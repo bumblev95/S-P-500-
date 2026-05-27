@@ -1,5 +1,5 @@
 {
   "sheetCsvUrl": "",
-  "submitUrl": "",
+  "submitUrl": "https://script.google.com/macros/s/AKfycby7aauROVo1WoyETGpYD5RxmSK_1adZZ8xCf6fAMcXMmv5rcqGltyR9Lypu9uKmUS3NGQ/exec",
   "notes": "sheetCsvUrl은 GitHub Actions가 읽는 Google Sheet published CSV URL입니다. submitUrl은 대시보드가 티커를 저장할 Google Apps Script Web App URL입니다."
 }
