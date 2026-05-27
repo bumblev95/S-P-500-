@@ -36,3 +36,4 @@ jobs:
           git add prices/latest_prices.csv
           git diff --cached --quiet || git commit -m "Update S&P 500 EOD prices"
           git push
+
