@@ -1,0 +1,5 @@
+{
+  "sheetCsvUrl": "",
+  "submitUrl": "",
+  "notes": "sheetCsvUrl은 GitHub Actions가 읽는 Google Sheet published CSV URL입니다. submitUrl은 대시보드가 티커를 저장할 Google Apps Script Web App URL입니다."
+}
