@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>S&P 500 섹터 밸류에이션 대시보드 - 섹터 히트맵 복구 v24</title>
+  <title>S&P 500 섹터 밸류에이션 대시보드 - 섹터 히트맵 복구 v25</title>
   <style>
     :root{
       --bg:#07111f; --panel:#111827; --panel2:#0f172a; --panel3:#0b1220; --muted:#94a3b8; --text:#e5e7eb;
@@ -76,13 +76,13 @@
   <div class="wrap">
     <div class="hero">
       <div class="title">
-        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 v24 · 섹터 히트맵 + 클릭 상세 매매 계획</div>
+        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 v25 · 섹터 히트맵 + 클릭 상세 매매 계획</div>
         <p>아버지가 휴대폰에서도 쉽게 볼 수 있도록 상단은 오늘 볼 종목, 위험 카드, 섹터 히트맵을 중심으로 정리하고, 매수가·목표가·손절가·유동성·추세 같은 세부 정보는 종목을 클릭했을 때 보이도록 정리한 가족용 대시보드입니다. 가격과 펀더멘털은 GitHub Actions CSV를 읽고, 관심종목은 Google Sheet와 연결해 가족이 함께 관리할 수 있습니다.</p>
       </div>
       <div class="sourceBox">
         <div class="label">데이터 소스 상태</div>
         <div id="sourceStatus"><strong>기본 목록을 불러오는 중입니다.</strong> “S&P 500 목록 새로고침”을 누르면 DataHub/GitHub에서 최신 구성종목 CSV를 가져옵니다.</div>
-        <div class="note">가격은 GitHub Actions가 생성하는 prices/latest_prices.csv의 Yahoo EOD 종가를 사용합니다. 펀더멘털/추정치는 fundamentals/latest_fundamentals.csv에서 불러옵니다. 브라우저에서 Yahoo/FMP를 직접 호출하지 않으므로 CORS와 429 문제를 피합니다. 자동으로 채워진 값이 마음에 들지 않으면 표에서 직접 수정하면 됩니다.</div>
+        <div class="note">가격은 GitHub Actions가 생성하는 prices/latest_prices.csv의 Yahoo EOD 종가를 사용합니다. 펀더멘털/추정치는 fundamentals/latest_fundamentals.csv에서 불러옵니다. 브라우저에서 Yahoo/FMP를 직접 호출하지 않으므로 CORS와 429 문제를 피합니다. 자동으로 채워진 값이 마음에 들지 않으면 표에서 직접 수정하면 됩니다. Google Sheet에서 지운 관심종목은 “공유 관심종목 동기화”를 눌러야 화면에서도 제거됩니다.</div>
       </div>
     </div>
 
@@ -107,7 +107,7 @@
       <button class="btn primary" id="btnFetchPrices">가격 불러오기</button>
       <button class="btn" id="btnFetchFundamentals">펀더멘털 자동 적용</button>
       <button class="btn soft" id="btnAdd">관심종목 추가</button>
-      <button class="btn soft" id="btnFetchSharedWatchlist">공유 관심종목 불러오기</button>
+      <button class="btn soft" id="btnFetchSharedWatchlist">공유 관심종목 동기화</button>
       <button class="btn soft" id="btnSave">저장</button>
       <button class="btn soft" id="btnMobileToggle">모바일 보기</button>
       <select class="select" id="analysisMode" title="투자 스타일">
@@ -309,7 +309,7 @@
           <button class="btn soft" id="saveWatchlistPin" type="button">PIN 저장</button>
           <button class="btn soft" id="clearWatchlistPin" type="button">PIN 삭제</button>
         </div>
-        <button class="btn primary" id="confirmAdd">관심종목 추가</button><div class="note">추가하면 현재 브라우저에 바로 저장됩니다. 가족 PIN이 맞고 Google Sheet 연결이 설정되어 있으면 가족 공유 시트에도 저장됩니다. Apps Script URL은 화면에 표시하지 않으며 config/watchlist_config.json에서만 읽습니다.</div>
+        <button class="btn primary" id="confirmAdd">관심종목 추가</button><div class="note">추가하면 현재 브라우저에 바로 저장됩니다. 가족 PIN이 맞고 Google Sheet 연결이 설정되어 있으면 가족 공유 시트에도 저장됩니다. Apps Script URL은 화면에 표시하지 않으며 config/watchlist_config.json에서만 읽습니다. 추가한 종목은 항상 관심종목 탭으로 들어갑니다.</div>
       </div>
     </div>
   </div>
@@ -325,7 +325,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_family_v22';
+    const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_family_v25';
     const EMBEDDED_FMP_KEY = ''; // v8에서는 FMP를 사용하지 않습니다. GitHub Actions가 생성한 CSV만 읽습니다.
     const CONSTITUENT_CSV_URL = 'https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv';
     const WATCHLIST_CONFIG_URL = 'config/watchlist_config.json';
@@ -1075,9 +1075,15 @@
           const sym=normalizeSymbol(csvField(r,header,['symbol','ticker','티커']));
           if(!sym) continue;
           const name=csvField(r,header,['name','company','security','회사명']) || sym;
-          const sector=csvField(r,header,['sector','gics sector','섹터']) || 'Watchlist';
-          const sub=csvField(r,header,['subindustry','sub industry','gics sub-industry','industry','세부업종']) || sourceLabel || '관심종목';
-          const s=rowToStock([sym,name,sector,sub]); s.isCustom=true; s.fundamentalSource='공유 관심종목'; out.push(s);
+          // Google Sheet/custom_tickers에서 읽은 티커는 항상 관심종목으로 분류합니다.
+          // 시트에 sector가 비어 있거나 다른 값이 들어가도 대시보드에서는 Watchlist 탭으로 들어갑니다.
+          const rawSector=csvField(r,header,['sector','gics sector','섹터']) || 'Watchlist';
+          const sub=csvField(r,header,['subindustry','sub industry','gics sub-industry','industry','세부업종']) || rawSector || sourceLabel || '관심종목';
+          const s=rowToStock([sym,name,'Watchlist',sub]);
+          s.isCustom=true;
+          s.watchlistSource=sourceLabel || 'shared';
+          s.fundamentalSource='공유 관심종목';
+          out.push(s);
         }
         return out;
       }catch(e){ log(`${sourceLabel||'관심종목'} CSV를 불러오지 못했습니다: ${e.message}`); return []; }
@@ -1094,10 +1100,26 @@
     async function fetchSharedWatchlist(silent=false){
       const old=Object.fromEntries(state.stocks.map(s=>[s.symbol,s]));
       const shared=await getSharedWatchlistStocks(silent);
-      for(const s of shared){ if(old[s.symbol]) Object.assign(s, {...s, ...pickOverrides(old[s.symbol], s)}); s.isCustom=true; if(!s.sector || s.sector==='Other') s.sector='Watchlist'; }
-      state.stocks=dedupe([...state.stocks, ...shared]);
-      if(shared.length){ state.selectedSector='Watchlist'; render(); persistMaybe(); }
-      if(!silent) log(`공유 관심종목 불러오기 완료: ${shared.length}개`);
+      const sharedSymbols=new Set(shared.map(s=>normalizeSymbol(s.symbol)));
+      for(const s of shared){
+        if(old[s.symbol]) Object.assign(s, {...s, ...pickOverrides(old[s.symbol], s)});
+        s.isCustom=true;
+        s.sector='Watchlist';
+        s.watchlistSource=s.watchlistSource || 'shared';
+      }
+      let base;
+      if(silent){
+        // 페이지 자동 로딩 중에는 삭제 동기화까지는 하지 않고 추가/업데이트만 합니다.
+        base=state.stocks;
+      }else{
+        const removed=state.stocks.filter(s=>(s.isCustom || s.sector==='Watchlist') && !sharedSymbols.has(normalizeSymbol(s.symbol))).length;
+        if(removed) log(`Google Sheet/custom_tickers에서 삭제된 관심종목 ${removed}개를 브라우저에서도 제거했습니다.`);
+        // S&P 500 기본 종목은 유지하고, 관심종목/커스텀 종목만 Google Sheet/custom_tickers와 동기화합니다.
+        base=state.stocks.filter(s=>!(s.isCustom || s.sector==='Watchlist'));
+      }
+      state.stocks=dedupe([...base, ...shared]);
+      if(shared.length || !silent){ state.selectedSector='Watchlist'; render(); persistMaybe(); }
+      if(!silent) log(`공유 관심종목 동기화 완료: ${shared.length}개. 가격/EPS는 GitHub Actions 실행 후 반영됩니다.`);
     }
     function normalizeAppsScriptUrl(url){
       let u=String(url||'').trim();
@@ -1137,7 +1159,7 @@
         const body=new URLSearchParams();
         body.set('symbol', stock.symbol);
         body.set('name', stock.name||stock.symbol);
-        body.set('sector', stock.sector||'Watchlist');
+        body.set('sector', 'Watchlist');
         body.set('subIndustry', stock.subIndustry||'관심종목');
         body.set('addedAt', new Date().toISOString());
         body.set('pin', state.settings.watchlistPin || '');
@@ -1172,7 +1194,7 @@
     async function fetchPrices(){
       const visible=getVisibleStocks(); if(!visible.length){log('새로고침할 표시 티커가 없습니다.'); return;}
       const symbols=visible.map(s=>s.symbol);
-      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v24는 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
+      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v25는 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
       let updated=0;
 
       updated += await fetchLocalEodCsvPrices(symbols);
@@ -1676,7 +1698,7 @@
       document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
     }
     function bind(){
-      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v24는 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v25는 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
       document.getElementById('btnReset').onclick=()=>{ if(confirm('저장된 데이터를 삭제하고 기본 목록으로 초기화할까요?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
       document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
       document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});
@@ -1692,7 +1714,7 @@
       document.getElementById('copyExport').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('exportText').value); log('JSON 내보내기 내용을 클립보드에 복사했습니다.')};
       const savePinBtn=document.getElementById('saveWatchlistPin'); if(savePinBtn) savePinBtn.onclick=()=>{const pin=(document.getElementById('watchlistPinInput')?.value||'').trim(); if(!pin) return alert('저장할 PIN을 입력하세요.'); state.settings.watchlistPin=pin; persistMaybe(); log('가족 PIN을 이 브라우저에 저장했습니다.');};
       const clearPinBtn=document.getElementById('clearWatchlistPin'); if(clearPinBtn) clearPinBtn.onclick=()=>{state.settings.watchlistPin=''; applyWatchlistInputs(); persistMaybe(); log('가족 PIN을 이 브라우저에서 삭제했습니다.');};
-      document.getElementById('confirmAdd').onclick=async()=>{const sym=normalizeSymbol(document.getElementById('addSymbol').value); if(!sym) return alert('티커는 필수입니다.'); if(!isValidTicker(sym)) return alert('티커 형식이 이상합니다. 예: SOFI, IONQ, BRK.B, SHOP.TO'); const pinValue=(document.getElementById('watchlistPinInput')?.value||'').trim(); if(pinValue){state.settings.watchlistPin=pinValue; persistMaybe();} const row=[sym,document.getElementById('addName').value.trim()||sym,document.getElementById('addSector').value||'Watchlist',document.getElementById('addSub').value.trim()||'관심종목']; const existing=state.stocks.find(s=>normalizeSymbol(s.symbol)===sym); if(existing) return alert('이미 존재하는 티커입니다.'); const added=rowToStock(row); added.isCustom=true; added.sector=added.sector||'Watchlist'; state.stocks.push(added); state.selectedSymbol=sym; state.selectedSector=added.sector; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 추가됨.'); await submitWatchlistTicker(added);};
+      document.getElementById('confirmAdd').onclick=async()=>{const sym=normalizeSymbol(document.getElementById('addSymbol').value); if(!sym) return alert('티커는 필수입니다.'); if(!isValidTicker(sym)) return alert('티커 형식이 이상합니다. 예: SOFI, IONQ, BRK.B, SHOP.TO'); const pinValue=(document.getElementById('watchlistPinInput')?.value||'').trim(); if(pinValue){state.settings.watchlistPin=pinValue; persistMaybe();} const row=[sym,document.getElementById('addName').value.trim()||sym,'Watchlist',document.getElementById('addSub').value.trim()||'관심종목']; const existing=state.stocks.find(s=>normalizeSymbol(s.symbol)===sym); if(existing) return alert('이미 존재하는 티커입니다. 이미 있는 티커를 지웠다면 먼저 공유 관심종목 동기화를 누르세요.'); const added=rowToStock(row); added.isCustom=true; added.sector='Watchlist'; added.watchlistSource='local'; state.stocks.push(added); state.selectedSymbol=sym; state.selectedSector='Watchlist'; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 관심종목에 추가됨. 가격/EPS는 GitHub Actions를 다시 실행한 뒤 가격 불러오기/펀더멘털 자동 적용을 눌러야 채워집니다.'); await submitWatchlistTicker(added);};
     }
 
     loadState(); bind(); applySettingsToInputs(); setMobileMode(localStorage.getItem(STORAGE_KEY+'_mobileMode')==='1'); render(); loadWatchlistConfig().then(()=>fetchSharedWatchlist(true));
