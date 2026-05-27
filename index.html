@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S&P 500 섹터 밸류에이션 대시보드</title>
+  <style>
+    :root{
+      --bg:#07111f; --panel:#111827; --panel2:#0f172a; --panel3:#0b1220; --muted:#94a3b8; --text:#e5e7eb;
+      --line:#263244; --accent:#38bdf8; --accent2:#a78bfa; --good:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+      --input:#0b1220; --chip:#172033; --shadow:0 14px 36px rgba(0,0,0,.34); --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:radial-gradient(1000px 600px at 0% -10%, rgba(56,189,248,.18), transparent 58%),radial-gradient(900px 600px at 94% 0%, rgba(167,139,250,.18), transparent 55%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.35}
+    button,input,select,textarea{font:inherit} a{color:#7dd3fc;text-decoration:none}
+    .wrap{max-width:1680px;margin:0 auto;padding:22px}
+    .hero{display:grid;grid-template-columns:1fr minmax(300px,430px);gap:18px;align-items:start;margin-bottom:14px}
+    .title h1{font-size:clamp(25px,4.2vw,44px);line-height:1.04;margin:0 0 8px;letter-spacing:-.045em}
+    .title p{margin:0;color:var(--muted);max-width:980px}
+    .sourceBox{background:linear-gradient(180deg,rgba(17,24,39,.92),rgba(15,23,42,.88));border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+    .sourceBox .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#a5b4fc;margin-bottom:7px}
+    .sourceBox div{color:var(--muted);font-size:12px}.sourceBox strong{color:#e5e7eb}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0;background:rgba(15,23,42,.78);border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);position:sticky;top:0;z-index:40;backdrop-filter:blur(14px)}
+    .btn{border:1px solid #334155;background:linear-gradient(180deg,#1e293b,#111827);color:var(--text);padding:9px 12px;border-radius:12px;cursor:pointer;transition:.16s ease;white-space:nowrap}.btn:hover{transform:translateY(-1px);border-color:#64748b}.btn.primary{background:linear-gradient(180deg,#0ea5e9,#0369a1);border-color:#0284c7;color:white}.btn.soft{background:#0b1220}.btn.danger{background:linear-gradient(180deg,#7f1d1d,#450a0a);border-color:#991b1b}
+    .smallInput,.select{background:var(--input);border:1px solid #334155;color:var(--text);border-radius:12px;padding:9px 10px;min-height:38px}.smallInput{width:110px}.search{min-width:230px;flex:1;max-width:460px}.select{min-width:135px}
+    .miniLabel{display:flex;gap:7px;align-items:center;color:var(--muted);padding:8px 10px;border:1px solid #334155;border-radius:12px;background:#0b1220;white-space:nowrap}.miniLabel input{accent-color:#38bdf8}
+    .sectorTabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}.tab{border:1px solid #334155;background:#0b1220;color:#cbd5e1;border-radius:999px;padding:8px 11px;cursor:pointer;font-size:12px;display:inline-flex;gap:7px;align-items:center}.tab:hover{border-color:#64748b}.tab.active{background:linear-gradient(180deg,rgba(56,189,248,.22),rgba(56,189,248,.10));border-color:#38bdf8;color:#e0f2fe}.tab b{font-size:11px;color:#94a3b8;font-weight:700}.tab.active b{color:#bae6fd}
+    .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0}.card{background:linear-gradient(180deg,rgba(17,24,39,.94),rgba(15,23,42,.88));border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow);min-height:102px}.card .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}.card .v{font-size:26px;font-weight:850;letter-spacing:-.04em}.card .s{color:var(--muted);font-size:12px;margin-top:5px}
+    .layout{display:grid;grid-template-columns:1fr 380px;gap:14px;align-items:start}.panel{background:rgba(15,23,42,.80);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.panelHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(17,24,39,.72)}.panelHeader h2{margin:0;font-size:16px;letter-spacing:-.01em}.panelHeader span{color:var(--muted);font-size:12px}
+    .tableWrap{overflow:auto;max-height:calc(100vh - 296px)} table{border-collapse:separate;border-spacing:0;width:100%;min-width:1580px} th,td{border-bottom:1px solid #1f2937;padding:9px 8px;vertical-align:middle;text-align:right;white-space:nowrap} th{position:sticky;top:0;background:#111827;color:#cbd5e1;font-size:11px;text-transform:uppercase;letter-spacing:.07em;z-index:4;cursor:pointer;user-select:none} td:first-child,th:first-child{text-align:left;position:sticky;left:0;background:#0f172a;z-index:3;border-right:1px solid #1f2937} th:first-child{z-index:5;background:#111827} tr:hover td{background:#111a2b} tr:hover td:first-child{background:#111a2b}.selected td{background:#11243a!important}.selected td:first-child{background:#11243a!important}
+    .ticker{font-weight:850;color:#f8fafc;display:flex;gap:8px;align-items:center}.sub{font-size:11px;color:var(--muted);margin-top:3px;max-width:260px;overflow:hidden;text-overflow:ellipsis;text-align:left}.sectorSmall{font-size:11px;color:#c4b5fd;margin-top:2px;text-align:left}.num{font-variant-numeric:tabular-nums}.readonly{color:#cbd5e1;font-weight:750}.muted{color:var(--muted)}.positive{color:#86efac;font-weight:850}.negative{color:#fca5a5;font-weight:850}.neutral{color:#cbd5e1;font-weight:850}.cellInput{width:76px;background:#0b1220;border:1px solid #273449;color:#e5e7eb;border-radius:10px;padding:7px 6px;text-align:right}.wideInput{width:92px}.cellInput:focus,.smallInput:focus,.select:focus{outline:2px solid rgba(56,189,248,.35);border-color:#38bdf8}
+    .pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;background:var(--chip);border:1px solid #2d3a50;color:#cbd5e1}.pill.good{background:rgba(34,197,94,.13);border-color:rgba(34,197,94,.36);color:#86efac}.pill.warn{background:rgba(245,158,11,.13);border-color:rgba(245,158,11,.36);color:#fbbf24}.pill.bad{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.36);color:#fca5a5}.pill.info{background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.34);color:#7dd3fc}.pill.gray{background:#111827;border-color:#334155;color:#cbd5e1}
+    .bar{height:8px;background:#1f2937;border-radius:999px;overflow:hidden;min-width:74px;display:inline-block;vertical-align:middle}.bar i{height:100%;display:block;border-radius:999px;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)}
+    .side{display:flex;flex-direction:column;gap:14px;position:sticky;top:88px}.sideBody{padding:14px 16px}.kv{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 0;border-bottom:1px solid #1f2937}.kv:last-child{border-bottom:0}.kv span{color:var(--muted)}.riskGrid{display:grid;gap:9px}.riskRow{display:grid;grid-template-columns:1fr 66px;gap:10px;align-items:center}.riskRow span{color:var(--muted);font-size:12px}.riskRow input{width:66px;background:#0b1220;border:1px solid #334155;color:#e5e7eb;border-radius:10px;padding:7px;text-align:center}.miniList{display:grid;gap:9px}.miniItem{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;border:1px solid #253247;background:#0b1220;border-radius:14px;padding:10px}.rank{width:24px;height:24px;border-radius:999px;background:#1e293b;display:grid;place-items:center;color:#cbd5e1;font-size:11px;font-weight:850}.log{max-height:160px;overflow:auto;color:#cbd5e1;font-size:12px;padding:10px 12px;background:#07101d;border:1px solid #253247;border-radius:14px;white-space:pre-wrap}.fileInput{display:none}.note{font-size:12px;color:var(--muted);margin-top:8px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:none;align-items:center;justify-content:center;z-index:90;padding:16px}.modal.show{display:flex}.dialog{width:min(740px,100%);background:#0f172a;border:1px solid #334155;border-radius:20px;box-shadow:0 20px 70px rgba(0,0,0,.55);overflow:hidden}.dialogHead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #263244}.dialogHead h3{margin:0}.dialogBody{padding:16px;display:grid;gap:12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.textarea{min-height:180px;background:#07101d;border:1px solid #334155;color:#e5e7eb;border-radius:14px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+
+    .apiPanel{margin:16px 0 12px;padding:16px;border:1px solid rgba(56,189,248,.35);background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(167,139,250,.08));border-radius:var(--radius);box-shadow:var(--shadow);display:grid;grid-template-columns:1.2fr 1.3fr auto auto;gap:12px;align-items:center}
+    .apiPanel .apiTitle{font-weight:800;font-size:15px;color:#e0f2fe}.apiPanel .apiSub{font-size:12px;color:var(--muted);margin-top:3px}
+    .apiInput{width:100%;min-width:230px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--input);color:var(--text);outline:none}
+    @media (max-width:1180px){.hero,.layout,.apiPanel{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tableWrap{max-height:none}}
+    @media (max-width:720px){.wrap{padding:14px}.cards{grid-template-columns:1fr}.toolbar{position:static}.smallInput,.select,.search{width:100%;max-width:none;flex:auto}.btn{flex:1}.grid2{grid-template-columns:1fr}.sourceBox{padding:13px}.title h1{font-size:27px}.tableWrap{margin:0 -10px;padding-left:10px}.sectorTabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px}.tab{flex:0 0 auto}.card .v{font-size:23px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="title">
+        <h1>S&P 500 섹터 밸류에이션 대시보드</h1>
+        <p>Filter the S&P 500 by GICS sector, enter forward EPS and growth assumptions, then compare each company against its own scenario fair value and sector valuation context. Built as one static HTML file for GitHub Pages.</p>
+      </div>
+      <div class="sourceBox">
+        <div class="label">데이터 소스 상태</div>
+        <div id="source상태"><strong>기본 목록을 불러오는 중입니다.</strong> “S&P 500 목록 새로고침”을 누르면 DataHub/GitHub에서 최신 구성종목 CSV를 가져옵니다.</div>
+        <div class="note">가격은 먼저 내장된 가족용 FMP API 키를 사용하고, 실패하면 Yahoo/Stooq을 백업으로 시도합니다. 필요하면 이 브라우저에서만 키를 바꿔 사용할 수 있습니다.</div>
+      </div>
+    </div>
+
+    <div class="apiPanel" id="apiPanel">
+      <div>
+        <div class="apiTitle">가격 API 설정</div>
+        <div class="apiSub">가족용 버전입니다. FMP 키가 이미 HTML에 포함되어 있습니다. 이 브라우저에서만 다른 키로 바꿀 수 있습니다.</div>
+      </div>
+      <label class="miniLabel" style="display:block">FMP API 키
+        <input class="apiInput" id="fmpKeyInput" type="password" placeholder="내장된 FMP 키가 이미 활성화되어 있습니다" autocomplete="off" />
+      </label>
+      <label class="miniLabel" style="white-space:nowrap"><input id="useFmpToggle" type="checkbox" checked> FMP 먼저 사용</label>
+      <button class="btn primary" id="btnSaveApi">API 키 저장</button>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn primary" id="btnFetchConstituents">S&P 500 목록 새로고침</button>
+      <button class="btn" id="btnFetchPrices">가격 새로고침: 현재 섹터</button>
+      <button class="btn soft" id="btnSave">저장</button>
+      <button class="btn soft" id="btnExport">JSON 내보내기</button>
+      <button class="btn soft" id="btnImportJson">JSON 가져오기</button>
+      <button class="btn soft" id="btnImportCsv">구성종목 CSV 가져오기</button>
+      <button class="btn soft" id="btnAdd">티커 추가</button>
+      <button class="btn danger" id="btnReset">로컬 데이터 초기화</button>
+      <input class="smallInput search" id="searchBox" placeholder="티커, 회사명, 세부 업종 검색..." />
+      <select class="select" id="statusFilter">
+        <option value="All">전체 상태</option>
+        <option value="Very undervalued">매우 저평가</option>
+        <option value="Undervalued">저평가</option>
+        <option value="Okay">적정</option>
+        <option value="Overvalued">고평가</option>
+        <option value="Very overvalued">매우 고평가</option>
+        <option value="Need EPS">EPS 필요</option>
+      </select>
+      <label class="miniLabel">기간 <input class="smallInput" id="yearsInput" type="number" min="1" max="10" step="1" value="5" style="width:68px;padding:6px 8px;min-height:28px"></label>
+    </div>
+
+    <div class="toolbar" style="position:static;margin-top:0">
+      <label class="miniLabel">기본 Forward EPS <input class="smallInput" id="defaultEpsInput" type="number" step="0.01" value="5" style="width:80px;padding:6px 8px;min-height:28px"></label>
+      <label class="miniLabel">기본 할인율 % <input class="smallInput" id="defaultDiscountInput" type="number" step="0.1" value="10" style="width:72px;padding:6px 8px;min-height:28px"></label>
+      <label class="miniLabel">Bear 성장률 조정 % <input class="smallInput" id="bearGrowthShift" type="number" step="0.5" value="-5" style="width:72px;padding:6px 8px;min-height:28px"></label>
+      <label class="miniLabel">Bull 성장률 조정 % <input class="smallInput" id="bullGrowthShift" type="number" step="0.5" value="5" style="width:72px;padding:6px 8px;min-height:28px"></label>
+      <label class="miniLabel">고평가 기준 % <input class="smallInput" id="overvaluedThreshold" type="number" step="1" value="-10" style="width:72px;padding:6px 8px;min-height:28px"></label>
+      <label class="miniLabel"><input id="autoSaveToggle" type="checkbox" checked> 수정사항 자동 저장</label>
+    </div>
+
+    <div id="sectorTabs" class="sectorTabs"></div>
+
+    <div class="cards">
+      <div class="card"><div class="k">표시 기업 수</div><div class="v" id="cardCount">0</div><div class="s" id="cardSector">전체 섹터</div></div>
+      <div class="card"><div class="k">Forward P/E 중앙값</div><div class="v" id="cardMedianPe">–</div><div class="s">가격 ÷ Forward EPS</div></div>
+      <div class="card"><div class="k">Base 상승여력 중앙값</div><div class="v" id="cardMedianUpside">–</div><div class="s">Base 적정가 대비 현재가</div></div>
+      <div class="card"><div class="k">고평가 비중</div><div class="v" id="cardOvervalued">–</div><div class="s">고평가 또는 매우 고평가</div></div>
+      <div class="card"><div class="k">고위험 비중</div><div class="v" id="cardRisk">–</div><div class="s">리스크 점수 ≥ 3.75 / 5</div></div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="panelHeader">
+          <div><h2 id="tableTitle">S&P 500 전체 기업</h2><span id="tableSubtitle">표에서 가정을 직접 수정하세요. 행을 클릭하면 리스크 입력값을 조정할 수 있습니다.</span></div>
+          <span id="lastUpdated">아직 새로고침되지 않음</span>
+        </div>
+        <div class="tableWrap">
+          <table id="stockTable">
+            <thead>
+              <tr>
+                <th data-sort="symbol">기업</th>
+                <th data-sort="sector">섹터</th>
+                <th data-sort="price">가격</th>
+                <th data-sort="forwardEPS">Forward EPS</th>
+                <th data-sort="epsGrowth">EPS CAGR %</th>
+                <th data-sort="revGrowth">매출 성장률 %</th>
+                <th data-sort="grossMargin">매출총이익률 %</th>
+                <th data-sort="opMargin">영업이익률 %</th>
+                <th data-sort="exitPE">Exit P/E</th>
+                <th data-sort="discountRate">할인율 %</th>
+                <th data-sort="currentPE">현재 P/E</th>
+                <th data-sort="sectorPremium">섹터 대비 P/E 프리미엄</th>
+                <th data-sort="requiredGrowth">필요 EPS CAGR</th>
+                <th data-sort="bearFV">Bear 적정가</th>
+                <th data-sort="baseFV">Base 적정가</th>
+                <th data-sort="bullFV">Bull 적정가</th>
+                <th data-sort="upside">상승여력</th>
+                <th data-sort="status">상태</th>
+                <th data-sort="riskScore">리스크</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="panel">
+          <div class="panelHeader"><h2>선택한 기업</h2><span id="selectedTickerLabel">없음</span></div>
+          <div class="sideBody" id="selectedDetails">
+            <div class="muted">행을 클릭하면 섹터 비교와 리스크 입력값을 확인·수정할 수 있습니다.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelHeader"><h2>리스크 점수 가중치</h2><span>입력 범위 1–5</span></div>
+          <div class="sideBody riskGrid">
+            <div class="riskRow"><span>금리 민감도 가중치</span><input type="number" min="0" max="5" step="0.1" id="wRate" value="1.0"></div>
+            <div class="riskRow"><span>경기민감도 가중치</span><input type="number" min="0" max="5" step="0.1" id="wCyc" value="1.1"></div>
+            <div class="riskRow"><span>마진 리스크 가중치</span><input type="number" min="0" max="5" step="0.1" id="wMargin" value="1.0"></div>
+            <div class="riskRow"><span>재무건전성 리스크 가중치</span><input type="number" min="0" max="5" step="0.1" id="wBalance" value="1.0"></div>
+            <div class="riskRow"><span>밸류에이션/쏠림 가중치</span><input type="number" min="0" max="5" step="0.1" id="wCrowding" value="1.2"></div>
+            <div class="riskRow"><span>규제/지정학 리스크 가중치</span><input type="number" min="0" max="5" step="0.1" id="wReg" value="0.8"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelHeader"><h2>섹터 극단값</h2><span id="extremeLabel">현재 표시 목록</span></div>
+          <div class="sideBody miniList" id="extremes"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panelHeader"><h2>계산 방식</h2><span>밸류에이션 계산</span></div>
+          <div class="sideBody">
+            <div class="kv"><span>Base 적정가</span><b>EPS × 성장 × Exit P/E ÷ 할인</b></div>
+            <div class="kv"><span>Bear/Bull</span><b>성장률, 멀티플, 할인율 조정</b></div>
+            <div class="kv"><span>필요 EPS 성장률</span><b>현재가를 정당화하는 성장률</b></div>
+            <div class="kv"><span>상태</span><b>상승여력 + 섹터 P/E 프리미엄</b></div>
+            <div class="note">이 모델은 완전한 DCF가 아니라 스크리닝용 모델입니다. 섹터별 가정을 일관되게 비교하는 용도로 사용하세요.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelHeader"><h2>작업 로그</h2><span>최근 작업</span></div>
+          <div class="sideBody"><div class="log" id="logBox"></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <input class="fileInput" type="file" id="jsonFile" accept="application/json,.json" />
+  <input class="fileInput" type="file" id="csvFile" accept="text/csv,.csv" />
+
+  <div class="modal" id="addModal">
+    <div class="dialog">
+      <div class="dialogHead"><h3>티커 추가</h3><button class="btn soft" id="closeAdd">닫기</button></div>
+      <div class="dialogBody grid2">
+        <input class="smallInput" id="addSymbol" placeholder="티커 예: AAPL" />
+        <input class="smallInput" id="addName" placeholder="회사명" />
+        <select class="select" id="addSector"></select>
+        <input class="smallInput" id="addSub" placeholder="세부 업종" />
+        <button class="btn primary" id="confirmAdd">기업 추가</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="exportModal">
+    <div class="dialog">
+      <div class="dialogHead"><h3>대시보드 데이터 내보내기</h3><button class="btn soft" id="closeExport">닫기</button></div>
+      <div class="dialogBody">
+        <textarea class="textarea" id="exportText" readonly></textarea>
+        <button class="btn primary" id="copyExport">JSON 복사</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_v1';
+    const EMBEDDED_FMP_KEY = 'qxe7mTn3pPKQLqQVJMeLLbxxxzUImO3j'; // 가족용 내장 키입니다. 공개/유료 API 키에는 이 방식을 사용하지 마세요.
+    const CONSTITUENT_CSV_URL = 'https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv';
+    const SECTOR_ORDER = ['All','Communication Services','Consumer Discretionary','Consumer Staples','Energy','Financials','Health Care','Industrials','Information Technology','Materials','Real Estate','Utilities'];
+    const SECTOR_LABELS = {
+      'All':'전체',
+      'Communication Services':'커뮤니케이션 서비스',
+      'Consumer Discretionary':'임의소비재',
+      'Consumer Staples':'필수소비재',
+      'Energy':'에너지',
+      'Financials':'금융',
+      'Health Care':'헬스케어',
+      'Industrials':'산업재',
+      'Information Technology':'정보기술',
+      'Materials':'소재',
+      'Real Estate':'부동산',
+      'Utilities':'유틸리티',
+      'Other':'기타'
+    };
+    const STATUS_LABELS = {
+      'Very undervalued':'매우 저평가',
+      'Undervalued':'저평가',
+      'Okay':'적정',
+      'Overvalued':'고평가',
+      'Very overvalued':'매우 고평가',
+      'Need EPS':'EPS 필요'
+    };
+    function sectorLabel(s){return SECTOR_LABELS[s] || s || '기타'}
+    function statusLabel(s){return STATUS_LABELS[s] || s}
+
+    const sectorDefaults = {
+      'Communication Services': {epsGrowth:9, revGrowth:7, grossMargin:55, opMargin:25, exitPE:21, discountRate:9.5, risk:{rate:2.6, cyc:3.1, margin:3.0, balance:2.2, crowding:3.4, reg:3.5}},
+      'Consumer Discretionary': {epsGrowth:8, revGrowth:6, grossMargin:42, opMargin:12, exitPE:21, discountRate:10.0, risk:{rate:3.2, cyc:3.8, margin:3.4, balance:2.8, crowding:3.1, reg:2.3}},
+      'Consumer Staples': {epsGrowth:5, revGrowth:4, grossMargin:38, opMargin:18, exitPE:19, discountRate:8.5, risk:{rate:2.2, cyc:1.9, margin:2.8, balance:2.3, crowding:2.5, reg:2.2}},
+      'Energy': {epsGrowth:3, revGrowth:3, grossMargin:35, opMargin:18, exitPE:10, discountRate:11.0, risk:{rate:2.8, cyc:4.4, margin:4.1, balance:3.1, crowding:2.3, reg:4.0}},
+      'Financials': {epsGrowth:6, revGrowth:5, grossMargin:0, opMargin:28, exitPE:13, discountRate:10.0, risk:{rate:4.0, cyc:3.6, margin:3.0, balance:3.8, crowding:2.5, reg:3.5}},
+      'Health Care': {epsGrowth:8, revGrowth:6, grossMargin:65, opMargin:24, exitPE:18, discountRate:9.0, risk:{rate:2.0, cyc:2.1, margin:2.9, balance:2.4, crowding:2.5, reg:4.0}},
+      'Industrials': {epsGrowth:7, revGrowth:5, grossMargin:34, opMargin:16, exitPE:19, discountRate:9.5, risk:{rate:2.8, cyc:3.7, margin:3.2, balance:2.7, crowding:2.7, reg:2.6}},
+      'Information Technology': {epsGrowth:12, revGrowth:9, grossMargin:58, opMargin:30, exitPE:27, discountRate:10.0, risk:{rate:3.4, cyc:3.2, margin:3.0, balance:2.1, crowding:4.2, reg:3.2}},
+      'Materials': {epsGrowth:4, revGrowth:4, grossMargin:31, opMargin:14, exitPE:15, discountRate:10.0, risk:{rate:2.9, cyc:4.0, margin:3.8, balance:2.9, crowding:2.1, reg:2.8}},
+      'Real Estate': {epsGrowth:3, revGrowth:3, grossMargin:0, opMargin:35, exitPE:17, discountRate:10.5, risk:{rate:4.5, cyc:3.4, margin:2.8, balance:4.1, crowding:2.0, reg:2.4}},
+      'Utilities': {epsGrowth:4, revGrowth:4, grossMargin:0, opMargin:24, exitPE:17, discountRate:8.5, risk:{rate:4.0, cyc:1.8, margin:2.4, balance:3.7, crowding:2.2, reg:3.2}}
+    };
+
+    const fallbackRows = [
+      ['AAPL','Apple Inc.','Information Technology','Technology Hardware, Storage & Peripherals'],['MSFT','Microsoft','Information Technology','Systems Software'],['NVDA','Nvidia','Information Technology','Semiconductors'],['AVGO','Broadcom','Information Technology','Semiconductors'],['ORCL','Oracle','Information Technology','Application Software'],['CRM','Salesforce','Information Technology','Application Software'],['ADBE','Adobe','Information Technology','Application Software'],['AMD','Advanced Micro Devices','Information Technology','Semiconductors'],['CSCO','Cisco','Information Technology','Communications Equipment'],['ACN','Accenture','Information Technology','IT Consulting & Other Services'],['QCOM','Qualcomm','Information Technology','Semiconductors'],['TXN','Texas Instruments','Information Technology','Semiconductors'],['AMAT','Applied Materials','Information Technology','Semiconductor Materials & Equipment'],['MU','Micron Technology','Information Technology','Semiconductors'],['LRCX','Lam Research','Information Technology','Semiconductor Materials & Equipment'],['KLAC','KLA Corporation','Information Technology','Semiconductor Materials & Equipment'],['ADI','Analog Devices','Information Technology','Semiconductors'],['PANW','Palo Alto Networks','Information Technology','Systems Software'],['PLTR','Palantir Technologies','Information Technology','Application Software'],['ANET','Arista Networks','Information Technology','Communications Equipment'],['CDNS','Cadence Design Systems','Information Technology','Application Software'],['SNPS','Synopsys','Information Technology','Application Software'],['CRWD','CrowdStrike','Information Technology','Systems Software'],['INTU','Intuit','Information Technology','Application Software'],['IBM','IBM','Information Technology','IT Consulting & Other Services'],
+      ['GOOGL','Alphabet Class A','Communication Services','Interactive Media & Services'],['GOOG','Alphabet Class C','Communication Services','Interactive Media & Services'],['META','Meta Platforms','Communication Services','Interactive Media & Services'],['NFLX','Netflix','Communication Services','Movies & Entertainment'],['DIS','Walt Disney','Communication Services','Movies & Entertainment'],['CMCSA','Comcast','Communication Services','Cable & Satellite'],['T','AT&T','Communication Services','Integrated Telecommunication Services'],['VZ','Verizon','Communication Services','Integrated Telecommunication Services'],['TMUS','T-Mobile US','Communication Services','Wireless Telecommunication Services'],['EA','Electronic Arts','Communication Services','Interactive Home Entertainment'],['TTWO','Take-Two Interactive','Communication Services','Interactive Home Entertainment'],['CHTR','Charter Communications','Communication Services','Cable & Satellite'],
+      ['AMZN','Amazon','Consumer Discretionary','Broadline Retail'],['TSLA','Tesla','Consumer Discretionary','Automobile Manufacturers'],['HD','Home Depot','Consumer Discretionary','Home Improvement Retail'],['MCD','McDonald’s','Consumer Discretionary','Restaurants'],['BKNG','Booking Holdings','Consumer Discretionary','Hotels, Resorts & Cruise Lines'],['LOW','Lowe’s','Consumer Discretionary','Home Improvement Retail'],['TJX','TJX Companies','Consumer Discretionary','Apparel Retail'],['NKE','Nike','Consumer Discretionary','Apparel, Accessories & Luxury Goods'],['SBUX','Starbucks','Consumer Discretionary','Restaurants'],['CMG','Chipotle Mexican Grill','Consumer Discretionary','Restaurants'],['GM','General Motors','Consumer Discretionary','Automobile Manufacturers'],['F','Ford Motor','Consumer Discretionary','Automobile Manufacturers'],['ORLY','O’Reilly Automotive','Consumer Discretionary','Automotive Retail'],['AZO','AutoZone','Consumer Discretionary','Automotive Retail'],['MAR','Marriott International','Consumer Discretionary','Hotels, Resorts & Cruise Lines'],
+      ['WMT','Walmart','Consumer Staples','Consumer Staples Merchandise Retail'],['COST','Costco','Consumer Staples','Consumer Staples Merchandise Retail'],['PG','Procter & Gamble','Consumer Staples','Household Products'],['KO','Coca-Cola','Consumer Staples','Soft Drinks & Non-alcoholic Beverages'],['PEP','PepsiCo','Consumer Staples','Soft Drinks & Non-alcoholic Beverages'],['PM','Philip Morris International','Consumer Staples','Tobacco'],['MO','Altria','Consumer Staples','Tobacco'],['MDLZ','Mondelez','Consumer Staples','Packaged Foods & Meats'],['CL','Colgate-Palmolive','Consumer Staples','Household Products'],['KMB','Kimberly-Clark','Consumer Staples','Household Products'],['GIS','General Mills','Consumer Staples','Packaged Foods & Meats'],['KR','Kroger','Consumer Staples','Food Retail'],['TGT','Target','Consumer Staples','Consumer Staples Merchandise Retail'],
+      ['XOM','Exxon Mobil','Energy','Integrated Oil & Gas'],['CVX','Chevron','Energy','Integrated Oil & Gas'],['COP','ConocoPhillips','Energy','Oil & Gas Exploration & Production'],['EOG','EOG Resources','Energy','Oil & Gas Exploration & Production'],['SLB','Schlumberger','Energy','Oil & Gas Equipment & Services'],['MPC','Marathon Petroleum','Energy','Oil & Gas Refining & Marketing'],['PSX','Phillips 66','Energy','Oil & Gas Refining & Marketing'],['VLO','Valero Energy','Energy','Oil & Gas Refining & Marketing'],['OKE','ONEOK','Energy','Oil & Gas Storage & Transportation'],['WMB','Williams Companies','Energy','Oil & Gas Storage & Transportation'],['BKR','Baker Hughes','Energy','Oil & Gas Equipment & Services'],['HAL','Halliburton','Energy','Oil & Gas Equipment & Services'],
+      ['BRK.B','Berkshire Hathaway','Financials','Multi-Sector Holdings'],['JPM','JPMorgan Chase','Financials','Diversified Banks'],['BAC','Bank of America','Financials','Diversified Banks'],['WFC','Wells Fargo','Financials','Diversified Banks'],['GS','Goldman Sachs','Financials','Investment Banking & Brokerage'],['MS','Morgan Stanley','Financials','Investment Banking & Brokerage'],['C','Citigroup','Financials','Diversified Banks'],['BLK','BlackRock','Financials','Asset Management & Custody Banks'],['BX','Blackstone','Financials','Asset Management & Custody Banks'],['V','Visa','Financials','Transaction & Payment Processing Services'],['MA','Mastercard','Financials','Transaction & Payment Processing Services'],['AXP','American Express','Financials','Consumer Finance'],['SPGI','S&P Global','Financials','Financial Exchanges & Data'],['SCHW','Charles Schwab','Financials','Investment Banking & Brokerage'],['PGR','Progressive','Financials','Property & Casualty Insurance'],['CB','Chubb','Financials','Property & Casualty Insurance'],['AIG','AIG','Financials','Multi-line Insurance'],['COF','Capital One','Financials','Consumer Finance'],
+      ['LLY','Eli Lilly','Health Care','Pharmaceuticals'],['UNH','UnitedHealth Group','Health Care','Managed Health Care'],['JNJ','Johnson & Johnson','Health Care','Pharmaceuticals'],['ABBV','AbbVie','Health Care','Biotechnology'],['MRK','Merck','Health Care','Pharmaceuticals'],['TMO','Thermo Fisher Scientific','Health Care','Life Sciences Tools & Services'],['ABT','Abbott Laboratories','Health Care','Health Care Equipment'],['ISRG','Intuitive Surgical','Health Care','Health Care Equipment'],['DHR','Danaher','Health Care','Life Sciences Tools & Services'],['AMGN','Amgen','Health Care','Biotechnology'],['PFE','Pfizer','Health Care','Pharmaceuticals'],['GILD','Gilead Sciences','Health Care','Biotechnology'],['CVS','CVS Health','Health Care','Health Care Services'],['MDT','Medtronic','Health Care','Health Care Equipment'],['BSX','Boston Scientific','Health Care','Health Care Equipment'],['SYK','Stryker','Health Care','Health Care Equipment'],
+      ['GE','GE Aerospace','Industrials','Aerospace & Defense'],['CAT','Caterpillar','Industrials','Construction Machinery & Heavy Transportation Equipment'],['RTX','RTX','Industrials','Aerospace & Defense'],['BA','Boeing','Industrials','Aerospace & Defense'],['LMT','Lockheed Martin','Industrials','Aerospace & Defense'],['HON','Honeywell','Industrials','Industrial Conglomerates'],['UNP','Union Pacific','Industrials','Rail Transportation'],['UPS','UPS','Industrials','Air Freight & Logistics'],['DE','Deere & Co.','Industrials','Agricultural & Farm Machinery'],['ETN','Eaton','Industrials','Electrical Components & Equipment'],['ADP','Automatic Data Processing','Industrials','Human Resource & Employment Services'],['ITW','Illinois Tool Works','Industrials','Industrial Machinery & Supplies & Components'],['MMM','3M','Industrials','Industrial Conglomerates'],['GEV','GE Vernova','Industrials','Heavy Electrical Equipment'],['PH','Parker-Hannifin','Industrials','Industrial Machinery & Supplies & Components'],['WM','Waste Management','Industrials','Environmental & Facilities Services'],
+      ['LIN','Linde','Materials','Industrial Gases'],['SHW','Sherwin-Williams','Materials','Specialty Chemicals'],['APD','Air Products','Materials','Industrial Gases'],['ECL','Ecolab','Materials','Specialty Chemicals'],['NEM','Newmont','Materials','Gold'],['FCX','Freeport-McMoRan','Materials','Copper'],['NUE','Nucor','Materials','Steel'],['DOW','Dow','Materials','Commodity Chemicals'],['DD','DuPont','Materials','Specialty Chemicals'],['PPG','PPG Industries','Materials','Specialty Chemicals'],['MLM','Martin Marietta Materials','Materials','Construction Materials'],['VMC','Vulcan Materials','Materials','Construction Materials'],
+      ['AMT','American Tower','Real Estate','Telecom Tower REITs'],['PLD','Prologis','Real Estate','Industrial REITs'],['EQIX','Equinix','Real Estate','Data Center REITs'],['WELL','Welltower','Real Estate','Health Care REITs'],['SPG','Simon Property Group','Real Estate','Retail REITs'],['O','Realty Income','Real Estate','Retail REITs'],['PSA','Public Storage','Real Estate','Self-Storage REITs'],['CCI','Crown Castle','Real Estate','Telecom Tower REITs'],['DLR','Digital Realty','Real Estate','Data Center REITs'],['CBRE','CBRE Group','Real Estate','Real Estate Services'],['VICI','VICI Properties','Real Estate','Hotel & Resort REITs'],['AVB','AvalonBay Communities','Real Estate','Multi-Family Residential REITs'],
+      ['NEE','NextEra Energy','Utilities','Multi-Utilities'],['SO','Southern Company','Utilities','Electric Utilities'],['DUK','Duke Energy','Utilities','Electric Utilities'],['AEP','American Electric Power','Utilities','Electric Utilities'],['SRE','Sempra','Utilities','Multi-Utilities'],['EXC','Exelon','Utilities','Electric Utilities'],['XEL','Xcel Energy','Utilities','Electric Utilities'],['D','Dominion Energy','Utilities','Electric Utilities'],['PEG','Public Service Enterprise Group','Utilities','Electric Utilities'],['ED','Consolidated Edison','Utilities','Multi-Utilities'],['ETR','Entergy','Utilities','Electric Utilities'],['CEG','Constellation Energy','Utilities','Electric Utilities'],['VST','Vistra','Utilities','Independent Power Producers & Energy Traders']
+    ];
+
+    let state = {
+      selectedSector:'All', search:'', statusFilter:'All', sortKey:'symbol', sortDir:1, selectedSymbol:null,
+      settings:{years:5, defaultEPS:5, defaultDiscount:10, bearGrowthShift:-5, bullGrowthShift:5, overvaluedThreshold:-10, autoSave:true, fmpApiKey:EMBEDDED_FMP_KEY, useFmp:true,
+        weights:{rate:1.0, cyc:1.1, margin:1.0, balance:1.0, crowding:1.2, reg:0.8}},
+      stocks: fallbackRows.map(rowToStock), lastConstituentRefresh:null, lastPriceRefresh:null
+    };
+
+    function rowToStock(r){
+      const symbol = String(r[0]||'').trim().toUpperCase();
+      const sector = String(r[2]||'Other').trim();
+      const d = sectorDefaults[sector] || sectorDefaults['Industrials'];
+      return {symbol, name:String(r[1]||symbol).trim(), sector, subIndustry:String(r[3]||'').trim(), price:null, priceSource:'manual', forwardEPS:null,
+        revGrowth:d.revGrowth, epsGrowth:d.epsGrowth, grossMargin:d.grossMargin, opMargin:d.opMargin, exitPE:d.exitPE, discountRate:d.discountRate,
+        risk:{...d.risk}, notes:''};
+    }
+
+    function parseCSV(text){
+      const rows=[]; let row=[], field='', q=false;
+      for(let i=0;i<text.length;i++){
+        const c=text[i], n=text[i+1];
+        if(q){ if(c==='"' && n==='"'){field+='"'; i++;} else if(c==='"'){q=false;} else field+=c; }
+        else{ if(c==='"') q=true; else if(c===','){row.push(field); field='';} else if(c==='\n'){row.push(field); rows.push(row); row=[]; field='';} else if(c!=='\r') field+=c; }
+      }
+      if(field.length || row.length){row.push(field); rows.push(row)}
+      return rows.filter(r=>r.some(x=>String(x).trim()!==''));
+    }
+    function csvEscape(v){const s=String(v??''); return /[",\n]/.test(s)?'"'+s.replaceAll('"','""')+'"':s}
+    function n(v){const x=parseFloat(v); return Number.isFinite(x)?x:null}
+    function pct(v,d=1){return Number.isFinite(v)?(v*100).toFixed(d)+'%':'–'}
+    function fmt(v,d=1){return Number.isFinite(v)?Number(v).toLocaleString(undefined,{maximumFractionDigits:d,minimumFractionDigits:d}):'–'}
+    function money(v){return Number.isFinite(v)?'$'+Number(v).toLocaleString(undefined,{maximumFractionDigits:2,minimumFractionDigits:2}):'–'}
+    function median(arr){const a=arr.filter(Number.isFinite).sort((x,y)=>x-y); if(!a.length) return null; const m=Math.floor(a.length/2); return a.length%2?a[m]:(a[m-1]+a[m])/2}
+    function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+    function log(msg){const box=document.getElementById('logBox'); const line='['+new Date().toLocaleTimeString()+'] '+msg; box.textContent=(line+'\n'+box.textContent).slice(0,5000)}
+
+    function normalizeSymbolForYahoo(sym){return sym.replace('.', '-').toUpperCase()}
+    function normalizeSymbolForStooq(sym){return sym.replace('-', '.').toLowerCase()+'.us'}
+
+    function calc(stock, visibleSectorStocks=null){
+      const years=state.settings.years, price=n(stock.price), eps=n(stock.forwardEPS), g=(n(stock.epsGrowth)??0)/100, pe=n(stock.exitPE), d=(n(stock.discountRate)??state.settings.defaultDiscount)/100;
+      const currentPE = (price && eps && eps>0)?price/eps:null;
+      const calcFV = (growthShift, peMult, discShift)=>{
+        if(!(eps>0) || !(pe>0)) return null;
+        const gg = Math.max(-0.95, g + growthShift/100);
+        const dd = Math.max(0, d + discShift/100);
+        return eps * Math.pow(1+gg, years) * (pe*peMult) / Math.pow(1+dd, years);
+      };
+      const bearFV=calcFV(state.settings.bearGrowthShift, .80, 2.0);
+      const baseFV=calcFV(0, 1.0, 0);
+      const bullFV=calcFV(state.settings.bullGrowthShift, 1.20, -1.0);
+      const upside=(baseFV && price)?baseFV/price-1:null;
+      let requiredGrowth=null;
+      if(price && eps>0 && pe>0){
+        const target=(price*Math.pow(1+d,years))/(eps*pe);
+        if(target>0) requiredGrowth=Math.pow(target,1/years)-1;
+      }
+      const medPe = visibleSectorStocks?median(visibleSectorStocks.map(s=>{const p=n(s.price), e=n(s.forwardEPS); return p&&e>0?p/e:null;})):null;
+      const sectorPremium = currentPE && medPe ? currentPE/medPe-1 : null;
+      const riskScore = riskScoreCalc(stock);
+      let status='Need EPS', statusClass='gray';
+      if(price && eps>0 && baseFV){
+        if(upside>=0.25){status='Very undervalued'; statusClass='good'}
+        else if(upside>=0.10){status='Undervalued'; statusClass='good'}
+        else if(upside>=state.settings.overvaluedThreshold/100){status='Okay'; statusClass='warn'}
+        else if(upside>=-0.25){status='Overvalued'; statusClass='bad'}
+        else {status='Very overvalued'; statusClass='bad'}
+        if(status==='Okay' && sectorPremium!==null && sectorPremium>0.30 && requiredGrowth!==null && requiredGrowth > g + 0.04){status='Overvalued'; statusClass='bad'}
+      }
+      return {currentPE,bearFV,baseFV,bullFV,upside,requiredGrowth,sectorPremium,riskScore,status,statusClass};
+    }
+
+    function riskScoreCalc(stock){
+      const r=stock.risk || {}; const w=state.settings.weights; const pairs=[['rate',w.rate],['cyc',w.cyc],['margin',w.margin],['balance',w.balance],['crowding',w.crowding],['reg',w.reg]];
+      let num=0, den=0; for(const [k,wt] of pairs){const v=n(r[k]); if(Number.isFinite(v) && wt>0){num+=clamp(v,1,5)*wt; den+=wt}}
+      return den?num/den:null;
+    }
+    function riskClass(score){ if(!Number.isFinite(score)) return 'gray'; if(score>=3.75) return 'bad'; if(score>=2.75) return 'warn'; return 'good'}
+    function riskLabel(score){ if(!Number.isFinite(score)) return '–'; if(score>=3.75) return '높음'; if(score>=2.75) return '중간'; return '낮음'}
+
+    function getVisibleStocks(){
+      let arr=state.stocks.slice();
+      if(state.selectedSector!=='All') arr=arr.filter(s=>s.sector===state.selectedSector);
+      const q=state.search.trim().toLowerCase();
+      if(q) arr=arr.filter(s=>[s.symbol,s.name,s.sector,s.subIndustry].some(x=>String(x||'').toLowerCase().includes(q)));
+      if(state.statusFilter!=='All'){
+        const sectorSet = state.selectedSector==='All'?arr:state.stocks.filter(s=>s.sector===state.selectedSector);
+        arr=arr.filter(s=>calc(s, sectorSet).status===state.statusFilter);
+      }
+      const sectorSet = state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
+      arr.sort((a,b)=>{
+        const ca=calc(a, sectorSet), cb=calc(b, sectorSet);
+        const valsA={...a,...ca}, valsB={...b,...cb};
+        let va=valsA[state.sortKey], vb=valsB[state.sortKey];
+        if(typeof va==='string'||typeof vb==='string') return String(va??'').localeCompare(String(vb??''))*state.sortDir;
+        va=Number.isFinite(va)?va:-999999; vb=Number.isFinite(vb)?vb:-999999;
+        return (va-vb)*state.sortDir;
+      });
+      return arr;
+    }
+
+    function renderTabs(){
+      const counts = Object.fromEntries(SECTOR_ORDER.map(s=>[s,0])); counts.All=state.stocks.length;
+      for(const s of state.stocks) counts[s.sector]=(counts[s.sector]||0)+1;
+      const tabs=document.getElementById('sectorTabs'); tabs.innerHTML='';
+      for(const sector of SECTOR_ORDER){
+        const el=document.createElement('button'); el.className='tab'+(state.selectedSector===sector?' active':''); el.innerHTML=`${sectorLabel(sector)} <b>${counts[sector]||0}</b>`;
+        el.onclick=()=>{state.selectedSector=sector; state.selectedSymbol=null; render(); persistMaybe()}; tabs.appendChild(el);
+      }
+      const otherSectors=[...new Set(state.stocks.map(s=>s.sector).filter(s=>!SECTOR_ORDER.includes(s)))].sort();
+      for(const sector of otherSectors){
+        const el=document.createElement('button'); el.className='tab'+(state.selectedSector===sector?' active':''); el.innerHTML=`${sectorLabel(sector)} <b>${counts[sector]||0}</b>`;
+        el.onclick=()=>{state.selectedSector=sector; render(); persistMaybe()}; tabs.appendChild(el);
+      }
+    }
+
+    function render(){
+      renderTabs(); renderTable(); renderCards(); renderSelected(); renderExtremes(); renderAddSector();
+      document.getElementById('tableTitle').textContent = state.selectedSector==='All'?'S&P 500 전체 기업':sectorLabel(state.selectedSector)+' 섹터';
+      document.getElementById('tableSubtitle').textContent = state.search?('검색 필터: '+state.search):'표에서 가정을 직접 수정하세요. 행을 클릭하면 리스크 입력값을 조정할 수 있습니다.';
+      document.getElementById('lastUpdated').textContent = state.lastPriceRefresh?('가격 새로고침: '+new Date(state.lastPriceRefresh).toLocaleString()):'가격 데이터가 아직 새로고침되지 않았습니다';
+      document.getElementById('source상태').innerHTML = state.lastConstituentRefresh ? `<strong>구성종목 새로고침 완료.</strong> 출처: DataHub/GitHub CSV. 마지막 가져오기: ${new Date(state.lastConstituentRefresh).toLocaleString()}.` : `<strong>기본 목록이 로드되었습니다.</strong> “S&P 500 목록 새로고침”을 눌러 최신 DataHub/GitHub CSV를 가져오세요.`;
+    }
+
+    function renderTable(){
+      const tbody=document.getElementById('tbody'); tbody.innerHTML='';
+      const visible=getVisibleStocks();
+      const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
+      const frag=document.createDocumentFragment();
+      visible.forEach(s=>{
+        const c=calc(s, sectorSet); const tr=document.createElement('tr'); tr.dataset.symbol=s.symbol; if(state.selectedSymbol===s.symbol) tr.className='selected';
+        tr.innerHTML = `
+          <td><div class="ticker"><span>${s.symbol}</span>${s.priceSource==='auto'?'<span class="pill info">자동</span>':''}</div><div class="sub">${escapeHtml(s.name)}</div><div class="sectorSmall">${escapeHtml(s.subIndustry||'')}</div></td>
+          <td><span class="pill gray">${escapeHtml(sectorLabel(s.sector))}</span></td>
+          <td><input class="cellInput" data-field="price" value="${inputVal(s.price)}" placeholder="가격"></td>
+          <td><input class="cellInput" data-field="forwardEPS" value="${inputVal(s.forwardEPS)}" placeholder="EPS"></td>
+          <td><input class="cellInput" data-field="epsGrowth" value="${inputVal(s.epsGrowth)}"></td>
+          <td><input class="cellInput" data-field="revGrowth" value="${inputVal(s.revGrowth)}"></td>
+          <td><input class="cellInput" data-field="grossMargin" value="${inputVal(s.grossMargin)}"></td>
+          <td><input class="cellInput" data-field="opMargin" value="${inputVal(s.opMargin)}"></td>
+          <td><input class="cellInput" data-field="exitPE" value="${inputVal(s.exitPE)}"></td>
+          <td><input class="cellInput" data-field="discountRate" value="${inputVal(s.discountRate)}"></td>
+          <td class="readonly num">${fmt(c.currentPE,1)}</td>
+          <td class="readonly num ${c.sectorPremium>0.2?'negative':c.sectorPremium<-0.2?'positive':'neutral'}">${pct(c.sectorPremium,0)}</td>
+          <td class="readonly num ${c.requiredGrowth>(n(s.epsGrowth)||0)/100+0.04?'negative':'neutral'}">${pct(c.requiredGrowth,1)}</td>
+          <td class="readonly num">${money(c.bearFV)}</td>
+          <td class="readonly num">${money(c.baseFV)}</td>
+          <td class="readonly num">${money(c.bullFV)}</td>
+          <td class="readonly num ${c.upside>0.1?'positive':c.upside<state.settings.overvaluedThreshold/100?'negative':'neutral'}">${pct(c.upside,1)}</td>
+          <td><span class="pill ${c.statusClass}">${statusLabel(c.status)}</span></td>
+          <td><span class="pill ${riskClass(c.riskScore)}">${riskLabel(c.riskScore)} ${Number.isFinite(c.riskScore)?fmt(c.riskScore,1):''}</span> <span class="bar"><i style="width:${Number.isFinite(c.riskScore)?(c.riskScore/5*100):0}%"></i></span></td>
+        `;
+        tr.addEventListener('click', e=>{ if(e.target.tagName!=='INPUT'){state.selectedSymbol=s.symbol; render(); persistMaybe();} });
+        tr.querySelectorAll('input[data-field]').forEach(inp=>{
+          inp.addEventListener('change', e=>{ const f=e.target.dataset.field; const val=n(e.target.value); s[f]=val; if(f==='price') s.priceSource='manual'; render(); persistMaybe(); });
+          inp.addEventListener('click', e=>e.stopPropagation());
+        });
+        frag.appendChild(tr);
+      });
+      tbody.appendChild(frag);
+    }
+
+    function inputVal(v){return Number.isFinite(n(v))?String(v):''}
+    function escapeHtml(s){return String(s??'').replace(/[&<>"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}
+
+    function renderCards(){
+      const visible=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
+      const calcs=visible.map(s=>calc(s, sectorSet));
+      const pes=calcs.map(c=>c.currentPE), ups=calcs.map(c=>c.upside), risks=calcs.map(c=>c.riskScore);
+      const over=calcs.filter(c=>['Overvalued','Very overvalued'].includes(c.status)).length;
+      const high=risks.filter(x=>Number.isFinite(x)&&x>=3.75).length;
+      document.getElementById('cardCount').textContent=visible.length.toLocaleString();
+      document.getElementById('cardSector').textContent=sectorLabel(state.selectedSector);
+      document.getElementById('cardMedianPe').textContent=fmt(median(pes),1);
+      document.getElementById('cardMedianUpside').textContent=pct(median(ups),1);
+      document.getElementById('cardOvervalued').textContent=visible.length?pct(over/visible.length,0):'–';
+      document.getElementById('cardRisk').textContent=visible.length?pct(high/visible.length,0):'–';
+    }
+
+    function renderSelected(){
+      const box=document.getElementById('selectedDetails'); const label=document.getElementById('selectedTickerLabel');
+      const s=state.stocks.find(x=>x.symbol===state.selectedSymbol);
+      if(!s){label.textContent='None'; box.innerHTML='<div class="muted">행을 클릭하면 섹터 비교와 리스크 입력값을 확인·수정할 수 있습니다.</div>'; return;}
+      const sectorSet=state.stocks.filter(x=>x.sector===s.sector); const c=calc(s, sectorSet); label.textContent=s.symbol;
+      box.innerHTML=`
+        <div class="kv"><span>기업</span><b>${escapeHtml(s.name)}</b></div>
+        <div class="kv"><span>섹터</span><b>${escapeHtml(sectorLabel(s.sector))}</b></div>
+        <div class="kv"><span>세부 업종</span><b>${escapeHtml(s.subIndustry||'')}</b></div>
+        <div class="kv"><span>가격 / Base 적정가</span><b>${money(n(s.price))} / ${money(c.baseFV)}</b></div>
+        <div class="kv"><span>상승 / 하락 여력</span><b class="${c.upside>0?'positive':'negative'}">${pct(c.upside,1)}</b></div>
+        <div class="kv"><span>Forward P/E / 섹터 프리미엄</span><b>${fmt(c.currentPE,1)} / ${pct(c.sectorPremium,0)}</b></div>
+        <div class="kv"><span>필요 EPS CAGR</span><b>${pct(c.requiredGrowth,1)}</b></div>
+        <div class="kv"><span>밸류에이션 상태</span><b><span class="pill ${c.statusClass}">${statusLabel(c.status)}</span></b></div>
+        <div class="note">${s.symbol} 리스크 입력값. 기준: 1 = 낮은 리스크, 5 = 높은 리스크.</div>
+        <div class="riskGrid" style="margin-top:10px">
+          ${riskInput('rate','금리 민감도',s.risk.rate)}
+          ${riskInput('cyc','경기민감도',s.risk.cyc)}
+          ${riskInput('margin','마진 리스크',s.risk.margin)}
+          ${riskInput('balance','재무건전성 리스크',s.risk.balance)}
+          ${riskInput('crowding','밸류에이션/쏠림 리스크',s.risk.crowding)}
+          ${riskInput('reg','규제/지정학 리스크',s.risk.reg)}
+        </div>
+      `;
+      box.querySelectorAll('input[data-risk]').forEach(inp=>inp.addEventListener('change',e=>{s.risk[e.target.dataset.risk]=n(e.target.value); render(); persistMaybe();}));
+    }
+    function riskInput(k,label,val){return `<div class="riskRow"><span>${label}</span><input type="number" min="1" max="5" step="0.1" data-risk="${k}" value="${fmt(n(val),1)}"></div>`}
+
+    function renderExtremes(){
+      const box=document.getElementById('extremes'); box.innerHTML=''; document.getElementById('extremeLabel').textContent=sectorLabel(state.selectedSector);
+      const arr=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
+      const enriched=arr.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.upside));
+      const cheap=enriched.slice().sort((a,b)=>b.c.upside-a.c.upside).slice(0,3);
+      const expensive=enriched.slice().sort((a,b)=>a.c.upside-b.c.upside).slice(0,3);
+      const addHeader=t=>{const h=document.createElement('div'); h.className='muted'; h.style.margin='3px 0 0'; h.textContent=t; box.appendChild(h)};
+      const addItem=(x,i)=>{const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">${i}</div><div><b>${x.s.symbol}</b><div class="sub">${escapeHtml(x.s.name)}</div></div><div class="${x.c.upside>=0?'positive':'negative'}">${pct(x.c.upside,0)}</div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render()}; box.appendChild(div)};
+      addHeader('Base 시나리오 기준 저평가 상위'); cheap.forEach((x,i)=>addItem(x,i+1)); addHeader('Base 시나리오 기준 고평가 상위'); expensive.forEach((x,i)=>addItem(x,i+1));
+      if(!enriched.length) box.innerHTML='<div class="muted">가격과 EPS 가정을 입력하면 저평가/고평가 목록이 표시됩니다.</div>';
+    }
+
+    function renderAddSector(){
+      const sel=document.getElementById('addSector'); if(sel.children.length) return;
+      for(const sector of SECTOR_ORDER.filter(s=>s!=='All')){const o=document.createElement('option'); o.value=sector; o.textContent=sectorLabel(sector); sel.appendChild(o)}
+    }
+
+    async function fetchConstituents(){
+      log('Fetching S&P 500 constituent CSV...');
+      try{
+        const res=await fetch(CONSTITUENT_CSV_URL, {cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status);
+        const text=await res.text(); const rows=parseCSV(text); const header=rows.shift().map(h=>h.trim());
+        const ix={symbol:header.indexOf('Symbol'), name:header.indexOf('Security'), sector:header.indexOf('GICS Sector'), sub:header.indexOf('GICS Sub-Industry')};
+        const old=Object.fromEntries(state.stocks.map(s=>[s.symbol,s]));
+        const stocks=rows.map(r=>rowToStock([r[ix.symbol],r[ix.name],r[ix.sector],r[ix.sub]])).filter(s=>s.symbol);
+        for(const s of stocks){ if(old[s.symbol]) Object.assign(s, {...s, ...pickOverrides(old[s.symbol], s)}); }
+        state.stocks=dedupe(stocks); state.lastConstituentRefresh=Date.now(); state.selectedSector='All'; log(`DataHub/GitHub에서 S&P 500 종목 ${state.stocks.length}개를 불러왔습니다.`); render(); saveState();
+      }catch(err){ log('Constituent refresh failed: '+err.message+'. Using fallback or saved list.'); render(); }
+    }
+    function pickOverrides(oldS, newS){
+      return {price:oldS.price, priceSource:oldS.priceSource, forwardEPS:oldS.forwardEPS, revGrowth:oldS.revGrowth??newS.revGrowth, epsGrowth:oldS.epsGrowth??newS.epsGrowth, grossMargin:oldS.grossMargin??newS.grossMargin, opMargin:oldS.opMargin??newS.opMargin, exitPE:oldS.exitPE??newS.exitPE, discountRate:oldS.discountRate??newS.discountRate, risk:oldS.risk??newS.risk, notes:oldS.notes??''};
+    }
+    function dedupe(stocks){const seen=new Set(); return stocks.filter(s=>{if(seen.has(s.symbol)) return false; seen.add(s.symbol); return true})}
+
+    async function fetchPrices(){
+      const visible=getVisibleStocks(); if(!visible.length){log('새로고침할 표시 티커가 없습니다.'); return;}
+      const symbols=visible.map(s=>s.symbol); log(`표시된 티커 ${symbols.length}개의 가격 새로고침을 시도합니다...`);
+      let updated=0;
+      if(state.settings.useFmp && state.settings.fmpApiKey){
+        updated += await fetchFmpPrices(symbols);
+      } else if(state.settings.useFmp && !state.settings.fmpApiKey){
+        log('FMP is enabled but no API key is saved. Paste your free FMP key in the toolbar, then click Save.');
+      }
+      if(updated===0) updated += await fetchYahooPrices(symbols);
+      if(updated===0) updated += await fetchStooqPrices(symbols);
+      state.lastPriceRefresh=Date.now(); log(`가격 새로고침 완료. ${updated}개 티커가 업데이트되었습니다. FMP가 무료 브라우저 엔드포인트보다 보통 더 안정적이지만, API 제한이나 CORS 문제가 발생할 수 있습니다.`); render(); saveState();
+    }
+
+    async function fetchFmpPrices(symbols){
+      let updated=0; const key=(state.settings.fmpApiKey||'').trim();
+      if(!key) return 0;
+      for(const chunk of chunks(symbols, 80)){
+        try{
+          const url='https://financialmodelingprep.com/stable/batch-quote-short?symbols='+chunk.map(encodeURIComponent).join(',')+'&apikey='+encodeURIComponent(key);
+          const res=await fetch(url, {cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status);
+          const data=await res.json();
+          const results=Array.isArray(data) ? data : (data?.data || data?.results || []);
+          for(const q of results){
+            const raw=String(q.symbol||q.ticker||'').toUpperCase().replace('-', '.');
+            const s=state.stocks.find(x=>x.symbol.toUpperCase()===raw || x.symbol.replace('.', '-').toUpperCase()===String(q.symbol||'').toUpperCase());
+            const price=n(q.price ?? q.previous닫기 ?? q.close ?? q.dayHigh);
+            if(s && price){s.price=price; s.priceSource='auto'; updated++;}
+          }
+        }catch(err){ log('FMP 가격 엔드포인트가 일부 배치에서 실패했습니다: '+err.message); return updated; }
+      }
+      if(updated) log('FMP updated '+updated+' prices.');
+      return updated;
+    }
+
+    async function fetchYahooPrices(symbols){
+      let updated=0;
+      for(const chunk of chunks(symbols, 80)){
+        try{
+          const url='https://query1.finance.yahoo.com/v7/finance/quote?symbols='+chunk.map(normalizeSymbolForYahoo).join(',');
+          const res=await fetch(url, {cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status);
+          const data=await res.json(); const results=data?.quoteResponse?.result||[];
+          for(const q of results){
+            const sym=String(q.symbol||'').replace('-', '.').toUpperCase(); const s=state.stocks.find(x=>x.symbol===sym || normalizeSymbolForYahoo(x.symbol)===q.symbol);
+            if(!s) continue; const price=n(q.regularMarketPrice ?? q.postMarketPrice ?? q.preMarketPrice);
+            if(price){s.price=price; s.priceSource='auto'; updated++;}
+            if(!s.forwardEPS && n(q.epsForward)) s.forwardEPS=n(q.epsForward);
+            if(!s.exitPE && n(q.forwardPE)) s.exitPE=n(q.forwardPE);
+          }
+        }catch(err){ log('Yahoo 가격 엔드포인트가 차단되었거나 일부 배치에서 실패했습니다: '+err.message); return updated; }
+      }
+      return updated;
+    }
+
+    async function fetchStooqPrices(symbols){
+      let updated=0;
+      for(const chunk of chunks(symbols, 50)){
+        try{
+          const url='https://stooq.com/q/l/?s='+chunk.map(normalizeSymbolForStooq).join(',')+'&f=sd2t2ohlcv&h&e=csv';
+          const res=await fetch(url, {cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status);
+          const text=await res.text(); const rows=parseCSV(text); const h=rows.shift().map(x=>x.toLowerCase()); const isym=h.indexOf('symbol'), iclose=h.indexOf('close');
+          for(const r of rows){const raw=String(r[isym]||'').replace('.US','').replace('.us','').toUpperCase(); const s=state.stocks.find(x=>x.symbol.replace('-', '.').toUpperCase()===raw); const price=n(r[iclose]); if(s&&price){s.price=price; s.priceSource='auto'; updated++;}}
+        }catch(err){ log('Stooq price endpoint failed for one batch: '+err.message); }
+      }
+      return updated;
+    }
+    function chunks(arr, size){const out=[]; for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size)); return out}
+
+    function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); log('대시보드가 로컬에 저장되었습니다.'); }
+    function persistMaybe(){ if(state.settings.autoSave) localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function loadState(){
+      try{ const raw=localStorage.getItem(STORAGE_KEY); if(raw){ const saved=JSON.parse(raw); state={...state,...saved, settings:{...state.settings,...saved.settings, weights:{...state.settings.weights,...(saved.settings?.weights||{})}}}; if(!state.settings.fmpApiKey){state.settings.fmpApiKey=EMBEDDED_FMP_KEY; state.settings.useFmp=true;} log('저장된 로컬 대시보드 데이터를 불러왔습니다.'); }}catch(e){log('저장된 데이터를 불러오지 못했습니다: '+e.message)}
+    }
+
+    function exportJson(){
+      const txt=JSON.stringify(state,null,2); document.getElementById('exportText').value=txt; document.getElementById('exportModal').classList.add('show');
+    }
+    function importJsonFile(file){
+      const reader=new FileReader(); reader.onload=()=>{try{const data=JSON.parse(reader.result); state={...state,...data, settings:{...state.settings,...data.settings, weights:{...state.settings.weights,...(data.settings?.weights||{})}}}; render(); saveState(); log('JSON 대시보드 데이터를 가져왔습니다.')}catch(e){alert('유효하지 않은 JSON입니다: '+e.message)}}; reader.readAsText(file);
+    }
+    function importCsvFile(file){
+      const reader=new FileReader(); reader.onload=()=>{try{
+        const rows=parseCSV(reader.result); const header=rows.shift().map(h=>h.trim().toLowerCase());
+        const get=(names)=>names.map(x=>header.indexOf(x)).find(i=>i>=0);
+        const ix={symbol:get(['symbol','ticker']), name:get(['security','name','company']), sector:get(['gics sector','sector']), sub:get(['gics sub-industry','sub industry','industry'])};
+        if(ix.symbol==null || ix.name==null || ix.sector==null) throw new Error('CSV에는 Symbol/Ticker, Security/Name, GICS Sector/Sector 열이 필요합니다.');
+        const old=Object.fromEntries(state.stocks.map(s=>[s.symbol,s]));
+        state.stocks=dedupe(rows.map(r=>rowToStock([r[ix.symbol],r[ix.name],r[ix.sector],ix.sub!=null?r[ix.sub]:''])).filter(s=>s.symbol));
+        for(const s of state.stocks){ if(old[s.symbol]) Object.assign(s,{...s,...pickOverrides(old[s.symbol],s)}); }
+        state.lastConstituentRefresh=Date.now(); render(); saveState(); log('구성종목 CSV '+state.stocks.length+'행을 가져왔습니다.');
+      }catch(e){alert('CSV import failed: '+e.message)}}; reader.readAsText(file);
+    }
+
+    function applySettingsToInputs(){
+      document.getElementById('yearsInput').value=state.settings.years; document.getElementById('defaultEpsInput').value=state.settings.defaultEPS; document.getElementById('defaultDiscountInput').value=state.settings.defaultDiscount; document.getElementById('bearGrowthShift').value=state.settings.bearGrowthShift; document.getElementById('bullGrowthShift').value=state.settings.bullGrowthShift; document.getElementById('overvaluedThreshold').value=state.settings.overvaluedThreshold; document.getElementById('autoSaveToggle').checked=state.settings.autoSave;
+      document.getElementById('fmpKeyInput').value=state.settings.fmpApiKey || ''; document.getElementById('useFmpToggle').checked=state.settings.useFmp !== false;
+      document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
+    }
+    function bind(){
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=document.getElementById('fmpKeyInput').value.trim(); state.settings.useFmp=document.getElementById('useFmpToggle').checked; saveState(); log(state.settings.fmpApiKey?'FMP API 키 saved. Now click 가격 새로고침: 현재 섹터.':'FMP API 키 cleared.');}; document.getElementById('btnSave').onclick=saveState; document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnReset').onclick=()=>{ if(confirm('Clear saved data and reset to fallback list?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
+      document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
+      document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});
+      const settingMap={yearsInput:['years',true],defaultEpsInput:['defaultEPS',false],defaultDiscountInput:['defaultDiscount',false],bearGrowthShift:['bearGrowthShift',false],bullGrowthShift:['bullGrowthShift',false],overvaluedThreshold:['overvaluedThreshold',false]};
+      for(const [id,[key,inty]] of Object.entries(settingMap)){document.getElementById(id).onchange=e=>{state.settings[key]=inty?parseInt(e.target.value||0,10):n(e.target.value); render(); persistMaybe();}}
+      document.getElementById('autoSaveToggle').onchange=e=>{state.settings.autoSave=e.target.checked; persistMaybe()};
+      document.getElementById('fmpKeyInput').onchange=e=>{state.settings.fmpApiKey=e.target.value.trim(); persistMaybe(); log(state.settings.fmpApiKey?'FMP API 키 saved in this browser.':'FMP API 키 cleared.');};
+      document.getElementById('useFmpToggle').onchange=e=>{state.settings.useFmp=e.target.checked; persistMaybe();};
+      const weightIds={wRate:'rate',wCyc:'cyc',wMargin:'margin',wBalance:'balance',wCrowding:'crowding',wReg:'reg'};
+      for(const [id,key] of Object.entries(weightIds)){document.getElementById(id).onchange=e=>{state.settings.weights[key]=n(e.target.value)||0; render(); persistMaybe();}}
+      document.getElementById('btnAdd').onclick=()=>document.getElementById('addModal').classList.add('show'); document.getElementById('closeAdd').onclick=()=>document.getElementById('addModal').classList.remove('show'); document.getElementById('closeExport').onclick=()=>document.getElementById('exportModal').classList.remove('show');
+      document.getElementById('copyExport').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('exportText').value); log('JSON 내보내기 copied to clipboard.')};
+      document.getElementById('confirmAdd').onclick=()=>{const sym=document.getElementById('addSymbol').value.trim().toUpperCase(); if(!sym) return alert('티커는 필수입니다.'); const row=[sym,document.getElementById('addName').value.trim()||sym,document.getElementById('addSector').value,document.getElementById('addSub').value.trim()]; const existing=state.stocks.find(s=>s.symbol===sym); if(existing) return alert('이미 존재하는 티커입니다.'); state.stocks.push(rowToStock(row)); state.selectedSymbol=sym; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 추가됨.')};
+    }
+
+    loadState(); bind(); applySettingsToInputs(); render();
+    // Try to pull the current list automatically. If it fails, the fallback list remains available.
+    setTimeout(()=>{ if(!state.lastConstituentRefresh) fetchConstituents(); }, 500);
+  </script>
+</body>
+</html>
