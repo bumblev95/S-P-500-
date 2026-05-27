@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>S&P 500 섹터 밸류에이션 대시보드 - 섹터 히트맵 복구 v24</title>
+  <title>S&P 500 섹터 밸류에이션 대시보드 - 분리형 위험 카드 v22</title>
   <style>
     :root{
       --bg:#07111f; --panel:#111827; --panel2:#0f172a; --panel3:#0b1220; --muted:#94a3b8; --text:#e5e7eb;
@@ -57,18 +57,8 @@
     .signalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.signalCard{border:1px solid #253247;background:#0b1220;border-radius:14px;padding:11px;cursor:pointer}.signalCard:hover{border-color:#38bdf8}.signalTicker{font-size:18px;font-weight:900}.signalMeta{font-size:11px;color:#94a3b8;margin-top:4px}.signalScore{font-size:22px;font-weight:900;text-align:right}.mobileStockPanel{display:none;margin:14px 0}.mobileStockList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}.mobileStockCard{border:1px solid #253247;background:linear-gradient(180deg,#0b1220,#101827);border-radius:16px;padding:13px;cursor:pointer}.mobileStockCard:hover{border-color:#38bdf8}.mobileTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.mobileTicker{font-size:22px;font-weight:900}.mobileCompany{font-size:11px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}.mobileMetrics{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px}.mobileMetric{border:1px solid #253247;background:#07101d;border-radius:10px;padding:7px}.mobileMetric span{display:block;color:#94a3b8;font-size:10px}.mobileMetric b{font-size:13px}.mobileMode .wrap{max-width:760px}.mobileMode .hero,.mobileMode .layout,.mobileMode .picksPanel,.mobileMode .signalsPanel{grid-template-columns:1fr}.mobileMode .cards{grid-template-columns:repeat(2,minmax(0,1fr))}.mobileMode .side{position:static}.mobileMode .tableWrap{display:none}.mobileMode .mobileStockPanel{display:block}.mobileMode .toolbar{position:static}.mobileMode .pickGrid,.mobileMode .signalGrid,.mobileMode .mobileStockList,.mobileMode .heatGrid{grid-template-columns:1fr}.mobileMode .modeHint{display:none}.mobileMode .sourceBox{display:none}.mobileMode .title p{font-size:12px}.mobileMode .title h1{font-size:25px}.mobileMode .card{min-height:88px}.mobileMode .card .v{font-size:22px}
 
     @media (max-width:1180px){.hero,.layout,.apiPanel,.picksPanel,.signalsPanel,.homeGrid,.alertGrid{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tableWrap{max-height:none}}
-        .heatPanel{margin:14px 0}.heatPanel .sectionTitle{margin-bottom:10px}.heatPanel .simpleHint{margin-top:10px}
-    .familyHidden{display:none!important}
+        .familyHidden{display:none!important}
     .criteriaNote{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.45}
-    .detailBlock{border:1px solid #263244;background:#0b1220;border-radius:16px;padding:12px;margin:12px 0}
-    .detailBlock h3{margin:0 0 10px;font-size:13px;color:#e0f2fe;letter-spacing:-.01em}
-    .tradeGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .tradeBox{border:1px solid #223047;background:#07101d;border-radius:13px;padding:10px}
-    .tradeBox span{display:block;color:#94a3b8;font-size:11px;margin-bottom:5px}
-    .tradeBox b{font-size:15px}
-    .tradeBox .tiny{font-size:11px;color:#94a3b8;margin-top:4px}
-    .signalLine{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-    @media (max-width:720px){.tradeGrid{grid-template-columns:1fr}.detailBlock{padding:11px}}
     @media (max-width:720px){.wrap{padding:14px}.homeGrid,.alertGrid{grid-template-columns:1fr}.pickGrid{grid-template-columns:1fr}.signalGrid{grid-template-columns:1fr}.mobileStockList{grid-template-columns:1fr}.heatGrid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.toolbar{position:static}.smallInput,.select,.search{width:100%;max-width:none;flex:auto}.btn{flex:1}.grid2{grid-template-columns:1fr}.sourceBox{padding:13px}.title h1{font-size:27px}.tableWrap{margin:0 -10px;padding-left:10px}.sectorTabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px}.tab{flex:0 0 auto}.card .v{font-size:23px}}
   </style>
 </head>
@@ -76,8 +66,8 @@
   <div class="wrap">
     <div class="hero">
       <div class="title">
-        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 v24 · 섹터 히트맵 + 클릭 상세 매매 계획</div>
-        <p>아버지가 휴대폰에서도 쉽게 볼 수 있도록 상단은 오늘 볼 종목, 위험 카드, 섹터 히트맵을 중심으로 정리하고, 매수가·목표가·손절가·유동성·추세 같은 세부 정보는 종목을 클릭했을 때 보이도록 정리한 가족용 대시보드입니다. 가격과 펀더멘털은 GitHub Actions CSV를 읽고, 관심종목은 Google Sheet와 연결해 가족이 함께 관리할 수 있습니다.</p>
+        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 보안 관심종목 v20 · PIN 보호 + 모바일 중심</div>
+        <p>아버지가 휴대폰에서도 쉽게 볼 수 있도록 오늘 볼 종목, 관심종목 TOP, 실적 임박, Value Trap, 부채 위험을 따로 분리해 보여주는 가족용 대시보드입니다. 가격과 펀더멘털은 GitHub Actions CSV를 읽고, 관심종목은 Google Sheet와 연결해 가족이 함께 관리할 수 있습니다.</p>
       </div>
       <div class="sourceBox">
         <div class="label">데이터 소스 상태</div>
@@ -172,13 +162,9 @@
       </div>
     </section>
 
-    <section class="heatPanel" id="sectorHeatmapPanel">
-      <div class="sectionTitle">
-        <h2>섹터 히트맵</h2>
-        <span>섹터별 평균 단기점수와 고평가 비중</span>
-      </div>
+    <section class="signalsPanel familyHidden">
+      <div id="signalSummary" class="signalGrid"></div>
       <div id="sectorHeatmap" class="heatGrid"></div>
-      <div class="simpleHint">타일을 누르면 해당 섹터로 바로 이동합니다. 점수가 높을수록 현재 필터 기준에서 상대적으로 매력적인 섹터입니다.</div>
     </section>
 
     <div id="sectorTabs" class="sectorTabs"></div>
@@ -878,91 +864,6 @@
       const cw=document.getElementById('cardWatchTop'); const cws=document.getElementById('cardWatchTopSub'); if(cw) cw.textContent=topWatch?topWatch.s.symbol:'–'; if(cws) cws.textContent=topWatch?('점수 '+fmt(topWatch.c.shortScore,0)):'관심종목 기준';
     }
 
-
-    function planNumber(v){ return Number.isFinite(v) ? v : null; }
-    function liquidityInfo(stock){
-      const price=n(stock.price), vol=n(stock.avgVolume3m)||n(stock.volume);
-      const dollar=(price&&vol)?price*vol:null;
-      let label='데이터 없음', cls='gray', note='평균 거래량 데이터 없음';
-      if(Number.isFinite(dollar)){
-        if(dollar>=50000000){label='낮음'; cls='good'; note='거래대금 충분';}
-        else if(dollar>=10000000){label='정상'; cls='good'; note='대부분 매매 가능';}
-        else if(dollar>=2000000){label='주의'; cls='warn'; note='소형주 매매 시 호가 확인';}
-        else {label='높음'; cls='bad'; note='유동성 부족 가능성';}
-      }
-      const vr=(n(stock.volume)&&n(stock.avgVolume3m))?n(stock.volume)/n(stock.avgVolume3m):null;
-      return {label,cls,note,dollar,avgVol:vol,volRatio:vr};
-    }
-    function trendInfo(stock){
-      const price=n(stock.price), ma20=n(stock.ma20), ma50=n(stock.ma50), ma200=n(stock.ma200);
-      let score=0, checks=0;
-      if(price&&ma20){checks++; score+=price>ma20?1:-1;}
-      if(price&&ma50){checks++; score+=price>ma50?1:-1;}
-      if(price&&ma200){checks++; score+=price>ma200?1:-1;}
-      let label='데이터 없음', cls='gray', note='이동평균 데이터 없음';
-      if(checks){
-        if(score>=2){label='상승'; cls='good'; note='주요 이동평균 위';}
-        else if(score<=-2){label='하락'; cls='bad'; note='주요 이동평균 아래';}
-        else {label='중립'; cls='warn'; note='추세 혼조';}
-      }
-      return {label,cls,note,ma20,ma50,ma200};
-    }
-    function volatilityInfo(stock){
-      const vol=n(stock.volatility4m), dd=n(stock.maxDrawdown4m);
-      let label='데이터 없음', cls='gray';
-      if(Number.isFinite(vol)){
-        if(vol<0.25){label='낮음'; cls='good';}
-        else if(vol<0.45){label='정상'; cls='good';}
-        else if(vol<0.75){label='주의'; cls='warn';}
-        else {label='높음'; cls='bad';}
-      } else if(Number.isFinite(dd)){
-        if(dd>-0.15){label='낮음'; cls='good';}
-        else if(dd>-0.30){label='정상'; cls='good';}
-        else if(dd>-0.45){label='주의'; cls='warn';}
-        else {label='높음'; cls='bad';}
-      }
-      return {label,cls,vol,dd};
-    }
-    function tradePlan(stock,c){
-      const price=n(stock.price), base=n(c.baseFV), range52=n(c.range52), ret=n(c.returnH), vol=n(stock.volatility4m);
-      if(!price) return null;
-      const profile=horizonProfile();
-      const stopPct=clamp((Number.isFinite(vol)?vol*0.22:0.09),0.06,profile.key==='swing4m'?0.16:0.20);
-      let targetPct=0.10;
-      if(Number.isFinite(c.upside)) targetPct=clamp(c.upside*(profile.key==='swing4m'?0.45:0.60),0.06,profile.key==='swing4m'?0.25:0.35);
-      if(Number.isFinite(ret) && ret>0.10) targetPct+=0.02;
-      if(Number.isFinite(range52) && range52>0.85) targetPct=Math.min(targetPct,0.10);
-      const target1=base&&base>price?Math.min(price*(1+targetPct),base):price*(1+targetPct);
-      const target2=base&&base>target1?base:price*(1+targetPct*1.55);
-      const stop=price*(1-stopPct);
-      const buyLow=price*(Number.isFinite(range52)&&range52>0.80?0.94:0.97);
-      const buyHigh=price*(Number.isFinite(range52)&&range52>0.80?0.99:1.02);
-      const rr=(target1-price)/(price-stop);
-      let action='관찰'; let cls='warn'; let reason='가격/실적/추세 확인 후 접근';
-      if(Number.isFinite(c.shortScore)&&c.shortScore>=70 && rr>=1.5){action='후보'; cls='good'; reason='점수와 위험/보상 양호';}
-      else if((Number.isFinite(c.earningsDays)&&c.earningsDays>=0&&c.earningsDays<=7) || (c.debtInfo&&c.debtInfo.label==='높음')){action='주의'; cls='bad'; reason='실적 또는 부채 리스크 확인 필요';}
-      else if(rr<1.0){action='관찰'; cls='warn'; reason='위험 대비 보상 부족';}
-      return {buyLow,buyHigh,target1,target2,stop,rr,action,cls,reason};
-    }
-    function tradePlanHtml(stock,c){
-      const p=tradePlan(stock,c), liq=liquidityInfo(stock), tr=trendInfo(stock), vo=volatilityInfo(stock);
-      if(!p) return '<div class="detailBlock"><h3>매매 계획</h3><div class="muted">가격 데이터를 먼저 불러오면 매수가/목표가/손절가가 표시됩니다.</div></div>';
-      return `<div class="detailBlock"><h3>클릭 상세: 4개월~1년 매매 체크</h3>
-        <div class="signalLine"><span class="pill ${p.cls}">판단 ${p.action}</span><span class="pill ${liq.cls}">유동성 ${liq.label}</span><span class="pill ${tr.cls}">추세 ${tr.label}</span><span class="pill ${vo.cls}">변동성 ${vo.label}</span></div>
-        <div class="tradeGrid" style="margin-top:10px">
-          <div class="tradeBox"><span>관심 매수가</span><b>${money(p.buyLow)} ~ ${money(p.buyHigh)}</b><div class="tiny">현재가 기준 진입 범위</div></div>
-          <div class="tradeBox"><span>1차 / 2차 목표가</span><b>${money(p.target1)} / ${money(p.target2)}</b><div class="tiny">Base 적정가와 단기 점수 반영</div></div>
-          <div class="tradeBox"><span>손절 기준</span><b class="negative">${money(p.stop)}</b><div class="tiny">변동성 기반 보수적 기준</div></div>
-          <div class="tradeBox"><span>위험/보상비율</span><b class="${p.rr>=1.5?'positive':p.rr<1?'negative':'neutral'}">1 : ${fmt(p.rr,2)}</b><div class="tiny">${escapeHtml(p.reason)}</div></div>
-          <div class="tradeBox"><span>유동성</span><b>${compactMoney(liq.dollar)}</b><div class="tiny">평균 거래량 ${fmt(liq.avgVol,0)} · 거래량비 ${fmt(liq.volRatio,2)}</div></div>
-          <div class="tradeBox"><span>이동평균 위치</span><b>${tr.label}</b><div class="tiny">MA20 ${money(tr.ma20)} · MA50 ${money(tr.ma50)} · MA200 ${money(tr.ma200)}</div></div>
-          <div class="tradeBox"><span>변동성 / 최대하락</span><b>${pct(vo.vol,0)} / ${pct(vo.dd,0)}</b><div class="tiny">최근 약 4개월 기준</div></div>
-          <div class="tradeBox"><span>52주 위치</span><b>${pct(c.range52,0)}</b><div class="tiny">고점대비 ${pct(c.drawdown52High,0)} · 저점대비 ${pct(c.from52Low,0)}</div></div>
-        </div>
-        <div class="note">자동 계산은 스크리닝용입니다. 매수·매도 결정 전 뉴스, 실적 발표, 차트, 호가/거래량을 따로 확인하세요.</div>
-      </div>`;
-    }
-
     function renderSelected(){
       const box=document.getElementById('selectedDetails'); const label=document.getElementById('selectedTickerLabel');
       const s=state.stocks.find(x=>x.symbol===state.selectedSymbol);
@@ -973,7 +874,6 @@
         <div class="kv"><span>섹터</span><b>${escapeHtml(sectorLabel(s.sector))}</b></div>
         <div class="kv"><span>세부 업종</span><b>${escapeHtml(s.subIndustry||'')}</b></div>
         <div class="kv"><span>가격 / Base 적정가</span><b>${money(n(s.price))} / ${money(c.baseFV)}</b></div>
-        ${tradePlanHtml(s,c)}
         <div class="kv"><span>52주 위치</span><b>${pct(c.range52,0)} · 고점대비 ${pct(c.drawdown52High,0)} · 저점대비 ${pct(c.from52Low,0)}</b></div>
         <div class="kv"><span>실적 발표</span><b><span class="pill ${earningsClass(c.earningsDays)}">${earningsLabel(c.earningsDays)}</span> ${escapeHtml(s.nextEarningsDate||'')}</b></div>
         <div class="kv"><span>부채 위험</span><b><span class="pill ${c.debtInfo.cls}">${c.debtInfo.label}</span> D/E ${fmt(c.debtInfo.dte,0)}% · 유동비율 ${fmt(c.debtInfo.currentRatio,2)} · 현금/부채 ${pct(c.debtInfo.cashDebt,0)}</b></div>
@@ -1165,14 +1065,14 @@
       }catch(err){ log('구성종목 새로고침 실패: '+err.message+'. 기본 목록 또는 저장된 목록을 사용합니다.'); render(); }
     }
     function pickOverrides(oldS, newS){
-      return {price:oldS.price, priceSource:oldS.priceSource, forwardEPS:oldS.forwardEPS, revGrowth:oldS.revGrowth??newS.revGrowth, epsGrowth:oldS.epsGrowth??newS.epsGrowth, grossMargin:oldS.grossMargin??newS.grossMargin, opMargin:oldS.opMargin??newS.opMargin, exitPE:oldS.exitPE??newS.exitPE, discountRate:oldS.discountRate??newS.discountRate, risk:oldS.risk??newS.risk, notes:oldS.notes??'', fundamentalSource:oldS.fundamentalSource??newS.fundamentalSource, fundamentalAuto:oldS.fundamentalAuto??false, fundamentalManual:oldS.fundamentalManual??false, return1m:oldS.return1m??newS.return1m, return3m:oldS.return3m??newS.return3m, return4m:oldS.return4m??newS.return4m, return6m:oldS.return6m??newS.return6m, isCustom:oldS.isCustom??newS.isCustom??false, volume:oldS.volume??newS.volume, avgVolume3m:oldS.avgVolume3m??newS.avgVolume3m, ma20:oldS.ma20??newS.ma20, ma50:oldS.ma50??newS.ma50, ma200:oldS.ma200??newS.ma200, volatility4m:oldS.volatility4m??newS.volatility4m, maxDrawdown4m:oldS.maxDrawdown4m??newS.maxDrawdown4m};
+      return {price:oldS.price, priceSource:oldS.priceSource, forwardEPS:oldS.forwardEPS, revGrowth:oldS.revGrowth??newS.revGrowth, epsGrowth:oldS.epsGrowth??newS.epsGrowth, grossMargin:oldS.grossMargin??newS.grossMargin, opMargin:oldS.opMargin??newS.opMargin, exitPE:oldS.exitPE??newS.exitPE, discountRate:oldS.discountRate??newS.discountRate, risk:oldS.risk??newS.risk, notes:oldS.notes??'', fundamentalSource:oldS.fundamentalSource??newS.fundamentalSource, fundamentalAuto:oldS.fundamentalAuto??false, fundamentalManual:oldS.fundamentalManual??false, return1m:oldS.return1m??newS.return1m, return3m:oldS.return3m??newS.return3m, return4m:oldS.return4m??newS.return4m, return6m:oldS.return6m??newS.return6m, isCustom:oldS.isCustom??newS.isCustom??false};
     }
     function dedupe(stocks){const seen=new Set(); return stocks.filter(s=>{if(seen.has(s.symbol)) return false; seen.add(s.symbol); return true})}
 
     async function fetchPrices(){
       const visible=getVisibleStocks(); if(!visible.length){log('새로고침할 표시 티커가 없습니다.'); return;}
       const symbols=visible.map(s=>s.symbol);
-      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v24는 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
+      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v16은 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
       let updated=0;
 
       updated += await fetchLocalEodCsvPrices(symbols);
@@ -1394,14 +1294,7 @@
         return6m: header.indexOf('return6m'),
         high52: header.indexOf('high52'),
         low52: header.indexOf('low52'),
-        range52: header.indexOf('range52'),
-        volume: header.indexOf('volume'),
-        avgVolume3m: header.indexOf('avgvolume3m'),
-        ma20: header.indexOf('ma20'),
-        ma50: header.indexOf('ma50'),
-        ma200: header.indexOf('ma200'),
-        volatility4m: header.indexOf('volatility4m'),
-        maxDrawdown4m: header.indexOf('maxdrawdown4m')
+        range52: header.indexOf('range52')
       };
       if(ix.symbol<0 || (ix.close<0 && ix.adjClose<0)){
         log('prices/latest_prices.csv 형식이 맞지 않습니다. 필요한 열: symbol,date,close 또는 adjClose');
@@ -1426,14 +1319,7 @@
           return6m: ix.return6m>=0 ? toNumLoose(r[ix.return6m]) : null,
           high52: ix.high52>=0 ? toNumLoose(r[ix.high52]) : null,
           low52: ix.low52>=0 ? toNumLoose(r[ix.low52]) : null,
-          range52: ix.range52>=0 ? toNumLoose(r[ix.range52]) : null,
-          volume: ix.volume>=0 ? toNumLoose(r[ix.volume]) : null,
-          avgVolume3m: ix.avgVolume3m>=0 ? toNumLoose(r[ix.avgVolume3m]) : null,
-          ma20: ix.ma20>=0 ? toNumLoose(r[ix.ma20]) : null,
-          ma50: ix.ma50>=0 ? toNumLoose(r[ix.ma50]) : null,
-          ma200: ix.ma200>=0 ? toNumLoose(r[ix.ma200]) : null,
-          volatility4m: ix.volatility4m>=0 ? toNumLoose(r[ix.volatility4m]) : null,
-          maxDrawdown4m: ix.maxDrawdown4m>=0 ? toNumLoose(r[ix.maxDrawdown4m]) : null
+          range52: ix.range52>=0 ? toNumLoose(r[ix.range52]) : null
         };
       }
       let updated=0; let matchedRows=Object.keys(bySymbol).length; let usableRows=0;
@@ -1449,13 +1335,6 @@
           if(Number.isFinite(rec.high52)) s.high52=rec.high52;
           if(Number.isFinite(rec.low52)) s.low52=rec.low52;
           if(Number.isFinite(rec.range52)) s.range52=rec.range52;
-          if(Number.isFinite(rec.volume)) s.volume=rec.volume;
-          if(Number.isFinite(rec.avgVolume3m)) s.avgVolume3m=rec.avgVolume3m;
-          if(Number.isFinite(rec.ma20)) s.ma20=rec.ma20;
-          if(Number.isFinite(rec.ma50)) s.ma50=rec.ma50;
-          if(Number.isFinite(rec.ma200)) s.ma200=rec.ma200;
-          if(Number.isFinite(rec.volatility4m)) s.volatility4m=rec.volatility4m;
-          if(Number.isFinite(rec.maxDrawdown4m)) s.maxDrawdown4m=rec.maxDrawdown4m;
           updated++;
         }
       }
@@ -1676,7 +1555,7 @@
       document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
     }
     function bind(){
-      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v24는 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v20은 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
       document.getElementById('btnReset').onclick=()=>{ if(confirm('저장된 데이터를 삭제하고 기본 목록으로 초기화할까요?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
       document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
       document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>S&P 500 섹터 밸류에이션 대시보드 - 섹터 히트맵 복구 v24</title>
+  <title>S&P 500 섹터 밸류에이션 대시보드 - 클릭 상세 매매 계획 v23</title>
   <style>
     :root{
       --bg:#07111f; --panel:#111827; --panel2:#0f172a; --panel3:#0b1220; --muted:#94a3b8; --text:#e5e7eb;
@@ -57,8 +57,7 @@
     .signalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.signalCard{border:1px solid #253247;background:#0b1220;border-radius:14px;padding:11px;cursor:pointer}.signalCard:hover{border-color:#38bdf8}.signalTicker{font-size:18px;font-weight:900}.signalMeta{font-size:11px;color:#94a3b8;margin-top:4px}.signalScore{font-size:22px;font-weight:900;text-align:right}.mobileStockPanel{display:none;margin:14px 0}.mobileStockList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}.mobileStockCard{border:1px solid #253247;background:linear-gradient(180deg,#0b1220,#101827);border-radius:16px;padding:13px;cursor:pointer}.mobileStockCard:hover{border-color:#38bdf8}.mobileTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.mobileTicker{font-size:22px;font-weight:900}.mobileCompany{font-size:11px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}.mobileMetrics{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px}.mobileMetric{border:1px solid #253247;background:#07101d;border-radius:10px;padding:7px}.mobileMetric span{display:block;color:#94a3b8;font-size:10px}.mobileMetric b{font-size:13px}.mobileMode .wrap{max-width:760px}.mobileMode .hero,.mobileMode .layout,.mobileMode .picksPanel,.mobileMode .signalsPanel{grid-template-columns:1fr}.mobileMode .cards{grid-template-columns:repeat(2,minmax(0,1fr))}.mobileMode .side{position:static}.mobileMode .tableWrap{display:none}.mobileMode .mobileStockPanel{display:block}.mobileMode .toolbar{position:static}.mobileMode .pickGrid,.mobileMode .signalGrid,.mobileMode .mobileStockList,.mobileMode .heatGrid{grid-template-columns:1fr}.mobileMode .modeHint{display:none}.mobileMode .sourceBox{display:none}.mobileMode .title p{font-size:12px}.mobileMode .title h1{font-size:25px}.mobileMode .card{min-height:88px}.mobileMode .card .v{font-size:22px}
 
     @media (max-width:1180px){.hero,.layout,.apiPanel,.picksPanel,.signalsPanel,.homeGrid,.alertGrid{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tableWrap{max-height:none}}
-        .heatPanel{margin:14px 0}.heatPanel .sectionTitle{margin-bottom:10px}.heatPanel .simpleHint{margin-top:10px}
-    .familyHidden{display:none!important}
+        .familyHidden{display:none!important}
     .criteriaNote{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.45}
     .detailBlock{border:1px solid #263244;background:#0b1220;border-radius:16px;padding:12px;margin:12px 0}
     .detailBlock h3{margin:0 0 10px;font-size:13px;color:#e0f2fe;letter-spacing:-.01em}
@@ -76,8 +75,8 @@
   <div class="wrap">
     <div class="hero">
       <div class="title">
-        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 v24 · 섹터 히트맵 + 클릭 상세 매매 계획</div>
-        <p>아버지가 휴대폰에서도 쉽게 볼 수 있도록 상단은 오늘 볼 종목, 위험 카드, 섹터 히트맵을 중심으로 정리하고, 매수가·목표가·손절가·유동성·추세 같은 세부 정보는 종목을 클릭했을 때 보이도록 정리한 가족용 대시보드입니다. 가격과 펀더멘털은 GitHub Actions CSV를 읽고, 관심종목은 Google Sheet와 연결해 가족이 함께 관리할 수 있습니다.</p>
+        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 v23 · 클릭하면 매수가/목표가/손절가/유동성/추세 확인</div>
+        <p>아버지가 휴대폰에서도 쉽게 볼 수 있도록 상단은 오늘 볼 종목과 위험 카드만 남기고, 매수가·목표가·손절가·유동성·추세 같은 세부 정보는 종목을 클릭했을 때 보이도록 정리한 가족용 대시보드입니다. 가격과 펀더멘털은 GitHub Actions CSV를 읽고, 관심종목은 Google Sheet와 연결해 가족이 함께 관리할 수 있습니다.</p>
       </div>
       <div class="sourceBox">
         <div class="label">데이터 소스 상태</div>
@@ -172,13 +171,9 @@
       </div>
     </section>
 
-    <section class="heatPanel" id="sectorHeatmapPanel">
-      <div class="sectionTitle">
-        <h2>섹터 히트맵</h2>
-        <span>섹터별 평균 단기점수와 고평가 비중</span>
-      </div>
+    <section class="signalsPanel familyHidden">
+      <div id="signalSummary" class="signalGrid"></div>
       <div id="sectorHeatmap" class="heatGrid"></div>
-      <div class="simpleHint">타일을 누르면 해당 섹터로 바로 이동합니다. 점수가 높을수록 현재 필터 기준에서 상대적으로 매력적인 섹터입니다.</div>
     </section>
 
     <div id="sectorTabs" class="sectorTabs"></div>
@@ -1172,7 +1167,7 @@
     async function fetchPrices(){
       const visible=getVisibleStocks(); if(!visible.length){log('새로고침할 표시 티커가 없습니다.'); return;}
       const symbols=visible.map(s=>s.symbol);
-      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v24는 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
+      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v23은 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
       let updated=0;
 
       updated += await fetchLocalEodCsvPrices(symbols);
@@ -1676,7 +1671,7 @@
       document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
     }
     function bind(){
-      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v24는 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v23은 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
       document.getElementById('btnReset').onclick=()=>{ if(confirm('저장된 데이터를 삭제하고 기본 목록으로 초기화할까요?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
       document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
       document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});

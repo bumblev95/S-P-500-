@@ -37,6 +37,25 @@ def clean_value(value: Any) -> Any:
     return value
 
 
+
+
+def unix_to_date(value: Any) -> str:
+    try:
+        if value in (None, ""):
+            return ""
+        ts = float(value)
+        if ts <= 0:
+            return ""
+        return datetime.fromtimestamp(ts, timezone.utc).date().isoformat()
+    except Exception:
+        return ""
+
+def first_nonempty(*values: Any) -> Any:
+    for v in values:
+        if v not in (None, ""):
+            return v
+    return ""
+
 def read_watchlist_sheet_url() -> str:
     env_url = os.getenv("WATCHLIST_CSV_URL", "").strip()
     if env_url:
@@ -149,6 +168,10 @@ def main() -> int:
                 "totalCash": clean_value(info.get("totalCash")),
                 "beta": clean_value(info.get("beta")),
                 "marketCap": clean_value(info.get("marketCap")),
+                "fiftyTwoWeekHigh": clean_value(info.get("fiftyTwoWeekHigh")),
+                "fiftyTwoWeekLow": clean_value(info.get("fiftyTwoWeekLow")),
+                "earningsTimestamp": clean_value(first_nonempty(info.get("earningsTimestamp"), info.get("earningsTimestampStart"), info.get("earningsTimestampEnd"))),
+                "nextEarningsDate": unix_to_date(first_nonempty(info.get("earningsTimestamp"), info.get("earningsTimestampStart"), info.get("earningsTimestampEnd"))),
                 "source": "Yahoo Finance fundamentals via yfinance/GitHub Actions",
                 "updatedAt": updated_at,
             }
@@ -171,6 +194,7 @@ def main() -> int:
         "forwardEps", "trailingEps", "forwardPE", "trailingPE", "pegRatio",
         "revenueGrowth", "earningsGrowth", "grossMargins", "operatingMargins", "profitMargins",
         "debtToEquity", "currentRatio", "quickRatio", "totalDebt", "totalCash", "beta", "marketCap",
+        "fiftyTwoWeekHigh", "fiftyTwoWeekLow", "earningsTimestamp", "nextEarningsDate",
         "source", "updatedAt", "error",
     ]
     for col in preferred_cols:

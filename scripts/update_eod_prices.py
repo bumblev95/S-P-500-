@@ -125,6 +125,32 @@ def calc_return(series: pd.Series, lookback: int) -> float | str:
     return round(last / prev - 1.0, 6)
 
 
+def calc_ma(series: pd.Series, window: int) -> float | str:
+    s = series.dropna()
+    if len(s) < window:
+        return ""
+    return round(float(s.tail(window).mean()), 6)
+
+
+def calc_annualized_vol(series: pd.Series, lookback: int = 84) -> float | str:
+    s = series.dropna().tail(lookback + 1)
+    if len(s) < 25:
+        return ""
+    rets = s.pct_change().dropna()
+    if rets.empty:
+        return ""
+    return round(float(rets.std() * (252 ** 0.5)), 6)
+
+
+def calc_max_drawdown(series: pd.Series, lookback: int = 84) -> float | str:
+    s = series.dropna().tail(lookback)
+    if len(s) < 10:
+        return ""
+    running_max = s.cummax()
+    dd = s / running_max - 1.0
+    return round(float(dd.min()), 6)
+
+
 def main() -> int:
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     symbols = read_symbols()
@@ -134,7 +160,7 @@ def main() -> int:
     print(f"Downloading Yahoo EOD prices/history for {len(yahoo_symbols)} symbols...")
     data = yf.download(
         tickers=" ".join(yahoo_symbols),
-        period="8mo",
+        period="13mo",
         interval="1d",
         group_by="ticker",
         auto_adjust=False,
@@ -179,6 +205,35 @@ def main() -> int:
         except Exception:
             pass
 
+        high52 = ""
+        low52 = ""
+        range52 = ""
+        distance52High = ""
+        distance52Low = ""
+        try:
+            recent = valid.tail(252)
+            if not recent.empty:
+                high52_val = float(recent.max())
+                low52_val = float(recent.min())
+                high52 = round(high52_val, 6)
+                low52 = round(low52_val, 6)
+                if high52_val > low52_val:
+                    range52 = round((close - low52_val) / (high52_val - low52_val), 6)
+                if high52_val > 0:
+                    distance52High = round(close / high52_val - 1.0, 6)
+                if low52_val > 0:
+                    distance52Low = round(close / low52_val - 1.0, 6)
+        except Exception:
+            pass
+
+        avgVolume3m = ""
+        try:
+            vol_series = one.get("Volume").dropna().tail(63)
+            if not vol_series.empty:
+                avgVolume3m = int(vol_series.mean())
+        except Exception:
+            pass
+
         original_symbol = symbol_map.get(ysym, to_display_symbol(ysym))
         rows.append({
             "symbol": original_symbol,
@@ -187,6 +242,17 @@ def main() -> int:
             "close": round(close, 6),
             "adjClose": adj_close,
             "volume": volume,
+            "avgVolume3m": avgVolume3m,
+            "ma20": calc_ma(valid, 20),
+            "ma50": calc_ma(valid, 50),
+            "ma200": calc_ma(valid, 200),
+            "volatility4m": calc_annualized_vol(valid, 84),
+            "maxDrawdown4m": calc_max_drawdown(valid, 84),
+            "high52": high52,
+            "low52": low52,
+            "range52": range52,
+            "distance52High": distance52High,
+            "distance52Low": distance52Low,
             "return1m": calc_return(valid, 21),
             "return3m": calc_return(valid, 63),
             "return4m": calc_return(valid, 84),
