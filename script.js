@@ -1,5 +1,5 @@
 
-    const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_family_v15';
+    const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_family_v16';
     const EMBEDDED_FMP_KEY = ''; // v8에서는 FMP를 사용하지 않습니다. GitHub Actions가 생성한 CSV만 읽습니다.
     const CONSTITUENT_CSV_URL = 'https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv';
     const WATCHLIST_CONFIG_URL = 'config/watchlist_config.json';
@@ -74,7 +74,7 @@
       const d = sectorDefaults[sector] || sectorDefaults['Industrials'];
       return {symbol, name:String(r[1]||symbol).trim(), sector, subIndustry:String(r[3]||'').trim(), price:null, priceSource:'manual', forwardEPS:null,
         revGrowth:d.revGrowth, epsGrowth:d.epsGrowth, grossMargin:d.grossMargin, opMargin:d.opMargin, exitPE:d.exitPE, discountRate:d.discountRate,
-        risk:{...d.risk}, notes:'', fundamentalSource:'섹터 기본값', fundamentalAuto:false, fundamentalManual:false};
+        risk:{...d.risk}, notes:'', fundamentalSource:'섹터 기본값', fundamentalAuto:false, fundamentalManual:false, high52:null, low52:null, range52:null, nextEarningsDate:'', earningsDays:null};
     }
 
     function parseCSV(text){
@@ -95,6 +95,35 @@
     function median(arr){const a=arr.filter(Number.isFinite).sort((x,y)=>x-y); if(!a.length) return null; const m=Math.floor(a.length/2); return a.length%2?a[m]:(a[m-1]+a[m])/2}
     function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
     function log(msg){const box=document.getElementById('logBox'); const line='['+new Date().toLocaleTimeString()+'] '+msg; box.textContent=(line+'\n'+box.textContent).slice(0,5000)}
+
+    function daysUntilDate(dateStr){
+      if(!dateStr) return null;
+      const d=new Date(String(dateStr).slice(0,10)+'T12:00:00');
+      if(Number.isNaN(d.getTime())) return null;
+      const now=new Date();
+      const today=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12,0,0);
+      return Math.round((d-today)/(24*3600*1000));
+    }
+    function earningsLabel(days){
+      if(!Number.isFinite(days)) return '–';
+      if(days<0) return '지남';
+      if(days===0) return '오늘';
+      return days+'일 후';
+    }
+    function earningsClass(days){
+      if(!Number.isFinite(days)) return 'gray';
+      if(days>=0 && days<=7) return 'bad';
+      if(days<=14) return 'warn';
+      return 'gray';
+    }
+    function range52Label(v){
+      if(!Number.isFinite(v)) return '–';
+      if(v<0.20) return '저점권';
+      if(v<0.45) return '낮은 구간';
+      if(v<0.75) return '중간';
+      if(v<0.92) return '고점권';
+      return '52주 고점 근처';
+    }
 
 
     function horizonProfile(){
@@ -137,6 +166,8 @@
       if(Number.isFinite(c.returnH) && c.returnH>0.03) out.push('모멘텀 양호');
       if(Number.isFinite(c.riskScore) && c.riskScore<2.8) out.push('리스크 낮음');
       if(Number.isFinite(c.upside) && c.upside>0.1) out.push('적정가 대비 여력');
+      if(Number.isFinite(c.range52) && c.range52<0.35) out.push('52주 저점권');
+      if(Number.isFinite(c.earningsDays) && c.earningsDays>=0 && c.earningsDays<=14) out.push('실적 임박');
       if(!out.length) out.push('추가 확인 필요');
       return out.slice(0,4);
     }
@@ -223,9 +254,16 @@
       const sensitivity = (baseFV && bearFV && bullFV) ? (bullFV-bearFV)/baseFV : null;
       const confidence = confidenceScore(stock);
       const returnH=currentMomentum(stock);
-      const shortScore = shortScoreCalc({upside, pePercentile, peg, growthGap, riskScore, returnH, confidence});
+      const high52=n(stock.high52), low52=n(stock.low52);
+      let range52=n(stock.range52);
+      if(!Number.isFinite(range52) && price && high52 && low52 && high52>low52) range52=clamp((price-low52)/(high52-low52),0,1);
+      const drawdown52High=(price && high52)?price/high52-1:null;
+      const from52Low=(price && low52)?price/low52-1:null;
+      const earningsDays=Number.isFinite(n(stock.earningsDays))?n(stock.earningsDays):daysUntilDate(stock.nextEarningsDate);
+      let shortScore = shortScoreCalc({upside, pePercentile, peg, growthGap, riskScore, returnH, confidence});
+      if(Number.isFinite(earningsDays) && earningsDays>=0 && earningsDays<=7) shortScore = clamp(shortScore-4,0,100);
       const valueTrap = valueTrapFlag({currentPE, peg, growthGap, riskScore, returnH, epsGrowthPct, revGrowthPct:n(stock.revGrowth)});
-      return {currentPE,bearFV,baseFV,bullFV,upside,requiredGrowth,sectorPremium,riskScore,status,statusClass,pePercentile,peg,growthGap,sensitivity,confidence,shortScore,valueTrap,returnH,return3m:n(stock.return3m),return4m:n(stock.return4m),return1m:n(stock.return1m),return6m:n(stock.return6m)};
+      return {currentPE,bearFV,baseFV,bullFV,upside,requiredGrowth,sectorPremium,riskScore,status,statusClass,pePercentile,peg,growthGap,sensitivity,confidence,shortScore,valueTrap,returnH,return3m:n(stock.return3m),return4m:n(stock.return4m),return1m:n(stock.return1m),return6m:n(stock.return6m),range52,high52,low52,drawdown52High,from52Low,earningsDays};
     }
 
     function riskScoreCalc(stock){
@@ -283,7 +321,7 @@
       top.forEach((x,i)=>{
         const f=factorScores(x.s,x.c); const chips=reasonChips(x.s,x.c).map(r=>`<span class="reasonChip">${escapeHtml(r)}</span>`).join('');
         const div=document.createElement('div'); div.className='pickCard';
-        div.innerHTML=`<div class="pickHead"><div><div class="pickTicker">${x.s.symbol}</div><div class="pickName">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><div class="scoreBig ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div><div class="muted" style="font-size:10px;text-align:right">추천점수</div></div></div><div class="reasonList">${chips}</div><div class="metricTiny" style="margin-top:9px">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 성장갭 ${pct(x.c.growthGap,1)} · 모멘텀 ${pct(x.c.returnH,0)}</div><div class="factorRow"><div class="factor"><b>${grade(f.value)}</b><span>가치</span></div><div class="factor"><b>${grade(f.growth)}</b><span>성장</span></div><div class="factor"><b>${grade(f.momentum)}</b><span>모멘텀</span></div><div class="factor"><b>${grade(f.quality)}</b><span>품질</span></div><div class="factor"><b>${grade(f.risk)}</b><span>리스크</span></div></div>`;
+        div.innerHTML=`<div class="pickHead"><div><div class="pickTicker">${x.s.symbol}</div><div class="pickName">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><div class="scoreBig ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div><div class="muted" style="font-size:10px;text-align:right">추천점수</div></div></div><div class="reasonList">${chips}</div><div class="metricTiny" style="margin-top:9px">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 52주 ${pct(x.c.range52,0)} · 실적 ${earningsLabel(x.c.earningsDays)} · 모멘텀 ${pct(x.c.returnH,0)}</div><div class="factorRow"><div class="factor"><b>${grade(f.value)}</b><span>가치</span></div><div class="factor"><b>${grade(f.growth)}</b><span>성장</span></div><div class="factor"><b>${grade(f.momentum)}</b><span>모멘텀</span></div><div class="factor"><b>${grade(f.quality)}</b><span>품질</span></div><div class="factor"><b>${grade(f.risk)}</b><span>리스크</span></div></div>`;
         div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; box.appendChild(div);
       });
     }
@@ -295,10 +333,53 @@
       tiles.forEach(t=>{const div=document.createElement('div'); div.className='heatTile'; div.innerHTML=`<div class="top"><b>${escapeHtml(sectorLabel(t.sec))}</b><span class="pill ${scoreClass(t.score)}">${fmt(t.score,0)}</span></div><div class="metricTiny">${t.count}개 · 고평가 ${t.count?pct(t.over/t.count,0):'–'}</div><div class="meter"><i style="width:${clamp(t.score,0,100)}%"></i></div>`; div.onclick=()=>{state.selectedSector=t.sec; state.selectedSymbol=null; render(); persistMaybe();}; box.appendChild(div);});
     }
 
+
+    function renderSignals(){
+      const signalBox=document.getElementById('signalSummary'); const earnBox=document.getElementById('earningsAlerts');
+      if(!signalBox && !earnBox) return;
+      const visible=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
+      const enriched=visible.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore));
+      const best=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,3);
+      if(signalBox){
+        signalBox.innerHTML='';
+        if(!best.length){ signalBox.innerHTML='<div class="muted">가격과 펀더멘털을 불러오면 단기 신호가 표시됩니다.</div>'; }
+        best.forEach(x=>{
+          const reasons=reasonChips(x.s,x.c).slice(0,3).map(r=>`<span class="reasonChip">${escapeHtml(r)}</span>`).join('');
+          const div=document.createElement('div'); div.className='signalCard';
+          div.innerHTML=`<div class="mobileTop"><div><div class="signalTicker">${x.s.symbol}</div><div class="signalMeta">${escapeHtml(x.s.name)} · ${sectorLabel(x.s.sector)}</div></div><div class="signalScore ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div></div><div class="reasonList">${reasons}</div><div class="signalMeta">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 모멘텀 ${pct(x.c.returnH,0)} · 실적 ${earningsLabel(x.c.earningsDays)}</div>`;
+          div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; signalBox.appendChild(div);
+        });
+      }
+      if(!earnBox) return;
+      const earns=enriched.filter(x=>Number.isFinite(x.c.earningsDays)&&x.c.earningsDays>=0&&x.c.earningsDays<=14).sort((a,b)=>a.c.earningsDays-b.c.earningsDays).slice(0,6);
+      const riskies=enriched.filter(x=>x.c.valueTrap || (Number.isFinite(x.c.riskScore)&&x.c.riskScore>=3.75)).sort((a,b)=>(a.c.shortScore||0)-(b.c.shortScore||0)).slice(0,4);
+      earnBox.innerHTML='';
+      if(!earns.length && !riskies.length){ earnBox.innerHTML='<div class="muted">현재 표시 목록에는 임박한 실적 발표나 강한 주의 신호가 없습니다.</div>'; return; }
+      earns.forEach(x=>{ const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">!</div><div><b>${x.s.symbol}</b> <span class="pill ${earningsClass(x.c.earningsDays)}">${earningsLabel(x.c.earningsDays)}</span><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">${horizonProfile().label} 모멘텀 ${pct(x.c.returnH,0)} · ${escapeHtml(x.s.nextEarningsDate||'')}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; earnBox.appendChild(div); });
+      riskies.forEach(x=>{ const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">⚠</div><div><b>${x.s.symbol}</b> <span class="pill bad">주의</span><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">${x.c.valueTrap?'Value Trap 가능성 · ':''}리스크 ${fmt(x.c.riskScore,1)} · 점수 ${fmt(x.c.shortScore,0)}</div></div><div><span class="pill ${riskClass(x.c.riskScore)}">${riskLabel(x.c.riskScore)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; earnBox.appendChild(div); });
+    }
+
+    function renderMobileList(){
+      const box=document.getElementById('mobileStockList'); if(!box) return;
+      const visible=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
+      const enriched=visible.map(s=>({s,c:calc(s,sectorSet)})).sort((a,b)=>(b.c.shortScore||0)-(a.c.shortScore||0)).slice(0,30);
+      document.getElementById('mobileListCount').textContent=visible.length+'개 중 상위 '+enriched.length+'개';
+      box.innerHTML='';
+      if(!enriched.length){ box.innerHTML='<div class="muted">표시할 종목이 없습니다.</div>'; return; }
+      enriched.forEach(x=>{ const div=document.createElement('div'); div.className='mobileStockCard'; if(state.selectedSymbol===x.s.symbol) div.style.borderColor='#38bdf8'; div.innerHTML=`<div class="mobileTop"><div><div class="mobileTicker">${x.s.symbol}</div><div class="mobileCompany">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">점수 ${fmt(x.c.shortScore,0)}</span></div></div><div class="mobileMetrics"><div class="mobileMetric"><span>가격</span><b>${money(n(x.s.price))}</b></div><div class="mobileMetric"><span>상승여력</span><b class="${x.c.upside>0?'positive':'negative'}">${pct(x.c.upside,0)}</b></div><div class="mobileMetric"><span>PEG</span><b>${fmt(x.c.peg,2)}</b></div><div class="mobileMetric"><span>실적</span><b>${earningsLabel(x.c.earningsDays)}</b></div><div class="mobileMetric"><span>52주 위치</span><b>${pct(x.c.range52,0)}</b></div><div class="mobileMetric"><span>모멘텀</span><b class="${x.c.returnH>0?'positive':'negative'}">${pct(x.c.returnH,0)}</b></div></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; box.appendChild(div); });
+    }
+
+    function setMobileMode(on){
+      document.body.classList.toggle('mobileMode', !!on);
+      localStorage.setItem(STORAGE_KEY+'_mobileMode', on?'1':'0');
+      const btn=document.getElementById('btnMobileToggle'); if(btn) btn.textContent=on?'데스크톱 보기':'모바일 보기';
+      renderMobileList();
+    }
+
     function render(){
-      renderTabs(); renderTodaysPicks(); renderSectorHeatmap(); renderTable(); renderCards(); renderSelected(); renderExtremes(); renderAddSector();
+      renderTabs(); renderTodaysPicks(); renderSectorHeatmap(); renderSignals(); renderTable(); renderCards(); renderMobileList(); renderSelected(); renderExtremes(); renderWatchlistTop(); renderAddSector();
       document.getElementById('tableTitle').textContent = state.selectedSector==='All'?'S&P 500 전체 기업':sectorLabel(state.selectedSector)+' 섹터';
-      document.getElementById('tableSubtitle').textContent = state.search?('검색 필터: '+state.search):'표에서 가정을 직접 수정하세요. 관심종목 추가로 S&P 500 밖의 작은 종목도 볼 수 있습니다.';
+      document.getElementById('tableSubtitle').textContent = state.search?('검색 필터: '+state.search):'표는 비교용입니다. 아버지가 먼저 볼 부분은 위의 오늘 볼 종목, 관심종목 TOP, 실적·위험 주의입니다.';
       document.getElementById('lastUpdated').textContent = state.lastPriceRefresh?('가격 새로고침: '+new Date(state.lastPriceRefresh).toLocaleString()):'가격 데이터가 아직 새로고침되지 않았습니다';
       document.getElementById('sourceStatus').innerHTML = state.lastConstituentRefresh ? `<strong>구성종목 새로고침 완료.</strong> 출처: DataHub/GitHub CSV. 마지막 가져오기: ${new Date(state.lastConstituentRefresh).toLocaleString()}.` : `<strong>기본 목록이 로드되었습니다.</strong> “S&P 500 목록 새로고침”을 눌러 최신 DataHub/GitHub CSV를 가져오세요.`;
     }
@@ -322,6 +403,7 @@
           <td><span class="pill gray">${escapeHtml(sectorLabel(s.sector))}</span></td>
           <td>${fundSourcePill(s)}</td>
           <td><input class="cellInput" data-field="price" value="${inputVal(s.price)}" placeholder="가격"></td>
+          <td><span class="rangeTag">${pct(c.range52,0)} ${range52Label(c.range52)}</span><div class="rangeMini"><i style="width:${Number.isFinite(c.range52)?clamp(c.range52*100,0,100):0}%"></i></div></td>
           <td><input class="cellInput" data-field="forwardEPS" value="${inputVal(s.forwardEPS)}" placeholder="EPS"></td>
           <td><input class="cellInput" data-field="epsGrowth" value="${inputVal(s.epsGrowth)}"></td>
           <td><input class="cellInput" data-field="revGrowth" value="${inputVal(s.revGrowth)}"></td>
@@ -336,8 +418,6 @@
           <td class="readonly num ${c.peg>2.8?'negative':c.peg<1.5?'positive':'neutral'}">${fmt(c.peg,2)}</td>
           <td class="readonly num ${c.pePercentile>0.75?'negative':c.pePercentile<0.35?'positive':'neutral'}">${pct(c.pePercentile,0)}</td>
           <td class="readonly num ${c.returnH>0?'positive':c.returnH<0?'negative':'neutral'}">${pct(c.returnH,1)}</td>
-          <td><span class="pill ${scoreClass(c.shortScore)}">${fmt(c.shortScore,0)}</span></td>
-          <td>${c.valueTrap?'<span class="trap">'+escapeHtml(c.valueTrap)+'</span>':'<span class="oksignal">OK</span>'}</td>
           <td class="readonly num">${money(c.bearFV)}</td>
           <td class="readonly num">${money(c.baseFV)}</td>
           <td class="readonly num">${money(c.bullFV)}</td>
@@ -373,6 +453,11 @@
       const topShort=visible.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore)[0];
       document.getElementById('cardShortTop').textContent=topShort?topShort.s.symbol:'–';
       document.getElementById('cardShortTopSub').textContent=topShort?('단기점수 '+fmt(topShort.c.shortScore,0)+' / '+sectorLabel(topShort.s.sector)):'점수 기반';
+      const earningsSoon=visible.map(s=>calc(s,sectorSet)).filter(c=>Number.isFinite(c.earningsDays)&&c.earningsDays>=0&&c.earningsDays<=14).length;
+      const ce=document.getElementById('cardEarningsSoon'); if(ce) ce.textContent=earningsSoon.toLocaleString();
+      const watch=state.stocks.filter(s=>s.isCustom || s.sector==='Watchlist');
+      const topWatch=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore)[0];
+      const cw=document.getElementById('cardWatchTop'); const cws=document.getElementById('cardWatchTopSub'); if(cw) cw.textContent=topWatch?topWatch.s.symbol:'–'; if(cws) cws.textContent=topWatch?('점수 '+fmt(topWatch.c.shortScore,0)):'관심종목 기준';
     }
 
     function renderSelected(){
@@ -385,6 +470,8 @@
         <div class="kv"><span>섹터</span><b>${escapeHtml(sectorLabel(s.sector))}</b></div>
         <div class="kv"><span>세부 업종</span><b>${escapeHtml(s.subIndustry||'')}</b></div>
         <div class="kv"><span>가격 / Base 적정가</span><b>${money(n(s.price))} / ${money(c.baseFV)}</b></div>
+        <div class="kv"><span>52주 위치</span><b>${pct(c.range52,0)} · 고점대비 ${pct(c.drawdown52High,0)} · 저점대비 ${pct(c.from52Low,0)}</b></div>
+        <div class="kv"><span>실적 발표</span><b><span class="pill ${earningsClass(c.earningsDays)}">${earningsLabel(c.earningsDays)}</span> ${escapeHtml(s.nextEarningsDate||'')}</b></div>
         <div class="kv"><span>상승 / 하락 여력</span><b class="${c.upside>0?'positive':'negative'}">${pct(c.upside,1)}</b></div>
         <div class="kv"><span>Forward P/E / 섹터 프리미엄</span><b>${fmt(c.currentPE,1)} / ${pct(c.sectorPremium,0)}</b></div>
         <div class="kv"><span>필요 EPS CAGR</span><b>${pct(c.requiredGrowth,1)}</b></div>
@@ -413,10 +500,31 @@
       const top=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,8);
       const traps=enriched.slice().filter(x=>x.c.valueTrap).sort((a,b)=>a.c.shortScore-b.c.shortScore).slice(0,4);
       const addHeader=t=>{const h=document.createElement('div'); h.className='muted'; h.style.margin='3px 0 0'; h.textContent=t; box.appendChild(h)};
-      const addItem=(x,i)=>{const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">${i}</div><div><b>${x.s.symbol}</b><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 성장갭 ${pct(x.c.growthGap,1)} · ${horizonProfile().label} ${pct(x.c.returnH,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render()}; box.appendChild(div)};
+      const addItem=(x,i)=>{const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">${i}</div><div><b>${x.s.symbol}</b><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 52주 ${pct(x.c.range52,0)} · 실적 ${earningsLabel(x.c.earningsDays)} · ${horizonProfile().label} ${pct(x.c.returnH,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render()}; box.appendChild(div)};
       addHeader('단기 저평가 후보 TOP'); top.forEach((x,i)=>addItem(x,i+1));
       if(traps.length){ addHeader('Value Trap / 기대 과다 경고'); traps.forEach((x,i)=>addItem(x,i+1)); }
       if(!enriched.length) box.innerHTML='<div class="muted">가격, EPS, 펀더멘털을 불러오면 단기 후보 점수가 표시됩니다.</div>';
+    }
+
+
+    function renderWatchlistTop(){
+      const boxes=['watchlistTop','watchlistTopSide'].map(id=>document.getElementById(id)).filter(Boolean);
+      if(!boxes.length) return;
+      boxes.forEach(box=>box.innerHTML='');
+      const watch=state.stocks.filter(s=>s.isCustom || s.sector==='Watchlist');
+      const setHtml=(html)=>boxes.forEach(box=>box.innerHTML=html);
+      if(!watch.length){ setHtml('<div class="muted">관심종목을 추가하면 여기에서 Watchlist 전용 TOP 10이 표시됩니다.</div>'); return; }
+      const enriched=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,10);
+      if(!enriched.length){ setHtml('<div class="muted">관심종목 가격과 펀더멘털을 불러오면 랭킹이 표시됩니다.</div>'); return; }
+      boxes.forEach(box=>{
+        enriched.forEach((x,i)=>{
+          const div=document.createElement('div'); div.className='miniItem';
+          const warn=(Number.isFinite(x.c.earningsDays)&&x.c.earningsDays>=0&&x.c.earningsDays<=14)?`<span class="pill ${earningsClass(x.c.earningsDays)}">실적 ${earningsLabel(x.c.earningsDays)}</span>`:'';
+          div.innerHTML=`<div class="rank">${i+1}</div><div><b>${x.s.symbol}</b> ${warn}<div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">점수 ${fmt(x.c.shortScore,0)} · 52주 ${pct(x.c.range52,0)} · 모멘텀 ${pct(x.c.returnH,0)} · 상승여력 ${pct(x.c.upside,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`;
+          div.onclick=()=>{state.selectedSymbol=x.s.symbol; state.selectedSector=x.s.sector||'Watchlist'; render();};
+          box.appendChild(div);
+        });
+      });
     }
 
     function renderAddSector(){
@@ -484,6 +592,20 @@
       if(shared.length){ state.selectedSector='Watchlist'; render(); persistMaybe(); }
       if(!silent) log(`공유 관심종목 불러오기 완료: ${shared.length}개`);
     }
+    function postToGoogleSheetViaForm(url, params){
+      return new Promise((resolve,reject)=>{
+        try{
+          const form=document.createElement('form');
+          form.method='POST'; form.action=url; form.target='watchlistSubmitFrame'; form.style.display='none'; form.acceptCharset='UTF-8';
+          for(const [k,v] of params.entries()){
+            const input=document.createElement('input'); input.type='hidden'; input.name=k; input.value=v; form.appendChild(input);
+          }
+          document.body.appendChild(form);
+          form.submit();
+          setTimeout(()=>{ try{form.remove()}catch(_){} resolve(); }, 1400);
+        }catch(e){ reject(e); }
+      });
+    }
     async function submitWatchlistTicker(stock){
       const share=document.getElementById('addShareToggle')?.checked;
       const url=(state.settings.watchlistSubmitUrl||'').trim();
@@ -491,9 +613,9 @@
       if(!url){ log(`${stock.symbol}은 현재 브라우저에 저장되었습니다. Google Sheet 연결 URL이 없어 가족 공유 시트에는 저장하지 않았습니다.`); return; }
       try{
         const body=new URLSearchParams();
-        body.set('symbol', stock.symbol); body.set('name', stock.name||stock.symbol); body.set('sector', stock.sector||'Watchlist'); body.set('subIndustry', stock.subIndustry||'관심종목'); body.set('addedAt', new Date().toISOString()); body.set('source','dashboard');
-        await fetch(url, {method:'POST', mode:'no-cors', body});
-        log(`${stock.symbol} Google Sheet 저장 요청을 보냈습니다. 다음 GitHub Actions 실행 후 가격/펀더멘털 자동 업데이트 대상에 포함됩니다.`);
+        body.set('symbol', stock.symbol); body.set('name', stock.name||stock.symbol); body.set('sector', stock.sector||'Watchlist'); body.set('subIndustry', stock.subIndustry||'관심종목'); body.set('addedAt', new Date().toISOString()); body.set('source','dashboard-v18');
+        await postToGoogleSheetViaForm(url, body);
+        log(`${stock.symbol} Google Sheet 저장 요청을 보냈습니다. 시트에 티커가 보이지 않으면 Web App URL이 /exec로 끝나는지, 배포 권한이 Anyone인지 확인하세요.`);
       }catch(e){ log(`${stock.symbol} Google Sheet 저장 요청 실패: ${e.message}`); }
     }
 
@@ -521,7 +643,7 @@
     async function fetchPrices(){
       const visible=getVisibleStocks(); if(!visible.length){log('새로고침할 표시 티커가 없습니다.'); return;}
       const symbols=visible.map(s=>s.symbol);
-      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v15는 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
+      log(`표시된 티커 ${symbols.length}개의 EOD 가격을 prices/latest_prices.csv에서 불러옵니다. v16은 브라우저에서 Yahoo/FMP를 직접 호출하지 않습니다.`);
       let updated=0;
 
       updated += await fetchLocalEodCsvPrices(symbols);
@@ -539,7 +661,7 @@
     async function fetchFundamentals(){
       const visible=getVisibleStocks(); if(!visible.length){log('자동채우기할 표시 티커가 없습니다.'); return;}
       const symbols=visible.map(s=>s.symbol);
-      // 가족용 v15: Yahoo/yfinance 펀더멘털 CSV에 값이 있으면 성장률/마진/Forward EPS/Exit P/E를 자동으로 적용합니다.
+      // 가족용 v16: Yahoo/yfinance 펀더멘털 CSV에 값이 있으면 성장률/마진/Forward EPS/Exit P/E를 자동으로 적용합니다.
       // 따라서 같은 섹터 기본값이 계속 반복되는 문제를 줄입니다. 할인율은 사용자 가정이라 자동 변경하지 않습니다.
       const overwrite=true;
       log(`표시된 티커 ${symbols.length}개의 펀더멘털/추정치를 fundamentals/latest_fundamentals.csv에서 불러옵니다. 자동 데이터가 있으면 기존 기본값을 덮어씁니다.`);
@@ -635,6 +757,8 @@
         operatingMargins: find(['operatingMargins','operatingMargin','operating_margins','operating_margin']),
         debtToEquity: find(['debtToEquity','debt_to_equity']),
         beta: find(['beta']),
+        nextEarningsDate: find(['nextEarningsDate','earningsDate','earnings_date']),
+        earningsTimestamp: find(['earningsTimestamp','earningsTimestampStart','earnings_timestamp']),
         source: find(['source']),
         updatedAt: find(['updatedAt','updated_at'])
       };
@@ -657,6 +781,10 @@
         const earn=ix.earningsGrowth>=0?pctFromSource(r[ix.earningsGrowth]):null;
         const gm=ix.grossMargins>=0?pctFromSource(r[ix.grossMargins]):null;
         const om=ix.operatingMargins>=0?pctFromSource(r[ix.operatingMargins]):null;
+        const earnDate=ix.nextEarningsDate>=0?r[ix.nextEarningsDate]:'';
+        const earnTs=ix.earningsTimestamp>=0?toNumLoose(r[ix.earningsTimestamp]):null;
+        if(earnDate){ s.nextEarningsDate=String(earnDate).slice(0,10); s.earningsDays=daysUntilDate(s.nextEarningsDate); touched=true; }
+        else if(earnTs){ const dt=new Date(earnTs*1000); if(!Number.isNaN(dt.getTime())){s.nextEarningsDate=dt.toISOString().slice(0,10); s.earningsDays=daysUntilDate(s.nextEarningsDate); touched=true;} }
         if(maybeSet(s,'forwardEPS', (fwd&&fwd>0)?fwd:((trail&&trail>0)?trail:null), overwrite)){ touched=true; assumptionTouched=true; }
         if(maybeSet(s,'revGrowth', rev, overwrite)){ touched=true; assumptionTouched=true; }
         if(maybeSet(s,'epsGrowth', earn, overwrite)){ touched=true; assumptionTouched=true; }
@@ -717,7 +845,10 @@
         return1m: header.indexOf('return1m'),
         return3m: header.indexOf('return3m'),
         return4m: header.indexOf('return4m'),
-        return6m: header.indexOf('return6m')
+        return6m: header.indexOf('return6m'),
+        high52: header.indexOf('high52'),
+        low52: header.indexOf('low52'),
+        range52: header.indexOf('range52')
       };
       if(ix.symbol<0 || (ix.close<0 && ix.adjClose<0)){
         log('prices/latest_prices.csv 형식이 맞지 않습니다. 필요한 열: symbol,date,close 또는 adjClose');
@@ -739,7 +870,10 @@
           return1m: ix.return1m>=0 ? toNumLoose(r[ix.return1m]) : null,
           return3m: ix.return3m>=0 ? toNumLoose(r[ix.return3m]) : null,
           return4m: ix.return4m>=0 ? toNumLoose(r[ix.return4m]) : null,
-          return6m: ix.return6m>=0 ? toNumLoose(r[ix.return6m]) : null
+          return6m: ix.return6m>=0 ? toNumLoose(r[ix.return6m]) : null,
+          high52: ix.high52>=0 ? toNumLoose(r[ix.high52]) : null,
+          low52: ix.low52>=0 ? toNumLoose(r[ix.low52]) : null,
+          range52: ix.range52>=0 ? toNumLoose(r[ix.range52]) : null
         };
       }
       let updated=0; let matchedRows=Object.keys(bySymbol).length; let usableRows=0;
@@ -752,6 +886,9 @@
           if(Number.isFinite(rec.return3m)) s.return3m=rec.return3m;
           if(Number.isFinite(rec.return4m)) s.return4m=rec.return4m;
           if(Number.isFinite(rec.return6m)) s.return6m=rec.return6m;
+          if(Number.isFinite(rec.high52)) s.high52=rec.high52;
+          if(Number.isFinite(rec.low52)) s.low52=rec.low52;
+          if(Number.isFinite(rec.range52)) s.range52=rec.range52;
           updated++;
         }
       }
@@ -972,7 +1109,7 @@
       document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
     }
     function bind(){
-      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v15는 GitHub Actions가 생성한 prices/latest_prices.csv와 fundamentals/latest_fundamentals.csv만 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v18은 GitHub Actions가 생성한 prices/latest_prices.csv와 fundamentals/latest_fundamentals.csv만 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
       document.getElementById('btnReset').onclick=()=>{ if(confirm('저장된 데이터를 삭제하고 기본 목록으로 초기화할까요?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
       document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
       document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});
@@ -991,7 +1128,7 @@
       document.getElementById('confirmAdd').onclick=async()=>{const sym=normalizeSymbol(document.getElementById('addSymbol').value); if(!sym) return alert('티커는 필수입니다.'); const typedUrl=document.getElementById('watchlistSubmitUrlInput').value.trim(); if(typedUrl){state.settings.watchlistSubmitUrl=typedUrl; persistMaybe();} const row=[sym,document.getElementById('addName').value.trim()||sym,document.getElementById('addSector').value||'Watchlist',document.getElementById('addSub').value.trim()||'관심종목']; const existing=state.stocks.find(s=>normalizeSymbol(s.symbol)===sym); if(existing) return alert('이미 존재하는 티커입니다.'); const added=rowToStock(row); added.isCustom=true; added.sector=added.sector||'Watchlist'; state.stocks.push(added); state.selectedSymbol=sym; state.selectedSector=added.sector; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 추가됨.'); await submitWatchlistTicker(added);};
     }
 
-    loadState(); bind(); applySettingsToInputs(); render(); loadWatchlistConfig().then(()=>fetchSharedWatchlist(true));
+    loadState(); bind(); applySettingsToInputs(); setMobileMode(localStorage.getItem(STORAGE_KEY+'_mobileMode')==='1'); render(); loadWatchlistConfig().then(()=>fetchSharedWatchlist(true));
     // Try to pull the current list automatically. If it fails, the fallback list remains available.
     setTimeout(()=>{ if(!state.lastConstituentRefresh) fetchConstituents(); }, 500);
   

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>S&P 500 섹터 밸류에이션 대시보드 - 가족용 보안 관심종목 v20</title>
+  <title>S&P 500 섹터 밸류에이션 대시보드 - 가족용 모바일/스윙 v17</title>
   <style>
     :root{
       --bg:#07111f; --panel:#111827; --panel2:#0f172a; --panel3:#0b1220; --muted:#94a3b8; --text:#e5e7eb;
@@ -43,30 +43,22 @@
     .pickGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.pickCard{border:1px solid #273449;background:linear-gradient(180deg,#0b1220,#101827);border-radius:16px;padding:13px;min-height:160px;cursor:pointer;transition:.16s ease}.pickCard:hover{transform:translateY(-2px);border-color:#38bdf8}.pickHead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.pickTicker{font-size:24px;font-weight:900;letter-spacing:-.04em}.pickName{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}.scoreBig{font-size:26px;font-weight:900}.reasonList{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.reasonChip{font-size:10px;border:1px solid #334155;border-radius:999px;padding:4px 7px;color:#cbd5e1;background:#111827}.factorRow{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:12px}.factor{border:1px solid #253247;background:#07101d;border-radius:10px;padding:6px 5px;text-align:center}.factor b{display:block;font-size:12px}.factor span{display:block;font-size:9px;color:#94a3b8;margin-top:1px}.heatGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.heatTile{border:1px solid #253247;border-radius:14px;background:#0b1220;padding:10px;cursor:pointer}.heatTile:hover{border-color:#64748b}.heatTile .top{display:flex;justify-content:space-between;align-items:center;gap:8px}.heatTile b{font-size:13px}.heatTile .meter{height:7px;background:#1f2937;border-radius:999px;overflow:hidden;margin-top:7px}.heatTile .meter i{display:block;height:100%;background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e);border-radius:999px}.advancedBox{width:100%;border:1px solid #334155;border-radius:14px;background:#0b1220;padding:8px 10px}.advancedBox summary{cursor:pointer;color:#cbd5e1;font-weight:800}.advancedInner{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.modeHint{color:#94a3b8;font-size:12px;min-width:210px}.modePill{display:inline-flex;border:1px solid #334155;border-radius:999px;padding:5px 9px;background:#111827;color:#cbd5e1;font-size:12px}.earnSoon{color:#fbbf24;font-size:11px;font-weight:900}.earnDanger{color:#fca5a5;font-size:11px;font-weight:900}.rangeTag{font-size:10px;color:#cbd5e1;border:1px solid #334155;background:#111827;border-radius:999px;padding:3px 7px;display:inline-block}.watchHeader{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.rangeMini{height:6px;background:#1f2937;border-radius:999px;overflow:hidden;margin-top:4px}.rangeMini i{display:block;height:100%;background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e,#f59e0b);border-radius:999px}
 
 
-
-    .homeGrid{display:grid;grid-template-columns:1.45fr .85fr .85fr;gap:14px;margin:14px 0 16px;align-items:stretch}
-    .homeCard{background:rgba(15,23,42,.80);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;overflow:hidden}
-    .homeCard .sectionTitle{padding:0 0 11px;border-bottom:1px solid #1f2937;margin-bottom:11px}
-    .homeCard .miniList{max-height:420px;overflow:auto;padding-right:2px}
-    .hiddenFrame{display:none;width:0;height:0;border:0}
-    .simpleHint{font-size:12px;color:var(--muted);margin-top:6px}
-    .mobileMode .homeGrid{grid-template-columns:1fr}.mobileMode .signalsPanel{display:none}
-    .signalsPanel{display:none;grid-template-columns:1.05fr .95fr;gap:14px;margin:0 0 16px;align-items:stretch}
+    .signalsPanel{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin:0 0 16px;align-items:stretch}
     .signalBox{background:linear-gradient(180deg,rgba(17,24,39,.94),rgba(15,23,42,.88));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:15px 16px;overflow:hidden}
     .signalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.signalCard{border:1px solid #253247;background:#0b1220;border-radius:14px;padding:11px;cursor:pointer}.signalCard:hover{border-color:#38bdf8}.signalTicker{font-size:18px;font-weight:900}.signalMeta{font-size:11px;color:#94a3b8;margin-top:4px}.signalScore{font-size:22px;font-weight:900;text-align:right}.mobileStockPanel{display:none;margin:14px 0}.mobileStockList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}.mobileStockCard{border:1px solid #253247;background:linear-gradient(180deg,#0b1220,#101827);border-radius:16px;padding:13px;cursor:pointer}.mobileStockCard:hover{border-color:#38bdf8}.mobileTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.mobileTicker{font-size:22px;font-weight:900}.mobileCompany{font-size:11px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}.mobileMetrics{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px}.mobileMetric{border:1px solid #253247;background:#07101d;border-radius:10px;padding:7px}.mobileMetric span{display:block;color:#94a3b8;font-size:10px}.mobileMetric b{font-size:13px}.mobileMode .wrap{max-width:760px}.mobileMode .hero,.mobileMode .layout,.mobileMode .picksPanel,.mobileMode .signalsPanel{grid-template-columns:1fr}.mobileMode .cards{grid-template-columns:repeat(2,minmax(0,1fr))}.mobileMode .side{position:static}.mobileMode .tableWrap{display:none}.mobileMode .mobileStockPanel{display:block}.mobileMode .toolbar{position:static}.mobileMode .pickGrid,.mobileMode .signalGrid,.mobileMode .mobileStockList,.mobileMode .heatGrid{grid-template-columns:1fr}.mobileMode .modeHint{display:none}.mobileMode .sourceBox{display:none}.mobileMode .title p{font-size:12px}.mobileMode .title h1{font-size:25px}.mobileMode .card{min-height:88px}.mobileMode .card .v{font-size:22px}
 
-    @media (max-width:1180px){.hero,.layout,.apiPanel,.picksPanel,.signalsPanel,.homeGrid{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tableWrap{max-height:none}}
+    @media (max-width:1180px){.hero,.layout,.apiPanel,.picksPanel,.signalsPanel{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tableWrap{max-height:none}}
         .familyHidden{display:none!important}
     .criteriaNote{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.45}
-    @media (max-width:720px){.wrap{padding:14px}.homeGrid{grid-template-columns:1fr}.pickGrid{grid-template-columns:1fr}.signalGrid{grid-template-columns:1fr}.mobileStockList{grid-template-columns:1fr}.heatGrid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.toolbar{position:static}.smallInput,.select,.search{width:100%;max-width:none;flex:auto}.btn{flex:1}.grid2{grid-template-columns:1fr}.sourceBox{padding:13px}.title h1{font-size:27px}.tableWrap{margin:0 -10px;padding-left:10px}.sectorTabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px}.tab{flex:0 0 auto}.card .v{font-size:23px}}
+    @media (max-width:720px){.wrap{padding:14px}.pickGrid{grid-template-columns:1fr}.signalGrid{grid-template-columns:1fr}.mobileStockList{grid-template-columns:1fr}.heatGrid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.toolbar{position:static}.smallInput,.select,.search{width:100%;max-width:none;flex:auto}.btn{flex:1}.grid2{grid-template-columns:1fr}.sourceBox{padding:13px}.title h1{font-size:27px}.tableWrap{margin:0 -10px;padding-left:10px}.sectorTabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px}.tab{flex:0 0 auto}.card .v{font-size:23px}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="hero">
       <div class="title">
-        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 보안 관심종목 v20 · PIN 보호 + 모바일 중심</div>
-        <p>아버지가 휴대폰에서도 쉽게 볼 수 있도록 오늘 볼 종목, 관심종목 TOP, 실적/위험 주의를 먼저 보여주는 가족용 대시보드입니다. 가격과 펀더멘털은 GitHub Actions CSV를 읽고, 관심종목은 Google Sheet와 연결해 가족이 함께 관리할 수 있습니다.</p>
+        <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 모바일/스윙 v17 · 추천 카드 중심 + 단기 신호 분리</div>
+        <p>GICS 섹터별로 S&P 500 기업을 필터링하고, Forward EPS와 성장률 가정을 입력한 뒤 각 기업의 시나리오 적정가와 섹터 밸류에이션을 비교합니다. GitHub Pages에서 바로 쓸 수 있는 단일 HTML 파일입니다. 가격과 펀더멘털 자동채우기, 4개월/1년/3년/5년 투자 스타일, 오늘의 후보, 섹터 히트맵, 관심종목 추가, 52주 위치, 실적 발표일 경고, 관심종목 전용 TOP 10 기능을 포함합니다. v17에서는 단기 점수와 실적 경고를 테이블 밖의 카드 영역으로 분리하고 모바일 보기 버튼을 추가했습니다.</p>
       </div>
       <div class="sourceBox">
         <div class="label">데이터 소스 상태</div>
@@ -131,25 +123,26 @@
       </details>
     </div>
 
-    <section class="homeGrid">
-      <div class="homeCard">
-        <div class="sectionTitle"><h2>오늘 볼 종목</h2><span id="pickSubtitle">현재 섹터 기준 TOP 후보</span></div>
+    <section class="picksPanel">
+      <div class="spotlight">
+        <div class="sectionTitle"><h2>오늘 확인할 후보</h2><span id="pickSubtitle">현재 섹터 기준</span></div>
         <div id="todayPicks" class="pickGrid"></div>
-        <div class="simpleHint">점수는 단기/스윙 후보를 찾기 위한 스크리닝용입니다. 매수 결정 전 실적일, 뉴스, 차트를 함께 확인하세요.</div>
       </div>
-      <div class="homeCard">
-        <div class="sectionTitle"><h2>아빠 관심종목 TOP</h2><span>Google Sheet / Watchlist</span></div>
-        <div id="watchlistTop" class="miniList"></div>
-      </div>
-      <div class="homeCard">
-        <div class="sectionTitle"><h2>실적·위험 주의</h2><span>14일 이내 실적 또는 주의 신호</span></div>
-        <div id="earningsAlerts" class="miniList"></div>
+      <div class="heatPanel">
+        <div class="sectionTitle"><h2>섹터 히트맵</h2><span>평균 단기 점수</span></div>
+        <div id="sectorHeatmap" class="heatGrid"></div>
       </div>
     </section>
 
-    <section class="signalsPanel familyHidden">
-      <div id="signalSummary" class="signalGrid"></div>
-      <div id="sectorHeatmap" class="heatGrid"></div>
+    <section class="signalsPanel">
+      <div class="signalBox">
+        <div class="sectionTitle"><h2>단기 신호 요약</h2><span>점수/경고는 테이블 밖에서 확인</span></div>
+        <div id="signalSummary" class="signalGrid"></div>
+      </div>
+      <div class="signalBox">
+        <div class="sectionTitle"><h2>실적 발표 주의</h2><span>14일 이내</span></div>
+        <div id="earningsAlerts" class="miniList"></div>
+      </div>
     </section>
 
     <div id="sectorTabs" class="sectorTabs"></div>
@@ -157,10 +150,10 @@
     <div class="cards">
       <div class="card"><div class="k">표시 기업 수</div><div class="v" id="cardCount">0</div><div class="s" id="cardSector">전체 섹터</div></div>
       <div class="card"><div class="k">Forward P/E 중앙값</div><div class="v" id="cardMedianPe">–</div><div class="s">가격 ÷ Forward EPS</div></div>
-      <div class="card"><div class="k">중앙 상승여력</div><div class="v" id="cardMedianUpside">–</div><div class="s">현재 목록 기준</div></div>
+      <div class="card"><div class="k">Base 상승여력 중앙값</div><div class="v" id="cardMedianUpside">–</div><div class="s">Base 적정가 대비 현재가</div></div>
       <div class="card"><div class="k">고평가 비중</div><div class="v" id="cardOvervalued">–</div><div class="s">고평가 또는 매우 고평가</div></div>
       <div class="card"><div class="k">고위험 비중</div><div class="v" id="cardRisk">–</div><div class="s">리스크 점수 ≥ 3.75 / 5</div></div>
-      <div class="card"><div class="k">오늘 TOP</div><div class="v" id="cardShortTop">–</div><div class="s" id="cardShortTopSub">점수 기반</div></div>
+      <div class="card"><div class="k">단기 후보 TOP</div><div class="v" id="cardShortTop">–</div><div class="s" id="cardShortTopSub">점수 기반</div></div>
       <div class="card"><div class="k">실적 임박</div><div class="v" id="cardEarningsSoon">–</div><div class="s">14일 이내 실적 발표</div></div>
       <div class="card"><div class="k">관심종목 TOP</div><div class="v" id="cardWatchTop">–</div><div class="s" id="cardWatchTopSub">Watchlist 기준</div></div>
     </div>
@@ -173,7 +166,7 @@
     <div class="layout">
       <div class="panel">
         <div class="panelHeader">
-          <div><h2 id="tableTitle">S&P 500 전체 기업</h2><span id="tableSubtitle">표는 비교용입니다. 아버지가 먼저 볼 부분은 위의 오늘 볼 종목, 관심종목 TOP, 실적·위험 주의입니다.</span></div>
+          <div><h2 id="tableTitle">S&P 500 전체 기업</h2><span id="tableSubtitle">표는 핵심 숫자 비교용입니다. 단기 점수와 실적 경고는 위 추천/신호 카드에서 확인하세요.</span></div>
           <span id="lastUpdated">아직 새로고침되지 않음</span>
         </div>
         <div class="tableWrap">
@@ -232,14 +225,14 @@
           </div>
         </div>
 
-        <div class="panel familyHidden">
+        <div class="panel">
           <div class="panelHeader"><h2>단기/가치 랭킹</h2><span id="extremeLabel">현재 표시 목록</span></div>
           <div class="sideBody miniList" id="extremes"></div>
         </div>
 
-        <div class="panel familyHidden">
+        <div class="panel">
           <div class="panelHeader"><h2>관심종목 추천 TOP 10</h2><span>작은 종목/Watchlist</span></div>
-          <div class="sideBody miniList" id="watchlistTopSide"></div>
+          <div class="sideBody miniList" id="watchlistTop"></div>
         </div>
 
         <div class="panel">
@@ -274,12 +267,12 @@
         <select class="select" id="addSector"></select>
         <input class="smallInput" id="addSub" placeholder="세부 업종" />
         <label class="miniLabel" style="grid-column:1/-1"><input id="addShareToggle" type="checkbox" checked> 가족 Google Sheet에도 저장</label>
-        <input class="smallInput" id="watchlistPinInput" type="password" placeholder="가족 PIN · 처음 한 번 입력하면 이 브라우저에 저장" autocomplete="off" style="grid-column:1/-1;width:100%" />
+        <input class="smallInput" id="watchlistSubmitUrlInput" placeholder="Google Apps Script Web App URL · 설정 파일에 있으면 비워도 됨" style="grid-column:1/-1;width:100%" />
         <div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn soft" id="saveWatchlistPin" type="button">PIN 저장</button>
-          <button class="btn soft" id="clearWatchlistPin" type="button">PIN 삭제</button>
+          <button class="btn soft" id="saveWatchlistSettings" type="button">Google Sheet 연결 저장</button>
+          <button class="btn soft" id="clearWatchlistSettings" type="button">연결 해제</button>
         </div>
-        <button class="btn primary" id="confirmAdd">관심종목 추가</button><div class="note">추가하면 현재 브라우저에 바로 저장됩니다. 가족 PIN이 맞고 Google Sheet 연결이 설정되어 있으면 가족 공유 시트에도 저장됩니다. Apps Script URL은 화면에 표시하지 않으며 config/watchlist_config.json에서만 읽습니다.</div>
+        <button class="btn primary" id="confirmAdd">관심종목 추가</button><div class="note">추가하면 현재 브라우저에 바로 저장됩니다. Google Sheet Web App URL이 설정되어 있으면 가족 공유 시트에도 자동 저장되고, GitHub Actions가 다음 실행 때 가격/펀더멘털 업데이트 대상에 포함합니다.</div>
       </div>
     </div>
   </div>
@@ -359,7 +352,7 @@
 
     let state = {
       selectedSector:'All', search:'', statusFilter:'All', sortKey:'symbol', sortDir:1, selectedSymbol:null,
-      settings:{years:0.33, analysisMode:0.33, defaultEPS:5, defaultDiscount:10, bearGrowthShift:-5, bullGrowthShift:5, overvaluedThreshold:-10, autoSave:true, fmpApiKey:'', useFmp:false, watchlistSubmitUrl:'', watchlistSheetCsvUrl:'', watchlistPin:'',
+      settings:{years:0.33, analysisMode:0.33, defaultEPS:5, defaultDiscount:10, bearGrowthShift:-5, bullGrowthShift:5, overvaluedThreshold:-10, autoSave:true, fmpApiKey:'', useFmp:false, watchlistSubmitUrl:'', watchlistSheetCsvUrl:'',
         weights:{rate:1.0, cyc:1.1, margin:1.0, balance:1.0, crowding:1.2, reg:0.8}},
       stocks: fallbackRows.map(rowToStock), lastConstituentRefresh:null, lastPriceRefresh:null
     };
@@ -632,27 +625,22 @@
 
     function renderSignals(){
       const signalBox=document.getElementById('signalSummary'); const earnBox=document.getElementById('earningsAlerts');
-      if(!signalBox && !earnBox) return;
+      if(!signalBox || !earnBox) return;
       const visible=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
       const enriched=visible.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore));
       const best=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,3);
-      if(signalBox){
-        signalBox.innerHTML='';
-        if(!best.length){ signalBox.innerHTML='<div class="muted">가격과 펀더멘털을 불러오면 단기 신호가 표시됩니다.</div>'; }
-        best.forEach(x=>{
-          const reasons=reasonChips(x.s,x.c).slice(0,3).map(r=>`<span class="reasonChip">${escapeHtml(r)}</span>`).join('');
-          const div=document.createElement('div'); div.className='signalCard';
-          div.innerHTML=`<div class="mobileTop"><div><div class="signalTicker">${x.s.symbol}</div><div class="signalMeta">${escapeHtml(x.s.name)} · ${sectorLabel(x.s.sector)}</div></div><div class="signalScore ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div></div><div class="reasonList">${reasons}</div><div class="signalMeta">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 모멘텀 ${pct(x.c.returnH,0)} · 실적 ${earningsLabel(x.c.earningsDays)}</div>`;
-          div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; signalBox.appendChild(div);
-        });
-      }
-      if(!earnBox) return;
+      signalBox.innerHTML='';
+      if(!best.length){ signalBox.innerHTML='<div class="muted">가격과 펀더멘털을 불러오면 단기 신호가 표시됩니다.</div>'; }
+      best.forEach(x=>{
+        const reasons=reasonChips(x.s,x.c).slice(0,3).map(r=>`<span class="reasonChip">${escapeHtml(r)}</span>`).join('');
+        const div=document.createElement('div'); div.className='signalCard';
+        div.innerHTML=`<div class="mobileTop"><div><div class="signalTicker">${x.s.symbol}</div><div class="signalMeta">${escapeHtml(x.s.name)} · ${sectorLabel(x.s.sector)}</div></div><div class="signalScore ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div></div><div class="reasonList">${reasons}</div><div class="signalMeta">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 모멘텀 ${pct(x.c.returnH,0)} · 실적 ${earningsLabel(x.c.earningsDays)}</div>`;
+        div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; signalBox.appendChild(div);
+      });
       const earns=enriched.filter(x=>Number.isFinite(x.c.earningsDays)&&x.c.earningsDays>=0&&x.c.earningsDays<=14).sort((a,b)=>a.c.earningsDays-b.c.earningsDays).slice(0,6);
-      const riskies=enriched.filter(x=>x.c.valueTrap || (Number.isFinite(x.c.riskScore)&&x.c.riskScore>=3.75)).sort((a,b)=>(a.c.shortScore||0)-(b.c.shortScore||0)).slice(0,4);
       earnBox.innerHTML='';
-      if(!earns.length && !riskies.length){ earnBox.innerHTML='<div class="muted">현재 표시 목록에는 임박한 실적 발표나 강한 주의 신호가 없습니다.</div>'; return; }
-      earns.forEach(x=>{ const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">!</div><div><b>${x.s.symbol}</b> <span class="pill ${earningsClass(x.c.earningsDays)}">${earningsLabel(x.c.earningsDays)}</span><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">${horizonProfile().label} 모멘텀 ${pct(x.c.returnH,0)} · ${escapeHtml(x.s.nextEarningsDate||'')}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; earnBox.appendChild(div); });
-      riskies.forEach(x=>{ const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">⚠</div><div><b>${x.s.symbol}</b> <span class="pill bad">주의</span><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">${x.c.valueTrap?'Value Trap 가능성 · ':''}리스크 ${fmt(x.c.riskScore,1)} · 점수 ${fmt(x.c.shortScore,0)}</div></div><div><span class="pill ${riskClass(x.c.riskScore)}">${riskLabel(x.c.riskScore)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; earnBox.appendChild(div); });
+      if(!earns.length){ earnBox.innerHTML='<div class="muted">현재 표시 목록에는 14일 이내 실적 발표 경고가 없습니다.</div>'; return; }
+      earns.forEach(x=>{ const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">!</div><div><b>${x.s.symbol}</b> <span class="pill ${earningsClass(x.c.earningsDays)}">${earningsLabel(x.c.earningsDays)}</span><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">단기점수 ${fmt(x.c.shortScore,0)} · ${horizonProfile().label} 모멘텀 ${pct(x.c.returnH,0)} · ${escapeHtml(x.s.nextEarningsDate||'')}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; earnBox.appendChild(div); });
     }
 
     function renderMobileList(){
@@ -675,7 +663,7 @@
     function render(){
       renderTabs(); renderTodaysPicks(); renderSectorHeatmap(); renderSignals(); renderTable(); renderCards(); renderMobileList(); renderSelected(); renderExtremes(); renderWatchlistTop(); renderAddSector();
       document.getElementById('tableTitle').textContent = state.selectedSector==='All'?'S&P 500 전체 기업':sectorLabel(state.selectedSector)+' 섹터';
-      document.getElementById('tableSubtitle').textContent = state.search?('검색 필터: '+state.search):'표는 비교용입니다. 아버지가 먼저 볼 부분은 위의 오늘 볼 종목, 관심종목 TOP, 실적·위험 주의입니다.';
+      document.getElementById('tableSubtitle').textContent = state.search?('검색 필터: '+state.search):'표는 핵심 숫자 비교용입니다. 단기 점수와 실적 경고는 위 추천/신호 카드에서 확인하세요.';
       document.getElementById('lastUpdated').textContent = state.lastPriceRefresh?('가격 새로고침: '+new Date(state.lastPriceRefresh).toLocaleString()):'가격 데이터가 아직 새로고침되지 않았습니다';
       document.getElementById('sourceStatus').innerHTML = state.lastConstituentRefresh ? `<strong>구성종목 새로고침 완료.</strong> 출처: DataHub/GitHub CSV. 마지막 가져오기: ${new Date(state.lastConstituentRefresh).toLocaleString()}.` : `<strong>기본 목록이 로드되었습니다.</strong> “S&P 500 목록 새로고침”을 눌러 최신 DataHub/GitHub CSV를 가져오세요.`;
     }
@@ -804,22 +792,17 @@
 
 
     function renderWatchlistTop(){
-      const boxes=['watchlistTop','watchlistTopSide'].map(id=>document.getElementById(id)).filter(Boolean);
-      if(!boxes.length) return;
-      boxes.forEach(box=>box.innerHTML='');
+      const box=document.getElementById('watchlistTop'); if(!box) return; box.innerHTML='';
       const watch=state.stocks.filter(s=>s.isCustom || s.sector==='Watchlist');
-      const setHtml=(html)=>boxes.forEach(box=>box.innerHTML=html);
-      if(!watch.length){ setHtml('<div class="muted">관심종목을 추가하면 여기에서 Watchlist 전용 TOP 10이 표시됩니다.</div>'); return; }
+      if(!watch.length){ box.innerHTML='<div class="muted">관심종목을 추가하면 여기에서 Watchlist 전용 TOP 10이 표시됩니다.</div>'; return; }
       const enriched=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,10);
-      if(!enriched.length){ setHtml('<div class="muted">관심종목 가격과 펀더멘털을 불러오면 랭킹이 표시됩니다.</div>'); return; }
-      boxes.forEach(box=>{
-        enriched.forEach((x,i)=>{
-          const div=document.createElement('div'); div.className='miniItem';
-          const warn=(Number.isFinite(x.c.earningsDays)&&x.c.earningsDays>=0&&x.c.earningsDays<=14)?`<span class="pill ${earningsClass(x.c.earningsDays)}">실적 ${earningsLabel(x.c.earningsDays)}</span>`:'';
-          div.innerHTML=`<div class="rank">${i+1}</div><div><b>${x.s.symbol}</b> ${warn}<div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">점수 ${fmt(x.c.shortScore,0)} · 52주 ${pct(x.c.range52,0)} · 모멘텀 ${pct(x.c.returnH,0)} · 상승여력 ${pct(x.c.upside,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`;
-          div.onclick=()=>{state.selectedSymbol=x.s.symbol; state.selectedSector=x.s.sector||'Watchlist'; render();};
-          box.appendChild(div);
-        });
+      if(!enriched.length){ box.innerHTML='<div class="muted">관심종목 가격과 펀더멘털을 불러오면 랭킹이 표시됩니다.</div>'; return; }
+      enriched.forEach((x,i)=>{
+        const div=document.createElement('div'); div.className='miniItem';
+        const warn=(Number.isFinite(x.c.earningsDays)&&x.c.earningsDays>=0&&x.c.earningsDays<=14)?`<span class="pill ${earningsClass(x.c.earningsDays)}">실적 ${earningsLabel(x.c.earningsDays)}</span>`:'';
+        div.innerHTML=`<div class="rank">${i+1}</div><div><b>${x.s.symbol}</b> ${warn}<div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">점수 ${fmt(x.c.shortScore,0)} · 52주 ${pct(x.c.range52,0)} · 모멘텀 ${pct(x.c.returnH,0)} · 상승여력 ${pct(x.c.upside,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`;
+        div.onclick=()=>{state.selectedSymbol=x.s.symbol; state.selectedSector=x.s.sector||'Watchlist'; render();};
+        box.appendChild(div);
       });
     }
 
@@ -837,17 +820,16 @@
         if(cfg && typeof cfg==='object'){
           if(!state.settings.watchlistSubmitUrl && cfg.submitUrl) state.settings.watchlistSubmitUrl=String(cfg.submitUrl).trim();
           if(!state.settings.watchlistSheetCsvUrl && cfg.sheetCsvUrl) state.settings.watchlistSheetCsvUrl=String(cfg.sheetCsvUrl).trim();
-          if(cfg.submitUrl || cfg.sheetCsvUrl) log('Google Sheet 관심종목 설정을 불러왔습니다. Apps Script URL은 화면에 표시하지 않습니다.');
+          if(cfg.submitUrl || cfg.sheetCsvUrl) log('Google Sheet 관심종목 설정을 불러왔습니다.');
         }
       }catch(e){ /* config is optional */ }
       applyWatchlistInputs();
     }
     function applyWatchlistInputs(){
-      const pinInp=document.getElementById('watchlistPinInput');
-      if(pinInp) pinInp.value=state.settings.watchlistPin || '';
+      const inp=document.getElementById('watchlistSubmitUrlInput');
+      if(inp) inp.value=state.settings.watchlistSubmitUrl || '';
     }
     function normalizeSymbol(sym){ return String(sym||'').trim().toUpperCase().replace(/-/g,'.'); }
-    function isValidTicker(sym){ return /^[A-Z0-9.]{1,15}$/.test(String(sym||'')); }
     function csvField(row, header, names){
       for(const name of names){ const i=header.indexOf(name); if(i>=0) return row[i]; }
       return '';
@@ -889,52 +871,16 @@
       if(shared.length){ state.selectedSector='Watchlist'; render(); persistMaybe(); }
       if(!silent) log(`공유 관심종목 불러오기 완료: ${shared.length}개`);
     }
-    function normalizeAppsScriptUrl(url){
-      let u=String(url||'').trim();
-      if(!u) return '';
-      u=u.replace(/\/dev(\?|$)/,'/exec$1');
-      return u;
-    }
-    function submitToGoogleSheetViaGet(url, params){
-      return new Promise((resolve,reject)=>{
-        try{
-          const cleanUrl=normalizeAppsScriptUrl(url);
-          const qs=new URLSearchParams(params);
-          qs.set('ts', Date.now().toString());
-          const sep=cleanUrl.includes('?')?'&':'?';
-          const img=new Image();
-          const done=()=>{ try{ img.remove(); }catch(_){} resolve(); };
-          img.onload=done;
-          img.onerror=done;
-          img.style.display='none';
-          img.referrerPolicy='no-referrer';
-          img.src=cleanUrl+sep+qs.toString();
-          document.body.appendChild(img);
-          setTimeout(done, 1800);
-        }catch(e){ reject(e); }
-      });
-    }
     async function submitWatchlistTicker(stock){
       const share=document.getElementById('addShareToggle')?.checked;
-      let url=(state.settings.watchlistSubmitUrl||'').trim();
+      const url=(state.settings.watchlistSubmitUrl||'').trim();
       if(!share){ log(`${stock.symbol}은 현재 브라우저에만 저장되었습니다.`); return; }
-      if(!url){ log(`${stock.symbol}은 현재 브라우저에 저장되었습니다. Google Sheet 연결 설정이 없어 가족 공유 시트에는 저장하지 않았습니다.`); return; }
-      if(!state.settings.watchlistPin){ log(`${stock.symbol}은 현재 브라우저에 저장되었습니다. 가족 PIN이 없어 Google Sheet에는 저장하지 않았습니다.`); return; }
-      url=normalizeAppsScriptUrl(url);
-      state.settings.watchlistSubmitUrl=url;
-      applyWatchlistInputs();
+      if(!url){ log(`${stock.symbol}은 현재 브라우저에 저장되었습니다. Google Sheet 연결 URL이 없어 가족 공유 시트에는 저장하지 않았습니다.`); return; }
       try{
         const body=new URLSearchParams();
-        body.set('symbol', stock.symbol);
-        body.set('name', stock.name||stock.symbol);
-        body.set('sector', stock.sector||'Watchlist');
-        body.set('subIndustry', stock.subIndustry||'관심종목');
-        body.set('addedAt', new Date().toISOString());
-        body.set('pin', state.settings.watchlistPin || '');
-        body.set('source','dashboard-v20-pin');
-        await submitToGoogleSheetViaGet(url, body);
-        saveState();
-        log(`${stock.symbol} Google Sheet 저장 요청을 보냈습니다. PIN이 맞으면 2~3초 뒤 Google Sheet custom_tickers 시트에 저장됩니다.`);
+        body.set('symbol', stock.symbol); body.set('name', stock.name||stock.symbol); body.set('sector', stock.sector||'Watchlist'); body.set('subIndustry', stock.subIndustry||'관심종목'); body.set('addedAt', new Date().toISOString()); body.set('source','dashboard');
+        await fetch(url, {method:'POST', mode:'no-cors', body});
+        log(`${stock.symbol} Google Sheet 저장 요청을 보냈습니다. 다음 GitHub Actions 실행 후 가격/펀더멘털 자동 업데이트 대상에 포함됩니다.`);
       }catch(e){ log(`${stock.symbol} Google Sheet 저장 요청 실패: ${e.message}`); }
     }
 
@@ -1428,7 +1374,7 @@
       document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
     }
     function bind(){
-      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v20은 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v17은 GitHub Actions가 생성한 prices/latest_prices.csv와 fundamentals/latest_fundamentals.csv만 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
       document.getElementById('btnReset').onclick=()=>{ if(confirm('저장된 데이터를 삭제하고 기본 목록으로 초기화할까요?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
       document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
       document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});
@@ -1442,9 +1388,9 @@
       for(const [id,key] of Object.entries(weightIds)){document.getElementById(id).onchange=e=>{state.settings.weights[key]=n(e.target.value)||0; render(); persistMaybe();}}
       document.getElementById('btnAdd').onclick=()=>{applyWatchlistInputs(); document.getElementById('addModal').classList.add('show')}; document.getElementById('closeAdd').onclick=()=>document.getElementById('addModal').classList.remove('show'); document.getElementById('closeExport').onclick=()=>document.getElementById('exportModal').classList.remove('show');
       document.getElementById('copyExport').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('exportText').value); log('JSON 내보내기 내용을 클립보드에 복사했습니다.')};
-      const savePinBtn=document.getElementById('saveWatchlistPin'); if(savePinBtn) savePinBtn.onclick=()=>{const pin=(document.getElementById('watchlistPinInput')?.value||'').trim(); if(!pin) return alert('저장할 PIN을 입력하세요.'); state.settings.watchlistPin=pin; persistMaybe(); log('가족 PIN을 이 브라우저에 저장했습니다.');};
-      const clearPinBtn=document.getElementById('clearWatchlistPin'); if(clearPinBtn) clearPinBtn.onclick=()=>{state.settings.watchlistPin=''; applyWatchlistInputs(); persistMaybe(); log('가족 PIN을 이 브라우저에서 삭제했습니다.');};
-      document.getElementById('confirmAdd').onclick=async()=>{const sym=normalizeSymbol(document.getElementById('addSymbol').value); if(!sym) return alert('티커는 필수입니다.'); if(!isValidTicker(sym)) return alert('티커 형식이 이상합니다. 예: SOFI, IONQ, BRK.B, SHOP.TO'); const pinValue=(document.getElementById('watchlistPinInput')?.value||'').trim(); if(pinValue){state.settings.watchlistPin=pinValue; persistMaybe();} const row=[sym,document.getElementById('addName').value.trim()||sym,document.getElementById('addSector').value||'Watchlist',document.getElementById('addSub').value.trim()||'관심종목']; const existing=state.stocks.find(s=>normalizeSymbol(s.symbol)===sym); if(existing) return alert('이미 존재하는 티커입니다.'); const added=rowToStock(row); added.isCustom=true; added.sector=added.sector||'Watchlist'; state.stocks.push(added); state.selectedSymbol=sym; state.selectedSector=added.sector; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 추가됨.'); await submitWatchlistTicker(added);};
+      document.getElementById('saveWatchlistSettings').onclick=()=>{state.settings.watchlistSubmitUrl=document.getElementById('watchlistSubmitUrlInput').value.trim(); persistMaybe(); log('Google Sheet 저장 URL을 이 브라우저에 저장했습니다.')};
+      document.getElementById('clearWatchlistSettings').onclick=()=>{state.settings.watchlistSubmitUrl=''; applyWatchlistInputs(); persistMaybe(); log('Google Sheet 저장 URL을 이 브라우저에서 삭제했습니다.')};
+      document.getElementById('confirmAdd').onclick=async()=>{const sym=normalizeSymbol(document.getElementById('addSymbol').value); if(!sym) return alert('티커는 필수입니다.'); const typedUrl=document.getElementById('watchlistSubmitUrlInput').value.trim(); if(typedUrl){state.settings.watchlistSubmitUrl=typedUrl; persistMaybe();} const row=[sym,document.getElementById('addName').value.trim()||sym,document.getElementById('addSector').value||'Watchlist',document.getElementById('addSub').value.trim()||'관심종목']; const existing=state.stocks.find(s=>normalizeSymbol(s.symbol)===sym); if(existing) return alert('이미 존재하는 티커입니다.'); const added=rowToStock(row); added.isCustom=true; added.sector=added.sector||'Watchlist'; state.stocks.push(added); state.selectedSymbol=sym; state.selectedSector=added.sector; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 추가됨.'); await submitWatchlistTicker(added);};
     }
 
     loadState(); bind(); applySettingsToInputs(); setMobileMode(localStorage.getItem(STORAGE_KEY+'_mobileMode')==='1'); render(); loadWatchlistConfig().then(()=>fetchSharedWatchlist(true));
