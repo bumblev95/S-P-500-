@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime,timezone,timedelta
-from build_crypto import candles,indicators,forecast,assess,observed_change,fresh
+from build_crypto import candles,indicators,forecast,assess,observed_change,fresh,spot_points,spot_assess
 class CryptoTests(unittest.TestCase):
     def setUp(self):
         self.now=datetime(2026,9,11,22,tzinfo=timezone.utc);s=self.now.isoformat()
@@ -30,4 +30,12 @@ class CryptoTests(unittest.TestCase):
         r=dict(at=(self.now-timedelta(hours=24)).isoformat(),symbol='BTC',circulating=100)
         self.assertEqual(observed_change([r],'BTC','circulating',self.now.isoformat()),100)
         self.assertFalse(fresh((self.now+timedelta(hours=1)).isoformat(),self.now))
+    def test_spot_observations_exclude_live_point(self):
+        midnight=self.now.replace(hour=0).timestamp()*1000
+        rows=spot_points({'prices':[[midnight,100],[midnight+3600000,105],[midnight+86400000,110]]},self.now)
+        self.assertEqual(len(rows),1);self.assertEqual(rows[0]['date'],'2026-09-10')
+        self.assertEqual(rows[0]['close'],100)
+    def test_spot_never_substitutes_perpetual_history(self):
+        a=spot_assess(self.e,indicators(self.rows),self.now)
+        self.assertIsNone(a['indicators']);self.assertEqual(a['spotAction'],'관망')
 if __name__=='__main__':unittest.main()

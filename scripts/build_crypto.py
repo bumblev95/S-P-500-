@@ -1,5 +1,5 @@
 """Public crypto rules: separate spot/supply and perpetual data; no trading or AI claims."""
-import json,math,statistics,threading
+import json,math,statistics,threading,time
 from datetime import datetime,timezone,timedelta
 from pathlib import Path
 from urllib.request import Request,urlopen
@@ -9,7 +9,7 @@ from build_forecasts import atomic_json
 ROOT=Path(__file__).resolve().parents[1]
 COINS={'BTC':'bitcoin','ETH':'ethereum','SOL':'solana','BNB':'binancecoin','XRP':'ripple','DOGE':'dogecoin','LINK':'chainlink','AVAX':'avalanche-2','SUI':'sui','ARB':'arbitrum','HYPE':'hyperliquid','SKR':'seeker'}
 HL='https://api.hyperliquid.xyz/info'
-HALTED=set();LOCK=threading.Lock()
+HALTED=set();LOCK=threading.Lock();CG_LOCK=threading.Lock();CG_NEXT=0
 def number(x):
     try:
         v=float(x)
@@ -21,7 +21,14 @@ def age_hours(s,now):
     except (ValueError,TypeError,AttributeError):return float('inf')
 def fresh(s,now,h=2):return 0<=age_hours(s,now)<=h
 def request(url,body=None):
+    global CG_NEXT
     host='HL' if url==HL else 'CG'
+    if host=='CG':
+        with CG_LOCK:
+            with LOCK:
+                if host in HALTED:raise RuntimeError(host+' rate/access limit; no retry')
+            time.sleep(max(0,CG_NEXT-time.monotonic()))
+            CG_NEXT=time.monotonic()+12
     with LOCK:
         if host in HALTED:raise RuntimeError(host+' rate/access limit; no retry')
     try:
@@ -69,6 +76,40 @@ def backtest(rows,h):
         errors.append(abs(f['base']/actual-1));baseline.append(abs(rows[i]['close']/actual-1));origins.append(rows[i]['date'])
         if len(errors)>=12:break
     return dict(n=len(errors),mape=statistics.mean(errors) if errors else None,baselineMape=statistics.mean(baseline) if errors else None,origins=origins)
+def spot_points(raw,now):
+    """Keep UTC midnight spot observations; exclude the appended live-price point."""
+    rows={}
+    for t,price in raw.get('prices',[]):
+        price=number(price)
+        if not price or price<=0 or not isinstance(t,(int,float)) or t%86400000!=0 or t>now.timestamp()*1000:continue
+        at=datetime.fromtimestamp(t/1000,timezone.utc)
+        date=(at-timedelta(milliseconds=1)).date().isoformat()
+        rows[date]=dict(date=date,at=at.isoformat(),close=price)
+    return [rows[d] for d in sorted(rows)]
+def spot_rows(e):
+    # Close-only adapter: ATR is not used for spot levels and is never presented as OHLC ATR.
+    return [dict(r,open=r['close'],high=r['close'],low=r['close'],volume=None) for r in e.get('spotHistory',[])]
+def spot_assess(e,btc,now):
+    rows=spot_rows(e);view=dict(e,history=rows,perp={},book={});a=assess(view,btc,now)
+    a={k:a[k] for k in ['indicators','score','coverage','components','floatRatio','fdvRatio','spotBlocks']}
+    a['levels']={};a['spotAction']='관망';ind=a['indicators'];price=(e.get('spot') or {}).get('price')
+    if not ind or not price:return a
+    p=[r['close'] for r in rows];moves=[abs(y-x) for x,y in zip(p,p[1:])];buffer=statistics.mean(moves[-14:])
+    below=[];above=[]
+    for i in range(max(2,len(p)-160),len(p)-2):
+        if p[i]==min(p[i-2:i+3]) and p[i]<price:below.append(p[i])
+        if p[i]==max(p[i-2:i+3]) and p[i]>price:above.append(p[i])
+    support=max(below) if below else None
+    if support and buffer>0:
+        low=support;high=support+.5*buffer;stop=support-1.5*buffer
+        targets=[v for v in above if v>max(high,price)];target=min(targets) if targets else None
+        rr=(target-high)/(high-stop) if target and 0<stop<high else None
+        a['levels']=dict(buyLow=low,buyHigh=high,spotStop=stop if stop>0 else None,spotTarget=target,rr=rr)
+        if not a['spotBlocks']:
+            if a['score']>=65 and ind['trend']>=62 and low<=price<=high and rr is not None and rr>=1.5:a['spotAction']='분할매수 검토'
+            else:a['spotAction']='신규 매수 대기' if ind['trend']<40 else '눌림목·조건 대기'
+    else:a['spotBlocks'].append('현물 일별 가격에서 확인된 지지 구간 부족')
+    return a
 def observed_change(history,symbol,key,stamp):
     target=datetime.fromisoformat(stamp)-timedelta(hours=24)
     candidates=[r for r in history if r['symbol']==symbol and number(r.get(key)) is not None and 0<=(target-datetime.fromisoformat(r['at'])).total_seconds()<=7200]
@@ -131,11 +172,16 @@ def build(root=ROOT):
         meta,ctx=request(HL,{'type':'metaAndAssetCtxs'});contexts={a['name']:(a,c) for a,c in zip(meta['universe'],ctx)}
     except Exception as ex:errors.append('Hyperliquid: '+str(ex))
     def collect(item):
-        symbol,cg=item;prior=old['coins'].get(symbol,{});e=dict(symbol=symbol,id=cg,name=prior.get('name',symbol),history=prior.get('history',[]),spot=prior.get('spot'),supply=prior.get('supply'),perp=prior.get('perp'),book=prior.get('book'),errors=[])
+        symbol,cg=item;prior=old['coins'].get(symbol,{});e=dict(symbol=symbol,id=cg,name=prior.get('name',symbol),history=prior.get('history',[]),spotHistory=prior.get('spotHistory',[]),spot=prior.get('spot'),supply=prior.get('supply'),perp=prior.get('perp'),book=prior.get('book'),errors=[])
         m=markets.get(cg)
         if m and str(m.get('symbol','')).upper()==symbol:
             e['name']=m['name'];e['spot']=dict(price=number(m.get('current_price')),marketCap=number(m.get('market_cap')),fdv=number(m.get('fully_diluted_valuation')),volume24h=number(m.get('total_volume')),at=m.get('last_updated'))
             e['supply']=dict(circulating=number(m.get('circulating_supply')),total=number(m.get('total_supply')),maximum=number(m.get('max_supply')))
+        # Daily history is cached until the next UTC day; failed refreshes retain its own timestamps.
+        last_point=(e['spotHistory'][-1].get('at') if e['spotHistory'] else '') or ''
+        if not last_point.startswith(now.date().isoformat()):
+            try:e['spotHistory']=spot_points(request('https://api.coingecko.com/api/v3/coins/'+cg+'/market_chart?vs_currency=usd&days=365&interval=daily'),now) or e['spotHistory']
+            except Exception as ex:e['errors'].append('현물 일별 가격: '+str(ex))
         if symbol in contexts:
             a,c=contexts[symbol];mark=number(c.get('markPx'));oi=number(c.get('openInterest'));oracle=number(c.get('oraclePx'));prev=number(c.get('prevDayPx'))
             e['perp']=dict(mark=mark,oracle=oracle,fundingHourly=number(c.get('funding')),openInterest=oi,openInterestUSD=oi*mark if oi is not None and mark else None,volume24h=number(c.get('dayNtlVlm')),premium=mark/oracle-1 if mark and oracle else None,return24h=mark/prev-1 if mark and prev else None,at=stamp,delisted=bool(a.get('isDelisted')))
@@ -155,10 +201,14 @@ def build(root=ROOT):
     btc=indicators(entries['BTC']['history']) if entries['BTC']['history'] and fresh(entries['BTC']['history'][-1]['date']+'T23:59:59+00:00',now,36) else None
     mp=root/'market/latest.json';macro=json.loads(mp.read_text()) if mp.exists() else {}
     state=(macro.get('credit') or {}).get('status','unknown') if fresh(macro.get('generatedAt'),now,96) else 'unknown'
+    btc_spot=indicators(spot_rows(entries['BTC'])) if entries['BTC']['spotHistory'] and fresh(entries['BTC']['spotHistory'][-1]['at'],now,36) else None
     for symbol,e in entries.items():
         e['macroState']=state;e['analysis']=assess(e,btc,now);ind=e['analysis']['indicators'];px=(e.get('perp') or {}).get('mark')
         e['predictions']={str(h):forecast(px,ind,h) for h in (30,120,365)} if px and ind else {}
         e['backtest']={str(h):backtest(e['history'],h) for h in (30,120,365)}
+        e['spotAnalysis']=spot_assess(e,btc_spot,now);sind=e['spotAnalysis']['indicators'];spx=(e.get('spot') or {}).get('price')
+        e['spotPredictions']={str(h):forecast(spx,sind,h) for h in (30,120,365)} if spx and sind else {}
+        e['spotBacktest']={str(h):backtest(spot_rows(e),h) for h in (30,120,365)}
         obs=dict(symbol=symbol,at=stamp)
         if fresh((e.get('spot') or {}).get('at'),now):obs['circulating']=(e.get('supply') or {}).get('circulating')
         if fresh((e.get('perp') or {}).get('at'),now):obs['openInterest']=(e.get('perp') or {}).get('openInterest')
