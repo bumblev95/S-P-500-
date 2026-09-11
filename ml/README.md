@@ -64,3 +64,23 @@ Automatic updates run on weekdays after market close. A Pages build is
 explicitly requested after publishing results so bot commits refresh the site.
 Provider failure leaves the last successful forecast dates intact; the UI
 rejects stale or misaligned results instead of treating them as current.
+
+## Path illustration and additional comparison
+
+The default wavy line is an explicitly labeled illustration. It resamples
+five-session blocks of the last 126 observed closes' demeaned log returns,
+with a deterministic symbol/date/horizon seed, then conditions the path to
+end at the existing model endpoint. It changes neither the endpoint forecast
+nor entry/exit levels. Excursions are not clipped to the reference band. It is
+not a learned daily path or a forecast of when to buy a dip. The user can
+switch back to the average direction; inadequate history disables sampling.
+
+`build_forecast_comparison.py` compares no-change, trend-decay, and the fitted
+model on stored out-of-sample records. A fourth research method chooses the
+lowest-MAE candidate using only outcomes already matured before each test
+origin, after at least two earlier test dates are available. All four methods
+are compared on identical later dates. The table includes average and 90th
+percentile absolute return errors, not portfolio losses or maximum drawdown.
+This rule was devised retrospectively and needs prospective evaluation. It
+does not replace the production forecast, alter promotion gates, or claim to
+identify the best possible model. The comparison refreshes with daily builds.
