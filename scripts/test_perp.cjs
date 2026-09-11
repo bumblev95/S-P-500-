@@ -15,11 +15,17 @@ const forming={...raw.at(-1),t:Math.floor(now/300000)*300000,T:Math.floor(now/30
 assert.equal(E.candles([...raw,forming],'5m',now,'BTC').length,240);
 assert.deepEqual(E.candles([{...raw[0],v:null},{...raw[0],i:'15m'},{...raw[0],s:'ETH'}],'5m',now,'BTC'),[]);
 const ind=E.indicators(s.frames['5m'],'5m'),pattern=E.detect(s.frames['5m'],ind),zero=E.levels(s.frames['5m'],ind,pattern,'long',0,300000),costly=E.levels(s.frames['5m'],ind,pattern,'long',.002,300000);assert(costly.rr<zero.rr);
+for(const [tf,horizons] of Object.entries(E.HORIZONS)){
+ const rows=s.frames[tf],ind=E.indicators(rows,tf),full=E.projection(rows,ind,tf,horizons.at(-1));
+ for(const h of horizons)assert.deepEqual(E.projection(rows,ind,tf,h),full.slice(0,h+1));
+ assert(full.every(q=>q.low>0&&q.low<=q.v&&q.v<=q.high));
+}
 // Exercise the actual page loader and interactions without requiring network access in CI.
 const nodes=new Map(),node=id=>nodes.get(id)||nodes.set(id,{innerHTML:'',textContent:'',value:'BTC',disabled:false,events:{},addEventListener(k,f){this.events[k]=f;}}).get(id);
 const buttons=['5m','15m','1d'].map(tf=>({dataset:{tf},addEventListener(k,f){this[k]=f},setAttribute(){}})),timers=[];let clock=now,fail=false;
 class Clock extends Date{constructor(...args){super(...(args.length?args:[clock]))}static now(){return clock}}
-const context={PerpEngine:{...E,analyze:(s,tf)=>E.analyze(s,tf,clock)},window:{innerWidth:390},document:{hidden:false,getElementById:node,querySelectorAll:()=>buttons,addEventListener(){}},Date:Clock,Intl,console,AbortController,setTimeout(){return 1},clearTimeout(){},setInterval(f){timers.push(f)},fetch:async(url,args)=>{
+const aheadButtons=[3,7,8,12,14,24,36,48,72].map(ahead=>({dataset:{ahead:String(ahead)},addEventListener(k,f){this[k]=f}}));
+const context={MarketVisuals:require('../assets/market-visuals.js'),PerpEngine:{...E,analyze:(s,tf)=>E.analyze(s,tf,clock)},window:{innerWidth:390},document:{hidden:false,getElementById:node,querySelectorAll:q=>q==='[data-ahead]'?aheadButtons:buttons,addEventListener(){}},Date:Clock,Intl,console,AbortController,setTimeout(){return 1},clearTimeout(){},setInterval(f){timers.push(f)},fetch:async(url,args)=>{
  assert.equal(url,'https://api.hyperliquid.xyz/info');if(fail)throw Error('offline');const b=JSON.parse(args.body);let result;
  if(b.type==='metaAndAssetCtxs')result=[{universe:[{name:'BTC'}]},[{markPx:s.quote.mark,oraclePx:s.quote.mark,funding:.000001,openInterest:1e8/s.quote.mark,dayNtlVlm:1e9}]];
  else if(b.type==='l2Book')result={time:now,levels:[[{px:s.quote.mark-.001}],[{px:s.quote.mark+.001}]]};
@@ -30,6 +36,6 @@ vm.runInNewContext(fs.readFileSync('assets/perp-page.js','utf8'),context);
 setImmediate(()=>{
  let html=node('app').innerHTML;assert(html.includes('롱 조건 충족'));assert(html.includes('손절 기준'));assert(!/NaN|Infinity|undefined/.test(html));
  for(const b of buttons){b.click();assert(node('app').innerHTML.includes(b.dataset.tf==='1d'?'일봉':b.dataset.tf==='15m'?'15분봉':'5분봉'));}
- buttons[0].click();clock+=120000;timers[1]();assert(node('app').innerHTML.includes('관망'));assert(!node('app').innerHTML.includes('롱 조건 충족'));
+ buttons[0].click();aheadButtons.find(b=>b.dataset.ahead==='72').click();assert(node('app').innerHTML.includes('6시간 뒤 기준 시나리오'));clock+=120000;timers[1]();assert(node('app').innerHTML.includes('관망'));assert(!node('app').innerHTML.includes('롱 조건 충족'));
  fail=true;node('refresh').events.click();setImmediate(()=>{assert(node('app').innerHTML.includes('갱신하지 못해'));console.log('Perp: long/short candidates, stale/gap/cost guards, completed candles, 3 timeframe UI and failed refresh passed');});
 });

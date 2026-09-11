@@ -9,6 +9,8 @@ on:
       - 'scripts/test_crypto_page.cjs'
       - 'assets/perp-engine.js'
       - 'assets/perp-page.js'
+      - 'assets/market-visuals.js'
+      - 'assets/crypto.css'
       - 'scripts/test_perp.cjs'
       - 'futures.html'
       - 'crypto.html'

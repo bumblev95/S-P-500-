@@ -73,5 +73,13 @@ function analyze(snapshot,interval,now=Date.now()){
  const action=blocks.length?'관망':side==='long'?'롱 조건 충족':'숏 조건 충족';
  return {action,blocks,ind,hi,higher,pattern,bias,longScore:Math.round(ls),shortScore:Math.round(ss),long,short,side,signalAt:rows.at(-1).end,expiresAt:rows.at(-1).end+step+15000,rows};
 }
-const api={MS,HIGHER,candles,indicators,detect,levels,analyze};if(typeof module!=='undefined')module.exports=api;else root.PerpEngine=api;
+const HORIZONS={'5m':[12,36,72],'15m':[8,24,48],'1d':[3,7,14]};
+function projection(rows,ind,interval,bars){
+ if(!HORIZONS[interval]?.includes(bars)||!rows?.length||!ind||!finite(ind.atr)||ind.atr<0)return [];
+ const price=rows.at(-1).close;if(!finite(price)||price<=0)return [];
+ const drift=clamp((ind.ema20-ind.ema50)/20,-.25*ind.atr,.25*ind.atr)/price,tau=interval==='1d'?5:24,sigma=ind.atr/price*.8;
+ // Horizon only truncates this shared, uncalibrated trend scenario; it never changes entry rules.
+ return Array.from({length:bars+1},(_,t)=>{const c=drift*tau*(1-Math.exp(-t/tau)),w=sigma*Math.sqrt(t);return {t,v:price*Math.exp(c),low:price*Math.exp(c-w),high:price*Math.exp(c+w)};});
+}
+const api={MS,HIGHER,HORIZONS,projection,candles,indicators,detect,levels,analyze};if(typeof module!=='undefined')module.exports=api;else root.PerpEngine=api;
 })(typeof window!=='undefined'?window:globalThis);
