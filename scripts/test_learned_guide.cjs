@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),g=require('../assets/learned-guide.js');
+const now=Date.parse('2026-09-11T22:00:00Z'),e={symbol:'TEST',price:100,asOf:'2026-09-11'};
+const forecast={horizon:21,anchor:100,base:105,bear:90,bull:120,learned:true,logReturn:Math.log(1.05),lowLogReturn:Math.log(.9),highLogReturn:Math.log(1.2)};
+const data={status:'trained',generatedAt:'2026-09-11T21:00:00Z',stocks:{TEST:{asOf:e.asOf,price:100,predictions:{21:{status:'eligible',forecast}}}}};
+assert(g.inspect(data,e,21,now).eligible);
+assert(!g.inspect(data,e,21,now+7*86400000).eligible);
+assert(!g.inspect(data,{...e,price:90},21,now).eligible);
+assert(!g.inspect(null,e,21,now).eligible);
+assert(!g.inspect(data,e,84,now).eligible);
+data.stocks.TEST.predictions[21].status='withheld';assert(!g.inspect(data,e,21,now).eligible);
+data.stocks.TEST.predictions[21].status='eligible';forecast.base=Infinity;assert(!g.inspect(data,e,21,now).eligible);
+console.log('Learned display: eligible, withheld, stale, price mismatch, missing horizon and invalid range guards passed');
