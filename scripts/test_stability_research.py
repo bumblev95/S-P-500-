@@ -23,6 +23,14 @@ class StabilityTests(unittest.TestCase):
         rows=self.rows();rows[3]['targetDate']='2015-01-01'
         result=compare(rows)
         self.assertNotIn('2013-01-01',result['selectionDates'])
+    def test_annual_boundary_keeps_a_maturity_gap(self):
+        rows=self.rows()[:5]
+        for i,r in enumerate(rows):r['targetDate']=f'{2011+i}-01-01'
+        result=compare(rows)
+        self.assertEqual(len(result['selectionDates']),2)
+        self.assertEqual(len(result['evaluationDates']),2)
+        self.assertLess(result['selectionTargetThrough'],result['evaluationStart'])
+        self.assertFalse(result['checks']['enoughDates'])
     def test_weighted_model_accepts_actual_features(self):
         f=pd.DataFrame({k:np.linspace(.1,.2,200) for k in FEATURES})
         f['y']=np.log(np.linspace(.8,1.2,200))

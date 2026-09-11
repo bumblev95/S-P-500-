@@ -147,7 +147,9 @@ A predeclared 50% blend with no-change is another candidate. Neither changes
 the production model, forecast path, promotion gates, or issue archive.
 All comparisons use identical production OOS stock/origin rows and input hashes.
 
-The earlier half of available origins selects among no-change, trend, existing
+Starting from the earlier half, a calendar-only boundary advances if needed
+to retain two fully matured selection origins and at least two later origins.
+This boundary never depends on observed candidate accuracy. Selection is among no-change, trend, existing
 AI, relative-error AI and the 50% blend. The fixed selection objective is
 equal-date mean MAPE + 0.25 * pooled p90 absolute percentage error. Selection
 labels must mature strictly before the later evaluation begins. The chosen

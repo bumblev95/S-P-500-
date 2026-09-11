@@ -31,8 +31,14 @@ def stats(rows,name):
 def compare(rows):
     dates=sorted({r['origin'] for r in rows})
     if len(dates)<4:return dict(status='insufficient',liveForecastChanged=False)
-    split=max(2,len(dates)//2);evaluation_start=dates[split]
-    # Purge selection outcomes that had not matured by the first later origin.
+    split=max(2,len(dates)//2)
+    # Calendar-only boundary: leave enough strictly matured selection origins.
+    # Never move the boundary in response to candidate accuracy.
+    while split<len(dates)-1:
+        selection=[r for r in rows if r['origin'] in dates[:split] and r['targetDate']<dates[split]]
+        if len({r['origin'] for r in selection})>=2:break
+        split+=1
+    evaluation_start=dates[split]
     selection=[r for r in rows if r['origin'] in dates[:split] and r['targetDate']<evaluation_start]
     test=[r for r in rows if r['origin'] in dates[split:]]
     if len({r['origin'] for r in selection})<2:return dict(status='insufficient',liveForecastChanged=False)
