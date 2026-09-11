@@ -137,3 +137,31 @@ view, including the reference band and deterministic five-session bootstrap
 illustration. The bootstrap is pinned separately at each endpoint. Interior
 values are interpolation/illustration, not learned daily forecasts, and an
 annual endpoint alone does not validate any shorter horizon.
+
+## Relative-price-error stability experiment
+
+`build_stability_research.py` adds one fixed weighted absolute-error HGB
+(target = future/current price, weight = current/future price). Its weighted
+absolute training loss corresponds to actual-future-price-relative error.
+A predeclared 50% blend with no-change is another candidate. Neither changes
+the production model, forecast path, promotion gates, or issue archive.
+All comparisons use identical production OOS stock/origin rows and input hashes.
+
+The earlier half of available origins selects among no-change, trend, existing
+AI, relative-error AI and the 50% blend. The fixed selection objective is
+equal-date mean MAPE + 0.25 * pooled p90 absolute percentage error. Selection
+labels must mature strictly before the later evaluation begins. The chosen
+method remains fixed across that evaluation; later training may use only data
+available at each origin, as in the existing rolling forecasting protocol.
+These historical periods have been inspected in prior research, so they are
+held out from this selection, not genuinely unseen prospective evidence.
+
+The research gate requires at least four later dates, 2% improvement in
+date-mean MAPE over all three original candidates, p90 no worse than both
+simple baselines, wins against both simple baselines on at least 60% of dates,
+and direction agreement at least as high as always predicting an upward move
+above 2%. All conditions are set before this experiment's results. Even a pass
+is not an automatic promotion or proof of future skill. Pooled MAPE, p90 and
+within-10% share are published alongside the checks; none is trading return.
+Only five annual origins currently exist, limiting the later annual sample.
+The experiment refreshes in the daily pipeline after the chronological audit.
