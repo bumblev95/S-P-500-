@@ -28,7 +28,7 @@ class PricePipelineTests(unittest.TestCase):
                                   "Volume":[1000]*260}, index=dates)
             downloaded = pd.concat({"AAA":frame}, axis=1)
             with patch.object(eod,"OUT_PATH",target), patch.object(eod,"read_symbols") as shared, \
-                    patch.object(eod.yf,"download",return_value=downloaded), \
+                    patch.object(eod,"download_public_chart",return_value=downloaded), \
                     contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(eod.main(["--public-prices-only"]),0)
                 shared.assert_not_called()
@@ -47,7 +47,7 @@ class PricePipelineTests(unittest.TestCase):
             original = b"symbol,date,close\nAAA,2026-09-10,100\n"
             target.write_bytes(original)
             with patch.object(eod,"OUT_PATH",target), \
-                    patch.object(eod.yf,"download",return_value=pd.DataFrame()), \
+                    patch.object(eod,"download_public_chart",return_value=pd.DataFrame()), \
                     contextlib.redirect_stdout(io.StringIO()):
                 with self.assertRaises(RuntimeError):
                     eod.main(["--public-prices-only"])

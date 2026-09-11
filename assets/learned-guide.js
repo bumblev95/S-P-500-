@@ -1,0 +1,23 @@
+(function(root){
+  'use strict';
+  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const pct=x=>Number.isFinite(x)?(100*x).toFixed(1):'—';
+  function inspect(data,e,h,now=Date.now()){
+    const item=data?.stocks?.[e.symbol],record=item?.predictions?.[String(h)],f=record?.forecast;
+    const age=(now-Date.parse(data?.generatedAt))/86400000,priceAge=(now-Date.parse(e.asOf))/86400000;
+    const aligned=item?.asOf===e.asOf&&Number.isFinite(item?.price)&&Math.abs(item.price/e.price-1)<.001;
+    const valid=f&&[f.anchor,f.base,f.bear,f.bull].every(v=>Number.isFinite(v)&&v>0)&&f.bear<=f.base&&f.base<=f.bull&&[f.logReturn,f.lowLogReturn,f.highLogReturn].every(Number.isFinite);
+    const eligible=data?.status==='trained'&&record?.status==='eligible'&&aligned&&valid&&age>=0&&age<=5&&priceAge>=0&&priceAge<=5;
+    const reason=!record?'학습에 필요한 가격 이력 확인 중':!aligned||!(age>=0&&age<=5&&priceAge>=0&&priceAge<=5)?'최신 가격과 예측 갱신 확인 필요':!valid?'예측 파일 검증 필요':(record.reasons||[]).join(' · ')||'시범 검증 기준 통과';
+    return {eligible,record,reason,forecast:eligible?f:null};
+  }
+  function panel(data,e,h){
+    const x=inspect(data,e,h),m=x.record?.validation||{},g=data?.validation?.[String(h)]||{};
+    return `<div class="learnedSummary"><div class="learnedTitle"><b>${x.eligible?'시범 AI 전망 사용 중':'AI 전망 판단 보류'}</b><span>${x.eligible?'과거 검증 기준 통과 · 실전 성과 축적 중':'차트 점선은 기존 계산의 참고 경로'}</span></div><p>${esc(x.reason)}</p><details><summary>이 예측을 믿을 근거는?</summary><p>학습형 모델이 수집 종목의 가격·거래량 패턴을 학습합니다. 현재는 뉴스·실적을 학습하지 않습니다. 확률이 아닌 예상 수익률을 계산합니다.</p><div class="validationGrid"><div>이 종목의 검증 시점<strong>${m.dates||0}회</strong></div><div>AI 수익률 오차<strong>${pct(m.mae)}%p</strong></div><div>가격 불변 예측 오차<strong>${pct(m.noChangeMae)}%p</strong></div><div>기존 추세 예측 오차<strong>${pct(m.trendMae)}%p</strong></div></div><p>오차는 작을수록 좋습니다. 방향 일치 ${pct(m.directionAccuracy)}%는 과거 ${m.n||0}회 결과이며, 이번 상승 확률이 아닙니다. 전체 검증은 ${g.dates||0}개 시점 / ${g.n||0}개 종목·시점 조합입니다. 종목들이 같이 움직이므로 모두 독립된 시험은 아닙니다.</p><p>범위는 학습에 쓰지 않은 과거 오차의 10·90 분위수를 이용합니다. 그래프 중간 점선은 기간 끝 예상값을 잇는 표시이며 일별 움직임 예측이 아닙니다. 상장폐지 종목·배당·거래비용을 반영한 실전 성과는 아직 검증하지 않았습니다.</p></details></div>`;
+  }
+  function nextSteps(plan,price){
+    const money=x=>Number.isFinite(x)?'$'+x.toFixed(2):'자료 확인 후';
+    return `<section class="nextSteps"><h3>지금 확인할 세 가지</h3><ol><li><b>지금 할 일</b><span>${esc(plan.action)}. ${esc(plan.blocks[0]||'관심 가격대에서 지지가 유지되는지 확인하세요.')}</span></li><li><b>판단이 바뀌는 조건</b><span>${plan.buyHigh?money(plan.buyLow)+'–'+money(plan.buyHigh)+'에서 지지 확인 후, 시장 경고와 예측 검증 조건을 다시 확인하세요.':'가격 자료가 채워지면 관심 구간을 다시 계산합니다.'}</span></li><li><b>손실 가능성 먼저 확인</b><span>${plan.stop&&price>plan.stop?'현재가에서 손절 기준까지 약 '+pct((price-plan.stop)/price)+'%입니다. 급락하면 손실이 더 커질 수 있어요.':'손절 기준이 없거나 현재가 아래에 있지 않아 손실 범위를 제시하지 않습니다.'}</span></li></ol><details><summary>처음 보는 용어 설명</summary><p><b>지지:</b> 과거 매수세가 나타났거나 이동평균이 위치한 참고 가격. 반드시 반등하는 가격은 아닙니다.<br><b>저항:</b> 상승 중 매도 압력이 나타날 수 있는 참고 가격.<br><b>손익비:</b> 관심 구간 상단에서 샀을 때, 목표까지의 이익 폭을 손절까지의 손실 폭으로 나눈 값.<br><b>변동성:</b> 가격이 흔들리는 크기. 상승 확률을 뜻하지 않습니다.<br><b>관망:</b> 조건이 갖춰질 때까지 매수를 미루는 판단입니다.</p></details></section>`;
+  }
+  const api={inspect,panel,nextSteps};if(typeof module!=='undefined')module.exports=api;else root.LearnedGuide=api;
+})(typeof window!=='undefined'?window:globalThis);

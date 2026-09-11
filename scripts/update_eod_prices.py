@@ -5,6 +5,11 @@ import json
 import os
 import re
 import sys
+import threading
+import urllib.request
+import urllib.error
+from concurrent.futures import ThreadPoolExecutor
+from zoneinfo import ZoneInfo
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
@@ -18,6 +23,48 @@ CUSTOM_PATH = Path("custom_tickers.csv")
 CONFIG_PATH = Path("config/watchlist_config.json")
 LEGACY_SHEET_URL_PATH = Path("watchlist_sheet_url.txt")
 OUT_PATH = Path("prices/latest_prices.csv")
+
+
+def download_public_chart(symbols):
+    """Public chart endpoint, bounded concurrency; stop on provider throttling.
+
+    No cookies, credentials, rotating hosts, or fabricated historical prices.
+    The existing yfinance downloader remains available through --source.
+    """
+    stopped = threading.Event()
+    now = datetime.now(timezone.utc)
+    def one(symbol):
+        if stopped.is_set(): return symbol, None
+        url = 'https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?range=10y&interval=1d'
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent':'PublicStockDashboard/1.0'})
+            with urllib.request.urlopen(req, timeout=30) as response:
+                result = json.load(response)['chart']['result'][0]
+            quotes = result['indicators']['quote'][0]
+            zone = ZoneInfo(result['meta'].get('exchangeTimezoneName','America/New_York'))
+            stamps = result.get('timestamp', [])
+            index = [datetime.fromtimestamp(t,zone).replace(tzinfo=None) for t in stamps]
+            frame = pd.DataFrame({k.title():v for k,v in quotes.items()}, index=pd.DatetimeIndex(index))
+            adj = result['indicators'].get('adjclose', [])
+            if adj: frame['Adj Close'] = adj[0]['adjclose']
+            # Never publish today's unfinished daily bar as an EOD close.
+            regular_end = result['meta'].get('currentTradingPeriod',{}).get('regular',{}).get('end')
+            if regular_end and now.timestamp()<regular_end+900:
+                frame=frame[[x.date()<now.astimezone(zone).date() for x in frame.index]]
+            return symbol, frame
+        except urllib.error.HTTPError as exc:
+            if exc.code in (401,403,429): stopped.set()
+            print(f'Chart unavailable {symbol}: HTTP {exc.code}',flush=True)
+        except Exception as exc:
+            print(f'Chart unavailable {symbol}: {type(exc).__name__}',flush=True)
+        return symbol, None
+    frames={}
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        for i,(symbol,frame) in enumerate(pool.map(one,symbols)):
+            if frame is not None and not frame.empty: frames[symbol]=frame
+            if (i+1)%50==0: print(f'History: checked {i+1}/{len(symbols)}; available {len(frames)}',flush=True)
+    if stopped.is_set(): print('Provider requested a stop; no retries or alternate hosts used.',flush=True)
+    return pd.concat(frames,axis=1) if frames else pd.DataFrame()
 
 
 def to_yahoo_symbol(symbol: str) -> str:
@@ -158,6 +205,7 @@ def calc_max_drawdown(series: pd.Series, lookback: int = 84) -> float | str:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument('--source', choices=('chart','yfinance'), default='chart')
     parser.add_argument("--public-prices-only", action="store_true",
                         help="Use only the repository's existing public price CSV. "
                              "Never read watchlist configuration or Google Sheets.")
@@ -172,9 +220,9 @@ def main(argv=None) -> int:
     symbol_map = dict(zip(yahoo_symbols, symbols))
 
     print(f"Downloading Yahoo EOD prices/history for {len(yahoo_symbols)} symbols...")
-    data = yf.download(
+    data = download_public_chart(yahoo_symbols) if args.source == 'chart' else yf.download(
         tickers=" ".join(yahoo_symbols),
-        period="5y",
+        period="10y",
         interval="1d",
         group_by="ticker",
         auto_adjust=False,

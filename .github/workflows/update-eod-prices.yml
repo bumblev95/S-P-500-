@@ -1,6 +1,12 @@
 name: Update S&P 500 EOD prices
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_learned_forecasts.py'
+      - 'scripts/update_eod_prices.py'
+      - 'scripts/requirements-ml.txt'
   workflow_dispatch:
     inputs:
       public_prices_only:
@@ -33,11 +39,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas yfinance
+          pip install -r scripts/requirements-ml.txt
 
       - name: Download EOD prices
         env:
-          FORECAST_PUBLIC_PRICES_ONLY: ${{ github.event.inputs.public_prices_only || 'false' }}
+          FORECAST_PUBLIC_PRICES_ONLY: ${{ github.event_name == 'push' && 'true' || github.event.inputs.public_prices_only || 'false' }}
         run: |
           if [ "$FORECAST_PUBLIC_PRICES_ONLY" = "true" ]; then
             python scripts/update_eod_prices.py --public-prices-only
@@ -48,11 +54,14 @@ jobs:
       - name: Build forecasts and preserve issue records
         run: python scripts/build_forecasts.py
 
+      - name: Train and validate learned forecasts
+        run: python scripts/build_learned_forecasts.py
+
       - name: Commit updated price file
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices/latest_prices.csv prices/history forecasts
+          git add prices/latest_prices.csv forecasts ml
           git diff --cached --quiet || git commit -m "Update S&P 500 EOD prices"
           git pull --rebase origin main
           git push
