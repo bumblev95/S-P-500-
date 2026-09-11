@@ -17,9 +17,9 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from build_forecasts import atomic_json, age_days
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL = 'pooled-hgb-price-v1'
+MODEL = 'pooled-hgb-pattern-v2'
 HORIZONS = (21, 84, 252)
-FEATURES = ['r5','r21','r63','r126','ma20','ma50','ma200','vol21','vol84','drawdown','volumeRatio','market21','market63','relative63']
+FEATURES = ['r5','r21','r63','r126','ma20','ma50','ma200','vol21','vol84','drawdown','volumeRatio','market21','market63','relative63','rsi14','macd','macdHistogram','trendSlope','volumeMomentum']
 PARAMS = dict(max_iter=60, max_leaf_nodes=15, learning_rate=.05,
               min_samples_leaf=40, l2_regularization=10, early_stopping=False, random_state=17)
 
@@ -33,6 +33,13 @@ def feature_frame(rows):
     x['drawdown'] = p/p.rolling(252).max()-1
     vol = pd.to_numeric(f.get('volume', pd.Series(index=f.index,dtype=float)), errors='coerce')
     x['volumeRatio'] = vol/vol.rolling(63).mean().replace(0,np.nan)
+    delta=p.diff();gain=delta.clip(lower=0).ewm(alpha=1/14,adjust=False,min_periods=14).mean();loss=(-delta.clip(upper=0)).ewm(alpha=1/14,adjust=False,min_periods=14).mean()
+    x['rsi14']=(100-100/(1+gain/loss.replace(0,np.nan))).where(loss!=0,100).where((gain+loss)!=0,50)/100
+    macd=p.ewm(span=12,adjust=False).mean()-p.ewm(span=26,adjust=False).mean()
+    x['macd']=macd/p
+    x['macdHistogram']=(macd-macd.ewm(span=9,adjust=False).mean())/p
+    x['trendSlope']=p.rolling(50).mean()/p.rolling(50).mean().shift(21)-1
+    x['volumeMomentum']=vol.rolling(5).mean()/vol.rolling(63).mean().replace(0,np.nan)-1
     x['close'] = p
     return x.replace([np.inf,-np.inf],np.nan).iloc[251:]
 
@@ -54,7 +61,7 @@ def load_frames(root, now):
     for f in frames.values():
         f['market21']=market.r21.reindex(f.index)
         f['market63']=market.r63.reindex(f.index)
-        f['relative63']=f.r63-f.market63
+        f['relative63','rsi14','macd','macdHistogram','trendSlope','volumeMomentum']=f.r63-f.market63
     return frames,hashes
 
 def examples(frames,h):
@@ -87,9 +94,20 @@ def metrics(rows):
     # Errors are return percentage points, not accuracy probabilities.
     return dict(n=len(d),dates=int(d.origin.nunique()),mae=float(np.mean(abs(actual-pred))),
         noChangeMae=float(np.mean(abs(actual))),trendMae=float(np.mean(abs(actual-np.expm1(d.trend)))),
-        directionAccuracy=float(np.mean(np.sign(d.y)==np.sign(d.pred))),
-        alwaysUpAccuracy=float(np.mean(d.y>0)),rangeCoverage=float(np.mean((d.y>=d.low)&(d.y<=d.high))),
+        directionAccuracy=float(np.mean(np.where(actual>.02,1,np.where(actual<-.02,-1,0))==np.where(pred>.02,1,np.where(pred<-.02,-1,0)))),
+        alwaysUpAccuracy=float(np.mean(actual>.02)),rangeCoverage=float(np.mean((d.y>=d.low)&(d.y<=d.high))),
         firstDate=str(d.origin.min()),lastDate=str(d.origin.max()))
+
+def diagnostics(rows):
+    if not rows:return dict(byDate={},regimes={},dateWinRate=None)
+    by_date={d:metrics([r for r in rows if r['origin']==d]) for d in sorted({r['origin'] for r in rows})}
+    regimes={}
+    groups={'above200':lambda r:r['ma200']>=0,'below200':lambda r:r['ma200']<0,
+            'highVolatility':lambda r:r['vol84']>=.4,'lowerVolatility':lambda r:r['vol84']<.4,
+            'overbought':lambda r:r['rsi14']>=.7,'oversold':lambda r:r['rsi14']<=.3}
+    for name,condition in groups.items():regimes[name]=metrics([r for r in rows if condition(r)])
+    return dict(byDate=by_date,regimes=regimes,dateWinRate=sum(m['mae']<min(m['noChangeMae'],m['trendMae']) for m in by_date.values())/len(by_date),
+                worstDateMae=max(m['mae'] for m in by_date.values()),note='Same-date stocks are correlated; descriptive diagnostics, not independent significance tests.')
 
 def qualifies(m):
     return m.get('dates',0)>=4 and m['mae']<.98*min(m['noChangeMae'],m['trendMae']) and m['directionAccuracy']>=m['alwaysUpAccuracy'] and m['rangeCoverage']>=.60
@@ -105,14 +123,14 @@ def build(root=ROOT,now=None):
           '범위는 과거 오차 10·90 분위수이며 미래 포함 확률 보장 아님',
           '종목별 통과 조건은 사후 선별: 통과 종목 집합의 실전 성과는 별도 검증 필요',
           '배당·거래비용·체결을 반영한 매매전략 검증 아님'],
-        method='Fixed pooled HGB; 6 disjoint outcome dates; purged train/calibration/test; no hyperparameter search; return-MAE versus no-change and trend-decay.')
+        method='Fixed pooled pattern HGB; up to 12 disjoint outcome dates; purged train/calibration/test; no hyperparameter search; return-MAE versus no-change and trend-decay.')
     if not frames:
         atomic_json(root/'ml/latest.json',result);print('ML: usable SPY and stock history required');return result
     calendar=list(frames['SPY'].index);latest=calendar[-1]
     for h in HORIZONS:
         data=examples(frames,h);outcomes=[];folds=[]
         last=len(calendar)-h-2
-        origins=[calendar[j] for j in sorted(last-k*max(h,126) for k in range(6)) if j>=h+400]
+        origins=[calendar[j] for j in sorted(last-k*max(h,63) for k in range(12)) if j>=h+400]
         print(f'ML {h}: {len(data)} labeled rows, {len(origins)} chronological folds',flush=True)
         for origin in origins:
             trained=fit_at(data,calendar,origin,h)
@@ -120,9 +138,9 @@ def build(root=ROOT,now=None):
             model,lo,hi,meta=trained;test=data[data.origin==origin].copy()
             if test.empty:continue
             test['pred']=model.predict(test[FEATURES]);test['low']=test.pred+lo;test['high']=test.pred+hi
-            outcomes.extend(test[['symbol','origin','targetDate','y','trend','pred','low','high']].to_dict('records'));folds.append(meta)
+            outcomes.extend(test[['symbol','origin','targetDate','y','trend','pred','low','high','ma200','vol84','rsi14','macdHistogram']].to_dict('records'));folds.append(meta)
         overall=metrics(outcomes);global_ok=qualifies(overall)
-        result['validation'][str(h)]=dict(**overall,passed=global_ok,folds=folds)
+        result['validation'][str(h)]=dict(**overall,passed=global_ok,folds=folds,diagnostics=diagnostics(outcomes))
         trained=fit_at(data,calendar,latest,h)
         if not trained:continue
         model,lo,hi,meta=trained
@@ -152,8 +170,9 @@ def build(root=ROOT,now=None):
         atomic_json(root/'ml/validation'/f'{h}.json',dict(model=MODEL,generatedAt=now,folds=folds,outcomes=outcomes))
     result['status']='trained';result['asOf']=latest
     # First publication per model/symbol/origin/horizon is preserved, including withheld status.
-    archive=root/'ml/archive'/f'{latest}.json'
+    archive=root/'ml/archive'/f'{latest}-{MODEL}.json'
     prior=json.loads(archive.read_text()) if archive.exists() else dict(model=MODEL,issuedAt=now,stocks={})
+    if prior.get('model')!=MODEL:raise ValueError('Archive model mismatch')
     for symbol,entry in result['stocks'].items():
         if entry['asOf']!=latest:continue
         old=prior['stocks'].setdefault(symbol,dict(asOf=latest,price=entry['price'],predictions={}))

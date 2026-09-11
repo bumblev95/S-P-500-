@@ -36,8 +36,11 @@ def summary(rows):
 
 def build(root=ROOT):
     rows=[];stocks={};seen=set();cache={}
+    latest=json.loads((root/'ml/latest.json').read_text())
+    current_model=latest.get('model')
     for path in sorted((root/'ml/archive').glob('*.json')):
         a=json.loads(path.read_text());model=a.get('model','unknown')
+        if model!=current_model:continue
         for symbol,entry in a.get('stocks',{}).items():
             if symbol not in cache:
                 hp=root/'prices/history'/f'{symbol}.json'
@@ -51,7 +54,7 @@ def build(root=ROOT):
                 seen.add(key)
                 r=dict(evaluate(entry,p,a.get('issuedAt',''),cache[symbol]),symbol=symbol,model=model)
                 rows.append(r);stocks.setdefault(symbol,{}).setdefault(horizon,[]).append(r)
-    payload=dict(schemaVersion=1,generatedAt=datetime.now(timezone.utc).isoformat(),
+    payload=dict(schemaVersion=1,model=current_model,generatedAt=datetime.now(timezone.utc).isoformat(),
                  horizons={str(h):summary([r for r in rows if r['horizon']==h]) for h in (21,84,252)},
                  stocks={s:{h:dict(summary=summary(rs),records=rs[-60:]) for h,rs in hs.items()} for s,hs in stocks.items()},
                  note='실제 발표 후 결과를 추적한 예측 평가. 매매 수익률 아님. 매일 발행한 예측의 평가 기간은 서로 겹칠 수 있어 독립 표본이 아닙니다.')
