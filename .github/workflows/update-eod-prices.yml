@@ -2,12 +2,21 @@ name: Update S&P 500 EOD prices
 
 on:
   workflow_dispatch:
+    inputs:
+      public_prices_only:
+        description: "Use existing public price tickers; do not read Google Sheets"
+        type: boolean
+        default: false
   schedule:
     # Runs after the U.S. market close on weekdays. Adjust if you want a different refresh time.
     - cron: "30 23 * * 1-5"
 
 permissions:
   contents: write
+
+concurrency:
+  group: market-data
+  cancel-in-progress: false
 
 jobs:
   update-eod-prices:
@@ -27,12 +36,23 @@ jobs:
           pip install pandas yfinance
 
       - name: Download EOD prices
-        run: python scripts/update_eod_prices.py
+        env:
+          FORECAST_PUBLIC_PRICES_ONLY: ${{ github.event.inputs.public_prices_only || 'false' }}
+        run: |
+          if [ "$FORECAST_PUBLIC_PRICES_ONLY" = "true" ]; then
+            python scripts/update_eod_prices.py --public-prices-only
+          else
+            python scripts/update_eod_prices.py
+          fi
+
+      - name: Build forecasts and preserve issue records
+        run: python scripts/build_forecasts.py
 
       - name: Commit updated price file
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices/latest_prices.csv
+          git add prices/latest_prices.csv prices/history forecasts
           git diff --cached --quiet || git commit -m "Update S&P 500 EOD prices"
+          git pull --rebase origin main
           git push
