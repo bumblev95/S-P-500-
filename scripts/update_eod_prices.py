@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import argparse
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -9,6 +11,7 @@ from typing import Iterable
 
 import pandas as pd
 import yfinance as yf
+from build_forecasts import atomic_json
 
 CONSTITUENTS_URL = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
 CUSTOM_PATH = Path("custom_tickers.csv")
@@ -19,7 +22,9 @@ OUT_PATH = Path("prices/latest_prices.csv")
 
 def to_yahoo_symbol(symbol: str) -> str:
     """Convert symbols such as BRK.B to Yahoo style BRK-B."""
-    return str(symbol).strip().upper().replace(".", "-")
+    value = str(symbol).strip().upper()
+    # Class shares use "-", while exchange suffixes such as ".TO" keep the dot.
+    return re.sub(r"\.([AB])$", r"-\1", value)
 
 
 def to_display_symbol(yahoo_symbol: str) -> str:
@@ -151,22 +156,32 @@ def calc_max_drawdown(series: pd.Series, lookback: int = 84) -> float | str:
     return round(float(dd.min()), 6)
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--public-prices-only", action="store_true",
+                        help="Use only the repository's existing public price CSV. "
+                             "Never read watchlist configuration or Google Sheets.")
+    args = parser.parse_args(argv)
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    symbols = read_symbols()
+    if args.public_prices_only:
+        symbols = pd.read_csv(OUT_PATH)["symbol"].dropna().astype(str).tolist()
+    else:
+        symbols = read_symbols()
+    symbols = list(dict.fromkeys(symbols + ["SPY", "SOXX"]))
     yahoo_symbols = [to_yahoo_symbol(s) for s in symbols]
     symbol_map = dict(zip(yahoo_symbols, symbols))
 
     print(f"Downloading Yahoo EOD prices/history for {len(yahoo_symbols)} symbols...")
     data = yf.download(
         tickers=" ".join(yahoo_symbols),
-        period="13mo",
+        period="5y",
         interval="1d",
         group_by="ticker",
         auto_adjust=False,
         actions=False,
-        threads=True,
+        threads=8,
         progress=False,
+        timeout=20,
     )
 
     updated_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -235,6 +250,22 @@ def main() -> int:
             pass
 
         original_symbol = symbol_map.get(ysym, to_display_symbol(ysym))
+        history = []
+        for day, daily in one.iterrows():
+            daily_close = daily.get("Close")
+            if pd.isna(daily_close) or float(daily_close) <= 0:
+                continue
+            daily_volume = daily.get("Volume")
+            history.append({
+                "date": day.date().isoformat(),
+                "close": float(daily_close),
+                "volume": int(daily_volume) if pd.notna(daily_volume) else None,
+            })
+        if re.fullmatch(r"[A-Z0-9^][A-Z0-9.^=-]{0,19}", original_symbol):
+            atomic_json(OUT_PATH.parent / "history" / (original_symbol + ".json"),
+                        {"symbol": original_symbol, "updatedAt": updated_at,
+                         "basis": "Yahoo Close; split-adjusted, dividends excluded",
+                         "prices": history})
         rows.append({
             "symbol": original_symbol,
             "yahooSymbol": ysym,
@@ -264,8 +295,18 @@ def main() -> int:
     if not rows:
         raise RuntimeError("No prices were downloaded. Yahoo/yfinance may be temporarily unavailable.")
 
-    out = pd.DataFrame(rows).sort_values("symbol")
-    out.to_csv(OUT_PATH, index=False)
+    out = pd.DataFrame(rows)
+    # Keep a last-known row when an individual download fails. Its original
+    # observation date remains intact so the forecast UI can mark it stale.
+    if OUT_PATH.exists():
+        previous = pd.read_csv(OUT_PATH)
+        keep = previous[previous["symbol"].isin(symbols) &
+                        ~previous["symbol"].isin(out["symbol"])]
+        out = pd.concat([out, keep], ignore_index=True)
+    out = out.sort_values("symbol")
+    temp = OUT_PATH.with_suffix(".csv.tmp")
+    out.to_csv(temp, index=False)
+    temp.replace(OUT_PATH)
     print(f"Wrote {len(out)} prices to {OUT_PATH}")
     return 0
 
