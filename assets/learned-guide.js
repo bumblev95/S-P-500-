@@ -22,9 +22,23 @@
     const x=inspect(data,e,h),m=x.record?.validation||{},g=data?.validation?.[String(h)]||{};
     return `<div class="learnedSummary"><div class="learnedTitle"><b>${x.eligible?'시범 AI 전망 사용 중':'AI 전망 판단 보류'}</b><span>${x.eligible?'과거 검증 기준 통과 · 실전 성과 축적 중':'차트 점선은 기존 계산의 참고 경로'}</span></div><p>${esc(x.reason)}</p><details><summary>이 예측을 믿을 근거는?</summary><p>학습형 모델이 수집 종목의 가격·거래량 패턴을 학습합니다. 현재는 뉴스·실적을 학습하지 않습니다. 확률이 아닌 예상 수익률을 계산합니다.</p><div class="validationGrid"><div>이 종목의 검증 시점<strong>${m.dates||0}회</strong></div><div>AI 수익률 오차<strong>${pct(m.mae)}%p</strong></div><div>가격 불변 예측 오차<strong>${pct(m.noChangeMae)}%p</strong></div><div>기존 추세 예측 오차<strong>${pct(m.trendMae)}%p</strong></div></div><p>오차는 작을수록 좋습니다. 방향 일치 ${pct(m.directionAccuracy)}%는 과거 ${m.n||0}회 결과이며, 이번 상승 확률이 아닙니다. 전체 검증은 ${g.dates||0}개 시점 / ${g.n||0}개 종목·시점 조합입니다. 종목들이 같이 움직이므로 모두 독립된 시험은 아닙니다.</p><p>범위는 학습에 쓰지 않은 과거 오차의 10·90 분위수를 이용합니다. 그래프 중간 점선은 기간 끝 예상값을 잇는 표시이며 일별 움직임 예측이 아닙니다. 상장폐지 종목·배당·거래비용을 반영한 실전 성과는 아직 검증하지 않았습니다.</p></details></div>`;
   }
-  function nextSteps(plan,price){
+  function nextSteps(plan,price,context={}){
     const money=x=>Number.isFinite(x)?'$'+x.toFixed(2):'자료 확인 후';
-    return `<section class="nextSteps"><h3>지금 확인할 세 가지</h3><ol><li><b>지금 할 일</b><span>${esc(plan.action)}. ${esc(plan.blocks[0]||'관심 가격대에서 지지가 유지되는지 확인하세요.')}</span></li><li><b>판단이 바뀌는 조건</b><span>${plan.buyHigh?money(plan.buyLow)+'–'+money(plan.buyHigh)+'에서 지지 확인 후, 시장 경고와 예측 검증 조건을 다시 확인하세요.':'가격 자료가 채워지면 관심 구간을 다시 계산합니다.'}</span></li><li><b>손실 가능성 먼저 확인</b><span>${plan.stop&&price>plan.stop?'현재가에서 손절 기준까지 약 '+pct((price-plan.stop)/price)+'%입니다. 급락하면 손실이 더 커질 수 있어요.':'손절 기준이 없거나 현재가 아래에 있지 않아 손실 범위를 제시하지 않습니다.'}</span></li></ol><details><summary>처음 보는 용어 설명</summary><p><b>지지:</b> 과거 매수세가 나타났거나 이동평균이 위치한 참고 가격. 반드시 반등하는 가격은 아닙니다.<br><b>저항:</b> 상승 중 매도 압력이 나타날 수 있는 참고 가격.<br><b>손익비:</b> 관심 구간 상단에서 샀을 때, 목표까지의 이익 폭을 손절까지의 손실 폭으로 나눈 값.<br><b>변동성:</b> 가격이 흔들리는 크기. 상승 확률을 뜻하지 않습니다.<br><b>관망:</b> 조건이 갖춰질 때까지 매수를 미루는 판단입니다.</p></details></section>`;
+    const hasZone=Number.isFinite(plan.buyLow)&&Number.isFinite(plan.buyHigh),inside=hasZone&&price>=plan.buyLow&&price<=plan.buyHigh;
+    const location=!hasZone?'관심 구간 자료 부족':inside?'관심 구간 안':price>plan.buyHigh?'관심 구간보다 '+pct(price/plan.buyHigh-1)+'% 위':'관심 구간보다 '+pct(1-price/plan.buyLow)+'% 아래';
+    const threshold=plan.market==='watch'?2:1.5,rr=Number.isFinite(plan.rr)?plan.rr.toFixed(2):'계산 불가';
+    const marketNames={stable:'관측 지표에 뚜렷한 경고 없음',watch:'주의: 더 높은 손익비 필요',risk:'위험: 신규 진입 보류',unknown:'자료 확인 전 보류'};
+    const checks=[
+      ['예측 검증',context.ai?.eligible?'시범 기준 통과 · 적은 검증 표본에 유의':context.ai?.reason||'선택 기간의 AI 검증 확인 필요',!!context.ai?.eligible],
+      ['가격 위치',location,inside],
+      ['시장 위험',marketNames[plan.market]||marketNames.unknown,['stable','watch'].includes(plan.market)],
+      ['손익비','현재 '+rr+' / 필요한 기준 '+threshold,Number.isFinite(plan.rr)&&plan.rr>=threshold],
+      ['추세 조건','현재 '+plan.ts+' / 진입 검토 기준 60',plan.ts>=60],
+    ];
+    const waiting=plan.blocks.length?plan.blocks.join(' · '):plan.ts<60?'추세 점수가 진입 검토 기준 60에 못 미칩니다.':!inside?'현재가가 관심 구간 밖에 있습니다. 가격 위치와 지지를 다시 확인하세요.':'수치 조건은 충족했지만 실제 지지 유지와 최신 공시를 확인해야 합니다.';
+    const trigger=!hasZone?'자료가 갱신된 뒤 관심 구간을 확인하세요.':inside?'관심 구간 안입니다. 아래 미충족 조건이 해결됐는지 먼저 확인하세요.':price>plan.buyHigh?money(plan.buyHigh)+' 부근까지 조정될 때 다시 확인하세요. 도달만으로 매수 조건이 충족되지는 않습니다.':money(plan.buyLow)+' 위로 회복하는지 확인하세요. 하락 중 추가 매수를 권하는 신호가 아닙니다.';
+    const invalid=plan.stop&&price>plan.stop?money(plan.stop)+' 아래로 종가가 내려가면 지지 가정을 재검토하세요. 현재가와의 차이는 약 '+pct((price-plan.stop)/price)+'%이며 손실 상한은 아닙니다.':plan.stop&&price<=plan.stop?'표시된 재평가 기준을 이미 이탈했습니다. 기존 지지 가정으로 신규 진입하지 말고 계획을 다시 확인하세요.':'유효한 재평가 가격을 계산하지 못했습니다. 손실 범위를 확인하기 전 신규 진입은 보류하세요.';
+    return `<section class="nextSteps"><h3>지금 확인할 세 가지</h3><ol><li><b>지금 할 일 · 신규 매수 기준</b><span>${esc(plan.action)}. ${esc(plan.blocks[0]||'관심 가격대의 지지가 유지되는지 확인하세요.')}</span></li><li><b>언제 다시 확인할까?</b><span>${esc(trigger)}</span></li><li><b>예측이 틀렸다면?</b><span>${esc(invalid)} 시장 경고가 심해지거나 중요한 공시가 나오면 가격 도달 전에도 재평가하세요.</span></li></ol><details><summary>내가 기다려야 하는 구체적인 이유</summary><p>${esc(waiting)}</p><dl class="decisionChecks">${checks.map(([name,value,pass])=>`<div><dt>${esc(name)}</dt><dd><b class="${pass?'infoText':'warnText'}">${pass?'조건 확인':'확인 필요'}</b> · ${esc(value)}</dd></div>`).join('')}</dl><p>가격 기준일 ${esc(context.asOf||'확인 필요')} · 일별 종가 기준입니다. 실시간 호가와 다를 수 있어요. 실적 일정·기업 공시는 아직 자동 진입 조건에 포함하지 않습니다. 보유 중인 주식의 매도 판단에는 매입가·비중·최초 계획도 필요합니다.</p></details><details><summary>처음 보는 용어 설명</summary><p><b>지지:</b> 과거 매수세가 나타났거나 이동평균이 위치한 참고 가격. 반드시 반등하는 가격은 아닙니다.<br><b>저항:</b> 상승 중 매도 압력이 나타날 수 있는 참고 가격.<br><b>손익비:</b> 관심 구간 상단에서 샀을 때, 목표까지의 이익 폭을 손절까지의 손실 폭으로 나눈 값.<br><b>변동성:</b> 가격이 흔들리는 크기. 상승 확률을 뜻하지 않습니다.<br><b>손절 기준:</b> 계획을 재평가할 가격이며 실제 체결 가격이나 최대 손실을 보장하지 않습니다.<br><b>관망:</b> 조건이 갖춰질 때까지 매수를 미루는 판단입니다.</p></details></section>`;
   }
   const api={inspect,panel,nextSteps,comparisonPanel};if(typeof module!=='undefined')module.exports=api;else root.LearnedGuide=api;
 })(typeof window!=='undefined'?window:globalThis);
