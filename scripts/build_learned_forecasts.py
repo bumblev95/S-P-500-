@@ -61,7 +61,7 @@ def load_frames(root, now):
     for f in frames.values():
         f['market21']=market.r21.reindex(f.index)
         f['market63']=market.r63.reindex(f.index)
-        f['relative63','rsi14','macd','macdHistogram','trendSlope','volumeMomentum']=f.r63-f.market63
+        f['relative63']=f.r63-f.market63
     return frames,hashes
 
 def examples(frames,h):

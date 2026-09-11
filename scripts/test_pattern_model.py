@@ -1,7 +1,9 @@
 import unittest
+import json,tempfile
+from pathlib import Path
 import numpy as np
 import pandas as pd
-from build_learned_forecasts import feature_frame,diagnostics,metrics,qualifies,fit_at,FEATURES
+from build_learned_forecasts import feature_frame,diagnostics,metrics,qualifies,fit_at,FEATURES,load_frames,examples
 
 class PatternTests(unittest.TestCase):
     def test_features_do_not_change_when_future_is_appended(self):
@@ -10,6 +12,18 @@ class PatternTests(unittest.TestCase):
         past=feature_frame(rows[:450]);full=feature_frame(rows)
         pd.testing.assert_frame_equal(past,full.loc[past.index])
         self.assertTrue(np.isfinite(full[['rsi14','macd','macdHistogram','trendSlope','volumeMomentum']]).all().all())
+    def test_feature_loading_and_targets(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);folder=root/'prices/history';folder.mkdir(parents=True)
+            dates=pd.bdate_range('2018-01-01',periods=650).strftime('%Y-%m-%d')
+            rows=[dict(date=d,close=100+i/10,volume=1000+i%20) for i,d in enumerate(dates)]
+            for symbol in ['SPY','TEST']:(folder/(symbol+'.json')).write_text(json.dumps(dict(prices=rows)))
+            frames,_=load_frames(root,'2026-09-11T23:00:00Z')
+            for h in [21,84,252]:
+                data=examples(frames,h)
+                self.assertFalse(data.empty)
+                self.assertTrue(set(FEATURES).issubset(data.columns))
+                self.assertTrue((data.targetDate>data.origin).all())
     def test_neutral_direction_and_diagnostics(self):
         rows=[dict(origin=d,y=np.log(1.01),pred=0.,trend=0.,low=-.1,high=.1,ma200=.1,vol84=.3,rsi14=.5) for d in ['2020-01-01','2021-01-01']]
         self.assertEqual(metrics(rows)['directionAccuracy'],1)
