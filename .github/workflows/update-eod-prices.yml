@@ -58,6 +58,9 @@ jobs:
       - name: Train and validate learned forecasts
         run: python scripts/build_learned_forecasts.py
 
+      - name: Audit realized targets and chronological separation
+        run: python scripts/audit_learned_results.py
+
       - name: Compare forecasts without using future outcomes for selection
         run: python scripts/build_forecast_comparison.py
 
