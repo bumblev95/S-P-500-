@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "model": "public-early-warning-v1",
+  "generatedAt": "2026-09-11T20:03:56.888696+00:00",
+  "indicators": [
+    {
+      "id": "NFCI",
+      "label": "금융여건",
+      "unit": "index",
+      "maxAgeDays": 16,
+      "source": "Federal Reserve Bank of Chicago",
+      "url": "https://fred.stlouisfed.org/series/NFCI",
+      "thresholds": [
+        0,
+        0.5,
+        1
+      ],
+      "status": "ready",
+      "value": -0.564,
+      "asOf": "2026-09-04",
+      "previous": -0.546,
+      "previousDate": "2026-08-07",
+      "change": -0.017999999999999905,
+      "severity": 0
+    },
+    {
+      "id": "STLFSI4",
+      "label": "금융 스트레스",
+      "unit": "index",
+      "maxAgeDays": 16,
+      "source": "Federal Reserve Bank of St. Louis",
+      "url": "https://fred.stlouisfed.org/series/STLFSI4",
+      "thresholds": [
+        0,
+        1,
+        2
+      ],
+      "status": "ready",
+      "value": -0.7884,
+      "asOf": "2026-09-04",
+      "previous": -0.769,
+      "previousDate": "2026-08-07",
+      "change": -0.019399999999999973,
+      "severity": 0
+    },
+    {
+      "id": "DRTSCILM",
+      "label": "은행 기업대출 긴축",
+      "unit": "%",
+      "maxAgeDays": 150,
+      "source": "Board of Governors of the Federal Reserve System",
+      "url": "https://fred.stlouisfed.org/series/DRTSCILM",
+      "thresholds": [
+        10,
+        25,
+        50
+      ],
+      "status": "ready",
+      "value": 0.0,
+      "asOf": "2026-07-01",
+      "previous": 8.1,
+      "previousDate": "2026-04-01",
+      "change": -8.1,
+      "severity": 0
+    },
+    {
+      "id": "SOFR",
+      "label": "SOFR",
+      "unit": "%",
+      "maxAgeDays": 5,
+      "source": "Federal Reserve Bank of New York",
+      "url": "https://fred.stlouisfed.org/series/SOFR",
+      "thresholds": null,
+      "status": "ready",
+      "value": 3.62,
+      "asOf": "2026-09-10",
+      "previous": 3.62,
+      "previousDate": "2026-08-13",
+      "change": 0.0,
+      "severity": null
+    },
+    {
+      "id": "IORB",
+      "label": "IORB",
+      "unit": "%",
+      "maxAgeDays": 5,
+      "source": "Board of Governors of the Federal Reserve System",
+      "url": "https://fred.stlouisfed.org/series/IORB",
+      "thresholds": null,
+      "status": "ready",
+      "value": 3.65,
+      "asOf": "2026-09-11",
+      "previous": 3.65,
+      "previousDate": "2026-08-14",
+      "change": 0.0,
+      "severity": null
+    },
+    {
+      "id": "FUNDING",
+      "label": "SOFR − IORB",
+      "unit": "bp",
+      "maxAgeDays": 5,
+      "source": "New York Fed / Federal Reserve Board via FRED",
+      "url": "https://fred.stlouisfed.org/series/SOFR",
+      "thresholds": [
+        5,
+        15,
+        30
+      ],
+      "status": "ready",
+      "asOf": "2026-09-10",
+      "value": -3.0,
+      "previous": -1.0,
+      "previousDate": "2026-09-09",
+      "change": -2.0,
+      "severity": 0,
+      "persistent": false
+    }
+  ],
+  "credit": {
+    "status": "stable",
+    "score": 0,
+    "coverage": 3,
+    "expected": 3
+  },
+  "news": [
+    {
+      "title": "Agencies seek comment on proposed third-party risk management guidance and issue statement on community bank engagement with core service providers",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260911a.htm",
+      "publishedAt": "2026-09-11T14:00:00+00:00",
+      "source": "Fed 발표",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    },
+    {
+      "title": "Agencies reduce regulatory burden for community banks, increase eligibility for 18-month exam cycle",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260910a.htm",
+      "publishedAt": "2026-09-10T20:00:00+00:00",
+      "source": "Fed 발표",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    },
+    {
+      "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+      "publishedAt": "2026-09-04T15:00:00+00:00",
+      "source": "Fed 발표",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    },
+    {
+      "title": "Waller, The Economic Outlook and Some Comments on My Policy Communication",
+      "url": "https://www.federalreserve.gov/newsevents/speech/waller20260903a.htm",
+      "publishedAt": "2026-09-03T12:30:00+00:00",
+      "source": "Fed 연설",
+      "topic": "금리·물가",
+      "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
+      "assessment": "원문 검토 필요"
+    },
+    {
+      "title": "Barr, Unlocking Opportunities for Workers and Entrepreneurs with a Criminal Record",
+      "url": "https://www.federalreserve.gov/newsevents/speech/barr20260901a.htm",
+      "publishedAt": "2026-09-01T13:05:00+00:00",
+      "source": "Fed 연설",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    }
+  ],
+  "feeds": [
+    {
+      "name": "Fed 발표",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "status": "ready"
+    },
+    {
+      "name": "Fed 연설",
+      "url": "https://www.federalreserve.gov/feeds/speeches.xml",
+      "status": "ready"
+    }
+  ],
+  "errors": [],
+  "newsScope": "Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.",
+  "exclusions": [
+    "HY/CCC OAS와 MOVE 수치 미재배포",
+    "사모신용 환매·BDC 부실·CLO 직접 측정 아님"
+  ],
+  "referenceLinks": [
+    {
+      "label": "HY OAS 원본",
+      "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+    },
+    {
+      "label": "CCC OAS 원본",
+      "url": "https://fred.stlouisfed.org/series/BAMLH0A3HYC"
+    }
+  ]
+}
