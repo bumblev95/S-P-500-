@@ -1,0 +1,48 @@
+name: Update crypto market guide
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_crypto.py'
+      - 'scripts/test_crypto.py'
+      - 'assets/crypto.js'
+      - 'scripts/test_crypto_page.cjs'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: crypto-data
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate crypto rules
+        run: python -m unittest discover -s scripts -p 'test_crypto.py'
+      - name: Build public crypto snapshots
+        run: python scripts/build_crypto.py
+      - name: Check crypto page
+        run: |
+          if [ -f scripts/test_crypto_page.cjs ]; then
+            node --check assets/crypto.js
+            node scripts/test_crypto_page.cjs
+          fi
+      - name: Publish snapshots
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add crypto
+          git diff --cached --quiet || git commit -m 'Update crypto market data'
+          git pull --rebase origin main
+          git push
+      - name: Refresh dashboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
