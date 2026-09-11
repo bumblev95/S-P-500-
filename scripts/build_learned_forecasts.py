@@ -74,6 +74,13 @@ def examples(frames,h):
         chunks.append(q)
     return pd.concat(chunks).replace([np.inf,-np.inf],np.nan).dropna(subset=FEATURES+['y','targetDate'])
 
+def test_at(data,origin,next_origin=None):
+    test=data[data.origin==origin].copy()
+    # A missing quote can shift a stock's h-th observed session beyond SPY's
+    # next test origin. Exclude it to keep evaluated outcome windows disjoint.
+    if next_origin is not None:test=test[test.targetDate<=next_origin]
+    return test
+
 def fit_at(data,calendar,origin,h):
     pos=calendar.index(origin); cut=calendar[max(0,pos-h-126)]
     train=data[(data.targetDate<cut)&(data.origin<cut)]
@@ -132,10 +139,10 @@ def build(root=ROOT,now=None):
         last=len(calendar)-h-2
         origins=[calendar[j] for j in sorted(last-k*max(h,63) for k in range(12)) if j>=h+400]
         print(f'ML {h}: {len(data)} labeled rows, {len(origins)} chronological folds',flush=True)
-        for origin in origins:
+        for index,origin in enumerate(origins):
             trained=fit_at(data,calendar,origin,h)
             if not trained:continue
-            model,lo,hi,meta=trained;test=data[data.origin==origin].copy()
+            model,lo,hi,meta=trained;test=test_at(data,origin,origins[index+1] if index+1<len(origins) else None)
             if test.empty:continue
             test['pred']=model.predict(test[FEATURES]);test['low']=test.pred+lo;test['high']=test.pred+hi
             outcomes.extend(test[['symbol','origin','targetDate','y','trend','pred','low','high','ma200','vol84','rsi14','macdHistogram']].to_dict('records'));folds.append(meta)

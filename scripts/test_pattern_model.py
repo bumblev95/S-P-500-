@@ -3,7 +3,7 @@ import json,tempfile
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from build_learned_forecasts import feature_frame,diagnostics,metrics,qualifies,fit_at,FEATURES,load_frames,examples
+from build_learned_forecasts import feature_frame,diagnostics,metrics,qualifies,fit_at,FEATURES,load_frames,examples,test_at
 
 class PatternTests(unittest.TestCase):
     def test_features_do_not_change_when_future_is_appended(self):
@@ -24,6 +24,9 @@ class PatternTests(unittest.TestCase):
                 self.assertFalse(data.empty)
                 self.assertTrue(set(FEATURES).issubset(data.columns))
                 self.assertTrue((data.targetDate>data.origin).all())
+    def test_missing_session_cannot_overlap_next_test(self):
+        data=pd.DataFrame([dict(origin='2025-09-09',targetDate='2026-01-09',symbol='missing'),dict(origin='2025-09-09',targetDate='2026-01-08',symbol='aligned')])
+        self.assertEqual(test_at(data,'2025-09-09','2026-01-08').symbol.tolist(),['aligned'])
     def test_neutral_direction_and_diagnostics(self):
         rows=[dict(origin=d,y=np.log(1.01),pred=0.,trend=0.,low=-.1,high=.1,ma200=.1,vol84=.3,rsi14=.5) for d in ['2020-01-01','2021-01-01']]
         self.assertEqual(metrics(rows)['directionAccuracy'],1)
