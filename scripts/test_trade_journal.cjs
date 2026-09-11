@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),J=require('../assets/trade-journal.js
 const now=Date.now(),day=new Date(now).toISOString().slice(0,10),yesterday=new Date(now-86400000).toISOString().slice(0,10);
 const p={version:1,id:'one',symbol:'NVDA',horizon:84,type:'held',entry:100,quantity:2,stop:90,target:120,reason:'Original thesis',savedAt:yesterday+'T23:59:59Z',snapshot:{asOf:yesterday,price:100}};
 assert.equal(J.validate(p),p);
-for(const edit of [{quantity:-1},{entry:NaN},{stop:Infinity},{symbol:'<script>'},{reason:' '},{savedAt:'bad'}])assert.throws(()=>J.validate({...p,...edit}));
+for(const edit of [{quantity:-1},{entry:NaN},{stop:Infinity},{symbol:'<script>'},{reason:' '},{savedAt:'bad'},{savedAt:2026},{symbol:['NVDA']},{id:''}])assert.throws(()=>J.validate({...p,...edit}));
 assert.doesNotThrow(()=>J.validate({...p,stop:105})); // A held position may have a trailing stop above cost.
 assert.throws(()=>J.validate({...p,type:'watch',stop:105}));
 const e={symbol:'NVDA',price:110,fresh:true,asOf:day,history:[]};

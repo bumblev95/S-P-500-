@@ -4,12 +4,12 @@
   const money=x=>Number.isFinite(x)?'$'+x.toFixed(2):'—',pct=x=>Number.isFinite(x)?(100*x).toFixed(1)+'%':'—';
   let records=[],context=null,mode='entry',message='';
   function validate(p){
-    if(!p||p.version!==1||!/^\w[\w.^=-]{0,19}$/.test(p.symbol)||![21,84,252].includes(p.horizon))throw Error('계획 파일 형식을 확인하세요.');
+    if(!p||p.version!==1||typeof p.symbol!=='string'||!/^\w[\w.^=-]{0,19}$/.test(p.symbol)||![21,84,252].includes(p.horizon))throw Error('계획 파일 형식을 확인하세요.');
     if(!['watch','held'].includes(p.type)||!Number.isFinite(p.entry)||p.entry<=0||!Number.isFinite(p.quantity)||p.quantity<0||(p.type==='held'&&p.quantity<=0))throw Error('매입가와 수량을 확인하세요.');
     for(const k of ['stop','target'])if(p[k]!==null&&(!Number.isFinite(p[k])||p[k]<=0))throw Error('가격 기준을 확인하세요.');
     if(p.type==='watch'&&p.stop!==null&&p.stop>=p.entry)throw Error('저장할 초기 손절 기준은 매입가보다 낮아야 합니다.');
     if(p.type==='watch'&&p.target!==null&&p.target<=p.entry)throw Error('관심 계획의 목표는 관심 매수가보다 높아야 합니다.');
-    if(typeof p.reason!=='string'||!p.reason.trim()||p.reason.length>1000||typeof p.id!=='string'||p.id.length>100||!Number.isFinite(Date.parse(p.savedAt)))throw Error('기록 내용을 확인하세요.');
+    if(typeof p.reason!=='string'||!p.reason.trim()||p.reason.length>1000||typeof p.id!=='string'||!p.id.trim()||p.id.length>100||typeof p.savedAt!=='string'||!/^\d{4}-\d{2}-\d{2}T/.test(p.savedAt)||!Number.isFinite(Date.parse(p.savedAt)))throw Error('기록 내용을 확인하세요.');
     return p;
   }
   function assessment(p,e){
