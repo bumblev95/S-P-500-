@@ -7,6 +7,13 @@ on:
       - 'scripts/test_crypto.py'
       - 'assets/crypto.js'
       - 'scripts/test_crypto_page.cjs'
+      - 'assets/perp-engine.js'
+      - 'assets/perp-page.js'
+      - 'scripts/test_perp.cjs'
+      - 'futures.html'
+      - 'crypto.html'
+      - 'index.html'
+      - '.github/workflows/update-crypto.yml'
   workflow_dispatch:
   schedule:
     - cron: '17 * * * *'
@@ -34,6 +41,10 @@ jobs:
             node --check assets/crypto.js
             node scripts/test_crypto_page.cjs
           fi
+          node --check assets/perp-engine.js
+          node --check assets/perp-page.js
+          node scripts/test_perp.cjs
+          node scripts/test_technical_guide.cjs
       - name: Publish snapshots
         run: |
           git config user.name 'github-actions[bot]'

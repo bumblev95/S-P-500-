@@ -16,5 +16,5 @@ const flat={price:100,asOf:'2026-09-10',history:Array.from({length:70},(_,i)=>({
 flat.asOf=flat.history.at(-1).date;assert.equal(guide.indicators(flat).rsi,50);assert.equal(guide.indicators(flat).macd,0);assert.equal(guide.indicators(flat).z,0);
 const nodes=new Map(),node=id=>nodes.get(id)||nodes.set(id,{innerHTML:'',value:'NVDA',textContent:'',classList:{remove(){},toggle(){}},addEventListener(){},querySelectorAll(){return []}}).get(id);
 const context={StabilityPanel:require('../assets/stability-panel.js'),TradeJournal:{mount(){}},ForecastPath:require('../assets/forecast-path.js'),TechnicalGuide:guide,LearnedGuide:require('../assets/learned-guide.js'),MarketContext:{render(){}},document:{querySelector:node,querySelectorAll:()=>[]},window:{scrollTo(){}},fetch:async url=>({ok:true,json:async()=>url.startsWith('forecasts')?data:url.startsWith('market')?market:null}),console};
-vm.runInNewContext(fs.readFileSync('beginner.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1],context);
+vm.runInNewContext(fs.readFileSync('index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1],context);
 setImmediate(()=>{assert(node('#app').innerHTML.includes('기술 지표'));assert(!/NaN|Infinity/.test(node('#app').innerHTML));console.log(`${count} plans, missing/stale guards, RSI/MACD flat series, page render passed`);});
