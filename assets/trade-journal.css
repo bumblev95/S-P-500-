@@ -1,0 +1,10 @@
+.tradeJournal{margin-bottom:22px;font-size:13px;line-height:1.65;color:var(--muted)}
+.journalTabs{display:flex;gap:6px;margin-bottom:12px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--surface-3)}
+.tradeJournal button,.fileButton{cursor:pointer;font:inherit;color:var(--text);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.journalTabs button{flex:1;border:0;background:transparent}.journalTabs [aria-pressed=true]{background:#18344b;color:var(--cyan);font-weight:700}
+.tradeJournal details{border-top:1px solid var(--line);padding:12px 0}.tradeJournal summary{cursor:pointer;color:var(--text);font-weight:600}.tradeJournal p{margin:10px 0}
+.journalCards article{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;overflow-wrap:anywhere}.journalCards b{color:var(--text)}
+.journalFields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.tradeJournal label{display:block;min-width:0}.tradeJournal input,.tradeJournal textarea{display:block;width:100%;box-sizing:border-box;margin:5px 0 8px;background:var(--surface-3);border:1px solid var(--line-strong);border-radius:7px;padding:9px;color:var(--text);font:inherit}.tradeJournal textarea{min-height:80px;resize:vertical}
+.journalFiles{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.fileButton{position:relative;overflow:hidden}.fileButton input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}.fileButton:focus-within,.tradeJournal button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.tradeJournal .journalStatus{color:var(--cyan);overflow-wrap:anywhere}.tradeJournal small{display:block;font-size:11px}.holdingMode .decisionHero,.holdingMode .levels,.holdingMode .nextSteps{display:none}.liveResults{font-size:12px}
+@media(max-width:420px){.journalFields{grid-template-columns:1fr}}

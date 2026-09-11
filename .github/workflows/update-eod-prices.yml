@@ -61,6 +61,9 @@ jobs:
       - name: Compare forecasts without using future outcomes for selection
         run: python scripts/build_forecast_comparison.py
 
+      - name: Score first-issued forecasts against realized prices
+        run: python scripts/score_live_forecasts.py
+
       - name: Commit updated price file
         run: |
           git config user.name "github-actions[bot]"

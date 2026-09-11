@@ -84,3 +84,29 @@ percentile absolute return errors, not portfolio losses or maximum drawdown.
 This rule was devised retrospectively and needs prospective evaluation. It
 does not replace the production forecast, alter promotion gates, or claim to
 identify the best possible model. The comparison refreshes with daily builds.
+
+## Prospective scorecard and private plans
+
+`score_live_forecasts.py` evaluates immutable first-issued archives against the
+close after 21/84/252 observed sessions. `live-results.json` separates eligible
+predictions from withheld research records. Unfinished outcomes have null
+metrics, not zero accuracy. Late publication, revised anchors (>0.5%), and
+missing origin history are flagged instead of silently scored. Full downloaded
+history is preferred; the public 126-close snapshot is a fallback and cannot
+resolve long-horizon outcomes with missing full history. Daily overlapping
+forecasts and correlated stocks are not independent observations. The scorecard
+is forecast evaluation, not executable strategy returns or verified profit.
+
+The beginner page has entry and holding modes. Holding mode suppresses current
+new-entry advice and compares saved personal criteria with latest analysis.
+Original criteria never move automatically. Historical checks use available
+closes strictly after the save date; they do not detect intraday breaches.
+Price revisions flag the position for review rather than report misleading P/L.
+
+Personal plans are user-owned JSON documents downloaded/imported explicitly.
+The editor working copy lasts only for the current page session; the downloaded
+file is the durable record, required again on the next visit. No localStorage
+or public repository contains holdings. No server receives form values.
+There is no account synchronization, order execution, or background alerting.
+P/L excludes fees, dividends and FX. Imported plans are validated atomically;
+conflicting IDs are rejected instead of overwriting original records.
