@@ -16,3 +16,14 @@ for(const e of Object.values(data.stocks))for(const h of [21,84,252]){
   }
 }
 console.log(`${checked} paths: deterministic, finite, anchored and missing-data safe; ${turns} have both rises and falls`);
+const guide=require('../assets/learned-guide.js');let shared=0;
+for(const e of Object.values(data.stocks)){
+  const forecasts=guide.allPeriods(ml,e);if(![21,84,252].every(h=>forecasts[h]))continue;
+  for(const mode of ['center','sample']){
+    const full=path.build(e,forecasts[252],252,mode,forecasts);
+    for(const h of [21,84])assert.deepEqual(path.build(e,forecasts[h],h,mode,forecasts).points,full.points.slice(0,h+1));
+    for(const h of [21,84,252])assert.equal(full.points[h].base,forecasts[h].base);
+    assert(full.points.every(q=>q.base>0&&q.bear<=q.bull&&Object.values(q).every(Number.isFinite)));shared++;
+  }
+}
+console.log(`${shared} shared paths: exact cross-horizon prefixes and all three endpoint anchors passed`);

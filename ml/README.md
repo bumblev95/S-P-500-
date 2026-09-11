@@ -1,6 +1,6 @@
 # Learned forecast pilot
 
-`pooled-hgb-price-v1` is an actual fitted histogram gradient boosting regressor,
+`pooled-hgb-pattern-v2` is an actual fitted histogram gradient boosting regressor,
 not a language-model-generated price. It uses fixed parameters and pooled
 price/volume features. SPY returns provide market context. The market warning
 and Fed news panels remain separate; their current observations never enter
@@ -21,7 +21,7 @@ The standard snapshot contains the last 126 actual daily closes for the UI.
 
 Targets are log price returns after 21, 84, and 252 observed trading sessions.
 Features at an origin use prices no later than that origin. Each horizon has
-up to six test origins separated by max(horizon,126) SPY sessions, so their
+up to twelve test origins separated by max(horizon,63) SPY sessions, so their
 outcome windows do not overlap. All stocks share the same time boundaries.
 Training target end dates must precede the calibration start. Calibration
 target end dates must precede the test origin. No random row cross-validation
@@ -48,7 +48,7 @@ the horizon endpoint; it is not a learned prediction for each intermediate day.
 
 ## Records and limits
 
-`archive/YYYY-MM-DD.json` preserves first-issued records, including withheld
+`archive/YYYY-MM-DD[-model].json` preserves first-issued records, including withheld
 forecasts, for each origin. `validation/*.json` exposes the latest fold
 predictions and cutoff dates. Future live outcomes need to accumulate; this
 release does not claim live-trading performance or transaction-cost returns.
@@ -110,3 +110,30 @@ or public repository contains holdings. No server receives form values.
 There is no account synchronization, order execution, or background alerting.
 P/L excludes fees, dividends and FX. Imported plans are validated atomically;
 conflicting IDs are rejected instead of overwriting original records.
+
+## Pattern model v2 and common horizon path
+
+V2 adds causal exponentially smoothed RSI, price-normalized MACD/signal
+residual, 50-day-average slope and relative-volume momentum. Features use only
+observations through each forecast origin. These are numeric price patterns,
+not named chart-pattern detection or historical news analysis. A fixed HGB
+configuration is retrained for each of 21, 84 and 252 observed sessions.
+The fold budget is 12 with disjoint outcomes; available annual history may
+permit fewer. The original MAE, coverage and minimum-date gates remain.
+Direction metrics now consistently use the UI's ±2% neutral category.
+
+Validation includes per-date and historical regime diagnostics (200-day
+average, volatility and RSI groups). These are descriptive subsets of the
+same out-of-sample data, not separate independent proofs or tuned gates.
+V2 archives include the model ID in filenames; V1 issue records remain intact.
+The prospective scorecard includes the current model only, so a newly revised
+model cannot inherit the older model's results.
+
+The displayed common path connects the chosen 21/84/252 endpoints, with each
+endpoint's AI eligibility shown. A failed horizon retains its explicitly
+labeled trend fallback; no unvalidated AI endpoint is promoted for visual
+consistency. The 21- and 84-session views are exact prefixes of the 252-session
+view, including the reference band and deterministic five-session bootstrap
+illustration. The bootstrap is pinned separately at each endpoint. Interior
+values are interpolation/illustration, not learned daily forecasts, and an
+annual endpoint alone does not validate any shorter horizon.
