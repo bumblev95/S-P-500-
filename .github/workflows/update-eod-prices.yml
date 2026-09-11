@@ -7,6 +7,7 @@ on:
       - 'scripts/build_learned_forecasts.py'
       - 'scripts/update_eod_prices.py'
       - 'scripts/requirements-ml.txt'
+      - 'scripts/build_stability_research.py'
   workflow_dispatch:
     inputs:
       public_prices_only:
@@ -60,6 +61,9 @@ jobs:
 
       - name: Audit realized targets and chronological separation
         run: python scripts/audit_learned_results.py
+
+      - name: Evaluate relative price error and stability candidates
+        run: python scripts/build_stability_research.py
 
       - name: Compare forecasts without using future outcomes for selection
         run: python scripts/build_forecast_comparison.py
