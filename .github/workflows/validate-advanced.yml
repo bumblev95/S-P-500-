@@ -1,0 +1,34 @@
+name: Validate advanced research
+on:
+  push:
+    paths:
+      - 'advanced.html'
+      - 'assets/advanced*'
+      - 'scripts/test_advanced.cjs'
+      - 'scripts/build_forecasts.py'
+      - 'tests/test_forecasts.py'
+      - '.github/workflows/validate-advanced.yml'
+  pull_request:
+    paths:
+      - 'advanced.html'
+      - 'assets/advanced*'
+      - 'scripts/test_advanced.cjs'
+      - 'scripts/build_forecasts.py'
+      - 'tests/test_forecasts.py'
+      - '.github/workflows/validate-advanced.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: node --check assets/advanced-page.js
+      - run: node scripts/test_advanced.cjs
+      - run: python -m unittest discover -s tests -p test_forecasts.py

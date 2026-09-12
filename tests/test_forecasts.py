@@ -25,6 +25,24 @@ def history(count=1300):
 
 
 class ForecastTests(unittest.TestCase):
+    def test_published_history_covers_252_return_intervals(self):
+        sample = history(350)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "prices/history").mkdir(parents=True)
+            (root / "prices/history/TEST.json").write_text(json.dumps({"prices": sample}))
+            snapshot = engine.snapshot(sample, len(sample)-1)
+            snapshot.update(symbol="TEST", date=sample[-1]["date"])
+            with (root / "prices/latest_prices.csv").open("w", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=list(snapshot))
+                writer.writeheader()
+                writer.writerow(snapshot)
+            payload = engine.build(root, sample[-1]["date"] + "T12:00:00Z")
+            published = payload["stocks"]["TEST"]["history"]
+            self.assertEqual(len(published), 253)
+            self.assertEqual(published[0]["date"], sample[-253]["date"])
+            self.assertEqual(published[-1]["close"], sample[-1]["close"])
+
     def test_missing_inputs_never_invent_a_forecast(self):
         row = engine.snapshot(history(250), 249)
         for bad in ("", None, "NaN", "-1"):

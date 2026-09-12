@@ -239,7 +239,7 @@ def build(root=ROOT, now=None):
             "inputs": {k: number(row.get(k)) for k in
                        ("return1m", "return3m", "return6m", "ma20", "ma50", "ma200",
                         "volume", "avgVolume3m", "volatility4m")},
-            "history": history[-126:], "historyCount": len(history),
+            "history": history[-253:], "historyCount": len(history),
             "backtest": checks, "issued": outcomes, "previous": prior,
         }
         if fresh:
