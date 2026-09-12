@@ -24,3 +24,5 @@ setImmediate(()=>{const html=node('app').innerHTML;assert(html.includes('SPOT'))
 // Stale or misaligned learned forecasts cannot be promoted to an AI direction.
 const currentDate=new Date().toISOString().slice(0,10),coin={spot:{price:100},spotHistory:[{date:currentDate}],modelGeneratedAt:new Date().toISOString(),spotModel:{asOf:currentDate,anchor:100,predictions:{30:{status:'eligible',forecast:{base:120,logReturn:Math.log(1.2)},reasons:[]}}}};
 assert(F.inspect(coin,30).eligible);coin.spot.price=130;assert(!F.inspect(coin,30).eligible);coin.spot.price=100;coin.modelGeneratedAt='2020-01-01';assert(!F.inspect(coin,30).eligible);
+
+const smallChart=guide.chart(data.coins.SKR,365,'sample');assert(!/font-size="13">0<\/text>/.test(smallChart),'Small token axis must not round positive prices to zero');
