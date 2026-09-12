@@ -1,0 +1,677 @@
+{
+  "version": "leverage-allocation-v1",
+  "createdAt": "2026-09-12T21:05:05.588Z",
+  "start": 1640995200000,
+  "end": 1788220799999,
+  "methods": [
+    {
+      "id": "boost_swing",
+      "name": "14일 돌파 + 기존 부스팅",
+      "kind": "스윙",
+      "rule": "완료 4시간봉 14일 모멘텀·3일 돌파·연도별 과거 학습 부스팅 ≥0.1R. 2.5 ATR 손절·추적, 모멘텀 반전 또는 30일 종료."
+    },
+    {
+      "id": "channel_swing",
+      "name": "20일 채널 추세",
+      "kind": "스윙",
+      "rule": "완료 4시간봉 20일 채널 돌파, 2.5 ATR 초기 손절·추적, 반대 10일 채널 이탈 또는 30일 종료."
+    },
+    {
+      "id": "q_daily",
+      "name": "쿨라마기 응용 · 일봉 돌파",
+      "kind": "스윙",
+      "rule": "20일 상승 ≥15%, 10일선>20일선, 직전 5일 범위가 이전 10일 범위의 75% 이하, 5일 고점 돌파·거래량 20일 평균 1.5배. 당일 저점 손절. 3일 뒤 절반 매도·잔량 본전 손절, 10일선 종가 이탈 또는 30일 종료. 롱만."
+    },
+    {
+      "id": "q_flag",
+      "name": "쿨라마기 응용 · 15분 깃발",
+      "kind": "스윙",
+      "rule": "전일 기준 20일 상승 ≥15%·10일선>20일선. 직전 16개 15분봉 범위가 이전 32봉 범위의 75% 이하, 그 고점 돌파·거래량 32봉 평균 1.5배. 깃발 저점 손절. 3일 뒤 절반·본전, 10일선 이탈 또는 15일 종료. 롱만."
+    },
+    {
+      "id": "breakout_day",
+      "name": "15분 돌파 + EMA 방향",
+      "kind": "단타",
+      "rule": "직전 32봉 고점·저점 돌파, EMA50·200 방향 일치. 2 ATR 손절, 2R 절반 익절 후 본전·2 ATR 추적. 8시간 종료."
+    },
+    {
+      "id": "pullback_day",
+      "name": "15분 EMA 눌림목",
+      "kind": "단타",
+      "rule": "EMA20·50·200 정렬 방향으로 종가가 EMA20을 재돌파. 1.5 ATR 손절, 2R 절반 익절 후 본전·2 ATR 추적. 8시간 종료."
+    },
+    {
+      "id": "vwap_day",
+      "name": "24시간 VWAP 회귀",
+      "kind": "단타",
+      "rule": "EMA50·200 간격 <1 ATR인 구간에서 종가가 직전 24시간 거래량 가중 평균 ±2σ 밖에서 안으로 복귀. 1.5 ATR 손절, 진입 신호 VWAP 전량 익절. 8시간 종료."
+    },
+    {
+      "id": "orb_day",
+      "name": "UTC 첫 1시간 범위 돌파",
+      "kind": "단타",
+      "rule": "UTC 00–01시 범위를 01–04시 종가가 돌파하고 EMA200 방향 일치. 반대 범위 끝 손절, 2R 절반·본전·2 ATR 추적. 하루·종목당 첫 신호만, 8시간 종료."
+    },
+    {
+      "id": "regime_day",
+      "name": "단타 국면 조합",
+      "kind": "단타",
+      "rule": "EMA50·200 간격 ≥2 ATR이면 15분 돌파, <1 ATR이면 VWAP 회귀. 중간은 대기. 진입 때 선택한 청산 규칙 유지."
+    }
+  ],
+  "policies": [
+    {
+      "id": "risk1",
+      "name": "손절 예산 1%",
+      "risk": 0.01
+    },
+    {
+      "id": "risk2",
+      "name": "손절 예산 2%",
+      "risk": 0.02
+    },
+    {
+      "id": "risk4",
+      "name": "손절 예산 4%",
+      "risk": 0.04
+    },
+    {
+      "id": "margin25",
+      "name": "증거금 25%",
+      "margin": 0.25
+    },
+    {
+      "id": "margin50",
+      "name": "증거금 50%",
+      "margin": 0.5
+    },
+    {
+      "id": "margin90",
+      "name": "증거금 90%",
+      "margin": 0.9
+    }
+  ],
+  "combinations": [
+    {
+      "method": "boost_swing",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "boost_swing",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "boost_swing",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "boost_swing",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "boost_swing",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "boost_swing",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "boost_swing",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "boost_swing",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "boost_swing",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "boost_swing",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "boost_swing",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "boost_swing",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "channel_swing",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "channel_swing",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "channel_swing",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "channel_swing",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "channel_swing",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "channel_swing",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "channel_swing",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "channel_swing",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "channel_swing",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "channel_swing",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "channel_swing",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "channel_swing",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "q_daily",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "q_daily",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "q_daily",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "q_daily",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "q_daily",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "q_daily",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "q_daily",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "q_daily",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "q_daily",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "q_daily",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "q_daily",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "q_daily",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "q_flag",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "q_flag",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "q_flag",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "q_flag",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "q_flag",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "q_flag",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "q_flag",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "q_flag",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "q_flag",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "q_flag",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "q_flag",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "q_flag",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "breakout_day",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "breakout_day",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "breakout_day",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "breakout_day",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "breakout_day",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "breakout_day",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "breakout_day",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "breakout_day",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "breakout_day",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "breakout_day",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "breakout_day",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "breakout_day",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "pullback_day",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "pullback_day",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "pullback_day",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "pullback_day",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "pullback_day",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "pullback_day",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "pullback_day",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "pullback_day",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "pullback_day",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "pullback_day",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "pullback_day",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "pullback_day",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "vwap_day",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "vwap_day",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "vwap_day",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "vwap_day",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "vwap_day",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "vwap_day",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "vwap_day",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "vwap_day",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "vwap_day",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "vwap_day",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "vwap_day",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "vwap_day",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "orb_day",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "orb_day",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "orb_day",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "orb_day",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "orb_day",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "orb_day",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "orb_day",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "orb_day",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "orb_day",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "orb_day",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "orb_day",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "orb_day",
+      "policy": "margin90",
+      "leverage": 10
+    },
+    {
+      "method": "regime_day",
+      "policy": "risk1",
+      "leverage": 5
+    },
+    {
+      "method": "regime_day",
+      "policy": "risk1",
+      "leverage": 10
+    },
+    {
+      "method": "regime_day",
+      "policy": "risk2",
+      "leverage": 5
+    },
+    {
+      "method": "regime_day",
+      "policy": "risk2",
+      "leverage": 10
+    },
+    {
+      "method": "regime_day",
+      "policy": "risk4",
+      "leverage": 5
+    },
+    {
+      "method": "regime_day",
+      "policy": "risk4",
+      "leverage": 10
+    },
+    {
+      "method": "regime_day",
+      "policy": "margin25",
+      "leverage": 5
+    },
+    {
+      "method": "regime_day",
+      "policy": "margin25",
+      "leverage": 10
+    },
+    {
+      "method": "regime_day",
+      "policy": "margin50",
+      "leverage": 5
+    },
+    {
+      "method": "regime_day",
+      "policy": "margin50",
+      "leverage": 10
+    },
+    {
+      "method": "regime_day",
+      "policy": "margin90",
+      "leverage": 5
+    },
+    {
+      "method": "regime_day",
+      "policy": "margin90",
+      "leverage": 10
+    }
+  ],
+  "marketHash": "24ea0e30aceb63b1db1d947c51100d7449d4a60c5a00aa0e237dce1ad63818a2",
+  "scoreHash": "01cee4c1d606c1c5df6d23cf797a744abe5936eca7d3fd67af704e290fe6717f",
+  "sourceHashes": {
+    "leverage_methods.cjs": "ea0d1d56f0dff86ed5be156bc3dcb572b8dc3824b60375ff8610e257773182c8",
+    "leverage_engine.cjs": "a14f9e700baa6198143e44ab7ba896560df68f77102870b9e1947db778c3c94d",
+    "research_leverage.cjs": "c498309827dad1efe639a9072c8e5ccd0cd7a0cf0f144bd52fd22829081a0f9e",
+    "trend_methods.cjs": "a9e4c4cecdb0595b5ddf17843d7c42689d42faf6641a2378d1a4da434be65255"
+  },
+  "allocation": "One concurrent position, $10,000 initial capital, isolated margin. Leverage5/10. Risk1/2/4% targets include initial stop/fee/slippage risk and cap margin at90%; fixed margin25/50/90% targets that equity fraction irrespective of stop risk. Every entry is capped at0.5% of the smaller of signal-bar volume and prior32-bar mean volume; target allocation can be underfilled. No leverage averaging, martingale, drawdown sizing, daily stop or loss-streak cooldown. Stop/gap losses can exceed the planned risk. If flat equity drops below1% of initial capital, remain in cash.",
+  "fills": "Signals from completed bars only; next15m open with adverse slippage. Reject wrong-side stops, open gaps over half initial stop distance, or stop beyond estimated liquidation. One candidate at a time, descending signal rank then alphabetical symbol. At same bar stop/target crossing, stop first; stop/liq crossing follows first reachable price threshold. Partial sells50% of remaining initial position once. Break-even/trail updated only for next bar. Final positions force-closed.",
+  "costs": "Per side fee0.045% + slippage0.02%. Cost stress doubles both. Actual historical funding rates, timestamps rounded to settlement hour; opening after settlement pays next settlement. Missing settlement intervals charged0.01% notional per missing payment, never credited. Funding debits isolated margin.",
+  "liquidation": "Approximation using traded OHLC as mark proxy, flat maintenance2.5%, entire remaining isolated margin forfeited at liquidation, no top-up. Separate liquidation stress uses5% maintenance and adverse0.5% mark deviation with ordinary fees. These are declared research assumptions, not historical Binance liquidation tiers or real matching-engine fills.",
+  "selection": "For each year2022–2026, use previous calendar year only: >=20 exits, positive ordinary and double-cost net return, MDD<=40%. Choose maximum log(1+return)-MDD; tie by method:policy:leverage; no eligible means cash. Each annual segment starts flat. Boost scores begin2022 so cannot win2021 selection.",
+  "shortlist": "Descriptive full-period screen: >=100 exits, ordinary and double-cost return positive, MDD<=40%, four of five annual periods positive. A screen pass is not independent validation.",
+  "limitations": [
+    "Data and strategy ideas have already been studied. This is exploratory comparison, not a pristine holdout or independent proof of an optimal strategy.",
+    "Same BTC/ETH/SOL universe controls this sizing comparison. No broader equity/crypto leader scan, point-in-time delistings or news-based EP are tested.",
+    "Qullamaggie-inspired rules are crypto adaptations, not a replication of his equity selection, discretionary pattern reading, opening session or claimed returns.",
+    "Real futures comparison covers2022-01 through2026-08, using2020 onward history for features. It is not a15-year futures test.2026 is partial.",
+    "No order-book capacity model, historical maintenance tiers, insurance fund mechanics or exchange outages. High-exposure compounded results may substantially overstate executable dollar returns.",
+    "Boosting uses existing year-specific past-trained scores only for the entry it was trained on. No current model is retroactively applied.",
+    "5/10x is position leverage. Account notional exposure equals margin fraction times leverage; risk-based policies often deploy much less."
+  ],
+  "sources": [
+    {
+      "title": "Qullamaggie original setups",
+      "url": "https://qullamaggie.com/my-3-timeless-setups-that-have-made-me-tens-of-millions/"
+    },
+    {
+      "title": "Official Binance public market archives",
+      "url": "https://github.com/binance/binance-public-data"
+    },
+    {
+      "title": "Margin and isolated collateral mechanics",
+      "url": "https://hyperliquid.gitbook.io/hyperliquid-docs/trading/margining"
+    },
+    {
+      "title": "Mark-based liquidation mechanics",
+      "url": "https://hyperliquid.gitbook.io/hyperliquid-docs/trading/liquidations"
+    }
+  ]
+}

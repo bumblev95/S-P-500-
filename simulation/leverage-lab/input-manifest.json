@@ -1,0 +1,34 @@
+{
+  "marketHash": "24ea0e30aceb63b1db1d947c51100d7449d4a60c5a00aa0e237dce1ad63818a2",
+  "scoreHash": "01cee4c1d606c1c5df6d23cf797a744abe5936eca7d3fd67af704e290fe6717f",
+  "coverage": {
+    "BTC": {
+      "start": 1577836800000,
+      "end": 1788220799999,
+      "bars": 233760,
+      "hours": 58440,
+      "fundingEvents": 7305,
+      "missingBars": 0,
+      "invalidRows": 0
+    },
+    "ETH": {
+      "start": 1577836800000,
+      "end": 1788220799999,
+      "bars": 233760,
+      "hours": 58440,
+      "fundingEvents": 7305,
+      "missingBars": 0,
+      "invalidRows": 0
+    },
+    "SOL": {
+      "start": 1600066800000,
+      "end": 1788220799999,
+      "bars": 209060,
+      "hours": 52265,
+      "fundingEvents": 6610,
+      "missingBars": 0,
+      "invalidRows": 0
+    }
+  },
+  "errors": []
+}

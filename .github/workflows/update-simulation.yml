@@ -13,6 +13,10 @@ on:
       - 'scripts/test_signal_lab.cjs'
       - 'assets/signal-lab.*'
       - 'signal-lab.html'
+      - 'scripts/*leverage*.cjs'
+      - 'assets/leverage-lab.*'
+      - 'leverage-lab.html'
+      - 'simulation/leverage-lab/**'
       - 'simulation/momentum-boost/model.json'
       - 'simulation/momentum-boost/research.json'
       - 'scripts/fixtures/momentum-boost-parity.json'
@@ -58,6 +62,8 @@ jobs:
           node scripts/test_momentum_boost.cjs
           node scripts/test_signal_tournament.cjs
           node scripts/test_signal_lab.cjs
+          node scripts/test_leverage.cjs
+          node scripts/test_leverage_lab.cjs
           node scripts/test_momentum_cpd.cjs
           node scripts/test_selector.cjs --quick
           node scripts/test_exit_methods.cjs
