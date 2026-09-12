@@ -9,6 +9,10 @@ on:
       - 'scripts/build_simulation.cjs'
       - 'scripts/build_leveraged.cjs'
       - 'scripts/*momentum*'
+      - 'scripts/*signal*tournament*'
+      - 'scripts/test_signal_lab.cjs'
+      - 'assets/signal-lab.*'
+      - 'signal-lab.html'
       - 'simulation/momentum-boost/model.json'
       - 'simulation/momentum-boost/research.json'
       - 'scripts/fixtures/momentum-boost-parity.json'
@@ -52,6 +56,8 @@ jobs:
           node scripts/test_momentum_forward.cjs
           node scripts/test_momentum_target6.cjs
           node scripts/test_momentum_boost.cjs
+          node scripts/test_signal_tournament.cjs
+          node scripts/test_signal_lab.cjs
           node scripts/test_momentum_cpd.cjs
           node scripts/test_selector.cjs --quick
           node scripts/test_exit_methods.cjs

@@ -1,0 +1,227 @@
+{
+  "version": "public-signal-tournament-v1",
+  "createdAt": "2026-09-12T20:08:36.797Z",
+  "methods": [
+    {
+      "id": "momentum_none",
+      "name": "14일 모멘텀 · 단독",
+      "family": "momentum",
+      "filter": "none"
+    },
+    {
+      "id": "momentum_ema",
+      "name": "14일 모멘텀 · EMA 200 방향",
+      "family": "momentum",
+      "filter": "ema"
+    },
+    {
+      "id": "momentum_adx",
+      "name": "14일 모멘텀 · ADX ≥ 20",
+      "family": "momentum",
+      "filter": "adx"
+    },
+    {
+      "id": "ut_none",
+      "name": "UT ATR 반전 · 단독",
+      "family": "ut",
+      "filter": "none"
+    },
+    {
+      "id": "ut_ema",
+      "name": "UT ATR 반전 · EMA 200 방향",
+      "family": "ut",
+      "filter": "ema"
+    },
+    {
+      "id": "ut_adx",
+      "name": "UT ATR 반전 · ADX ≥ 20",
+      "family": "ut",
+      "filter": "adx"
+    },
+    {
+      "id": "supertrend_none",
+      "name": "Supertrend 10·3 · 단독",
+      "family": "supertrend",
+      "filter": "none"
+    },
+    {
+      "id": "supertrend_ema",
+      "name": "Supertrend 10·3 · EMA 200 방향",
+      "family": "supertrend",
+      "filter": "ema"
+    },
+    {
+      "id": "supertrend_adx",
+      "name": "Supertrend 10·3 · ADX ≥ 20",
+      "family": "supertrend",
+      "filter": "adx"
+    },
+    {
+      "id": "squeeze_none",
+      "name": "Squeeze 해제 · 단독",
+      "family": "squeeze",
+      "filter": "none"
+    },
+    {
+      "id": "squeeze_ema",
+      "name": "Squeeze 해제 · EMA 200 방향",
+      "family": "squeeze",
+      "filter": "ema"
+    },
+    {
+      "id": "squeeze_adx",
+      "name": "Squeeze 해제 · ADX ≥ 20",
+      "family": "squeeze",
+      "filter": "adx"
+    },
+    {
+      "id": "channel_none",
+      "name": "20일 Donchian 돌파 · 단독",
+      "family": "channel",
+      "filter": "none"
+    },
+    {
+      "id": "channel_ema",
+      "name": "20일 Donchian 돌파 · EMA 200 방향",
+      "family": "channel",
+      "filter": "ema"
+    },
+    {
+      "id": "channel_adx",
+      "name": "20일 Donchian 돌파 · ADX ≥ 20",
+      "family": "channel",
+      "filter": "adx"
+    },
+    {
+      "id": "macdbb_none",
+      "name": "MACD·BB 회귀 · 단독",
+      "family": "macdbb",
+      "filter": "none"
+    },
+    {
+      "id": "macdbb_ema",
+      "name": "MACD·BB 회귀 · EMA 200 방향",
+      "family": "macdbb",
+      "filter": "ema"
+    },
+    {
+      "id": "macdbb_adx",
+      "name": "MACD·BB 회귀 · ADX ≥ 20",
+      "family": "macdbb",
+      "filter": "adx"
+    },
+    {
+      "id": "rsi_none",
+      "name": "RSI 2 눌림목",
+      "family": "rsi",
+      "filter": "none"
+    },
+    {
+      "id": "rsi_range",
+      "name": "RSI 2 + ADX < 18",
+      "family": "rsi",
+      "filter": "range"
+    },
+    {
+      "id": "momentum_breakout",
+      "name": "14일 + 3일 돌파",
+      "family": "momentum",
+      "filter": "breakout"
+    },
+    {
+      "id": "momentum_target6",
+      "name": "14일 + 6 ATR 익절",
+      "family": "momentum",
+      "filter": "none",
+      "target": 6
+    },
+    {
+      "id": "momentum_boost",
+      "name": "14일 + 3일 돌파 + 부스팅",
+      "family": "momentum",
+      "filter": "boost"
+    },
+    {
+      "id": "knn_none",
+      "name": "Lorentzian 거리 kNN 응용",
+      "family": "knn",
+      "filter": "none"
+    },
+    {
+      "id": "momentum_knn",
+      "name": "14일 + Lorentzian 거리 kNN",
+      "family": "momentum",
+      "filter": "knn"
+    },
+    {
+      "id": "ut_knn",
+      "name": "UT + Lorentzian 거리 kNN",
+      "family": "ut",
+      "filter": "knn"
+    },
+    {
+      "id": "ut2_none",
+      "name": "UT ATR 10·2",
+      "family": "ut2",
+      "filter": "none"
+    },
+    {
+      "id": "ut3_none",
+      "name": "UT ATR 10·3",
+      "family": "ut3",
+      "filter": "none"
+    },
+    {
+      "id": "supertrend_target6",
+      "name": "Supertrend + 6 ATR 익절",
+      "family": "supertrend",
+      "filter": "none",
+      "target": 6
+    },
+    {
+      "id": "momentum_adx_target6",
+      "name": "14일 + ADX + 6 ATR 익절",
+      "family": "momentum",
+      "filter": "adx",
+      "target": 6
+    },
+    {
+      "id": "regime_none",
+      "name": "국면 분리 · 돌파 / 평균회귀",
+      "family": "regime",
+      "filter": "none"
+    },
+    {
+      "id": "consensus_none",
+      "name": "14일·Supertrend·kNN 2표 합의",
+      "family": "consensus",
+      "filter": "none"
+    }
+  ],
+  "start": 1640995200000,
+  "end": 1788220799999,
+  "trainingYear": 2021,
+  "marketHash": "24ea0e30aceb63b1db1d947c51100d7449d4a60c5a00aa0e237dce1ad63818a2",
+  "scoreHash": "01cee4c1d606c1c5df6d23cf797a744abe5936eca7d3fd67af704e290fe6717f",
+  "sourceHashes": {
+    "signal_tournament.cjs": "2c4a26008a57d66747ac65f7d45bf3d9b1b35673fcb7e1a351d674c3d78d110c",
+    "research_signal_tournament.cjs": "04ebd8367a587c7fac825384e23ac3e81e7fee4ee8b13386270f586ca15810c8",
+    "paper_engine.cjs": "c6102007a69e6863b74c72e3697f984db20a45e7a1d0c8d2cb03b7fb9a4b8b5d",
+    "trend_methods.cjs": "a9e4c4cecdb0595b5ddf17843d7c42689d42faf6641a2378d1a4da434be65255",
+    "public_bot_methods.cjs": "29f4c302042ea585e059246d1526a160d61d5e3230d860b4ebfd1b1b3d501357",
+    "research_exit_methods.cjs": "5208ee5f0028cb094fe7600a4943997bd3659d9cf015a0bbce4d733078b569a0"
+  },
+  "decision": "32 frozen recipes; shared 1-position engine; annual prior-year selection; no automatic account replacement",
+  "selection": "Prior calendar year: >=20 exits, positive net and double-cost return, MDD<=25%, positive mean netR. Max daily Sharpe minus 2*MDD; ties alphabetical; no eligible candidate means cash.",
+  "costs": "Each side 0.045% fee + 0.02% slippage; recorded funding. Stress doubles fee/slippage only. BTC5x ETH/SOL3x; 1% initial risk budget; existing drawdown and daily loss controls.",
+  "endings": "Annual experiments force-close at year end; continuous fixed experiments close only at final end. Selection stitches annual flat starts.",
+  "knn": "Independent Lorentzian-distance kNN adaptation, not a port of jdehorty. 5 bounded features, last2000 bars sampled every4, 8 neighbors,4-bar net-direction target with0.13% deadband. Each target ends >=1 bar before decision. Min100 known samples; vote>=0.25.",
+  "limitations": [
+    "Historical periods and current symbols have already been examined. Chronological selection is not pristine out-of-sample proof.",
+    "Futures data are 2020–2026, not 15 years; fixed comparisons start2022. SOL data begin2020-09.",
+    "Original TradingView/Freqtrade software was not executed. OHLC signals were independently adapted, and common exits/portfolio sizing replace original bots.",
+    "No Heikin Ashi execution, averaging down, grid or martingale. The current production paper accounts are unchanged.",
+    "The 2026 boosting model is not applied to earlier years. Stored prior-year-trained yearly OOS scores from the previous research are used.",
+    "Reusing a model trained for momentum trades to filter unrelated bots would change its meaning; boosting is used only with its original momentum breakout entry."
+  ]
+}
