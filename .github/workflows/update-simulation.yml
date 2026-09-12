@@ -1,0 +1,57 @@
+name: Update public paper accounts
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/collect_simulation_data.py'
+      - 'scripts/paper_engine.cjs'
+      - 'scripts/build_simulation.cjs'
+      - 'scripts/test_paper_engine.cjs'
+      - 'scripts/test_simulation_data.py'
+      - 'assets/simulation*'
+      - 'simulation.html'
+      - '.github/workflows/update-simulation.yml'
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: public-paper-accounts
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test simulated execution and data chronology
+        run: |
+          node scripts/test_paper_engine.cjs
+          python -m unittest discover -s scripts -p test_simulation_data.py
+          node --check assets/simulation-page.js
+      - name: Collect public candles and historical funding
+        run: python scripts/collect_simulation_data.py
+      - name: Settle paper orders and preserve account records
+        run: node scripts/build_simulation.cjs
+      - name: Publish paper accounts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add simulation
+          git diff --cached --quiet || git commit -m 'Update public paper accounts and immutable execution records'
+          git pull --rebase origin main
+          git push
+      - name: Refresh public simulation page
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
