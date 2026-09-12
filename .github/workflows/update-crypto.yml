@@ -10,6 +10,8 @@ on:
       - 'assets/spot-forecast.js'
       - 'scripts/test_crypto.py'
       - 'assets/crypto.js'
+      - 'assets/decision-support.js'
+      - 'scripts/test_technical_guide.cjs'
       - 'scripts/test_crypto_page.cjs'
       - 'assets/perp-engine.js'
       - 'assets/perp-page.js'
@@ -57,6 +59,7 @@ jobs:
           node --check assets/perp-page.js
           node scripts/test_perp.cjs
           node scripts/test_technical_guide.cjs
+          node scripts/test_decision_support.cjs
       - name: Publish snapshots
         run: |
           git config user.name 'github-actions[bot]'
