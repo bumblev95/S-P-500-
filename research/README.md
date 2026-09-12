@@ -144,3 +144,5 @@ success rate is claimed. Run input collection before the model build. Both
 accept `--offline` for existing local inputs. The Actions workflow runs on relevant
 code updates and weekly, and tests filing leakage, incomplete funding days,
 future-value invariance, calibration chronology and interval scoring.
+
+SEC connection setup and supported file import are documented in [SEC-DATA.md](SEC-DATA.md).

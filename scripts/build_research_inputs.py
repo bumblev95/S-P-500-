@@ -1,9 +1,10 @@
 """Public, publication-dated covariates. Never backfill a current snapshot into history."""
-import json, math, os, time
+import json, math, os, re, time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
+from urllib.parse import urlsplit
 from build_forecasts import atomic_json
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -101,8 +102,16 @@ def crypto_before(funding, snapshots, day):
     used += [r['date'] for r in snapshots if r['date'] < day and (now-datetime.fromisoformat(r['date'])).days <= 35]
     return x, max(used) if any(math.isfinite(v) for v in x) and used else None
 
+def sec_identity():
+    identity=os.environ.get('SEC_USER_AGENT','').strip()
+    if '\n' in identity or '\r' in identity or not re.search(r'\S+@[^\s@]+\.[^\s@]+',identity):
+        raise ValueError('SEC contact configuration missing: set SEC_USER_AGENT to an app name and a real contact email')
+    return identity
+
 def request(url, body=None):
-    headers = {'User-Agent': os.environ.get('SEC_USER_AGENT', 'PublicForecastResearch/1.0 https://github.com/bumblev95/S-P-500-'), 'Content-Type': 'application/json'}
+    # The SEC contact is sent only to SEC, never to the crypto provider.
+    identity=sec_identity() if urlsplit(url).hostname in ('data.sec.gov','www.sec.gov') else 'PublicForecastResearch/1.0 https://github.com/bumblev95/S-P-500-'
+    headers = {'User-Agent': identity, 'Content-Type': 'application/json'}
     with urlopen(Request(url, data=json.dumps(body).encode() if body else None, headers=headers), timeout=25) as r:
         return json.load(r)
 
@@ -123,6 +132,9 @@ def build(root=ROOT, download=True):
         blocked_until=(datetime.fromisoformat(old['generatedAt'])+timedelta(days=1)).isoformat()
     halted = not download or blocked_until>now.isoformat()
     if download and blocked_until>now.isoformat():errors.extend(e for e in old.get('errors',[]) if e.startswith('SEC '))
+    if download:
+        try:sec_identity()
+        except ValueError as e:halted=True;errors.append(str(e))
     for symbol, cik in CIKS.items():
         p = cache/(symbol+'.json')
         try:
@@ -132,7 +144,8 @@ def build(root=ROOT, download=True):
                 atomic_json(p, payload); time.sleep(.2)
             elif p.exists(): payload = json.loads(p.read_text())
             else: continue
-            stocks[symbol] = dict(cik=cik, source='SEC companyfacts / annual US-GAAP', rows=financial_history(payload), retrievedAt=now.isoformat() if not halted else stocks.get(symbol, {}).get('retrievedAt'))
+            if int(payload.get('cik',-1))!=cik:raise ValueError('Cached SEC issuer identity mismatch')
+            stocks[symbol] = dict(stocks.get(symbol,{}),cik=cik, source='SEC companyfacts / annual US-GAAP', rows=financial_history(payload), retrievedAt=now.isoformat() if not halted else stocks.get(symbol, {}).get('retrievedAt'))
         except Exception as e:
             errors.append(f'SEC {symbol}: {e}')
             if isinstance(e, HTTPError) and e.code in (401, 403, 429):

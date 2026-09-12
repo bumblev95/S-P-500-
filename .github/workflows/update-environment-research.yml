@@ -33,7 +33,10 @@ jobs:
           restore-keys: environment-history-
       - run: pip install -r scripts/requirements-crypto-ml.txt
       - run: python -m unittest discover -s scripts -p test_research_inputs.py
+      - run: python -m unittest discover -s scripts -p test_sec_import.py
       - run: python scripts/build_research_inputs.py
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
       - run: python scripts/build_environment_research.py
       - run: python -m unittest discover -s scripts -p test_environment_research.py
       - run: node --check assets/environment-research.js && node scripts/test_environment_page.cjs
