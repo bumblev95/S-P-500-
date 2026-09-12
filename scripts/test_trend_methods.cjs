@@ -1,5 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),T=require('./trend_methods.cjs'),P=require('./paper_engine.cjs');
+const R=require('./research_trend_methods.cjs');
 const start=Date.UTC(2024,0,1),step=900000;
 const rows=Array.from({length:4000},(_,i)=>({t:start+i*step,end:start+(i+1)*step-1,open:100+i*.01,close:100+i*.01,high:100.02+i*.01,low:99.98+i*.01,volume:1}));
 assert.equal(T.aggregate(rows.slice(0,15)).length,0);
@@ -21,4 +22,8 @@ assert.equal(a.trades.length,1);assert.equal(a.trades[0].exitAt,bars[3].end);ass
 const flip=(s,rs)=>rs.at(-1).end===q.at?q:rs.at(-1).end===bars[1].end?{side:null,exitLong:true}:{side:null};
 const b=P.run(P.create('crypto',start,'trendResearch'),market,{mode:'replay',startAt:start,now:bars.at(-1).end+1,provider:flip});
 assert.equal(b.trades[0].exitAt,bars[2].t);assert.equal(b.trades[0].exitReason,'4시간 추세 이탈');
+const endResult=R.evaluate(market,{BTC:new Map([[q.at,q]])},start,bars.at(-1).end);
+assert.equal(endResult.trades,1);assert.equal(endResult.closed[0].reason,'평가 기간 종료');
+assert(Math.abs(endResult.equity-10000-endResult.closed.reduce((s,t)=>s+t.net,0))<1e-8);
+assert.equal(endResult.curve.at(-1).equity,endResult.equity);
 console.log('Fixed trend signals: complete bars, prefix invariance, next-bar trailing stops and trend exits passed');

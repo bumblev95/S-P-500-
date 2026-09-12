@@ -25,6 +25,7 @@ function benchmark(market,start,end){
  for(const r of rows){const value=qty*r.close;high=Math.max(high,value);dd=Math.max(dd,1-value/high);}
  const equity=qty*rows.at(-1).close*(1-cfg.slip)*(1-cfg.fee);dd=Math.max(dd,1-equity/high);
  return {equity,return:equity/10000-1,maxDrawdown:dd};
+}
 function build(){
  const cache=process.env.PAPER_LONG_CACHE||'/tmp/paper-long-cache',file=path.join(cache,'market.json'),manifest=JSON.parse(fs.readFileSync(path.join(cache,'manifest.json')));
  if(manifest.errors.length)throw Error('Incomplete archive collection');
