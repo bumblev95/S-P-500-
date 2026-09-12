@@ -9,6 +9,7 @@ on:
       - 'scripts/build_simulation.cjs'
       - 'scripts/build_leveraged.cjs'
       - 'scripts/*momentum*'
+      - 'scripts/*exit*'
       - 'scripts/*pattern*'
       - 'scripts/test_leveraged.cjs'
       - 'scripts/test_wide_recovery.cjs'
@@ -48,9 +49,11 @@ jobs:
           node scripts/test_momentum_forward.cjs
           node scripts/test_momentum_cpd.cjs
           node scripts/test_selector.cjs --quick
+          node scripts/test_exit_methods.cjs
           python -m unittest discover -s scripts -p test_simulation_data.py
           python -m unittest discover -s scripts -p test_pattern_research.py
           node --check assets/simulation-page.js
+          node --check assets/exit-experiment.js
       - name: Collect public candles and historical funding
         run: python scripts/collect_simulation_data.py
       - name: Check weekly neural research interval

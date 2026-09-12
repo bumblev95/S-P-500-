@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('node:assert/strict'),X=require('./exit_methods.cjs'),R=require('./research_exit_methods.cjs');
+const q={side:'long',price:100,atr:2,stop:95,target:null,trailLong:95,trailShort:105,holdBars:2880,exitLong:true,exitShort:false};
+let v=X.apply(X.METHODS.find(x=>x.id==='trail2'),q);assert.equal(v.stop,96);assert.equal(v.trailLong,96);assert.equal(v.holdBars,2880);
+v=X.apply(X.METHODS.find(x=>x.id==='fixed2r'),q);assert.equal(v.stop,95);assert.equal(v.target,110);assert.equal(v.trailLong,null);
+v=X.apply(X.METHODS.find(x=>x.id==='hold14'),q);assert.equal(v.holdBars,1344);
+v=X.apply(X.METHODS.find(x=>x.id==='trailOnly'),q);assert.equal(v.exitLong,false);assert.equal(v.target,null);
+const flat=Array.from({length:366},(_,i)=>({at:Date.UTC(2024,0,1)+i*86400000,equity:10000*(1+i/365*.1)}));
+const m=R.metrics(flat,[],flat[0].at,flat.at(-1).at,11000,.02);assert.ok(Math.abs(m.cagr-.1)<.001);assert.ok(m.sharpe>0);
+assert.ok(R.eligible({trades:30,cagr:.1,sharpe:1,expectancyR:.1,stress:{return:.01}}));assert.ok(!R.eligible({trades:29,cagr:.1,sharpe:1,expectancyR:.1,stress:{return:.01}}));
+console.log('PASS: fixed exit rules, annualized metrics and selection gates');

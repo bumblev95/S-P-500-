@@ -1,0 +1,99 @@
+{
+  "version": "momentum14-exit-walkforward-v1",
+  "createdAt": "2026-09-12T10:17:25.727Z",
+  "evaluationYears": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "validation": "Select one exit using only the preceding calendar year; 2026 evaluation ends at archive end.",
+  "entry": "Unchanged momentum14 signals on completed 4-hour bars; next 15-minute open execution.",
+  "methods": [
+    {
+      "id": "baseline",
+      "name": "기존 2.5 ATR 추적",
+      "trailAtr": 2.5,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "trail2",
+      "name": "빠른 2 ATR 추적",
+      "trailAtr": 2,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "trail3",
+      "name": "느린 3 ATR 추적",
+      "trailAtr": 3,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "trail35",
+      "name": "넓은 3.5 ATR 추적",
+      "trailAtr": 3.5,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "target4",
+      "name": "4 ATR 목표 + 추적",
+      "trailAtr": 2.5,
+      "targetAtr": 4,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "target6",
+      "name": "6 ATR 목표 + 추적",
+      "trailAtr": 2.5,
+      "targetAtr": 6,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "fixed2r",
+      "name": "고정 2R 목표",
+      "trailAtr": 2.5,
+      "targetAtr": 5,
+      "trailing": false,
+      "holdDays": 30,
+      "reverse": true
+    },
+    {
+      "id": "hold14",
+      "name": "최대 14일 + 추적",
+      "trailAtr": 2.5,
+      "holdDays": 14,
+      "reverse": true
+    },
+    {
+      "id": "trailOnly",
+      "name": "반전 청산 없음 + 추적",
+      "trailAtr": 2.5,
+      "holdDays": 30,
+      "reverse": false
+    }
+  ],
+  "selection": {
+    "eligibility": "At least 30 exits, positive CAGR, daily Sharpe, expectancy in initial-risk units, and positive doubled-cost return.",
+    "score": "CAGR - maximum drawdown + 0.05 × daily Sharpe. Fixed method order breaks exact ties."
+  },
+  "costs": "BTC 5x; ETH/SOL 3x. 1% risk budget, 3% total open risk, 0.045% fee and 0.02% slippage per side, observed funding. Stress doubles fees and slippage.",
+  "promotion": false,
+  "inputHashes": {
+    "market": "083cc264c2db3c52d169dc362919fae82b1b325b48de744a12754ab4c2d5c282",
+    "manifest": "ffeedaa195c71d13588dc4be5f40475dcbaa1e33fff6a5f44fe88b374e0db4ba"
+  },
+  "sourceHashes": {
+    "exit_methods.cjs": "6207651c15df33ee072c381797220fbed68b659a3d3e19f9aa43176c7bafc105",
+    "research_exit_methods.cjs": "5208ee5f0028cb094fe7600a4943997bd3659d9cf015a0bbce4d733078b569a0",
+    "paper_engine.cjs": "c5e256c41911753a1861983c2a1beaf4eb3aa2330ed8a46d0976de2bc40b2527",
+    "trend_methods.cjs": "a9e4c4cecdb0595b5ddf17843d7c42689d42faf6641a2378d1a4da434be65255"
+  }
+}
