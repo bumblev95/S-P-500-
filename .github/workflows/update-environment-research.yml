@@ -1,0 +1,40 @@
+name: Update environment model research
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 2 * * 0'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: environment-research
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/cache@v4
+        with:
+          path: research/history
+          key: environment-history-${{ github.run_id }}
+          restore-keys: environment-history-
+      - run: pip install -r scripts/requirements-crypto-ml.txt
+      - run: python scripts/build_environment_research.py
+      - run: python -m unittest discover -s scripts -p test_environment_research.py
+      - run: node --check assets/environment-research.js && node scripts/test_environment_page.cjs
+      - name: Publish research results
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/environment.json
+          git diff --cached --quiet || git commit -m 'Update public environment model comparison'
+          git pull --rebase origin main
+          git push
+      - name: Refresh dashboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
