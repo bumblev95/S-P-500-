@@ -1,0 +1,64 @@
+{
+  "version": "momentum-selector-v1",
+  "createdAt": "2026-09-12T09:53:40.605857+00:00",
+  "evaluationYears": [
+    2024,
+    2025,
+    2026
+  ],
+  "validation": "July–December of the preceding year; each year uses a newly trained frozen model. Evaluation ends 2026-08-31.",
+  "trainingWindows": [
+    "all",
+    "5y",
+    "3y"
+  ],
+  "embargoDays": 1,
+  "trainOnlyClosedLabels": true,
+  "trainingSampling": "Two signal opportunities per UTC day per asset; predictions on every completed 4-hour signal.",
+  "models": {
+    "boost": {
+      "max_iter": 100,
+      "max_leaf_nodes": 7,
+      "l2_regularization": 10,
+      "learning_rate": 0.05,
+      "min_samples_leaf": 60,
+      "early_stopping": false
+    },
+    "mlp": {
+      "hidden_layer_sizes": [
+        32,
+        16,
+        8
+      ],
+      "alpha": 3,
+      "max_iter": 180,
+      "batch_size": 128,
+      "early_stopping": false,
+      "random_state": 42
+    }
+  },
+  "target": "Independent candidate net return divided by initial dollar risk budget, using the shared leveraged execution primitives, actual funding and trailing stop. Clip training target to [-3,6]; report unclipped realized account results.",
+  "entryThresholdNetR": 0.1,
+  "selection": "Pick highest validation return minus maximum drawdown with at least 20 closed trades, separately by model family. Break ties by fixed model/window order. If none eligible, retain baseline; all candidates still reported.",
+  "dailyContext": "Auxiliary logistic regression for BTC 14-day direction. Coin Metrics daily prices from 2014 for fitting, cutoff strictly before prediction year. Predict normalized daily features from Binance futures history (source transfer); never label 2014 daily prices as leveraged trade outcomes. all/5y/3y apply separately to both context model and available futures labels.",
+  "dailyContextAblation": "Include boost-all without the auxiliary daily model.",
+  "exits": [
+    "original 2.5 ATR trailing",
+    "fixed 2R target without trailing",
+    "4 ATR target with original trailing"
+  ],
+  "exitSelection": "Compare exit variants only on the selector chosen from the prior validation period; do not select a winner from evaluation returns.",
+  "costStress": "Double fees and slippage, unchanged actual funding.",
+  "promotion": false,
+  "limitations": [
+    "All evaluation years were already examined in prior experiments; exploratory historical comparison, not fresh holdout evidence.",
+    "Current BTC/ETH/SOL asset selection; no cross-sectional universe expansion in this first selector experiment.",
+    "Overlapping labels are not independent trades; training subsampling reduces but does not eliminate overlap.",
+    "Daily context may not improve future returns; no uncalibrated score presented as win probability."
+  ],
+  "inputHashes": {
+    "/tmp/paper-long-cache/market.json": "083cc264c2db3c52d169dc362919fae82b1b325b48de744a12754ab4c2d5c282",
+    "/tmp/paper-long-cache/manifest.json": "ffeedaa195c71d13588dc4be5f40475dcbaa1e33fff6a5f44fe88b374e0db4ba",
+    "/workspace/scratch/b1f576a108b4/dashboard/simulation/selector-research/btc-daily.json": "56954e6472fa1aecea3bfaf443bf60a12e51c0227d2ab11fb6f7bc380149d668"
+  }
+}

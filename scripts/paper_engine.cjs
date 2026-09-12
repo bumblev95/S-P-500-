@@ -7,6 +7,9 @@ const TREND={...WIDE,profile:'trendResearch',profileVersion:'trend-research-v1',
 const TREND_STRESS={...TREND,profile:'trendResearchStress',profileVersion:'trend-research-stress-v1',fee:TREND.fee*2,slip:TREND.slip*2};
 const MOMENTUM={...TREND,profile:'momentum14',profileVersion:'momentum14-forward-v1',observedTrend:true,signalTtl:14400000};
 const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE,trendResearch:TREND,trendResearchStress:TREND_STRESS,momentum14:MOMENTUM};
+// Explicit research-only opt-in; existing profiles keep their original exits.
+PROFILES.selectorTargets={...TREND,profile:'selectorTargets',profileVersion:'selector-targets-v1',targets:true};
+PROFILES.selectorTargetsStress={...TREND_STRESS,profile:'selectorTargetsStress',profileVersion:'selector-targets-stress-v1',targets:true};
 function config(a){if(a.profile&&a.profile!=='baseline'&&!PROFILES[a.profile])throw Error('Unknown account profile');const cfg=PROFILES[a.profile];if(cfg&&(a.asset!=='crypto'||a.profileVersion!==cfg.profileVersion))throw Error('Leverage profile version changed');return cfg||CONFIG[a.asset];}
 const finite=Number.isFinite,side=p=>p.side==='long'?1:-1;
 const copy=x=>JSON.parse(JSON.stringify(x));
@@ -170,7 +173,7 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
    const r=bars[p.symbol];if(!r){warn(a,p.symbol+' 보유 중 봉 누락 · 평가에 제한');continue;}
    if(p.pendingStop&&r.t>=p.pendingStop.notBefore){p.stop=p.pendingStop.price;delete p.pendingStop;}
    const m=markets[p.symbol];funding(a,p,r.t,m.source,r.open);
-   const stopGap=side(p)*(r.open-p.stop)<=0,targetGap=!cfg.trend&&side(p)*(r.open-p.target)>=0;
+   const stopGap=side(p)*(r.open-p.stop)<=0,targetGap=(!cfg.trend||cfg.targets)&&finite(p.target)&&side(p)*(r.open-p.target)>=0;
    if(cfg.profile&&side(p)*(r.open-liquidation(p,cfg))<=0)close(a,p,r.open,r.t,'가상 격리 청산 · 시가 갭',cfg,now,'open');
    else if(stopGap)close(a,p,r.open,r.t,'손절 · 시가 갭',cfg,now,'open');
    else if(targetGap)close(a,p,p.target,r.t,'익절 · 시가 목표 통과',cfg,now,'open');
@@ -186,12 +189,12 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
   a.pending=keep;
   for(const p of [...a.positions]){
    const r=bars[p.symbol];if(!r)continue;p.bars++;
-   const stop=p.side==='long'?r.low<=p.stop:r.high>=p.stop,target=!cfg.trend&&(p.side==='long'?r.high>=p.target:r.low<=p.target);
+   const stop=p.side==='long'?r.low<=p.stop:r.high>=p.stop,target=(!cfg.trend||cfg.targets)&&finite(p.target)&&(p.side==='long'?r.high>=p.target:r.low<=p.target);
    const closing=stop||target||p.bars>=p.holdBars;
    funding(a,p,r.end,markets[p.symbol].source,r.open,stop||target);
    if(cfg.profile){p.liquidation=liquidation(p,cfg);const liquid=p.side==='long'?r.low<=p.liquidation:r.high>=p.liquidation;
     if(liquid&&(!stop||side(p)*(p.stop-p.liquidation)<=0)){close(a,p,p.liquidation,r.end,'가상 격리 청산 · 봉 가격 기준',cfg,now);continue;}}
-   if(closing){close(a,p,stop?p.stop:target?p.target:r.close,r.end,stop?(target?'손절 · 같은 봉 목표 동시 도달':'손절'):target?'익절 · 2R 목표':'보유 시간 종료',cfg,now,stop||target?'bar':'close');continue;}
+   if(closing){close(a,p,stop?p.stop:target?p.target:r.close,r.end,stop?(target?'손절 · 같은 봉 목표 동시 도달':'손절'):target?(cfg.targets?'익절 · 연구 목표':'익절 · 2R 목표'):'보유 시간 종료',cfg,now,stop||target?'bar':'close');continue;}
    if(a.asset==='stocks'){
     const m=markets[p.symbol],i=m.byTime.get(t),ind=E.indicators(m.rows.slice(Math.max(0,i-239),i+1),'1d');
     if(ind&&r.close<ind.ema50)p.exitPending='추세 이탈 · 50일 EMA';
