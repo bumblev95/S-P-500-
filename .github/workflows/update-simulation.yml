@@ -47,6 +47,7 @@ jobs:
           node scripts/test_wide_recovery.cjs
           node scripts/test_trend_methods.cjs
           node scripts/test_momentum_forward.cjs
+          node scripts/test_momentum_target6.cjs
           node scripts/test_momentum_cpd.cjs
           node scripts/test_selector.cjs --quick
           node scripts/test_exit_methods.cjs

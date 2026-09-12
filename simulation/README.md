@@ -1,5 +1,25 @@
 # $10,000 public paper accounts
 
+## Current default: 14-day momentum + 6 ATR profit target
+
+By user request, the default crypto view now selects the separate
+`momentum14-target6-forward-v1` account in `momentum-target6/`. It begins with
+$10,000 when the updated automated runner first executes. No old balances,
+positions, replay profits or backdated fills are transferred. The original
+`momentum/` account continues unchanged as a comparison, including its open
+positions, closed trades and hash-linked ledger. Different start dates mean
+their lifetime returns are not a matched-period comparison.
+
+Entries, 2.5 four-hour ATR initial/trailing stops, momentum reversal exits,
+30-day maximum holding time, fees, funding and leverage/risk limits are unchanged.
+The new target is signal price plus 6 signal ATR for longs or minus 6 for shorts.
+It is frozen with the entry order, not recalculated or trailed after entry.
+Same-bar stop/target hits remain stop-first. Forward orders and control changes
+apply only after their actual observation time. This is prospective paper
+evaluation authorized by the user, not validated profitability or real trading.
+All earlier research reports remain unchanged historical records of their
+original publication decisions. See [exit research](../exit-experiment.html).
+
 Two independent USD paper accounts, each initialized at $10,000. No keys,
 wallet, user trade history, exchange order endpoint or payment is used. The
 only Hyperliquid requests are public `/info` reads.

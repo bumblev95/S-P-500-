@@ -48,6 +48,8 @@ function build(now=Date.now()){
  output.leveraged=require('./build_leveraged.cjs').build(market,now,folder);
  output.wide=require('./build_leveraged.cjs').build(market,now,folder,'wideRecovery');
  output.momentum=require('./build_momentum.cjs').build(market,now,folder);
+ output.momentumTarget6=require('./build_momentum.cjs').build(market,now,folder,'momentum14Target6');
+ output.defaultCryptoProfile='momentum14Target6';
  output.methodResearch=read('method-research/latest.json',null);
  output.publicBotResearch=read('public-bot-research/latest.json',null);
  output.longResearch=read('long-research/latest.json',null);
@@ -57,7 +59,7 @@ function build(now=Date.now()){
   const sources=market[asset]||{};
   const candles=s=>asset==='crypto'?sources[s]?.frames?.['15m']||[]:sources[s]?.rows||[];
   for(const sym of Object.keys(sources))output.preview[asset][sym]=candles(sym).slice(-100);
-  for(const group of asset==='crypto'?[output,output.leveraged,output.wide,output.momentum]:[output])for(const mode of ['forward','replay'])for(const trade of group[mode]?.accounts?.[asset]?.trades?.slice(-30)||[]){
+  for(const group of asset==='crypto'?[output,output.leveraged,output.wide,output.momentum,output.momentumTarget6]:[output])for(const mode of ['forward','replay'])for(const trade of group[mode]?.accounts?.[asset]?.trades?.slice(-30)||[]){
    const rows=candles(trade.symbol),i=rows.findIndex(r=>r.t>=trade.entryAt),j=rows.findIndex(r=>r.end>=trade.exitAt);
    if(i>=0&&j>=0)output.tradeWindows[trade.id]=rows.slice(Math.max(0,i-25),j+12);
   }
@@ -65,7 +67,7 @@ function build(now=Date.now()){
  // Full histories and account state remain public, but the UI only needs curves,
  // trades and recent events; avoid downloading all observed signal logs on phones.
  for(const mode of ['forward','replay'])for(const a of Object.values(output[mode]?.accounts||{}))a.events=a.events.slice(-60);
- for(const group of [output.leveraged,output.wide,output.momentum])for(const mode of ['forward','replay'])group[mode].accounts.crypto.events=group[mode].accounts.crypto.events.slice(-60);
+ for(const group of [output.leveraged,output.wide,output.momentum,output.momentumTarget6])for(const mode of ['forward','replay'])group[mode].accounts.crypto.events=group[mode].accounts.crypto.events.slice(-60);
  write('latest.json',output);
  console.log(JSON.stringify(Object.fromEntries(['forward','replay'].map(mode=>[mode,Object.fromEntries(Object.entries(output[mode]?.accounts||{}).map(([asset,a])=>[asset,{equity:a.equity,trades:a.trades.length,positions:a.positions.length,pending:a.pending.length,winRate:a.winRate,drawdown:a.maxDrawdown}]))])),null,2));
  return output;
