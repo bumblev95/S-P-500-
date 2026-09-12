@@ -1,6 +1,7 @@
 import unittest
 from datetime import datetime, timezone
 import math
+from unittest.mock import patch
 import build_research_inputs as m
 
 class PublicationDates(unittest.TestCase):
@@ -35,5 +36,11 @@ class PublicationDates(unittest.TestCase):
         self.assertAlmostEqual(x[0],.007);self.assertTrue(math.isnan(x[1]));self.assertTrue(math.isnan(x[2]))
         self.assertLess(through,'2024-01-08')
         self.assertAlmostEqual(m.crypto_before(funding,snapshots,'2024-01-09')[0][2],1.)
+    def test_funding_page_respects_window_and_response_weight(self):
+        rows=[dict(coin='BTC',time=i,fundingRate='0.01') for i in range(500)]
+        with patch.object(m,'request',return_value=rows),patch.object(m.time,'sleep') as pause:
+            result=m.funding_page('BTC',100,200)
+        self.assertEqual(len(result),101)
+        self.assertEqual(pause.call_args.args[0],2.7)
 
 if __name__=='__main__':unittest.main()

@@ -106,12 +106,23 @@ def request(url, body=None):
     with urlopen(Request(url, data=json.dumps(body).encode() if body else None, headers=headers), timeout=25) as r:
         return json.load(r)
 
+def funding_page(symbol,start,end):
+    batch=request(HL,dict(type='fundingHistory',coin=symbol,startTime=start,endTime=end))
+    if not isinstance(batch,list):raise ValueError('Invalid funding response')
+    # Official weight: 20 plus one per 20 returned records; stay below 1000/min.
+    time.sleep((20+math.ceil(len(batch)/20))*60/1000)
+    return [r for r in batch if r.get('coin')==symbol and start<=r.get('time',0)<=end]
+
 def build(root=ROOT, download=True):
     path = root/'research/inputs.json'; old = json.loads(path.read_text()) if path.exists() else {}
     cache = root/'research/source-cache'; cache.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc); today = now.date().isoformat()
     stocks = old.get('stocks', {}); funding = old.get('funding', {}); snapshots = old.get('snapshots', {}); errors = []
-    halted = not download
+    blocked_until=old.get('secBlockedUntil','')
+    if not blocked_until and any(e.startswith('SEC ') and any(str(code) in e for code in (401,403,429)) for e in old.get('errors',[])):
+        blocked_until=(datetime.fromisoformat(old['generatedAt'])+timedelta(days=1)).isoformat()
+    halted = not download or blocked_until>now.isoformat()
+    if download and blocked_until>now.isoformat():errors.extend(e for e in old.get('errors',[]) if e.startswith('SEC '))
     for symbol, cik in CIKS.items():
         p = cache/(symbol+'.json')
         try:
@@ -124,7 +135,8 @@ def build(root=ROOT, download=True):
             stocks[symbol] = dict(cik=cik, source='SEC companyfacts / annual US-GAAP', rows=financial_history(payload), retrievedAt=now.isoformat() if not halted else stocks.get(symbol, {}).get('retrievedAt'))
         except Exception as e:
             errors.append(f'SEC {symbol}: {e}')
-            if isinstance(e, HTTPError) and e.code in (401, 403, 429): halted = True
+            if isinstance(e, HTTPError) and e.code in (401, 403, 429):
+                halted = True;blocked_until=(now+timedelta(days=1)).isoformat()
     market = json.loads((root/'crypto/latest.json').read_text())
     # Preserve first observed value per day, never rewrite past supply/OI with today's snapshot.
     for symbol in market['coins']:
@@ -137,6 +149,7 @@ def build(root=ROOT, download=True):
                 existing[d] = dict(date=d, observedAt=r['at'], circulating=r.get('circulating'), openInterest=r.get('openInterest'))
         snapshots[symbol] = [existing[d] for d in sorted(existing)]
     halted = not download
+    backfill=old.get('fundingBackfill',{})
     for symbol, coin in market['coins'].items():
         if not coin.get('perp') or halted: continue
         p = cache/('funding-'+symbol+'.json')
@@ -144,11 +157,23 @@ def build(root=ROOT, download=True):
         start = max([r['time'] for r in raw], default=int((now-timedelta(days=90)).timestamp()*1000)) + 1
         try:
             for _ in range(8):  # bounded paging; resume next run if provider truncates
-                batch = request(HL, dict(type='fundingHistory', coin=symbol, startTime=start, endTime=int(now.timestamp()*1000)))
-                if not isinstance(batch, list): raise ValueError('Invalid funding response')
-                batch = [r for r in batch if r.get('coin') == symbol and r.get('time', 0) >= start]
+                batch = funding_page(symbol,start,int(now.timestamp()*1000))
                 if not batch: break
-                raw.extend(batch); start = max(r['time'] for r in batch)+1; time.sleep(.2)
+                raw.extend(batch); start = max(r['time'] for r in batch)+1;atomic_json(p,raw)
+            if symbol in ('BTC','ETH','SOL'):
+                progress=cache/('funding-backfill-'+symbol+'.json')
+                state=json.loads(progress.read_text()) if progress.exists() else backfill.get(symbol)
+                if state is None:state=dict(cursor=int((now-timedelta(days=1095)).timestamp()*1000),end=min([r['time'] for r in raw],default=int(now.timestamp()*1000))-1,completed=False)
+                backfill[symbol]=state
+                for _ in range(64):
+                    if state['completed']:break
+                    batch=funding_page(symbol,state['cursor'],state['end'])
+                    if not batch:state['completed']=True;break
+                    raw.extend(batch);state['cursor']=max(r['time'] for r in batch)+1
+                    if state['cursor']>state['end']:state['completed']=True
+                    atomic_json(p,raw)
+                    # Persist paging progress even if a later request is denied.
+                    atomic_json(progress,state)
             raw = list({r['time']: r for r in raw}.values()); atomic_json(p, raw)
             # Combine previously published complete days even after a cache eviction.
             days = {r['date']: r for r in funding.get(symbol, [])}
@@ -157,7 +182,9 @@ def build(root=ROOT, download=True):
         except Exception as e:
             errors.append(f'Hyperliquid {symbol}: {e}')
             if isinstance(e, HTTPError) and e.code in (401, 403, 429): halted = True
-    result = dict(schemaVersion=1, generatedAt=now.isoformat(), stocks=stocks, funding=funding, snapshots=snapshots, errors=errors,
+            days={r['date']:r for r in funding.get(symbol,[])}
+            days.update({r['date']:r for r in daily_funding(raw) if r['date']<today});funding[symbol]=[days[d] for d in sorted(days)]
+    result = dict(schemaVersion=1, generatedAt=now.isoformat(), secBlockedUntil=blocked_until, stocks=stocks, funding=funding, fundingBackfill=backfill, snapshots=snapshots, errors=errors,
                   limitations=['SEC original filed dates, standard annual USD facts only; not a certified vintage feed.', 'No guidance, earnings surprises, news or unlock forecasts.', 'Hyperliquid funding is exchange-specific; OI and supply begin when observed here.', 'Current snapshots are never copied into old backtests.'])
     atomic_json(path, result)
     print('Research inputs:', len(stocks), 'SEC issuers;', len(funding), 'funding series;', errors, flush=True)

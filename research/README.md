@@ -112,7 +112,11 @@ point-in-time vendor feed; current API history/taxonomy can still be revised.
 Custom tags, quarterly earnings, guidance and earnings surprises are absent.
 
 The crypto collector pages up to 90 days of initial hourly Hyperliquid funding,
-then resumes from its cache and retains published complete days. Only 24-hour
+and requests up to three years for the BTC/ETH/SOL pilot (younger venue histories
+remain shorter). Paging checkpoints preserve progress. Requests are spaced by
+the documented response-weight budget, targeting under 1000 weight/minute. It
+then resumes from its cache and retains published complete days. SEC denials
+set a 24-hour backoff; no alternate identity or route is attempted. Only 24-hour
 complete days enter 7/30-day funding sums. The first observed daily circulating
 supply and base-coin OI snapshots are retained across the weekly build; this
 history cannot predate this dashboard's observations. Seven-day OI and 30-day
