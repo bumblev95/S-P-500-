@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-09-11T20:03:56.888696+00:00",
+  "generatedAt": "2026-09-12T01:35:34.008971+00:00",
   "indicators": [
     {
       "id": "NFCI",
@@ -15,13 +15,13 @@
         0.5,
         1
       ],
-      "status": "ready",
+      "status": "unavailable",
       "value": -0.564,
       "asOf": "2026-09-04",
       "previous": -0.546,
       "previousDate": "2026-08-07",
       "change": -0.017999999999999905,
-      "severity": 0
+      "severity": null
     },
     {
       "id": "STLFSI4",
@@ -35,13 +35,13 @@
         1,
         2
       ],
-      "status": "ready",
+      "status": "unavailable",
       "value": -0.7884,
       "asOf": "2026-09-04",
       "previous": -0.769,
       "previousDate": "2026-08-07",
       "change": -0.019399999999999973,
-      "severity": 0
+      "severity": null
     },
     {
       "id": "DRTSCILM",
@@ -55,13 +55,13 @@
         25,
         50
       ],
-      "status": "ready",
+      "status": "unavailable",
       "value": 0.0,
       "asOf": "2026-07-01",
       "previous": 8.1,
       "previousDate": "2026-04-01",
       "change": -8.1,
-      "severity": 0
+      "severity": null
     },
     {
       "id": "SOFR",
@@ -71,7 +71,7 @@
       "source": "Federal Reserve Bank of New York",
       "url": "https://fred.stlouisfed.org/series/SOFR",
       "thresholds": null,
-      "status": "ready",
+      "status": "unavailable",
       "value": 3.62,
       "asOf": "2026-09-10",
       "previous": 3.62,
@@ -87,7 +87,7 @@
       "source": "Board of Governors of the Federal Reserve System",
       "url": "https://fred.stlouisfed.org/series/IORB",
       "thresholds": null,
-      "status": "ready",
+      "status": "unavailable",
       "value": 3.65,
       "asOf": "2026-09-11",
       "previous": 3.65,
@@ -107,21 +107,16 @@
         15,
         30
       ],
-      "status": "ready",
-      "asOf": "2026-09-10",
-      "value": -3.0,
-      "previous": -1.0,
-      "previousDate": "2026-09-09",
-      "change": -2.0,
-      "severity": 0,
-      "persistent": false
+      "status": "missing",
+      "value": null,
+      "asOf": null,
+      "severity": null
     }
   ],
   "credit": {
-    "status": "stable",
-    "score": 0,
-    "coverage": 3,
-    "expected": 3
+    "status": "unknown",
+    "score": null,
+    "coverage": 0
   },
   "news": [
     {
@@ -182,7 +177,13 @@
       "status": "ready"
     }
   ],
-  "errors": [],
+  "errors": [
+    "NFCI: TimeoutError",
+    "STLFSI4: TimeoutError",
+    "DRTSCILM: TimeoutError",
+    "SOFR: TimeoutError",
+    "IORB: TimeoutError"
+  ],
   "newsScope": "Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.",
   "exclusions": [
     "HY/CCC OAS와 MOVE 수치 미재배포",
