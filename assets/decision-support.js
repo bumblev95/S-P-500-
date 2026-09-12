@@ -6,7 +6,7 @@ const fresh=(s,days,now=Date.now())=>{const age=(now-Date.parse(s))/86400000;ret
 let bundle=null,market=null,stocks={},coins={},loading=null;
 function confidence(m={},options={}){
  const dates=m.dates||0,n=m.n||0,grade=dates>=20?'충분':dates>=6?'제한적':'자료 부족';
- const price=N(m.mape),error=price?m.mape:m.mae,baseline=price?(m.noChangeMape??m.baselineMape):m.noChangeMae,tail=m.p90Error??options.tail;
+ const price=N(m.mape),error=price?m.mape:m.mae,baseline=price?(m.noChangeMape??m.baselineMape):m.noChangeMae,tail=m.p90Error??m.p90??options.tail;
  return '<section class="ds-confidence"><div class="ds-heading"><b>검증 수준 · '+grade+'</b><span>'+dates+'개 시점 · '+n+'개 평가</span></div><div class="ds-metrics"><div>과거 방향 적중률<strong>'+pct(m.directionAccuracy)+'</strong></div><div>'+ (price?'평균 가격 오차':'평균 수익률 오차')+'<strong>'+ (N(error)?(100*error).toFixed(1)+(price?'%':'%p'):'자료 부족')+'</strong></div><div>큰 오차 · 90백분위<strong>'+(N(tail)?(100*tail).toFixed(1)+(price?'%':'%p'):'자료 부족')+'</strong></div></div><p>'+ (N(error)&&N(baseline)?'가격 불변 기준 대비 '+(error<baseline?'오차가 작았음':'개선 확인 안 됨')+' · 같은 표본의 기준 오차 '+(100*baseline).toFixed(1)+(price?'%':'%p'):'같은 표본의 가격 불변 기준 비교 자료 부족')+'</p><details><summary>이 숫자는 어떻게 읽나요?</summary><p>과거 적중률은 이번 예측이 맞을 확률이 아닙니다. 검증 수준은 시점 수 기준(6개 미만 자료 부족, 6–19개 제한적, 20개 이상 충분)이며 성능 보장이 아닙니다. 같은 날 여러 종목은 독립 시험이 아닙니다. 큰 오차는 최대 손실이 아닙니다. '+esc(options.direction||'상승·중립(±2%)·하락 방향을 비교합니다.')+'</p></details></section>';
 }
 function risk(m,universe={},coin=null,now=Date.now()){
@@ -20,8 +20,8 @@ function risk(m,universe={},coin=null,now=Date.now()){
   add(q.label,ok?Number(q.value).toFixed(2)+' '+q.unit:'자료 부족',q.asOf,ok?severity:null,q.url,detail);
  }
  for(const [id,label] of [['GZ_SPREAD','회사채 GZ 신용스프레드'],['EBP','초과 채권 프리미엄 EBP'],['DGS10','미국 10년 국채 금리'],['DTWEXBGS','광의 달러 지수']])if(!(m?.indicators||[]).some(q=>q.id===id))add(label,'자료 부족',null,null,'');
- const valid=Object.values(universe).filter(e=>positive(e.price)&&fresh(e.asOf,5,now)&&e.inputs?.ma200>0),latest=valid.map(e=>e.asOf).sort().at(-1),same=valid.filter(e=>e.asOf===latest);
- if(same.length){const breadth=same.filter(e=>e.price>e.inputs.ma200).length/same.length;add('시장 상승 참여도',pct(breadth),latest,breadth<.3?2:breadth<.45?1:0,'','수집 '+same.length+'종목의 200일선 상회 비율');}
+ const valid=Object.values(universe).filter(e=>positive(e.price)&&fresh(e.asOf,5,now)&&e.inputs?.ma200>0),dateCounts=valid.reduce((a,e)=>(a[e.asOf]=(a[e.asOf]||0)+1,a),{}),latest=Object.keys(dateCounts).sort((a,b)=>dateCounts[a]-dateCounts[b]||a.localeCompare(b)).at(-1),same=valid.filter(e=>e.asOf===latest);
+ if(same.length>=30&&same.length>=valid.length*.5){const breadth=same.filter(e=>e.price>e.inputs.ma200).length/same.length;add('시장 상승 참여도',pct(breadth),latest,breadth<.3?2:breadth<.45?1:0,'','수집 '+same.length+'종목의 200일선 상회 비율');}
  const spy=universe.SPY,history=spy?.history||[];
  if(fresh(spy?.asOf,5,now)&&history.length>=21){const prices=history.slice(-63).map(r=>r.close).filter(positive),draw=spy.price/Math.max(...prices)-1,rets=prices.slice(1).map((p,i)=>Math.log(p/prices[i])).slice(-20),mean=rets.reduce((a,b)=>a+b,0)/rets.length,vol=Math.sqrt(rets.reduce((s,x)=>s+(x-mean)**2,0)/(rets.length-1)*252);add('SPY 20일 실현 변동성',pct(vol),spy.asOf,vol>.4?2:vol>.25?1:0,'','VIX가 아닌 실제 종가 변동성');add('SPY 최근 63거래일 고점 대비',pct(draw),spy.asOf,draw<-.2?2:draw<-.1?1:0,'');}
  if(coin){const p=coin.perp||{},ok=fresh(p.at,2/24,now);add('미결제약정 규모',ok&&N(p.openInterestUSD)?money(p.openInterestUSD):'자료 부족',p.at,null,'','규모 자체는 방향 신호가 아닙니다.');add('코인 시간당 펀딩비',ok&&N(p.fundingHourly)?(100*p.fundingHourly).toFixed(4)+'%':'자료 부족',p.at,ok&&N(p.fundingHourly)?Math.abs(p.fundingHourly)>.0003?2:Math.abs(p.fundingHourly)>.0001?1:0:null,'https://hyperliquid.gitbook.io/hyperliquid-docs/trading/funding','양수: 롱 지급 · 음수: 숏 지급');add('미결제약정 24시간 변화',ok?pct(coin.oiChange24h):'자료 부족',p.at,ok&&N(coin.oiChange24h)?coin.oiChange24h>.2?2:coin.oiChange24h>.1?1:0:null,'','OI 증가만으로 청산 방향을 알 수 없습니다.');add('청산 쏠림','자료 미연결',null,null,'','확인된 청산 데이터 없이 펀딩·OI로 추정하지 않습니다.');}
@@ -68,7 +68,7 @@ function planner(host,context){
 }
 function extras(asset,sym,h,validation,tail){return confidence(validation,{tail,direction:asset==='crypto'?'과거 코인 백테스트는 상승/비상승을 비교합니다. 실제 성적표는 ±2% 중립 기준을 별도로 사용합니다.':undefined})+changePanel(asset,sym,h)+scorePanel(asset,sym,h)}
 function mountStock({e,plan,h,ai}){
- const host=document.getElementById('decisionEvidence');if(host)host.innerHTML=extras('stocks',e.symbol,h,ai.record?.validation||{},bundle?.stockValidationGeneratedAt===ai.generatedAt?bundle?.stockTailErrors?.[e.symbol]?.[h]:null);
+ const host=document.getElementById('decisionEvidence');if(host)host.innerHTML=extras('stocks',e.symbol,h,ai.record?.validation||{},!ai.record?.model&&bundle?.stockValidationGeneratedAt===ai.generatedAt?bundle?.stockTailErrors?.[e.symbol]?.[h]:null);
  planner(document.getElementById('tradePlanner'),{asset:'stocks',symbol:e.symbol,horizon:h,price:e.price,low:plan.buyLow,high:plan.buyHigh,stop:plan.stop,target:plan.target1});
  const riskHost=document.getElementById('sharedRisk');if(riskHost)riskHost.innerHTML=riskPanel();
  const earnings=document.getElementById('earningsNotice'),event=bundle?.earnings?.[e.symbol];if(earnings)earnings.textContent=event&&fresh(event.updatedAt,8)&&Date.parse(event.date)>=Date.now()-86400000?'다음 실적 예상일 '+event.date+' · Yahoo 수집 '+event.updatedAt+' · 일정 변경 가능':'다음 실적 일정: 최신 확인 자료 없음';

@@ -8,3 +8,5 @@ assert.equal(D.risk(null,{}).status,'unknown');
 const old={generatedAt:'2020-01-01',indicators:[{id:'GZ_SPREAD',label:'GZ',status:'ready',asOf:'2020-01-01',severity:0,value:1}]};assert.equal(D.risk(old,{}).coverage,0);
 const html=D.confidence({dates:12,n:120,mape:.1,noChangeMape:.08,directionAccuracy:.6,p90Error:.3});assert(html.includes('제한적'));assert(html.includes('개선 확인 안 됨'));assert(html.includes('60.0%'));assert(!/NaN|undefined|Infinity/.test(html));
 console.log('Trade costs, funding sign, quantity caps, invalid inputs and stale risk checks passed');
+
+const stamp=new Date().toISOString().slice(0,10);assert(!D.risk(null,{X:{price:90,asOf:stamp,inputs:{ma200:100}}}).items.some(x=>x.label==='시장 상승 참여도'),'One stock cannot stand in for market breadth');
