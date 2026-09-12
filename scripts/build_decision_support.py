@@ -59,6 +59,23 @@ def capture(root, now):
                         band=e.get('range',{}) if variant=='balanced' else {}
                         v=e.get('validation',{}).get(variant,{})
                         rows.append(dict(assetClass=asset,symbol=sym,asOf=e['asOf'],horizon=int(h),model=env['model']+':'+variant,anchor=e['anchor'],base=e[variant],low=band.get('low'),high=band.get('high'),features=e.get('inputValues',{}),validation=v,eligible=False,sourceGeneratedAt=env['generatedAt'],issuedAt=now.isoformat(),source='Yahoo EOD' if asset=='stocks' else 'Yahoo Finance spot daily USD',kind='challenger'))
+    adaptive=read(root,'ml/adaptive.json'); generated=timestamp(adaptive.get('generatedAt'))
+    if (generated and 0 <= (now-generated).total_seconds() <= 5*86400
+            and adaptive.get('sourceModel')==stock.get('model')
+            and adaptive.get('sourceGeneratedAt')==stock.get('generatedAt')):
+        for sym,hs in adaptive.get('stocks',{}).items():
+            for h,e in hs.items():
+                origin=timestamp(e.get('asOf')); original=stock.get('stocks',{}).get(sym,{})
+                if not origin or not 0 <= (now-origin).total_seconds() <= 5*86400:continue
+                if e.get('asOf')!=original.get('asOf') or not positive(e.get('anchor')):continue
+                if not positive(original.get('price')) or abs(e['anchor']/original['price']-1)>1e-6:continue
+                if not e.get('correction',{}).get('targetThrough','9999')<e['asOf']:continue
+                for variant,p in e.get('variants',{}).items():
+                    if not positive(p.get('base')):continue
+                    cal=p.get('calibration'); low=p.get('low'); high=p.get('high')
+                    if cal and not cal.get('targetThrough','9999')<e['asOf']:continue
+                    if not cal:low=high=None
+                    rows.append(dict(assetClass='stocks',symbol=sym,asOf=e['asOf'],horizon=int(h),model=p['model'],anchor=e['anchor'],base=p['base'],low=low,high=high,features={},validation=p.get('validation',{}),eligible=False,sourceGeneratedAt=adaptive['generatedAt'],issuedAt=now.isoformat(),source='Yahoo EOD',kind='challenger'))
     return rows, {'stocks':stock.get('model'), 'crypto':spot.get('model')}
 
 def score(r, history, now, calendar=None):

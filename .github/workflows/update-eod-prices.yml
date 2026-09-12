@@ -68,6 +68,9 @@ jobs:
       - name: Compare forecasts without using future outcomes for selection
         run: python scripts/build_forecast_comparison.py
 
+      - name: Evaluate forecast correction and regime blending
+        run: python scripts/build_adaptive_research.py
+
       - name: Score first-issued forecasts against realized prices
         run: python scripts/score_live_forecasts.py
 

@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from datetime import datetime,timedelta,timezone
-from build_decision_support import score,paired_gate,build,change,summarize
+from build_decision_support import score,paired_gate,build,change,summarize,capture
 from build_market_context import bond_spreads
 
 class DecisionTests(unittest.TestCase):
@@ -66,6 +66,20 @@ class DecisionTests(unittest.TestCase):
         a=dict(self.r,features={'return30':.1});b=dict(a,asOf='2026-08-01',base=115,features={'return30':.05})
         c=change(b,a);self.assertLess(c['delta'],0);self.assertEqual(len(c['facts']),1)
         self.assertEqual(change(b,None)['status'],'waiting')
+    def test_adapters_require_matching_source_and_mature_correction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'ml').mkdir()
+            source=dict(model='old',generatedAt=self.now.isoformat(),stocks={'A':dict(asOf='2026-09-11',price=100,predictions={})})
+            (root/'ml/latest.json').write_text(json.dumps(source))
+            e=dict(asOf='2026-09-11',anchor=100,correction={'targetThrough':'2026-09-10'},variants={'biasCorrected':dict(model='adapter:old:bias',base=105,low=90,high=120,calibration=None,validation={})})
+            d=dict(sourceModel='old',sourceGeneratedAt=source['generatedAt'],generatedAt=source['generatedAt'],stocks={'A':{'21':e}})
+            path=root/'ml/adaptive.json';path.write_text(json.dumps(d))
+            rows,_=capture(root,self.now)
+            self.assertEqual(len(rows),1);self.assertIsNone(rows[0]['low']);self.assertFalse(rows[0]['eligible'])
+            d['sourceGeneratedAt']='2026-09-10';path.write_text(json.dumps(d))
+            self.assertEqual(capture(root,self.now)[0],[])
+            d['sourceGeneratedAt']=source['generatedAt'];e['correction']['targetThrough']=e['asOf'];path.write_text(json.dumps(d))
+            self.assertEqual(capture(root,self.now)[0],[])
     def test_fed_spread_parsing_and_missing(self):
         rows=bond_spreads('date,gz_spread,ebp,est_prob\n2026-07-01,1.5,-0.3,0.1\n2026-08-01,2.1,0.1,0.2\n',self.now.date())
         self.assertEqual(rows[0]['status'],'ready');self.assertAlmostEqual(rows[0]['change'],.6)
