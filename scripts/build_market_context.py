@@ -20,12 +20,43 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 # id: label, unit, observation-age limit, warning levels, change warning, source
 SERIES = {
+    'DGS10': ('미국 10년 국채 금리', '%', 7, None, None, 'Federal Reserve Board'),
+    'DTWEXBGS': ('광의 달러 지수', 'index', 10, None, None, 'Federal Reserve Board'),
     'NFCI': ('금융여건', 'index', 16, [0, .5, 1], .25, 'Federal Reserve Bank of Chicago'),
     'STLFSI4': ('금융 스트레스', 'index', 16, [0, 1, 2], .5, 'Federal Reserve Bank of St. Louis'),
     'DRTSCILM': ('은행 기업대출 긴축', '%', 150, [10, 25, 50], 10, 'Board of Governors of the Federal Reserve System'),
     'SOFR': ('SOFR', '%', 5, None, None, 'Federal Reserve Bank of New York'),
     'IORB': ('IORB', '%', 5, None, None, 'Board of Governors of the Federal Reserve System'),
 }
+EBP_URL = 'https://www.federalreserve.gov/econres/notes/feds-notes/ebp_csv.csv'
+EBP_NOTE = 'https://www.federalreserve.gov/econres/notes/feds-notes/updating-the-recession-risk-and-the-excess-bond-premium-20161006.html'
+
+def bond_spreads(text, today):
+    """Fed research bond spread, monthly; EBP is a component, not total spread."""
+    values = {'gz_spread': [], 'ebp': []}
+    for raw in csv.DictReader(io.StringIO(text)):
+        row = {k.strip().lower(): v for k, v in raw.items() if k}
+        raw_date = row.get('date', '').strip()
+        try:
+            d = date.fromisoformat(raw_date[:10] if len(raw_date) >= 10 else raw_date+'-01')
+        except ValueError:
+            try: d = datetime.strptime(raw_date, '%m/%d/%Y').date()
+            except ValueError: continue
+        if not 0 <= (today-d).days < 900: continue
+        for key in values:
+            try:
+                v = float(row[key])
+                if math.isfinite(v): values[key].append((d.isoformat(), v))
+            except (ValueError, KeyError, TypeError): pass
+    out = []
+    for key, label, limits, delta in [('gz_spread','회사채 GZ 신용스프레드',[2,3,4],.5), ('ebp','초과 채권 프리미엄 EBP',[0,.5,1],.25)]:
+        rows = sorted(dict(values[key]).items())
+        q = dict(id=key.upper(), label=label, source='Federal Reserve Board · staff research', url=EBP_NOTE, unit='%p', maxAgeDays=75, frequency='monthly', status='missing', value=None, asOf=None, severity=None)
+        if rows:
+            d,v = rows[-1]; prior=rows[-2] if len(rows)>1 else None; change=v-prior[1] if prior else None
+            q.update(asOf=d, value=v, previousDate=prior[0] if prior else None, change=change, status='ready' if age(d,today)<=75 else 'stale', severity=max(sum(v>=x for x in limits), 1 if change is not None and change>=delta else 0))
+        out.append(q)
+    return out
 FEEDS = [('Fed 발표', 'https://www.federalreserve.gov/feeds/press_all.xml'),
          ('Fed 연설', 'https://www.federalreserve.gov/feeds/speeches.xml')]
 TOPICS = [
@@ -96,6 +127,8 @@ def credit_state(indicators):
     if conditions: groups.append(max(conditions))
     for k in ('FUNDING','DRTSCILM'):
         if k in by: groups.append(by[k]['severity'])
+    bonds=[by[k]['severity'] for k in ('GZ_SPREAD','EBP') if k in by]
+    if bonds: groups.append(max(bonds))
     if not groups: return dict(status='unknown',score=None,coverage=0)
     score=round(statistics.mean(groups)/3*100)
     status='risk' if max(groups)>=3 or sum(v>=2 for v in groups)>=2 else 'watch' if max(groups)>=1 else 'stable'
@@ -143,6 +176,9 @@ def build(root=ROOT, now=None, fetcher=get):
                 if prior: entry=dict(prior,status='unavailable',severity=None)
             indicators.append(entry)
     indicators.append(funding(observations.get('SOFR',[]),observations.get('IORB',[]),today))
+    try: indicators.extend(bond_spreads(fetcher(EBP_URL), today))
+    except Exception as exc:
+        indicators.extend(bond_spreads('', today)); errors.append('Fed bond spread: '+type(exc).__name__)
     news=[]; feeds=[]
     for name,url in FEEDS:
         try:
