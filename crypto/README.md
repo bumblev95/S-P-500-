@@ -1,6 +1,6 @@
 # Crypto spot and short-term perpetual guides
 
-Routes: `/` is the beginner stock guide; `advanced.html` retains the valuation dashboard; `crypto.html` is spot only; `futures.html` is short-term perpetuals. No wallet connection, order execution or leverage recommendation.
+Routes: `/` is the beginner stock guide; `advanced.html` is the automated equity research workspace; `crypto.html` is spot only; `futures.html` is short-term perpetuals. No wallet connection, order execution or leverage recommendation.
 
 ## Spot
 CoinGecko aggregated spot prices, turnover, supply and FDV, plus UTC midnight daily price observations. The trailing live observation from market_chart is excluded. Midnight observations are labelled with the preceding completed date. Missing history remains missing; perpetual candles never substitute for spot data.
@@ -9,7 +9,23 @@ Daily history is cached until the next UTC day. Public CoinGecko requests are pa
 
 Fixed score: trend 40%, spot turnover 20%, float/FDV 20%, BTC spot trend 20%, normalized over available components. Entry requires current price inside an observed support zone and reward/risk >=1.5, fresh sources and acceptable US credit conditions. The close-only support buffer uses average absolute daily changes, not OHLC ATR. Targets use confirmed previous daily highs.
 
-The 30/120/365-day scenario views are prefixes of one decaying trend path. Historical spot availability is at most one year, so a one-year backtest is unavailable; shorter price-only MAPE comparisons are not trade-strategy results. The fluctuating path is illustrative, not a turning-point forecast.
+The previous fixed decaying trend is retained only as a backtest comparator. Its drift cap and decay restricted a one-year central scenario to roughly -11%/+13%; it is no longer used as the displayed spot forecast.
+
+The displayed 30/120/365-day views are prefixes of one seeded 365-day block-bootstrap simulation. It resamples 400 paths in five-day blocks of demeaned recent daily log returns, retaining local volatility clustering. Three fixed samples have independent, unconstrained endpoints. Shading is the pointwise simulation 10th–90th percentile, NOT a validated 80% prediction interval. Simulation percentiles and sample endpoints are distinct. Where a learned direction is withheld, the simulation uses a neutral log-return reference, not a prediction of unchanged price. Eligible learned horizon returns are interpolated; this interpolation does not predict daily turning points. No bridge forces a path to a target at 30, 120 or 365 days.
+
+## Learned spot price research
+
+`scripts/build_crypto_learned.py` trains pooled HistGradientBoostingRegressor models, one per horizon, with absolute log-return loss (conditional median), a fixed seed and fixed settings. Inputs: 7/30/90/180-day momentum, 30/90-day volatility, volatility ratio, 20/50/200-day average distances, 90-day drawdown/range, up-day share and BTC absolute/relative momentum. Current supply, news and token unlocks are not inserted into historical features.
+
+Eight major coins use up to ten years of public Yahoo Finance **spot** daily USD history. Response symbol, currency, cryptocurrency type/name, completed-day timestamps and overlapping CoinGecko prices are checked. Providers are not spliced together; missing days truncate to a continuous recent segment. Unsupported assets retain CoinGecko daily observations. This can leave new coins without sufficient own-asset validation. No perpetual history is used for learned spot forecasts.
+
+Daily history is cached per UTC day, not downloaded on every hourly update. A 401/403/429 stops further Yahoo requests for that run. Failed requests preserve original timestamps. A history fingerprint avoids hourly retraining on identical data; unchanged results retain their actual training date. History caches and model results are committed under `crypto/`.
+
+Training labels must mature strictly before each global test origin; held-out test origins are separated by at least the target horizon. Model hyperparameters are not selected using these test scores. Results expose per-coin and pooled same-origin price MAPE against no-change and the previous fixed trend. Admission requires at least six test origins, >=5% lower MAPE than both baselines and wins on at least half the test dates, for both pooled and individual-coin results. This is a pilot rule, not a statistical significance claim; correlated assets and the current survivor universe limit interpretation. Current-day models use only realized labels. Six observations are still a small annual sample.
+
+Only admitted forecasts with aligned source dates, <=3-day model/history age, and <=10% reference/current price difference may appear as an AI direction. The current live spot quote anchors displayed relative returns. Otherwise the chart says direction withheld and draws no neutral horizontal line as an AI prediction. Withheld numerical research candidates are not promoted to targets or trading signals. Token scores, entry rules and futures signals are unchanged.
+
+Method references: [scikit-learn time-series validation](https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split), [HistGradientBoostingRegressor](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html).
 
 ## Perpetuals
 The browser calls the public Hyperliquid info endpoint for the selected coin: metaAndAssetCtxs, l2Book and 5m/15m/1h/1d candleSnapshot (242 bars each). Only completed, timestamp-aligned OHLCV bars are accepted. No API key or user account data is sent. Visible pages poll every 60 seconds; freshness is rechecked every 15 seconds. 401/403 halt automatic requests; 429 pauses requests; failures use bounded backoff. Errors never refresh old timestamps or produce fresh entry signals. Changing coins discards superseded results.
@@ -20,9 +36,11 @@ Candidate gates require a confirmed pattern, aligned trend, no excessive RSI/ATR
 
 Stops sit 0.25 ATR beyond support/resistance, with risk <=5 ATR. Targets are observed confirmed pivots; after a breakout with no observed target, a measured range projection is explicitly labelled as an assumption. Targets are never moved to manufacture a passing reward/risk. The chart has a separate horizon selector: 5m bars project 1/3/6 hours; 15m bars project 2/6/12 hours; daily bars project 3/7/14 days. Longer views truncate the same log-price trend with exponential drift decay and an uncalibrated ATR-based widening band. Display horizons never change entry gates, signal expiry or the six-bar cost assumption. The chart extension is an untrained trend assumption. Scores are not probabilities; long and short scores need not sum to 100.
 
-Not connected: unlock schedules, concentration, exchange flows, active addresses, protocol revenue/TVL, liquidation maps, crypto news and trained crypto models. No claim of verified strategy profitability. US credit context applies to the spot page; it is not an intraday news signal.
+Not connected: unlock schedules, concentration, exchange flows, active addresses, protocol revenue/TVL, liquidation maps, crypto news. The learned spot model is price-only; no verified trading profitability is claimed. No claim of verified strategy profitability. US credit context applies to the spot page; it is not an intraday news signal.
 
 Validation: Python crypto data guards; Node shared spot path checks; perpetual candidate/stale/gap/cost/closed-bar checks and mocked mobile-sized page interactions; existing stock guide regression check. Mocked DOM tests do not verify browser visual appearance.
 
 ## Visual summaries
 Supply donuts use maximum supply when valid, otherwise current total supply. Slices separate circulating, issued-but-not-circulating and not-yet-issued tokens. They are not unlock schedules. Missing/inconsistent supply is not drawn as zero. Bars use common scales for component scores, market cap/FDV and signed 7/30-day returns. Long/short scores remain independent bars, not a percentage pie. RSI uses labelled 30/70 zones.
+
+Validation: `python -m unittest discover -s scripts -p test_crypto_learned.py`, `node scripts/test_crypto_page.cjs`. Tests cover past-only features, mature targets, annual target availability, provider identity/completed bars, date/price alignment, admission gates, stale AI suppression, consistent horizon prefixes and unconstrained sample endpoints.

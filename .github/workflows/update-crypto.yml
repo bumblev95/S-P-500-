@@ -4,6 +4,10 @@ on:
     branches: [main]
     paths:
       - 'scripts/build_crypto.py'
+      - 'scripts/build_crypto_learned.py'
+      - 'scripts/test_crypto_learned.py'
+      - 'scripts/requirements-crypto-ml.txt'
+      - 'assets/spot-forecast.js'
       - 'scripts/test_crypto.py'
       - 'assets/crypto.js'
       - 'scripts/test_crypto_page.cjs'
@@ -33,10 +37,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install spot learning dependencies
+        run: pip install -r scripts/requirements-crypto-ml.txt
+      - name: Validate crypto learning separation
+        run: python -m unittest discover -s scripts -p 'test_crypto_learned.py'
       - name: Validate crypto rules
         run: python -m unittest discover -s scripts -p 'test_crypto.py'
       - name: Build public crypto snapshots
         run: python scripts/build_crypto.py
+      - name: Train and validate spot models
+        run: python scripts/build_crypto_learned.py
       - name: Check crypto page
         run: |
           if [ -f scripts/test_crypto_page.cjs ]; then
