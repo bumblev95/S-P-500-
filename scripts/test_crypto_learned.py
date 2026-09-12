@@ -44,6 +44,21 @@ class SpotLearningTests(unittest.TestCase):
             self.assertEqual(len(result['BTC']['rows']),900)
             self.assertEqual(result['BTC']['rows'][-1]['date'],old[-1]['date'])
             self.assertEqual(errors,[])
+    def test_last_common_bitcoin_date_is_used_without_inventing_inputs(self):
+        rows=series(901)
+        _,latest=m.make_records({'BTC':{'rows':rows[:-1]},'SOL':{'rows':rows}},30)
+        self.assertEqual(latest['SOL']['asOf'],rows[-2]['date'])
+        self.assertEqual(latest['SOL']['anchor'],rows[-2]['close'])
+    def test_error_frequency_is_empirical_and_not_a_new_probability(self):
+        samples=[dict(date='2020-01-0'+str(i+1),error=e,noChange=.2,trendError=.3,direction=i%2) for i,e in enumerate([0,.1,.26,1])]
+        result=m.summary(samples)
+        self.assertEqual(result['n'],4)
+        self.assertEqual(result['over10Rate'],.5)
+        self.assertEqual(result['over25Rate'],.5)
+        self.assertAlmostEqual(result['medianError'],.18)
+        self.assertAlmostEqual(result['mape'],.34)
+        self.assertEqual(result['directionAccuracy'],.5)
+        self.assertIsNone(m.summary([])['over10Rate'])
     def test_validation_gates_need_real_own_coin_evidence(self):
         self.assertFalse(m.passes(m.summary([])))
         good=dict(dates=6,mape=.1,noChangeMape=.2,trendMape=.3,dateWinRate=.5)
@@ -59,5 +74,6 @@ class SpotLearningTests(unittest.TestCase):
             for a,b in zip(folds,folds[1:]):self.assertGreaterEqual((datetime.fromisoformat(b['origin'])-datetime.fromisoformat(a['origin'])).days,int(h))
         for coin in data['coins'].values():
             for h,r in coin['predictions'].items():
+                if r.get('trainedThrough'):self.assertLess(r['trainedThrough'],coin['asOf'])
                 if r['status']=='eligible':self.assertTrue(m.passes(r['validation']));self.assertTrue(m.passes(data['validation'][h]))
 if __name__=='__main__':unittest.main()

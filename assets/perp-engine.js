@@ -81,5 +81,21 @@ function projection(rows,ind,interval,bars){
  // Horizon only truncates this shared, uncalibrated trend scenario; it never changes entry rules.
  return Array.from({length:bars+1},(_,t)=>{const c=drift*tau*(1-Math.exp(-t/tau)),w=sigma*Math.sqrt(t);return {t,v:price*Math.exp(c),low:price*Math.exp(c-w),high:price*Math.exp(c+w)};});
 }
-const api={MS,HIGHER,HORIZONS,projection,candles,indicators,detect,levels,analyze};if(typeof module!=='undefined')module.exports=api;else root.PerpEngine=api;
+// Replay the displayed price projection, not an entry/exit strategy. No quote, funding or future candles enter each forecast.
+function projectionBacktest(rows,interval,bars,now=Date.now()){
+ const empty={n:0,directionN:0,mape:null,baselineMape:null,directionError:null,overHalfPercentRate:null,p90Error:null,firstAt:null,lastAt:null},step=MS[interval];
+ if(!HORIZONS[interval]?.includes(bars)||!Array.isArray(rows))return empty;
+ const samples=[];
+ for(let i=rows.length-bars-1;i>=59&&samples.length<24;i-=bars){
+  const past=rows.slice(0,i+1),target=rows[i+bars],window=rows.slice(0,i+bars+1);
+  if(window.some((r,j)=>!finite(r.close)||r.close<=0||!finite(r.end)||r.end>=now||j&&r.t-window[j-1].t!==step))continue;
+  const f=projection(past,indicators(past,interval),interval,bars).at(-1);if(!f)continue;
+  const predicted=f.v/past.at(-1).close-1,actual=target.close/past.at(-1).close-1;
+  samples.push({origin:past.at(-1).end,target:target.end,error:Math.abs(f.v/target.close-1),baseline:Math.abs(past.at(-1).close/target.close-1),direction:Math.abs(predicted)<1e-12?null:Math.sign(predicted)!==Math.sign(actual)});
+ }
+ if(!samples.length)return empty;
+ const errors=samples.map(s=>s.error).sort((a,b)=>a-b),direction=samples.filter(s=>s.direction!==null),p=.9*(errors.length-1),i=Math.floor(p),p90=errors[i]+(errors[Math.ceil(p)]-errors[i])*(p-i);
+ return {n:samples.length,directionN:direction.length,mape:mean(errors),baselineMape:mean(samples.map(s=>s.baseline)),directionError:direction.length?mean(direction.map(s=>Number(s.direction))):null,overHalfPercentRate:mean(errors.map(e=>Number(e>.005))),p90Error:p90,firstAt:samples.at(-1).origin,lastAt:samples[0].origin};
+}
+const api={MS,HIGHER,HORIZONS,projection,projectionBacktest,candles,indicators,detect,levels,analyze};if(typeof module!=='undefined')module.exports=api;else root.PerpEngine=api;
 })(typeof window!=='undefined'?window:globalThis);

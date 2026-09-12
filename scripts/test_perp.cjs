@@ -20,6 +20,19 @@ for(const [tf,horizons] of Object.entries(E.HORIZONS)){
  for(const h of horizons)assert.deepEqual(E.projection(rows,ind,tf,h),full.slice(0,h+1));
  assert(full.every(q=>q.low>0&&q.low<=q.v&&q.v<=q.high));
 }
+// Replays use the matching horizon, past-only candles, nonoverlapping targets and honest small samples.
+for(const tf of ['5m','15m','1d'])for(const h of E.HORIZONS[tf]){
+ const result=E.projectionBacktest(s.frames[tf],tf,h,now);
+ assert(result.n>0);assert(result.mape>=0);assert(result.directionError===null||result.directionError>=0&&result.directionError<=1);
+ assert.equal(result.n,Math.min(24,Math.floor((s.frames[tf].length-60)/h)));
+}
+const invalid=structuredClone(s.frames['5m']);invalid.splice(50,1);assert.equal(E.projectionBacktest(invalid,'5m',12,now).n,0);
+assert.equal(E.projectionBacktest(s.frames['5m'],'5m',999,now).n,0);
+const futureOnly=structuredClone(s.frames['5m']).map(r=>({...r,t:r.t+1e12,end:r.end+1e12}));assert.equal(E.projectionBacktest(futureOnly,'5m',12,now).n,0);
+const only=structuredClone(s.frames['5m'].slice(0,72)),past=only.slice(0,60),expected=E.projection(past,E.indicators(past,'5m'),'5m',12).at(-1).v;
+assert(Math.abs(E.projectionBacktest(only,'5m',12,now).mape-Math.abs(expected/only.at(-1).close-1))<1e-12);
+only.at(-1).close*=2;
+assert(Math.abs(E.projectionBacktest(only,'5m',12,now).mape-Math.abs(expected/only.at(-1).close-1))<1e-12); // Target mutation changes only scoring, not the forecast.
 // Exercise the actual page loader and interactions without requiring network access in CI.
 const nodes=new Map(),node=id=>nodes.get(id)||nodes.set(id,{innerHTML:'',textContent:'',value:'BTC',disabled:false,events:{},addEventListener(k,f){this.events[k]=f;}}).get(id);
 const buttons=['5m','15m','1d'].map(tf=>({dataset:{tf},addEventListener(k,f){this[k]=f},setAttribute(){}})),timers=[];let clock=now,fail=false;
@@ -34,7 +47,7 @@ const context={MarketVisuals:require('../assets/market-visuals.js'),PerpEngine:{
 }};
 vm.runInNewContext(fs.readFileSync('assets/perp-page.js','utf8'),context);
 setImmediate(()=>{
- let html=node('app').innerHTML;assert(html.includes('롱 조건 충족'));assert(html.includes('손절 기준'));assert(!/NaN|Infinity|undefined/.test(html));
+ let html=node('app').innerHTML;assert(html.includes('롱 조건 충족'));assert(html.includes('손절 기준'));assert(html.includes('과거 방향 오류율'));assert(html.includes('0.5% 초과 비율'));assert(!/NaN|Infinity|undefined/.test(html));
  for(const b of buttons){b.click();assert(node('app').innerHTML.includes(b.dataset.tf==='1d'?'일봉':b.dataset.tf==='15m'?'15분봉':'5분봉'));}
  buttons[0].click();aheadButtons.find(b=>b.dataset.ahead==='72').click();assert(node('app').innerHTML.includes('6시간 뒤 기준 시나리오'));clock+=120000;timers[1]();assert(node('app').innerHTML.includes('관망'));assert(!node('app').innerHTML.includes('롱 조건 충족'));
  fail=true;node('refresh').events.click();setImmediate(()=>{assert(node('app').innerHTML.includes('갱신하지 못해'));console.log('Perp: long/short candidates, stale/gap/cost guards, completed candles, 3 timeframe UI and failed refresh passed');});

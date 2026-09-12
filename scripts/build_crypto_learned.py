@@ -11,7 +11,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from build_forecasts import atomic_json
 ROOT=Path(__file__).resolve().parents[1]
 HORIZONS=(30,120,365)
-MODEL='spot-hgb-median-v1.1'
+MODEL='spot-hgb-median-v1.2'
 # Verified names are checked again in the response; unsupported tickers keep CoinGecko history.
 YAHOO={'BTC':('BTC-USD','bitcoin'),'ETH':('ETH-USD','ethereum'),'SOL':('SOL-USD','solana'),'BNB':('BNB-USD','bnb'),'XRP':('XRP-USD','xrp'),'DOGE':('DOGE-USD','dogecoin'),'LINK':('LINK-USD','chainlink'),'AVAX':('AVAX-USD','avalanche')}
 FEATURES=['return7','return30','return90','return180','vol30','vol90','volRatio','distance20','distance50','distance200','drawdown90','range90','upDays30','bitcoin30','bitcoin90','relativeBitcoin30']
@@ -39,7 +39,7 @@ def yahoo_rows(raw,ticker,name,today):
 def aligned(rows,cg):
     if not rows or not cg:return False
     target={r['date']:r['close'] for r in cg};overlap=[abs(r['close']/target[r['date']]-1) for r in rows[-60:] if r['date'] in target]
-    return len(overlap)>=20 and float(np.median(overlap))<.05 and max(overlap)<.25 
+    return len(overlap)>=20 and float(np.median(overlap))<.05 and max(overlap)<.25
 def histories(root,data,now,download=True):
     folder=root/'crypto/research-history';folder.mkdir(parents=True,exist_ok=True)
     today=now.date().isoformat();out={};errors=[];halt=False
@@ -89,7 +89,7 @@ def make_records(hist,h):
         for i in range(199,len(rows)):
             x=features(rows,i,btc)
             if x is None:continue
-            if i==len(rows)-1:latest[sym]=dict(x=x,asOf=rows[i]['date'],anchor=rows[i]['close'])
+            latest[sym]=dict(x=x,asOf=rows[i]['date'],anchor=rows[i]['close'])
             if i+h>=len(rows) or datetime.fromisoformat(rows[i]['date']).toordinal()%7:continue
             drift=max(-.002,min(.002,.25*(.6*x[0]/7+.4*x[1]/30)))
             records.append(dict(symbol=sym,date=rows[i]['date'],targetDate=rows[i+h]['date'],x=x,y=math.log(rows[i+h]['close']/rows[i]['close']),trend=drift*60*(1-math.exp(-h/60))))
@@ -100,13 +100,13 @@ def fit(records):
     model.fit(np.array([r['x'] for r in records]),np.array([r['y'] for r in records]));return model
 
 def summary(rows):
-    if not rows:return dict(n=0,dates=0,mape=None,noChangeMape=None,trendMape=None,directionAccuracy=None,dateWinRate=None)
+    if not rows:return dict(n=0,dates=0,mape=None,noChangeMape=None,trendMape=None,directionAccuracy=None,dateWinRate=None,over10Rate=None,over25Rate=None,medianError=None,p90Error=None)
     def metric(key):return float(np.mean([r[key] for r in rows]))
     dates=sorted({r['date'] for r in rows});wins=[]
     for d in dates:
         same=[r for r in rows if r['date']==d]
         means=[np.mean([r[k] for r in same]) for k in ('error','noChange','trendError')];wins.append(means[0]<min(means[1:]))
-    return dict(n=len(rows),dates=len(dates),mape=metric('error'),noChangeMape=metric('noChange'),trendMape=metric('trendError'),directionAccuracy=metric('direction'),dateWinRate=float(np.mean(wins)),firstDate=dates[0],lastDate=dates[-1])
+    return dict(n=len(rows),dates=len(dates),mape=metric('error'),noChangeMape=metric('noChange'),trendMape=metric('trendError'),directionAccuracy=metric('direction'),dateWinRate=float(np.mean(wins)),firstDate=dates[0],lastDate=dates[-1],over10Rate=float(np.mean([r['error']>.1 for r in rows])),over25Rate=float(np.mean([r['error']>.25 for r in rows])),medianError=float(np.median([r['error'] for r in rows])),p90Error=float(np.quantile([r['error'] for r in rows],.9)))
 
 def passes(m):
     return m['dates']>=6 and m['mape']<.95*min(m['noChangeMape'],m['trendMape']) and m['dateWinRate']>=.5
@@ -127,9 +127,16 @@ def research(hist,now):
             for r,v in zip(test,pred):
                 v=float(v);checks.append(dict(symbol=r['symbol'],date=origin,error=abs(math.exp(v-r['y'])-1),noChange=abs(math.exp(-r['y'])-1),trendError=abs(math.exp(r['trend']-r['y'])-1),direction=float((v>0)==(r['y']>0)),residual=r['y']-v))
         total=summary(checks);total['folds']=folds;total['passed']=passes(total);global_results[str(h)]=total
-        model=fit(records) if len(records)>=150 else None
+        current_models={}
         for sym,out in results.items():
             m=summary([r for r in checks if r['symbol']==sym]);current=latest.get(sym);reasons=[]
+            model=None;through=None
+            if current:
+                origin=current['asOf']
+                if origin not in current_models:
+                    mature=[r for r in records if r['targetDate']<origin]
+                    current_models[origin]=(fit(mature),max(r['targetDate'] for r in mature)) if len(mature)>=150 else (None,None)
+                model,through=current_models[origin]
             if not current or not model:reasons.append('해당 기간 학습에 필요한 완료 현물 이력 부족')
             if m['dates']<6:reasons.append('겹치지 않는 종목별 시험 시점 6개 미만')
             if not passes(total):reasons.append('전체 검증에서 단순 예측 대비 안정적 우위 미확인')
@@ -140,7 +147,7 @@ def research(hist,now):
                 own=[r['residual'] for r in checks if r['symbol']==sym]
                 if len(own)>=6:
                     low,high=np.quantile(own,[.1,.9]);prediction.update(lowLogReturn=lr+float(low),highLogReturn=lr+float(high))
-            out['predictions'][str(h)]=dict(status='eligible' if not reasons else 'withheld' if prediction else 'insufficient',forecast=prediction,validation=m,reasons=reasons)
+            out['predictions'][str(h)]=dict(status='eligible' if not reasons else 'withheld' if prediction else 'insufficient',forecast=prediction,validation=m,reasons=reasons,trainedThrough=through)
             if current:out.update(asOf=current['asOf'],anchor=current['anchor'],features=dict(zip(FEATURES,current['x'])))
     return dict(schemaVersion=1,model=MODEL,generatedAt=now.isoformat(),coins=results,validation=global_results,method='Pooled spot-only HGB conditional median; strictly mature labels before each test origin; non-overlapping test origins per horizon. No tuning on the test set.')
 

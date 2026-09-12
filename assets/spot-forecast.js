@@ -5,14 +5,15 @@ function rng(seed){let x=2166136261;for(const c of seed)x=Math.imul(x^c.charCode
 function inspect(e,h,now=Date.now()){
  const m=e.spotModel,r=m?.predictions?.[h],f=r?.forecast,age=(now-Date.parse(m?.asOf))/86400000,history=e.spotHistory?.at(-1),diff=Math.abs(e.spot?.price/m?.anchor-1),trainedAge=(now-Date.parse(e.modelGeneratedAt))/86400000;
  const valid=!!m&&m.asOf===history?.date&&age>=0&&age<=3&&trainedAge>=0&&trainedAge<=3&&finite(diff)&&diff<=.1&&finite(f?.logReturn)&&finite(f?.base)&&f.base>0;
- const eligible=valid&&r?.status==='eligible';
- return {eligible,record:r,model:m,forecast:eligible?f:null,reason:!m?'학습 결과를 확인할 수 없습니다':!valid&&r?.forecast?'예측과 최신 현물 날짜·가격을 다시 확인해야 합니다':(r?.reasons||[]).join(' · ')||'과거 검증 기준 통과'};
+ const rawValid=finite(m?.anchor)&&m.anchor>0&&finite(f?.base)&&f.base>0&&finite(f?.logReturn)&&Math.abs(Math.log(f.base/m.anchor)-f.logReturn)<1e-6&&Number.isFinite(Date.parse(m?.asOf))&&Date.parse(m.asOf)<=now;
+ const eligible=valid&&r?.status==='eligible',current=valid;
+ return {eligible,current,record:r,model:m,forecast:rawValid?f:null,reason:!m?'학습 결과를 확인할 수 없습니다':!rawValid?'유효한 연구 전망 자료가 없습니다':!current?'이전 기준 전망 · 현재 가격·날짜와 차이가 있습니다':(r?.reasons||[]).join(' · ')||'과거 검증 기준 통과'};
 }
 const cache=new WeakMap();
 function simulate(e){
- const state=[30,120,365].map(h=>inspect(e,h)),key=state.map(s=>s.eligible?'1':'0').join('')+'|'+e.spot?.price;
+ const state=[30,120,365].map(h=>inspect(e,h)),key=state.map(s=>s.forecast?.logReturn??'none').join('|')+'|'+e.spot?.price;
  if(cache.get(e)?.key===key)return cache.get(e).value;
- const anchor=e.spot?.price,history=e.spotHistory||[],returns=[];
+ const research=state.some(s=>s.forecast),anchor=research?e.spotModel.anchor:e.spot?.price,asOf=research?e.spotModel.asOf:null,history=(e.spotHistory||[]).filter(r=>!asOf||r.date<=asOf),returns=[];
  if(!finite(anchor)||anchor<=0)return null;
  for(let i=Math.max(1,history.length-120);i<history.length;i++){
   if(Date.parse(history[i].date)-Date.parse(history[i-1].date)!==86400000)return null;
@@ -20,8 +21,8 @@ function simulate(e){
  }
  if(returns.length<60)return null;
  const mean=returns.reduce((s,r)=>s+r,0)/returns.length,random=rng(e.symbol+'|'+history.at(-1).date+'|spot-bootstrap-v2');
- // No estimated trend where the model is withheld. This is a neutral stress reference, not a forecast.
- const knots=[{t:0,v:0},...[30,120,365].map((t,i)=>({t,v:state[i].eligible?state[i].forecast.logReturn:0}))];
+ // Display numerically valid research targets regardless of validation grade, on their ORIGINAL reference date and price.
+ const knots=[{t:0,v:0}];for(const [i,t] of [30,120,365].entries())knots.push({t,v:state[i].forecast?state[i].forecast.logReturn:knots.at(-1).v});
  const drift=t=>{const b=knots.findIndex(k=>k.t>=t);if(b<=0)return 0;const a=knots[b-1],z=knots[b];return a.v+(z.v-a.v)*(t-a.t)/(z.t-a.t)};
  const paths=[];
  for(let n=0;n<400;n++){
@@ -33,7 +34,7 @@ function simulate(e){
  const bands=Array.from({length:366},(_,t)=>({t,base:quantile(paths.map(p=>p[t]),.5),bear:quantile(paths.map(p=>p[t]),.1),bull:quantile(paths.map(p=>p[t]),.9),ai:anchor*Math.exp(drift(t))}));
  // Fixed seeded samples across ALL horizon buttons; endpoints remain free, never bridged to a target.
  const samples=[paths[7],paths[83],paths[219]];
- const value={bands,samples,paths,state};cache.set(e,{key,value});return value;
+ const value={bands,samples,paths,state,anchor,asOf};cache.set(e,{key,value});return value;
 }
 function path(e,h,style='center'){
  const s=simulate(e);if(!s)return [];
