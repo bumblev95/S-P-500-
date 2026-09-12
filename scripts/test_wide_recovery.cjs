@@ -1,0 +1,17 @@
+'use strict';
+const assert=require('node:assert/strict'),P=require('./paper_engine.cjs'),S=require('../assets/simulation-signals.js');
+const now=1780000000000,q={side:'long',price:100,stop:99.5,target:101,atr:1,holdBars:8,reason:'fixture'},wide=S.wide(q);
+assert.equal(wide.stop,98);assert.equal(wide.target,104);assert.equal(wide.holdBars,32);assert.equal(q.stop,99.5);assert.deepEqual(S.wide(wide),wide);
+const a=P.create('crypto',now,'wideRecovery');P.riskState(a,now,P.WIDE);a.cash=8900;P.riskState(a,now+86400000,P.WIDE);
+assert.equal(a.riskMultiplier,.5);assert(!a.drawdownHalted);
+const bar={t:now+86400000,end:now+86400000+899999,open:100,high:101,low:99,close:100,volume:100};
+assert.equal(P.enter(a,{...wide,id:'test',symbol:'BTC',createdAt:now,at:now},bar,P.WIDE,now),null);
+assert(a.positions[0].riskBudget<=44.5);assert(a.positions[0].leverage===5);
+const reduced=P.create('crypto',now,'wideRecovery');reduced.cash=7900;P.riskState(reduced,now,P.WIDE);assert.equal(reduced.riskMultiplier,.25);reduced.cash=9600;P.riskState(reduced,now+86400000,P.WIDE);assert.equal(reduced.riskMultiplier,1);
+// Published 8-hour funding does not create seven fictional hourly payments.
+const h=3600000,t=Math.floor(now/(8*h))*8*h,source={fundingSchedule:'published',funding:[{time:t,rate:.001,intervalHours:8},{time:t+8*h,rate:.002,intervalHours:8}]};
+const f=P.create('crypto',t,'wideRecovery'),p={side:'long',entryAt:t+1,fundingThrough:t+1,qty:2,margin:100,funding:0};
+P.funding(f,p,t+8*h,source,100);assert.equal(p.funding,.4);assert.equal(f.estimatedFundingHours,0);assert.equal(p.margin,99.6);
+const gap={fundingSchedule:'published',funding:[{time:t,rate:.001,intervalHours:8},{time:t+16*h,rate:.002,intervalHours:8}]};
+const g=P.create('crypto',t,'wideRecovery'),gp={...p,entryAt:t+1,fundingThrough:t+1,margin:100,funding:0};P.funding(g,gp,t+8*h,gap,100);assert(g.estimatedFundingHours>0);
+console.log('Wide stops, independent risk sizing, 10/20% drawdown recovery and 8-hour funding chronology passed');

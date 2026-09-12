@@ -2,10 +2,12 @@
 const S=require('../assets/simulation-signals.js'),E=require('../assets/perp-engine.js');
 const CONFIG={crypto:{risk:.005,maxPositions:3,maxWeight:1/3,fee:.00045,slip:.0002,step:900000,warmup:65},stocks:{risk:.01,maxPositions:5,maxWeight:.2,fee:.0005,slip:.0005,step:86400000,warmup:205}};
 const LEVERAGED={...CONFIG.crypto,profile:'leverage5x3x',profileVersion:'isolated-5x3x-risk-v1',leverage:{BTC:5,ETH:3,SOL:3},maxWeight:.2,maxMargin:.4,maxNotional:2,maxOpenRisk:.015,dailyLoss:.02,drawdownLimit:.10,lossStreak:3,cooldown:21600000,maintenance:.025};
-function config(a){if(a.profile&&a.profile!=='baseline'&&a.profile!=='leverage5x3x')throw Error('Unknown account profile');if(a.profile==='leverage5x3x'&&(a.asset!=='crypto'||a.profileVersion!==LEVERAGED.profileVersion))throw Error('Leverage profile version changed');return a.profile==='leverage5x3x'?LEVERAGED:CONFIG[a.asset];}
+const WIDE={...LEVERAGED,profile:'wideRecovery',profileVersion:'isolated-wide-recovery-v1',risk:.01,maxOpenRisk:.03,dailyLoss:.03,recovery:true,stopAtr:2,holdBars:32};
+const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE};
+function config(a){if(a.profile&&a.profile!=='baseline'&&!PROFILES[a.profile])throw Error('Unknown account profile');const cfg=PROFILES[a.profile];if(cfg&&(a.asset!=='crypto'||a.profileVersion!==cfg.profileVersion))throw Error('Leverage profile version changed');return cfg||CONFIG[a.asset];}
 const finite=Number.isFinite,side=p=>p.side==='long'?1:-1;
 const copy=x=>JSON.parse(JSON.stringify(x));
-function create(asset,at,profile){return {schemaVersion:1,version:S.VERSION,asset,...(profile?{profile,profileVersion:LEVERAGED.profileVersion}:{}),createdAt:at,initial:10000,cash:10000,positions:[],pending:[],trades:[],events:[],curve:[],marks:{},lastProcessed:null,fees:0,funding:0,estimatedFundingHours:0,slippage:0,warnings:[],signals:[],highWater:10000,maxDrawdown:0,benchmark:null};}
+function create(asset,at,profile){return {schemaVersion:1,version:S.VERSION,asset,...(profile?{profile,profileVersion:PROFILES[profile]?.profileVersion}:{}),createdAt:at,initial:10000,cash:10000,positions:[],pending:[],trades:[],events:[],curve:[],marks:{},lastProcessed:null,fees:0,funding:0,estimatedFundingHours:0,slippage:0,warnings:[],signals:[],highWater:10000,maxDrawdown:0,benchmark:null};}
 function liquidation(p,cfg){return (p.entry-side(p)*p.margin/p.qty)/(1-side(p)*cfg.maintenance);}
 function riskState(a,at,cfg){
  if(!cfg.profile)return;
@@ -13,8 +15,10 @@ function riskState(a,at,cfg){
  if(a.riskDay!==day){a.riskDay=day;a.dayStartEquity=eq;a.dayBlocked=false;}
  if(eq<=a.dayStartEquity*(1-cfg.dailyLoss))a.dayBlocked=true;
  a.riskHighWater=Math.max(a.riskHighWater||10000,eq);
- if(eq<=a.riskHighWater*(1-cfg.drawdownLimit))a.drawdownHalted=true;
- a.riskStatus=a.drawdownHalted?'고점 대비 10% 하락 · 신규 진입 중단':a.dayBlocked?'UTC 하루 손실 2% · 다음 날까지 진입 중단':at<(a.cooldownUntil||0)?'3연속 손실 · 6시간 휴식':'위험 한도 내 · 신호 대기';
+ const dd=1-eq/a.riskHighWater;
+ if(cfg.recovery)a.riskMultiplier=dd>=.20?.25:dd>=.10?.5:1;
+ else if(eq<=a.riskHighWater*(1-cfg.drawdownLimit))a.drawdownHalted=true;
+ a.riskStatus=a.drawdownHalted?'고점 대비 10% 하락 · 신규 진입 중단':a.dayBlocked?'UTC 하루 손실 '+Math.round(cfg.dailyLoss*100)+'% · 다음 날까지 진입 중단':at<(a.cooldownUntil||0)?'3연속 손실 · 6시간 휴식':cfg.recovery&&a.riskMultiplier<1?'낙폭 회복 모드 · 거래 위험 '+(cfg.risk*a.riskMultiplier*100)+'%':'위험 한도 내 · 신호 대기';
 }
 function equity(a){return a.cash+a.positions.reduce((s,p)=>s+p.margin+side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry),0);}
 function event(a,type,at,data){const e={id:a.asset+':'+a.events.length,type,at,...data};a.events.push(e);return e;}
@@ -33,14 +37,16 @@ function funding(a,p,through,source,mark,uncertain=false){
  if(a.asset!=='crypto')return;
  let hour=Math.floor(Math.max(p.entryAt,p.fundingThrough)/3600000)*3600000;
  const rates=source._funding||(source._funding=new Map((source.funding||[]).map(r=>[Math.floor(r.time/3600000)*3600000,r])));
+ if(source.fundingSchedule==='published'&&!source._nonFundingHours){source._nonFundingHours=new Set();const rows=source.funding||[];for(let i=1;i<rows.length;i++){const p=rows[i-1],n=rows[i];if(n.time-p.time===n.intervalHours*3600000)for(let h=p.time+3600000;h<n.time;h+=3600000)source._nonFundingHours.add(h);}}
  for(;hour<=through;hour+=3600000){
   const observed=rates.get(hour),t=observed?.time??hour;
   if(t<=p.entryAt||t<=p.fundingThrough||t>through)continue;
+  if(!observed&&source._nonFundingHours?.has(hour))continue;
   let rate=observed?.rate,estimated=!finite(rate);
   // Missing rates are charged conservatively, never silently replaced by zero.
   let cost=estimated?p.qty*mark*.0001:side(p)*p.qty*mark*rate;
   if(uncertain&&cost<0)cost=0;
-  if(a.profile==='leverage5x3x')p.margin-=cost;else a.cash-=cost;a.funding+=cost;p.funding+=cost;
+  if(PROFILES[a.profile])p.margin-=cost;else a.cash-=cost;a.funding+=cost;p.funding+=cost;
   if(estimated){a.estimatedFundingHours++;warn(a,'일부 펀딩 누락: 시간당 0.01% 지급 가정 포함');}
  }
  p.fundingThrough=through;
@@ -52,14 +58,14 @@ function enter(a,order,bar,cfg,recordedAt){
  const sign=side(order),entry=bar.open*(1+sign*cfg.slip);
  if(Math.abs(bar.open-order.price)>.5*order.atr)return '신호 가격에서 0.5 ATR 이상 이탈';
  const stopFill=order.stop*(1-sign*cfg.slip),targetFill=order.target*(1-sign*cfg.slip);
- const risk=sign*(entry-stopFill)+cfg.fee*(entry+stopFill)+(a.asset==='crypto'?entry*.0001*2:0),reward=sign*(targetFill-entry)-cfg.fee*(entry+targetFill);
+ const risk=sign*(entry-stopFill)+cfg.fee*(entry+stopFill)+(a.asset==='crypto'?entry*.0001*(cfg.recovery?order.holdBars/4:2):0),reward=sign*(targetFill-entry)-cfg.fee*(entry+targetFill);
  if(!(risk>0)||reward/risk<1.3||sign*(entry-order.stop)<=0||sign*(order.target-entry)<=0)return '비용 반영 손익비 또는 가격 조건 미충족';
  const eq=equity(a);if(eq<=0||a.cash<=0)return '가상 자본 부족';
  const leverage=cfg.profile?cfg.leverage[order.symbol]:1;if(!leverage)return '지원하지 않는 배율 종목';
- let qty=Math.min(eq*cfg.risk/risk,eq*cfg.maxWeight*leverage/entry,a.cash/(entry*(1/leverage+cfg.fee)));
+ let qty=Math.min(eq*cfg.risk*(a.riskMultiplier||1)/risk,eq*cfg.maxWeight*leverage/entry,a.cash/(entry*(1/leverage+cfg.fee)));
  if(cfg.profile){
   const margins=a.positions.reduce((s,p)=>s+Math.max(0,p.margin),0),notional=a.positions.reduce((s,p)=>s+p.qty*(a.marks[p.symbol]??p.entry),0),openRisk=a.positions.reduce((s,p)=>s+(p.riskBudget||0),0);
-  qty=Math.min(qty,Math.max(0,eq*cfg.maxMargin-margins)*leverage/entry,Math.max(0,eq*cfg.maxNotional-notional)/entry,Math.max(0,eq*cfg.maxOpenRisk-openRisk)/risk);
+  qty=Math.min(qty,Math.max(0,eq*cfg.maxMargin-margins)*leverage/entry,Math.max(0,eq*cfg.maxNotional-notional)/entry,Math.max(0,eq*cfg.maxOpenRisk*(a.riskMultiplier||1)-openRisk)/risk);
   const liq=liquidation({entry,side:order.side,margin:entry/leverage,qty:1},cfg);
   if(sign*(order.stop-liq)<Math.max(2*order.atr,entry*.01))return '손절과 가상 청산 기준 사이 여유 부족';
  }
@@ -83,7 +89,7 @@ function indexMarkets(market,asset){
 function signalAt(m,symbol,index,asset,all,provider){
  const rows=m.rows.slice(Math.max(0,index-260),index+1),last=rows.at(-1);
  if(provider)return provider(symbol,rows,asset);
- if(asset==='crypto')return S.crypto(rows,(m.source.frames?.['1h']||[]).filter(r=>r.end<=last.end));
+ if(asset==='crypto')return S.crypto(rows,m.source.frames?.['1h']||[]);
  if(symbol==='SPY')return {side:null,reason:'시장 비교 기준',at:last.end};
  return S.stock(rows,(all.SPY?.rows||[]).filter(r=>r.end<=last.end).slice(-260));
 }
@@ -104,6 +110,7 @@ function signalList(a,markets,asset,at,now,mode,provider){
  for(const [symbol,m] of Object.entries(markets)){
   let i=m.byTime.get(at);if(i===undefined)continue;
   const r=m.rows[i];let q=signalAt(m,symbol,i,asset,markets,provider);
+  if(a.profile==='wideRecovery')q=S.wide(q);
   if(mode==='forward'){
    const age=now-r.end,limit=asset==='crypto'?900000:5*86400000;
    if(age<0||age>limit)q={side:null,at:r.end,reason:'자료가 오래되어 신규 신호 보류'};
@@ -199,4 +206,4 @@ function report(a){
  }
  return {...a,equity:equity(a),return:equity(a)/a.initial-1,realized:net.reduce((s,x)=>s+x,0),unrealized:a.positions.reduce((s,p)=>s+side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry),0),winRate:net.length?wins.length/net.length:null,profitFactor:grossLoss?grossProfit/grossLoss:null,averageTrade:net.length?net.reduce((s,x)=>s+x,0)/net.length:null,patternResults:groups,positions:a.positions.map(p=>({...p,mark:a.marks[p.symbol]??p.entry,unrealized:side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry)}))};
 }
-module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,config,liquidation,riskState};
+module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,WIDE,config,liquidation,riskState};

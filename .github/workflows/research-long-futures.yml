@@ -1,0 +1,70 @@
+name: Research long-history futures
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/collect_long_futures.py'
+      - 'scripts/train_long_futures.py'
+      - 'scripts/test_long_futures.py'
+      - '.github/workflows/research-long-futures.yml'
+  schedule:
+    - cron: '25 5 8 * *'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: public-paper-accounts
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      PAPER_LONG_CACHE: ${{ runner.temp }}/paper-long-cache
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install neural research dependencies
+        run: pip install -r scripts/requirements-pattern-ml.txt
+      - name: Set archive cache month
+        id: month
+        run: echo "key=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PAPER_LONG_CACHE }}
+          key: long-futures-v1-${{ steps.month.outputs.key }}
+          restore-keys: long-futures-v1-
+      - name: Verify risk rules and calendar separation
+        run: |
+          node scripts/test_paper_engine.cjs
+          node scripts/test_leveraged.cjs
+          node scripts/test_wide_recovery.cjs
+          python -m unittest discover -s scripts -p test_long_futures.py
+      - name: Collect all available completed monthly futures archives
+        run: python scripts/collect_long_futures.py
+      - name: Train expanding history and evaluate later calendar periods
+        run: python scripts/train_long_futures.py
+      - name: Refresh public paper report with long research
+        run: node scripts/build_simulation.cjs
+      - name: Publish preserved research and paper account updates
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add simulation
+          git diff --cached --quiet || git commit -m 'Preserve long-history neural evaluation and wide-stop account report'
+          git pull --rebase origin main
+          git push
+      - name: Refresh public page
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

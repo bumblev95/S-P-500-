@@ -204,3 +204,79 @@ a separate prospective paper experiment. Failed and losing results remain visibl
 
 Sources: [Hyperliquid margin definitions](https://hyperliquid.gitbook.io/hyperliquid-docs/trading/margining),
 [scikit-learn supervised neural networks](https://scikit-learn.org/stable/modules/neural_networks_supervised.html).
+
+## Wider stops and drawdown recovery experiment
+
+`wide/` is another independent $10,000 account, version
+`isolated-wide-recovery-v1`. Earlier accounts are preserved. Entry leverage is
+still BTC 5x and ETH/SOL 3x. Account risk percentage is not price stop distance.
+The initial comparison changes several parameters together, not a causal test
+of any single parameter:
+
+* Stop distance: maximum of the original structural distance and 2 ATR.
+* Target: twice that initial distance; maximum hold: 32 fifteen-minute bars
+  (8 hours), versus the original 8 bars (2 hours).
+* Base planned account risk per trade: 1%; aggregate open entry risk: 3%.
+* Daily entry pause: 3% UTC-day loss; three losses still trigger six-hour rest.
+* At >=10% drawdown from the preserved observed risk high-water mark, multiply
+  both risk budgets by 0.5; at >=20%, multiply by 0.25. Existing positions are
+  not enlarged. When drawdown falls below those thresholds, budgets recover
+  by the same stages. There is no permanent 10% stop in this new experiment.
+* Collateral, exposure, liquidation and gap assumptions are otherwise retained.
+  Funding risk reserve used for sizing now covers the eight-hour hold window.
+
+These are hypotheses, not optimized or validated principles. Wider stops can
+produce larger losses, fewer units or longer exposure. A 10% capital loss needs
+11.11% subsequent profit to recover; recovery is not guaranteed. The observed
+first old leverage replay had 35 stop exits, 49 time exits and 18 target exits,
+so holding-time exits are also tested explicitly.
+
+## Multi-year futures research
+
+`collect_long_futures.py` reads the public Binance USD-M monthly archive listing,
+downloads every available completed month for BTCUSDT/ETHUSDT/SOLUSDT 15-minute
+klines and funding rates, and verifies official SHA-256 CHECKSUM files. At this
+experiment's launch the available monthly candle history begins January 2020
+for BTC/ETH and September 2020 for SOL. No pre-existence decades of crypto
+futures are synthesized. Listing, actual dates, row counts, gaps and checksums
+are published in each manifest. First-seen archives are cached and verified;
+unavailable files cause the research to fail rather than silently use a shorter
+history. Only complete groups of four 15-minute candles form a 1-hour candle.
+
+The long archive is separate from the live Hyperliquid market. Funding follows
+the archive's actual published settlement times and intervals. Intervening
+hours count as no settlement only when consecutive published records confirm
+the interval. Missing expected intervals retain explicit conservative charges;
+an 8-hour settlement is not incorrectly charged every hour. Trading fees remain
+the same fixed research assumption, not historical Binance account fee tiers.
+
+`train_long_futures.py` fits an expanding-history MLP (16, 8), L2 alpha 1, seed
+42, fixed 1000 L-BFGS iterations and training-only feature scaling. The target
+is positive net candidate P&L under the wider-stop experiment. Evaluation in
+2024 uses pre-2023 training and 2023 selection; 2025 uses pre-2024 training and
+2024 selection; 2026 uses pre-2025 training and 2025 selection. Outcome windows
+are purged with an additional 32-bar embargo. Threshold choices 0.5/0.6/0.7
+require at least 30 selection samples and are chosen before the next-year
+evaluation. Each year's model, warning, comparison and dates are preserved.
+
+Reports compare Brier errors against logistic and training-base-rate models,
+and use the actual paper engine to evaluate filtered and unfiltered candidates
+in separate $10,000 accounts per evaluation segment. Segment returns must not
+be added or presented as one continuous equity curve. Future monthly updates
+preserve completed-year results and evaluate only dates after the last
+evaluated-through time for incomplete years; earlier segments remain embedded.
+Minimum screening includes 100 closed neural trades per segment, positive net
+returns across segments, no worse drawdown, superiority to simple predictive
+and trading controls, and no convergence warning. Data gaps are disclosed.
+These are screening rules, not proof of future profitability. No automatic
+promotion into an operating account occurs.
+
+`Research long-history futures` runs after relevant source updates, on manual
+dispatch, and monthly on the 8th after publication of the prior month's files.
+It allows 90 minutes, caches reproducible raw inputs, and preserves reports,
+manifests and model weights in git. Heavy research shares the account publisher
+lock to avoid conflicting balance writes; scheduled paper updates may be
+delayed during that run. The first result is retrospective research, not a
+prospective trading record. Monthly archive age is visible in the data dates.
+
+Source: [Binance public data specification and checksums](https://github.com/binance/binance-public-data).

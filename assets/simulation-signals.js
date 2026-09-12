@@ -3,11 +3,13 @@
 const E=typeof module!=='undefined'?require('./perp-engine.js'):root.PerpEngine;
 const VERSION='paper-pattern-portfolio-v1',STEP=900000;
 const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+function completed(rows,end,limit=240){let lo=0,hi=rows.length;while(lo<hi){const mid=(lo+hi)>>1;if(rows[mid].end<=end)lo=mid+1;else hi=mid;}return rows.slice(Math.max(0,lo-limit),lo);}
+function wide(q){if(!q.side||q.wide)return q;const sign=q.side==='long'?1:-1,risk=Math.max(Math.abs(q.price-q.stop),2*q.atr);return {...q,wide:true,stop:q.price-sign*risk,target:q.price+sign*2*risk,holdBars:32,reason:q.reason+' · 넓은 손절·8시간 실험'};}
 function crypto(rows,higher){
  const last=rows.at(-1),wait=reason=>({side:null,reason,at:last?.end});
  if(rows.length<65||!last)return wait('완료된 15분봉 65개 필요');
  const recent=rows.slice(-65);if(recent.some((r,i)=>i&&r.t-recent[i-1].t!==STEP))return wait('15분봉 누락');
- higher=higher.filter(r=>r.end<=last.end).slice(-240);
+ higher=completed(higher,last.end);
  if(higher.length<60||last.end-higher.at(-1).end>=3600000)return wait('완료된 1시간봉 자료 확인 필요');
  const a=E.indicators(rows.slice(-240),'15m'),hi=E.indicators(higher,'1h');
  if(!a||!hi||!(a.atr>0)||a.atr/last.close>.035)return wait('변동성 조건 미충족');
@@ -51,5 +53,5 @@ function stock(rows,market){
  const risk=2*a.atr;if(risk/last.close>.12)return wait('종목 손절 폭 12% 초과');
  return {side:'long',pattern:'portfolioTrend',reason:pullback?'상승 추세 · 20일선 눌림 반등':'상승 추세 · 20일 종가 돌파',at:last.end,price:last.close,stop:last.close-risk,target:last.close+2*risk,atr:a.atr,rank:momentum/(a.atr/last.close),holdBars:84};
 }
-const api={VERSION,STEP,crypto,stock};if(typeof module!=='undefined')module.exports=api;else root.SimulationSignals=api;
+const api={VERSION,STEP,crypto,stock,completed,wide};if(typeof module!=='undefined')module.exports=api;else root.SimulationSignals=api;
 })(typeof window!=='undefined'?window:globalThis);
