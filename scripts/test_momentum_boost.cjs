@@ -74,9 +74,9 @@ async function uiTest(){
  const data={generatedAt:now,config:P.CONFIG,...built.accounts,momentumBoostStudy:built.study,preview:{crypto:{}},notes:[]};
  const source=fs.readFileSync(path.join(__dirname,'../assets/simulation-page.js'),'utf8');
  const render=async query=>{vm.runInNewContext(source,{document,location:{search:query},URLSearchParams,history:{replaceState(){}},fetch:async()=>({ok:true,json:async()=>data})});await new Promise(resolve=>setImmediate(resolve));return nodes.simulationApp.innerHTML;};
- let html=await render('');assert.ok(html.includes('새 기본 · 동시 1종목 + ML'));assert.ok(html.includes('0 / 1개 보유'));assert.ok(html.includes('같은 날 시작한 세 계좌'));assert.ok(html.includes('ML 필터 점수'));
+ let html=await render('?profile=momentumBoostOne');assert.ok(html.includes('이전 · 동시 1종목 + ML'));assert.ok(html.includes('0 / 1개 보유'));assert.ok(html.includes('같은 날 시작한 세 계좌'));assert.ok(html.includes('ML 필터 점수'));
  html=await render('?profile=momentumBreakoutThree');assert.ok(html.includes('0 / 3개 보유'));
- delete data.momentumBoostOne;html=await render('');assert.ok(html.includes('첫 자동 갱신'));assert.ok(html.includes('기존 6 ATR 계좌 보기'));
+ delete data.momentumBoostOne;html=await render('?profile=momentumBoostOne');assert.ok(html.includes('첫 자동 갱신'));assert.ok(html.includes('기존 6 ATR 계좌 보기'));
  console.log('PASS: sklearn parity, entry gates and controls, one-position cap, recorded-time fills, fallback rank, immutable study/decision ledgers, model locks, default UI and position counts');
 }
 uiTest().catch(e=>{console.error(e);process.exitCode=1});
