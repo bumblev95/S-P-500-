@@ -11,6 +11,21 @@ class EnvironmentResearch(unittest.TestCase):
     def test_metric_actual_price_denominator(self):
         r=[dict(origin='2020-01-01',y=2.,environment=1.)]
         self.assertEqual(m.score(r,'environment')['mape'],.5)
+    def test_log_error_treats_reciprocal_misses_equally(self):
+        rows=[dict(origin='2020-01-01',y=1.,balanced=2.),dict(origin='2020-01-02',y=1.,balanced=.5)]
+        result=m.score(rows,'balanced')
+        self.assertAlmostEqual(result['logBias'],0.)
+        self.assertAlmostEqual(result['logMae'],np.log(2))
+    def test_calibration_ignores_unrealized_outcomes(self):
+        rows=[dict(origin=f'{year}-01-01',targetDate=f'{year}-12-31',y=1.,balanced=1.1) for year in (2020,2021,2022) for _ in range(10)]
+        before=m.calibration(rows,'2023-01-01')
+        rows.append(dict(origin='2023-01-01',targetDate='2023-12-31',y=999,balanced=.001))
+        self.assertEqual(before,m.calibration(rows,'2023-01-01'))
+        self.assertIsNone(m.calibration(rows,'2022-01-01'))
+    def test_interval_score_penalizes_width_and_misses(self):
+        def score(lo,hi,y=1.):return m.interval_score([dict(origin='2020-01-01',y=y,range=dict(low=lo,high=hi))])
+        self.assertLess(score(.9,1.1)['logIntervalScore'],score(.1,10)['logIntervalScore'])
+        self.assertEqual(score(.9,1.1,2.)['coverage'],0.)
     def test_selection_cannot_see_later_outcomes(self):
         rows=[]
         for year in range(2000,2016):
@@ -39,7 +54,12 @@ class EnvironmentResearch(unittest.TestCase):
                     self.assertLess(f['trainTargetThrough'],f['origin']);self.assertGreater(f['origin'],end);end=f['targetThrough']
                 for f in v['predictions'].values():
                     self.assertLess(f['trainTargetThrough'],f['asOf']);self.assertLess(f['contextThrough'],f['asOf'])
+                    if f.get('range'):self.assertLess(f['range']['targetThrough'],f['asOf'])
+                    if f.get('inputThrough'):self.assertLess(f['inputThrough'],f['asOf'])
                 for r in v['outcomes']:self.assertLess(r['contextThrough'],r['origin'])
+                for r in v['outcomes']:
+                    if r.get('range'):self.assertLess(r['range']['targetThrough'],r['origin'])
+                    if r.get('inputThrough'):self.assertLess(r['inputThrough'],r['origin'])
                 c=v['comparison']
                 if c['status']=='research':self.assertLess(c['selectionTargetThrough'],c['evaluationStart'])
 if __name__=='__main__':unittest.main()

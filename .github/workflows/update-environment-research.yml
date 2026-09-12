@@ -1,5 +1,12 @@
 name: Update environment model research
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_environment_research.py'
+      - 'scripts/build_research_inputs.py'
+      - 'scripts/test_research_inputs.py'
+      - '.github/workflows/update-environment-research.yml'
   workflow_dispatch:
   schedule:
     - cron: '35 2 * * 0'
@@ -19,10 +26,14 @@ jobs:
           python-version: '3.11'
       - uses: actions/cache@v4
         with:
-          path: research/history
+          path: |
+            research/history
+            research/source-cache
           key: environment-history-${{ github.run_id }}
           restore-keys: environment-history-
       - run: pip install -r scripts/requirements-crypto-ml.txt
+      - run: python -m unittest discover -s scripts -p test_research_inputs.py
+      - run: python scripts/build_research_inputs.py
       - run: python scripts/build_environment_research.py
       - run: python -m unittest discover -s scripts -p test_environment_research.py
       - run: node --check assets/environment-research.js && node scripts/test_environment_page.cjs
@@ -30,7 +41,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add research/environment.json
+          git add research/environment.json research/inputs.json research/issued.json
           git diff --cached --quiet || git commit -m 'Update public environment model comparison'
           git pull --rebase origin main
           git push
