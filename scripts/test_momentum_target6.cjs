@@ -54,11 +54,11 @@ async function uiTest(){
  const nodes={},document={getElementById(id){return nodes[id]||(nodes[id]={innerHTML:'',addEventListener(){}})},querySelectorAll(){return []}};
  const data={generatedAt:now,config:P.CONFIG,momentum:built,momentumTarget6:built,preview:{crypto:{}},notes:[]};
  const source=fs.readFileSync(path.join(__dirname,'../assets/simulation-page.js'),'utf8');
- vm.runInNewContext(source,{document,location:{search:''},URLSearchParams,history:{replaceState(){}},fetch:async()=>({ok:true,json:async()=>data})});
+ vm.runInNewContext(source,{document,location:{search:'?profile=momentum14Target6'},URLSearchParams,history:{replaceState(){}},fetch:async()=>({ok:true,json:async()=>data})});
  await new Promise(resolve=>setImmediate(resolve));
- assert.ok(nodes.simulationApp.innerHTML.includes('새 기본 · 모멘텀 + 6 ATR'));assert.ok(nodes.simulationApp.innerHTML.includes('momentum-target6/state.json'));assert.ok(nodes.simulationApp.innerHTML.includes('$10,000.00'));
+ assert.ok(nodes.simulationApp.innerHTML.includes('기존 · 모멘텀 + 6 ATR'));assert.ok(nodes.simulationApp.innerHTML.includes('momentum-target6/state.json'));assert.ok(nodes.simulationApp.innerHTML.includes('$10,000.00'));
  delete data.momentumTarget6;
- vm.runInNewContext(source,{document,location:{search:''},URLSearchParams,history:{replaceState(){}},fetch:async()=>({ok:true,json:async()=>data})});
+ vm.runInNewContext(source,{document,location:{search:'?profile=momentum14Target6'},URLSearchParams,history:{replaceState(){}},fetch:async()=>({ok:true,json:async()=>data})});
  await new Promise(resolve=>setImmediate(resolve));assert.ok(nodes.simulationApp.innerHTML.includes('첫 자동 갱신'));
  console.log('PASS: long/short targets, stop priority, observed fills, frozen targets, unchanged old profile, independent account/ledger, prefix invariance and new default UI');
 }

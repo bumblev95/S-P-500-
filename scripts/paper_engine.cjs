@@ -9,6 +9,11 @@ const MOMENTUM={...TREND,profile:'momentum14',profileVersion:'momentum14-forward
 const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE,trendResearch:TREND,trendResearchStress:TREND_STRESS,momentum14:MOMENTUM};
 const MOMENTUM_TARGET6={...MOMENTUM,profile:'momentum14Target6',profileVersion:'momentum14-target6-forward-v1',targets:true,targetAtr:6,targetExitReason:'익절 · 6 ATR 목표'};
 PROFILES.momentum14Target6=MOMENTUM_TARGET6;
+// Independent forward study: same breakout/exits, separate position-count and ML controls.
+const MOMENTUM_BREAKOUT_THREE={...MOMENTUM,profile:'momentumBreakoutThree',profileVersion:'momentum-breakout3-three-forward-v1',maxPositions:3};
+const MOMENTUM_BREAKOUT_ONE={...MOMENTUM,profile:'momentumBreakoutOne',profileVersion:'momentum-breakout3-one-forward-v1',maxPositions:1};
+const MOMENTUM_BOOST_ONE={...MOMENTUM,profile:'momentumBoostOne',profileVersion:'momentum-breakout3-boost-one-forward-v1',maxPositions:1};
+for(const cfg of [MOMENTUM_BREAKOUT_THREE,MOMENTUM_BREAKOUT_ONE,MOMENTUM_BOOST_ONE])PROFILES[cfg.profile]=cfg;
 // Explicit research-only opt-in; existing profiles keep their original exits.
 PROFILES.selectorTargets={...TREND,profile:'selectorTargets',profileVersion:'selector-targets-v1',targets:true};
 PROFILES.selectorTargetsStress={...TREND_STRESS,profile:'selectorTargetsStress',profileVersion:'selector-targets-stress-v1',targets:true};
@@ -82,6 +87,7 @@ function enter(a,order,bar,cfg,recordedAt){
  const margin=qty*entry/leverage,fee=qty*entry*cfg.fee;
  a.cash-=margin+fee;a.fees+=fee;a.slippage+=Math.abs(entry-bar.open)*qty;
  const p={id:order.id,symbol:order.symbol,sector:order.sector,side:order.side,pattern:order.pattern,reason:order.reason,signalAt:order.at,orderCreatedAt:order.createdAt,entryAt:bar.t,entry,qty,margin,stop:order.stop,target:order.target,entryFee:fee,funding:0,fundingThrough:bar.t,bars:0,holdBars:order.holdBars,recordedAt};
+ if(order.modelId)Object.assign(p,{modelId:order.modelId,modelScore:order.modelScore,breakoutPassed:order.breakoutPassed});
  if(cfg.profile){Object.assign(p,{leverage,initialMargin:margin,riskBudget:qty*risk,maintenance:cfg.maintenance});p.liquidation=liquidation(p,cfg);}
  a.positions.push(p);event(a,'entry',bar.t,{symbol:p.symbol,side:p.side,price:entry,qty,reason:p.reason,pattern:p.pattern,tradeId:p.id,stop:p.stop,target:p.target,recordedAt});return null;
 }
@@ -111,6 +117,7 @@ function queue(a,candidates,at,mode,cfg,now){
   if(createdAt>=expires)continue;
   const order={...q,id,createdAt,notBefore:Math.max(createdAt,q.at+1),expires};a.pending.push(order);
   event(a,'signal',createdAt,{signalId:id,symbol:q.symbol,side:q.side,pattern:q.pattern,reason:q.reason,price:q.price,stop:q.stop,target:q.target,signalAt:q.at,recordedAt:now});
+  if(q.modelId)Object.assign(a.events.at(-1),{modelId:q.modelId,modelScore:q.modelScore,breakoutPassed:q.breakoutPassed});
  }
 }
 function signalList(a,markets,asset,at,now,mode,provider){

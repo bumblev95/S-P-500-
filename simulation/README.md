@@ -1,6 +1,25 @@
 # $10,000 public paper accounts
 
-## Current default: 14-day momentum + 6 ATR profit target
+## Current default: breakout + boosting, at most one open position
+
+The user authorized a forward paper test of the already researched boosting
+candidate as a possible supplementary trading indicator. The new default is
+`momentumBoostOne`: 14-day momentum, prior 3-day breakout confirmation, frozen
+2026 boosting score at least 0.10 R, and at most one open BTC/ETH/SOL position.
+It keeps the researched 2.5 ATR trailing/reversal/30-day exits, without adding
+a fixed take-profit target. A score is not a calibrated win probability.
+
+Three independent $10,000 accounts start together in `momentum-boost/`: the
+same breakout rule with at most three positions, the rule with at most one,
+and the one-position ML filter. Their common start separates the position
+limit from the model's effect. Existing accounts continue with their own
+histories. Observed passing and rejected indicators have an additional
+hash-linked decision record. The model is pinned; no automatic retraining,
+historical resets, or live-trading promotion occurs.
+
+See [the study rules and verification](momentum-boost/README.md).
+
+## Previous default: 14-day momentum + 6 ATR profit target
 
 By user request, the default crypto view now selects the separate
 `momentum14-target6-forward-v1` account in `momentum-target6/`. It begins with
