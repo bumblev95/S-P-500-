@@ -131,10 +131,12 @@ def build(root=ROOT, download=True):
     if not blocked_until and any(e.startswith('SEC ') and any(str(code) in e for code in (401,403,429)) for e in old.get('errors',[])):
         blocked_until=(datetime.fromisoformat(old['generatedAt'])+timedelta(days=1)).isoformat()
     halted = not download or blocked_until>now.isoformat()
-    if download and blocked_until>now.isoformat():errors.extend(e for e in old.get('errors',[]) if e.startswith('SEC '))
+    if download and blocked_until>now.isoformat():errors.extend(e for e in old.get('errors',[]) if e.startswith('SEC ') and 'configuration missing' not in e)
+    sec_configured=None
     if download:
-        try:sec_identity()
-        except ValueError as e:halted=True;errors.append(str(e))
+        try:sec_identity();sec_configured=True
+        except ValueError as e:halted=True;sec_configured=False;errors.append(str(e))
+        print('SEC contact configured:',sec_configured,'; request backoff active:',blocked_until>now.isoformat(),flush=True)
     for symbol, cik in CIKS.items():
         p = cache/(symbol+'.json')
         try:
@@ -197,7 +199,7 @@ def build(root=ROOT, download=True):
             if isinstance(e, HTTPError) and e.code in (401, 403, 429): halted = True
             days={r['date']:r for r in funding.get(symbol,[])}
             days.update({r['date']:r for r in daily_funding(raw) if r['date']<today});funding[symbol]=[days[d] for d in sorted(days)]
-    result = dict(schemaVersion=1, generatedAt=now.isoformat(), secBlockedUntil=blocked_until, stocks=stocks, funding=funding, fundingBackfill=backfill, snapshots=snapshots, errors=errors,
+    result = dict(schemaVersion=1, generatedAt=now.isoformat(), secBlockedUntil=blocked_until, secContactConfigured=sec_configured, stocks=stocks, funding=funding, fundingBackfill=backfill, snapshots=snapshots, errors=errors,
                   limitations=['SEC original filed dates, standard annual USD facts only; not a certified vintage feed.', 'No guidance, earnings surprises, news or unlock forecasts.', 'Hyperliquid funding is exchange-specific; OI and supply begin when observed here.', 'Current snapshots are never copied into old backtests.'])
     atomic_json(path, result)
     print('Research inputs:', len(stocks), 'SEC issuers;', len(funding), 'funding series;', errors, flush=True)
