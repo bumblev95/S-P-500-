@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-09-12T03:15:33.109760+00:00",
+  "generatedAt": "2026-09-12T03:17:56.162927+00:00",
   "indicators": [
     {
       "id": "DGS10",
@@ -11,7 +11,7 @@
       "source": "Federal Reserve Board",
       "url": "https://fred.stlouisfed.org/series/DGS10",
       "thresholds": null,
-      "status": "missing",
+      "status": "unavailable",
       "value": null,
       "asOf": null,
       "severity": null
@@ -24,7 +24,7 @@
       "source": "Federal Reserve Board",
       "url": "https://fred.stlouisfed.org/series/DTWEXBGS",
       "thresholds": null,
-      "status": "missing",
+      "status": "unavailable",
       "value": null,
       "asOf": null,
       "severity": null
