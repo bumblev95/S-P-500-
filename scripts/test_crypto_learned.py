@@ -34,6 +34,16 @@ class SpotLearningTests(unittest.TestCase):
         rows=series(65);self.assertTrue(m.aligned(rows,rows));self.assertTrue(m.continuous(rows))
         self.assertFalse(m.aligned([dict(r,close=r['close']*2) for r in rows],rows))
         self.assertFalse(m.continuous(rows[:30]+rows[31:]))
+    def test_delayed_provider_keeps_verified_long_history(self):
+        old=series(900);cg=series(901)[-365:]
+        self.assertTrue(m.aligned(old,cg))
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);folder=root/'crypto/research-history';folder.mkdir(parents=True)
+            (folder/'BTC.json').write_text(json.dumps(dict(source='Yahoo Finance spot daily USD',checkedDate='2022-06-19',prices=old)))
+            result,errors=m.histories(root,{'coins':{'BTC':{'spotHistory':cg}}},datetime(2022,6,20,tzinfo=timezone.utc),download=False)
+            self.assertEqual(len(result['BTC']['rows']),900)
+            self.assertEqual(result['BTC']['rows'][-1]['date'],old[-1]['date'])
+            self.assertEqual(errors,[])
     def test_validation_gates_need_real_own_coin_evidence(self):
         self.assertFalse(m.passes(m.summary([])))
         good=dict(dates=6,mape=.1,noChangeMape=.2,trendMape=.3,dateWinRate=.5)

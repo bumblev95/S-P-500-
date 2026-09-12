@@ -11,7 +11,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from build_forecasts import atomic_json
 ROOT=Path(__file__).resolve().parents[1]
 HORIZONS=(30,120,365)
-MODEL='spot-hgb-median-v1'
+MODEL='spot-hgb-median-v1.1'
 # Verified names are checked again in the response; unsupported tickers keep CoinGecko history.
 YAHOO={'BTC':('BTC-USD','bitcoin'),'ETH':('ETH-USD','ethereum'),'SOL':('SOL-USD','solana'),'BNB':('BNB-USD','bnb'),'XRP':('XRP-USD','xrp'),'DOGE':('DOGE-USD','dogecoin'),'LINK':('LINK-USD','chainlink'),'AVAX':('AVAX-USD','avalanche')}
 FEATURES=['return7','return30','return90','return180','vol30','vol90','volRatio','distance20','distance50','distance200','drawdown90','range90','upDays30','bitcoin30','bitcoin90','relativeBitcoin30']
@@ -39,25 +39,29 @@ def yahoo_rows(raw,ticker,name,today):
 def aligned(rows,cg):
     if not rows or not cg:return False
     target={r['date']:r['close'] for r in cg};overlap=[abs(r['close']/target[r['date']]-1) for r in rows[-60:] if r['date'] in target]
-    return len(overlap)>=20 and float(np.median(overlap))<.05 and max(overlap)<.25 and rows[-1]['date']==cg[-1]['date']
+    return len(overlap)>=20 and float(np.median(overlap))<.05 and max(overlap)<.25 
 def histories(root,data,now,download=True):
     folder=root/'crypto/research-history';folder.mkdir(parents=True,exist_ok=True)
     today=now.date().isoformat();out={};errors=[];halt=False
     for sym,e in data['coins'].items():
         cg=clean(e.get('spotHistory',[]));path=folder/(sym+'.json')
         cached=json.loads(path.read_text()) if path.exists() else {};rows=cached.get('prices',[])
-        if sym in YAHOO and download and not halt and cached.get('checkedDate')!=today:
+        target_date=cg[-1]['date'] if cg else None
+        attempt_needed=cached.get('checkedDate')!=today or (rows and rows[-1]['date']!=target_date and cached.get('attemptedTarget')!=target_date)
+        if sym in YAHOO and download and not halt and attempt_needed and not (cached.get('attemptedDate')==today and cached.get('attemptedTarget')==target_date):
             ticker,name=YAHOO[sym]
             try:
                 req=Request('https://query1.finance.yahoo.com/v8/finance/chart/'+ticker+'?range=10y&interval=1d',headers={'User-Agent':'CryptoResearchDashboard/1.0'})
                 with urlopen(req,timeout=20) as response:raw=json.load(response)
                 candidate=yahoo_rows(raw,ticker,name,today)
                 if not aligned(candidate,cg):raise ValueError('Yahoo / CoinGecko date or price alignment failed')
-                rows=candidate;cached=dict(source='Yahoo Finance spot daily USD',ticker=ticker,checkedDate=today,prices=rows)
+                rows=candidate;cached=dict(source='Yahoo Finance spot daily USD',ticker=ticker,checkedDate=today,attemptedDate=today,attemptedTarget=target_date,prices=rows)
                 atomic_json(path,cached)
             except Exception as ex:
                 if isinstance(ex,HTTPError) and ex.code in (401,403,429):halt=True
                 errors.append(sym+': '+str(ex))
+                cached.update(attemptedDate=today,attemptedTarget=target_date)
+                atomic_json(path,cached)
         use=clean(rows) if aligned(rows,cg) else cg
         source=cached.get('source') if use and use!=cg else 'CoinGecko UTC daily spot'
         # Do not bridge gaps or blend different providers into one learned return series.
