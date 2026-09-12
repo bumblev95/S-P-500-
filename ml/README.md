@@ -39,8 +39,8 @@ dates, return MAE at least 2% lower than both price baselines, direction
 agreement no lower than always-up, and observed interval coverage at least 60%.
 Both pooled and per-symbol results must pass, with aligned fresh current
 prices. These are pilot eligibility checks, not statistical proof of skill.
-No criteria are relaxed after a failed result. Forecasts that fail are stored
-for research but not used as AI price lines or entry signals in the UI.
+No criteria are relaxed after a failed result. Valid forecasts that fail are displayed as research price lines with their failed
+grade and original date/anchor. Eligibility for entry signals and rankings is unchanged.
 
 The 10th/90th percentiles of calibration residuals create a reference range.
 They are not a guaranteed future 80% interval. The displayed line interpolates
@@ -63,14 +63,15 @@ particularly few independent observations, and abstention is expected.
 Automatic updates run on weekdays after market close. A Pages build is
 explicitly requested after publishing results so bot commits refresh the site.
 Provider failure leaves the last successful forecast dates intact; the UI
-rejects stale or misaligned results instead of treating them as current.
+keeps valid stale research at its original date and anchor, labels it as an earlier
+reference, and excludes it from eligible entry signals.
 
 ## Path illustration and additional comparison
 
-The default wavy line is an explicitly labeled illustration. It resamples
+The default line connects the latest fitted research targets. The optional wavy line is an explicitly labeled illustration. It resamples
 five-session blocks of the last 126 observed closes' demeaned log returns,
-with a deterministic symbol/date/horizon seed, then conditions the path to
-end at the existing model endpoint. It changes neither the endpoint forecast
+with a deterministic seed and free endpoints. The optional sample does not have
+to finish at any model target. It changes neither the endpoint forecast
 nor entry/exit levels. Excursions are not clipped to the reference band. It is
 not a learned daily path or a forecast of when to buy a dip. The user can
 switch back to the average direction; inadequate history disables sampling.
@@ -130,11 +131,12 @@ The prospective scorecard includes the current model only, so a newly revised
 model cannot inherit the older model's results.
 
 The displayed common path connects the chosen 21/84/252 endpoints, with each
-endpoint's AI eligibility shown. A failed horizon retains its explicitly
-labeled trend fallback; no unvalidated AI endpoint is promoted for visual
-consistency. The 21- and 84-session views are exact prefixes of the 252-session
+endpoint's AI eligibility shown. A failed horizon retains its raw research value and failed grade; showing it
+does not promote it to an eligible entry signal. Missing or corrupt model records
+retain an explicitly labeled trend fallback only on a matching anchor. The 21- and 84-session views are exact prefixes of the 252-session
 view, including the reference band and deterministic five-session bootstrap
-illustration. The bootstrap is pinned separately at each endpoint. Interior
+illustration. The bootstrap sample is not pinned at any endpoint. The center line alone matches
+the fitted targets. Interior
 values are interpolation/illustration, not learned daily forecasts, and an
 annual endpoint alone does not validate any shorter horizon.
 
@@ -167,3 +169,19 @@ is not an automatic promotion or proof of future skill. Pooled MAPE, p90 and
 within-10% share are published alongside the checks; none is trading return.
 Only five annual origins currently exist, limiting the later annual sample.
 The experiment refreshes in the daily pipeline after the chronological audit.
+
+## Stock research display
+
+The main stock page shows numerically consistent, chronologically valid fitted
+forecasts even when validation fails. Raw predictions remain separate from the
+`forecast` property used by entry and ranking gates. A stale study uses its
+original model price/date and discards later history when drawing its chart.
+A record whose training or calibration labels extend to or after its reference
+date is not displayed as valid research.
+
+The visible errors are return MAE in percentage points, empirical three-class
+direction error (neutral ±2%), historical interval coverage, and sample count.
+Return MAE is explicitly distinguished from crypto price MAPE. These are not
+calibrated probabilities for the next trade. Small endpoint returns do not mean
+low interim volatility. This display update does not alter model weights,
+first-issued archives, model selection, or claim improved predictive accuracy.

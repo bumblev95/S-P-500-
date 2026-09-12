@@ -17,10 +17,10 @@
       const points=Array.from({length:h+1},(_,t)=>{
         if(t===0)return {t,base:e.price,bear:e.price,bull:e.price};
         const i=knots.findIndex(q=>q.t>=t),a=knots[i-1],b=knots[i],r=(t-a.t)/(b.t-a.t);
-        const bridge=sampled?shock[t]-shock[a.t]-r*(shock[b.t]-shock[a.t]):0;
+        const bridge=sampled?shock[t]:0;
         const center=(1-r)*Math.log(a.base)+r*Math.log(b.base);
         const width=side=>Math.sqrt((1-r)*Math.log(a[side]/a.base)**2+r*Math.log(b[side]/b.base)**2);
-        return {t,base:t===b.t?b.base:Math.exp(center+bridge),bear:t===b.t?b.bear:Math.exp(center-width('bear')),bull:t===b.t?b.bull:Math.exp(center+width('bull'))};
+        return {t,base:t===b.t&&!sampled?b.base:Math.exp(center+bridge),bear:t===b.t?b.bear:Math.exp(center-width('bear')),bull:t===b.t?b.bull:Math.exp(center+width('bull'))};
       });
       return {points,sampled,shared:true};
     }
@@ -37,9 +37,8 @@
       const ratio=t/h,center=p.learned?p.logReturn*ratio:p.dailyDrift*63*(1-Math.exp(-t/63));
       const lo=p.learned?center+(p.lowLogReturn-p.logReturn)*Math.sqrt(ratio):center-p.volatility*Math.sqrt(t/252);
       const hi=p.learned?center+(p.highLogReturn-p.logReturn)*Math.sqrt(ratio):center+p.volatility*Math.sqrt(t/252);
-      // An endpoint-conditioned illustration, not a path forecast. Do not clip
-      // excursions to the band: that would invent a false limit on price risk.
-      const bridge=sampled?shocks[t]-ratio*shocks[h]:0;
+      // Unconditioned illustration, not a daily forecast. Its endpoint is not forced to the AI target.
+      const bridge=sampled?shocks[t]:0;
       return {t,base:p.anchor*Math.exp(center+bridge),bear:p.anchor*Math.exp(lo),bull:p.anchor*Math.exp(hi)};
     });
     return {points,sampled};
