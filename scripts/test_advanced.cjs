@@ -55,7 +55,7 @@ const nodes=new Map();
 function node(id){if(!nodes.has(id))nodes.set(id,{value:'',innerHTML:'',textContent:'',checked:false,hidden:false,dataset:{},events:{},addEventListener(type,fn){this.events[type]=fn},setAttribute(){},insertAdjacentHTML(_,html){this.innerHTML=html+this.innerHTML}});return nodes.get(id)}
 const tabs=['screen','compare','value','validation'].map(view=>Object.assign(node('tab-'+view),{dataset:{view}}));
 let fail=false;
-const context={AdvancedEngine:E,MarketVisuals:V,LearnedGuide:L,document:{getElementById:node,querySelectorAll:s=>s==='[data-view]'?tabs:[],hidden:false},localStorage:{getItem:()=>null,setItem(){}},fetch:async url=>{if(fail)throw Error('offline');return {ok:true,text:async()=>fs.readFileSync(url,'utf8'),json:async()=>JSON.parse(fs.readFileSync(url,'utf8'))}},setInterval(){},setTimeout,console,Intl,Date};
+const context={AdvancedEngine:E,MarketVisuals:V,LearnedGuide:L,document:{getElementById:node,querySelectorAll:s=>s==='[data-view]'?tabs:s==='[data-assumption]'?[...node('content').innerHTML.matchAll(/data-assumption="([^"]+)"[^>]*value="([^"]*)"/g)].map(m=>{const n=node('assumption-'+m[1]);n.dataset.assumption=m[1];if(n.value==='')n.value=m[2];return n}):[],hidden:false},localStorage:{getItem:()=>null,setItem(){}},fetch:async url=>{if(fail)throw Error('offline');return {ok:true,text:async()=>fs.readFileSync(url,'utf8'),json:async()=>JSON.parse(fs.readFileSync(url,'utf8'))}},setInterval(){},setTimeout,console,Intl,Date};
 vm.runInNewContext(fs.readFileSync('assets/advanced-page.js','utf8'),context);
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
 (async()=>{
@@ -69,6 +69,14 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
     assert(html.length>1000);
     assert(!/NaN|undefined|Infinity/.test(html),view);
   }
+  node('tab-value').events.click();
+  const inputs=context.document.querySelectorAll('[data-assumption]');
+  for(const n of inputs)n.value=String({eps:5,growth:10,pe:20,discount:10,years:3}[n.dataset.assumption]);
+  node('applyAssumptions').events.click();
+  assert(node('content').innerHTML.includes('이 기기에 저장된 사용자 가정'));
+  assert(node('content').innerHTML.includes('value="10"'));
+  const changed=E.scenario({...config,price:actual.find(r=>r.symbol==='NVDA').price});
+  assert(node('content').innerHTML.includes(changed.present.toLocaleString('en-US',{maximumFractionDigits:2})));
   node('tab-compare').events.click();await settle();
   node('analysisHorizon').events.change({target:{value:'252'}});
   if(JSON.parse(fs.readFileSync('forecasts/latest.json')).stocks.NVDA.history.length<253)
