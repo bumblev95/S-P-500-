@@ -37,7 +37,7 @@ function funding(a,p,through,source,mark,uncertain=false){
  if(a.asset!=='crypto')return;
  let hour=Math.floor(Math.max(p.entryAt,p.fundingThrough)/3600000)*3600000;
  const rates=source._funding||(source._funding=new Map((source.funding||[]).map(r=>[Math.floor(r.time/3600000)*3600000,r])));
- if(source.fundingSchedule==='published'&&!source._nonFundingHours){source._nonFundingHours=new Set();const rows=source.funding||[];for(let i=1;i<rows.length;i++){const p=rows[i-1],n=rows[i];if(n.time-p.time===n.intervalHours*3600000)for(let h=p.time+3600000;h<n.time;h+=3600000)source._nonFundingHours.add(h);}}
+ if(source.fundingSchedule==='published'&&!source._nonFundingHours){source._nonFundingHours=new Set();const rows=source.funding||[];for(let i=1;i<rows.length;i++){const p=rows[i-1],n=rows[i],ph=Math.floor(p.time/3600000)*3600000,nh=Math.floor(n.time/3600000)*3600000,interval=n.intervalHours*3600000;if(nh-ph===interval&&Math.abs(n.time-p.time-interval)<=60000)for(let h=ph+3600000;h<nh;h+=3600000)source._nonFundingHours.add(h);}}
  for(;hour<=through;hour+=3600000){
   const observed=rates.get(hour),t=observed?.time??hour;
   if(t<=p.entryAt||t<=p.fundingThrough||t>through)continue;

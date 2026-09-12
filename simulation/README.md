@@ -280,3 +280,12 @@ delayed during that run. The first result is retrospective research, not a
 prospective trading record. Monthly archive age is visible in the data dates.
 
 Source: [Binance public data specification and checksums](https://github.com/binance/binance-public-data).
+
+Long-research correction: `long-futures-wide-mlp-v1` is superseded. Some archive
+funding timestamps differ from their hour boundaries by one millisecond; exact
+interval comparisons incorrectly charged conservative missing-hour funding.
+`v2-funding-clock` verifies matching hour-aligned intervals with at most one
+minute of timestamp jitter while retaining actual settlement times for charges.
+True missing multi-interval gaps still trigger estimates. Candidate labels,
+models and all year evaluations are regenerated under a new cache/version key.
+Old reports remain as withdrawn research history, not valid performance.

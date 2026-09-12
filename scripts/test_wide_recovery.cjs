@@ -12,6 +12,9 @@ const reduced=P.create('crypto',now,'wideRecovery');reduced.cash=7900;P.riskStat
 const h=3600000,t=Math.floor(now/(8*h))*8*h,source={fundingSchedule:'published',funding:[{time:t,rate:.001,intervalHours:8},{time:t+8*h,rate:.002,intervalHours:8}]};
 const f=P.create('crypto',t,'wideRecovery'),p={side:'long',entryAt:t+1,fundingThrough:t+1,qty:2,margin:100,funding:0};
 P.funding(f,p,t+8*h,source,100);assert.equal(p.funding,.4);assert.equal(f.estimatedFundingHours,0);assert.equal(p.margin,99.6);
+const jitter={fundingSchedule:'published',funding:[{time:t+1,rate:.001,intervalHours:8},{time:t+8*h,rate:.002,intervalHours:8},{time:t+16*h+1,rate:.003,intervalHours:8}]};
+const j=P.create('crypto',t,'wideRecovery'),jp={side:'long',entryAt:t+2,fundingThrough:t+2,qty:2,margin:100,funding:0};
+P.funding(j,jp,t+16*h+2,jitter,100);assert.equal(jp.funding,1);assert.equal(j.estimatedFundingHours,0);
 const gap={fundingSchedule:'published',funding:[{time:t,rate:.001,intervalHours:8},{time:t+16*h,rate:.002,intervalHours:8}]};
 const g=P.create('crypto',t,'wideRecovery'),gp={...p,entryAt:t+1,fundingThrough:t+1,margin:100,funding:0};P.funding(g,gp,t+8*h,gap,100);assert(g.estimatedFundingHours>0);
 console.log('Wide stops, independent risk sizing, 10/20% drawdown recovery and 8-hour funding chronology passed');

@@ -12,7 +12,7 @@ from train_pattern_research import FEATURES
 
 ROOT=Path(__file__).resolve().parents[1]
 CACHE=Path(os.environ.get('PAPER_LONG_CACHE','/tmp/paper-long-cache'))
-VERSION='long-futures-wide-mlp-v1'
+VERSION='long-futures-wide-mlp-v2-funding-clock'
 def stamp(year):return int(datetime(year,1,1,tzinfo=timezone.utc).timestamp()*1000)
 def partition(rows,year):
     validation=stamp(year-1);test=stamp(year);end=stamp(year+1);gap=32*900000
@@ -26,10 +26,11 @@ def train():
     if manifest['errors']:raise ValueError('Archive collection incomplete; do not publish a partial-history experiment')
     now=int(time.time()*1000);end=min(v['end'] for v in manifest['coverage'].values())
     latest=folder/'latest.json';previous=json.loads(latest.read_text()) if latest.exists() else {}
+    if previous.get('version')!=VERSION:previous={}
     if previous.get('version')==VERSION and previous.get('dataEnd')==end:
         print('Same completed archive period; previous experiment retained');return
     source_hash=hashlib.sha256(market.read_bytes()).hexdigest()
-    samples=CACHE/('wide-samples-'+source_hash[:16]+'.json')
+    samples=CACHE/('wide-samples-'+VERSION+'-'+source_hash[:16]+'.json')
     if not samples.exists():
         with samples.open('wb') as dest:subprocess.run(['node',str(ROOT/'scripts/pattern_research_data.cjs'),str(market),'wideRecovery'],stdout=dest,check=True,cwd=ROOT)
     rows=json.loads(samples.read_text());print('Labeled wide-stop candidates',len(rows),flush=True)
@@ -91,7 +92,8 @@ def train():
             'dataEnd':end,'coverage':manifest['coverage'],'archives':len(manifest['files']),'sourceHash':source_hash,
             'sampleHash':hashlib.sha256(samples.read_bytes()).hexdigest(),'samples':len(rows),'folds':folds,'reasons':reasons,
             'model':'MLP 16 → 8 · 확장 학습','venue':'Binance USD-M 공개 선물 기록',
-            'notes':['코인 선물의 수십 년 기록은 존재하지 않습니다. 실제 월별 자료의 시작일부터 학습합니다.',
+            'notes':['v1 보고서는 펀딩 시각의 밀리초 차이를 누락으로 처리한 오류가 있어 대체되었습니다. v2는 학습 정답·모델·평가를 모두 다시 계산한 보정 결과입니다.',
+                     '코인 선물의 수십 년 기록은 존재하지 않습니다. 실제 월별 자료의 시작일부터 학습합니다.',
                      '2020년부터 학습 범위를 늘리고 직전 1년으로 선택한 뒤 다음 연도로 평가합니다. 경계는 32봉 추가 분리합니다.',
                      '각 평가 구간은 별도 $10,000 계좌이며 수익률을 더하거나 연결한 하나의 실적이 아닙니다.',
                      '장기 기록은 Binance, 진행 계좌는 Hyperliquid입니다. 거래소·유동성 차이 때문에 직접 이전 성능이 보장되지 않습니다.',
