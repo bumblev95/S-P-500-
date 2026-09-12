@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      PAPER_LONG_CACHE: ${{ runner.temp }}/paper-long-cache
+      PAPER_LONG_CACHE: /tmp/paper-long-cache
       OPENBLAS_NUM_THREADS: '1'
       OMP_NUM_THREADS: '1'
     steps:
