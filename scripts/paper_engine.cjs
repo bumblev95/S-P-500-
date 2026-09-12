@@ -5,7 +5,8 @@ const LEVERAGED={...CONFIG.crypto,profile:'leverage5x3x',profileVersion:'isolate
 const WIDE={...LEVERAGED,profile:'wideRecovery',profileVersion:'isolated-wide-recovery-v1',risk:.01,maxOpenRisk:.03,dailyLoss:.03,recovery:true,stopAtr:2,holdBars:32};
 const TREND={...WIDE,profile:'trendResearch',profileVersion:'trend-research-v1',trend:true,fundingReserveHours:8};
 const TREND_STRESS={...TREND,profile:'trendResearchStress',profileVersion:'trend-research-stress-v1',fee:TREND.fee*2,slip:TREND.slip*2};
-const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE,trendResearch:TREND,trendResearchStress:TREND_STRESS};
+const MOMENTUM={...TREND,profile:'momentum14',profileVersion:'momentum14-forward-v1',observedTrend:true,signalTtl:14400000};
+const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE,trendResearch:TREND,trendResearchStress:TREND_STRESS,momentum14:MOMENTUM};
 function config(a){if(a.profile&&a.profile!=='baseline'&&!PROFILES[a.profile])throw Error('Unknown account profile');const cfg=PROFILES[a.profile];if(cfg&&(a.asset!=='crypto'||a.profileVersion!==cfg.profileVersion))throw Error('Leverage profile version changed');return cfg||CONFIG[a.asset];}
 const finite=Number.isFinite,side=p=>p.side==='long'?1:-1;
 const copy=x=>JSON.parse(JSON.stringify(x));
@@ -101,7 +102,7 @@ function queue(a,candidates,at,mode,cfg,now){
   const id=[S.VERSION,...(cfg.profile?[cfg.profileVersion]:[]),a.asset,q.symbol,q.at,q.side].join(':');
   if(a.events.some(e=>e.type==='signal'&&e.signalId===id))continue;
   const createdAt=mode==='forward'?now:at;
-  const expires=q.at+(a.asset==='crypto'?cfg.step*2:5*86400000);
+  const expires=q.at+(a.asset==='crypto'?(mode==='forward'&&cfg.signalTtl||cfg.step*2):5*86400000);
   if(createdAt>=expires)continue;
   const order={...q,id,createdAt,notBefore:Math.max(createdAt,q.at+1),expires};a.pending.push(order);
   event(a,'signal',createdAt,{signalId:id,symbol:q.symbol,side:q.side,pattern:q.pattern,reason:q.reason,price:q.price,stop:q.stop,target:q.target,signalAt:q.at,recordedAt:now});
@@ -122,6 +123,19 @@ function signalList(a,markets,asset,at,now,mode,provider){
   candidates.push({...q,symbol,sector:m.source.sector||'코인'});
  }
  return candidates;
+}
+function observeTrend(a,p,q,now){
+ if(!finite(q?.indicatorAt)||q.indicatorAt<=(p.lastControlAt||0))return;
+ p.lastControlAt=q.indicatorAt;
+ if((q.exitLong&&p.side==='long'||q.exitShort&&p.side==='short')&&!p.exitPending){
+  p.exitPending='14일 모멘텀 반전';p.exitNotBefore=now;
+  event(a,'exitSignal',now,{symbol:p.symbol,reason:p.exitPending,tradeId:p.id,signalAt:q.indicatorAt,recordedAt:now});
+ }
+ const next=p.side==='long'?q.trailLong:q.trailShort,current=p.pendingStop?.price??p.stop;
+ if(finite(next)&&side(p)*(next-current)>0){
+  p.pendingStop={price:next,notBefore:now};
+  event(a,'stopUpdate',now,{symbol:p.symbol,price:next,reason:'추적 손절 변경 예약 · 기록 이후 시작하는 봉부터 적용',tradeId:p.id,signalAt:q.indicatorAt,recordedAt:now});
+ }
 }
 function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
  const a=copy(state),cfg=config(a);if(a.version!==S.VERSION)throw Error('Strategy version changed: create a separate experiment, never reset an existing account');
@@ -154,12 +168,13 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
   for(const [symbol,r] of Object.entries(bars))a.marks[symbol]=r.open;
   for(const p of [...a.positions]){
    const r=bars[p.symbol];if(!r){warn(a,p.symbol+' 보유 중 봉 누락 · 평가에 제한');continue;}
+   if(p.pendingStop&&r.t>=p.pendingStop.notBefore){p.stop=p.pendingStop.price;delete p.pendingStop;}
    const m=markets[p.symbol];funding(a,p,r.t,m.source,r.open);
    const stopGap=side(p)*(r.open-p.stop)<=0,targetGap=!cfg.trend&&side(p)*(r.open-p.target)>=0;
    if(cfg.profile&&side(p)*(r.open-liquidation(p,cfg))<=0)close(a,p,r.open,r.t,'가상 격리 청산 · 시가 갭',cfg,now,'open');
    else if(stopGap)close(a,p,r.open,r.t,'손절 · 시가 갭',cfg,now,'open');
    else if(targetGap)close(a,p,p.target,r.t,'익절 · 시가 목표 통과',cfg,now,'open');
-   else if(p.exitPending)close(a,p,r.open,r.t,p.exitPending,cfg,now,'open');
+   else if(p.exitPending&&r.t>=(p.exitNotBefore||0))close(a,p,r.open,r.t,p.exitPending,cfg,now,'open');
   }
   const keep=[];
   for(const order of a.pending){
@@ -183,7 +198,7 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
    }
    // Research-only controls use a completed 4h bar. Revised stops first apply
    // to the NEXT 15m bar, never to the high/low of the bar that produced them.
-   if(cfg.trend&&provider){
+   if(cfg.trend&&provider&&!(cfg.observedTrend&&mode==='forward')){
     const m=markets[p.symbol],control=signalAt(m,p.symbol,m.byTime.get(t),a.asset,markets,provider);
     if(control.exitLong&&p.side==='long'||control.exitShort&&p.side==='short')p.exitPending='4시간 추세 이탈';
     const next=p.side==='long'?control.trailLong:control.trailShort;
@@ -203,6 +218,7 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
  // Catch-up candles may settle already-posted orders, never invent old signals.
  if(mode==='forward'){
   a.signals=signalList(a,markets,a.asset,end,now,mode,provider);
+  if(cfg.observedTrend)for(const p of a.positions)observeTrend(a,p,a.signals.find(q=>q.symbol===p.symbol),now);
   if(equity(a)>0)queue(a,a.signals,now,mode,cfg,now);
  }
  a.updatedAt=now;a.marketAsOf=endBar.end;a.equity=equity(a);
@@ -216,4 +232,4 @@ function report(a){
  }
  return {...a,equity:equity(a),return:equity(a)/a.initial-1,realized:net.reduce((s,x)=>s+x,0),unrealized:a.positions.reduce((s,p)=>s+side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry),0),winRate:net.length?wins.length/net.length:null,profitFactor:grossLoss?grossProfit/grossLoss:null,averageTrade:net.length?net.reduce((s,x)=>s+x,0)/net.length:null,patternResults:groups,positions:a.positions.map(p=>({...p,mark:a.marks[p.symbol]??p.entry,unrealized:side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry)}))};
 }
-module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,WIDE,TREND,config,liquidation,riskState};
+module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,WIDE,TREND,MOMENTUM,config,liquidation,riskState,observeTrend};

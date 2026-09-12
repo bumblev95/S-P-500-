@@ -8,6 +8,7 @@ on:
       - 'scripts/paper_engine.cjs'
       - 'scripts/build_simulation.cjs'
       - 'scripts/build_leveraged.cjs'
+      - 'scripts/*momentum*'
       - 'scripts/*pattern*'
       - 'scripts/test_leveraged.cjs'
       - 'scripts/test_wide_recovery.cjs'
@@ -44,6 +45,7 @@ jobs:
           node scripts/test_leveraged.cjs
           node scripts/test_wide_recovery.cjs
           node scripts/test_trend_methods.cjs
+          node scripts/test_momentum_forward.cjs
           python -m unittest discover -s scripts -p test_simulation_data.py
           python -m unittest discover -s scripts -p test_pattern_research.py
           node --check assets/simulation-page.js
