@@ -45,11 +45,14 @@ function build(now=Date.now()){
    '예약 신호 이후의 다음 가용 봉 시가에 체결. 같은 봉 손절·목표 동시 도달은 손절 우선.',
    '자동 갱신은 약 15분 간격을 목표로 하며 GitHub Actions 지연 시 늦어집니다. 틈새 시간에 나타났다 사라진 미기록 신호를 소급 체결하지 않습니다.']};
  output.preview={crypto:{},stocks:{}};output.tradeWindows={};
+ output.leveraged=require('./build_leveraged.cjs').build(market,now,folder);
+ output.research=read('research/latest.json',null);
+ output.researchAttempt=read('research/attempt.json',null);
  for(const asset of ['crypto','stocks']){
   const sources=market[asset]||{};
   const candles=s=>asset==='crypto'?sources[s]?.frames?.['15m']||[]:sources[s]?.rows||[];
   for(const sym of Object.keys(sources))output.preview[asset][sym]=candles(sym).slice(-100);
-  for(const mode of ['forward','replay'])for(const trade of output[mode]?.accounts?.[asset]?.trades?.slice(-30)||[]){
+  for(const group of asset==='crypto'?[output,output.leveraged]:[output])for(const mode of ['forward','replay'])for(const trade of group[mode]?.accounts?.[asset]?.trades?.slice(-30)||[]){
    const rows=candles(trade.symbol),i=rows.findIndex(r=>r.t>=trade.entryAt),j=rows.findIndex(r=>r.end>=trade.exitAt);
    if(i>=0&&j>=0)output.tradeWindows[trade.id]=rows.slice(Math.max(0,i-25),j+12);
   }
@@ -57,6 +60,7 @@ function build(now=Date.now()){
  // Full histories and account state remain public, but the UI only needs curves,
  // trades and recent events; avoid downloading all observed signal logs on phones.
  for(const mode of ['forward','replay'])for(const a of Object.values(output[mode]?.accounts||{}))a.events=a.events.slice(-60);
+ for(const mode of ['forward','replay'])output.leveraged[mode].accounts.crypto.events=output.leveraged[mode].accounts.crypto.events.slice(-60);
  write('latest.json',output);
  console.log(JSON.stringify(Object.fromEntries(['forward','replay'].map(mode=>[mode,Object.fromEntries(Object.entries(output[mode]?.accounts||{}).map(([asset,a])=>[asset,{equity:a.equity,trades:a.trades.length,positions:a.positions.length,pending:a.pending.length,winRate:a.winRate,drawdown:a.maxDrawdown}]))])),null,2));
  return output;

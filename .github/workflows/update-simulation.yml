@@ -7,6 +7,9 @@ on:
       - 'scripts/collect_simulation_data.py'
       - 'scripts/paper_engine.cjs'
       - 'scripts/build_simulation.cjs'
+      - 'scripts/build_leveraged.cjs'
+      - 'scripts/*pattern*'
+      - 'scripts/test_leveraged.cjs'
       - 'scripts/test_paper_engine.cjs'
       - 'scripts/test_simulation_data.py'
       - 'assets/simulation*'
@@ -37,10 +40,40 @@ jobs:
       - name: Test simulated execution and data chronology
         run: |
           node scripts/test_paper_engine.cjs
+          node scripts/test_leveraged.cjs
           python -m unittest discover -s scripts -p test_simulation_data.py
+          python -m unittest discover -s scripts -p test_pattern_research.py
           node --check assets/simulation-page.js
       - name: Collect public candles and historical funding
         run: python scripts/collect_simulation_data.py
+      - name: Check weekly neural research interval
+        id: research
+        run: echo "due=$(python scripts/train_pattern_research.py --due)" >> "$GITHUB_OUTPUT"
+      - name: Install small neural research dependencies
+        id: neural_deps
+        continue-on-error: true
+        if: steps.research.outputs.due == 'true'
+        run: pip install -r scripts/requirements-pattern-ml.txt
+      - name: Train and preserve research evaluation
+        id: neural_train
+        continue-on-error: true
+        if: steps.research.outputs.due == 'true' && steps.neural_deps.outcome == 'success'
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: python scripts/train_pattern_research.py
+      - name: Record neural research attempt separately from account operation
+        if: steps.research.outputs.due == 'true'
+        env:
+          TRAIN_RESULT: ${{ steps.neural_train.outcome }}
+        run: |
+          python - <<'PY'
+          import json,os,time
+          from pathlib import Path
+          p=Path('simulation/research/attempt.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({'at':int(time.time()*1000),'status':os.environ['TRAIN_RESULT']}))
+          PY
       - name: Settle paper orders and preserve account records
         run: node scripts/build_simulation.cjs
       - name: Publish paper accounts

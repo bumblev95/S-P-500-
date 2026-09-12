@@ -1,18 +1,33 @@
 'use strict';
 const S=require('../assets/simulation-signals.js'),E=require('../assets/perp-engine.js');
 const CONFIG={crypto:{risk:.005,maxPositions:3,maxWeight:1/3,fee:.00045,slip:.0002,step:900000,warmup:65},stocks:{risk:.01,maxPositions:5,maxWeight:.2,fee:.0005,slip:.0005,step:86400000,warmup:205}};
+const LEVERAGED={...CONFIG.crypto,profile:'leverage5x3x',profileVersion:'isolated-5x3x-risk-v1',leverage:{BTC:5,ETH:3,SOL:3},maxWeight:.2,maxMargin:.4,maxNotional:2,maxOpenRisk:.015,dailyLoss:.02,drawdownLimit:.10,lossStreak:3,cooldown:21600000,maintenance:.025};
+function config(a){if(a.profile&&a.profile!=='baseline'&&a.profile!=='leverage5x3x')throw Error('Unknown account profile');if(a.profile==='leverage5x3x'&&(a.asset!=='crypto'||a.profileVersion!==LEVERAGED.profileVersion))throw Error('Leverage profile version changed');return a.profile==='leverage5x3x'?LEVERAGED:CONFIG[a.asset];}
 const finite=Number.isFinite,side=p=>p.side==='long'?1:-1;
 const copy=x=>JSON.parse(JSON.stringify(x));
-function create(asset,at){return {schemaVersion:1,version:S.VERSION,asset,createdAt:at,initial:10000,cash:10000,positions:[],pending:[],trades:[],events:[],curve:[],marks:{},lastProcessed:null,fees:0,funding:0,estimatedFundingHours:0,slippage:0,warnings:[],signals:[],highWater:10000,maxDrawdown:0,benchmark:null};}
+function create(asset,at,profile){return {schemaVersion:1,version:S.VERSION,asset,...(profile?{profile,profileVersion:LEVERAGED.profileVersion}:{}),createdAt:at,initial:10000,cash:10000,positions:[],pending:[],trades:[],events:[],curve:[],marks:{},lastProcessed:null,fees:0,funding:0,estimatedFundingHours:0,slippage:0,warnings:[],signals:[],highWater:10000,maxDrawdown:0,benchmark:null};}
+function liquidation(p,cfg){return (p.entry-side(p)*p.margin/p.qty)/(1-side(p)*cfg.maintenance);}
+function riskState(a,at,cfg){
+ if(!cfg.profile)return;
+ const day=Math.floor(at/86400000),eq=equity(a);
+ if(a.riskDay!==day){a.riskDay=day;a.dayStartEquity=eq;a.dayBlocked=false;}
+ if(eq<=a.dayStartEquity*(1-cfg.dailyLoss))a.dayBlocked=true;
+ a.riskHighWater=Math.max(a.riskHighWater||10000,eq);
+ if(eq<=a.riskHighWater*(1-cfg.drawdownLimit))a.drawdownHalted=true;
+ a.riskStatus=a.drawdownHalted?'고점 대비 10% 하락 · 신규 진입 중단':a.dayBlocked?'UTC 하루 손실 2% · 다음 날까지 진입 중단':at<(a.cooldownUntil||0)?'3연속 손실 · 6시간 휴식':'위험 한도 내 · 신호 대기';
+}
 function equity(a){return a.cash+a.positions.reduce((s,p)=>s+p.margin+side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry),0);}
 function event(a,type,at,data){const e={id:a.asset+':'+a.events.length,type,at,...data};a.events.push(e);return e;}
 function warn(a,message){if(!a.warnings.includes(message))a.warnings.push(message);}
 function close(a,p,raw,at,reason,cfg,recordedAt,precision='bar'){
  const exit=raw*(1-side(p)*cfg.slip),gross=side(p)*p.qty*(exit-p.entry),fee=p.qty*exit*cfg.fee;
- a.cash+=p.margin+gross-fee;a.fees+=fee;a.slippage+=Math.abs(exit-raw)*p.qty;
- const t={...p,exit,exitAt:at,exitReason:reason,gross,exitFee:fee,net:gross-p.entryFee-fee-p.funding,recordedAt,timePrecision:precision};
+ const adjustment=cfg.profile?Math.max(0,-(p.margin+gross-fee)):0;
+ a.cash+=p.margin+gross-fee+adjustment;a.fees+=fee;a.slippage+=Math.abs(exit-raw)*p.qty;
+ if(adjustment){a.isolatedLossAdjustment=(a.isolatedLossAdjustment||0)+adjustment;warn(a,'격리 증거금 초과 손실은 가상 한도로 제한: 실제 청산·보험기금과 다를 수 있음');}
+ const t={...p,exit,exitAt:at,exitReason:reason,gross,exitFee:fee,net:gross-p.entryFee-fee-p.funding+adjustment,...(cfg.profile?{isolatedLossAdjustment:adjustment}:{}),recordedAt,timePrecision:precision};
  a.trades.push(t);a.positions=a.positions.filter(x=>x.id!==p.id);
  event(a,'exit',at,{symbol:p.symbol,side:p.side,price:exit,qty:p.qty,reason,net:t.net,tradeId:p.id,recordedAt,timePrecision:precision});
+ if(cfg.profile){a.consecutiveLosses=t.net<0?(a.consecutiveLosses||0)+1:0;if(a.consecutiveLosses>=cfg.lossStreak){a.cooldownUntil=at+cfg.cooldown;a.consecutiveLosses=0;}riskState(a,at,cfg);}
 }
 function funding(a,p,through,source,mark,uncertain=false){
  if(a.asset!=='crypto')return;
@@ -25,12 +40,13 @@ function funding(a,p,through,source,mark,uncertain=false){
   // Missing rates are charged conservatively, never silently replaced by zero.
   let cost=estimated?p.qty*mark*.0001:side(p)*p.qty*mark*rate;
   if(uncertain&&cost<0)cost=0;
-  a.cash-=cost;a.funding+=cost;p.funding+=cost;
+  if(a.profile==='leverage5x3x')p.margin-=cost;else a.cash-=cost;a.funding+=cost;p.funding+=cost;
   if(estimated){a.estimatedFundingHours++;warn(a,'일부 펀딩 누락: 시간당 0.01% 지급 가정 포함');}
  }
  p.fundingThrough=through;
 }
 function enter(a,order,bar,cfg,recordedAt){
+ if(cfg.profile){riskState(a,bar.t,cfg);if(a.drawdownHalted||a.dayBlocked||bar.t<(a.cooldownUntil||0))return a.riskStatus;}
  if(a.positions.length>=cfg.maxPositions||a.positions.some(p=>p.symbol===order.symbol))return '포지션 한도';
  if(a.asset==='stocks'&&a.positions.filter(p=>p.sector===order.sector).length>=2)return '동일 업종 2종목 한도';
  const sign=side(order),entry=bar.open*(1+sign*cfg.slip);
@@ -39,12 +55,20 @@ function enter(a,order,bar,cfg,recordedAt){
  const risk=sign*(entry-stopFill)+cfg.fee*(entry+stopFill)+(a.asset==='crypto'?entry*.0001*2:0),reward=sign*(targetFill-entry)-cfg.fee*(entry+targetFill);
  if(!(risk>0)||reward/risk<1.3||sign*(entry-order.stop)<=0||sign*(order.target-entry)<=0)return '비용 반영 손익비 또는 가격 조건 미충족';
  const eq=equity(a);if(eq<=0||a.cash<=0)return '가상 자본 부족';
- let qty=Math.min(eq*cfg.risk/risk,eq*cfg.maxWeight/entry,a.cash/(entry*(1+cfg.fee)));
+ const leverage=cfg.profile?cfg.leverage[order.symbol]:1;if(!leverage)return '지원하지 않는 배율 종목';
+ let qty=Math.min(eq*cfg.risk/risk,eq*cfg.maxWeight*leverage/entry,a.cash/(entry*(1/leverage+cfg.fee)));
+ if(cfg.profile){
+  const margins=a.positions.reduce((s,p)=>s+Math.max(0,p.margin),0),notional=a.positions.reduce((s,p)=>s+p.qty*(a.marks[p.symbol]??p.entry),0),openRisk=a.positions.reduce((s,p)=>s+(p.riskBudget||0),0);
+  qty=Math.min(qty,Math.max(0,eq*cfg.maxMargin-margins)*leverage/entry,Math.max(0,eq*cfg.maxNotional-notional)/entry,Math.max(0,eq*cfg.maxOpenRisk-openRisk)/risk);
+  const liq=liquidation({entry,side:order.side,margin:entry/leverage,qty:1},cfg);
+  if(sign*(order.stop-liq)<Math.max(2*order.atr,entry*.01))return '손절과 가상 청산 기준 사이 여유 부족';
+ }
  qty=a.asset==='stocks'?Math.floor(qty):Math.floor(qty*1e8)/1e8;
  if(!(qty>0))return '가상 자본 또는 최소 수량 부족';
- const margin=qty*entry,fee=margin*cfg.fee;
+ const margin=qty*entry/leverage,fee=qty*entry*cfg.fee;
  a.cash-=margin+fee;a.fees+=fee;a.slippage+=Math.abs(entry-bar.open)*qty;
  const p={id:order.id,symbol:order.symbol,sector:order.sector,side:order.side,pattern:order.pattern,reason:order.reason,signalAt:order.at,orderCreatedAt:order.createdAt,entryAt:bar.t,entry,qty,margin,stop:order.stop,target:order.target,entryFee:fee,funding:0,fundingThrough:bar.t,bars:0,holdBars:order.holdBars,recordedAt};
+ if(cfg.profile){Object.assign(p,{leverage,initialMargin:margin,riskBudget:qty*risk,maintenance:cfg.maintenance});p.liquidation=liquidation(p,cfg);}
  a.positions.push(p);event(a,'entry',bar.t,{symbol:p.symbol,side:p.side,price:entry,qty,reason:p.reason,pattern:p.pattern,tradeId:p.id,stop:p.stop,target:p.target,recordedAt});return null;
 }
 function indexMarkets(market,asset){
@@ -66,7 +90,7 @@ function signalAt(m,symbol,index,asset,all,provider){
 function queue(a,candidates,at,mode,cfg,now){
  const ordered=candidates.filter(q=>q.side&&!a.positions.some(p=>p.symbol===q.symbol)&&!a.pending.some(p=>p.symbol===q.symbol)).sort((x,y)=>y.rank-x.rank||x.symbol.localeCompare(y.symbol));
  for(const q of ordered){
-  const id=[S.VERSION,a.asset,q.symbol,q.at,q.side].join(':');
+  const id=[S.VERSION,...(cfg.profile?[cfg.profileVersion]:[]),a.asset,q.symbol,q.at,q.side].join(':');
   if(a.events.some(e=>e.type==='signal'&&e.signalId===id))continue;
   const createdAt=mode==='forward'?now:at;
   const expires=q.at+(a.asset==='crypto'?cfg.step*2:5*86400000);
@@ -90,18 +114,20 @@ function signalList(a,markets,asset,at,now,mode,provider){
  }
  return candidates;
 }
-function run(state,market,{mode='forward',now=Date.now(),provider}={}){
- const a=copy(state),cfg=CONFIG[a.asset];if(a.version!==S.VERSION)throw Error('Strategy version changed: create a separate experiment, never reset an existing account');
+function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
+ const a=copy(state),cfg=config(a);if(a.version!==S.VERSION)throw Error('Strategy version changed: create a separate experiment, never reset an existing account');
  const markets=indexMarkets(market,a.asset),reference=markets[a.asset==='stocks'?'SPY':'BTC'];
  if(!reference){warn(a,'시장 기준 데이터 없음 · 운용 보류');return a;}
  const times=reference.rows.filter(r=>r.end<now).map(r=>r.t),end=times.at(-1);
  if(end===undefined)return a;
  const endBar=reference.rows[reference.byTime.get(end)];
  if(a.lastProcessed===null){
-  const start=mode==='forward'?end:times[Math.min(cfg.warmup,times.length-1)];
+  const start=mode==='forward'?end:startAt?times.find(t=>t>=startAt):times[Math.min(cfg.warmup,times.length-1)];
+  if(start===undefined)return a;
   a.lastProcessed=start;a.startedAt=mode==='forward'?now:reference.rows[reference.byTime.get(start)].end;
   const rb=reference.rows[reference.byTime.get(start)];a.benchmark={symbol:a.asset==='stocks'?'SPY':'BTC',price:rb.close,qty:10000/(rb.close*(1+cfg.slip)*(1+cfg.fee)),at:a.startedAt};
   a.curve.push({at:a.startedAt,equity:10000,benchmark:a.benchmark.qty*rb.close,cash:10000,exposure:0});
+  riskState(a,a.startedAt,cfg);
   for(const [sym,m] of Object.entries(markets)){const i=m.byTime.get(start);if(i!==undefined)a.marks[sym]=m.rows[i].close;}
   const initial=signalList(a,markets,a.asset,start,now,mode,provider);a.signals=initial;queue(a,initial,a.startedAt,mode,cfg,now);
  }
@@ -113,13 +139,16 @@ function run(state,market,{mode='forward',now=Date.now(),provider}={}){
    const i=m.byTime.get(t);if(i!==undefined&&m.rows[i].end<now)bars[symbol]=m.rows[i];
   }
   const barEnd=reference.rows[reference.byTime.get(t)].end;
+  // Establish UTC day's opening equity from the previous completed valuation.
+  riskState(a,t,cfg);
   // Opening prices only: do not finance an opening purchase with a later stop/target sale.
   for(const [symbol,r] of Object.entries(bars))a.marks[symbol]=r.open;
   for(const p of [...a.positions]){
    const r=bars[p.symbol];if(!r){warn(a,p.symbol+' 보유 중 봉 누락 · 평가에 제한');continue;}
    const m=markets[p.symbol];funding(a,p,r.t,m.source,r.open);
    const stopGap=side(p)*(r.open-p.stop)<=0,targetGap=side(p)*(r.open-p.target)>=0;
-   if(stopGap)close(a,p,r.open,r.t,'손절 · 시가 갭',cfg,now,'open');
+   if(cfg.profile&&side(p)*(r.open-liquidation(p,cfg))<=0)close(a,p,r.open,r.t,'가상 격리 청산 · 시가 갭',cfg,now,'open');
+   else if(stopGap)close(a,p,r.open,r.t,'손절 · 시가 갭',cfg,now,'open');
    else if(targetGap)close(a,p,p.target,r.t,'익절 · 시가 목표 통과',cfg,now,'open');
    else if(p.exitPending)close(a,p,r.open,r.t,p.exitPending,cfg,now,'open');
   }
@@ -136,6 +165,8 @@ function run(state,market,{mode='forward',now=Date.now(),provider}={}){
    const stop=p.side==='long'?r.low<=p.stop:r.high>=p.stop,target=p.side==='long'?r.high>=p.target:r.low<=p.target;
    const closing=stop||target||p.bars>=p.holdBars;
    funding(a,p,r.end,markets[p.symbol].source,r.open,stop||target);
+   if(cfg.profile){p.liquidation=liquidation(p,cfg);const liquid=p.side==='long'?r.low<=p.liquidation:r.high>=p.liquidation;
+    if(liquid&&(!stop||side(p)*(p.stop-p.liquidation)<=0)){close(a,p,p.liquidation,r.end,'가상 격리 청산 · 봉 가격 기준',cfg,now);continue;}}
    if(closing){close(a,p,stop?p.stop:target?p.target:r.close,r.end,stop?(target?'손절 · 같은 봉 목표 동시 도달':'손절'):target?'익절 · 2R 목표':'보유 시간 종료',cfg,now,stop||target?'bar':'close');continue;}
    if(a.asset==='stocks'){
     const m=markets[p.symbol],i=m.byTime.get(t),ind=E.indicators(m.rows.slice(Math.max(0,i-239),i+1),'1d');
@@ -144,6 +175,7 @@ function run(state,market,{mode='forward',now=Date.now(),provider}={}){
   }
   for(const [symbol,r] of Object.entries(bars))a.marks[symbol]=r.close;
   const eq=equity(a);a.highWater=Math.max(a.highWater,eq);a.maxDrawdown=Math.max(a.maxDrawdown,1-eq/a.highWater);
+  riskState(a,barEnd,cfg);
   if(eq<=0)warn(a,'가상 계좌 자본 소진 · 신규 주문 중단');
   const benchmark=a.benchmark.qty*reference.rows[reference.byTime.get(t)].close;
   a.curve.push({at:barEnd,equity:eq,benchmark,cash:a.cash,exposure:a.positions.reduce((s,p)=>s+p.qty*(a.marks[p.symbol]??p.entry),0)});
@@ -167,4 +199,4 @@ function report(a){
  }
  return {...a,equity:equity(a),return:equity(a)/a.initial-1,realized:net.reduce((s,x)=>s+x,0),unrealized:a.positions.reduce((s,p)=>s+side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry),0),winRate:net.length?wins.length/net.length:null,profitFactor:grossLoss?grossProfit/grossLoss:null,averageTrade:net.length?net.reduce((s,x)=>s+x,0)/net.length:null,patternResults:groups,positions:a.positions.map(p=>({...p,mark:a.marks[p.symbol]??p.entry,unrealized:side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry)}))};
 }
-module.exports={create,run,report,equity,enter,close,funding,CONFIG};
+module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,config,liquidation,riskState};

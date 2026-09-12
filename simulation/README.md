@@ -117,3 +117,90 @@ idempotence and preservation of old candles.
 * [Hyperliquid candle availability](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/info-endpoint)
 * [Hyperliquid fees](https://hyperliquid.gitbook.io/hyperliquid-docs/trading/fees)
 * [Hyperliquid funding](https://hyperliquid.gitbook.io/hyperliquid-docs/trading/funding)
+
+## BTC 5x / ETH and SOL 3x experiment
+
+The new default crypto view is a separate account under `leveraged/`, version
+`isolated-5x3x-risk-v1`. Original 1x and stock accounts, balances and closed trades
+are preserved. Both crypto accounts start with their own $10,000. New experiments
+do not inherit replay profits. A fixed same-data 1x replay is also saved with the
+new replay; leverage and risk controls both differ, so this is not a causal test
+of leverage alone.
+
+BTC uses 5x and ETH/SOL 3x entry leverage, with isolated collateral. Notional is
+quantity times price; collateral is notional divided by leverage. Fees and
+funding are based on notional, never collateral. Quantity is the minimum allowed
+by all limits, not automatically multiplied by leverage:
+
+* Planned stop risk, including modeled costs: 0.5% of current account equity.
+* Sum of still-open entry risk budgets: at most 1.5% of current equity.
+* Entry collateral per symbol: 20%; aggregate collateral: 40% of equity.
+* Aggregate opening notional exposure: 2x account equity maximum.
+* UTC day's equity loss >=2%: block new entries until the next UTC day.
+* Three consecutive closed losing trades: six-hour entry cooldown.
+* Equity >=10% below observed risk high-water mark: latch entry pause permanently
+  for this experiment; no automatic capital or peak reset.
+* No averaging down, widened stops or added collateral. Existing barriers/time
+  exits continue during entry pauses. Target remains 2R, maximum hold two hours.
+
+Daily and drawdown checks use observed opening/closing valuations, not continuous
+ticks. They cancel new entries, do not promise a maximum account loss. Adverse
+gaps may exceed the planned stop budget. An order also needs its stop to be at
+least max(2 ATR, 1% of entry price) away from the modeled liquidation boundary.
+
+**Stylized liquidation, not exchange-exact reconstruction:** fixed maintenance
+rate 2.5% for all three symbols; trade OHLC substitutes for mark-price OHLC.
+Historical margin tiers, insurance funds, order-book execution and partial
+liquidations are unavailable. Liquidation price solves
+`collateral + signed_quantity * (price - entry) = maintenance * quantity * price`.
+Hourly funding changes isolated collateral and its boundary. Entry fees come
+from available cash. If the opening price crosses the liquidation boundary,
+liquidation takes precedence. For a continuous intrabar path crossing both stop
+and liquidation, the nearer adverse boundary is used; stop also precedes target
+when both are hit. Exact intrabar order of funding and prices is unknown.
+Losses beyond isolated collateral are capped by a **simulation assumption**, with
+the adjustment recorded per trade, aggregated and warned. This is not a claim
+about actual liquidation guarantees. Original 1x execution has no such cap.
+
+## Neural research and policy changes
+
+`train_pattern_research.py` actually fits a small MLP with two hidden layers
+(16 and 8 units), seed 42, L2 alpha 1, L-BFGS with a fixed 500-iteration limit.
+This is an exploratory neural network, not ChatGPT retraining itself. Twenty
+features describe completed-candle body/wicks, trend, volatility, volume, side,
+pattern and symbol. The target is **whether the hypothetical candidate trade
+has positive net P&L**, not the next candle's direction.
+
+Candidate outcomes use the same isolated execution engine with actual funding,
+fees and gap checks, independently per signal. These overlapping training
+observations are not independent portfolio trades. Three common time slices
+across symbols use 60% training, 20% threshold selection, 20% final evaluation.
+Samples whose outcomes approach the next boundary are purged with an additional
+8-bar embargo. Scaling fits training data only. Thresholds 0.5, 0.6 and 0.7 are
+ranked by validation candidate sum of net risk units, requiring 10 accepted
+validation samples; the final evaluation does not choose model parameters.
+
+Evaluation reports Brier error against logistic regression and a fixed training
+base rate. A second pass evaluates neural-filtered and unfiltered eligible
+signals as two actual paper portfolios, under identical risk and cost rules.
+The displayed portfolio returns are not a sum of independently sized labels.
+The first holdout is exploratory because the rules were studied on the broader
+historical data before this experiment. It is not prospective performance.
+
+All recorded reports, fitted weights and training sample snapshots are retained
+under `research/`. A run is considered at most once per seven days; each later
+evaluation must use signals after the prior evaluated-through timestamp. Older
+outcomes may then be used in training/selection, but never counted again as a
+new unseen evaluation period. Insufficient new data produces a waiting report.
+Changing this research version is a new candidate, not erasure of old results.
+
+Minimum candidate gates fixed before the first fit: 90 days of price history,
+100 closed evaluation trades, positive net return, improvement over same-period
+rule portfolio, no worse drawdown, Brier error below both simple baselines,
+sufficient validation samples and no convergence warning. These gates are
+screening criteria, not statistical proof of superiority. No learned model
+automatically alters the operating account; a qualified candidate still needs
+a separate prospective paper experiment. Failed and losing results remain visible.
+
+Sources: [Hyperliquid margin definitions](https://hyperliquid.gitbook.io/hyperliquid-docs/trading/margining),
+[scikit-learn supervised neural networks](https://scikit-learn.org/stable/modules/neural_networks_supervised.html).
