@@ -43,6 +43,7 @@ jobs:
           node scripts/test_paper_engine.cjs
           node scripts/test_leveraged.cjs
           node scripts/test_wide_recovery.cjs
+          node scripts/test_trend_methods.cjs
           python -m unittest discover -s scripts -p test_simulation_data.py
           python -m unittest discover -s scripts -p test_pattern_research.py
           node --check assets/simulation-page.js

@@ -7,6 +7,7 @@ on:
       - 'scripts/collect_long_futures.py'
       - 'scripts/train_long_futures.py'
       - 'scripts/test_long_futures.py'
+      - 'scripts/*trend*'
       - '.github/workflows/research-long-futures.yml'
   schedule:
     - cron: '25 5 8 * *'
@@ -49,11 +50,14 @@ jobs:
           node scripts/test_paper_engine.cjs
           node scripts/test_leveraged.cjs
           node scripts/test_wide_recovery.cjs
+          node scripts/test_trend_methods.cjs
           python -m unittest discover -s scripts -p test_long_futures.py
       - name: Collect all available completed monthly futures archives
         run: python scripts/collect_long_futures.py
       - name: Train expanding history and evaluate later calendar periods
         run: python scripts/train_long_futures.py
+      - name: Compare fixed 4-hour trend methods and doubled trading costs
+        run: node scripts/research_trend_methods.cjs
       - name: Refresh public paper report with long research
         run: node scripts/build_simulation.cjs
       - name: Publish preserved research and paper account updates

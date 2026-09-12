@@ -47,6 +47,7 @@ function build(now=Date.now()){
  output.preview={crypto:{},stocks:{}};output.tradeWindows={};
  output.leveraged=require('./build_leveraged.cjs').build(market,now,folder);
  output.wide=require('./build_leveraged.cjs').build(market,now,folder,'wideRecovery');
+ output.methodResearch=read('method-research/latest.json',null);
  output.longResearch=read('long-research/latest.json',null);
  output.research=read('research/latest.json',null);
  output.researchAttempt=read('research/attempt.json',null);

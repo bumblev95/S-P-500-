@@ -289,3 +289,12 @@ minute of timestamp jitter while retaining actual settlement times for charges.
 True missing multi-interval gaps still trigger estimates. Candidate labels,
 models and all year evaluations are regenerated under a new cache/version key.
 Old reports remain as withdrawn research history, not valid performance.
+
+
+## Fixed 4-hour trend comparison (v1)
+
+Three new methods are kept separate from active paper accounts: prior 20-day Donchian breakout / 10-day opposite channel exit; EMA 60/180 on 4-hour bars (10/30 days); 14-day price momentum exceeding 2 four-hour ATR. Every method uses a 2.5 ATR initial and monotonically tightening trailing stop, no fixed profit target, and a 30-day maximum holding time. Completed 4-hour signals enter at the next available 15-minute open; stop revisions apply only to subsequent bars. The existing BTC 5x / ETH,SOL 3x risk and exposure limits remain in force. Eight hours of estimated funding is reserved at sizing; actual holding-period funding may exceed that reserve.
+
+`research_trend_methods.cjs` evaluates every fixed method, without parameter search or selecting only winners, on separate $10,000 calendar accounts from 2024 to the latest archived month. Positions are closed at period end with exit costs. Each method is also rerun with doubled fees and slippage. Prior reports remain timestamped under `simulation/method-research/`. The three-method screen requires positive base and stressed returns in every period, maximum close-to-close drawdown <=10%, and at least 100 total closed trades; even passing this exploratory screen does not deploy a strategy. These years were already examined in earlier experiments, so this is explicitly retrospective comparison, not untouched out-of-sample proof. Fixed methods use only their rolling historical windows; this is not additional neural training. Current symbols entail selection/survivorship bias. Binance archive execution remains an approximation, separate from Hyperliquid forward accounts.
+
+Motivation: [Time Series Momentum](https://www.aqr.com/Insights/Research/Journal-Article/Time-Series-Momentum). That paper studies different markets and longer horizons; its findings do not establish profitability for these crypto implementations.

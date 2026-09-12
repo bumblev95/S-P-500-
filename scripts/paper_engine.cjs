@@ -3,7 +3,9 @@ const S=require('../assets/simulation-signals.js'),E=require('../assets/perp-eng
 const CONFIG={crypto:{risk:.005,maxPositions:3,maxWeight:1/3,fee:.00045,slip:.0002,step:900000,warmup:65},stocks:{risk:.01,maxPositions:5,maxWeight:.2,fee:.0005,slip:.0005,step:86400000,warmup:205}};
 const LEVERAGED={...CONFIG.crypto,profile:'leverage5x3x',profileVersion:'isolated-5x3x-risk-v1',leverage:{BTC:5,ETH:3,SOL:3},maxWeight:.2,maxMargin:.4,maxNotional:2,maxOpenRisk:.015,dailyLoss:.02,drawdownLimit:.10,lossStreak:3,cooldown:21600000,maintenance:.025};
 const WIDE={...LEVERAGED,profile:'wideRecovery',profileVersion:'isolated-wide-recovery-v1',risk:.01,maxOpenRisk:.03,dailyLoss:.03,recovery:true,stopAtr:2,holdBars:32};
-const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE};
+const TREND={...WIDE,profile:'trendResearch',profileVersion:'trend-research-v1',trend:true,fundingReserveHours:8};
+const TREND_STRESS={...TREND,profile:'trendResearchStress',profileVersion:'trend-research-stress-v1',fee:TREND.fee*2,slip:TREND.slip*2};
+const PROFILES={leverage5x3x:LEVERAGED,wideRecovery:WIDE,trendResearch:TREND,trendResearchStress:TREND_STRESS};
 function config(a){if(a.profile&&a.profile!=='baseline'&&!PROFILES[a.profile])throw Error('Unknown account profile');const cfg=PROFILES[a.profile];if(cfg&&(a.asset!=='crypto'||a.profileVersion!==cfg.profileVersion))throw Error('Leverage profile version changed');return cfg||CONFIG[a.asset];}
 const finite=Number.isFinite,side=p=>p.side==='long'?1:-1;
 const copy=x=>JSON.parse(JSON.stringify(x));
@@ -58,8 +60,8 @@ function enter(a,order,bar,cfg,recordedAt){
  const sign=side(order),entry=bar.open*(1+sign*cfg.slip);
  if(Math.abs(bar.open-order.price)>.5*order.atr)return '신호 가격에서 0.5 ATR 이상 이탈';
  const stopFill=order.stop*(1-sign*cfg.slip),targetFill=order.target*(1-sign*cfg.slip);
- const risk=sign*(entry-stopFill)+cfg.fee*(entry+stopFill)+(a.asset==='crypto'?entry*.0001*(cfg.recovery?order.holdBars/4:2):0),reward=sign*(targetFill-entry)-cfg.fee*(entry+targetFill);
- if(!(risk>0)||reward/risk<1.3||sign*(entry-order.stop)<=0||sign*(order.target-entry)<=0)return '비용 반영 손익비 또는 가격 조건 미충족';
+ const risk=sign*(entry-stopFill)+cfg.fee*(entry+stopFill)+(a.asset==='crypto'?entry*.0001*(cfg.fundingReserveHours??(cfg.recovery?order.holdBars/4:2)):0),reward=sign*(targetFill-entry)-cfg.fee*(entry+targetFill);
+ if(!(risk>0)||(!cfg.trend&&(reward/risk<1.3||sign*(order.target-entry)<=0))||sign*(entry-order.stop)<=0)return '비용 반영 손익비 또는 가격 조건 미충족';
  const eq=equity(a);if(eq<=0||a.cash<=0)return '가상 자본 부족';
  const leverage=cfg.profile?cfg.leverage[order.symbol]:1;if(!leverage)return '지원하지 않는 배율 종목';
  let qty=Math.min(eq*cfg.risk*(a.riskMultiplier||1)/risk,eq*cfg.maxWeight*leverage/entry,a.cash/(entry*(1/leverage+cfg.fee)));
@@ -153,7 +155,7 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
   for(const p of [...a.positions]){
    const r=bars[p.symbol];if(!r){warn(a,p.symbol+' 보유 중 봉 누락 · 평가에 제한');continue;}
    const m=markets[p.symbol];funding(a,p,r.t,m.source,r.open);
-   const stopGap=side(p)*(r.open-p.stop)<=0,targetGap=side(p)*(r.open-p.target)>=0;
+   const stopGap=side(p)*(r.open-p.stop)<=0,targetGap=!cfg.trend&&side(p)*(r.open-p.target)>=0;
    if(cfg.profile&&side(p)*(r.open-liquidation(p,cfg))<=0)close(a,p,r.open,r.t,'가상 격리 청산 · 시가 갭',cfg,now,'open');
    else if(stopGap)close(a,p,r.open,r.t,'손절 · 시가 갭',cfg,now,'open');
    else if(targetGap)close(a,p,p.target,r.t,'익절 · 시가 목표 통과',cfg,now,'open');
@@ -169,7 +171,7 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
   a.pending=keep;
   for(const p of [...a.positions]){
    const r=bars[p.symbol];if(!r)continue;p.bars++;
-   const stop=p.side==='long'?r.low<=p.stop:r.high>=p.stop,target=p.side==='long'?r.high>=p.target:r.low<=p.target;
+   const stop=p.side==='long'?r.low<=p.stop:r.high>=p.stop,target=!cfg.trend&&(p.side==='long'?r.high>=p.target:r.low<=p.target);
    const closing=stop||target||p.bars>=p.holdBars;
    funding(a,p,r.end,markets[p.symbol].source,r.open,stop||target);
    if(cfg.profile){p.liquidation=liquidation(p,cfg);const liquid=p.side==='long'?r.low<=p.liquidation:r.high>=p.liquidation;
@@ -178,6 +180,14 @@ function run(state,market,{mode='forward',now=Date.now(),provider,startAt}={}){
    if(a.asset==='stocks'){
     const m=markets[p.symbol],i=m.byTime.get(t),ind=E.indicators(m.rows.slice(Math.max(0,i-239),i+1),'1d');
     if(ind&&r.close<ind.ema50)p.exitPending='추세 이탈 · 50일 EMA';
+   }
+   // Research-only controls use a completed 4h bar. Revised stops first apply
+   // to the NEXT 15m bar, never to the high/low of the bar that produced them.
+   if(cfg.trend&&provider){
+    const m=markets[p.symbol],control=signalAt(m,p.symbol,m.byTime.get(t),a.asset,markets,provider);
+    if(control.exitLong&&p.side==='long'||control.exitShort&&p.side==='short')p.exitPending='4시간 추세 이탈';
+    const next=p.side==='long'?control.trailLong:control.trailShort;
+    if(finite(next)&&side(p)*(next-p.stop)>0)p.stop=next;
    }
   }
   for(const [symbol,r] of Object.entries(bars))a.marks[symbol]=r.close;
@@ -206,4 +216,4 @@ function report(a){
  }
  return {...a,equity:equity(a),return:equity(a)/a.initial-1,realized:net.reduce((s,x)=>s+x,0),unrealized:a.positions.reduce((s,p)=>s+side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry),0),winRate:net.length?wins.length/net.length:null,profitFactor:grossLoss?grossProfit/grossLoss:null,averageTrade:net.length?net.reduce((s,x)=>s+x,0)/net.length:null,patternResults:groups,positions:a.positions.map(p=>({...p,mark:a.marks[p.symbol]??p.entry,unrealized:side(p)*p.qty*((a.marks[p.symbol]??p.entry)-p.entry)}))};
 }
-module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,WIDE,config,liquidation,riskState};
+module.exports={create,run,report,equity,enter,close,funding,CONFIG,LEVERAGED,WIDE,TREND,config,liquidation,riskState};
