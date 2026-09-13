@@ -109,3 +109,10 @@ E1 failure blocks additional fitting in E2; the data quality audit still runs.
 Budget: six E0 + four E1 + at most two E2 configurations. Fixed controls and
 diagnostic summaries remain disclosed. New model/feature/threshold searches
 require a new named protocol, not undisclosed retries until a gate turns green.
+
+The same four E1 configurations are also fitted on matured labels at the latest
+available origin and issued once with the actual UTC completion timestamp.
+This is a research record, not production promotion or a fifth configuration.
+Preserve the first issuance on reruns. A tradable evaluation must enter at the
+first closing price strictly after issuance, not at the already observed anchor.
+Future outcomes are pending; these records cannot validate the model today.
