@@ -1,0 +1,4998 @@
+{
+  "experiment": "stock-validation-e1-v1",
+  "issuedAt": "2026-09-13T19:00:58.208838+00:00",
+  "codeHash": "9ba91628e3ba8026a70d8a7099cca4820be465d6b7e030ce239ec68e1b3443df",
+  "protocolHash": "ac7119ff54625a0432ff8484dc935c926cb87b782564a7cf0f0f5fe8287a851a",
+  "asOf": "2026-09-11",
+  "horizonTradingDays": 252,
+  "training": {
+    "trainingRows": 406229,
+    "trainingOrigins": 888,
+    "trainTargetThrough": "2026-09-09"
+  },
+  "status": "research_only_awaiting_future_outcomes",
+  "entryRule": "First tradable closing price strictly after issuedAt; retain both as-of and execution-based outcomes.",
+  "productionPromoted": false,
+  "predictions": [
+    {
+      "symbol": "A",
+      "anchor": 146.92999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.17993985369116128,
+        "ridgeRelative": 0.001182048049372705,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "AAPL",
+      "anchor": 332.2699890136719,
+      "scores": {
+        "ridgeAbsolute": 0.156006059788717,
+        "ridgeRelative": -0.0015477606491372197,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0025123411985200255
+      }
+    },
+    {
+      "symbol": "ABBV",
+      "anchor": 257.1199951171875,
+      "scores": {
+        "ridgeAbsolute": 0.13522949260278908,
+        "ridgeRelative": -0.02902026908467685,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "ABNB",
+      "anchor": 170.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.19828643435962914,
+        "ridgeRelative": 0.03809621223281733,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.01637926860157629
+      }
+    },
+    {
+      "symbol": "ABT",
+      "anchor": 101.94999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.15533085451661816,
+        "ridgeRelative": -0.025583647289123827,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "ACGL",
+      "anchor": 96.08999633789062,
+      "scores": {
+        "ridgeAbsolute": 0.144558927842518,
+        "ridgeRelative": -0.029314824606876615,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "ACN",
+      "anchor": 183.89999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.20028012095495418,
+        "ridgeRelative": 0.0071729360765808246,
+        "treeAbsolute": 0.18121951024257435,
+        "treeRelative": 0.015044592380147975
+      }
+    },
+    {
+      "symbol": "ADBE",
+      "anchor": 252.22999572753906,
+      "scores": {
+        "ridgeAbsolute": 0.22759635203912387,
+        "ridgeRelative": 0.03754561578733445,
+        "treeAbsolute": 0.13329150984594243,
+        "treeRelative": 0.013817214300884015
+      }
+    },
+    {
+      "symbol": "ADI",
+      "anchor": 378.7799987792969,
+      "scores": {
+        "ridgeAbsolute": 0.16732846553304176,
+        "ridgeRelative": 0.0005453855309588006,
+        "treeAbsolute": 0.1050610250092,
+        "treeRelative": 0.00852364845862636
+      }
+    },
+    {
+      "symbol": "ADM",
+      "anchor": 86.72000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.12576973405963038,
+        "ridgeRelative": -0.02869858938854069,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.005887795700233465
+      }
+    },
+    {
+      "symbol": "ADP",
+      "anchor": 268.260009765625,
+      "scores": {
+        "ridgeAbsolute": 0.18273315876599416,
+        "ridgeRelative": 0.005124529172536171,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "ADSK",
+      "anchor": 212.39999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.20605140143627138,
+        "ridgeRelative": 0.02290178799446985,
+        "treeAbsolute": 0.1095930165990334,
+        "treeRelative": 0.011253030268843533
+      }
+    },
+    {
+      "symbol": "AEE",
+      "anchor": 104.9000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.11280217422537933,
+        "ridgeRelative": -0.05209008376043592,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006558679913320753
+      }
+    },
+    {
+      "symbol": "AEP",
+      "anchor": 123.33000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.12957548616407463,
+        "ridgeRelative": -0.03562247196435291,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.014409706508643752
+      }
+    },
+    {
+      "symbol": "AES",
+      "anchor": 14.789999961853027,
+      "scores": {
+        "ridgeAbsolute": 0.06784664786401237,
+        "ridgeRelative": -0.09336344937353004,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.013154290827120664
+      }
+    },
+    {
+      "symbol": "AFL",
+      "anchor": 115.27999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.13715548892674034,
+        "ridgeRelative": -0.02620527131111067,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.01275015070602627
+      }
+    },
+    {
+      "symbol": "AIG",
+      "anchor": 75.33000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.14726493627271028,
+        "ridgeRelative": -0.02484002051457061,
+        "treeAbsolute": 0.08880696178221646,
+        "treeRelative": 0.01903795006380339
+      }
+    },
+    {
+      "symbol": "AIZ",
+      "anchor": 282.4599914550781,
+      "scores": {
+        "ridgeAbsolute": 0.1469499182039648,
+        "ridgeRelative": -0.011858696140588909,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "AJG",
+      "anchor": 240.32000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.181462050474598,
+        "ridgeRelative": 0.0016866290465458067,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.015440916748579983
+      }
+    },
+    {
+      "symbol": "AKAM",
+      "anchor": 106.79000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.17044128870212566,
+        "ridgeRelative": 0.06955228412631005,
+        "treeAbsolute": 0.2060841953703062,
+        "treeRelative": 0.0686703468123836
+      }
+    },
+    {
+      "symbol": "ALB",
+      "anchor": 117.5199966430664,
+      "scores": {
+        "ridgeAbsolute": 0.228354518952005,
+        "ridgeRelative": 0.04088745579935814,
+        "treeAbsolute": 0.1366103934388132,
+        "treeRelative": 0.1016578277038315
+      }
+    },
+    {
+      "symbol": "ALGN",
+      "anchor": 150.82000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.1817287835982061,
+        "ridgeRelative": 0.005916911763338929,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.007729590121626278
+      }
+    },
+    {
+      "symbol": "ALL",
+      "anchor": 253.7100067138672,
+      "scores": {
+        "ridgeAbsolute": 0.16541085348877715,
+        "ridgeRelative": -0.00018545784473358992,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013417880336949716
+      }
+    },
+    {
+      "symbol": "ALLE",
+      "anchor": 153.35000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.15169045430838132,
+        "ridgeRelative": -0.02015150039231725,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "AMAT",
+      "anchor": 456.489990234375,
+      "scores": {
+        "ridgeAbsolute": 0.2864660953325963,
+        "ridgeRelative": 0.09706417055153704,
+        "treeAbsolute": 0.2502751483582472,
+        "treeRelative": 0.051310420491352364
+      }
+    },
+    {
+      "symbol": "AMCR",
+      "anchor": 42.31999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.15486049297309096,
+        "ridgeRelative": -0.026184024678191507,
+        "treeAbsolute": 0.09329793399716105,
+        "treeRelative": 0.027966176075588114
+      }
+    },
+    {
+      "symbol": "AMD",
+      "anchor": 516.1300048828125,
+      "scores": {
+        "ridgeAbsolute": 0.26948223555688616,
+        "ridgeRelative": 0.10368063524125128,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.0614843461756655
+      }
+    },
+    {
+      "symbol": "AME",
+      "anchor": 241.8699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.1223926186974194,
+        "ridgeRelative": -0.03579903394824477,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "AMGN",
+      "anchor": 377.3500061035156,
+      "scores": {
+        "ridgeAbsolute": 0.15763847707508846,
+        "ridgeRelative": -0.012721458139593978,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.007506881444960284
+      }
+    },
+    {
+      "symbol": "AMP",
+      "anchor": 557.6099853515625,
+      "scores": {
+        "ridgeAbsolute": 0.14751403878025443,
+        "ridgeRelative": -0.017616855728096965,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "AMT",
+      "anchor": 177.85000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.13753564255840808,
+        "ridgeRelative": -0.027767982950070446,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.03812671343892795
+      }
+    },
+    {
+      "symbol": "AMZN",
+      "anchor": 256.7799987792969,
+      "scores": {
+        "ridgeAbsolute": 0.1599693318960262,
+        "ridgeRelative": 0.006878956437107483,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.007225604417053291
+      }
+    },
+    {
+      "symbol": "ANET",
+      "anchor": 199.58999633789062,
+      "scores": {
+        "ridgeAbsolute": 0.23026137634206312,
+        "ridgeRelative": 0.06055887900755446,
+        "treeAbsolute": 0.15666449301692814,
+        "treeRelative": 0.004561705000857842
+      }
+    },
+    {
+      "symbol": "AON",
+      "anchor": 302.69000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.17782607164929073,
+        "ridgeRelative": 0.00775850809958205,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013653281524892816
+      }
+    },
+    {
+      "symbol": "AOS",
+      "anchor": 57.38999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.1402445441106581,
+        "ridgeRelative": -0.030896541499996835,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031135836574401657
+      }
+    },
+    {
+      "symbol": "APA",
+      "anchor": 44.72999954223633,
+      "scores": {
+        "ridgeAbsolute": 0.08630703456205965,
+        "ridgeRelative": 0.010336387849569311,
+        "treeAbsolute": 0.08767799647090274,
+        "treeRelative": 0.02510683596379145
+      }
+    },
+    {
+      "symbol": "APD",
+      "anchor": 291.42999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.1512480728286504,
+        "ridgeRelative": -0.016166197204256154,
+        "treeAbsolute": 0.09188986335543478,
+        "treeRelative": 0.021388056582334163
+      }
+    },
+    {
+      "symbol": "APH",
+      "anchor": 83.91999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.1822185173948318,
+        "ridgeRelative": 0.010556563253754224,
+        "treeAbsolute": 0.10461255176715369,
+        "treeRelative": 0.020955740382628832
+      }
+    },
+    {
+      "symbol": "APO",
+      "anchor": 128.97999572753906,
+      "scores": {
+        "ridgeAbsolute": 0.17822255254933128,
+        "ridgeRelative": 0.0094859908313904,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.022070972362768015
+      }
+    },
+    {
+      "symbol": "APP",
+      "anchor": 323.9599914550781,
+      "scores": {
+        "ridgeAbsolute": 0.30248617329212546,
+        "ridgeRelative": 0.13032262620909377,
+        "treeAbsolute": 0.30350290550212616,
+        "treeRelative": 0.14995421607770965
+      }
+    },
+    {
+      "symbol": "APTV",
+      "anchor": 45.540000915527344,
+      "scores": {
+        "ridgeAbsolute": 0.2371798039357455,
+        "ridgeRelative": 0.07360471905493358,
+        "treeAbsolute": 0.20288154497309502,
+        "treeRelative": 0.0886023661798766
+      }
+    },
+    {
+      "symbol": "ARE",
+      "anchor": 51.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.0704138345832114,
+        "ridgeRelative": -0.008051046695093904,
+        "treeAbsolute": 0.08767799647090274,
+        "treeRelative": 0.02510683596379145
+      }
+    },
+    {
+      "symbol": "ARES",
+      "anchor": 131.63999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.18923950042897997,
+        "ridgeRelative": 0.012272488177378029,
+        "treeAbsolute": 0.09535291019113375,
+        "treeRelative": 0.01637926860157629
+      }
+    },
+    {
+      "symbol": "ATO",
+      "anchor": 163.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.11171354805602922,
+        "ridgeRelative": -0.05678383690934849,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0035080796008360184
+      }
+    },
+    {
+      "symbol": "AVGO",
+      "anchor": 361.989990234375,
+      "scores": {
+        "ridgeAbsolute": 0.2194531546953697,
+        "ridgeRelative": 0.04339380020851468,
+        "treeAbsolute": 0.1096543600479753,
+        "treeRelative": 0.010800400347768581
+      }
+    },
+    {
+      "symbol": "AVY",
+      "anchor": 169.3800048828125,
+      "scores": {
+        "ridgeAbsolute": 0.12613363923949347,
+        "ridgeRelative": -0.042198143174132625,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.014279248767431654
+      }
+    },
+    {
+      "symbol": "AWK",
+      "anchor": 137.69000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.1119439183437942,
+        "ridgeRelative": -0.05119800793387968,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.005566853741626718
+      }
+    },
+    {
+      "symbol": "AXON",
+      "anchor": 479.3399963378906,
+      "scores": {
+        "ridgeAbsolute": 0.26232986238519723,
+        "ridgeRelative": 0.091089087190758,
+        "treeAbsolute": 0.26292089941940466,
+        "treeRelative": 0.08466096810429583
+      }
+    },
+    {
+      "symbol": "AXP",
+      "anchor": 324.69000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.15546022871800075,
+        "ridgeRelative": -0.016811719460809588,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "AZO",
+      "anchor": 2876.75,
+      "scores": {
+        "ridgeAbsolute": 0.15805619171240948,
+        "ridgeRelative": -0.02246698423430577,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.003600543026139637
+      }
+    },
+    {
+      "symbol": "BA",
+      "anchor": 210.4499969482422,
+      "scores": {
+        "ridgeAbsolute": 0.16314718444123175,
+        "ridgeRelative": -0.004494071439377769,
+        "treeAbsolute": 0.09956683634703851,
+        "treeRelative": 0.029105842683198765
+      }
+    },
+    {
+      "symbol": "BAC",
+      "anchor": 62.689998626708984,
+      "scores": {
+        "ridgeAbsolute": 0.1430682316945152,
+        "ridgeRelative": -0.022555896796897536,
+        "treeAbsolute": 0.091661588739297,
+        "treeRelative": 0.007036969725434017
+      }
+    },
+    {
+      "symbol": "BALL",
+      "anchor": 59.900001525878906,
+      "scores": {
+        "ridgeAbsolute": 0.04979997989171818,
+        "ridgeRelative": -0.040792094422952355,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "BAX",
+      "anchor": 23.799999237060547,
+      "scores": {
+        "ridgeAbsolute": 0.20045617106824698,
+        "ridgeRelative": 0.026091804154086948,
+        "treeAbsolute": 0.11536520889701268,
+        "treeRelative": 0.04216521099479641
+      }
+    },
+    {
+      "symbol": "BBY",
+      "anchor": 90.80000305175781,
+      "scores": {
+        "ridgeAbsolute": 0.16397126521664096,
+        "ridgeRelative": 0.013031480001610375,
+        "treeAbsolute": 0.13209276285879684,
+        "treeRelative": 0.02520090622943154
+      }
+    },
+    {
+      "symbol": "BDX",
+      "anchor": 177.85000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.15414074433441655,
+        "ridgeRelative": -0.01321883213258728,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.018129928968988338
+      }
+    },
+    {
+      "symbol": "BEN",
+      "anchor": 33.650001525878906,
+      "scores": {
+        "ridgeAbsolute": 0.14911119331208902,
+        "ridgeRelative": -0.011427714315658,
+        "treeAbsolute": 0.09056917768603225,
+        "treeRelative": 0.01807373546811112
+      }
+    },
+    {
+      "symbol": "BF.B",
+      "anchor": 26.219999313354492,
+      "scores": {
+        "ridgeAbsolute": 0.15613965725136014,
+        "ridgeRelative": -0.012894266031120547,
+        "treeAbsolute": 0.08469574095943587,
+        "treeRelative": 0.0028323066295331723
+      }
+    },
+    {
+      "symbol": "BG",
+      "anchor": 122.41000366210938,
+      "scores": {
+        "ridgeAbsolute": 0.13808920186532567,
+        "ridgeRelative": -0.029415844910718268,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.017452917674048468
+      }
+    },
+    {
+      "symbol": "BIIB",
+      "anchor": 217.14999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.1605741960386485,
+        "ridgeRelative": -0.009749473404378201,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.007729590121626278
+      }
+    },
+    {
+      "symbol": "BKNG",
+      "anchor": 173.9199981689453,
+      "scores": {
+        "ridgeAbsolute": 0.20986030140566425,
+        "ridgeRelative": 0.03256018169892786,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.022371995193859993
+      }
+    },
+    {
+      "symbol": "BKR",
+      "anchor": 59.060001373291016,
+      "scores": {
+        "ridgeAbsolute": 0.14991874295531404,
+        "ridgeRelative": -0.023178794101969345,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0028323066295331723
+      }
+    },
+    {
+      "symbol": "BLDR",
+      "anchor": 60.369998931884766,
+      "scores": {
+        "ridgeAbsolute": 0.23566521964792692,
+        "ridgeRelative": 0.05265656207426562,
+        "treeAbsolute": 0.22089082997032888,
+        "treeRelative": 0.11237139745956227
+      }
+    },
+    {
+      "symbol": "BLK",
+      "anchor": 1079.6500244140625,
+      "scores": {
+        "ridgeAbsolute": 0.15236450154356077,
+        "ridgeRelative": -0.021974997512080215,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "BMY",
+      "anchor": 63.63999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.15716620793646346,
+        "ridgeRelative": -0.013517691368241784,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.009962934402425907
+      }
+    },
+    {
+      "symbol": "BNY",
+      "anchor": 162.66000366210938,
+      "scores": {
+        "ridgeAbsolute": 0.14443722587252586,
+        "ridgeRelative": -0.020222856272680154,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "BR",
+      "anchor": 167.74000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.17097833586964872,
+        "ridgeRelative": -0.006892843115623579,
+        "treeAbsolute": 0.08722743150536418,
+        "treeRelative": 0.013670658043560874
+      }
+    },
+    {
+      "symbol": "BRK.B",
+      "anchor": 510.3699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.10757662778220889,
+        "ridgeRelative": -0.05555886719183559,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.0043913839192768304
+      }
+    },
+    {
+      "symbol": "BRO",
+      "anchor": 66.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.1603155764569873,
+        "ridgeRelative": -0.021630767133647883,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "BSX",
+      "anchor": 42.97999954223633,
+      "scores": {
+        "ridgeAbsolute": 0.18556443301698725,
+        "ridgeRelative": 0.003073194007181001,
+        "treeAbsolute": 0.15723616097452298,
+        "treeRelative": 0.08573220792092168
+      }
+    },
+    {
+      "symbol": "BX",
+      "anchor": 128.50999450683594,
+      "scores": {
+        "ridgeAbsolute": 0.18963783329285666,
+        "ridgeRelative": 0.015226719407967871,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.006924581585961317
+      }
+    },
+    {
+      "symbol": "BXP",
+      "anchor": 64.69999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.16452854987492893,
+        "ridgeRelative": -0.0031758256249727087,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.008630672164469413
+      }
+    },
+    {
+      "symbol": "C",
+      "anchor": 138.82000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.15744998013606748,
+        "ridgeRelative": -0.007597674277380687,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.028347734555340263
+      }
+    },
+    {
+      "symbol": "CAH",
+      "anchor": 234.57000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.12601001991620261,
+        "ridgeRelative": -0.039525743521565286,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.019409266557636903
+      }
+    },
+    {
+      "symbol": "CARR",
+      "anchor": 57.459999084472656,
+      "scores": {
+        "ridgeAbsolute": 0.19292707082946367,
+        "ridgeRelative": 0.01388726817994945,
+        "treeAbsolute": 0.10979716887422782,
+        "treeRelative": 0.026923243750586797
+      }
+    },
+    {
+      "symbol": "CASY",
+      "anchor": 615.469970703125,
+      "scores": {
+        "ridgeAbsolute": 0.234234852474401,
+        "ridgeRelative": 0.051044738422765065,
+        "treeAbsolute": 0.1401693194204466,
+        "treeRelative": 0.04138716984316711
+      }
+    },
+    {
+      "symbol": "CAT",
+      "anchor": 818.5700073242188,
+      "scores": {
+        "ridgeAbsolute": 0.19851104877669695,
+        "ridgeRelative": 0.03059395821642638,
+        "treeAbsolute": 0.12416618321733375,
+        "treeRelative": 0.032135306860957
+      }
+    },
+    {
+      "symbol": "CB",
+      "anchor": 338.25,
+      "scores": {
+        "ridgeAbsolute": 0.13960912432372943,
+        "ridgeRelative": -0.03035678416224471,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012085618098993223
+      }
+    },
+    {
+      "symbol": "CBOE",
+      "anchor": 281.0400085449219,
+      "scores": {
+        "ridgeAbsolute": 0.11778623174010135,
+        "ridgeRelative": 0.020629784283275422,
+        "treeAbsolute": 0.08767799647090274,
+        "treeRelative": 0.02480581313269948
+      }
+    },
+    {
+      "symbol": "CBRE",
+      "anchor": 140.50999450683594,
+      "scores": {
+        "ridgeAbsolute": 0.1612117996405796,
+        "ridgeRelative": -0.006548817386588156,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.029759640850825782
+      }
+    },
+    {
+      "symbol": "CCI",
+      "anchor": 75.62000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.16688193395910392,
+        "ridgeRelative": -0.00918948192129448,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.018752409253329463
+      }
+    },
+    {
+      "symbol": "CCL",
+      "anchor": 22.75,
+      "scores": {
+        "ridgeAbsolute": 0.19436086005422898,
+        "ridgeRelative": 0.01742457761635774,
+        "treeAbsolute": 0.12521495328429266,
+        "treeRelative": 0.010314678415847222
+      }
+    },
+    {
+      "symbol": "CDNS",
+      "anchor": 289.3699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.20715150308838182,
+        "ridgeRelative": 0.02811741772895303,
+        "treeAbsolute": 0.10983714990790222,
+        "treeRelative": 0.016345262771539186
+      }
+    },
+    {
+      "symbol": "CDW",
+      "anchor": 153.7899932861328,
+      "scores": {
+        "ridgeAbsolute": 0.22184790030659585,
+        "ridgeRelative": 0.055689891141074865,
+        "treeAbsolute": 0.2646250346777517,
+        "treeRelative": 0.06181635304397489
+      }
+    },
+    {
+      "symbol": "CEG",
+      "anchor": 284.75,
+      "scores": {
+        "ridgeAbsolute": 0.190315188405214,
+        "ridgeRelative": 0.01460253764484407,
+        "treeAbsolute": 0.09535291019113375,
+        "treeRelative": 0.019165904159282883
+      }
+    },
+    {
+      "symbol": "CF",
+      "anchor": 133.07000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.1525161911690762,
+        "ridgeRelative": -0.0020459222645400643,
+        "treeAbsolute": 0.09186968866825924,
+        "treeRelative": 0.006223928566716035
+      }
+    },
+    {
+      "symbol": "CFG",
+      "anchor": 70.4800033569336,
+      "scores": {
+        "ridgeAbsolute": 0.14568174312782514,
+        "ridgeRelative": -0.018913446990524573,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "CHD",
+      "anchor": 94.1500015258789,
+      "scores": {
+        "ridgeAbsolute": 0.13603738088179318,
+        "ridgeRelative": -0.036172504480380376,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0032780642837232066
+      }
+    },
+    {
+      "symbol": "CHRW",
+      "anchor": 152.77999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.22312438217385297,
+        "ridgeRelative": 0.0378617359311283,
+        "treeAbsolute": 0.13021805468021122,
+        "treeRelative": 0.043453841758943054
+      }
+    },
+    {
+      "symbol": "CHTR",
+      "anchor": 145.77000427246094,
+      "scores": {
+        "ridgeAbsolute": 0.1671411322803135,
+        "ridgeRelative": 0.002955143140657905,
+        "treeAbsolute": 0.16170127513718005,
+        "treeRelative": 0.024226599849908825
+      }
+    },
+    {
+      "symbol": "CI",
+      "anchor": 280.760009765625,
+      "scores": {
+        "ridgeAbsolute": 0.15106504069850982,
+        "ridgeRelative": -0.018253522253408948,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.02514247546253712
+      }
+    },
+    {
+      "symbol": "CIEN",
+      "anchor": 349.5400085449219,
+      "scores": {
+        "ridgeAbsolute": 0.2881198156556424,
+        "ridgeRelative": 0.11222086674969362,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.09478217177180394
+      }
+    },
+    {
+      "symbol": "CINF",
+      "anchor": 169.8000030517578,
+      "scores": {
+        "ridgeAbsolute": 0.14939011875262692,
+        "ridgeRelative": -0.023810682737675493,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "CL",
+      "anchor": 86.80000305175781,
+      "scores": {
+        "ridgeAbsolute": 0.14345257856049237,
+        "ridgeRelative": -0.02958551813230493,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.009127738414453874
+      }
+    },
+    {
+      "symbol": "CLX",
+      "anchor": 87.76000213623047,
+      "scores": {
+        "ridgeAbsolute": 0.17026725937645865,
+        "ridgeRelative": -0.010536926476349314,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.016442031593437528
+      }
+    },
+    {
+      "symbol": "CMCSA",
+      "anchor": 25.200000762939453,
+      "scores": {
+        "ridgeAbsolute": 0.1402382574385365,
+        "ridgeRelative": -0.0318716959316863,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0028323066295331723
+      }
+    },
+    {
+      "symbol": "CME",
+      "anchor": 275.5400085449219,
+      "scores": {
+        "ridgeAbsolute": 0.16035789253876528,
+        "ridgeRelative": -0.020091076361994156,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "CMG",
+      "anchor": 36.20000076293945,
+      "scores": {
+        "ridgeAbsolute": 0.18493791084726724,
+        "ridgeRelative": 0.01575123191926438,
+        "treeAbsolute": 0.12416618321733375,
+        "treeRelative": 0.021256763213720806
+      }
+    },
+    {
+      "symbol": "CMI",
+      "anchor": 556.75,
+      "scores": {
+        "ridgeAbsolute": 0.19078406411232737,
+        "ridgeRelative": 0.016434911557982497,
+        "treeAbsolute": 0.11536520889701268,
+        "treeRelative": 0.033318174749078805
+      }
+    },
+    {
+      "symbol": "CMS",
+      "anchor": 67.1500015258789,
+      "scores": {
+        "ridgeAbsolute": 0.11702588676809048,
+        "ridgeRelative": -0.052063186026515225,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.009355745895564337
+      }
+    },
+    {
+      "symbol": "CNC",
+      "anchor": 66.41999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.18695778686453252,
+        "ridgeRelative": 0.02529739371012292,
+        "treeAbsolute": 0.10676271135547137,
+        "treeRelative": 0.03216983687351886
+      }
+    },
+    {
+      "symbol": "CNP",
+      "anchor": 39.11000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.11680777127526766,
+        "ridgeRelative": -0.04846005389097119,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.007560355763658008
+      }
+    },
+    {
+      "symbol": "COF",
+      "anchor": 208.3000030517578,
+      "scores": {
+        "ridgeAbsolute": 0.15574340461188546,
+        "ridgeRelative": -0.016667567299469423,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.04903225257735764
+      }
+    },
+    {
+      "symbol": "COHR",
+      "anchor": 305.3699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.30574293582777606,
+        "ridgeRelative": 0.14512297161615434,
+        "treeAbsolute": 0.28176403821081086,
+        "treeRelative": 0.11593992657947569
+      }
+    },
+    {
+      "symbol": "COIN",
+      "anchor": 175.25999450683594,
+      "scores": {
+        "ridgeAbsolute": 0.25047328963114845,
+        "ridgeRelative": 0.08370979408119295,
+        "treeAbsolute": 0.25480713994808046,
+        "treeRelative": 0.04446346348466936
+      }
+    },
+    {
+      "symbol": "COO",
+      "anchor": 53.90999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.20792420534383102,
+        "ridgeRelative": 0.02408116499399107,
+        "treeAbsolute": 0.1312914249483369,
+        "treeRelative": 0.03021659495611287
+      }
+    },
+    {
+      "symbol": "COP",
+      "anchor": 137.35000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.14342824323907338,
+        "ridgeRelative": -0.022165883340855667,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.005566853741626718
+      }
+    },
+    {
+      "symbol": "COR",
+      "anchor": 321.57000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.16444894177349892,
+        "ridgeRelative": -0.014707926432676965,
+        "treeAbsolute": 0.11188198737413818,
+        "treeRelative": 0.02239371104921164
+      }
+    },
+    {
+      "symbol": "COST",
+      "anchor": 904.77001953125,
+      "scores": {
+        "ridgeAbsolute": 0.14184690633987293,
+        "ridgeRelative": -0.03261316177629461,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.02612781336917634
+      }
+    },
+    {
+      "symbol": "CPAY",
+      "anchor": 408.2200012207031,
+      "scores": {
+        "ridgeAbsolute": 0.15349935531703401,
+        "ridgeRelative": -0.015420719993683886,
+        "treeAbsolute": 0.08649376439844456,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "CPRT",
+      "anchor": 29.950000762939453,
+      "scores": {
+        "ridgeAbsolute": 0.07591876917301,
+        "ridgeRelative": -0.016428034303514777,
+        "treeAbsolute": 0.07658578550473527,
+        "treeRelative": 0.02022934135164694
+      }
+    },
+    {
+      "symbol": "CPT",
+      "anchor": 103.01000213623047,
+      "scores": {
+        "ridgeAbsolute": 0.060582159304498104,
+        "ridgeRelative": -0.1223713696274107,
+        "treeAbsolute": 0.08188813283282342,
+        "treeRelative": -0.08358234118437861
+      }
+    },
+    {
+      "symbol": "CRH",
+      "anchor": 88.55000305175781,
+      "scores": {
+        "ridgeAbsolute": 0.17886797701237916,
+        "ridgeRelative": 0.00204449283933965,
+        "treeAbsolute": 0.09035181918757763,
+        "treeRelative": 0.006845552336351484
+      }
+    },
+    {
+      "symbol": "CRL",
+      "anchor": 278.260009765625,
+      "scores": {
+        "ridgeAbsolute": 0.22693901189773175,
+        "ridgeRelative": 0.05624670544829839,
+        "treeAbsolute": 0.13203424241403297,
+        "treeRelative": 0.044570620442310784
+      }
+    },
+    {
+      "symbol": "CRM",
+      "anchor": 247.72000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.23637502923699624,
+        "ridgeRelative": 0.06834218172120719,
+        "treeAbsolute": 0.164805475284599,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "CRWD",
+      "anchor": 206.74000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.16950211599755938,
+        "ridgeRelative": 0.09988246894888275,
+        "treeAbsolute": 0.14228095884914885,
+        "treeRelative": 0.02510683596379145
+      }
+    },
+    {
+      "symbol": "CSCO",
+      "anchor": 112.12999725341797,
+      "scores": {
+        "ridgeAbsolute": 0.19503898995308633,
+        "ridgeRelative": 0.02903548726778643,
+        "treeAbsolute": 0.12416618321733375,
+        "treeRelative": 0.019316317515390945
+      }
+    },
+    {
+      "symbol": "CSGP",
+      "anchor": 30.459999084472656,
+      "scores": {
+        "ridgeAbsolute": 0.17722004025997412,
+        "ridgeRelative": -0.004625092473198094,
+        "treeAbsolute": 0.15314290921872972,
+        "treeRelative": 0.08584559199993198
+      }
+    },
+    {
+      "symbol": "CSX",
+      "anchor": 48.95000076293945,
+      "scores": {
+        "ridgeAbsolute": 0.14355526618383588,
+        "ridgeRelative": -0.021472887673528954,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006237946991723003
+      }
+    },
+    {
+      "symbol": "CTAS",
+      "anchor": 201.5,
+      "scores": {
+        "ridgeAbsolute": 0.13979402191459586,
+        "ridgeRelative": -0.03286268921660055,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "CTSH",
+      "anchor": 60.0,
+      "scores": {
+        "ridgeAbsolute": 0.1972002987835445,
+        "ridgeRelative": 0.0034868419374754584,
+        "treeAbsolute": 0.12980828832306793,
+        "treeRelative": 0.010314678415847222
+      }
+    },
+    {
+      "symbol": "CTVA",
+      "anchor": 83.9000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.1397644169151215,
+        "ridgeRelative": -0.011494824732900897,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006520364576293048
+      }
+    },
+    {
+      "symbol": "CVNA",
+      "anchor": 69.16000366210938,
+      "scores": {
+        "ridgeAbsolute": 0.2300825500956888,
+        "ridgeRelative": 0.046291836502641785,
+        "treeAbsolute": 0.17155751570414024,
+        "treeRelative": 0.04019633069178201
+      }
+    },
+    {
+      "symbol": "CVS",
+      "anchor": 94.66000366210938,
+      "scores": {
+        "ridgeAbsolute": 0.17314352332509492,
+        "ridgeRelative": 0.00588952160800436,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.02465362559523685
+      }
+    },
+    {
+      "symbol": "CVX",
+      "anchor": 214.05999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.12858444842627353,
+        "ridgeRelative": -0.03371718067427108,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031135836574401657
+      }
+    },
+    {
+      "symbol": "D",
+      "anchor": 64.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.13850960590867445,
+        "ridgeRelative": -0.03510468822827134,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012085618098993223
+      }
+    },
+    {
+      "symbol": "DAL",
+      "anchor": 79.91000366210938,
+      "scores": {
+        "ridgeAbsolute": 0.16817457785830153,
+        "ridgeRelative": 0.005317304509408959,
+        "treeAbsolute": 0.10294375634962703,
+        "treeRelative": 0.013106272197384285
+      }
+    },
+    {
+      "symbol": "DASH",
+      "anchor": 201.9499969482422,
+      "scores": {
+        "ridgeAbsolute": 0.22672115330272424,
+        "ridgeRelative": 0.035610275154206714,
+        "treeAbsolute": 0.1050610250092,
+        "treeRelative": 0.016422919573921224
+      }
+    },
+    {
+      "symbol": "DD",
+      "anchor": 126.98999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.16164047839671436,
+        "ridgeRelative": -0.006998479295166192,
+        "treeAbsolute": 0.09503511718799935,
+        "treeRelative": 0.037174318471989806
+      }
+    },
+    {
+      "symbol": "DDOG",
+      "anchor": 221.2100067138672,
+      "scores": {
+        "ridgeAbsolute": 0.2826529435663864,
+        "ridgeRelative": 0.1277546747885282,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.06874849421957205
+      }
+    },
+    {
+      "symbol": "DE",
+      "anchor": 675.739990234375,
+      "scores": {
+        "ridgeAbsolute": 0.16539068154193437,
+        "ridgeRelative": 0.001310088449811584,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.015710958224759076
+      }
+    },
+    {
+      "symbol": "DECK",
+      "anchor": 81.2699966430664,
+      "scores": {
+        "ridgeAbsolute": 0.1815721797201538,
+        "ridgeRelative": 0.0064160438677515795,
+        "treeAbsolute": 0.10304871311792389,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "DELL",
+      "anchor": 567.2899780273438,
+      "scores": {
+        "ridgeAbsolute": 0.3673214001089451,
+        "ridgeRelative": 0.23612539151981082,
+        "treeAbsolute": 0.28524725973368537,
+        "treeRelative": 0.14060156008953456
+      }
+    },
+    {
+      "symbol": "DG",
+      "anchor": 124.58000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.1766960187347929,
+        "ridgeRelative": -0.0026669517650655147,
+        "treeAbsolute": 0.11536520889701268,
+        "treeRelative": 0.03089049928487029
+      }
+    },
+    {
+      "symbol": "DGX",
+      "anchor": 235.02000427246094,
+      "scores": {
+        "ridgeAbsolute": 0.12349691374582976,
+        "ridgeRelative": -0.04274632729780875,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "DHI",
+      "anchor": 137.88999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.1641595165794424,
+        "ridgeRelative": -0.005902834859463652,
+        "treeAbsolute": 0.0961055421237735,
+        "treeRelative": 0.019267227072462687
+      }
+    },
+    {
+      "symbol": "DHR",
+      "anchor": 200.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.1593304940399595,
+        "ridgeRelative": -0.018178949864594503,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.005582012723296737
+      }
+    },
+    {
+      "symbol": "DIS",
+      "anchor": 106.55000305175781,
+      "scores": {
+        "ridgeAbsolute": 0.13256057453886064,
+        "ridgeRelative": -0.03488425304641905,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.00586328975120373
+      }
+    },
+    {
+      "symbol": "DLR",
+      "anchor": 188.5800018310547,
+      "scores": {
+        "ridgeAbsolute": 0.14049782006576278,
+        "ridgeRelative": -0.025210808113740064,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.005285576713719725
+      }
+    },
+    {
+      "symbol": "DLTR",
+      "anchor": 118.16999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.21933234381573213,
+        "ridgeRelative": 0.03536498226161537,
+        "treeAbsolute": 0.12416618321733375,
+        "treeRelative": 0.04102616629473454
+      }
+    },
+    {
+      "symbol": "DOC",
+      "anchor": 20.299999237060547,
+      "scores": {
+        "ridgeAbsolute": 0.17226971009918113,
+        "ridgeRelative": -0.007191308817748475,
+        "treeAbsolute": 0.08815703518270089,
+        "treeRelative": 0.006693945246368507
+      }
+    },
+    {
+      "symbol": "DOV",
+      "anchor": 189.0500030517578,
+      "scores": {
+        "ridgeAbsolute": 0.15076527471341658,
+        "ridgeRelative": -0.015664997041826046,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.018129928968988338
+      }
+    },
+    {
+      "symbol": "DOW",
+      "anchor": 29.030000686645508,
+      "scores": {
+        "ridgeAbsolute": 0.1656620145814175,
+        "ridgeRelative": -0.0006165984156916052,
+        "treeAbsolute": 0.11188198737413818,
+        "treeRelative": 0.01399797173952466
+      }
+    },
+    {
+      "symbol": "DPZ",
+      "anchor": 311.6000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.24142111635312924,
+        "ridgeRelative": 0.05933535109299199,
+        "treeAbsolute": 0.09268902677253428,
+        "treeRelative": 0.01812671882294222
+      }
+    },
+    {
+      "symbol": "DRI",
+      "anchor": 209.88999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.15387831406377947,
+        "ridgeRelative": -0.007214919438602068,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.02179154950421511
+      }
+    },
+    {
+      "symbol": "DTE",
+      "anchor": 132.5800018310547,
+      "scores": {
+        "ridgeAbsolute": 0.03511975346889801,
+        "ridgeRelative": -0.051335359222160065,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.017462199338064886
+      }
+    },
+    {
+      "symbol": "DUK",
+      "anchor": 119.41999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.0219875582776803,
+        "ridgeRelative": -0.0597552080035731,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.017462199338064886
+      }
+    },
+    {
+      "symbol": "DVA",
+      "anchor": 181.5500030517578,
+      "scores": {
+        "ridgeAbsolute": 0.21997964268386216,
+        "ridgeRelative": 0.06946566954929531,
+        "treeAbsolute": 0.16065250507022114,
+        "treeRelative": 0.04794344073743581
+      }
+    },
+    {
+      "symbol": "DVN",
+      "anchor": 50.22999954223633,
+      "scores": {
+        "ridgeAbsolute": 0.14591558068062338,
+        "ridgeRelative": -0.017653177427859806,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.005285576713719725
+      }
+    },
+    {
+      "symbol": "DXCM",
+      "anchor": 83.02999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.19589671580678195,
+        "ridgeRelative": 0.020154138259641116,
+        "treeAbsolute": 0.1085442465320745,
+        "treeRelative": 0.012882517538984716
+      }
+    },
+    {
+      "symbol": "EBAY",
+      "anchor": 107.75,
+      "scores": {
+        "ridgeAbsolute": 0.15963495621763005,
+        "ridgeRelative": 0.003955510419614152,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.018647097427853875
+      }
+    },
+    {
+      "symbol": "ECHO",
+      "anchor": 93.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.24331299539267875,
+        "ridgeRelative": 0.06210554439538619,
+        "treeAbsolute": 0.17206230623455873,
+        "treeRelative": 0.08030421190824406
+      }
+    },
+    {
+      "symbol": "ECL",
+      "anchor": 276.17999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.13123331634764052,
+        "ridgeRelative": -0.04023226917758388,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006237946991723003
+      }
+    },
+    {
+      "symbol": "ED",
+      "anchor": 106.45999908447266,
+      "scores": {
+        "ridgeAbsolute": 0.10479591405938449,
+        "ridgeRelative": -0.061714476713300596,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.009355745895564337
+      }
+    },
+    {
+      "symbol": "EFX",
+      "anchor": 169.0,
+      "scores": {
+        "ridgeAbsolute": 0.19583242317973953,
+        "ridgeRelative": 0.011022093530139946,
+        "treeAbsolute": 0.12490681557420692,
+        "treeRelative": 0.019316317515390945
+      }
+    },
+    {
+      "symbol": "EG",
+      "anchor": 371.7099914550781,
+      "scores": {
+        "ridgeAbsolute": 0.15283708811513286,
+        "ridgeRelative": -0.01677109514979464,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.009962934402425907
+      }
+    },
+    {
+      "symbol": "EIX",
+      "anchor": 56.0,
+      "scores": {
+        "ridgeAbsolute": 0.2046111265133334,
+        "ridgeRelative": 0.06733763186269764,
+        "treeAbsolute": 0.16065250507022114,
+        "treeRelative": 0.04769709812217253
+      }
+    },
+    {
+      "symbol": "EL",
+      "anchor": 97.12000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.17511498203720097,
+        "ridgeRelative": 0.013521182927963378,
+        "treeAbsolute": 0.12652472283601193,
+        "treeRelative": 0.019627358503285335
+      }
+    },
+    {
+      "symbol": "ELV",
+      "anchor": 418.7200012207031,
+      "scores": {
+        "ridgeAbsolute": 0.16631340670819655,
+        "ridgeRelative": -0.0007347807238249362,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.03187583719150952
+      }
+    },
+    {
+      "symbol": "EME",
+      "anchor": 780.6599731445312,
+      "scores": {
+        "ridgeAbsolute": 0.19055336225959757,
+        "ridgeRelative": 0.020885241760383384,
+        "treeAbsolute": 0.12454738273518741,
+        "treeRelative": 0.036753331803654025
+      }
+    },
+    {
+      "symbol": "EMR",
+      "anchor": 152.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.13659736076754686,
+        "ridgeRelative": -0.026037853268116685,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.005582012723296737
+      }
+    },
+    {
+      "symbol": "EOG",
+      "anchor": 147.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.13700167218407597,
+        "ridgeRelative": -0.02047887496707212,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0018306307791959154
+      }
+    },
+    {
+      "symbol": "EQIX",
+      "anchor": 1037.719970703125,
+      "scores": {
+        "ridgeAbsolute": 0.13086906591067374,
+        "ridgeRelative": -0.030893099564681656,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "EQT",
+      "anchor": 54.06999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.12241088044114137,
+        "ridgeRelative": -0.053045978629368114,
+        "treeAbsolute": 0.08188813283282342,
+        "treeRelative": -0.006434495879435189
+      }
+    },
+    {
+      "symbol": "ERIE",
+      "anchor": 245.02999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.18552886238929978,
+        "ridgeRelative": -0.0009242882978162683,
+        "treeAbsolute": 0.12068296169445922,
+        "treeRelative": 0.0111647471762015
+      }
+    },
+    {
+      "symbol": "ES",
+      "anchor": 68.5199966430664,
+      "scores": {
+        "ridgeAbsolute": 0.11265805833734209,
+        "ridgeRelative": -0.05016747251325782,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "ESS",
+      "anchor": 272.9100036621094,
+      "scores": {
+        "ridgeAbsolute": 0.02562009927537416,
+        "ridgeRelative": -0.12573033852187926,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.04695706634667814
+      }
+    },
+    {
+      "symbol": "ETN",
+      "anchor": 425.3699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.16974888351696743,
+        "ridgeRelative": 0.009896693945707639,
+        "treeAbsolute": 0.1252762967332345,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "ETR",
+      "anchor": 105.33000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.1162103546259653,
+        "ridgeRelative": -0.047334381139249135,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006558679913320753
+      }
+    },
+    {
+      "symbol": "EVRG",
+      "anchor": 81.62000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.10809407924018863,
+        "ridgeRelative": -0.05587348832257827,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.005900799961040531
+      }
+    },
+    {
+      "symbol": "EW",
+      "anchor": 84.37000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.14691581510654167,
+        "ridgeRelative": -0.02871056031219383,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "EXC",
+      "anchor": 43.15999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.12697420230494225,
+        "ridgeRelative": -0.039269183757971386,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.014409706508643752
+      }
+    },
+    {
+      "symbol": "EXE",
+      "anchor": 94.83000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.09035287252127158,
+        "ridgeRelative": -0.08778720361842163,
+        "treeAbsolute": 0.0694873305803266,
+        "treeRelative": -0.02346882300077003
+      }
+    },
+    {
+      "symbol": "EXPD",
+      "anchor": 192.60000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.13287163811407382,
+        "ridgeRelative": -0.029601297335297067,
+        "treeAbsolute": 0.09613721770881711,
+        "treeRelative": 0.017734194701955468
+      }
+    },
+    {
+      "symbol": "EXPE",
+      "anchor": 280.8299865722656,
+      "scores": {
+        "ridgeAbsolute": 0.20740980301802128,
+        "ridgeRelative": 0.03651900931759006,
+        "treeAbsolute": 0.12068296169445922,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "EXR",
+      "anchor": 137.63999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.11650923011144797,
+        "ridgeRelative": -0.058419859754917106,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.0562202517552363
+      }
+    },
+    {
+      "symbol": "F",
+      "anchor": 13.970000267028809,
+      "scores": {
+        "ridgeAbsolute": 0.20747551111684356,
+        "ridgeRelative": 0.03487957713353439,
+        "treeAbsolute": 0.13000794435888643,
+        "treeRelative": 0.045214072104533355
+      }
+    },
+    {
+      "symbol": "FANG",
+      "anchor": 204.97000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.14384580128822128,
+        "ridgeRelative": -0.021060135380456483,
+        "treeAbsolute": 0.08649376439844456,
+        "treeRelative": 0.005285576713719725
+      }
+    },
+    {
+      "symbol": "FAST",
+      "anchor": 49.31999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.11788065961218944,
+        "ridgeRelative": -0.043468455218563844,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "FCX",
+      "anchor": 71.06999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.1917978217988361,
+        "ridgeRelative": 0.02457606008296595,
+        "treeAbsolute": 0.13789797919296876,
+        "treeRelative": 0.013545436586767105
+      }
+    },
+    {
+      "symbol": "FDS",
+      "anchor": 259.7099914550781,
+      "scores": {
+        "ridgeAbsolute": 0.25169291843749947,
+        "ridgeRelative": 0.054260359149550075,
+        "treeAbsolute": 0.15716928354734663,
+        "treeRelative": 0.008687586718183704
+      }
+    },
+    {
+      "symbol": "FDX",
+      "anchor": 311.989990234375,
+      "scores": {
+        "ridgeAbsolute": 0.13134922282160555,
+        "ridgeRelative": -0.03896787197635843,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.017734194701955468
+      }
+    },
+    {
+      "symbol": "FE",
+      "anchor": 46.130001068115234,
+      "scores": {
+        "ridgeAbsolute": 0.11830340977115782,
+        "ridgeRelative": -0.04979527664094301,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.016205096640550077
+      }
+    },
+    {
+      "symbol": "FERG",
+      "anchor": 222.5399932861328,
+      "scores": {
+        "ridgeAbsolute": 0.1559249433978291,
+        "ridgeRelative": -0.006405776681611746,
+        "treeAbsolute": 0.09613721770881711,
+        "treeRelative": 0.023739645341743172
+      }
+    },
+    {
+      "symbol": "FFIV",
+      "anchor": 411.7099914550781,
+      "scores": {
+        "ridgeAbsolute": 0.15132275591658517,
+        "ridgeRelative": -0.0011873114387206591,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006924581585961317
+      }
+    },
+    {
+      "symbol": "FICO",
+      "anchor": 985.3900146484375,
+      "scores": {
+        "ridgeAbsolute": 0.2921174851504992,
+        "ridgeRelative": 0.11038703190516443,
+        "treeAbsolute": 0.1909669532783389,
+        "treeRelative": 0.06787377266956879
+      }
+    },
+    {
+      "symbol": "FIS",
+      "anchor": 38.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.19900129675808678,
+        "ridgeRelative": 0.028186261144406956,
+        "treeAbsolute": 0.1324370546642446,
+        "treeRelative": 0.04946617067949316
+      }
+    },
+    {
+      "symbol": "FISV",
+      "anchor": 51.58000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.19700160923892904,
+        "ridgeRelative": 0.024007196627091994,
+        "treeAbsolute": 0.12626530859210705,
+        "treeRelative": 0.020551523372960564
+      }
+    },
+    {
+      "symbol": "FITB",
+      "anchor": 54.720001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.04265185406770834,
+        "ridgeRelative": -0.03677358796940921,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "FIX",
+      "anchor": 1690.8199462890625,
+      "scores": {
+        "ridgeAbsolute": 0.23235950927294965,
+        "ridgeRelative": 0.07034444716384529,
+        "treeAbsolute": 0.17471911970418214,
+        "treeRelative": 0.022123761623284208
+      }
+    },
+    {
+      "symbol": "FLEX",
+      "anchor": 115.77999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.32045593926475535,
+        "ridgeRelative": 0.13119081383883877,
+        "treeAbsolute": 0.3008691964189445,
+        "treeRelative": 0.14395248604785657
+      }
+    },
+    {
+      "symbol": "FOX",
+      "anchor": 58.45000076293945,
+      "scores": {
+        "ridgeAbsolute": 0.1714989064151804,
+        "ridgeRelative": -0.0006679997682739812,
+        "treeAbsolute": 0.12652472283601193,
+        "treeRelative": 0.018689006650289032
+      }
+    },
+    {
+      "symbol": "FRT",
+      "anchor": 114.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.12642521571963083,
+        "ridgeRelative": -0.03957534527871954,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.002023444723246783
+      }
+    },
+    {
+      "symbol": "FSLR",
+      "anchor": 209.02999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.24142667333141526,
+        "ridgeRelative": 0.06645925103588646,
+        "treeAbsolute": 0.14607933845192092,
+        "treeRelative": 0.00960338224932427
+      }
+    },
+    {
+      "symbol": "FTNT",
+      "anchor": 156.07000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.23901078933062098,
+        "ridgeRelative": 0.07096500132712578,
+        "treeAbsolute": 0.1498066932836642,
+        "treeRelative": 0.03228233135104844
+      }
+    },
+    {
+      "symbol": "FTV",
+      "anchor": 54.689998626708984,
+      "scores": {
+        "ridgeAbsolute": 0.14137766726496417,
+        "ridgeRelative": -0.030186705675026453,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031135836574401657
+      }
+    },
+    {
+      "symbol": "GD",
+      "anchor": 355.8999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.12781724311403778,
+        "ridgeRelative": -0.04251711162222575,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.017734194701955468
+      }
+    },
+    {
+      "symbol": "GDDY",
+      "anchor": 98.06999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.2094400096154046,
+        "ridgeRelative": 0.05495278281826631,
+        "treeAbsolute": 0.17302706205906046,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "GE",
+      "anchor": 323.6600036621094,
+      "scores": {
+        "ridgeAbsolute": 0.17200549460447734,
+        "ridgeRelative": 0.00028944142431219224,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.019896977527961334
+      }
+    },
+    {
+      "symbol": "GEHC",
+      "anchor": 63.93000030517578,
+      "scores": {
+        "ridgeAbsolute": 0.18932894565669317,
+        "ridgeRelative": 0.004822054275593381,
+        "treeAbsolute": 0.10605453310744835,
+        "treeRelative": 0.029558237046913797
+      }
+    },
+    {
+      "symbol": "GEN",
+      "anchor": 30.260000228881836,
+      "scores": {
+        "ridgeAbsolute": 0.19668606467740196,
+        "ridgeRelative": 0.021812814164308664,
+        "treeAbsolute": 0.09535291019113375,
+        "treeRelative": 0.019896977527961334
+      }
+    },
+    {
+      "symbol": "GEV",
+      "anchor": 957.27001953125,
+      "scores": {
+        "ridgeAbsolute": 0.21886559601395095,
+        "ridgeRelative": 0.046947622268814805,
+        "treeAbsolute": 0.16312407521004757,
+        "treeRelative": 0.04929665534009274
+      }
+    },
+    {
+      "symbol": "GILD",
+      "anchor": 143.72000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.13337751110490298,
+        "ridgeRelative": -0.03683951971537439,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.006410363826270729
+      }
+    },
+    {
+      "symbol": "GIS",
+      "anchor": 35.849998474121094,
+      "scores": {
+        "ridgeAbsolute": 0.18993134344671708,
+        "ridgeRelative": 0.0027518227895176597,
+        "treeAbsolute": 0.08986356530028831,
+        "treeRelative": 0.02707946094927792
+      }
+    },
+    {
+      "symbol": "GL",
+      "anchor": 171.1699981689453,
+      "scores": {
+        "ridgeAbsolute": 0.15517422537095374,
+        "ridgeRelative": -0.011291709798901354,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.012712640496189474
+      }
+    },
+    {
+      "symbol": "GLW",
+      "anchor": 166.39999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.3103972215963068,
+        "ridgeRelative": 0.1250556142324987,
+        "treeAbsolute": 0.25697957198726873,
+        "treeRelative": 0.08974385364893585
+      }
+    },
+    {
+      "symbol": "GM",
+      "anchor": 85.62000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.16498625871411624,
+        "ridgeRelative": -0.005700959460528629,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.019283203227596395
+      }
+    },
+    {
+      "symbol": "GNRC",
+      "anchor": 186.99000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.225186576153886,
+        "ridgeRelative": 0.051571213669315136,
+        "treeAbsolute": 0.16857908471168423,
+        "treeRelative": 0.04590959100475273
+      }
+    },
+    {
+      "symbol": "GOOG",
+      "anchor": 335.45001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.16317647880279898,
+        "ridgeRelative": -0.003348635553407558,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.005006607166597628
+      }
+    },
+    {
+      "symbol": "GPC",
+      "anchor": 133.67999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.15922510802018147,
+        "ridgeRelative": -0.015485357125051771,
+        "treeAbsolute": 0.09681115450951742,
+        "treeRelative": 0.01802701542193679
+      }
+    },
+    {
+      "symbol": "GPN",
+      "anchor": 88.29000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.19290193055845917,
+        "ridgeRelative": 0.02224579627260284,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.009137958654275061
+      }
+    },
+    {
+      "symbol": "GRMN",
+      "anchor": 282.6700134277344,
+      "scores": {
+        "ridgeAbsolute": 0.15598395187439384,
+        "ridgeRelative": -0.007626852101363466,
+        "treeAbsolute": 0.09186968866825924,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "GS",
+      "anchor": 1029.1800537109375,
+      "scores": {
+        "ridgeAbsolute": 0.18210341038693867,
+        "ridgeRelative": 0.007836462528864448,
+        "treeAbsolute": 0.09956683634703851,
+        "treeRelative": 0.014064831682174142
+      }
+    },
+    {
+      "symbol": "GWW",
+      "anchor": 1280.0,
+      "scores": {
+        "ridgeAbsolute": 0.12859927574306995,
+        "ridgeRelative": -0.03293547437718993,
+        "treeAbsolute": 0.09056917768603225,
+        "treeRelative": 0.01409278906605152
+      }
+    },
+    {
+      "symbol": "HAL",
+      "anchor": 35.84000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.07099234959636842,
+        "ridgeRelative": -0.015933736944767584,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "HAS",
+      "anchor": 91.54000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.1545433403061831,
+        "ridgeRelative": -0.02045358683974077,
+        "treeAbsolute": 0.09683314062700804,
+        "treeRelative": 0.06787129489506183
+      }
+    },
+    {
+      "symbol": "HBAN",
+      "anchor": 16.860000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.14937736642489705,
+        "ridgeRelative": -0.020515719251814543,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "HCA",
+      "anchor": 426.94000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.12625346381691016,
+        "ridgeRelative": -0.043177462706664914,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "HD",
+      "anchor": 308.739990234375,
+      "scores": {
+        "ridgeAbsolute": 0.15311259832575103,
+        "ridgeRelative": -0.02068322707066377,
+        "treeAbsolute": 0.09613721770881711,
+        "treeRelative": 0.02108630966345487
+      }
+    },
+    {
+      "symbol": "HIG",
+      "anchor": 136.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.1341001441042531,
+        "ridgeRelative": -0.03556293432498347,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": -0.04973749241811788
+      }
+    },
+    {
+      "symbol": "HII",
+      "anchor": 279.69000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.18193079489065228,
+        "ridgeRelative": -0.008026748521361314,
+        "treeAbsolute": 0.11536520889701268,
+        "treeRelative": 0.03514155871099124
+      }
+    },
+    {
+      "symbol": "HLT",
+      "anchor": 306.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.15398877860775959,
+        "ridgeRelative": -0.013799347392117979,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "HON",
+      "anchor": 202.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.14780057141998076,
+        "ridgeRelative": -0.024477105226473537,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "HOOD",
+      "anchor": 112.56999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.25997368153545797,
+        "ridgeRelative": 0.0936095617503195,
+        "treeAbsolute": 0.23813643319586275,
+        "treeRelative": 0.051474971160665246
+      }
+    },
+    {
+      "symbol": "HPE",
+      "anchor": 62.09000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.2791113301825054,
+        "ridgeRelative": 0.14004384566493808,
+        "treeAbsolute": 0.27854283610466385,
+        "treeRelative": 0.08183381206408469
+      }
+    },
+    {
+      "symbol": "HPQ",
+      "anchor": 35.47999954223633,
+      "scores": {
+        "ridgeAbsolute": 0.23194040276472602,
+        "ridgeRelative": 0.08401991188144833,
+        "treeAbsolute": 0.16857908471168423,
+        "treeRelative": 0.027821696696148777
+      }
+    },
+    {
+      "symbol": "HRL",
+      "anchor": 20.56999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.08204084546004192,
+        "ridgeRelative": -0.005979872447278442,
+        "treeAbsolute": 0.0673127124211386,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "HSIC",
+      "anchor": 88.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.13535457531882802,
+        "ridgeRelative": -0.03385215400603314,
+        "treeAbsolute": 0.09613721770881711,
+        "treeRelative": 0.02246269082041629
+      }
+    },
+    {
+      "symbol": "HST",
+      "anchor": 22.239999771118164,
+      "scores": {
+        "ridgeAbsolute": 0.13850437698703258,
+        "ridgeRelative": -0.01661153505252657,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "HSY",
+      "anchor": 173.32000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.1437930253044431,
+        "ridgeRelative": -0.034008936016040985,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "HUBB",
+      "anchor": 460.3999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.15683105761666563,
+        "ridgeRelative": -0.009073336034299223,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.005582012723296737
+      }
+    },
+    {
+      "symbol": "HUM",
+      "anchor": 409.79998779296875,
+      "scores": {
+        "ridgeAbsolute": 0.21234440796155324,
+        "ridgeRelative": 0.04652844661011918,
+        "treeAbsolute": 0.11536520889701268,
+        "treeRelative": 0.03187583719150952
+      }
+    },
+    {
+      "symbol": "HWM",
+      "anchor": 229.61000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.18111982820561695,
+        "ridgeRelative": 0.013185231452871484,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.007225604417053291
+      }
+    },
+    {
+      "symbol": "IBKR",
+      "anchor": 91.37000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.1673346504608323,
+        "ridgeRelative": 0.010474426572824306,
+        "treeAbsolute": 0.09535291019113375,
+        "treeRelative": -0.002971828789302032
+      }
+    },
+    {
+      "symbol": "IBM",
+      "anchor": 243.2899932861328,
+      "scores": {
+        "ridgeAbsolute": 0.2808763836991092,
+        "ridgeRelative": 0.07314338171591124,
+        "treeAbsolute": 0.23864068735181626,
+        "treeRelative": 0.05577071262111482
+      }
+    },
+    {
+      "symbol": "ICE",
+      "anchor": 157.39999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.14007693595352902,
+        "ridgeRelative": -0.030256208184115285,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0025123411985200255
+      }
+    },
+    {
+      "symbol": "IDXX",
+      "anchor": 504.70001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.1669396439710903,
+        "ridgeRelative": -0.014279059353598097,
+        "treeAbsolute": 0.09035181918757763,
+        "treeRelative": 0.0015017969000329268
+      }
+    },
+    {
+      "symbol": "IEX",
+      "anchor": 224.2100067138672,
+      "scores": {
+        "ridgeAbsolute": 0.12029625086344661,
+        "ridgeRelative": -0.04014989908275837,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.007560355763658008
+      }
+    },
+    {
+      "symbol": "IFF",
+      "anchor": 83.61000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.16774788980537797,
+        "ridgeRelative": -0.002069265408628037,
+        "treeAbsolute": 0.13209276285879684,
+        "treeRelative": 0.023772749843762278
+      }
+    },
+    {
+      "symbol": "INCY",
+      "anchor": 121.47000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.16384815335470232,
+        "ridgeRelative": -0.009558509834585808,
+        "treeAbsolute": 0.08649376439844456,
+        "treeRelative": 0.0014412621196659143
+      }
+    },
+    {
+      "symbol": "INTC",
+      "anchor": 102.94000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.2843342855234253,
+        "ridgeRelative": 0.11868457668511895,
+        "treeAbsolute": 0.26911828714965336,
+        "treeRelative": 0.08691190287224188
+      }
+    },
+    {
+      "symbol": "INTU",
+      "anchor": 321.57000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.25527066144582927,
+        "ridgeRelative": 0.053036394703531234,
+        "treeAbsolute": 0.21855898053529016,
+        "treeRelative": 0.0722964183376301
+      }
+    },
+    {
+      "symbol": "INVH",
+      "anchor": 27.540000915527344,
+      "scores": {
+        "ridgeAbsolute": 0.1352926398449611,
+        "ridgeRelative": -0.03524054893260094,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.007648830204466836
+      }
+    },
+    {
+      "symbol": "IP",
+      "anchor": 34.36000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.1697136210424214,
+        "ridgeRelative": -0.007559167256155826,
+        "treeAbsolute": 0.11647082617353763,
+        "treeRelative": 0.041268812871692026
+      }
+    },
+    {
+      "symbol": "IQV",
+      "anchor": 261.7699890136719,
+      "scores": {
+        "ridgeAbsolute": 0.2108252004985297,
+        "ridgeRelative": 0.03315312556179753,
+        "treeAbsolute": 0.12416618321733375,
+        "treeRelative": 0.03903947101560262
+      }
+    },
+    {
+      "symbol": "IR",
+      "anchor": 72.93000030517578,
+      "scores": {
+        "ridgeAbsolute": 0.15896772482157034,
+        "ridgeRelative": -0.014624785178210436,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "IRM",
+      "anchor": 115.18000030517578,
+      "scores": {
+        "ridgeAbsolute": 0.1282366823011028,
+        "ridgeRelative": -0.024874070231236292,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "ISRG",
+      "anchor": 369.1499938964844,
+      "scores": {
+        "ridgeAbsolute": 0.1884444694391602,
+        "ridgeRelative": 0.004814480941977735,
+        "treeAbsolute": 0.13354267194076958,
+        "treeRelative": 0.03161531460608963
+      }
+    },
+    {
+      "symbol": "IT",
+      "anchor": 179.58999633789062,
+      "scores": {
+        "ridgeAbsolute": 0.25400803480984996,
+        "ridgeRelative": 0.08127830594876091,
+        "treeAbsolute": 0.24317267894164965,
+        "treeRelative": 0.052047044851108545
+      }
+    },
+    {
+      "symbol": "ITW",
+      "anchor": 268.1600036621094,
+      "scores": {
+        "ridgeAbsolute": 0.11430287578114463,
+        "ridgeRelative": -0.04796255139201108,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.004105409829134202
+      }
+    },
+    {
+      "symbol": "IVZ",
+      "anchor": 32.279998779296875,
+      "scores": {
+        "ridgeAbsolute": 0.1661839808643958,
+        "ridgeRelative": -0.00035456622515718126,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "J",
+      "anchor": 141.85000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.07481486543591728,
+        "ridgeRelative": -0.02053391503856262,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "JBHT",
+      "anchor": 270.45001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.06029104778629586,
+        "ridgeRelative": -0.012671699907720468,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "JBL",
+      "anchor": 318.0799865722656,
+      "scores": {
+        "ridgeAbsolute": 0.2149797426817856,
+        "ridgeRelative": 0.05146919704176382,
+        "treeAbsolute": 0.17206230623455873,
+        "treeRelative": 0.05444109040572616
+      }
+    },
+    {
+      "symbol": "JCI",
+      "anchor": 146.00999450683594,
+      "scores": {
+        "ridgeAbsolute": 0.1460194257201465,
+        "ridgeRelative": -0.007530700478648629,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.017143412100321095
+      }
+    },
+    {
+      "symbol": "JKHY",
+      "anchor": 161.1199951171875,
+      "scores": {
+        "ridgeAbsolute": 0.16259697619741326,
+        "ridgeRelative": -0.012595635464313156,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "JNJ",
+      "anchor": 265.5799865722656,
+      "scores": {
+        "ridgeAbsolute": 0.13801073892300078,
+        "ridgeRelative": -0.03193255590471522,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.003723654288353379
+      }
+    },
+    {
+      "symbol": "JPM",
+      "anchor": 356.2300109863281,
+      "scores": {
+        "ridgeAbsolute": 0.1475448684512136,
+        "ridgeRelative": -0.022405867268658494,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.008281012740490019
+      }
+    },
+    {
+      "symbol": "KDP",
+      "anchor": 31.389999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.14436291810879825,
+        "ridgeRelative": -0.020237700444269847,
+        "treeAbsolute": 0.091661588739297,
+        "treeRelative": 0.016608519036401488
+      }
+    },
+    {
+      "symbol": "KEY",
+      "anchor": 21.84000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.13927615433305335,
+        "ridgeRelative": -0.025089047261178953,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.002668971382242029
+      }
+    },
+    {
+      "symbol": "KEYS",
+      "anchor": 338.6400146484375,
+      "scores": {
+        "ridgeAbsolute": 0.1736476652271718,
+        "ridgeRelative": 0.012886779243860162,
+        "treeAbsolute": 0.12068296169445922,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "KHC",
+      "anchor": 24.600000381469727,
+      "scores": {
+        "ridgeAbsolute": 0.06588900101272839,
+        "ridgeRelative": -0.017981417290588435,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "KIM",
+      "anchor": 23.190000534057617,
+      "scores": {
+        "ridgeAbsolute": 0.1293831843393299,
+        "ridgeRelative": -0.04144326038500787,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.0019381138350902706
+      }
+    },
+    {
+      "symbol": "KKR",
+      "anchor": 101.08000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.19072374257766397,
+        "ridgeRelative": 0.02040599029375914,
+        "treeAbsolute": 0.09315151556344284,
+        "treeRelative": 0.03731292212263887
+      }
+    },
+    {
+      "symbol": "KLAC",
+      "anchor": 180.63999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.301307951096899,
+        "ridgeRelative": 0.10845612288406617,
+        "treeAbsolute": 0.2537583698811217,
+        "treeRelative": 0.06791746586207074
+      }
+    },
+    {
+      "symbol": "KMB",
+      "anchor": 98.1500015258789,
+      "scores": {
+        "ridgeAbsolute": 0.14658938114132153,
+        "ridgeRelative": -0.025178328787029653,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031135836574401657
+      }
+    },
+    {
+      "symbol": "KMI",
+      "anchor": 30.860000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.1279476577761084,
+        "ridgeRelative": -0.03949971518420642,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0057313343679097585
+      }
+    },
+    {
+      "symbol": "KO",
+      "anchor": 88.29000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.11925534855788686,
+        "ridgeRelative": -0.04616053822117962,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.0071786002228771935
+      }
+    },
+    {
+      "symbol": "KR",
+      "anchor": 58.4900016784668,
+      "scores": {
+        "ridgeAbsolute": 0.1704741602999125,
+        "ridgeRelative": -0.006983922541876145,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.020686538334254996
+      }
+    },
+    {
+      "symbol": "KVUE",
+      "anchor": 17.780000686645508,
+      "scores": {
+        "ridgeAbsolute": 0.14133392980962828,
+        "ridgeRelative": -0.029000493568779456,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006237946991723003
+      }
+    },
+    {
+      "symbol": "L",
+      "anchor": 108.79000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.1264841784607816,
+        "ridgeRelative": -0.04268105864924138,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.005299557502120392
+      }
+    },
+    {
+      "symbol": "LDOS",
+      "anchor": 128.86000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.17698441363285086,
+        "ridgeRelative": -0.002693862639018952,
+        "treeAbsolute": 0.12429828943739973,
+        "treeRelative": 0.03365337779407321
+      }
+    },
+    {
+      "symbol": "LEN",
+      "anchor": 79.5999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.16207646709352647,
+        "ridgeRelative": -0.014488940943303849,
+        "treeAbsolute": 0.11398111274891147,
+        "treeRelative": 0.03276552645910832
+      }
+    },
+    {
+      "symbol": "LH",
+      "anchor": 311.5400085449219,
+      "scores": {
+        "ridgeAbsolute": 0.141986669464948,
+        "ridgeRelative": -0.027493547513397738,
+        "treeAbsolute": 0.091661588739297,
+        "treeRelative": 0.016608519036401488
+      }
+    },
+    {
+      "symbol": "LHX",
+      "anchor": 245.5399932861328,
+      "scores": {
+        "ridgeAbsolute": 0.06719689640668927,
+        "ridgeRelative": -0.031178353467668694,
+        "treeAbsolute": 0.06921530252856163,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "LII",
+      "anchor": 366.0400085449219,
+      "scores": {
+        "ridgeAbsolute": 0.25346878206315177,
+        "ridgeRelative": 0.05827020759541238,
+        "treeAbsolute": 0.14770292333855337,
+        "treeRelative": 0.03770540355248549
+      }
+    },
+    {
+      "symbol": "LIN",
+      "anchor": 466.2200012207031,
+      "scores": {
+        "ridgeAbsolute": 0.13526306845416233,
+        "ridgeRelative": -0.03083275906441795,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006855115922897765
+      }
+    },
+    {
+      "symbol": "LITE",
+      "anchor": 927.030029296875,
+      "scores": {
+        "ridgeAbsolute": 0.27652689042372147,
+        "ridgeRelative": 0.11278099313718735,
+        "treeAbsolute": 0.26450966349365806,
+        "treeRelative": 0.11210018701562335
+      }
+    },
+    {
+      "symbol": "LLY",
+      "anchor": 1115.699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.15080167181669227,
+        "ridgeRelative": -0.01791274139371223,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.004004931316260373
+      }
+    },
+    {
+      "symbol": "LMT",
+      "anchor": 524.1900024414062,
+      "scores": {
+        "ridgeAbsolute": 0.1536024284915279,
+        "ridgeRelative": -0.020610087039813266,
+        "treeAbsolute": 0.091661588739297,
+        "treeRelative": 0.019220741044226292
+      }
+    },
+    {
+      "symbol": "LNT",
+      "anchor": 67.26000213623047,
+      "scores": {
+        "ridgeAbsolute": 0.11963269347831051,
+        "ridgeRelative": -0.04789054595224406,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.009355745895564337
+      }
+    },
+    {
+      "symbol": "LOW",
+      "anchor": 196.82000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.15985914823504108,
+        "ridgeRelative": -0.01638654273794817,
+        "treeAbsolute": 0.09056917768603225,
+        "treeRelative": 0.017444904027550914
+      }
+    },
+    {
+      "symbol": "LRCX",
+      "anchor": 298.2200012207031,
+      "scores": {
+        "ridgeAbsolute": 0.2776735055190364,
+        "ridgeRelative": 0.08957201991720724,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.06381155951789538
+      }
+    },
+    {
+      "symbol": "LULU",
+      "anchor": 98.97000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.22390658091218552,
+        "ridgeRelative": 0.04590543224441427,
+        "treeAbsolute": 0.19064276903949817,
+        "treeRelative": 0.08959922968869018
+      }
+    },
+    {
+      "symbol": "LUV",
+      "anchor": 39.2400016784668,
+      "scores": {
+        "ridgeAbsolute": 0.1727550444453126,
+        "ridgeRelative": 0.008256605120218408,
+        "treeAbsolute": 0.11188198737413818,
+        "treeRelative": 0.018895255231617766
+      }
+    },
+    {
+      "symbol": "LVS",
+      "anchor": 42.83000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.16010939379576072,
+        "ridgeRelative": -0.01137741053383926,
+        "treeAbsolute": 0.11172494762119037,
+        "treeRelative": 0.018789036828942743
+      }
+    },
+    {
+      "symbol": "LYB",
+      "anchor": 63.689998626708984,
+      "scores": {
+        "ridgeAbsolute": 0.1438813374825657,
+        "ridgeRelative": -0.013070537546292586,
+        "treeAbsolute": 0.09007367562161302,
+        "treeRelative": 0.019489548665698707
+      }
+    },
+    {
+      "symbol": "LYV",
+      "anchor": 170.14999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.1321322887908335,
+        "ridgeRelative": -0.029671567987988243,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.017734194701955468
+      }
+    },
+    {
+      "symbol": "MA",
+      "anchor": 569.1900024414062,
+      "scores": {
+        "ridgeAbsolute": 0.1407817941630439,
+        "ridgeRelative": -0.024877279739203038,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "MAA",
+      "anchor": 124.79000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.13624912859595373,
+        "ridgeRelative": -0.035886386395353694,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031037339787969467
+      }
+    },
+    {
+      "symbol": "MAR",
+      "anchor": 334.69000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.13139044427435984,
+        "ridgeRelative": -0.025975383722738915,
+        "treeAbsolute": 0.0895125741679604,
+        "treeRelative": 0.013387549225291277
+      }
+    },
+    {
+      "symbol": "MAS",
+      "anchor": 68.5199966430664,
+      "scores": {
+        "ridgeAbsolute": 0.19784713123540495,
+        "ridgeRelative": 0.021295104116779345,
+        "treeAbsolute": 0.1057647411091018,
+        "treeRelative": 0.021339315085530636
+      }
+    },
+    {
+      "symbol": "MCD",
+      "anchor": 252.52999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.12017440870953026,
+        "ridgeRelative": -0.05147061797495617,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": -0.005430569979450878
+      }
+    },
+    {
+      "symbol": "MCHP",
+      "anchor": 74.19999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.21795848610282453,
+        "ridgeRelative": 0.053938048660835666,
+        "treeAbsolute": 0.164805475284599,
+        "treeRelative": 0.019367247073104367
+      }
+    },
+    {
+      "symbol": "MCK",
+      "anchor": 881.510009765625,
+      "scores": {
+        "ridgeAbsolute": 0.1353019475752543,
+        "ridgeRelative": -0.030710327159818668,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.017848651941081338
+      }
+    },
+    {
+      "symbol": "MCO",
+      "anchor": 474.95001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.15871002348725916,
+        "ridgeRelative": -0.015549662605791504,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0025123411985200255
+      }
+    },
+    {
+      "symbol": "MDLZ",
+      "anchor": 62.439998626708984,
+      "scores": {
+        "ridgeAbsolute": 0.1307068475303761,
+        "ridgeRelative": -0.0353922291528365,
+        "treeAbsolute": 0.091661588739297,
+        "treeRelative": 0.019732882370684334
+      }
+    },
+    {
+      "symbol": "MDT",
+      "anchor": 90.95999908447266,
+      "scores": {
+        "ridgeAbsolute": 0.13953703341747262,
+        "ridgeRelative": -0.036963340901699365,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "MET",
+      "anchor": 97.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.14409722140152892,
+        "ridgeRelative": -0.015048536849769345,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.023666678772614035
+      }
+    },
+    {
+      "symbol": "META",
+      "anchor": 648.030029296875,
+      "scores": {
+        "ridgeAbsolute": 0.1665845815266236,
+        "ridgeRelative": 0.0005731360540211111,
+        "treeAbsolute": 0.1050610250092,
+        "treeRelative": 0.0022012540135270308
+      }
+    },
+    {
+      "symbol": "MGM",
+      "anchor": 39.88999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.20760970296658687,
+        "ridgeRelative": 0.024714821573994905,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.02334529073171747
+      }
+    },
+    {
+      "symbol": "MKC",
+      "anchor": 51.31999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.1562012364711196,
+        "ridgeRelative": -0.025674864542849087,
+        "treeAbsolute": 0.08612092953350885,
+        "treeRelative": 0.0032780642837232066
+      }
+    },
+    {
+      "symbol": "MLM",
+      "anchor": 509.9599914550781,
+      "scores": {
+        "ridgeAbsolute": 0.16335911266439251,
+        "ridgeRelative": -0.009734975348316506,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "MMM",
+      "anchor": 164.97000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.15275066789308986,
+        "ridgeRelative": -0.022804964574221015,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.01833660356969129
+      }
+    },
+    {
+      "symbol": "MNST",
+      "anchor": 43.400001525878906,
+      "scores": {
+        "ridgeAbsolute": 0.14442287438712845,
+        "ridgeRelative": -0.01977087286728327,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "MO",
+      "anchor": 68.9800033569336,
+      "scores": {
+        "ridgeAbsolute": 0.1704189905527404,
+        "ridgeRelative": -0.0005115434178747358,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.0017778007239758224
+      }
+    },
+    {
+      "symbol": "MOS",
+      "anchor": 25.190000534057617,
+      "scores": {
+        "ridgeAbsolute": 0.15224777264600342,
+        "ridgeRelative": -0.014656463473353592,
+        "treeAbsolute": 0.13209276285879684,
+        "treeRelative": 0.02476904151623826
+      }
+    },
+    {
+      "symbol": "MPC",
+      "anchor": 395.92999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.2005250578560271,
+        "ridgeRelative": 0.04903256175393488,
+        "treeAbsolute": 0.09776881290802983,
+        "treeRelative": 0.031594868038564046
+      }
+    },
+    {
+      "symbol": "MPWR",
+      "anchor": 1234.4599609375,
+      "scores": {
+        "ridgeAbsolute": 0.22719884750298436,
+        "ridgeRelative": 0.048221281302516995,
+        "treeAbsolute": 0.15666449301692814,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "MRK",
+      "anchor": 143.92999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.15718467382435608,
+        "ridgeRelative": -0.0021689563914546657,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.005311306271060441
+      }
+    },
+    {
+      "symbol": "MRNA",
+      "anchor": 143.97000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.6341252225744481,
+        "ridgeRelative": 0.572536248019126,
+        "treeAbsolute": 0.29738597489607,
+        "treeRelative": 0.14087373810779655
+      }
+    },
+    {
+      "symbol": "MRSH",
+      "anchor": 176.91000366210938,
+      "scores": {
+        "ridgeAbsolute": 0.14391034779810677,
+        "ridgeRelative": -0.031520703909760125,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "MRVL",
+      "anchor": 236.10000610351562,
+      "scores": {
+        "ridgeAbsolute": 0.3531635888890442,
+        "ridgeRelative": 0.17508113621614602,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.07055218392530023
+      }
+    },
+    {
+      "symbol": "MS",
+      "anchor": 214.3800048828125,
+      "scores": {
+        "ridgeAbsolute": 0.161250113290765,
+        "ridgeRelative": -0.007836398391857442,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.023092902128057962
+      }
+    },
+    {
+      "symbol": "MSCI",
+      "anchor": 554.6099853515625,
+      "scores": {
+        "ridgeAbsolute": 0.1935076371919078,
+        "ridgeRelative": 0.013421135159212592,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.007747550483165914
+      }
+    },
+    {
+      "symbol": "MSFT",
+      "anchor": 495.6300048828125,
+      "scores": {
+        "ridgeAbsolute": 0.17337661691737039,
+        "ridgeRelative": 0.00198817291279401,
+        "treeAbsolute": 0.09186968866825924,
+        "treeRelative": -0.0018449031620413668
+      }
+    },
+    {
+      "symbol": "MSI",
+      "anchor": 466.1600036621094,
+      "scores": {
+        "ridgeAbsolute": 0.14507353675841697,
+        "ridgeRelative": -0.025350560803504462,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "MTB",
+      "anchor": 239.8300018310547,
+      "scores": {
+        "ridgeAbsolute": 0.13202083704045744,
+        "ridgeRelative": -0.03153090481313906,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.002668971382242029
+      }
+    },
+    {
+      "symbol": "MTD",
+      "anchor": 1293.52001953125,
+      "scores": {
+        "ridgeAbsolute": 0.20492266183456695,
+        "ridgeRelative": 0.012443330415074533,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.01919173768720109
+      }
+    },
+    {
+      "symbol": "MU",
+      "anchor": 975.260009765625,
+      "scores": {
+        "ridgeAbsolute": 0.3344643645782968,
+        "ridgeRelative": 0.13907621713898738,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.07340590417340431
+      }
+    },
+    {
+      "symbol": "NCLH",
+      "anchor": 14.819999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.13607643505627914,
+        "ridgeRelative": 0.03802352872271034,
+        "treeAbsolute": 0.12309057024821435,
+        "treeRelative": 0.05721100764364033
+      }
+    },
+    {
+      "symbol": "NDAQ",
+      "anchor": 91.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.16602162016344696,
+        "ridgeRelative": -0.015459879393662347,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "NDSN",
+      "anchor": 314.4700012207031,
+      "scores": {
+        "ridgeAbsolute": 0.12354923070047981,
+        "ridgeRelative": -0.0347694895802573,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.00586328975120373
+      }
+    },
+    {
+      "symbol": "NEE",
+      "anchor": 82.30999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.03375794495170267,
+        "ridgeRelative": -0.05189660330728569,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.017462199338064886
+      }
+    },
+    {
+      "symbol": "NEM",
+      "anchor": 126.80999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.1738938687652629,
+        "ridgeRelative": 0.006525531109091846,
+        "treeAbsolute": 0.1096543600479753,
+        "treeRelative": 0.004561705000857842
+      }
+    },
+    {
+      "symbol": "NFLX",
+      "anchor": 77.4000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.16160396858407075,
+        "ridgeRelative": -0.014013970913689144,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0014412621196659143
+      }
+    },
+    {
+      "symbol": "NI",
+      "anchor": 41.40999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.11278138965157311,
+        "ridgeRelative": -0.04992925402422066,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.007560355763658008
+      }
+    },
+    {
+      "symbol": "NKE",
+      "anchor": 36.79999923706055,
+      "scores": {
+        "ridgeAbsolute": 0.1493679811510331,
+        "ridgeRelative": -0.026247967533929425,
+        "treeAbsolute": 0.12625084406160944,
+        "treeRelative": 0.02923468696757492
+      }
+    },
+    {
+      "symbol": "NOC",
+      "anchor": 518.969970703125,
+      "scores": {
+        "ridgeAbsolute": 0.13687956912349628,
+        "ridgeRelative": -0.0377752154926602,
+        "treeAbsolute": 0.08986356530028831,
+        "treeRelative": 0.016277936436160517
+      }
+    },
+    {
+      "symbol": "NOW",
+      "anchor": 132.52999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.2611717951693071,
+        "ridgeRelative": 0.06897231902141857,
+        "treeAbsolute": 0.21953552914368263,
+        "treeRelative": 0.024024483937554353
+      }
+    },
+    {
+      "symbol": "NRG",
+      "anchor": 113.45999908447266,
+      "scores": {
+        "ridgeAbsolute": 0.22370886041275365,
+        "ridgeRelative": 0.06583662455864144,
+        "treeAbsolute": 0.1791708247325155,
+        "treeRelative": 0.053376071541467285
+      }
+    },
+    {
+      "symbol": "NSC",
+      "anchor": 320.2699890136719,
+      "scores": {
+        "ridgeAbsolute": 0.14625003903920764,
+        "ridgeRelative": -0.026019007690388524,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006237946991723003
+      }
+    },
+    {
+      "symbol": "NTAP",
+      "anchor": 199.27999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.24948916865264825,
+        "ridgeRelative": 0.08547381660514361,
+        "treeAbsolute": 0.16065250507022114,
+        "treeRelative": 0.04067929269352924
+      }
+    },
+    {
+      "symbol": "NTRS",
+      "anchor": 189.19000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.13645879840420688,
+        "ridgeRelative": -0.024335710696772716,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.002668971382242029
+      }
+    },
+    {
+      "symbol": "NUE",
+      "anchor": 259.42999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.16262910537732195,
+        "ridgeRelative": 0.006046643460691488,
+        "treeAbsolute": 0.09790356556278218,
+        "treeRelative": 0.0227221730069865
+      }
+    },
+    {
+      "symbol": "NVDA",
+      "anchor": 218.2899932861328,
+      "scores": {
+        "ridgeAbsolute": 0.11450745342209201,
+        "ridgeRelative": -0.05382335573140526,
+        "treeAbsolute": 0.08793799390333842,
+        "treeRelative": 0.0061860604317256745
+      }
+    },
+    {
+      "symbol": "NVR",
+      "anchor": 6160.759765625,
+      "scores": {
+        "ridgeAbsolute": 0.14215156783784122,
+        "ridgeRelative": -0.0339644757450529,
+        "treeAbsolute": 0.08986356530028831,
+        "treeRelative": 0.013153573101877685
+      }
+    },
+    {
+      "symbol": "NWS",
+      "anchor": 32.709999084472656,
+      "scores": {
+        "ridgeAbsolute": 0.15735885613069503,
+        "ridgeRelative": -0.006565845638687898,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.018129928968988338
+      }
+    },
+    {
+      "symbol": "NXPI",
+      "anchor": 236.6199951171875,
+      "scores": {
+        "ridgeAbsolute": 0.2322469496207702,
+        "ridgeRelative": 0.06056014327422075,
+        "treeAbsolute": 0.128759518256109,
+        "treeRelative": 0.02725232584446785
+      }
+    },
+    {
+      "symbol": "O",
+      "anchor": 59.5,
+      "scores": {
+        "ridgeAbsolute": 0.11982549914398144,
+        "ridgeRelative": -0.053007384594016084,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00835407004522708
+      }
+    },
+    {
+      "symbol": "ODFL",
+      "anchor": 179.7899932861328,
+      "scores": {
+        "ridgeAbsolute": 0.08064382242074025,
+        "ridgeRelative": -0.008147678313720626,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "OKE",
+      "anchor": 96.62000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.11785094322203006,
+        "ridgeRelative": -0.046652694298387136,
+        "treeAbsolute": 0.08188813283282342,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "OMC",
+      "anchor": 79.01000213623047,
+      "scores": {
+        "ridgeAbsolute": 0.16842562733436733,
+        "ridgeRelative": -0.007897371123527142,
+        "treeAbsolute": 0.08649376439844456,
+        "treeRelative": 0.009572565798892381
+      }
+    },
+    {
+      "symbol": "ON",
+      "anchor": 76.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.31855717163260705,
+        "ridgeRelative": 0.12333111505298426,
+        "treeAbsolute": 0.26911828714965336,
+        "treeRelative": 0.11652049074009493
+      }
+    },
+    {
+      "symbol": "ORCL",
+      "anchor": 150.27999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.2489999272333634,
+        "ridgeRelative": 0.07028595453745394,
+        "treeAbsolute": 0.15876361839170144,
+        "treeRelative": 0.01583847278680691
+      }
+    },
+    {
+      "symbol": "ORLY",
+      "anchor": 85.81999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.13689401332642212,
+        "ridgeRelative": -0.038349302876068636,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "OTIS",
+      "anchor": 69.0999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.15569292453760145,
+        "ridgeRelative": -0.01935015772143058,
+        "treeAbsolute": 0.08986356530028831,
+        "treeRelative": 0.014695197933787343
+      }
+    },
+    {
+      "symbol": "OXY",
+      "anchor": 61.459999084472656,
+      "scores": {
+        "ridgeAbsolute": 0.13476595209741596,
+        "ridgeRelative": -0.024800148420185093,
+        "treeAbsolute": 0.08469574095943587,
+        "treeRelative": 0.0018306307791959154
+      }
+    },
+    {
+      "symbol": "PANW",
+      "anchor": 330.6499938964844,
+      "scores": {
+        "ridgeAbsolute": 0.25780915578150504,
+        "ridgeRelative": 0.09021776043429851,
+        "treeAbsolute": 0.14918353859933986,
+        "treeRelative": 0.018365571222767114
+      }
+    },
+    {
+      "symbol": "PAYX",
+      "anchor": 115.80000305175781,
+      "scores": {
+        "ridgeAbsolute": 0.18628839616766374,
+        "ridgeRelative": 0.007616777735231211,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.003582938374435159
+      }
+    },
+    {
+      "symbol": "PCAR",
+      "anchor": 122.7300033569336,
+      "scores": {
+        "ridgeAbsolute": 0.1416170748346855,
+        "ridgeRelative": -0.026332945980941335,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031135836574401657
+      }
+    },
+    {
+      "symbol": "PCG",
+      "anchor": 13.800000190734863,
+      "scores": {
+        "ridgeAbsolute": 0.16627836220021777,
+        "ridgeRelative": 0.03152482211467507,
+        "treeAbsolute": 0.1252762967332345,
+        "treeRelative": 0.013545436586767105
+      }
+    },
+    {
+      "symbol": "PEG",
+      "anchor": 72.38999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.111923131210523,
+        "ridgeRelative": -0.0555924780853469,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.009355745895564337
+      }
+    },
+    {
+      "symbol": "PEP",
+      "anchor": 136.32000732421875,
+      "scores": {
+        "ridgeAbsolute": 0.14153274456214066,
+        "ridgeRelative": -0.03384229668399348,
+        "treeAbsolute": 0.08880696178221646,
+        "treeRelative": 0.018046123892109352
+      }
+    },
+    {
+      "symbol": "PFE",
+      "anchor": 27.719999313354492,
+      "scores": {
+        "ridgeAbsolute": 0.1289507620620397,
+        "ridgeRelative": -0.039060298997041575,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.004269890455417243
+      }
+    },
+    {
+      "symbol": "PFG",
+      "anchor": 116.16999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.13991021240905321,
+        "ridgeRelative": -0.012297028061525968,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.009127738414453874
+      }
+    },
+    {
+      "symbol": "PG",
+      "anchor": 145.27000427246094,
+      "scores": {
+        "ridgeAbsolute": 0.12468720720461357,
+        "ridgeRelative": -0.047102563783892985,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.007019596549180806
+      }
+    },
+    {
+      "symbol": "PGR",
+      "anchor": 217.6199951171875,
+      "scores": {
+        "ridgeAbsolute": 0.16520425634456407,
+        "ridgeRelative": -0.009963892621929126,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.01448847751286485
+      }
+    },
+    {
+      "symbol": "PH",
+      "anchor": 950.22998046875,
+      "scores": {
+        "ridgeAbsolute": 0.13313924076758074,
+        "ridgeRelative": -0.025661379892482492,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "PHM",
+      "anchor": 118.26000213623047,
+      "scores": {
+        "ridgeAbsolute": 0.1573814715246215,
+        "ridgeRelative": -0.016238306098990327,
+        "treeAbsolute": 0.08986356530028831,
+        "treeRelative": 0.012872296073970693
+      }
+    },
+    {
+      "symbol": "PKG",
+      "anchor": 234.39999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.13465968799419448,
+        "ridgeRelative": -0.029754735295968004,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "PLD",
+      "anchor": 135.75,
+      "scores": {
+        "ridgeAbsolute": 0.1321946260818964,
+        "ridgeRelative": -0.03848749639170926,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.004725330138690635
+      }
+    },
+    {
+      "symbol": "PLTR",
+      "anchor": 167.22999572753906,
+      "scores": {
+        "ridgeAbsolute": 0.24128049582931932,
+        "ridgeRelative": 0.07370306553699855,
+        "treeAbsolute": 0.23465321167298825,
+        "treeRelative": 0.02602208399205542
+      }
+    },
+    {
+      "symbol": "PM",
+      "anchor": 191.05999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.1574241880509372,
+        "ridgeRelative": -0.010686108720828707,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "PNC",
+      "anchor": 244.24000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.130283950465896,
+        "ridgeRelative": -0.02870609642315894,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013574510520671719
+      }
+    },
+    {
+      "symbol": "PNR",
+      "anchor": 56.58000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.20272606111671818,
+        "ridgeRelative": 0.010648317336244611,
+        "treeAbsolute": 0.15038534642149765,
+        "treeRelative": 0.07347651262199775
+      }
+    },
+    {
+      "symbol": "PNW",
+      "anchor": 96.0999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.11155243721658586,
+        "ridgeRelative": -0.05274872421714035,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.008650506054804092
+      }
+    },
+    {
+      "symbol": "PODD",
+      "anchor": 131.9600067138672,
+      "scores": {
+        "ridgeAbsolute": 0.22115170046789498,
+        "ridgeRelative": 0.048844335644160526,
+        "treeAbsolute": 0.24126157672450696,
+        "treeRelative": 0.10853340517093503
+      }
+    },
+    {
+      "symbol": "PPG",
+      "anchor": 105.5,
+      "scores": {
+        "ridgeAbsolute": 0.16486147419877895,
+        "ridgeRelative": -0.011948920450549598,
+        "treeAbsolute": 0.08880696178221646,
+        "treeRelative": 0.018592421518441392
+      }
+    },
+    {
+      "symbol": "PPL",
+      "anchor": 34.08000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.10730778271562588,
+        "ridgeRelative": -0.05777966486011063,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.007560355763658008
+      }
+    },
+    {
+      "symbol": "PRU",
+      "anchor": 119.23999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.14748684129231204,
+        "ridgeRelative": -0.013968052151266267,
+        "treeAbsolute": 0.09007367562161302,
+        "treeRelative": 0.01932842974138533
+      }
+    },
+    {
+      "symbol": "PSA",
+      "anchor": 296.5,
+      "scores": {
+        "ridgeAbsolute": 0.13412417085088152,
+        "ridgeRelative": -0.03692715760343227,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.005430569979450878
+      }
+    },
+    {
+      "symbol": "PSKY",
+      "anchor": 10.600000381469727,
+      "scores": {
+        "ridgeAbsolute": 0.07323323129253659,
+        "ridgeRelative": -0.020247599952847296,
+        "treeAbsolute": 0.07561133606326528,
+        "treeRelative": 0.019290989498650636
+      }
+    },
+    {
+      "symbol": "PSX",
+      "anchor": 259.4700012207031,
+      "scores": {
+        "ridgeAbsolute": 0.17722927341816508,
+        "ridgeRelative": 0.02037424678207321,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.019712984726652727
+      }
+    },
+    {
+      "symbol": "PTC",
+      "anchor": 130.77999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.20917537976826753,
+        "ridgeRelative": 0.018766160475395057,
+        "treeAbsolute": 0.1095930165990334,
+        "treeRelative": 0.004422448658990283
+      }
+    },
+    {
+      "symbol": "PWR",
+      "anchor": 650.5800170898438,
+      "scores": {
+        "ridgeAbsolute": 0.2004490537929922,
+        "ridgeRelative": 0.033508673731212,
+        "treeAbsolute": 0.12454738273518741,
+        "treeRelative": 0.0426488332232781
+      }
+    },
+    {
+      "symbol": "PYPL",
+      "anchor": 53.720001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.20673175800177834,
+        "ridgeRelative": 0.04714197131125792,
+        "treeAbsolute": 0.12416618321733375,
+        "treeRelative": 0.0377063136711882
+      }
+    },
+    {
+      "symbol": "Q",
+      "anchor": 126.4000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.21309452267327966,
+        "ridgeRelative": 0.05085972586201947,
+        "treeAbsolute": 0.17228642970218727,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "QCOM",
+      "anchor": 181.97000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.28635154545990166,
+        "ridgeRelative": 0.09166108276992348,
+        "treeAbsolute": 0.23864068735181626,
+        "treeRelative": 0.029941686336266787
+      }
+    },
+    {
+      "symbol": "RCL",
+      "anchor": 260.1400146484375,
+      "scores": {
+        "ridgeAbsolute": 0.1962766225553807,
+        "ridgeRelative": 0.013036548254290091,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.019165904159282883
+      }
+    },
+    {
+      "symbol": "RDDT",
+      "anchor": 157.77000427246094,
+      "scores": {
+        "ridgeAbsolute": 0.2471656580877517,
+        "ridgeRelative": 0.10271480240068365,
+        "treeAbsolute": 0.2670512845054644,
+        "treeRelative": 0.08126876909130867
+      }
+    },
+    {
+      "symbol": "REG",
+      "anchor": 74.62000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.11659777534269787,
+        "ridgeRelative": -0.04965863053856586,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.0019381138350902706
+      }
+    },
+    {
+      "symbol": "REGN",
+      "anchor": 781.489990234375,
+      "scores": {
+        "ridgeAbsolute": 0.16321448955329895,
+        "ridgeRelative": -0.013884779032769233,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.007459877250784186
+      }
+    },
+    {
+      "symbol": "RF",
+      "anchor": 30.1299991607666,
+      "scores": {
+        "ridgeAbsolute": 0.03492328920944501,
+        "ridgeRelative": -0.04335520501207278,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "RJF",
+      "anchor": 173.4600067138672,
+      "scores": {
+        "ridgeAbsolute": 0.15017293623224343,
+        "ridgeRelative": -0.01695158162974269,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "RL",
+      "anchor": 339.0899963378906,
+      "scores": {
+        "ridgeAbsolute": 0.1853231615246057,
+        "ridgeRelative": 0.0071579025597866275,
+        "treeAbsolute": 0.09535291019113375,
+        "treeRelative": 0.015440916748579983
+      }
+    },
+    {
+      "symbol": "RMD",
+      "anchor": 218.27000427246094,
+      "scores": {
+        "ridgeAbsolute": 0.15721266215028964,
+        "ridgeRelative": -0.020989165797443612,
+        "treeAbsolute": 0.08649376439844456,
+        "treeRelative": -0.004004931316260373
+      }
+    },
+    {
+      "symbol": "ROK",
+      "anchor": 428.3900146484375,
+      "scores": {
+        "ridgeAbsolute": 0.15467520619598543,
+        "ridgeRelative": -0.008523811137686133,
+        "treeAbsolute": 0.08469574095943587,
+        "treeRelative": 0.0028323066295331723
+      }
+    },
+    {
+      "symbol": "ROL",
+      "anchor": 34.72999954223633,
+      "scores": {
+        "ridgeAbsolute": 0.19695381130067358,
+        "ridgeRelative": 0.007887626194567482,
+        "treeAbsolute": 0.1357329878094413,
+        "treeRelative": 0.06705796184790715
+      }
+    },
+    {
+      "symbol": "ROP",
+      "anchor": 388.5199890136719,
+      "scores": {
+        "ridgeAbsolute": 0.17807950108193665,
+        "ridgeRelative": -0.005037457599037979,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "ROST",
+      "anchor": 230.74000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.14208502046862512,
+        "ridgeRelative": -0.020896487814731503,
+        "treeAbsolute": 0.08762916097417099,
+        "treeRelative": 0.013026007804012203
+      }
+    },
+    {
+      "symbol": "RSG",
+      "anchor": 222.74000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.11411675352063456,
+        "ridgeRelative": -0.0559469932317834,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.00586328975120373
+      }
+    },
+    {
+      "symbol": "RTX",
+      "anchor": 197.67999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.15278515834123702,
+        "ridgeRelative": -0.022378137966935635,
+        "treeAbsolute": 0.091661588739297,
+        "treeRelative": 0.019732882370684334
+      }
+    },
+    {
+      "symbol": "RVTY",
+      "anchor": 124.30999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.17635549308206325,
+        "ridgeRelative": 0.00428812240700797,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.005582012723296737
+      }
+    },
+    {
+      "symbol": "SBAC",
+      "anchor": 185.47000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.137125292473121,
+        "ridgeRelative": -0.03520942085153592,
+        "treeAbsolute": 0.08188813283282342,
+        "treeRelative": -0.07697781418027816
+      }
+    },
+    {
+      "symbol": "SBUX",
+      "anchor": 98.73999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.15629813431900677,
+        "ridgeRelative": -0.015492953931004414,
+        "treeAbsolute": 0.08880696178221646,
+        "treeRelative": 0.019450879673737747
+      }
+    },
+    {
+      "symbol": "SCHW",
+      "anchor": 107.25,
+      "scores": {
+        "ridgeAbsolute": 0.15116704991429003,
+        "ridgeRelative": -0.020093536547132706,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "SHW",
+      "anchor": 323.30999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.14353607469090965,
+        "ridgeRelative": -0.026620267132837428,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0031135836574401657
+      }
+    },
+    {
+      "symbol": "SJM",
+      "anchor": 121.13999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.07797140955677334,
+        "ridgeRelative": -0.01486565407863434,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "SLB",
+      "anchor": 56.060001373291016,
+      "scores": {
+        "ridgeAbsolute": 0.16295188990771325,
+        "ridgeRelative": -0.005221599339114664,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.008366919143530615
+      }
+    },
+    {
+      "symbol": "SMCI",
+      "anchor": 40.099998474121094,
+      "scores": {
+        "ridgeAbsolute": 0.3459363433115025,
+        "ridgeRelative": 0.1461991542028991,
+        "treeAbsolute": 0.28176403821081086,
+        "treeRelative": 0.11848439427584982
+      }
+    },
+    {
+      "symbol": "SNA",
+      "anchor": 375.44000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.12737539714200796,
+        "ridgeRelative": -0.043608119367841015,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.004105409829134202
+      }
+    },
+    {
+      "symbol": "SNDK",
+      "anchor": 1633.3499755859375,
+      "scores": {
+        "ridgeAbsolute": 0.32674201051178875,
+        "ridgeRelative": 0.1371122758385351,
+        "treeAbsolute": 0.2410955482118976,
+        "treeRelative": 0.04588813150733306
+      }
+    },
+    {
+      "symbol": "SNPS",
+      "anchor": 397.3800048828125,
+      "scores": {
+        "ridgeAbsolute": 0.2043273546538963,
+        "ridgeRelative": 0.033195486268704784,
+        "treeAbsolute": 0.1050610250092,
+        "treeRelative": 0.012103099029197812
+      }
+    },
+    {
+      "symbol": "SO",
+      "anchor": 87.16999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.12639629527103924,
+        "ridgeRelative": -0.043441498600685434,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.016205096640550077
+      }
+    },
+    {
+      "symbol": "SOLV",
+      "anchor": 87.44999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.165820552224852,
+        "ridgeRelative": -0.0070042460667739635,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.02374346461056766
+      }
+    },
+    {
+      "symbol": "SPG",
+      "anchor": 204.8300018310547,
+      "scores": {
+        "ridgeAbsolute": 0.14274274516056953,
+        "ridgeRelative": -0.023199106830842985,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013574510520671719
+      }
+    },
+    {
+      "symbol": "SPGI",
+      "anchor": 410.7099914550781,
+      "scores": {
+        "ridgeAbsolute": 0.16991611105478147,
+        "ridgeRelative": -0.010881205051421811,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.004004931316260373
+      }
+    },
+    {
+      "symbol": "SRE",
+      "anchor": 83.33999633789062,
+      "scores": {
+        "ridgeAbsolute": 0.12141720614272974,
+        "ridgeRelative": -0.03906482927907332,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "STE",
+      "anchor": 210.75999450683594,
+      "scores": {
+        "ridgeAbsolute": 0.1480973254396503,
+        "ridgeRelative": -0.03459635133661946,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "STLD",
+      "anchor": 239.7899932861328,
+      "scores": {
+        "ridgeAbsolute": 0.181470119869937,
+        "ridgeRelative": 0.024033005332381098,
+        "treeAbsolute": 0.11188198737413818,
+        "treeRelative": 0.02295528501922256
+      }
+    },
+    {
+      "symbol": "STT",
+      "anchor": 193.39999389648438,
+      "scores": {
+        "ridgeAbsolute": 0.1534776808703223,
+        "ridgeRelative": -0.006459790155226693,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "STX",
+      "anchor": 830.1699829101562,
+      "scores": {
+        "ridgeAbsolute": 0.28003825466848187,
+        "ridgeRelative": 0.11227674343443175,
+        "treeAbsolute": 0.25697957198726873,
+        "treeRelative": 0.08518309656504952
+      }
+    },
+    {
+      "symbol": "STZ",
+      "anchor": 122.44999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.1652046498452501,
+        "ridgeRelative": -0.009457565601377048,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.006237946991723003
+      }
+    },
+    {
+      "symbol": "SW",
+      "anchor": 43.220001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.1818960719252855,
+        "ridgeRelative": 0.0027923227742770113,
+        "treeAbsolute": 0.11438600767362726,
+        "treeRelative": 0.038259877870972916
+      }
+    },
+    {
+      "symbol": "SWK",
+      "anchor": 89.23999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.1689556898801594,
+        "ridgeRelative": -0.002494326096985695,
+        "treeAbsolute": 0.11188198737413818,
+        "treeRelative": 0.01399797173952466
+      }
+    },
+    {
+      "symbol": "SWKS",
+      "anchor": 88.3499984741211,
+      "scores": {
+        "ridgeAbsolute": 0.2085419230880292,
+        "ridgeRelative": 0.06084417949900799,
+        "treeAbsolute": 0.17228642970218727,
+        "treeRelative": 0.016063936245142976
+      }
+    },
+    {
+      "symbol": "SYF",
+      "anchor": 75.98999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.06835027376546896,
+        "ridgeRelative": -0.019612751993503135,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "SYK",
+      "anchor": 275.55999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.1849544241241295,
+        "ridgeRelative": 0.006020128568773153,
+        "treeAbsolute": 0.10159686214310386,
+        "treeRelative": 0.007225604417053291
+      }
+    },
+    {
+      "symbol": "SYY",
+      "anchor": 83.20999908447266,
+      "scores": {
+        "ridgeAbsolute": 0.10044339740852436,
+        "ridgeRelative": -0.06072901149684549,
+        "treeAbsolute": 0.09613721770881711,
+        "treeRelative": 0.019816171164795587
+      }
+    },
+    {
+      "symbol": "T",
+      "anchor": 26.059999465942383,
+      "scores": {
+        "ridgeAbsolute": 0.12209121746730268,
+        "ridgeRelative": -0.049093549151956156,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.00586328975120373
+      }
+    },
+    {
+      "symbol": "TAP",
+      "anchor": 38.93000030517578,
+      "scores": {
+        "ridgeAbsolute": 0.1445588952565218,
+        "ridgeRelative": -0.0252633818596296,
+        "treeAbsolute": 0.09503511718799935,
+        "treeRelative": 0.05566105332998942
+      }
+    },
+    {
+      "symbol": "TDG",
+      "anchor": 1140.3199462890625,
+      "scores": {
+        "ridgeAbsolute": 0.17334159706177046,
+        "ridgeRelative": -0.003813547061047379,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "TDY",
+      "anchor": 603.7899780273438,
+      "scores": {
+        "ridgeAbsolute": 0.13203095308939217,
+        "ridgeRelative": -0.03770392038413252,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "TECH",
+      "anchor": 72.12000274658203,
+      "scores": {
+        "ridgeAbsolute": 0.21096889626893486,
+        "ridgeRelative": 0.010025803491256667,
+        "treeAbsolute": 0.15716928354734663,
+        "treeRelative": 0.012607084733770802
+      }
+    },
+    {
+      "symbol": "TEL",
+      "anchor": 211.9600067138672,
+      "scores": {
+        "ridgeAbsolute": 0.14692328439845329,
+        "ridgeRelative": -0.01929515937333148,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "TER",
+      "anchor": 379.7200012207031,
+      "scores": {
+        "ridgeAbsolute": 0.26146172323283207,
+        "ridgeRelative": 0.0896676897665824,
+        "treeAbsolute": 0.26911828714965336,
+        "treeRelative": 0.07440758002374157
+      }
+    },
+    {
+      "symbol": "TFC",
+      "anchor": 50.400001525878906,
+      "scores": {
+        "ridgeAbsolute": 0.040660540496693695,
+        "ridgeRelative": -0.04205692305092306,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "TGT",
+      "anchor": 155.8300018310547,
+      "scores": {
+        "ridgeAbsolute": 0.16610178699398365,
+        "ridgeRelative": -0.0003193147438643267,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.01399797173952466
+      }
+    },
+    {
+      "symbol": "TJX",
+      "anchor": 126.0199966430664,
+      "scores": {
+        "ridgeAbsolute": 0.06585205683157594,
+        "ridgeRelative": -0.02384281461691399,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "TKO",
+      "anchor": 190.30999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.15535995630429691,
+        "ridgeRelative": -0.009474204416189782,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.004838282275720007
+      }
+    },
+    {
+      "symbol": "TMO",
+      "anchor": 609.8200073242188,
+      "scores": {
+        "ridgeAbsolute": 0.14465705721453778,
+        "ridgeRelative": -0.023763312144612317,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.00586328975120373
+      }
+    },
+    {
+      "symbol": "TMUS",
+      "anchor": 182.3300018310547,
+      "scores": {
+        "ridgeAbsolute": 0.14625062933478547,
+        "ridgeRelative": -0.02811011214886886,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "TPL",
+      "anchor": 369.1000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.1583175043557845,
+        "ridgeRelative": -0.006016144309463671,
+        "treeAbsolute": 0.12068296169445922,
+        "treeRelative": 0.012074950796347496
+      }
+    },
+    {
+      "symbol": "TPR",
+      "anchor": 118.48999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.2133639358554831,
+        "ridgeRelative": 0.05408889584507276,
+        "treeAbsolute": 0.11791370646955202,
+        "treeRelative": 0.04067929269352924
+      }
+    },
+    {
+      "symbol": "TRGP",
+      "anchor": 290.25,
+      "scores": {
+        "ridgeAbsolute": 0.14253967629544081,
+        "ridgeRelative": -0.015709325128688792,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.00586328975120373
+      }
+    },
+    {
+      "symbol": "TRMB",
+      "anchor": 57.65999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.18024782946833376,
+        "ridgeRelative": 0.003668497198224826,
+        "treeAbsolute": 0.1108459389411867,
+        "treeRelative": 0.02103495967873653
+      }
+    },
+    {
+      "symbol": "TROW",
+      "anchor": 106.29000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.14471088939290289,
+        "ridgeRelative": -0.019372269068177666,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": -0.004428894129113623
+      }
+    },
+    {
+      "symbol": "TRV",
+      "anchor": 375.20001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.15676143081808794,
+        "ridgeRelative": -0.007485423697617287,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013417880336949716
+      }
+    },
+    {
+      "symbol": "TSCO",
+      "anchor": 33.0099983215332,
+      "scores": {
+        "ridgeAbsolute": 0.15260987967456147,
+        "ridgeRelative": -0.03307802515816881,
+        "treeAbsolute": 0.12204233773226324,
+        "treeRelative": 0.037975511663690675
+      }
+    },
+    {
+      "symbol": "TSLA",
+      "anchor": 365.44000244140625,
+      "scores": {
+        "ridgeAbsolute": 0.22888062630707734,
+        "ridgeRelative": 0.044907959550145995,
+        "treeAbsolute": 0.1585768874549666,
+        "treeRelative": 0.033413009086979084
+      }
+    },
+    {
+      "symbol": "TSN",
+      "anchor": 52.97999954223633,
+      "scores": {
+        "ridgeAbsolute": 0.15131034088062764,
+        "ridgeRelative": -0.012077929488863803,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.014279248767431654
+      }
+    },
+    {
+      "symbol": "TT",
+      "anchor": 442.5199890136719,
+      "scores": {
+        "ridgeAbsolute": 0.155878150503688,
+        "ridgeRelative": -0.016224894963660974,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.00969289292624681
+      }
+    },
+    {
+      "symbol": "TTD",
+      "anchor": 14.34000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.27246090200117273,
+        "ridgeRelative": 0.11838248434857512,
+        "treeAbsolute": 0.31419608494003587,
+        "treeRelative": 0.18546012208020407
+      }
+    },
+    {
+      "symbol": "TTWO",
+      "anchor": 215.47000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.1744112298217171,
+        "ridgeRelative": 0.00910090183743486,
+        "treeAbsolute": 0.09956683634703851,
+        "treeRelative": 0.03315517478015808
+      }
+    },
+    {
+      "symbol": "TXN",
+      "anchor": 268.70001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.19871062189964245,
+        "ridgeRelative": 0.030867015890922025,
+        "treeAbsolute": 0.12068296169445922,
+        "treeRelative": 0.002413134021134101
+      }
+    },
+    {
+      "symbol": "TXT",
+      "anchor": 81.0,
+      "scores": {
+        "ridgeAbsolute": 0.1511754324405088,
+        "ridgeRelative": -0.019131825319255193,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.023167930661176533
+      }
+    },
+    {
+      "symbol": "TYL",
+      "anchor": 336.6700134277344,
+      "scores": {
+        "ridgeAbsolute": 0.1997924194224887,
+        "ridgeRelative": 0.012739903975189239,
+        "treeAbsolute": 0.12521495328429266,
+        "treeRelative": 0.010031817493086726
+      }
+    },
+    {
+      "symbol": "UAL",
+      "anchor": 109.81999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.19500701223253974,
+        "ridgeRelative": 0.028780493611499727,
+        "treeAbsolute": 0.1252762967332345,
+        "treeRelative": 0.018662007232344124
+      }
+    },
+    {
+      "symbol": "UBER",
+      "anchor": 71.66999816894531,
+      "scores": {
+        "ridgeAbsolute": 0.17439236943894654,
+        "ridgeRelative": 0.00021010248116189048,
+        "treeAbsolute": 0.09535291019113375,
+        "treeRelative": 0.007225604417053291
+      }
+    },
+    {
+      "symbol": "UDR",
+      "anchor": 35.119998931884766,
+      "scores": {
+        "ridgeAbsolute": 0.06383079553645954,
+        "ridgeRelative": -0.12340089232660888,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.049997226360417674
+      }
+    },
+    {
+      "symbol": "UHS",
+      "anchor": 174.8300018310547,
+      "scores": {
+        "ridgeAbsolute": 0.12353924415645169,
+        "ridgeRelative": -0.04565709777392079,
+        "treeAbsolute": 0.09797026111895504,
+        "treeRelative": 0.017734194701955468
+      }
+    },
+    {
+      "symbol": "ULTA",
+      "anchor": 546.780029296875,
+      "scores": {
+        "ridgeAbsolute": 0.14430917494969148,
+        "ridgeRelative": -0.02016585631360881,
+        "treeAbsolute": 0.09399879632425365,
+        "treeRelative": 0.02611823521492183
+      }
+    },
+    {
+      "symbol": "UNH",
+      "anchor": 379.0899963378906,
+      "scores": {
+        "ridgeAbsolute": 0.1654305212975551,
+        "ridgeRelative": -0.004148808855135541,
+        "treeAbsolute": 0.09722962876208187,
+        "treeRelative": 0.023374288006588285
+      }
+    },
+    {
+      "symbol": "UNP",
+      "anchor": 284.3999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.15006010036118517,
+        "ridgeRelative": -0.020787667899926074,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": -0.0009426047360037896
+      }
+    },
+    {
+      "symbol": "UPS",
+      "anchor": 100.27999877929688,
+      "scores": {
+        "ridgeAbsolute": 0.1466791153474959,
+        "ridgeRelative": -0.026678351379463706,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.014279248767431654
+      }
+    },
+    {
+      "symbol": "URI",
+      "anchor": 989.1199951171875,
+      "scores": {
+        "ridgeAbsolute": 0.18037658266636497,
+        "ridgeRelative": 0.012121804318541419,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.0030351244948536088
+      }
+    },
+    {
+      "symbol": "USB",
+      "anchor": 62.84000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.14282469116702226,
+        "ridgeRelative": -0.02240630032944073,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": 0.0016771452105479923
+      }
+    },
+    {
+      "symbol": "V",
+      "anchor": 370.45001220703125,
+      "scores": {
+        "ridgeAbsolute": 0.13690468962765995,
+        "ridgeRelative": -0.02908152210254543,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.0002280545913404546
+      }
+    },
+    {
+      "symbol": "VEEV",
+      "anchor": 262.3999938964844,
+      "scores": {
+        "ridgeAbsolute": 0.2206107381620228,
+        "ridgeRelative": 0.04904313085897301,
+        "treeAbsolute": 0.1096543600479753,
+        "treeRelative": 0.004561705000857842
+      }
+    },
+    {
+      "symbol": "VICI",
+      "anchor": 24.829999923706055,
+      "scores": {
+        "ridgeAbsolute": 0.13002420855962485,
+        "ridgeRelative": -0.04395721473734962,
+        "treeAbsolute": 0.08472741654447949,
+        "treeRelative": -0.006700210644238427
+      }
+    },
+    {
+      "symbol": "VLO",
+      "anchor": 390.4200134277344,
+      "scores": {
+        "ridgeAbsolute": 0.09491020333137833,
+        "ridgeRelative": 0.025993207245627033,
+        "treeAbsolute": 0.07448666012996198,
+        "treeRelative": 0.014393706006557526
+      }
+    },
+    {
+      "symbol": "VLTO",
+      "anchor": 94.0999984741211,
+      "scores": {
+        "ridgeAbsolute": 0.13303955948921087,
+        "ridgeRelative": -0.03907961814801628,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "VMC",
+      "anchor": 252.74000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.1641984382381939,
+        "ridgeRelative": -0.008770030525463669,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "VMRK",
+      "anchor": 65.54000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.03257510433020397,
+        "ridgeRelative": -0.043899484018524344,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.015666809206158552
+      }
+    },
+    {
+      "symbol": "VRSK",
+      "anchor": 176.1999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.20294551190681576,
+        "ridgeRelative": 0.022830980206550285,
+        "treeAbsolute": 0.10395540773267506,
+        "treeRelative": 0.011131764444700026
+      }
+    },
+    {
+      "symbol": "VRSN",
+      "anchor": 292.7099914550781,
+      "scores": {
+        "ridgeAbsolute": 0.20590621949942034,
+        "ridgeRelative": 0.03996233766284479,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.018740841774627995
+      }
+    },
+    {
+      "symbol": "VRT",
+      "anchor": 257.05999755859375,
+      "scores": {
+        "ridgeAbsolute": 0.26855068228475926,
+        "ridgeRelative": 0.08615466550862239,
+        "treeAbsolute": 0.23813643319586275,
+        "treeRelative": 0.060649805870217885
+      }
+    },
+    {
+      "symbol": "VRTX",
+      "anchor": 515.4400024414062,
+      "scores": {
+        "ridgeAbsolute": 0.1504407938419618,
+        "ridgeRelative": -0.020252907619687528,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": -0.003723654288353379
+      }
+    },
+    {
+      "symbol": "VST",
+      "anchor": 148.3800048828125,
+      "scores": {
+        "ridgeAbsolute": 0.1839232885631571,
+        "ridgeRelative": 0.017988162179966842,
+        "treeAbsolute": 0.1085442465320745,
+        "treeRelative": 0.04794344073743581
+      }
+    },
+    {
+      "symbol": "VTR",
+      "anchor": 89.98999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.14835721536068724,
+        "ridgeRelative": -0.016247089443718044,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "VTRS",
+      "anchor": 16.510000228881836,
+      "scores": {
+        "ridgeAbsolute": 0.15459581610104592,
+        "ridgeRelative": -0.0046604264047358564,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.011985970814056179
+      }
+    },
+    {
+      "symbol": "VZ",
+      "anchor": 50.61000061035156,
+      "scores": {
+        "ridgeAbsolute": 0.11603882698173941,
+        "ridgeRelative": -0.05239073007217756,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.0038818200540466303
+      }
+    },
+    {
+      "symbol": "WAB",
+      "anchor": 283.2200012207031,
+      "scores": {
+        "ridgeAbsolute": 0.1479486188174733,
+        "ridgeRelative": -0.022188454917665384,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "WAT",
+      "anchor": 408.3399963378906,
+      "scores": {
+        "ridgeAbsolute": 0.16790280022066384,
+        "ridgeRelative": -0.007041034550313054,
+        "treeAbsolute": 0.10047218620980056,
+        "treeRelative": 0.00628725256405698
+      }
+    },
+    {
+      "symbol": "WBD",
+      "anchor": 28.040000915527344,
+      "scores": {
+        "ridgeAbsolute": 0.12535108738209078,
+        "ridgeRelative": -0.04451979432683471,
+        "treeAbsolute": 0.08986356530028831,
+        "treeRelative": 0.021071128385947716
+      }
+    },
+    {
+      "symbol": "WDAY",
+      "anchor": 185.6999969482422,
+      "scores": {
+        "ridgeAbsolute": 0.26296738643029227,
+        "ridgeRelative": 0.08251003969671201,
+        "treeAbsolute": 0.23864068735181626,
+        "treeRelative": 0.02643452832054039
+      }
+    },
+    {
+      "symbol": "WDC",
+      "anchor": 447.17999267578125,
+      "scores": {
+        "ridgeAbsolute": 0.3031995746930165,
+        "ridgeRelative": 0.12566468925168958,
+        "treeAbsolute": 0.2534963504643942,
+        "treeRelative": 0.08842923459361181
+      }
+    },
+    {
+      "symbol": "WEC",
+      "anchor": 105.33000183105469,
+      "scores": {
+        "ridgeAbsolute": 0.10469704474449812,
+        "ridgeRelative": -0.05663622718709009,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.009355745895564337
+      }
+    },
+    {
+      "symbol": "WELL",
+      "anchor": 235.6199951171875,
+      "scores": {
+        "ridgeAbsolute": 0.1308509295624591,
+        "ridgeRelative": -0.034769430397161155,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "WFC",
+      "anchor": 90.29000091552734,
+      "scores": {
+        "ridgeAbsolute": 0.14480130019935808,
+        "ridgeRelative": -0.022065017330987917,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.019548704458766754
+      }
+    },
+    {
+      "symbol": "WM",
+      "anchor": 213.4600067138672,
+      "scores": {
+        "ridgeAbsolute": 0.14509061185930813,
+        "ridgeRelative": -0.031566420780178545,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013417880336949716
+      }
+    },
+    {
+      "symbol": "WMB",
+      "anchor": 72.8499984741211,
+      "scores": {
+        "ridgeAbsolute": 0.1249970373490855,
+        "ridgeRelative": -0.03901209117569573,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.005566853741626718
+      }
+    },
+    {
+      "symbol": "WMT",
+      "anchor": 107.1500015258789,
+      "scores": {
+        "ridgeAbsolute": 0.14427522811502397,
+        "ridgeRelative": -0.016739977294503,
+        "treeAbsolute": 0.09613721770881711,
+        "treeRelative": 0.017734194701955468
+      }
+    },
+    {
+      "symbol": "WRB",
+      "anchor": 69.9000015258789,
+      "scores": {
+        "ridgeAbsolute": 0.14024838029694922,
+        "ridgeRelative": -0.028057230466084198,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.013417880336949716
+      }
+    },
+    {
+      "symbol": "WSM",
+      "anchor": 226.22999572753906,
+      "scores": {
+        "ridgeAbsolute": 0.1636540472429139,
+        "ridgeRelative": -0.00403554877170759,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.011985970814056179
+      }
+    },
+    {
+      "symbol": "WST",
+      "anchor": 346.2300109863281,
+      "scores": {
+        "ridgeAbsolute": 0.1509162188784105,
+        "ridgeRelative": -0.01630562559856583,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "WTW",
+      "anchor": 315.6099853515625,
+      "scores": {
+        "ridgeAbsolute": 0.17225117414010413,
+        "ridgeRelative": -0.0043369500466071305,
+        "treeAbsolute": 0.08402180415873556,
+        "treeRelative": 0.009962934402425907
+      }
+    },
+    {
+      "symbol": "WY",
+      "anchor": 22.059999465942383,
+      "scores": {
+        "ridgeAbsolute": 0.15033354966897586,
+        "ridgeRelative": -0.021421412359218503,
+        "treeAbsolute": 0.09543160532307318,
+        "treeRelative": 0.019548504100369686
+      }
+    },
+    {
+      "symbol": "WYNN",
+      "anchor": 87.69999694824219,
+      "scores": {
+        "ridgeAbsolute": 0.06323117183195015,
+        "ridgeRelative": -0.02524858100546349,
+        "treeAbsolute": 0.07557185616082539,
+        "treeRelative": 0.01621941162479215
+      }
+    },
+    {
+      "symbol": "XEL",
+      "anchor": 75.5,
+      "scores": {
+        "ridgeAbsolute": 0.02566141338045272,
+        "ridgeRelative": -0.05732415926699215,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.015666809206158552
+      }
+    },
+    {
+      "symbol": "XOM",
+      "anchor": 165.99000549316406,
+      "scores": {
+        "ridgeAbsolute": 0.033436525928533606,
+        "ridgeRelative": -0.04498411143066599,
+        "treeAbsolute": 0.0666387756204383,
+        "treeRelative": 0.014674983034464517
+      }
+    },
+    {
+      "symbol": "XYL",
+      "anchor": 106.95999908447266,
+      "scores": {
+        "ridgeAbsolute": 0.14184227318057357,
+        "ridgeRelative": -0.027849783463062685,
+        "treeAbsolute": 0.08656045995461742,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "XYZ",
+      "anchor": 79.20999908447266,
+      "scores": {
+        "ridgeAbsolute": 0.18049671743153914,
+        "ridgeRelative": 0.021252682945208354,
+        "treeAbsolute": 0.11188198737413818,
+        "treeRelative": 0.02836858393703383
+      }
+    },
+    {
+      "symbol": "YUM",
+      "anchor": 140.8699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.18519660135025168,
+        "ridgeRelative": 0.013285598467956525,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.012582684348977684
+      }
+    },
+    {
+      "symbol": "ZBH",
+      "anchor": 93.48999786376953,
+      "scores": {
+        "ridgeAbsolute": 0.15109456755558193,
+        "ridgeRelative": -0.025324964268998395,
+        "treeAbsolute": 0.08581982759774424,
+        "treeRelative": 0.006568529591963972
+      }
+    },
+    {
+      "symbol": "ZBRA",
+      "anchor": 350.3699951171875,
+      "scores": {
+        "ridgeAbsolute": 0.22969126306718418,
+        "ridgeRelative": 0.07858688709594024,
+        "treeAbsolute": 0.17576965122506177,
+        "treeRelative": 0.01351146756184659
+      }
+    },
+    {
+      "symbol": "ZTS",
+      "anchor": 72.97000122070312,
+      "scores": {
+        "ridgeAbsolute": 0.2546128623759687,
+        "ridgeRelative": 0.05806465589856365,
+        "treeAbsolute": 0.19147174380875742,
+        "treeRelative": 0.07045284527822507
+      }
+    }
+  ]
+}
