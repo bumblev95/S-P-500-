@@ -6,8 +6,8 @@
     const aligned=history.at(-1)?.date===e.asOf&&Math.abs(history.at(-1)?.close/e.price-1)<.001;
     const returns=history.slice(1).map((q,i)=>Math.log(q.close/history[i].close));
     const sampled=mode==='sample'&&aligned&&returns.length>=20;
-    if(forecasts&&[21,84,252].every(k=>forecasts[k]&&[forecasts[k].base,forecasts[k].bear,forecasts[k].bull].every(v=>Number.isFinite(v)&&v>0))){
-      const knots=[{t:0,base:e.price,bear:e.price,bull:e.price},...[21,84,252].map(t=>({t,...forecasts[t]}))];
+    if(forecasts&&[126,252].every(k=>forecasts[k]&&[forecasts[k].base,forecasts[k].bear,forecasts[k].bull].every(v=>Number.isFinite(v)&&v>0))){
+      const knots=[{t:0,base:e.price,bear:e.price,bull:e.price},...[126,252].map(t=>({t,...forecasts[t]}))];
       const rng=random(e.symbol+'|'+e.asOf+'|shared-path-v2'),shock=[0];
       const mean=returns.length?returns.reduce((a,b)=>a+b,0)/returns.length:0;let start=0;
       for(let t=0;t<252;t++){

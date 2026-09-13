@@ -15,16 +15,16 @@ class LearnedTests(unittest.TestCase):
         pd.testing.assert_frame_equal(full.loc[before.index],before)
 
     def test_label_horizon_and_purge(self):
-        dates=pd.bdate_range('2016-01-01',periods=1500).strftime('%Y-%m-%d').tolist()
+        dates=pd.bdate_range('2016-01-01',periods=1900).strftime('%Y-%m-%d').tolist()
         frames={}
         for n in range(60):
             f=pd.DataFrame({k:np.linspace(.01,.1,len(dates)) for k in FEATURES},index=dates)
             f['close']=100*np.exp(np.arange(len(dates))*.0001)
             frames[str(n)]=f
-        data=examples(frames,84)
+        data=examples(frames,126)
         row=data.iloc[0]
-        self.assertEqual(row.targetDate,dates[84]);self.assertAlmostEqual(row.y,.0084)
-        trained=fit_at(data,dates,dates[1400],84)
+        self.assertEqual(row.targetDate,dates[126]);self.assertAlmostEqual(row.y,.0126)
+        trained=fit_at(data,dates,dates[1800],126)
         self.assertIsNotNone(trained)
         meta=trained[3]
         self.assertLess(meta['trainTargetThrough'],meta['trainCutoff'])
@@ -32,7 +32,7 @@ class LearnedTests(unittest.TestCase):
 
     def test_no_false_promotion(self):
         self.assertFalse(qualifies(metrics([])))
-        base=dict(dates=6,mae=.2,noChangeMae=.1,trendMae=.1,directionAccuracy=.8,alwaysUpAccuracy=.6,rangeCoverage=.8)
+        base=dict(dates=6,mae=.2,noChangeMae=.1,trendMae=.1,directionAccuracy=.8,alwaysUpAccuracy=.6,rangeCoverage=.8,actualDownCount=10,downRecall=0.)
         self.assertFalse(qualifies(base))
         self.assertTrue(qualifies(dict(base,mae=.05)))
         self.assertFalse(qualifies(dict(base,mae=.05,dates=3)))

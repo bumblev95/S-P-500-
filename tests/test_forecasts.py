@@ -25,7 +25,7 @@ def history(count=1300):
 
 
 class ForecastTests(unittest.TestCase):
-    def test_published_history_covers_252_return_intervals(self):
+    def test_published_history_covers_one_year_return_intervals(self):
         sample = history(350)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -77,8 +77,8 @@ class ForecastTests(unittest.TestCase):
         for row in sample[250:]:
             row["close"] *= 50
         self.assertEqual(engine.snapshot(sample, 249), original)
-        self.assertEqual(engine.predict(original, 84),
-                         engine.predict(engine.snapshot(sample, 249), 84))
+        self.assertEqual(engine.predict(original, 126),
+                         engine.predict(engine.snapshot(sample, 249), 126))
 
     def test_backtest_count_uses_nonoverlapping_completed_horizons(self):
         sample = history(900)
@@ -139,10 +139,42 @@ class ForecastTests(unittest.TestCase):
             self.assertEqual(payload["stocks"]["OK"]["status"], "ready")
             self.assertEqual(payload["stocks"]["OLD"]["status"], "stale")
             self.assertEqual(payload["stocks"]["FUTURE"]["status"], "stale")
-            self.assertEqual(payload["stocks"]["OK"]["backtest"]["21"]["n"], 0)
-            self.assertEqual(payload["stocks"]["OK"]["issued"]["21"]["pending"], 1)
-            self.assertEqual(len(engine.read_archive(root/"forecasts/archive")), 3)
+            self.assertEqual(payload["stocks"]["OK"]["backtest"]["126"]["n"], 0)
+            self.assertEqual(payload["stocks"]["OK"]["issued"]["126"]["pending"], 1)
+            self.assertEqual(len(engine.read_archive(root/"forecasts/archive")), 2)
             json.loads((root/"forecasts/latest.json").read_text())
+
+    def test_build_preserves_published_history_when_cache_is_absent(self):
+        sample = history(300)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "prices").mkdir()
+            (root / "forecasts").mkdir()
+            snap = engine.snapshot(sample, len(sample)-1)
+            snap.update(symbol="TEST", date=sample[-1]["date"])
+            with (root / "prices/latest_prices.csv").open("w", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=list(snap))
+                writer.writeheader(); writer.writerow(snap)
+            (root / "forecasts/latest.json").write_text(json.dumps({"stocks": {"TEST": {"history": sample[-253:]}}}))
+            payload = engine.build(root, sample[-1]["date"] + "T12:00:00Z")
+            self.assertEqual(len(payload["stocks"]["TEST"]["history"]), 253)
+
+    def test_three_year_scenario_fades_growth_and_compresses_multiple(self):
+        row = {"close": 200}
+        fundamental = {"forwardEps": 5, "forwardPE": 40, "earningsGrowth": .30,
+                       "revenueGrowth": .20, "sector": "Technology"}
+        result = engine.long_term_scenario(row, fundamental)
+        self.assertEqual(result["horizon"], 756)
+        self.assertGreater(result["currentPE"], result["cases"]["base"]["exitPE"])
+        self.assertEqual(len(result["cases"]["base"]["appliedGrowth"]), 2)
+        self.assertGreater(result["cases"]["base"]["annualGrowth"][0],
+                           result["cases"]["base"]["annualGrowth"][-1])
+        self.assertLess(result["cases"]["bear"]["value"], result["cases"]["base"]["value"])
+        self.assertLess(result["cases"]["base"]["value"], result["cases"]["bull"]["value"])
+
+    def test_three_year_scenario_abstains_without_positive_eps_or_growth(self):
+        self.assertIsNone(engine.long_term_scenario({"close": 100}, {"forwardEps": -2, "revenueGrowth": .1}))
+        self.assertIsNone(engine.long_term_scenario({"close": 100}, {"forwardEps": 4}))
 
 
 if __name__ == "__main__":

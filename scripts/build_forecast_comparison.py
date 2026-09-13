@@ -43,7 +43,7 @@ def compare(rows):
 def build(root=ROOT):
     out=dict(schemaVersion=1,model='past-only-comparison-v1',generatedAt=datetime.now(timezone.utc).isoformat(),horizons={},
              note='과거 기록을 이용한 소급 비교. 모델 선택 시점 이후 결과만 평가하지만, 이 선택 규칙 자체는 아직 실전 검증 전입니다. 매매 수익률·최대 낙폭 검증이 아닙니다.')
-    for h in (21,84,252):
+    for h in (126,252):
         path=root/'ml/validation'/f'{h}.json'
         if not path.exists():continue
         source=json.loads(path.read_text());rows=source.get('outcomes',[])

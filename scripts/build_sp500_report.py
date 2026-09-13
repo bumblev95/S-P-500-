@@ -28,7 +28,7 @@ def build(root=ROOT):
     for h,v in horizons.items():
         separated=v.get('horizonSpecific') or {};e=separated.get('evaluation') or {};counts=separated.get('directionCounts') or {}
         lines.append(f"| {h}거래일 | {(separated.get('profile') or {}).get('name','자료 부족')} | {pct(e.get('mape'))} | {pct(e.get('directionAccuracy'))} | {pct(e.get('downRecall'))} | {counts.get('up',0)} / {counts.get('flat',0)} / {counts.get('down',0)} |")
-    lines += ['', '21·84·252거래일 모델은 입력 범위, 모델 복잡도와 방향 분류기를 서로 공유하지 않습니다. 21일은 가격·시장환경 중심, 84일과 252일은 발표일이 확인된 SEC·실적 변수도 사용합니다. 방향은 상승·중립(±2%)·하락의 세 범주입니다. 하락 포착률은 실제 하락한 표본 가운데 하락으로 예측한 비율입니다. 표본 수는 독립된 시장 상황의 수가 아니며, 이번 결과만으로 기본 모델을 자동 교체하지 않습니다.', '',
+    lines += ['', '126·252거래일 모델은 입력 범위, 모델 복잡도와 방향 분류기를 서로 공유하지 않습니다. 두 기간 모두 발표일이 확인된 SEC·실적 변수를 사용합니다. 1개월 목표가 모델은 제거하고 단기 진입 타이밍을 별도 규칙으로 판단합니다. 방향은 상승·중립(±2%)·하락의 세 범주이며, 항상 상승 기준선과 하락 포착률을 함께 통과해야 합니다. 표본 수는 독립된 시장 상황의 수가 아니며, 이번 결과만으로 기본 모델을 자동 교체하지 않습니다.', '',
         '## 누락과 출처','',f"종목 목록: [{coverage['source']}]({coverage['source']}) · 확인 {coverage['retrievedAt']}",'',
         'SEC 유효 이력 미확보: '+(', '.join(sec.get('missingSymbols',[])) or '없음'),'',
         '가격 자료 부족: '+(', '.join(coverage.get('missingPrices',{})) or '없음'),'',

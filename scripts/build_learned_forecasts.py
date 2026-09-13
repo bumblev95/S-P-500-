@@ -17,8 +17,8 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from build_forecasts import atomic_json, age_days
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL = 'pooled-hgb-pattern-v2'
-HORIZONS = (21, 84, 252)
+MODEL = 'pooled-hgb-pattern-v3-medium-long'
+HORIZONS = (126, 252)
 FEATURES = ['r5','r21','r63','r126','ma20','ma50','ma200','vol21','vol84','drawdown','volumeRatio','market21','market63','relative63','rsi14','macd','macdHistogram','trendSlope','volumeMomentum']
 PARAMS = dict(max_iter=60, max_leaf_nodes=15, learning_rate=.05,
               min_samples_leaf=40, l2_regularization=10, early_stopping=False, random_state=17)
@@ -99,10 +99,17 @@ def metrics(rows):
     if not rows: return dict(n=0,dates=0)
     d=pd.DataFrame(rows); actual=np.expm1(d.y); pred=np.expm1(d.pred)
     # Errors are return percentage points, not accuracy probabilities.
+    actual_direction=np.where(actual>.02,1,np.where(actual<-.02,-1,0))
+    predicted_direction=np.where(pred>.02,1,np.where(pred<-.02,-1,0))
+    actual_down=actual_direction==-1;predicted_down=predicted_direction==-1
     return dict(n=len(d),dates=int(d.origin.nunique()),mae=float(np.mean(abs(actual-pred))),
         noChangeMae=float(np.mean(abs(actual))),trendMae=float(np.mean(abs(actual-np.expm1(d.trend)))),
-        directionAccuracy=float(np.mean(np.where(actual>.02,1,np.where(actual<-.02,-1,0))==np.where(pred>.02,1,np.where(pred<-.02,-1,0)))),
-        alwaysUpAccuracy=float(np.mean(actual>.02)),rangeCoverage=float(np.mean((d.y>=d.low)&(d.y<=d.high))),
+        directionAccuracy=float(np.mean(actual_direction==predicted_direction)),
+        alwaysUpAccuracy=float(np.mean(actual_direction==1)),
+        actualDownCount=int(actual_down.sum()),predictedDownCount=int(predicted_down.sum()),
+        downRecall=float(np.mean(predicted_down[actual_down])) if actual_down.any() else None,
+        downPrecision=float(np.mean(actual_down[predicted_down])) if predicted_down.any() else None,
+        rangeCoverage=float(np.mean((d.y>=d.low)&(d.y<=d.high))),
         firstDate=str(d.origin.min()),lastDate=str(d.origin.max()))
 
 def diagnostics(rows):
@@ -117,7 +124,8 @@ def diagnostics(rows):
                 worstDateMae=max(m['mae'] for m in by_date.values()),note='Same-date stocks are correlated; descriptive diagnostics, not independent significance tests.')
 
 def qualifies(m):
-    return m.get('dates',0)>=4 and m['mae']<.98*min(m['noChangeMae'],m['trendMae']) and m['directionAccuracy']>=m['alwaysUpAccuracy'] and m['rangeCoverage']>=.60
+    enough_down=m.get('actualDownCount',0)<20 or (m.get('downRecall') is not None and m['downRecall']>=.10)
+    return m.get('dates',0)>=4 and m['mae']<.98*min(m['noChangeMae'],m['trendMae']) and m['directionAccuracy']>m['alwaysUpAccuracy'] and enough_down and m['rangeCoverage']>=.60
 
 def build(root=ROOT,now=None):
     now=now or datetime.now(timezone.utc).isoformat(timespec='seconds')

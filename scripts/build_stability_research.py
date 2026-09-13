@@ -76,7 +76,7 @@ def build(root=ROOT):
              method='Fixed weighted absolute-error HGB and 50% no-change blend; date-mean MAPE + 0.25*p90 selection objective; same-observation comparisons.',
              limitations=['Current-universe survivorship bias remains.','Only price/volume patterns; no point-in-time fundamental or credit data.',
                           'Small date samples and correlated stocks; no significance or live-performance claim.','No automatic forecast promotion.'])
-    for h in (21,84,252):
+    for h in (126,252):
         source=json.loads((root/f'ml/validation/{h}.json').read_text())
         assert source['generatedAt']==latest['generatedAt']
         data=examples(frames,h);rows=[];folds=[]

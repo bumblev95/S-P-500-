@@ -181,7 +181,7 @@ def build(root=ROOT, now=None):
                           '기본 모델 교체는 별도 실제 발표 성적표의 승격 조건을 따릅니다.'],
              sources=['https://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting',
                       'https://otexts.com/fpp3/tscv.html'])
-    for h in (21,84,252):
+    for h in (126,252):
         source=json.loads((root/f'ml/validation/{h}.json').read_text())
         if source['model']!=latest['model'] or source['generatedAt']!=latest['generatedAt']:
             raise ValueError('Mismatched source validation snapshot')

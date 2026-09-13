@@ -11,6 +11,7 @@ class EnvironmentResearch(unittest.TestCase):
     def test_metric_actual_price_denominator(self):
         r=[dict(origin='2020-01-01',y=2.,environment=1.)]
         self.assertEqual(m.score(r,'environment')['mape'],.5)
+        self.assertEqual(m.score(r,'environment')['alwaysUpAccuracy'],1.)
     def test_log_error_treats_reciprocal_misses_equally(self):
         rows=[dict(origin='2020-01-01',y=1.,balanced=2.),dict(origin='2020-01-02',y=1.,balanced=.5)]
         result=m.score(rows,'balanced')
@@ -27,15 +28,14 @@ class EnvironmentResearch(unittest.TestCase):
         self.assertLess(score(.9,1.1)['logIntervalScore'],score(.1,10)['logIntervalScore'])
         self.assertEqual(score(.9,1.1,2.)['coverage'],0.)
     def test_stock_horizons_have_independent_profiles_and_down_model(self):
-        self.assertEqual({m.HORIZON_PROFILES[h]['name'] for h in (21,84,252)},
-                         {'short-21d','medium-84d','long-252d'})
-        self.assertEqual(m.HORIZON_PROFILES[21]['field'],'z')
-        self.assertEqual(m.HORIZON_PROFILES[84]['field'],'w')
+        self.assertEqual({m.HORIZON_PROFILES[h]['name'] for h in (126,252)},
+                         {'medium-126d','long-252d'})
+        self.assertEqual(m.HORIZON_PROFILES[126]['field'],'w')
         rows=[]
         for label,y,regime in ((-1,.9,'하락·보통변동'),(0,1.,'상승·보통변동'),(1,1.1,'상승·고변동')):
             for i in range(120):
                 rows.append(dict(y=y,z=[i%7/10],w=[i%7/10,1.],regime=regime))
-        fitted=m.fit_horizon(rows,21);prediction,probability=fitted.predict(rows)
+        fitted=m.fit_horizon(rows,126);prediction,probability=fitted.predict(rows)
         labels=[m.direction_label(v) for v in prediction]
         self.assertIn(-1,labels);self.assertIn(0,labels);self.assertIn(1,labels)
         self.assertEqual(set(probability[0]),{'down','flat','up','chosen'})
@@ -57,12 +57,12 @@ class EnvironmentResearch(unittest.TestCase):
         self.assertEqual(a[r[-2]['date']],b[r[-2]['date']])
     def test_quarterly_features_reach_model_without_future_release(self):
         from datetime import date,timedelta
-        prices=[dict(date=str(date(2024,1,1)+timedelta(days=i)),close=100+i/10) for i in range(280)]
+        prices=[dict(date=str(date(2024,1,1)+timedelta(days=i)),close=100+i/10) for i in range(500)]
         f=m.features(prices);context={key:dict(features=f,dates=np.array(sorted(f))) for key in m.PROXIES}
         first=dict(availableDate='2024-07-01',periodEnd='2024-06-30',quarterRevenueGrowth=.2,quarterNetMargin=-.1,quarterEpsChange=-.5,nextQuarterRevenueGrowth=None)
         later={**first,'availableDate':'2024-08-15','quarterRevenueGrowth':999.}
-        a,_=m.records({'NVDA':prices},context,21,'stocks',{'earnings':{'NVDA':[first]}})
-        b,_=m.records({'NVDA':prices},context,21,'stocks',{'earnings':{'NVDA':[first,later]}})
+        a,_=m.records({'NVDA':prices},context,126,'stocks',{'earnings':{'NVDA':[first]}})
+        b,_=m.records({'NVDA':prices},context,126,'stocks',{'earnings':{'NVDA':[first,later]}})
         by={r['origin']:r for r in b}
         before=[r for r in a if r['origin']<'2024-08-15']
         self.assertTrue(before)

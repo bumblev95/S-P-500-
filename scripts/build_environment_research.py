@@ -20,15 +20,12 @@ PROXIES={'SPY':'미국 주식','QQQ':'기술주','HYG':'하이일드 채권 가�
 BASE=['return7','return30','return90','return180','vol30','vol90','distance20','distance50','distance200','drawdown90']
 CONTEXT=[f'{s}_{k}' for s in PROXIES for k in ('return30','vol30','distance200')]+['BTC_return30','BTC_vol30','BTC_distance200']
 NAMES=('noChange','priceOnly','environment','ensemble','balanced')
-MODEL='environment-challenger-v5-horizon-specific'
+MODEL='environment-challenger-v6-medium-long'
 
 # Predeclared before the later holdout is evaluated. Each stock horizon gets
 # independent inputs, capacity and a balanced direction classifier.
 HORIZON_PROFILES={
-    21:dict(name='short-21d',field='z',max_iter=70,max_leaf_nodes=15,min_samples_leaf=35,
-            l2_regularization=12.,learning_rate=.04,class_weight_power=.45,
-            direction_probability=.46,direction_margin=.04),
-    84:dict(name='medium-84d',field='w',max_iter=85,max_leaf_nodes=11,min_samples_leaf=45,
+    126:dict(name='medium-126d',field='w',max_iter=90,max_leaf_nodes=11,min_samples_leaf=45,
             l2_regularization=15.,learning_rate=.04,class_weight_power=.55,
             direction_probability=.44,direction_margin=.03),
     252:dict(name='long-252d',field='w',max_iter=100,max_leaf_nodes=7,min_samples_leaf=60,
@@ -174,13 +171,13 @@ def interval_score(rows):
 
 def score(rows,name):
     rows=[r for r in rows if isinstance(r.get(name),(int,float)) and math.isfinite(r[name]) and r[name]>0]
-    if not rows:return dict(n=0,dates=0,mape=None,p90=None,logMae=None,logBias=None,directionAccuracy=None)
+    if not rows:return dict(n=0,dates=0,mape=None,p90=None,logMae=None,logBias=None,directionAccuracy=None,alwaysUpAccuracy=None)
     errors=np.array([abs(r[name]/r['y']-1) for r in rows]);dates=sorted({r['origin'] for r in rows})
     by={d:float(np.mean([errors[i] for i,r in enumerate(rows) if r['origin']==d])) for d in dates}
     sign=direction_label
     logs=np.array([math.log(r[name]/r['y']) for r in rows]);log_by={d:float(np.mean([abs(logs[i]) for i,r in enumerate(rows) if r['origin']==d])) for d in dates}
     down=[r for r in rows if sign(r['y'])==-1]
-    return dict(n=len(rows),dates=len(dates),mape=float(errors.mean()),dateMeanMape=float(np.mean(list(by.values()))),p90=float(np.quantile(errors,.9)),logMae=float(np.mean(abs(logs))),logBias=float(logs.mean()),p90Log=float(np.quantile(abs(logs),.9)),dateMeanLogMae=float(np.mean(list(log_by.values()))),directionAccuracy=float(np.mean([sign(r[name])==sign(r['y']) for r in rows])),actualDownCount=len(down),downRecall=sum(sign(r[name])==-1 for r in down)/len(down) if down else None,over10Rate=float(np.mean(errors>.1)),byDate=by,logByDate=log_by)
+    return dict(n=len(rows),dates=len(dates),mape=float(errors.mean()),dateMeanMape=float(np.mean(list(by.values()))),p90=float(np.quantile(errors,.9)),logMae=float(np.mean(abs(logs))),logBias=float(logs.mean()),p90Log=float(np.quantile(abs(logs),.9)),dateMeanLogMae=float(np.mean(list(log_by.values()))),directionAccuracy=float(np.mean([sign(r[name])==sign(r['y']) for r in rows])),alwaysUpAccuracy=float(np.mean([sign(r['y'])==1 for r in rows])),actualDownCount=len(down),downRecall=sum(sign(r[name])==-1 for r in down)/len(down) if down else None,over10Rate=float(np.mean(errors>.1)),byDate=by,logByDate=log_by)
 
 def grouped_comparison(rows,sectors):
     groups=defaultdict(list)
@@ -204,11 +201,11 @@ def compare(rows):
     names=NAMES+(('horizonModel',) if all(r.get('horizonModel') for r in later) else ())
     summary={k:score(later,k) for k in names};m=summary[choose]
     wins=sum(m['byDate'][d]<min(summary[k]['byDate'][d] for k in ('priceOnly','noChange')) for d in m['byDate'])/m['dates']
-    checks=dict(enoughDates=m['dates']>=6,logError=m['dateMeanLogMae']<.95*min(summary[k]['dateMeanLogMae'] for k in ('priceOnly','noChange')),average=m['dateMeanMape']<=min(summary[k]['dateMeanMape'] for k in ('priceOnly','noChange')),tail=m['p90']<=min(summary[k]['p90'] for k in ('priceOnly','noChange')),consistency=wins>=.6,direction=m['directionAccuracy']>=max(summary[k]['directionAccuracy'] for k in ('priceOnly','noChange')),downRecall=m['actualDownCount']<30 or (m['downRecall'] is not None and m['downRecall']>=.10))
+    checks=dict(enoughDates=m['dates']>=6,logError=m['dateMeanLogMae']<.95*min(summary[k]['dateMeanLogMae'] for k in ('priceOnly','noChange')),average=m['dateMeanMape']<=min(summary[k]['dateMeanMape'] for k in ('priceOnly','noChange')),tail=m['p90']<=min(summary[k]['p90'] for k in ('priceOnly','noChange')),consistency=wins>=.6,direction=m['directionAccuracy']>max(m['alwaysUpAccuracy'],*(summary[k]['directionAccuracy'] for k in ('priceOnly','noChange'))),downRecall=m['actualDownCount']<30 or (m['downRecall'] is not None and m['downRecall']>=.10))
     return dict(status='research',chosen=choose,selectionTargetThrough=max(r['targetDate'] for r in earlier),evaluationStart=start,evaluationDates=dates[boundary:],selectionDates=sorted({r['origin'] for r in earlier}),evaluation=summary,checks=checks,passed=all(checks.values()),dateWinRate=wins,liveForecastChanged=False)
 
 def run_class(hist,context,asset_class,inputs=None):
-    output={};hs=(21,84,252) if asset_class=='stocks' else (30,120,365)
+    output={};hs=(126,252) if asset_class=='stocks' else (30,120,365)
     for h in hs:
         data,latest=records(hist,context,h,asset_class,inputs);dates=sorted({r['origin'] for r in data});origins=[]
         # Index origins and matured labels once; never truncate the issuer universe.

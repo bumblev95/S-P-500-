@@ -14,8 +14,9 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL = "trend-decay-v1"
-HORIZONS = (21, 84, 252)
+MODEL = "trend-decay-v2-medium-long"
+HORIZONS = (126, 252)
+LONG_TERM_HORIZON = 756
 MIN_TRAIN = 200
 FIELDS = ("model", "symbol", "asOf", "issuedAt", "horizon", "anchor",
           "bear", "base", "bull", "direction", "dailyDrift", "volatility")
@@ -51,6 +52,69 @@ def age_days(as_of, now):
 
 def direction(change):
     return "up" if change > .02 else "down" if change < -.02 else "neutral"
+
+
+SECTOR_EXIT_PE = {
+    "Communication Services": 19.0, "Consumer Cyclical": 18.0,
+    "Consumer Defensive": 19.0, "Energy": 13.0, "Financial Services": 14.0,
+    "Healthcare": 18.0, "Industrials": 18.0, "Real Estate": 18.0,
+    "Technology": 22.0, "Utilities": 17.0, "Basic Materials": 15.0,
+}
+
+
+def long_term_scenario(price_row, fundamental):
+    """Three-year valuation scenarios, deliberately not a direction forecast.
+
+    Forward/trailing EPS, observed growth and today's multiple are all explicit.
+    Growth fades each year and the exit multiple moves toward a fixed sector norm.
+    """
+    price = number(price_row.get("close"))
+    forward_eps = number(fundamental.get("forwardEps"))
+    trailing_eps = number(fundamental.get("trailingEps"))
+    eps = forward_eps if forward_eps and forward_eps > 0 else trailing_eps
+    eps_source = "forwardEps" if forward_eps and forward_eps > 0 else "trailingEps"
+    stated_pe = number(fundamental.get("forwardPE" if eps_source == "forwardEps" else "trailingPE"))
+    current_pe = stated_pe if stated_pe and 2 <= stated_pe <= 200 else price / eps if price and eps else None
+    observed = [number(fundamental.get(k)) for k in ("earningsGrowth", "revenueGrowth")]
+    observed = [v for v in observed if v is not None and -1 < v < 5]
+    if not price or not eps or not current_pe or not observed:
+        return None
+    near_growth = max(-.20, min(.30, sum(observed) / len(observed)))
+    terminal_growth = .04
+    base_growth = [near_growth, .55 * near_growth + .45 * terminal_growth, terminal_growth]
+    sector = str(fundamental.get("sector") or "")
+    normal_pe = SECTOR_EXIT_PE.get(sector, 18.0)
+    # The base case never assumes multiple expansion. Expensive stocks move
+    # toward a sector norm; already-cheaper stocks retain today's multiple.
+    base_exit = max(8., min(35., min(current_pe, .45 * current_pe + .55 * normal_pe)))
+
+    def case(name, growth_shift, multiple_factor):
+        growth = [max(-.35, min(.40, g + growth_shift)) for g in base_growth]
+        projected_eps = eps
+        # Forward EPS represents year one already; trailing EPS still needs all
+        # three annual steps to reach the same three-year endpoint.
+        applied_growth = growth[1:] if eps_source == "forwardEps" else growth
+        for g in applied_growth:
+            projected_eps *= 1 + g
+        exit_pe = max(6., min(45., base_exit * multiple_factor))
+        value = projected_eps * exit_pe
+        return {"name": name, "value": value, "return": value / price - 1,
+                "eps": projected_eps, "exitPE": exit_pe,
+                "annualGrowth": growth, "appliedGrowth": applied_growth}
+
+    cases = {
+        "bear": case("Bear", -.10, .75),
+        "base": case("Base", 0., 1.),
+        "bull": case("Bull", .08, 1.20),
+    }
+    if not cases["bear"]["value"] <= cases["base"]["value"] <= cases["bull"]["value"]:
+        return None
+    return {"horizon": LONG_TERM_HORIZON, "years": 3, "anchor": price,
+            "epsSource": eps_source, "startingEps": eps, "currentPE": current_pe,
+            "observedGrowth": observed, "terminalGrowth": terminal_growth,
+            "sector": sector or None, "sectorNormalPE": normal_pe, "cases": cases,
+            "method": "Growth fades toward 4%; base exit P/E never expands and compresses toward a fixed sector norm when elevated.",
+            "warning": "Valuation scenarios, not probabilities or a three-year direction forecast."}
 
 
 def predict(row, horizon):
@@ -190,6 +254,14 @@ def build(root=ROOT, now=None):
     now = now or datetime.now(timezone.utc).isoformat(timespec="seconds")
     price_path = root / "prices/latest_prices.csv"
     rows = read_csv(price_path)
+    published_path = root / "forecasts/latest.json"
+    try:
+        published = json.loads(published_path.read_text(encoding="utf-8")).get("stocks", {})
+    except (OSError, ValueError, TypeError):
+        published = {}
+    fundamental_path = root / "fundamentals/latest_fundamentals.csv"
+    fundamentals = {str(r.get("symbol", "")).strip().upper(): r
+                    for r in read_csv(fundamental_path)} if fundamental_path.exists() else {}
     archive = root / "forecasts/archive"
     existing = read_archive(archive)
     records_by_symbol = {}
@@ -209,6 +281,11 @@ def build(root=ROOT, now=None):
         if history_path.exists():
             raw = json.loads(history_path.read_text(encoding="utf-8"))
             history = clean_history(raw.get("prices", []))
+            history = [p for p in history if p["date"] <= as_of]
+        elif symbol in published:
+            # A local/manual rebuild may not have the Actions-only history cache.
+            # Preserve the already published observations instead of erasing charts.
+            history = clean_history(published[symbol].get("history", []))
             history = [p for p in history if p["date"] <= as_of]
         # History and snapshot have to describe the same last close.
         price = number(row.get("close"))
@@ -236,6 +313,7 @@ def build(root=ROOT, now=None):
             "status": "ready" if fresh and all(predictions.values()) else
                       "stale" if not fresh else "missing",
             "price": number(row.get("close")), "predictions": predictions,
+            "longTermScenario": long_term_scenario(row, fundamentals.get(symbol, {})),
             "inputs": {k: number(row.get(k)) for k in
                        ("return1m", "return3m", "return6m", "ma20", "ma50", "ma200",
                         "volume", "avgVolume3m", "volatility4m")},
@@ -251,7 +329,9 @@ def build(root=ROOT, now=None):
     archive_records(archive, new_records)
     payload = {"schemaVersion": 1, "model": MODEL, "generatedAt": now,
                "method": "Fixed damped momentum; volatility scenarios, not calibrated probabilities.",
-               "horizons": list(HORIZONS), "stocks": entries}
+               "horizons": list(HORIZONS), "longTermHorizon": LONG_TERM_HORIZON,
+               "longTermMethod": "Fundamental Bear/Base/Bull valuation scenario with growth fade and no base-case P/E expansion; not a direction model.",
+               "stocks": entries}
     atomic_json(root / "forecasts/latest.json", payload)
     print(f"Forecasts: {len(entries)} symbols; "
           f"{sum(e['status'] == 'ready' for e in entries.values())} ready; "
