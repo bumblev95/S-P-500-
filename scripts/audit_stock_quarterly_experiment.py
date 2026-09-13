@@ -117,6 +117,15 @@ def build(root=ROOT):
         cik=int(payload['cik'])
         if cik in groups:
             by_cik[cik]=p;source_hashes[p.name]=sha
+    supplement_path=folder/'e2-supplement-manifest.json'
+    supplement=json.loads(supplement_path.read_text()) if supplement_path.exists() else {'sources':{},'errors':[]}
+    for name,source in supplement['sources'].items():
+        p=folder/'sec-supplement'/name;sha=hashlib.sha256(p.read_bytes()).hexdigest()
+        if sha!=source['sha256']:raise ValueError('Supplement source changed: '+name)
+        payload=json.loads(p.read_text());cik=int(payload['cik'])
+        if cik!=source['cik'] or cik not in groups or cik in by_cik:raise ValueError('Unexpected supplement issuer: '+name)
+        by_cik[cik]=p;source_hashes['sec-supplement/'+name]=sha
+    errors+=supplement['errors']
     issuer_stats={};controls=[];evidence_samples={};total_snapshots=0;derived=0;mixed=0;restated_periods=0
     for num,(cik,symbols) in enumerate(sorted(groups.items())):
         facts=facts_from(json.loads(by_cik[cik].read_text())) if cik in by_cik else []
@@ -159,7 +168,7 @@ def build(root=ROOT):
         event_files+=bool(payload.get('splits') or payload.get('corporateActions'))
     summary=Counter(r['status'] for r in controls)
     result=dict(experiment='stock-validation-e2-input-audit-v1',completedAt=datetime.now(timezone.utc).isoformat(),
-        codeHash=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),sourceHashes=source_hashes,
+        codeHash=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),sourceHashes=source_hashes,supplement=supplement,
         targetIssuers=len(groups),sourceIssuers=len(by_cik),issuersWithStandardFlowFacts=sum(v['facts']>0 for v in issuer_stats.values()),
         origins=coverage,issuerStats=issuer_stats,snapshots=total_snapshots,derivedValues=derived,mixedAccessionValues=mixed,
         periodsWithMultipleReportedValues=restated_periods,releaseControlCounts=dict(summary),releaseControls=controls,
