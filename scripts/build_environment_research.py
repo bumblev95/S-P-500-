@@ -14,13 +14,14 @@ from build_forecasts import atomic_json
 from research_universe import load_universe
 from build_research_inputs import stock_before, crypto_before, STOCK_FIELDS, CRYPTO_FIELDS
 from build_earnings_inputs import earnings_before, FIELDS as EARNINGS_FIELDS
+from research_direction import DYNAMIC_FIELDS, EXPERIMENTS, financial_changes, calibrate_direction
 ROOT=Path(__file__).resolve().parents[1]
 STOCKS=('NVDA','AMD','AVGO','MU','AMAT','QCOM','INTC','MSFT','AAPL','GOOGL','AMZN','META','TSLA','JPM','XOM','SPY')
 PROXIES={'SPY':'미국 주식','QQQ':'기술주','HYG':'하이일드 채권 가격','IEF':'중기 국채 가격','UUP':'달러 ETF','^VIX':'VIX'}
 BASE=['return7','return30','return90','return180','vol30','vol90','distance20','distance50','distance200','drawdown90']
 CONTEXT=[f'{s}_{k}' for s in PROXIES for k in ('return30','vol30','distance200')]+['BTC_return30','BTC_vol30','BTC_distance200']
 NAMES=('noChange','priceOnly','environment','ensemble','balanced')
-MODEL='environment-challenger-v6-medium-long'
+MODEL='environment-challenger-v7-direction-selection'
 
 # Predeclared before the later holdout is evaluated. Each stock horizon gets
 # independent inputs, capacity and a balanced direction classifier.
@@ -38,8 +39,9 @@ def direction_label(value):
 
 class HorizonModel:
     """Independent return and balanced-direction estimators for one horizon."""
-    def __init__(self,horizon):
-        self.horizon=horizon;self.profile=HORIZON_PROFILES[horizon]
+    def __init__(self,horizon,field=None):
+        self.horizon=horizon;self.profile=dict(HORIZON_PROFILES[horizon])
+        if field:self.profile['field']=field
         p=self.profile
         common=dict(max_iter=p['max_iter'],max_leaf_nodes=p['max_leaf_nodes'],
                     min_samples_leaf=p['min_samples_leaf'],l2_regularization=p['l2_regularization'],
@@ -72,6 +74,14 @@ class HorizonModel:
             else:value=float(np.clip(raw,math.log(.98),math.log(1.02)));chosen=0
             result.append(math.exp(value));details.append(dict(down=p[-1],flat=p[0],up=p[1],chosen=chosen))
         return np.asarray(result),details
+
+    def predict_independent(self,rows,previous,name,origin):
+        x=self.matrix(rows)
+        values=np.exp(self.return_model.predict(x))
+        probability=self.direction_model.predict_proba(x)
+        columns={int(label):i for i,label in enumerate(self.direction_model.classes_)}
+        raw=[[float(p[columns[label]]) if label in columns else 0. for label in (-1,0,1)] for p in probability]
+        return values,calibrate_direction(raw,previous,name,origin)
 
 def fit_horizon(train,horizon):
     return HorizonModel(horizon).fit(train)
@@ -135,6 +145,10 @@ def records(hist,context,h,asset_class,inputs=None):
                 added+=quarterly
                 through=max([d for d in (through,quarter_through) if d],default=None)
             current.update(w=current['z']+added,v=current['z']+[1. if math.isfinite(v) else float('nan') for v in added],inputThrough=through,inputCount=sum(math.isfinite(v) for v in added))
+            if asset_class=='stocks':
+                changes,change_through=financial_changes(inputs.get('stocks',{}).get(symbol,{}).get('rows',[]),inputs.get('earnings',{}).get(symbol,[]),day)
+                current.update(d=current['w']+changes,dynamicCount=sum(math.isfinite(v) for v in changes),
+                               inputThrough=max((d for d in (through,change_through) if d),default=None))
             latest[symbol]=current
             if symbol==representatives[ciks.get(symbol,symbol)] and i+h<len(prices) and datetime.fromisoformat(day).weekday()==(4 if asset_class=='stocks' else 6):
                 if asset_class=='crypto' and (datetime.fromisoformat(prices[i+h]['date'])-datetime.fromisoformat(day)).days!=h:continue
@@ -177,7 +191,19 @@ def score(rows,name):
     sign=direction_label
     logs=np.array([math.log(r[name]/r['y']) for r in rows]);log_by={d:float(np.mean([abs(logs[i]) for i,r in enumerate(rows) if r['origin']==d])) for d in dates}
     down=[r for r in rows if sign(r['y'])==-1]
-    return dict(n=len(rows),dates=len(dates),mape=float(errors.mean()),dateMeanMape=float(np.mean(list(by.values()))),p90=float(np.quantile(errors,.9)),logMae=float(np.mean(abs(logs))),logBias=float(logs.mean()),p90Log=float(np.quantile(abs(logs),.9)),dateMeanLogMae=float(np.mean(list(log_by.values()))),directionAccuracy=float(np.mean([sign(r[name])==sign(r['y']) for r in rows])),alwaysUpAccuracy=float(np.mean([sign(r['y'])==1 for r in rows])),actualDownCount=len(down),downRecall=sum(sign(r[name])==-1 for r in down)/len(down) if down else None,over10Rate=float(np.mean(errors>.1)),byDate=by,logByDate=log_by)
+    predicted=lambda r:r.get(name+'Direction',sign(r[name]))
+    predicted_down=[r for r in rows if predicted(r)==-1]
+    hits=sum(predicted(r)==-1 for r in down)
+    classes=sorted({sign(r['y']) for r in rows})
+    recalls=[sum(predicted(r)==label for r in rows if sign(r['y'])==label)/sum(sign(r['y'])==label for r in rows) for label in classes]
+    return dict(n=len(rows),dates=len(dates),mape=float(errors.mean()),dateMeanMape=float(np.mean(list(by.values()))),p90=float(np.quantile(errors,.9)),logMae=float(np.mean(abs(logs))),logBias=float(logs.mean()),p90Log=float(np.quantile(abs(logs),.9)),dateMeanLogMae=float(np.mean(list(log_by.values()))),directionAccuracy=float(np.mean([predicted(r)==sign(r['y']) for r in rows])),returnDirectionAccuracy=float(np.mean([sign(r[name])==sign(r['y']) for r in rows])),balancedDirectionAccuracy=float(np.mean(recalls)),alwaysUpAccuracy=float(np.mean([sign(r['y'])==1 for r in rows])),actualDownCount=len(down),predictedDownCount=len(predicted_down),downPrevalence=len(down)/len(rows),downPrecision=hits/len(predicted_down) if predicted_down else None,downRecall=hits/len(down) if down else None,directionSource='independent classifier' if name in EXPERIMENTS else 'predicted return',calibratedFraction=sum(bool((r.get(name+'Scores') or {}).get('calibrated')) for r in rows)/len(rows) if name in EXPERIMENTS else None,over10Rate=float(np.mean(errors>.1)),byDate=by,logByDate=log_by)
+
+def direction_checks(metrics,baselines):
+    benchmark=max(metrics['alwaysUpAccuracy'],*(v['directionAccuracy'] for v in baselines))
+    enough_down=metrics['actualDownCount']>=30
+    return dict(direction=metrics['directionAccuracy']>benchmark,
+                downRecall=not enough_down or (metrics['downRecall'] is not None and metrics['downRecall']>=.10),
+                downPrecision=not enough_down or (metrics['downPrecision'] is not None and metrics['downPrecision']>=metrics['downPrevalence']))
 
 def grouped_comparison(rows,sectors):
     groups=defaultdict(list)
@@ -196,13 +222,22 @@ def compare(rows):
     if boundary>=len(dates)-2:return dict(status='insufficient',passed=False,liveForecastChanged=False)
     start=dates[boundary];earlier=[r for r in rows if r['origin']<start and r['targetDate']<start];later=[r for r in rows if r['origin']>=start]
     if len({r['origin'] for r in earlier})<3:return dict(status='insufficient',passed=False,liveForecastChanged=False)
-    candidates=[k for k in ('environment','ensemble','balanced','horizonModel') if all(r.get(k) for r in earlier)]
-    choose=min(candidates,key=lambda k:score(earlier,k)['dateMeanLogMae']+.25*score(earlier,k)['p90Log'])
-    names=NAMES+(('horizonModel',) if all(r.get('horizonModel') for r in later) else ())
+    names=tuple(k for k in (*NAMES,'horizonModel',*EXPERIMENTS) if all(r.get(k) for r in earlier+later))
+    candidates=[k for k in names if k not in ('noChange','priceOnly')]
+    selection={k:score(earlier,k) for k in names}
+    selection_checks={k:direction_checks(selection[k],[selection[b] for b in ('priceOnly','noChange')]) for k in candidates}
+    eligible=[k for k in candidates if all(selection_checks[k].values())]
+    stock_experiment=any(k in names for k in EXPERIMENTS)
+    if not stock_experiment:eligible=candidates
+    objective=lambda k:selection[k]['dateMeanLogMae']+.25*selection[k]['p90Log']
+    choose=min(eligible or candidates,key=objective)
     summary={k:score(later,k) for k in names};m=summary[choose]
     wins=sum(m['byDate'][d]<min(summary[k]['byDate'][d] for k in ('priceOnly','noChange')) for d in m['byDate'])/m['dates']
     checks=dict(enoughDates=m['dates']>=6,logError=m['dateMeanLogMae']<.95*min(summary[k]['dateMeanLogMae'] for k in ('priceOnly','noChange')),average=m['dateMeanMape']<=min(summary[k]['dateMeanMape'] for k in ('priceOnly','noChange')),tail=m['p90']<=min(summary[k]['p90'] for k in ('priceOnly','noChange')),consistency=wins>=.6,direction=m['directionAccuracy']>max(m['alwaysUpAccuracy'],*(summary[k]['directionAccuracy'] for k in ('priceOnly','noChange'))),downRecall=m['actualDownCount']<30 or (m['downRecall'] is not None and m['downRecall']>=.10))
-    return dict(status='research',chosen=choose,selectionTargetThrough=max(r['targetDate'] for r in earlier),evaluationStart=start,evaluationDates=dates[boundary:],selectionDates=sorted({r['origin'] for r in earlier}),evaluation=summary,checks=checks,passed=all(checks.values()),dateWinRate=wins,liveForecastChanged=False)
+    if stock_experiment:checks.update(direction_checks(m,[summary[b] for b in ('priceOnly','noChange')]),selectionEligible=bool(eligible))
+    if choose in EXPERIMENTS:
+        checks.update(returnDirection=m['returnDirectionAccuracy']>max(m['alwaysUpAccuracy'],summary['priceOnly']['directionAccuracy'],summary['noChange']['directionAccuracy']),directionCalibrated=m['calibratedFraction']==1.)
+    return dict(status='research',chosen=choose,selectionEligible=bool(eligible),selectionRule='Direction, down recall >= 10%, down precision >= prevalence on earlier matured outcomes; then date log MAE + 0.25 tail. If none qualify, chosen is diagnostic only.',selectionChecks=selection_checks,selectionEvaluation=selection,legacyPriceChoice=min(candidates,key=objective),selectionTargetThrough=max(r['targetDate'] for r in earlier),evaluationStart=start,evaluationDates=dates[boundary:],selectionDates=sorted({r['origin'] for r in earlier}),evaluation=summary,checks=checks,passed=all(checks.values()),dateWinRate=wins,liveForecastChanged=False)
 
 def run_class(hist,context,asset_class,inputs=None):
     output={};hs=(126,252) if asset_class=='stocks' else (30,120,365)
@@ -233,11 +268,24 @@ def run_class(hist,context,asset_class,inputs=None):
             pv=np.exp(control.predict([r['v'] for r in test])) if control else [None]*len(test)
             horizon_model=fit_horizon(train,h) if asset_class=='stocks' else None
             ph,probabilities=horizon_model.predict(test) if horizon_model else ([None]*len(test),[None]*len(test))
+            experiments={}
+            if horizon_model:
+                experiments['independentReturn']=horizon_model.predict_independent(test,checks,'independentReturn',origin)
+                dynamics_model=HorizonModel(h,field='d').fit(train)
+                experiments['secDynamics']=dynamics_model.predict_independent(test,checks,'secDynamics',origin)
+            fold_experiments=[{} for _ in test]
+            for name,(values,details) in experiments.items():
+                for extra,value,detail in zip(fold_experiments,values,details):
+                    extra.update({name:float(value),name+'Direction':detail['chosen'],name+'Scores':detail})
             folds.append(dict(origin=origin,trainTargetThrough=max(r['targetDate'] for r in train),targetThrough=max(r['targetDate'] for r in test),n=len(test),trainingRows=len(train),additionalInputTrainingRows=len(usable)))
-            for r,v,w,z,e,mask,specific,probability in zip(test,pa,pb,pc,pe,pv,ph,probabilities):
+            for r,v,w,z,e,mask,specific,probability,extra in zip(test,pa,pb,pc,pe,pv,ph,probabilities,fold_experiments):
                 interval=dict(low=float(z*math.exp(-cal['logRadius'])),high=float(z*math.exp(cal['logRadius'])),**cal) if cal else None
-                checks.append({k:r[k] for k in ('symbol','origin','targetDate','y','regime','contextThrough','inputThrough','inputCount')}|dict(noChange=1.,priceOnly=float(v),environment=float(w),ensemble=float((v+w)/2),balanced=float(z),horizonModel=float(specific) if specific is not None else None,horizonDirectionScores=probability,enriched=float(e) if e is not None and r['inputCount'] else None,availabilityControl=float(mask) if mask is not None and r['inputCount'] else None,range=interval))
+                checks.append({k:r[k] for k in ('symbol','origin','targetDate','y','regime','contextThrough','inputThrough','inputCount')}|dict(noChange=1.,priceOnly=float(v),environment=float(w),ensemble=float((v+w)/2),balanced=float(z),horizonModel=float(specific) if specific is not None else None,horizonDirectionScores=probability,enriched=float(e) if e is not None and r['inputCount'] else None,availabilityControl=float(mask) if mask is not None and r['inputCount'] else None,range=interval,dynamicCount=r.get('dynamicCount',0))|extra)
+        if asset_class=='stocks' and checks:
+            # Fail before publishing if any variant accidentally changes its sample.
+            assert all(all(isinstance(r.get(k),(int,float)) and math.isfinite(r[k]) and r[k]>0 for k in ('horizonModel',*EXPERIMENTS)) for r in checks)
         comparison=compare(checks);predictions={};models={};training_status={};calibrations={}
+        live_experiments={}
         for s,current in latest.items():
             origin=current['origin']
             if origin not in models:
@@ -248,19 +296,37 @@ def run_class(hist,context,asset_class,inputs=None):
             if not models[origin]:continue
             a,b,c,e,specific_model,through=models[origin];v=float(a.predict([current['x']])[0]);w=float(b.predict([current['z']])[0]);z=float(np.exp(c.predict([current['z']])[0]));own=[r for r in checks if r['symbol']==s]
             specific,specific_probability=specific_model.predict([current]) if specific_model else ([None],[None])
+            if specific_model and origin not in live_experiments:
+                train=[r for r in data if r['targetDate']<origin]
+                batch=[r for r in latest.values() if r['origin']==origin]
+                dynamic_model=HorizonModel(h,field='d').fit(train)
+                live_experiments[origin]={r['symbol']:{} for r in batch}
+                for name,model in (('independentReturn',specific_model),('secDynamics',dynamic_model)):
+                    values,details=model.predict_independent(batch,checks,name,origin)
+                    for row,value,detail in zip(batch,values,details):
+                        live_experiments[origin][row['symbol']].update({name:row['anchor']*float(value),name+'Direction':detail['chosen'],name+'Scores':detail})
             if origin not in calibrations:calibrations[origin]=calibration(checks,origin)
             cal=calibrations[origin]
-            names=NAMES+(('horizonModel',) if asset_class=='stocks' else ())
+            names=NAMES+(('horizonModel',*EXPERIMENTS) if asset_class=='stocks' else ())
             predictions[s]=dict(asOf=origin,anchor=current['anchor'],contextThrough=current['contextThrough'],trainTargetThrough=through,regime=current['regime'],priceOnly=current['anchor']*v,environment=current['anchor']*w,ensemble=current['anchor']*(v+w)/2,balanced=current['anchor']*z,horizonModel=current['anchor']*float(specific[0]) if specific[0] is not None else None,horizonDirectionScores=specific_probability[0],enriched=current['anchor']*float(np.exp(e.predict([current['w']])[0])) if e and current['inputCount'] else None,inputThrough=current['inputThrough'],inputValues={k:float(val) if math.isfinite(val) else None for k,val in zip(STOCK_FIELDS+EARNINGS_FIELDS if asset_class=='stocks' else CRYPTO_FIELDS,current['w'][-(len(STOCK_FIELDS)+len(EARNINGS_FIELDS) if asset_class=='stocks' else len(CRYPTO_FIELDS)):])},range=dict(low=current['anchor']*z*math.exp(-cal['logRadius']),high=current['anchor']*z*math.exp(cal['logRadius']),**cal) if cal else None,rangeValidation=interval_score(own),validation={k:{a:b for a,b in score(own,k).items() if a not in ('byDate','logByDate')} for k in names})
+            if specific_model:
+                predictions[s].update(live_experiments[origin][s])
+                predictions[s]['dynamicValues']={k:float(val) if math.isfinite(val) else None for k,val in zip(DYNAMIC_FIELDS,current['d'][-len(DYNAMIC_FIELDS):])}
         later=[r for r in checks if r['origin']>=comparison.get('evaluationStart','9999')]
         paired=[r for r in later if r.get('enriched') is not None]
-        names=NAMES+(('horizonModel',) if asset_class=='stocks' else ())
+        names=NAMES+(('horizonModel',*EXPERIMENTS) if asset_class=='stocks' else ())
         horizon_evaluation=score(later,'horizonModel') if asset_class=='stocks' else None
         profile={k:v for k,v in HORIZON_PROFILES[h].items() if k not in ('direction_probability','direction_margin')} if asset_class=='stocks' else None
         horizon_specific=dict(profile=profile,evaluation=horizon_evaluation,directionCounts={label:sum(1 for r in later if (r.get('horizonModel',1)>1.02 if label=='up' else r.get('horizonModel',1)<.98 if label=='down' else .98<=r.get('horizonModel',1)<=1.02)) for label in ('up','flat','down')},liveForecastChanged=False) if asset_class=='stocks' else None
         output[str(h)]=dict(comparison=comparison,trainingStatus=training_status,allDates={k:score(checks,k) for k in names},rangeValidation=interval_score(later),horizonSpecific=horizon_specific,enrichment=dict(evaluation={k:score(paired,k) for k in ('balanced','availabilityControl','enriched')},alwaysUpDirectionAccuracy=float(np.mean([r['y']>1.02 for r in paired])) if paired else None,directionCounts={k:{label:sum(1 for r in paired if (r[k]>1.02 if label=='up' else r[k]<.98 if label=='down' else .98<=r[k]<=1.02)) for label in ('up','flat','down')} for k in ('balanced','enriched')},matchedBySymbol={s:sum(r['symbol']==s for r in paired) for s in sorted({r['symbol'] for r in paired})},matchedRows=len(paired),totalLaterRows=len(later),liveForecastChanged=False),regimes={g:{k:score([r for r in checks if r['regime']==g],k) for k in names} for g in sorted({r['regime'] for r in checks})},folds=folds,predictions=predictions,outcomes=checks)
         print(asset_class,h,'disjoint dates',len(folds),'later pass',comparison.get('passed'),flush=True)
         if asset_class=='stocks':
+            output[str(h)]['experiments']=dict(names=['horizonModel',*EXPERIMENTS],matchedRows=len(later),
+                dynamicInputRows=sum(r['dynamicCount']>0 for r in later),fields=DYNAMIC_FIELDS,
+                evaluation={k:score(later,k) for k in ('noChange','priceOnly','balanced','horizonModel',*EXPERIMENTS)},
+                evaluationByRegime={g:{k:score([r for r in later if r['regime']==g],k) for k in ('noChange','horizonModel',*EXPERIMENTS)} for g in sorted({r['regime'] for r in later})},
+                protocol='Same rows and origins. Independent return reuses the legacy fit without forcing; SEC dynamics adds dated period changes with identical model capacity. Classifiers use only previously realized OOS predictions for calibration and fixed argmax. Later historical evaluation has been revisited; no prospective claim.',
+                liveForecastChanged=False)
             output[str(h)]['enrichment']['evaluation']['noChange']=score(paired,'noChange')
             output[str(h)]['enrichment']['bySector']=grouped_comparison(paired,(inputs or {}).get('sectors',{}))
     return output
@@ -322,7 +388,7 @@ def build(root=ROOT,download=True,stocks_only=False):
             for symbol,p in v['predictions'].items():
                 key=(MODEL,cls,symbol,p['asOf'],h)
                 if key not in keys:
-                    archive.append(dict(model=MODEL,assetClass=cls,symbol=symbol,asOf=p['asOf'],horizon=h,issuedAt=now.isoformat(),anchor=p['anchor'],balanced=p['balanced'],horizonModel=p.get('horizonModel'),horizonDirectionScores=p.get('horizonDirectionScores'),enriched=p['enriched'],range=p['range']));keys.add(key)
+                    archive.append(dict(model=MODEL,assetClass=cls,symbol=symbol,asOf=p['asOf'],horizon=h,issuedAt=now.isoformat(),anchor=p['anchor'],balanced=p['balanced'],horizonModel=p.get('horizonModel'),horizonDirectionScores=p.get('horizonDirectionScores'),enriched=p['enriched'],range=p['range'],experiments={name:{key:p.get(key) for key in (name,name+'Direction',name+'Scores')} for name in EXPERIMENTS} if cls=='stocks' else None));keys.add(key)
     atomic_json(archive_path,archive);return out
 if __name__=='__main__':
     import sys

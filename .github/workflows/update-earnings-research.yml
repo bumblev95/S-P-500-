@@ -49,7 +49,10 @@ jobs:
           git push
       - name: Collect company releases and preserve observed fundamentals
         run: python scripts/build_earnings_inputs.py
-      - name: Retrain stock challenger with published earnings
+      - name: Verify stock experiment protocol
+        # Verify chronology and candidate selection before the expensive fit.
+        run: python -m unittest discover -s scripts -p test_research_direction.py
+      - name: Train and compare stock experiments
         run: python scripts/build_environment_research.py --stocks-only
       - run: python -m unittest discover -s scripts -p test_environment_research.py
       - run: python scripts/build_sp500_report.py

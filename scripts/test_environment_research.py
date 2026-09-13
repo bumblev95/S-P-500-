@@ -88,6 +88,12 @@ class EnvironmentResearch(unittest.TestCase):
                 for r in v['outcomes']:
                     if r.get('range'):self.assertLess(r['range']['targetThrough'],r['origin'])
                     if r.get('inputThrough'):self.assertLess(r['inputThrough'],r['origin'])
+                    for name in m.EXPERIMENTS:
+                        detail=r.get(name+'Scores')
+                        if detail and detail['targetThrough']:self.assertLess(detail['targetThrough'],r['origin'])
+                if v.get('experiments'):
+                    self.assertEqual(len({metric['n'] for metric in v['experiments']['evaluation'].values()}),1)
+                    if not v['comparison'].get('selectionEligible'):self.assertFalse(v['comparison']['passed'])
                 c=v['comparison']
                 if c['status']=='research':self.assertLess(c['selectionTargetThrough'],c['evaluationStart'])
 if __name__=='__main__':unittest.main()

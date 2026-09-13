@@ -9,6 +9,8 @@ on:
       - 'scripts/test_sp500_research.py'
       - 'scripts/build_environment_research.py'
       - 'scripts/test_environment_research.py'
+      - 'scripts/research_direction.py'
+      - 'scripts/test_research_direction.py'
       - 'scripts/build_earnings_inputs.py'
       - 'scripts/test_earnings_inputs.py'
       - 'scripts/import_sec_companyfacts.py'
@@ -51,7 +53,7 @@ jobs:
       - run: python -m unittest discover -s scripts -p test_earnings_inputs.py
       - name: Collect SEC histories
         id: collect
-        run: python scripts/build_research_inputs.py
+        run: python scripts/build_research_inputs.py ${{ github.event_name == 'push' && '--stocks-only' || '' }}
         env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
       - name: Preserve collected inputs before training
@@ -64,7 +66,8 @@ jobs:
           git pull --rebase origin main
           git push
       - run: python scripts/build_earnings_inputs.py
-      - run: python scripts/build_environment_research.py
+      - run: python -m unittest discover -s scripts -p test_research_direction.py
+      - run: python scripts/build_environment_research.py ${{ github.event_name == 'push' && '--stocks-only' || '' }}
       - run: python -m unittest discover -s scripts -p test_environment_research.py
       - run: python scripts/build_sp500_report.py
       - run: node --check assets/environment-research.js && node scripts/test_environment_page.cjs

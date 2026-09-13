@@ -12,6 +12,7 @@ def build(root=ROOT):
         horizons[h]=dict(matchedRows=e['matchedRows'],matchedIssuers=len(e['matchedBySymbol']),
             evaluation={k:{a:b for a,b in m.items() if a not in ('byDate','logByDate')} for k,m in e['evaluation'].items()},
             horizonSpecific=v.get('horizonSpecific'),
+            experiments=v.get('experiments'),comparison=v['comparison'],
             alwaysUpDirectionAccuracy=e['alwaysUpDirectionAccuracy'],directionCounts=e['directionCounts'],bySector=e.get('bySector',{}),
             firstOrigin=min((r['origin'] for r in rows),default=None),lastOrigin=max((r['origin'] for r in rows),default=None),
             evaluationDates=v['comparison'].get('evaluationDates',[]),trainingStatus=v['trainingStatus'])
@@ -28,6 +29,21 @@ def build(root=ROOT):
     for h,v in horizons.items():
         separated=v.get('horizonSpecific') or {};e=separated.get('evaluation') or {};counts=separated.get('directionCounts') or {}
         lines.append(f"| {h}거래일 | {(separated.get('profile') or {}).get('name','자료 부족')} | {pct(e.get('mape'))} | {pct(e.get('directionAccuracy'))} | {pct(e.get('downRecall'))} | {counts.get('up',0)} / {counts.get('flat',0)} / {counts.get('down',0)} |")
+    for h,v in horizons.items():
+        experiment=v.get('experiments')
+        if not experiment:continue
+        comparison=v['comparison']
+        lines += ['',f'## {h}거래일: 같은 표본에서 보완 실험','',
+            f"후반 {experiment['matchedRows']}개 종목·시점. SEC 변화 지표가 있는 표본 {experiment['dynamicInputRows']}개. 항상 상승 적중률 {pct(experiment['evaluation']['noChange'].get('alwaysUpAccuracy'))}.",'',
+            '| 방법 | 가격 오차 | 방향 분류 적중 | 목표가격 방향 적중 | 하락 포착 | 하락 예측 적중 |',
+            '|---|---:|---:|---:|---:|---:|']
+        labels=dict(noChange='가격 불변',priceOnly='가격 패턴',balanced='기존 균형 모델',horizonModel='기존 강제 조정 모델',independentReturn='강제 조정 제거 + 방향 보정',secDynamics='SEC 변화 추가 + 방향 보정')
+        for name,metric in experiment['evaluation'].items():
+            lines.append('| '+labels[name]+' | '+' | '.join(pct(metric.get(k)) for k in ('mape','directionAccuracy','returnDirectionAccuracy','downRecall','downPrecision'))+' |')
+        lines += ['',f"선택 후보: {labels.get(comparison.get('chosen'),comparison.get('chosen'))}. 앞쪽 방향 조건 충족 후보 존재: {comparison.get('selectionEligible')}. 연구 승격 조건 통과: {comparison.get('passed')}.",
+            '미통과 조건: '+', '.join(k for k,v in comparison.get('checks',{}).items() if not v)+'.',
+            '후보는 앞쪽에서 방향·하락 포착·하락 예측 적중 조건을 먼저 검사하고 가격오차로 선택합니다. 충족 후보가 없으면 표시된 후보는 진단용이며 승격하지 않습니다. 독립 방향 분류와 목표가격의 부호를 별도로 평가하며, 분류만 좋아졌다고 목표가격을 승격하지 않습니다.',
+            '방향 보정은 해당 예측 시점 이전에 결과가 확정된 과거 OOS 예측만 사용합니다. 과거 날짜별 가중치를 같게 두고, 보정 표본 부족 시 점수를 확률로 표시하지 않습니다. 최종 평가 결과로 임계값을 탐색하지 않습니다. 이 과거 평가 구간은 이미 개발 과정에서 확인했으므로 신규 실전 증거가 아닙니다.']
     lines += ['', '126·252거래일 모델은 입력 범위, 모델 복잡도와 방향 분류기를 서로 공유하지 않습니다. 두 기간 모두 발표일이 확인된 SEC·실적 변수를 사용합니다. 1개월 목표가 모델은 제거하고 단기 진입 타이밍을 별도 규칙으로 판단합니다. 방향은 상승·중립(±2%)·하락의 세 범주이며, 항상 상승 기준선과 하락 포착률을 함께 통과해야 합니다. 표본 수는 독립된 시장 상황의 수가 아니며, 이번 결과만으로 기본 모델을 자동 교체하지 않습니다.', '',
         '## 누락과 출처','',f"종목 목록: [{coverage['source']}]({coverage['source']}) · 확인 {coverage['retrievedAt']}",'',
         'SEC 유효 이력 미확보: '+(', '.join(sec.get('missingSymbols',[])) or '없음'),'',
