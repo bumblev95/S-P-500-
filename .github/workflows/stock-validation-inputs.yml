@@ -1,0 +1,41 @@
+name: Restore frozen stock experiment inputs
+on:
+  push:
+    branches: [research/stock-validation-e0]
+    paths:
+      - '.github/workflows/stock-validation-inputs.yml'
+      - 'scripts/audit_stock_experiment_inputs.py'
+      - 'research/experiments/2026-09-13/PROTOCOL.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: stock-validation-inputs
+  cancel-in-progress: false
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            research/history
+            research/source-cache
+          key: environment-history-34771649966
+          fail-on-cache-miss: true
+      - name: Verify exact archived price inputs and target returns
+        run: python scripts/audit_stock_experiment_inputs.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-stock-experiment-inputs
+          path: |
+            research/history
+            research/source-cache
+            research/experiments/2026-09-13/input-audit.json
+          retention-days: 90
+          compression-level: 6

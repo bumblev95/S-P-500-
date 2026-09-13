@@ -1,0 +1,63 @@
+name: Audit dated quarterly stock experiment inputs
+on:
+  push:
+    branches: [research/stock-validation-e0]
+    paths:
+      - '.github/workflows/stock-quarterly-audit.yml'
+      - 'scripts/audit_stock_quarterly_experiment.py'
+      - 'scripts/test_stock_quarterly_experiment.py'
+      - 'scripts/collect_stock_quarterly_supplement.py'
+      - 'research/experiments/2026-09-13/E2-PROTOCOL.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: stock-quarterly-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            research/history
+            research/source-cache
+          key: environment-history-34771649966
+          fail-on-cache-miss: true
+      - uses: actions/cache@v4
+        with:
+          path: |
+            research/experiments/2026-09-13/sec-supplement
+            research/experiments/2026-09-13/e2-supplement-manifest.json
+          key: stock-validation-quarterly-supplement-v1
+      - run: pip install -r scripts/requirements-stock-experiments.txt
+      - run: python -m unittest discover -s scripts -p 'test_stock_*_experiment.py'
+      - name: Recover missing raw SEC payloads for E2 only
+        run: python scripts/collect_stock_quarterly_supplement.py
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+      - name: Audit publication dates and standalone quarter reconstruction
+        run: python scripts/audit_stock_quarterly_experiment.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stock-quarterly-e2-audit
+          path: research/experiments/2026-09-13/
+          retention-days: 90
+      - name: Save audit results on the research branch
+        if: success()
+        env:
+          EXPERIMENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/experiments/2026-09-13/e2-input-audit.json research/experiments/2026-09-13/E2-RESULTS.md research/experiments/2026-09-13/e2-supplement-manifest.json
+          git diff --cached --quiet || git commit -m 'Publish dated quarterly input audit and release cross-checks'
+          git pull --rebase origin "$EXPERIMENT_BRANCH"
+          git push origin "HEAD:$EXPERIMENT_BRANCH"

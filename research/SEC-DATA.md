@@ -1,83 +1,71 @@
 # SEC 실적 수집과 학습 연결
 
-2026-09-12 공식 문서와 현재 코드를 재점검했습니다. 현재 서버의 403은 확인됐지만
-원인이 연락처 누락인지, 서버 주소에 대한 접근 제한인지는 확정하지 못했습니다.
+2026-09-13 수집·학습·재현 검증을 완료했습니다. 이전의 "15개 기업만 수집" 또는
+"연락처 설정 및 접근 성공 확인 필요" 상태는 이 완료 기록으로 갱신합니다.
 
-## 먼저 바로잡은 연결 설정
+| 구분 | 이번 확인 결과 |
+|---|---|
+| 대상 | 현재 S&P 500의 500개 기업·503개 주식 종류 |
+| SEC CompanyFacts 원문 | 500개 기업 확보 |
+| 기존 연간 학습 지표 | 488개 기업에서 사용 가능한 표준 연간 수치 확보 |
+| 가격 이력 | 498개 기업 |
+| 분기 추가 학습 | 공시 시점에 맞춘 매출 증가율·순이익률·현금흐름률과 변화량, 고정된 Ridge 설정 한 개 완료 |
+| 미래 자료 제거 후 재현 | 네 종목 순위 모델·496개 종목의 예측값 차이 0 |
+| 메인 가격 모델 교체 | 개선 조건 미충족으로 승격 없음 |
 
-SEC는 요청자 정보를 선언한 User-Agent를 안내하며 예시에 조직명과 연락처 이메일을
-포함합니다. 기존 코드에는 프로그램명과 저장소 주소만 있었습니다. 이제 SEC 요청은
-실제 연락처를 담은 `SEC_USER_AGENT`가 설정된 경우에만 실행됩니다. 이 값은 SEC에만
-보내며 코인 제공자에는 보내지 않습니다. 403/429가 발생하면 기존 대기 시간을 유지하고,
-설정을 바꿨다는 이유로 차단 상태를 자동 해제하지 않습니다.
+[추가 검증 전체 결과](experiments/2026-09-13/README.md),
+[실제 완료된 실행](https://github.com/bumblev95/S-P-500-/actions/runs/34776960624),
+[대시보드](../model-validation.html#stockStudy)에서 확인할 수 있습니다.
+이 수치는 고정 연구 시점의 범위이며 앞으로의 모든 수집 성공을 보장하는 상태 표시는 아닙니다.
 
-저장소 Settings → Secrets and variables → Actions → New repository secret:
+## 수집과 접근 설정
 
-- Name: `SEC_USER_AGENT`
-- Secret: `JackForecast/1.0` 뒤에 공백과 실제 연락용 이메일
+CompanyFacts 데이터 API에는 별도 API 키가 필요하지 않습니다. 기업의 표준 XBRL
+재무 수치를 JSON으로 제공하며, 전체 자료를 담은 일괄 ZIP도 매일 갱신됩니다.
+[SEC 공식 API 안내](https://www.sec.gov/search-filings/edgar-application-programming-interfaces).
 
-예시를 그대로 복사하지 말고 사용 가능한 실제 연락처로 설정합니다. 워크플로가 이
-secret을 환경 변수로 전달하도록 연결했습니다. 아직 연락처를 등록하거나 자동
-수집 성공을 확인한 것은 아닙니다. 연락처를 소스 코드나 공개 JSON에 저장할 필요는 없습니다.
+기존 GitHub Actions의 `SEC_USER_AGENT` 연결을 사용해 수집했습니다. 연락처 값을
+공개 코드나 결과 JSON에 기록하지 않습니다. 요청량을 제한하고 403/429 접근 제한의
+대기 상태를 유지합니다. 공식 정책은 요청자 User-Agent 선언과 절제된 요청을 안내합니다.
+[SEC 접근 정책](https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data).
 
-공식 자료: [SEC 접근 정책](https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data),
-[GitHub Actions secrets 설정](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets).
+사이트는 서버에서 수집·가공한 JSON을 읽습니다. CompanyFacts는 브라우저 CORS를
+지원하지 않으므로 방문자의 브라우저에서 직접 수집하지 않습니다.
+[SEC CORS 안내](https://www.sec.gov/search-filings/edgar-application-programming-interfaces).
 
-## 확보 경로
+## 공시 시점에 맞춘 자료 처리
 
-| 경로 | 역할 | 현재 지원 상태 |
-| --- | --- | --- |
-| CompanyFacts API | 기업별 표준 재무 수치와 원래 공시일 수집 | 연결 준비, 연락처 설정 및 접근 성공 확인 필요 |
-| 공식 `companyfacts.zip` 또는 개별 CompanyFacts JSON | 정상적으로 확보한 파일에서 원하는 기업만 가져오기 | 네트워크 없이 가져오는 스크립트 추가 |
-| Financial Statement Data Sets | 분기별로 배포되는 공시 당시 숫자와 제출 정보로 장기 학습 자료 구성 | 형식 검토 완료, SUB/NUM 전용 변환기는 아직 미구현 |
+기존 연간 파서는 매출 성장률, 순이익률, 영업현금흐름/매출, 부채/자산을 처리합니다.
+별도 분기 실험은 표준 USD 항목의 기간을 맞춰 누적 현금흐름을 분기 차분으로 복원하고,
+공시일 다음 날부터 사용합니다. 나중에 제출된 수정 공시를 앞선 예측에 넣지 않습니다.
+수치가 없으면 결측 상태를 유지하며, 최신 재무제표를 모든 과거 시점에 복사하지 않습니다.
 
-CompanyFacts API는 별도 API 키가 필요하지 않습니다. 공식 일괄 ZIP은 매일 갱신됩니다.
-API와 동일한 SEC 접근 정책이 적용되므로 ZIP 경로가 서버의 접근 제한을 해결한다고
-가정하지 않습니다. 대규모 초기 수집에는 일괄 파일이 적합하지만 현재 15개 기업만
-필요하다면 기업별 요청이 더 작습니다. 브라우저에서 SEC를 직접 호출하는 대신
-서버에서 수집하고 사이트는 가공한 JSON을 읽도록 유지합니다.
+이번 후반 검증 표본의 73.6%에서 분기 매출 증가율·순이익률·현금흐름률을 모두 확보했습니다.
+NVDA·MSFT 공식 발표와 104건을 교차 대조했고 1건은 대조 자료가 부족했습니다.
+다른 기업과 현금흐름 전체를 개별 발표 원문으로 대조한 것은 아닙니다.
+현재 CompanyFacts를 공시일로 걸러 복원했으므로 과거 시점별 원본을 보증하는 자료는 아닙니다.
 
-공식 자료: [SEC API와 bulk 파일](https://www.sec.gov/search-filings/edgar-application-programming-interfaces).
+원문 확보와 예측력 개선은 별도로 확인합니다. 이번 분기 추가 모델의 후반 순위 IC는
+0.0811에서 0.0721로 낮아졌으며, 해당 입력을 메인 모델에 승격하지 않았습니다.
+IC는 종목 순위 상관계수이며 가격 적중률이 아닙니다.
+과거 주식 수·주가 분할 기준 대조가 끝나지 않아 역사적 밸류에이션 실험은 실행하지 않았습니다.
 
-Financial Statement Data Sets는 실제 데이터가 2009년 4월부터 시작하고, 2009 Q1은
-헤더만 있는 파일입니다. SUB의 `adsh`로 NUM을 연결해 기업·공시일·접수 시각·태그·금액을
-보존할 수 있습니다. 분기 ZIP의 분기는 공시를 제출한 분기이므로 회사의 실적 분기와
-같다고 가정하면 안 됩니다. 단위, 연결 대상, 세그먼트와 `qtrs` 기간을 확인해야 합니다.
-이 파일들은 현재의 CompanyFacts ZIP 가져오기 스크립트와 호환되지 않습니다.
-
-공식 자료: [분기 데이터](https://www.sec.gov/data-research/sec-markets-data/financial-statement-data-sets),
-[SUB/NUM 형식 설명](https://www.sec.gov/files/financial-statement-data-sets.pdf).
-
-## 확보한 파일을 학습에 넣기
-
-정상적으로 받은 공식 CompanyFacts 파일에 대해 저장소 루트에서 실행합니다.
+## 정상적으로 확보한 파일을 가져오는 경로
 
 ```sh
 python scripts/import_sec_companyfacts.py /absolute/path/to/CIK0001045810.json
-# 또는 공식 CompanyFacts 일괄 파일에서 대표 15개 기업만 선택
 python scripts/import_sec_companyfacts.py /absolute/path/to/companyfacts.zip
-python scripts/build_environment_research.py --offline
-python -m unittest discover -s scripts -p test_environment_research.py
 ```
 
-첫 명령은 네트워크에 접속하지 않습니다. 기업 식별번호, 날짜, 사용 가능한 연간
-USD 실적을 확인하고 `research/inputs.json`의 주식 부분을 갱신합니다. 입력 파일의
-해시와 가져온 시각을 기록하며, 실제 다운로드 시각을 모르면 지어내지 않습니다.
-잘못된 기업, 중복 기업, 기존보다 짧은 기간의 파일은 거절합니다. 실제 SEC 파일로
-가져오기를 완료한 상태는 아니며, JSON/ZIP 형식·공시일·식별번호 테스트를 통과했습니다.
-`--offline` 학습은 기존 가격 캐시도 있어야 실행할 수 있습니다.
+네트워크 없이 공식 파일을 검증해 `research/inputs.json`의 연간 지표를 갱신하는 경로입니다.
+현재 `research/universe.json`의 대상 기업을 사용하며, 기업 식별번호·공시일·유효 연간 항목을
+검사합니다. 일괄 파일의 어떤 대상 기업이라도 유효 항목 검증에 실패하면 가져오기를
+중단할 수 있습니다. 분기별 SUB/NUM 배포 ZIP은 이 가져오기 형식과 다릅니다.
+이 명령은 분기 실험 재현이나 메인 모델 자동 교체 명령이 아닙니다.
 
-현재 모델에는 연간 매출 성장률, 순이익률, 영업현금흐름/매출, 부채/자산을 연결합니다.
-공시일 다음 날짜부터 사용하고, 나중에 나온 수정 공시를 앞선 예측에 넣지 않습니다.
-실적 추가 모델과 기존 모델은 같은 날짜·같은 종목에서 비교합니다. 현재 시점의
-재무제표를 과거 모든 날짜에 복사하거나, 없는 지표를 0으로 대체하지 않습니다.
+## 실험을 재현할 때
 
-## 다음에 추가할 실적 정보
-
-현재 파서는 연간 지표만 사용합니다. 연결을 해결한 뒤에는 분기 매출·마진 변화와
-실적 발표 후 경과일을 우선 추가하는 것이 적절합니다. 분기와 누적 실적을 구분하고,
-같은 공시 시점에서 사용 가능한 기간을 맞춰야 합니다. EPS와 주당 지표는 주식 분할과
-가중평균 주식 수를 확인하기 전까지 조정 주가와 그대로 결합하지 않습니다.
-가이던스·시장 예상 대비 실적은 현재 CompanyFacts 파서에 없으므로 별도의 발표 자료와
-당시 예상치가 필요합니다. 자료 수집 성공만으로 주가 예측 오차가 줄었다고 판단하지 않고,
-가격만 사용한 기준 모델과 후반 시점 검증을 다시 수행합니다.
+[고정 실험 폴더](experiments/2026-09-13/README.md)의 원래 코드·입력·프로토콜 해시를
+사용해야 합니다. 새로 받은 가격으로 원래 평가 입력을 조용히 교체하지 않습니다.
+원래 전체 예측은 GitHub Actions 산출물에 90일간 보관되며, 수집 캐시는 영구 보관이 아닙니다.
+추가 검증 기록은 고정하며 기존 수집·환경 모델 갱신 워크플로와 별개로 관리합니다.

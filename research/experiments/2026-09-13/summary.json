@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "studyDate": "2026-09-13",
+  "completedAt": "2026-09-13T19:15:39.486566+00:00",
+  "status": "completed",
+  "productionPromoted": false,
+  "configurations": 11,
+  "coverage": {
+    "targetIssuers": 500,
+    "targetTickers": 503,
+    "secSourceIssuers": 500,
+    "annualUsableIssuers": 488,
+    "priceIssuers": 498,
+    "completeQuarterlyCoverage": {
+      "earlier": 0.5108015918135305,
+      "later": 0.7356292076644225
+    },
+    "releaseChecks": {
+      "matched": 104,
+      "unavailable": 1
+    }
+  },
+  "calibration": [
+    {
+      "months": 6,
+      "selected": null,
+      "eligible": false,
+      "dates": 9,
+      "rawAuc": 0.5352538943741485,
+      "legacyAuc": 0.4917602823825149,
+      "monotoneAuc": 0.5352538943741485,
+      "monotoneBrier": 0.23948198657530226,
+      "priorBrier": 0.23727667033363145
+    },
+    {
+      "months": 12,
+      "selected": null,
+      "eligible": false,
+      "dates": 8,
+      "rawAuc": 0.533053342496572,
+      "legacyAuc": 0.48944293607652517,
+      "monotoneAuc": 0.533053342496572,
+      "monotoneBrier": 0.212196298670061,
+      "priorBrier": 0.21099632903791532
+    }
+  ],
+  "ranking": {
+    "selected": "ridgeAbsolute",
+    "laterEligible": false,
+    "dates": 8,
+    "rows": 3862,
+    "uncertainty": [
+      -0.08793484163305684,
+      0.14124773659539125
+    ],
+    "models": [
+      {
+        "key": "ridgeAbsolute",
+        "label": "Ridge · 종목 수익률",
+        "selected": true,
+        "earlierIc": 0.04394803100838381,
+        "laterIc": 0.08106471898034942
+      },
+      {
+        "key": "ridgeRelative",
+        "label": "Ridge · 시장 대비 수익률",
+        "selected": false,
+        "earlierIc": 0.040236802715678074,
+        "laterIc": 0.07322336729810759
+      },
+      {
+        "key": "treeAbsolute",
+        "label": "트리 · 종목 수익률",
+        "selected": false,
+        "earlierIc": 0.0036483770833719183,
+        "laterIc": 0.09575374624153234
+      },
+      {
+        "key": "treeRelative",
+        "label": "트리 · 시장 대비 수익률",
+        "selected": false,
+        "earlierIc": -0.014243674152751913,
+        "laterIc": 0.06889420899386597
+      },
+      {
+        "key": "momentum",
+        "label": "180일 모멘텀 기준",
+        "selected": false,
+        "earlierIc": -0.01714357001657433,
+        "laterIc": 0.050279317288697875
+      },
+      {
+        "key": "quarterlyRidge",
+        "label": "Ridge · 분기 실적 추가",
+        "selected": false,
+        "earlierIc": 0.042933840064735024,
+        "laterIc": 0.07211131561152614
+      }
+    ]
+  },
+  "quarterly": {
+    "status": "completed",
+    "fitted": 1,
+    "earlierImproves": false,
+    "laterEligible": false,
+    "valuationFitted": false
+  },
+  "verification": {
+    "passed": true,
+    "rows": 7380,
+    "replayRows": 496,
+    "replayOrigin": "2025-02-07",
+    "maxDifference": 0.0,
+    "priceFiles": 507,
+    "targets": 16051
+  },
+  "prospective": {
+    "issuedAt": "2026-09-13T19:00:58.208838+00:00",
+    "asOf": "2026-09-11",
+    "issuers": 498,
+    "status": "awaiting_252_trading_day_outcomes",
+    "fileHash": "602f83b3d4eb0e1c0d2b15df12b2bd9abc10a19c112aaaf8f3da8f54c49e16aa"
+  },
+  "sourceHashes": {
+    "e0-calibration.json": "cdb8bffe8941f681e70f17966ae643f37b8f7d2cbc5be40dd7292cdc7dbc9fbd",
+    "e1-ranking.json": "ff24227431ca856fe73283186ac104d582c59df5edd3437206ee22d6032ab3b0",
+    "e2-input-audit.json": "f05a8183b1c1e87457de35fd8ed52133c9c12ed2df22cdfb71ecd590a4f711d9",
+    "e2-quarterly.json": "22363f07e5e470df1352ff1183a8259da10bb0526b722c3e339c7347408a4106",
+    "e3-verification.json": "db31ebed842821bef6d921c8c2de8439cd64fe85071087c33fe13be5f45bc26a",
+    "input-audit.json": "4a328533c6cf57c8bb7287a529e79f0393a6362319dd18aa5ff0edc5e6650542"
+  },
+  "workflowUrl": "https://github.com/bumblev95/S-P-500-/actions/runs/34776960624"
+}
