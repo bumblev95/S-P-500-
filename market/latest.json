@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-09-13T19:29:26.406465+00:00",
+  "generatedAt": "2026-09-13T20:01:39.742650+00:00",
   "indicators": [
     {
       "id": "DGS10",
@@ -177,33 +177,6 @@
   },
   "news": [
     {
-      "title": "Agencies seek comment on proposed third-party risk management guidance and issue statement on community bank engagement with core service providers",
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260911a.htm",
-      "publishedAt": "2026-09-11T14:00:00+00:00",
-      "source": "Fed 발표",
-      "topic": "기타 발표",
-      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
-      "assessment": "원문 검토 필요"
-    },
-    {
-      "title": "Agencies reduce regulatory burden for community banks, increase eligibility for 18-month exam cycle",
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260910a.htm",
-      "publishedAt": "2026-09-10T20:00:00+00:00",
-      "source": "Fed 발표",
-      "topic": "기타 발표",
-      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
-      "assessment": "원문 검토 필요"
-    },
-    {
-      "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
-      "publishedAt": "2026-09-04T15:00:00+00:00",
-      "source": "Fed 발표",
-      "topic": "기타 발표",
-      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
-      "assessment": "원문 검토 필요"
-    },
-    {
       "title": "Waller, The Economic Outlook and Some Comments on My Policy Communication",
       "url": "https://www.federalreserve.gov/newsevents/speech/waller20260903a.htm",
       "publishedAt": "2026-09-03T12:30:00+00:00",
@@ -226,7 +199,7 @@
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "status": "ready"
+      "status": "unavailable"
     },
     {
       "name": "Fed 연설",
@@ -241,7 +214,8 @@
     "STLFSI4: TimeoutError",
     "DRTSCILM: TimeoutError",
     "SOFR: TimeoutError",
-    "IORB: TimeoutError"
+    "IORB: TimeoutError",
+    "Fed 발표: HTTPError"
   ],
   "newsScope": "Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.",
   "exclusions": [
