@@ -64,9 +64,9 @@ Use `--offline` for either builder to consume saved inputs without network acces
 Normalized dated features are committed; source HTML and price histories are
 Actions caches. Output records hashes of the training inputs for audit.
 
-## Initial completed run — 2026-09-13 UTC
+## Published validation run — 2026-09-13 UTC
 
-Actual training output: `environment-challenger-v3-official-earnings`, generated `2026-09-13T00:33:18.243074+00:00`.
+Actual training output: `environment-challenger-v3-official-earnings`, generated `2026-09-13T00:39:07.874782+00:00`.
 
 105 original releases: NVDA 53 (2013-05-09–2026-08-26) and MSFT 52
 (2013-10-24–2026-07-29). NVIDIA FY2016 Q4 remains missing; it was not
@@ -76,9 +76,9 @@ observations were preserved for forward accumulation, not historical training.
 
 | Horizon | Matched dates / rows | Context MAPE | Earnings MAPE | Context direction | Earnings direction | Always-up direction |
 |---|---:|---:|---:|---:|---:|---:|
-| 21 sessions | 9 / 18 | 6.29% | 6.33% | 22.22% | 38.89% | 38.89% |
-| 84 sessions | 9 / 18 | 13.79% | 14.53% | 55.56% | 61.11% | 72.22% |
-| 252 sessions | 8 / 16 | 33.07% | 32.47% | 68.75% | 68.75% | 68.75% |
+| 21 sessions | 9 / 18 | 6.29% | 6.32% | 22.22% | 33.33% | 38.89% |
+| 84 sessions | 9 / 18 | 13.85% | 14.37% | 55.56% | 61.11% | 72.22% |
+| 252 sessions | 8 / 16 | 33.07% | 31.90% | 68.75% | 68.75% | 68.75% |
 
 These are matched NVDA/MSFT results from the fixed later block, not whole-site
 production performance. Each date contains two companies; it is not two
@@ -93,9 +93,9 @@ power. The production model is therefore not replaced.
 
 | Horizon | Latest training rows | Rows with dated financial inputs | Availability-control MAPE | Earnings p90 error |
 |---|---:|---:|---:|---:|
-| 21 sessions | 14397 | 1312 | 6.35% | 12.46% |
-| 84 sessions | 14221 | 1290 | 14.39% | 30.58% |
-| 252 sessions | 13677 | 1222 | 33.00% | 49.73% |
+| 21 sessions | 14397 | 1312 | 6.37% | 12.46% |
+| 84 sessions | 14221 | 1290 | 14.27% | 30.50% |
+| 252 sessions | 13677 | 1222 | 33.27% | 49.73% |
 
 Financial training rows are weekly issuer/origin examples reusing quarterly
 releases, not that many independent earnings announcements. Training and test
@@ -108,3 +108,9 @@ Validation: eight collector tests, nine environment tests, five existing input
 tests, four SEC-import tests, and the JavaScript page checks passed. The crypto
 comparison and previous issued-record prefix were preserved. SEC was not contacted
 by this implementation or the new daily workflow.
+
+The table uses the successful GitHub Actions run 34728490983. Its fresh Yahoo
+adjusted-price snapshot and pinned runtime differ from the initial local run;
+the local and server scores are not interchangeable. Both runs show unresolved
+upward bias and no consistent improvement. Future published builds may update
+`environment.json`; this section remains dated evidence for the stated run.
