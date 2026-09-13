@@ -1,6 +1,6 @@
 # S&P 500 실적 학습 비교
 
-생성: 2026-09-13T04:02:24.532263+00:00 · 모델: environment-challenger-v4-sp500-earnings
+생성: 2026-09-13T07:39:31.673629+00:00 · 모델: environment-challenger-v4-sp500-earnings
 
 대상 500개 기업 / 503개 종목. SEC 유효 재무 이력 488개 기업. 가격 이력 498개 기업 / 501개 종목.
 
@@ -18,7 +18,7 @@
 
 ## 누락과 출처
 
-종목 목록: [https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv](https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv) · 확인 2026-09-13T03:54:50.564231+00:00
+종목 목록: [https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv](https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv) · 확인 2026-09-13T07:38:42.700329+00:00
 
 SEC 유효 이력 미확보: APA, CRWD, FITB, HONA, KHC, ODFL, RF, SJM, SYF, TFC, VLO, XOM
 
