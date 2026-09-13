@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from datetime import datetime,timedelta,timezone
-from build_decision_support import score,paired_gate,build,change,summarize,capture
+from build_decision_support import score,paired_gate,build,change,summarize,capture,timestamp
 from build_market_context import bond_spreads
 
 class DecisionTests(unittest.TestCase):
@@ -18,6 +18,16 @@ class DecisionTests(unittest.TestCase):
         self.assertAlmostEqual(x['mape'],10/130)
         self.assertAlmostEqual(x['baselineMape'],30/130)
         self.assertTrue(x['directionHit'])
+    def test_date_only_origin_is_utc_in_any_machine_timezone(self):
+        import os,time
+        from unittest.mock import patch
+        if not hasattr(time,'tzset'):self.skipTest('tzset unavailable')
+        try:
+            with patch.dict(os.environ,{'TZ':'Asia/Seoul'}):
+                time.tzset()
+                self.assertEqual(timestamp('2026-07-14'),datetime(2026,7,14,tzinfo=timezone.utc))
+                self.assertEqual(score(self.r,self.rows,self.now)['targetDate'],self.rows[30]['date'])
+        finally:time.tzset()
     def test_missing_dates_late_issue_and_future(self):
         self.assertEqual(score(self.r,self.rows[:30],self.now)['status'],'pending')
         self.assertEqual(score(self.r,self.rows[:30]+self.rows[31:],self.now)['status'],'unavailable')
@@ -80,6 +90,34 @@ class DecisionTests(unittest.TestCase):
             self.assertEqual(capture(root,self.now)[0],[])
             d['sourceGeneratedAt']=source['generatedAt'];e['correction']['targetThrough']=e['asOf'];path.write_text(json.dumps(d))
             self.assertEqual(capture(root,self.now)[0],[])
+    def test_stock_refresh_preserves_crypto_model_identity_and_age(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'research').mkdir()
+            prediction=dict(asOf='2026-09-11',anchor=100,balanced=110,range=None)
+            previous=(self.now-timedelta(days=1)).isoformat()
+            env=dict(model='new-stock',generatedAt=self.now.isoformat(),cryptoModel='old-crypto',cryptoGeneratedAt=previous,
+                     stocks={'21':{'predictions':{'NVDA':prediction}}},crypto={'30':{'predictions':{'BTC':prediction}}})
+            path=root/'research/environment.json';path.write_text(json.dumps(env))
+            rows,_=capture(root,self.now);by={r['assetClass']:r for r in rows}
+            self.assertEqual(by['stocks']['model'],'new-stock:balanced')
+            self.assertEqual(by['crypto']['model'],'old-crypto:balanced')
+            self.assertEqual(by['crypto']['sourceGeneratedAt'],previous)
+            self.assertIsNone(by['stocks']['low'])
+            env['cryptoGeneratedAt']=(self.now-timedelta(days=9)).isoformat();path.write_text(json.dumps(env))
+            self.assertEqual([r['assetClass'] for r in capture(root,self.now)[0]],['stocks'])
+    def test_newer_research_prices_and_calendar_make_forecast_pending(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            for folder in ['research/history','forecasts','ml']:(root/folder).mkdir(parents=True,exist_ok=True)
+            (root/'ml/latest.json').write_text(json.dumps(dict(model='old',stocks={})))
+            older=[dict(date='2026-09-10',close=100)]
+            (root/'forecasts/latest.json').write_text(json.dumps(dict(stocks={s:dict(history=older) for s in ['NVDA','SPY']})))
+            for s in ['NVDA','SPY']:
+                (root/f'research/history/{s}.json').write_text(json.dumps(dict(prices=older+[dict(date='2026-09-11',close=100)])))
+            env=dict(model='new-stock',generatedAt=self.now.isoformat(),stocks={'252':{'predictions':{'NVDA':dict(asOf='2026-09-11',anchor=100,balanced=110,range=None)}}})
+            (root/'research/environment.json').write_text(json.dumps(env))
+            result=build(root,self.now);s=result['groups']['stocks']['252']['symbols']['NVDA']['new-stock:balanced']
+            self.assertEqual(s['pending'],1);self.assertEqual(s['unavailable'],0);self.assertIsNone(s['directionAccuracy'])
     def test_fed_spread_parsing_and_missing(self):
         rows=bond_spreads('date,gz_spread,ebp,est_prob\n2026-07-01,1.5,-0.3,0.1\n2026-08-01,2.1,0.1,0.2\n',self.now.date())
         self.assertEqual(rows[0]['status'],'ready');self.assertAlmostEqual(rows[0]['change'],.6)

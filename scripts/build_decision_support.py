@@ -20,7 +20,10 @@ def read(root, path, default=None):
 def finite(x): return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
 def positive(x): return finite(x) and x > 0
 def timestamp(x):
-    try: return datetime.fromisoformat(x.replace('Z', '+00:00')).astimezone(timezone.utc)
+    try:
+        parsed=datetime.fromisoformat(x.replace('Z', '+00:00'))
+        if parsed.tzinfo is None: parsed=parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc)
     except (ValueError, TypeError, AttributeError): return None
 
 def key(r): return '|'.join(str(r[k]) for k in ('assetClass','symbol','asOf','horizon','model'))
@@ -46,9 +49,13 @@ def capture(root, now):
                 if lo is None and finite(f.get('lowLogReturn')): lo=anchor*math.exp(f['lowLogReturn'])
                 if hi is None and finite(f.get('highLogReturn')): hi=anchor*math.exp(f['highLogReturn'])
                 rows.append(dict(assetClass=asset,symbol=sym,asOf=e['asOf'],horizon=int(h),model=data['model'],anchor=anchor,base=f['base'],low=lo,high=hi,features=features,validation=p.get('validation',{}),eligible=p.get('status')=='eligible',sourceGeneratedAt=data['generatedAt'],issuedAt=now.isoformat(),source=e.get('source','Yahoo EOD'),kind='incumbent'))
-    env=read(root,'research/environment.json'); generated=timestamp(env.get('generatedAt'))
-    if generated and 0 <= (now-generated).total_seconds() <= 8*86400:
-        for asset in ('stocks','crypto'):
+    env=read(root,'research/environment.json')
+    for asset in ('stocks','crypto'):
+        # A stock-only refresh retains the crypto model's original identity and age.
+        source_generated=env.get('cryptoGeneratedAt',env.get('generatedAt')) if asset=='crypto' else env.get('generatedAt')
+        source_model=env.get('cryptoModel',env.get('model')) if asset=='crypto' else env.get('model')
+        generated=timestamp(source_generated)
+        if source_model and generated and 0 <= (now-generated).total_seconds() <= 8*86400:
             for h,block in env.get(asset,{}).items():
                 for sym,e in block.get('predictions',{}).items():
                     origin=timestamp(e.get('asOf'))
@@ -56,9 +63,9 @@ def capture(root, now):
                     for variant in ('balanced','enriched'):
                         if not positive(e.get(variant)) or not positive(e.get('anchor')): continue
                         # balanced interval is not reused for a different point forecast.
-                        band=e.get('range',{}) if variant=='balanced' else {}
+                        band=(e.get('range') or {}) if variant=='balanced' else {}
                         v=e.get('validation',{}).get(variant,{})
-                        rows.append(dict(assetClass=asset,symbol=sym,asOf=e['asOf'],horizon=int(h),model=env['model']+':'+variant,anchor=e['anchor'],base=e[variant],low=band.get('low'),high=band.get('high'),features=e.get('inputValues',{}),validation=v,eligible=False,sourceGeneratedAt=env['generatedAt'],issuedAt=now.isoformat(),source='Yahoo EOD' if asset=='stocks' else 'Yahoo Finance spot daily USD',kind='challenger'))
+                        rows.append(dict(assetClass=asset,symbol=sym,asOf=e['asOf'],horizon=int(h),model=source_model+':'+variant,anchor=e['anchor'],base=e[variant],low=band.get('low'),high=band.get('high'),features=e.get('inputValues',{}),validation=v,eligible=False,sourceGeneratedAt=source_generated,issuedAt=now.isoformat(),source='Yahoo EOD' if asset=='stocks' else 'Yahoo Finance spot daily USD',kind='challenger'))
     adaptive=read(root,'ml/adaptive.json'); generated=timestamp(adaptive.get('generatedAt'))
     if (generated and 0 <= (now-generated).total_seconds() <= 5*86400
             and adaptive.get('sourceModel')==stock.get('model')
@@ -149,17 +156,25 @@ def build(root=ROOT, now=None):
     if added:
         digest=hashlib.sha256(json.dumps(added,sort_keys=True).encode()).hexdigest()[:12]
         atomic_json(folder/(now.strftime('%Y%m%dT%H%M%S')+'-'+digest+'.json'),dict(recordedAt=now.isoformat(),records=added)); ledger.extend(added)
-    snapshots=read(root,'forecasts/latest.json').get('stocks',{}); crypto=read(root,'crypto/latest.json').get('coins',{}); cache={}
+    snapshots=read(root,'forecasts/latest.json').get('stocks',{}); crypto=read(root,'crypto/latest.json').get('coins',{}); cache={}; stock_cache={}
+    def stock_history(symbol):
+        if symbol not in stock_cache:
+            candidates=[read(root,folder+'/'+symbol+'.json').get('prices',[]) for folder in ('prices/history','research/history')]
+            candidates.append(snapshots.get(symbol,{}).get('history',[]))
+            candidates=[clean_history(rows) for rows in candidates if rows]
+            # Select one internally consistent adjusted-price vintage, never splice anchors.
+            stock_cache[symbol]=max((rows for rows in candidates if rows),key=lambda rows:(rows[-1]['date'],len(rows)),default=[])
+        return stock_cache[symbol]
     def history(r):
         k=(r['assetClass'],r['symbol'],r['source'])
         if k not in cache:
-            if r['assetClass']=='stocks': cache[k]=read(root,'prices/history/'+r['symbol']+'.json').get('prices',snapshots.get(r['symbol'],{}).get('history',[]))
+            if r['assetClass']=='stocks': cache[k]=stock_history(r['symbol'])
             elif r['source'].startswith('Yahoo'): cache[k]=read(root,'crypto/research-history/'+r['symbol']+'.json').get('prices',[])
             else: cache[k]=crypto.get(r['symbol'],{}).get('spotHistory',[])
         return cache[k]
     previous_scores=read(root,'decision/outcomes.json').get('records',{})
     scored=[]
-    calendar=[q['date'] for q in snapshots.get('SPY',{}).get('history',[])]
+    calendar=[q['date'] for q in stock_history('SPY')]
     for r in ledger:
         rid=key(r); stored=previous_scores.get(rid)
         result=dict(r,**stored) if stored else score(r,history(r),now,calendar)
