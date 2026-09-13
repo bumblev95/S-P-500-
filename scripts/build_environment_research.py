@@ -1,7 +1,9 @@
 """Fixed public-data challenger experiment; no trade records, no automatic promotion."""
 import os
 os.environ.setdefault('OMP_NUM_THREADS','2')
-import json, math, hashlib
+import json, math, hashlib, time
+from collections import Counter, defaultdict
+from bisect import bisect_left
 from pathlib import Path
 from datetime import datetime, timezone
 from urllib.request import Request, urlopen
@@ -9,6 +11,7 @@ from urllib.error import HTTPError
 import numpy as np
 from sklearn.ensemble import HistGradientBoostingRegressor
 from build_forecasts import atomic_json
+from research_universe import load_universe
 from build_research_inputs import stock_before, crypto_before, STOCK_FIELDS, CRYPTO_FIELDS
 from build_earnings_inputs import earnings_before, FIELDS as EARNINGS_FIELDS
 ROOT=Path(__file__).resolve().parents[1]
@@ -17,15 +20,16 @@ PROXIES={'SPY':'미국 주식','QQQ':'기술주','HYG':'하이일드 채권 가�
 BASE=['return7','return30','return90','return180','vol30','vol90','distance20','distance50','distance200','drawdown90']
 CONTEXT=[f'{s}_{k}' for s in PROXIES for k in ('return30','vol30','distance200')]+['BTC_return30','BTC_vol30','BTC_distance200']
 NAMES=('noChange','priceOnly','environment','ensemble','balanced')
-MODEL='environment-challenger-v3-official-earnings'
+MODEL='environment-challenger-v4-sp500-earnings'
 def fetch_history(symbol,folder,today):
     path=folder/(symbol.replace('^','INDEX_')+'.json')
     old=json.loads(path.read_text()) if path.exists() else {}
     if old.get('checkedDate')==today:return old['prices']
-    u='https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?range=20y&interval=1d'
+    ticker=symbol.replace('.', '-')
+    u='https://query1.finance.yahoo.com/v8/finance/chart/'+ticker+'?range=20y&interval=1d'
     with urlopen(Request(u,headers={'User-Agent':'DashboardEnvironmentResearch/1.0'}),timeout=25) as r:d=json.load(r)
     q=d['chart']['result'][0]
-    if q['meta']['symbol']!=symbol:raise ValueError('Asset identity mismatch')
+    if q['meta']['symbol'].upper()!=ticker.upper():raise ValueError('Asset identity mismatch')
     close=q['indicators'].get('adjclose',[{}])[0].get('adjclose',q['indicators']['quote'][0]['close'])
     rows=[]
     for t,p in zip(q['timestamp'],close):
@@ -35,15 +39,14 @@ def fetch_history(symbol,folder,today):
     return rows
 
 def features(rows,annual_days=252):
-    out={};p=np.array([r['close'] for r in rows]);ret=np.diff(np.log(p))
-    for i in range(199,len(rows)):
-        a=p[i-199:i+1];r=ret[i-90:i]
-        x=[float(np.log(p[i]/p[i-n])) for n in (7,30,90,180)]
-        x += [float(np.std(r[-n:],ddof=1)*np.sqrt(annual_days)) for n in (30,90)]
-        x += [float(p[i]/a[-n:].mean()-1) for n in (20,50,200)]
-        x += [float(p[i]/a[-90:].max()-1)]
-        out[rows[i]['date']]=x
-    return out
+    if len(rows)<200:return {}
+    p=np.array([r['close'] for r in rows],dtype=float);logret=np.diff(np.log(p))
+    from numpy.lib.stride_tricks import sliding_window_view
+    i=np.arange(199,len(p));columns=[np.log(p[i]/p[i-n]) for n in (7,30,90,180)]
+    columns += [sliding_window_view(logret,n).std(axis=1,ddof=1)[i-n]*np.sqrt(annual_days) for n in (30,90)]
+    columns += [p[i]/sliding_window_view(p,n).mean(axis=1)[i-n+1]-1 for n in (20,50,200)]
+    columns += [p[i]/sliding_window_view(p,90).max(axis=1)[i-89]-1]
+    return {rows[j]['date']:x for j,x in zip(i,np.column_stack(columns).tolist())}
 
 def context_before(series,day,max_age=5):
     # Every context close must precede the forecast day, including crypto weekends.
@@ -54,32 +57,34 @@ def context_before(series,day,max_age=5):
 
 def records(hist,context,h,asset_class,inputs=None):
     inputs=inputs or {}
-    rows=[];latest={}
+    rows=[];latest={};contexts={}
+    for day in sorted({r['date'] for prices in hist.values() for r in prices}):
+        extra=[];used=[]
+        for key in (*PROXIES, *(('BTC',) if asset_class=='crypto' else ())):
+            c=context_before(context[key],day)
+            if c is None:break
+            extra+=c[0];used.append(c[1])
+        else:contexts[day]=(extra+([0.,0.,0.] if asset_class=='stocks' else []),max(used))
+    ciks=inputs.get('symbolCIKs',{});representatives={}
+    for symbol in sorted(hist):representatives.setdefault(ciks.get(symbol,symbol),symbol)
     for symbol,prices in hist.items():
         own=features(prices,365 if asset_class=='crypto' else 252)
-        for i in range(199,len(prices)):
-            day=prices[i]['date'];base=own[day];extra=[];used=[]
-            for key in PROXIES:
-                c=context_before(context[key],day)
-                if c is None:break
-                extra+=c[0];used.append(c[1])
-            else:
-                if asset_class=='crypto':
-                    c=context_before(context['BTC'],day)
-                    if c is None:continue
-                    extra+=c[0];used.append(c[1])
-                else:extra += [0.,0.,0.]
-                current=dict(symbol=symbol,origin=day,anchor=prices[i]['close'],x=base,z=base+extra,contextThrough=max(used),regime=('상승' if extra[2]>=0 else '하락')+('·고변동' if extra[1]>=.3 else '·보통변동'))
-                added,through=(stock_before(inputs.get('stocks',{}).get(symbol,{}).get('rows',[]),day) if asset_class=='stocks' else crypto_before(inputs.get('funding',{}).get(symbol,[]),inputs.get('snapshots',{}).get(symbol,[]),day))
-                if asset_class=='stocks':
-                    quarterly,quarter_through=earnings_before(inputs.get('earnings',{}).get(symbol,[]),day)
-                    added+=quarterly
-                    through=max([d for d in (through,quarter_through) if d],default=None)
-                current.update(w=current['z']+added,v=current['z']+[1. if math.isfinite(v) else float('nan') for v in added],inputThrough=through,inputCount=sum(math.isfinite(v) for v in added))
-                latest[symbol]=current
-                if i+h<len(prices) and datetime.fromisoformat(day).weekday()==(4 if asset_class=='stocks' else 6):
-                    if asset_class=='crypto' and (datetime.fromisoformat(prices[i+h]['date'])-datetime.fromisoformat(day)).days!=h:continue
-                    rows.append({**current,'targetDate':prices[i+h]['date'],'y':prices[i+h]['close']/prices[i]['close']})
+        valid=[i for i in range(199,len(prices)) if prices[i]['date'] in contexts]
+        if not valid:continue
+        eligible=[i for i in valid if i==valid[-1] or (i+h<len(prices) and datetime.fromisoformat(prices[i]['date']).weekday()==(4 if asset_class=='stocks' else 6))]
+        for i in eligible:
+            day=prices[i]['date'];base=own[day];extra,used_through=contexts[day]
+            current=dict(symbol=symbol,origin=day,anchor=prices[i]['close'],x=base,z=base+extra,contextThrough=used_through,regime=('상승' if extra[2]>=0 else '하락')+('·고변동' if extra[1]>=.3 else '·보통변동'))
+            added,through=(stock_before(inputs.get('stocks',{}).get(symbol,{}).get('rows',[]),day) if asset_class=='stocks' else crypto_before(inputs.get('funding',{}).get(symbol,[]),inputs.get('snapshots',{}).get(symbol,[]),day))
+            if asset_class=='stocks':
+                quarterly,quarter_through=earnings_before(inputs.get('earnings',{}).get(symbol,[]),day)
+                added+=quarterly
+                through=max([d for d in (through,quarter_through) if d],default=None)
+            current.update(w=current['z']+added,v=current['z']+[1. if math.isfinite(v) else float('nan') for v in added],inputThrough=through,inputCount=sum(math.isfinite(v) for v in added))
+            latest[symbol]=current
+            if symbol==representatives[ciks.get(symbol,symbol)] and i+h<len(prices) and datetime.fromisoformat(day).weekday()==(4 if asset_class=='stocks' else 6):
+                if asset_class=='crypto' and (datetime.fromisoformat(prices[i+h]['date'])-datetime.fromisoformat(day)).days!=h:continue
+                rows.append({**current,'targetDate':prices[i+h]['date'],'y':prices[i+h]['close']/prices[i]['close']})
     return rows,latest
 
 def fit(train,field,balanced=False):
@@ -93,7 +98,8 @@ def calibration(rows,origin):
     dates=sorted({r['origin'] for r in prior})[-8:]
     prior=[r for r in prior if r['origin'] in dates]
     if len(dates)<3 or len(prior)<30:return None
-    values=sorted((abs(math.log(r['balanced']/r['y'])),1/sum(t['origin']==r['origin'] for t in prior)) for r in prior)
+    counts=Counter(r['origin'] for r in prior)
+    values=sorted((abs(math.log(r['balanced']/r['y'])),1/counts[r['origin']]) for r in prior)
     target=.8*sum(w for _,w in values);total=0
     for q,w in values:
         total+=w
@@ -116,7 +122,15 @@ def score(rows,name):
     by={d:float(np.mean([errors[i] for i,r in enumerate(rows) if r['origin']==d])) for d in dates}
     sign=lambda x:1 if x>1.02 else -1 if x<.98 else 0
     logs=np.array([math.log(r[name]/r['y']) for r in rows]);log_by={d:float(np.mean([abs(logs[i]) for i,r in enumerate(rows) if r['origin']==d])) for d in dates}
-    return dict(n=len(rows),dates=len(dates),mape=float(errors.mean()),dateMeanMape=float(np.mean(list(by.values()))),p90=float(np.quantile(errors,.9)),logMae=float(np.mean(abs(logs))),logBias=float(logs.mean()),p90Log=float(np.quantile(abs(logs),.9)),dateMeanLogMae=float(np.mean(list(log_by.values()))),directionAccuracy=float(np.mean([sign(r[name])==sign(r['y']) for r in rows])),over10Rate=float(np.mean(errors>.1)),byDate=by,logByDate=log_by)
+    down=[r for r in rows if sign(r['y'])==-1]
+    return dict(n=len(rows),dates=len(dates),mape=float(errors.mean()),dateMeanMape=float(np.mean(list(by.values()))),p90=float(np.quantile(errors,.9)),logMae=float(np.mean(abs(logs))),logBias=float(logs.mean()),p90Log=float(np.quantile(abs(logs),.9)),dateMeanLogMae=float(np.mean(list(log_by.values()))),directionAccuracy=float(np.mean([sign(r[name])==sign(r['y']) for r in rows])),actualDownCount=len(down),downRecall=sum(sign(r[name])==-1 for r in down)/len(down) if down else None,over10Rate=float(np.mean(errors>.1)),byDate=by,logByDate=log_by)
+
+def grouped_comparison(rows,sectors):
+    groups=defaultdict(list)
+    for row in rows:groups[sectors.get(row['symbol'],'Unknown')].append(row)
+    return {sector:dict(issuers=len({r['symbol'] for r in group}),
+        metrics={k:{a:b for a,b in score(group,k).items() if a not in ('byDate','logByDate')} for k in ('noChange','balanced','availabilityControl','enriched')},
+        alwaysUpDirectionAccuracy=sum(r['y']>1.02 for r in group)/len(group)) for sector,group in sorted(groups.items())}
 
 def compare(rows):
     # A later evaluation block is never used to choose the challenger.
@@ -139,17 +153,22 @@ def run_class(hist,context,asset_class,inputs=None):
     output={};hs=(21,84,252) if asset_class=='stocks' else (30,120,365)
     for h in hs:
         data,latest=records(hist,context,h,asset_class,inputs);dates=sorted({r['origin'] for r in data});origins=[]
-        # Disjoint outcome windows, not merely different origin dates.
+        # Index origins and matured labels once; never truncate the issuer universe.
+        by_origin=defaultdict(list)
+        for row in data:by_origin[row['origin']].append(row)
+        matured=sorted(data,key=lambda r:r['targetDate']);target_dates=[r['targetDate'] for r in matured]
+        seen=set();origin_counts=[0]
+        for row in matured:seen.add(row['origin']);origin_counts.append(len(seen))
         end=''
         for origin in dates:
-            test=[r for r in data if r['origin']==origin]
             if origin<=end:continue
-            train=[r for r in data if r['targetDate']<origin]
-            if len(train)<300 or len({r['origin'] for r in train})<40:continue
-            origins.append(origin);end=max(r['targetDate'] for r in test)
+            n=bisect_left(target_dates,origin)
+            if n<300 or origin_counts[n]<40:continue
+            origins.append(origin);end=max(r['targetDate'] for r in by_origin[origin])
         origins=origins[-18:];checks=[];folds=[]
         for origin in origins:
-            train=[r for r in data if r['targetDate']<origin];test=[r for r in data if r['origin']==origin]
+            train=[r for r in data if r['targetDate']<origin];test=by_origin[origin]
+            print(asset_class,h,'fold',origin,'train',len(train),'test',len(test),flush=True)
             a=fit(train,'x');b=fit(train,'z');pa=a.predict(np.array([r['x'] for r in test]));pb=b.predict(np.array([r['z'] for r in test]))
             balanced=fit(train,'z',True);pc=np.exp(balanced.predict([r['z'] for r in test]));cal=calibration(checks,origin)
             usable=[r for r in train if r['inputCount']>0]
@@ -161,7 +180,7 @@ def run_class(hist,context,asset_class,inputs=None):
             for r,v,w,z,e,mask in zip(test,pa,pb,pc,pe,pv):
                 interval=dict(low=float(z*math.exp(-cal['logRadius'])),high=float(z*math.exp(cal['logRadius'])),**cal) if cal else None
                 checks.append({k:r[k] for k in ('symbol','origin','targetDate','y','regime','contextThrough','inputThrough','inputCount')}|dict(noChange=1.,priceOnly=float(v),environment=float(w),ensemble=float((v+w)/2),balanced=float(z),enriched=float(e) if e is not None and r['inputCount'] else None,availabilityControl=float(mask) if mask is not None and r['inputCount'] else None,range=interval))
-        comparison=compare(checks);predictions={};models={};training_status={}
+        comparison=compare(checks);predictions={};models={};training_status={};calibrations={}
         for s,current in latest.items():
             origin=current['origin']
             if origin not in models:
@@ -170,23 +189,29 @@ def run_class(hist,context,asset_class,inputs=None):
                 training_status[origin]=dict(totalRows=len(train),additionalInputRows=len(usable),additionalInputOrigins=len({r['origin'] for r in usable}),additionalInputIssuers=sorted({r['symbol'] for r in usable}),firstAdditionalInputOrigin=min((r['origin'] for r in usable),default=None),trainTargetThrough=max((r['targetDate'] for r in train),default=None))
                 models[origin]=(fit(train,'x'),fit(train,'z'),fit(train,'z',True),fit(train,'w',True) if len(usable)>=300 and len({r['origin'] for r in usable})>=40 else None,max(r['targetDate'] for r in train)) if len(train)>=300 else None
             if not models[origin]:continue
-            a,b,c,e,through=models[origin];v=float(a.predict([current['x']])[0]);w=float(b.predict([current['z']])[0]);z=float(np.exp(c.predict([current['z']])[0]));own=[r for r in checks if r['symbol']==s];cal=calibration(checks,origin)
-            predictions[s]=dict(asOf=origin,anchor=current['anchor'],contextThrough=current['contextThrough'],trainTargetThrough=through,regime=current['regime'],priceOnly=current['anchor']*v,environment=current['anchor']*w,ensemble=current['anchor']*(v+w)/2,balanced=current['anchor']*z,enriched=current['anchor']*float(np.exp(e.predict([current['w']])[0])) if e and current['inputCount'] else None,inputThrough=current['inputThrough'],inputValues={k:float(val) if math.isfinite(val) else None for k,val in zip(STOCK_FIELDS+EARNINGS_FIELDS if asset_class=='stocks' else CRYPTO_FIELDS,current['w'][-(len(STOCK_FIELDS)+len(EARNINGS_FIELDS) if asset_class=='stocks' else len(CRYPTO_FIELDS)):])},range=dict(low=current['anchor']*z*math.exp(-cal['logRadius']),high=current['anchor']*z*math.exp(cal['logRadius']),**cal) if cal else None,rangeValidation=interval_score(own),validation={k:score(own,k) for k in NAMES})
+            a,b,c,e,through=models[origin];v=float(a.predict([current['x']])[0]);w=float(b.predict([current['z']])[0]);z=float(np.exp(c.predict([current['z']])[0]));own=[r for r in checks if r['symbol']==s]
+            if origin not in calibrations:calibrations[origin]=calibration(checks,origin)
+            cal=calibrations[origin]
+            predictions[s]=dict(asOf=origin,anchor=current['anchor'],contextThrough=current['contextThrough'],trainTargetThrough=through,regime=current['regime'],priceOnly=current['anchor']*v,environment=current['anchor']*w,ensemble=current['anchor']*(v+w)/2,balanced=current['anchor']*z,enriched=current['anchor']*float(np.exp(e.predict([current['w']])[0])) if e and current['inputCount'] else None,inputThrough=current['inputThrough'],inputValues={k:float(val) if math.isfinite(val) else None for k,val in zip(STOCK_FIELDS+EARNINGS_FIELDS if asset_class=='stocks' else CRYPTO_FIELDS,current['w'][-(len(STOCK_FIELDS)+len(EARNINGS_FIELDS) if asset_class=='stocks' else len(CRYPTO_FIELDS)):])},range=dict(low=current['anchor']*z*math.exp(-cal['logRadius']),high=current['anchor']*z*math.exp(cal['logRadius']),**cal) if cal else None,rangeValidation=interval_score(own),validation={k:{a:b for a,b in score(own,k).items() if a not in ('byDate','logByDate')} for k in NAMES})
         later=[r for r in checks if r['origin']>=comparison.get('evaluationStart','9999')]
         paired=[r for r in later if r.get('enriched') is not None]
         output[str(h)]=dict(comparison=comparison,trainingStatus=training_status,allDates={k:score(checks,k) for k in NAMES},rangeValidation=interval_score(later),enrichment=dict(evaluation={k:score(paired,k) for k in ('balanced','availabilityControl','enriched')},alwaysUpDirectionAccuracy=float(np.mean([r['y']>1.02 for r in paired])) if paired else None,directionCounts={k:{label:sum(1 for r in paired if (r[k]>1.02 if label=='up' else r[k]<.98 if label=='down' else .98<=r[k]<=1.02)) for label in ('up','flat','down')} for k in ('balanced','enriched')},matchedBySymbol={s:sum(r['symbol']==s for r in paired) for s in sorted({r['symbol'] for r in paired})},matchedRows=len(paired),totalLaterRows=len(later),liveForecastChanged=False),regimes={g:{k:score([r for r in checks if r['regime']==g],k) for k in NAMES} for g in sorted({r['regime'] for r in checks})},folds=folds,predictions=predictions,outcomes=checks)
         print(asset_class,h,'disjoint dates',len(folds),'later pass',comparison.get('passed'),flush=True)
+        if asset_class=='stocks':
+            output[str(h)]['enrichment']['evaluation']['noChange']=score(paired,'noChange')
+            output[str(h)]['enrichment']['bySector']=grouped_comparison(paired,(inputs or {}).get('sectors',{}))
     return output
 
 def build(root=ROOT,download=True,stocks_only=False):
     now=datetime.now(timezone.utc);today=now.date().isoformat();folder=root/'research/history';folder.mkdir(parents=True,exist_ok=True);hist={};errors=[];halt=not download
-    for sym in dict.fromkeys((*STOCKS,*PROXIES)):
+    manifest=load_universe(root);members=manifest['members'];stock_symbols=tuple(members)
+    for sym in dict.fromkeys((*PROXIES,*stock_symbols)):
         path=folder/(sym.replace('^','INDEX_')+'.json')
         try:
             if halt:
                 if not path.exists():raise ValueError('No cached history')
                 hist[sym]=json.loads(path.read_text())['prices']
-            else:hist[sym]=fetch_history(sym,folder,today);print('History',sym,len(hist[sym]),flush=True)
+            else:hist[sym]=fetch_history(sym,folder,today);print('History',sym,len(hist[sym]),flush=True);time.sleep(.25)
         except Exception as e:
             if isinstance(e,HTTPError) and e.code in (401,403,429):halt=True
             errors.append(sym+': '+str(e))
@@ -208,11 +233,15 @@ def build(root=ROOT,download=True,stocks_only=False):
     context={} 
     for sym,prices in {**{k:hist[k] for k in PROXIES},'BTC':crypto['BTC']}.items():
         f=features(prices,365 if sym=='BTC' else 252);context[sym]=dict(features=f,dates=np.array(sorted(f)))
-    universe={s:hist[s] for s in STOCKS if s in hist}
+    universe={s:hist[s] for s in stock_symbols if s in hist and len(hist[s])>=200}
     ip=root/'research/inputs.json';inputs=json.loads(ip.read_text()) if ip.exists() else {}
     ep=root/'research/earnings.json';earnings=json.loads(ep.read_text()) if ep.exists() else {}
     inputs['earnings']=earnings.get('issuers',{})
-    out=dict(model=MODEL,generatedAt=now.isoformat(),stocks=run_class(universe,context,'stocks',inputs),crypto=(json.loads((root/'research/environment.json').read_text())['crypto'] if stocks_only else run_class(crypto,context,'crypto',inputs)),errors=errors,stockUniverse=list(universe),history={s:dict(firstDate=r[0]['date'],lastDate=r[-1]['date'],count=len(r)) for s,r in {**universe,**crypto}.items()},contextLabels=PROXIES,historyHashes={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.glob('*.json')},cryptoInputHashes={s:hashlib.sha256(json.dumps(r,sort_keys=True).encode()).hexdigest() for s,r in crypto.items()},additionalInputHash=hashlib.sha256(ip.read_bytes()).hexdigest() if ip.exists() else None,inputStatus=dict(generatedAt=inputs.get('generatedAt'),errors=inputs.get('errors',[]),stocks={s:dict(rows=len(v['rows']),firstDate=v['rows'][0]['availableDate'] if v['rows'] else None,lastDate=v['rows'][-1]['availableDate'] if v['rows'] else None) for s,v in inputs.get('stocks',{}).items()},funding={s:dict(days=len(v),firstDate=v[0]['date'] if v else None,lastDate=v[-1]['date'] if v else None) for s,v in inputs.get('funding',{}).items()},snapshots={s:dict(days=len(v),firstDate=v[0]['date'] if v else None,lastDate=v[-1]['date'] if v else None) for s,v in inputs.get('snapshots',{}).items()}),limitations=['Representative current-universe pilot, not all stocks; survivorship bias remains.','Adjusted historical prices may be revised; SEC filed-date reconstruction is not a certified vintage feed.','NVDA/MSFT original quarterly GAAP earnings and explicit NVIDIA revenue guidance only; no analyst surprises or narrative history.','HYG and IEF prices are market proxies, not credit spreads or policy rates.','Context and publication dates strictly precede origin; no future macro inputs.','Same-date assets are correlated; annual outcomes are disjoint, not statistically independent.','Revisited historical holdout; not new prospective evidence.','80% is a calibration target, not guaranteed future coverage; pooled residuals may miss asset/regime changes.','No automatic promotion; historical improvement does not ensure future improvement.','Foundation models such as Chronos/TimesFM have not been run in this experiment.'])
+    inputs['symbolCIKs']={s:v['cik'] for s,v in members.items()}
+    inputs['sectors']={s:v['sector'] for s,v in members.items()}
+    out=dict(model=MODEL,generatedAt=now.isoformat(),stocks=run_class(universe,context,'stocks',inputs),crypto=(json.loads((root/'research/environment.json').read_text())['crypto'] if stocks_only else run_class(crypto,context,'crypto',inputs)),errors=errors,stockUniverse=list(universe),history={s:dict(firstDate=r[0]['date'],lastDate=r[-1]['date'],count=len(r)) for s,r in {**universe,**crypto}.items()},contextLabels=PROXIES,historyHashes={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.glob('*.json')},cryptoInputHashes={s:hashlib.sha256(json.dumps(r,sort_keys=True).encode()).hexdigest() for s,r in crypto.items()},additionalInputHash=hashlib.sha256(ip.read_bytes()).hexdigest() if ip.exists() else None,inputStatus=dict(generatedAt=inputs.get('generatedAt'),errors=inputs.get('errors',[]),stocks={s:dict(rows=len(v['rows']),firstDate=v['rows'][0]['availableDate'] if v['rows'] else None,lastDate=v['rows'][-1]['availableDate'] if v['rows'] else None) for s,v in inputs.get('stocks',{}).items()},funding={s:dict(days=len(v),firstDate=v[0]['date'] if v else None,lastDate=v[-1]['date'] if v else None) for s,v in inputs.get('funding',{}).items()},snapshots={s:dict(days=len(v),firstDate=v[0]['date'] if v else None,lastDate=v[-1]['date'] if v else None) for s,v in inputs.get('snapshots',{}).items()}),limitations=['Current S&P 500 constituent snapshot, not historical membership; survivorship bias remains. One representative ticker per CIK enters training and evaluation; all available share classes receive predictions.','Adjusted historical prices may be revised; SEC filed-date reconstruction is not a certified vintage feed.','NVDA/MSFT original quarterly GAAP earnings and explicit NVIDIA revenue guidance only; no analyst surprises or narrative history.','HYG and IEF prices are market proxies, not credit spreads or policy rates.','Context and publication dates strictly precede origin; no future macro inputs.','Same-date assets are correlated; annual outcomes are disjoint, not statistically independent.','Revisited historical holdout; not new prospective evidence.','80% is a calibration target, not guaranteed future coverage; pooled residuals may miss asset/regime changes.','No automatic promotion; historical improvement does not ensure future improvement.','Foundation models such as Chronos/TimesFM have not been run in this experiment.'])
+    out['universeCoverage']=dict(source=manifest['source'],retrievedAt=manifest['retrievedAt'],sourceHash=manifest['sourceHash'],targetTickers=len(members),targetIssuers=manifest['issuerCount'],priceTickers=len(universe),priceIssuers=len({members[s]['cik'] for s in universe}),missingPrices={s:('insufficient_price_history' if s in hist else 'price_unavailable') for s in members if s not in universe},sec=inputs.get('secCoverage',{}))
+    out['sectors']={s:v['sector'] for s,v in members.items()}
     out['earningsInputHash']=hashlib.sha256(ep.read_bytes()).hexdigest() if ep.exists() else None
     out['inputStatus']['earnings']=dict(generatedAt=earnings.get('generatedAt'),coverage=earnings.get('coverage',{}),errors=earnings.get('errors',[]))
     if stocks_only:

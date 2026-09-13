@@ -1,3 +1,34 @@
+# Current S&P 500 expansion
+
+The current v4 experiment targets every security in the dated current-constituent
+snapshot [universe.json](universe.json). See [SP500-LEARNING.md](SP500-LEARNING.md)
+for the generated run report and [sp500-summary.json](sp500-summary.json) for
+coverage, same-row comparisons and sector results. The older pilot notes below
+are historical documentation, not the current issuer limit.
+
+Membership is refreshed from the same public constituent dataset used by the
+stock dashboard. CompanyFacts is requested once per CIK, at most two requests
+per second, and histories retrieved within 20 hours are reused. Progress is
+checkpointed every 25 issuers and immediately on access denial. The dated input
+checkpoint is published before model training. A denial stops further SEC
+requests and preserves the 24-hour retry policy. Missing or unsupported standard
+annual facts are reported; they are never replaced with invented data.
+
+Both weekly and weekday research jobs refresh membership and SEC inputs. The
+weekday job retains crypto results and their original model/date. Raw SEC and
+price files are build caches. Additional companies can later be supported by
+expanding the versioned universe loader, collection and evaluation together.
+
+Price histories request up to 20 years. Each issuer contributes one representative
+share class to fitting and evaluation, while all available classes get forecasts.
+Weekly training origins, matured labels, nonoverlapping test windows and fixed
+model settings are retained. Sector summaries and an availability-only control
+use the same issuer/date pairs. Current membership has survivorship bias and
+previously inspected dates are not an untouched test set. No production promotion
+or paper-trading rule is changed by this expansion.
+
+---
+
 # Public environment model comparison
 
 **Current earnings extension:** [Official quarterly earnings learning](EARNINGS-LEARNING.md)

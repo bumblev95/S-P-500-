@@ -6,12 +6,13 @@ from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 from urllib.parse import urlsplit
 from build_forecasts import atomic_json
+from research_universe import targets
 
 ROOT = Path(__file__).resolve().parents[1]
 CIKS = dict(NVDA=1045810, AMD=2488, AVGO=1730168, MU=723125, AMAT=6951,
             QCOM=804328, INTC=50863, MSFT=789019, AAPL=320193, GOOGL=1652044,
             AMZN=1018724, META=1326801, TSLA=1318605, JPM=19617, XOM=34088)
-TAGS = dict(revenue=['RevenueFromContractWithCustomerExcludingAssessedTax', 'SalesRevenueNet', 'Revenues'],
+TAGS = dict(revenue=['RevenueFromContractWithCustomerExcludingAssessedTax', 'SalesRevenueNet', 'Revenues', 'RevenuesNetOfInterestExpense', 'RealEstateRevenueNet'],
             income=['NetIncomeLoss'], cashflow=['NetCashProvidedByUsedInOperatingActivities'],
             assets=['Assets'], liabilities=['Liabilities'])
 STOCK_FIELDS = ['revenueGrowth', 'netMargin', 'cashflowMargin', 'liabilitiesToAssets']
@@ -122,36 +123,77 @@ def funding_page(symbol,start,end):
     time.sleep((20+math.ceil(len(batch)/20))*60/1000)
     return [r for r in batch if r.get('coin')==symbol and start<=r.get('time',0)<=end]
 
-def build(root=ROOT, download=True):
+def collect_sec(old, root, download, now):
+    """One request per issuer, durable progress, fresh histories reused for 20 hours."""
+    cache=root/'research/source-cache';cache.mkdir(parents=True,exist_ok=True)
+    wanted=targets(root,CIKS);groups={}
+    for symbol,cik in wanted.items(): groups.setdefault(cik,[]).append(symbol)
+    stocks=dict(old.get('stocks',{}));errors=[];status={}
+    blocked=old.get('secBlockedUntil','')
+    if not blocked and any(e.startswith('SEC ') and any(str(code) in e for code in (401,403,429)) for e in old.get('errors',[])):
+        blocked=(datetime.fromisoformat(old['generatedAt'])+timedelta(days=1)).isoformat()
+    halted=not download or bool(blocked and datetime.fromisoformat(blocked)>now)
+    configured=None
+    if download:
+        try:sec_identity();configured=True
+        except ValueError as exc:halted=True;configured=False;errors.append(str(exc))
+    if blocked and datetime.fromisoformat(blocked)>now:
+        errors.extend(e for e in old.get('errors',[]) if e.startswith('SEC '))
+    print('SEC contact configured:',configured,'; request backoff active:',bool(blocked and datetime.fromisoformat(blocked)>now),flush=True)
+    requests=0
+    def checkpoint():
+        covered={c for c,syms in groups.items() if any(stocks.get(s,{}).get('cik')==c and stocks.get(s,{}).get('rows') for s in syms)}
+        coverage=dict(targetTickers=len(wanted),targetIssuers=len(groups),usableIssuers=len(covered),
+                      usableTickers=sum(bool(stocks.get(s,{}).get('rows')) and stocks[s].get('cik')==c for s,c in wanted.items()),
+                      requests=requests,status=status,missingSymbols=[s for s,c in wanted.items() if not stocks.get(s,{}).get('rows') or stocks[s].get('cik')!=c])
+        out={**old,'schemaVersion':1,'generatedAt':now.isoformat(),'stocks':stocks,'errors':errors,
+             'secBlockedUntil':blocked,'secContactConfigured':configured,'secCoverage':coverage}
+        atomic_json(root/'research/inputs.json',out)
+        return out
+    for i,(cik,symbols) in enumerate(groups.items()):
+        symbol=symbols[0]
+        previous=next((stocks[s] for s in symbols if stocks.get(s,{}).get('cik')==cik and stocks[s].get('retrievedAt')), {})
+        if not previous:
+            previous=next((v for v in stocks.values() if v.get('cik')==cik and v.get('retrievedAt')), {})
+        fresh=False
+        try: fresh=bool(previous and timedelta(0)<=now-datetime.fromisoformat(previous['retrievedAt'])<timedelta(hours=20))
+        except (TypeError,ValueError): pass
+        if fresh:
+            for s in symbols:stocks[s]=dict(previous)
+            status[str(cik)]='fresh' if previous.get('rows') else 'no_standard_annual_facts'
+            continue
+        if halted:
+            status[str(cik)]='retained' if previous.get('rows') else 'deferred'
+            continue
+        try:
+            requests+=1
+            payload=request(f'https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json')
+            if int(payload.get('cik',-1))!=cik:raise ValueError('SEC issuer identity mismatch')
+            rows=financial_history(payload)
+            atomic_json(cache/(symbol+'.json'),payload)
+            result=dict(cik=cik,source='SEC companyfacts / annual US-GAAP',rows=rows,retrievedAt=now.isoformat())
+            for s in symbols:stocks[s]=dict(result)
+            status[str(cik)]='updated' if rows else 'no_standard_annual_facts'
+        except Exception as exc:
+            errors.append(f'SEC {symbol}: {exc}');status[str(cik)]='error'
+            if isinstance(exc,HTTPError) and exc.code in (401,403,429):
+                halted=True;blocked=(datetime.now(timezone.utc)+timedelta(days=1)).isoformat()
+                checkpoint()
+        finally:time.sleep(.5)
+        if (i+1)%25==0:
+            checkpoint();print('SEC progress:',i+1,'/',len(groups),'issuers;',requests,'requests',flush=True)
+    return checkpoint()
+
+def build(root=ROOT, download=True, stocks_only=False):
     path = root/'research/inputs.json'; old = json.loads(path.read_text()) if path.exists() else {}
     cache = root/'research/source-cache'; cache.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc); today = now.date().isoformat()
-    stocks = old.get('stocks', {}); funding = old.get('funding', {}); snapshots = old.get('snapshots', {}); errors = []
-    blocked_until=old.get('secBlockedUntil','')
-    if not blocked_until and any(e.startswith('SEC ') and any(str(code) in e for code in (401,403,429)) for e in old.get('errors',[])):
-        blocked_until=(datetime.fromisoformat(old['generatedAt'])+timedelta(days=1)).isoformat()
-    halted = not download or blocked_until>now.isoformat()
-    if download and blocked_until>now.isoformat():errors.extend(e for e in old.get('errors',[]) if e.startswith('SEC ') and 'configuration missing' not in e)
-    sec_configured=None
-    if download:
-        try:sec_identity();sec_configured=True
-        except ValueError as e:halted=True;sec_configured=False;errors.append(str(e))
-        print('SEC contact configured:',sec_configured,'; request backoff active:',blocked_until>now.isoformat(),flush=True)
-    for symbol, cik in CIKS.items():
-        p = cache/(symbol+'.json')
-        try:
-            if not halted:
-                payload = request(f'https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json')
-                if int(payload.get('cik', -1)) != cik: raise ValueError('SEC issuer identity mismatch')
-                atomic_json(p, payload); time.sleep(.2)
-            elif p.exists(): payload = json.loads(p.read_text())
-            else: continue
-            if int(payload.get('cik',-1))!=cik:raise ValueError('Cached SEC issuer identity mismatch')
-            stocks[symbol] = dict(stocks.get(symbol,{}),cik=cik, source='SEC companyfacts / annual US-GAAP', rows=financial_history(payload), retrievedAt=now.isoformat() if not halted else stocks.get(symbol, {}).get('retrievedAt'))
-        except Exception as e:
-            errors.append(f'SEC {symbol}: {e}')
-            if isinstance(e, HTTPError) and e.code in (401, 403, 429):
-                halted = True;blocked_until=(now+timedelta(days=1)).isoformat()
+    collected=collect_sec(old,root,download,now)
+    stocks=collected['stocks'];funding=old.get('funding',{});snapshots=old.get('snapshots',{});errors=collected['errors']
+    if stocks_only:
+        print('Research inputs:',collected['secCoverage']['usableIssuers'],'SEC issuers;',errors,flush=True)
+        return collected
+    blocked_until=collected['secBlockedUntil'];sec_configured=collected['secContactConfigured']
     market = json.loads((root/'crypto/latest.json').read_text())
     # Preserve first observed value per day, never rewrite past supply/OI with today's snapshot.
     for symbol in market['coins']:
@@ -199,12 +241,12 @@ def build(root=ROOT, download=True):
             if isinstance(e, HTTPError) and e.code in (401, 403, 429): halted = True
             days={r['date']:r for r in funding.get(symbol,[])}
             days.update({r['date']:r for r in daily_funding(raw) if r['date']<today});funding[symbol]=[days[d] for d in sorted(days)]
-    result = dict(schemaVersion=1, generatedAt=now.isoformat(), secBlockedUntil=blocked_until, secContactConfigured=sec_configured, stocks=stocks, funding=funding, fundingBackfill=backfill, snapshots=snapshots, errors=errors,
+    result = dict(schemaVersion=1, secCoverage=collected['secCoverage'], generatedAt=now.isoformat(), secBlockedUntil=blocked_until, secContactConfigured=sec_configured, stocks=stocks, funding=funding, fundingBackfill=backfill, snapshots=snapshots, errors=errors,
                   limitations=['SEC original filed dates, standard annual USD facts only; not a certified vintage feed.', 'No guidance, earnings surprises, news or unlock forecasts.', 'Hyperliquid funding is exchange-specific; OI and supply begin when observed here.', 'Current snapshots are never copied into old backtests.'])
     atomic_json(path, result)
-    print('Research inputs:', len(stocks), 'SEC issuers;', len(funding), 'funding series;', errors, flush=True)
+    print('Research inputs:', collected['secCoverage']['usableIssuers'], 'SEC issuers;', len(funding), 'funding series;', errors, flush=True)
     return result
 
 if __name__ == '__main__':
     import sys
-    build(download='--offline' not in sys.argv)
+    build(download='--offline' not in sys.argv,stocks_only='--stocks-only' in sys.argv)

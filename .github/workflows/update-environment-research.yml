@@ -3,8 +3,18 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/research_universe.py'
       - 'scripts/build_research_inputs.py'
       - 'scripts/test_research_inputs.py'
+      - 'scripts/test_sp500_research.py'
+      - 'scripts/build_environment_research.py'
+      - 'scripts/test_environment_research.py'
+      - 'scripts/build_earnings_inputs.py'
+      - 'scripts/test_earnings_inputs.py'
+      - 'scripts/import_sec_companyfacts.py'
+      - 'scripts/build_sp500_report.py'
+      - 'assets/environment-research.js'
+      - '.github/workflows/update-environment-research.yml'
   workflow_dispatch:
   schedule:
     - cron: '35 2 * * 0'
@@ -17,6 +27,7 @@ concurrency:
 jobs:
   research:
     runs-on: ubuntu-latest
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,21 +43,36 @@ jobs:
           key: environment-history-${{ github.run_id }}
           restore-keys: environment-history-
       - run: pip install -r scripts/requirements-crypto-ml.txt
+      - run: python -m unittest discover -s scripts -p test_sp500_research.py
+      - name: Refresh current S&P 500 membership
+        run: python scripts/research_universe.py
       - run: python -m unittest discover -s scripts -p test_research_inputs.py
       - run: python -m unittest discover -s scripts -p test_sec_import.py
       - run: python -m unittest discover -s scripts -p test_earnings_inputs.py
-      - run: python scripts/build_research_inputs.py
+      - name: Collect SEC histories
+        id: collect
+        run: python scripts/build_research_inputs.py
         env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+      - name: Preserve collected inputs before training
+        if: always() && steps.collect.outcome != 'skipped'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/universe.json research/inputs.json
+          git diff --cached --quiet || git commit -m 'Checkpoint S&P 500 membership and SEC collection'
+          git pull --rebase origin main
+          git push
       - run: python scripts/build_earnings_inputs.py
       - run: python scripts/build_environment_research.py
       - run: python -m unittest discover -s scripts -p test_environment_research.py
+      - run: python scripts/build_sp500_report.py
       - run: node --check assets/environment-research.js && node scripts/test_environment_page.cjs
       - name: Publish research results
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add research/environment.json research/inputs.json research/issued.json research/earnings.json research/fundamental-observations.json
+          git add research/environment.json research/inputs.json research/issued.json research/earnings.json research/fundamental-observations.json research/sp500-summary.json research/SP500-LEARNING.md
           git diff --cached --quiet || git commit -m 'Update public environment model comparison'
           git pull --rebase origin main
           git push
