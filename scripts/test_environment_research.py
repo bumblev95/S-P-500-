@@ -26,6 +26,19 @@ class EnvironmentResearch(unittest.TestCase):
         def score(lo,hi,y=1.):return m.interval_score([dict(origin='2020-01-01',y=y,range=dict(low=lo,high=hi))])
         self.assertLess(score(.9,1.1)['logIntervalScore'],score(.1,10)['logIntervalScore'])
         self.assertEqual(score(.9,1.1,2.)['coverage'],0.)
+    def test_stock_horizons_have_independent_profiles_and_down_model(self):
+        self.assertEqual({m.HORIZON_PROFILES[h]['name'] for h in (21,84,252)},
+                         {'short-21d','medium-84d','long-252d'})
+        self.assertEqual(m.HORIZON_PROFILES[21]['field'],'z')
+        self.assertEqual(m.HORIZON_PROFILES[84]['field'],'w')
+        rows=[]
+        for label,y,regime in ((-1,.9,'하락·보통변동'),(0,1.,'상승·보통변동'),(1,1.1,'상승·고변동')):
+            for i in range(120):
+                rows.append(dict(y=y,z=[i%7/10],w=[i%7/10,1.],regime=regime))
+        fitted=m.fit_horizon(rows,21);prediction,probability=fitted.predict(rows)
+        labels=[m.direction_label(v) for v in prediction]
+        self.assertIn(-1,labels);self.assertIn(0,labels);self.assertIn(1,labels)
+        self.assertEqual(set(probability[0]),{'down','flat','up','chosen'})
     def test_selection_cannot_see_later_outcomes(self):
         rows=[]
         for year in range(2000,2016):

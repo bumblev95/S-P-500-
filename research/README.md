@@ -78,9 +78,29 @@ The workflow refreshes this research weekly; data dates remain visible.
 
 ## September 2026 upgrade: data, loss and uncertainty
 
-The running version is now `environment-challenger-v2-logmedian`. The earlier
-protocol above describes v1; these changes supersede its selection metric and
-its statement that no fundamental/supply inputs are present.
+The running version is now `environment-challenger-v5-horizon-specific`. The
+earlier protocol above describes v1; the sections below supersede its selection
+metric and its statement that no fundamental/supply inputs are present.
+
+### Horizon-specific stock challenger
+
+The 21-, 84- and 252-session stock targets now train independent models rather
+than sharing one estimator configuration. The 21-session model uses price and
+publication-lagged market context. The 84- and 252-session models can also use
+publication-dated SEC and company-release features. Each horizon has fixed,
+predeclared tree capacity and regularization, plus explicit prior-date bear and
+high-volatility regime flags.
+
+Each horizon also fits a separate three-class direction classifier for down,
+flat and up outcomes at the existing ±2% boundary. Training class weights reduce
+the previous all-up/all-flat collapse; its three outputs are labelled direction
+scores, not calibrated real-world probabilities. The return regressor still
+determines magnitude, subject only to the class boundary when a fixed score and
+margin threshold is met. All thresholds are declared before later evaluation.
+The later gate now also requires at least 10% down recall when 30 or more actual
+down observations exist. Better down recall cannot compensate for failing the
+existing mean, tail, consistency or direction checks, and no model is promoted
+automatically.
 
 Research reviewed:
 
