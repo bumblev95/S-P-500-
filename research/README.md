@@ -1,5 +1,10 @@
 # Public environment model comparison
 
+**Current earnings extension:** [Official quarterly earnings learning](EARNINGS-LEARNING.md)
+describes the NVDA/MSFT dated-release collector, four quarterly features, daily
+stock retraining and availability-only comparison. That extension supersedes the
+older statements below that quarterly releases and numeric guidance are absent.
+
 This is a separate, fixed challenger experiment for 16 representative current
 stocks and the dashboard's available spot coins. It does not request trade
 records or change the production model's forecast. Full historical inputs are

@@ -42,6 +42,21 @@ class EnvironmentResearch(unittest.TestCase):
         r=[{'date':str(date(2020,1,1)+timedelta(days=i)),'close':100+i/10} for i in range(240)]
         a=m.features(r);r[-1]['close']=1e6;b=m.features(r)
         self.assertEqual(a[r[-2]['date']],b[r[-2]['date']])
+    def test_quarterly_features_reach_model_without_future_release(self):
+        from datetime import date,timedelta
+        prices=[dict(date=str(date(2024,1,1)+timedelta(days=i)),close=100+i/10) for i in range(280)]
+        f=m.features(prices);context={key:dict(features=f,dates=np.array(sorted(f))) for key in m.PROXIES}
+        first=dict(availableDate='2024-07-01',periodEnd='2024-06-30',quarterRevenueGrowth=.2,quarterNetMargin=-.1,quarterEpsChange=-.5,nextQuarterRevenueGrowth=None)
+        later={**first,'availableDate':'2024-08-15','quarterRevenueGrowth':999.}
+        a,_=m.records({'NVDA':prices},context,21,'stocks',{'earnings':{'NVDA':[first]}})
+        b,_=m.records({'NVDA':prices},context,21,'stocks',{'earnings':{'NVDA':[first,later]}})
+        by={r['origin']:r for r in b}
+        before=[r for r in a if r['origin']<'2024-08-15']
+        self.assertTrue(before)
+        for row in before:
+            np.testing.assert_equal(row['w'],by[row['origin']]['w'])
+            self.assertEqual(row['w'][-4],.2);self.assertEqual(row['w'][-3],-.1)
+            self.assertEqual(row['v'][-4],1.);self.assertEqual(row['inputThrough'],'2024-07-01')
     def test_output_chronology(self):
         import json
         p=m.ROOT/'research/environment.json'
