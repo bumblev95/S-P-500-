@@ -1,6 +1,6 @@
 # S&P 500 실적 학습 비교
 
-생성: 2026-09-13T09:48:03.240469+00:00 · 모델: environment-challenger-v5-horizon-specific
+생성: 2026-09-13T10:46:24.445281+00:00 · 모델: environment-challenger-v6-medium-long
 
 대상 500개 기업 / 503개 종목. SEC 유효 재무 이력 488개 기업. 가격 이력 498개 기업 / 501개 종목.
 
@@ -10,15 +10,14 @@
 
 | 기간 | 분리 모델 | 분리 모델 가격 오차 | 분리 모델 방향 적중 | 분리 모델 하락 포착 | 예측 상승 / 중립 / 하락 |
 |---|---|---:|---:|---:|---:|
-| 21거래일 | short-21d | 8.00% | 24.96% | 7.24% | 793 / 3300 / 379 |
-| 84거래일 | medium-84d | 13.06% | 42.06% | 29.39% | 2159 / 967 / 1315 |
+| 126거래일 | medium-126d | 17.82% | 35.93% | 23.35% | 2032 / 1012 / 1373 |
 | 252거래일 | long-252d | 22.59% | 58.23% | 17.82% | 3043 / 197 / 622 |
 
-21·84·252거래일 모델은 입력 범위, 모델 복잡도와 방향 분류기를 서로 공유하지 않습니다. 21일은 가격·시장환경 중심, 84일과 252일은 발표일이 확인된 SEC·실적 변수도 사용합니다. 방향은 상승·중립(±2%)·하락의 세 범주입니다. 하락 포착률은 실제 하락한 표본 가운데 하락으로 예측한 비율입니다. 표본 수는 독립된 시장 상황의 수가 아니며, 이번 결과만으로 기본 모델을 자동 교체하지 않습니다.
+126·252거래일 모델은 입력 범위, 모델 복잡도와 방향 분류기를 서로 공유하지 않습니다. 두 기간 모두 발표일이 확인된 SEC·실적 변수를 사용합니다. 1개월 목표가 모델은 제거하고 단기 진입 타이밍을 별도 규칙으로 판단합니다. 방향은 상승·중립(±2%)·하락의 세 범주이며, 항상 상승 기준선과 하락 포착률을 함께 통과해야 합니다. 표본 수는 독립된 시장 상황의 수가 아니며, 이번 결과만으로 기본 모델을 자동 교체하지 않습니다.
 
 ## 누락과 출처
 
-종목 목록: [https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv](https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv) · 확인 2026-09-13T09:47:17.395383+00:00
+종목 목록: [https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv](https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv) · 확인 2026-09-13T10:45:38.111774+00:00
 
 SEC 유효 이력 미확보: APA, CRWD, FITB, HONA, KHC, ODFL, RF, SJM, SYF, TFC, VLO, XOM
 
