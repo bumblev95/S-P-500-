@@ -13,7 +13,7 @@ jobs:
       - name: Check FRED CSV over IPv4
         run: |
           set +e
-          curl -4 --connect-timeout 5 --max-time 20 --retry 0 --silent --show-error --fail --user-agent 'PublicMarketMonitor/1.0' --output /tmp/fred-check.csv --write-out 'HTTP %{http_code}; connect %{time_connect}; total %{time_total}\n' 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2026-08-01'
+          curl -4 --http1.1 --connect-timeout 5 --max-time 20 --retry 0 --silent --show-error --fail --user-agent 'PublicMarketMonitor/1.0' --output /tmp/fred-check.csv --write-out 'HTTP %{http_code}; connect %{time_connect}; total %{time_total}\n' 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10'
           result=$?
           echo "curl exit: $result"
           if [ "$result" = 0 ]; then
