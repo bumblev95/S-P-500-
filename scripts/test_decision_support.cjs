@@ -16,3 +16,22 @@ const panel=D.adaptivePanel('X',84,experiment);assert(panel.includes('기본 예
 assert.equal(D.adaptivePanel('X',21,null),'');
 const sparse=D.adaptivePanel('X',252,{horizons:{252:{sourceDates:5,correctionDates:0,comparison:{status:'insufficient'}}}});assert(sparse.includes('완료 시점이 부족'));assert(!sparse.includes('과거 비교 기준 통과'));
 console.log('Adapter improvement, failed direction gate, and insufficient-history labels passed');
+
+// Calendar-day boundaries match Python, and cached values remain visible without
+// turning missing/stale observations into usable risk signals.
+const nowRisk=Date.parse('2026-09-14T20:00:00Z');
+const riskSnapshot={generatedAt:'2026-09-14T19:00:00Z',indicators:[
+ {id:'GZ_SPREAD',label:'GZ',status:'ready',asOf:'2026-07-01',maxAgeDays:75,value:.8,severity:0,unit:'%p',frequency:'monthly'},
+ {id:'NFCI',label:'금융여건',status:'ready',asOf:'2026-09-04',maxAgeDays:16,value:0,severity:1,unit:'index',fetchStatus:'unavailable',fromCache:true},
+ {id:'IORB',label:'IORB',status:'unavailable',asOf:'2026-09-11',maxAgeDays:5,value:3.65,severity:null,unit:'%'},
+ {id:'DGS10',label:'국채 금리',status:'ready',asOf:'2026-09-11',maxAgeDays:7,value:null,change:1,severity:2,unit:'%'}
+]};
+let riskResult=D.risk(riskSnapshot,{},null,nowRisk);
+assert.equal(riskResult.items[0].value,'0.80 %p');assert.equal(riskResult.items[0].severity,0);
+assert.equal(riskResult.items[1].value,'0.00 index');assert(riskResult.items[1].detail.includes('수집 지연'));assert.equal(riskResult.items[1].severity,1);
+assert.equal(riskResult.items[2].value,'3.65 %');assert.equal(riskResult.items[2].severity,null);
+assert.equal(riskResult.items[3].value,'값 미확보');assert.equal(riskResult.items[3].severity,null);
+riskResult=D.risk(riskSnapshot,{},null,nowRisk+86400000);
+assert.equal(riskResult.items[0].value,'0.80 %p');assert.equal(riskResult.items[0].severity,null);assert(riskResult.items[0].detail.includes('판단 제외'));
+assert(!JSON.stringify(riskResult).includes('NaN'));
+console.log('Last-observation display, zero values, missing risk inputs and day-boundary checks passed');

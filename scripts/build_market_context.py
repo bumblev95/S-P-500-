@@ -16,6 +16,7 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.parse import urlparse
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parents[1]
 # id: label, unit, observation-age limit, warning levels, change warning, source
@@ -66,7 +67,7 @@ TOPICS = [
 ]
 
 def get(url):
-    with urlopen(Request(url, headers={'User-Agent': 'PublicMarketMonitor/1.0'}), timeout=20) as r:
+    with urlopen(Request(url, headers={'User-Agent': 'PublicMarketMonitor/1.0'}), timeout=30) as r:
         return r.read(3_000_000).decode('utf-8-sig')
 
 def age(d, today):
@@ -86,6 +87,52 @@ def parse_csv(text, key, today):
         except (ValueError, KeyError, TypeError):
             pass
     return sorted(rows.items())
+
+def parse_table(text, today):
+    """FRED's data table has initial HTML rows and a deferred #date|value block."""
+    pairs = re.findall(r'<th[^>]*scope="row"[^>]*>\s*(\d{4}-\d{2}-\d{2})\s*</th>\s*<td[^>]*>\s*([^<]+)</td>', text)
+    pairs += re.findall(r'#(\d{4}-\d{2}-\d{2})\|\s*([^\s<]+)', text)
+    rows = {}
+    for d, value in pairs:
+        try:
+            v = float(value)
+            if math.isfinite(v) and 0 <= age(d, today) < 900: rows[d] = v
+        except (ValueError, TypeError): pass
+    return sorted(rows.items())
+
+def collect_series(key, today, fetcher):
+    start = (today-timedelta(days=730)).isoformat()
+    urls = [('csv', 'https://fred.stlouisfed.org/graph/fredgraph.csv?id='+key+'&cosd='+start),
+            ('table', 'https://fred.stlouisfed.org/data/'+key+'.txt')]
+    attempts = []
+    for format_, url in urls:
+        try:
+            text = fetcher(url)
+            rows = parse_csv(text, key, today) if format_ == 'csv' else parse_table(text, today)
+            if not rows: raise ValueError('No valid observations')
+            return rows, dict(fetchStatus='ready', dataUrl=url, fetchWarnings=attempts)
+        except Exception as exc:
+            attempts.append(format_+': '+(str(exc.code) if isinstance(exc, HTTPError) else type(exc).__name__))
+            # No repeated requests following an explicit access/rate-limit rejection.
+            if isinstance(exc, HTTPError) and exc.code in (403, 429): break
+    return [], dict(fetchStatus='unavailable', fetchError='; '.join(attempts))
+
+def retain_observation(entry, prior, today, error, now):
+    """Keep a real last observation, its date and last successful fetch time."""
+    if prior and isinstance(prior.get('value'), (int, float)) and math.isfinite(prior['value']):
+        entry = dict(prior, status='ready' if 0 <= age(prior.get('asOf'), today) <= entry['maxAgeDays'] else 'stale')
+        # Older snapshots discarded severity after one failed fetch. Recompute it.
+        if entry['id'] in SERIES:
+            _, _, _, limits, delta, _ = SERIES[entry['id']]
+            severity = sum(entry['value'] >= x for x in limits) if limits else None
+            if severity is not None and delta and entry.get('change') is not None and entry['change'] >= delta:
+                severity = max(1, severity)
+            entry['severity'] = severity
+        entry['fromCache'] = True
+    else:
+        entry = dict(entry, status='missing', fromCache=False)
+    entry.update(fetchStatus='unavailable', fetchError=error, lastAttemptAt=now.isoformat())
+    return entry
 
 def summarize(key, rows, today):
     label, unit, days, limits, change_limit, source = SERIES[key]
@@ -162,23 +209,42 @@ def build(root=ROOT, now=None, fetcher=get):
     target=root/'market/latest.json'
     old=json.loads(target.read_text()) if target.exists() else {}
     errors=[]; observations={}; indicators=[]
-    start=(today-timedelta(days=730)).isoformat()
+    old_by = {x['id']: x for x in old.get('indicators', [])}
+    old_rows = old.get('observations', {})
     def fetch_series(key):
-        try: return key,parse_csv(fetcher('https://fred.stlouisfed.org/graph/fredgraph.csv?id='+key+'&cosd='+start),key,today),None
-        except Exception as exc: return key,[],type(exc).__name__
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        for key,rows,error in pool.map(fetch_series,SERIES):
+        rows, meta = collect_series(key, today, fetcher)
+        return key, rows, meta
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        for key,rows,meta in pool.map(fetch_series,SERIES):
+            fetched = bool(rows)
+            if not fetched: rows = [(d,v) for d,v in old_rows.get(key, []) if 0 <= age(d,today) < 900 and isinstance(v,(int,float)) and math.isfinite(v)]
             observations[key]=rows
             entry=summarize(key,rows,today)
-            if error: errors.append(key+': '+error)
-            if not rows:
-                prior=next((x for x in old.get('indicators',[]) if x['id']==key),None)
-                if prior: entry=dict(prior,status='unavailable',severity=None)
+            if fetched:
+                entry.update(meta, fromCache=False, lastSuccessAt=now.isoformat(), lastAttemptAt=now.isoformat())
+            else:
+                error = meta['fetchError']; errors.append(key+': '+error)
+                if rows: entry['lastSuccessAt'] = old_by.get(key, {}).get('lastSuccessAt')
+                entry = retain_observation(entry, entry if rows else old_by.get(key), today, error, now)
+            entry['frequency'] = 'quarterly' if key=='DRTSCILM' else 'weekly' if key in ('NFCI','STLFSI4') else 'daily'
             indicators.append(entry)
-    indicators.append(funding(observations.get('SOFR',[]),observations.get('IORB',[]),today))
-    try: indicators.extend(bond_spreads(fetcher(EBP_URL), today))
+    fund = funding(observations.get('SOFR',[]),observations.get('IORB',[]),today)
+    fund['frequency'] = 'daily'
+    inputs_ok = all(x['fetchStatus']=='ready' for x in indicators if x['id'] in ('SOFR','IORB'))
+    if inputs_ok and fund['value'] is not None:
+        fund.update(fromCache=False, fetchStatus='ready', lastSuccessAt=now.isoformat(), lastAttemptAt=now.isoformat())
+    else:
+        if fund['value'] is not None: fund['lastSuccessAt'] = old_by.get('FUNDING', {}).get('lastSuccessAt')
+        fund = retain_observation(fund, fund if fund['value'] is not None else old_by.get('FUNDING'), today, '동일 날짜 SOFR·IORB 자료 갱신 확인 필요', now)
+    indicators.append(fund)
+    try:
+        bonds = bond_spreads(fetcher(EBP_URL), today)
+        if any(q['value'] is None for q in bonds): raise ValueError('No valid bond observations')
+        for q in bonds: q.update(fetchStatus='ready', fromCache=False, lastSuccessAt=now.isoformat(), lastAttemptAt=now.isoformat())
+        indicators.extend(bonds)
     except Exception as exc:
-        indicators.extend(bond_spreads('', today)); errors.append('Fed bond spread: '+type(exc).__name__)
+        error = type(exc).__name__; errors.append('Fed bond spread: '+error)
+        indicators.extend(retain_observation(q, old_by.get(q['id']), today, error, now) for q in bond_spreads('', today))
     news=[]; feeds=[]
     for name,url in FEEDS:
         try:
@@ -187,7 +253,7 @@ def build(root=ROOT, now=None, fetcher=get):
             feeds.append(dict(name=name,url=url,status='unavailable'));errors.append(name+': '+type(exc).__name__)
     unique={x['url']:x for x in news}
     news=sorted(unique.values(),key=lambda x:x['publishedAt'],reverse=True)[:15]
-    payload=dict(schemaVersion=1,model='public-early-warning-v1',generatedAt=now.isoformat(),
+    payload=dict(schemaVersion=2,model='public-early-warning-v1',generatedAt=now.isoformat(),observations=observations,
                  indicators=indicators,credit=credit_state(indicators),news=news,feeds=feeds,errors=errors,
                  newsScope='Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.',
                  exclusions=['HY/CCC OAS와 MOVE 수치 미재배포','사모신용 환매·BDC 부실·CLO 직접 측정 아님'],
@@ -196,6 +262,7 @@ def build(root=ROOT, now=None, fetcher=get):
     target.parent.mkdir(parents=True,exist_ok=True)
     temp=target.with_suffix('.tmp');temp.write_text(json.dumps(payload,ensure_ascii=False,allow_nan=False,indent=2));temp.replace(target)
     print(json.dumps(dict(credit=payload['credit'],news=len(news),errors=errors)))
+    for error in errors: print('::warning title=Market indicator collection delayed::'+error)
     return payload
 
 if __name__=='__main__': build()

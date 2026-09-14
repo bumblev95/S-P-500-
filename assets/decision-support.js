@@ -3,6 +3,8 @@
 const N=Number.isFinite,esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pct=x=>N(x)?(100*x).toFixed(1)+'%':'자료 부족',money=x=>N(x)?'$'+x.toLocaleString('en-US',{maximumFractionDigits:2}):'자료 부족';
 const fresh=(s,days,now=Date.now())=>{const age=(now-Date.parse(s))/86400000;return N(age)&&age>=0&&age<=days};
+// Observation dates describe a calendar day, matching the collector's date arithmetic.
+const freshDay=(s,days,now=Date.now())=>{const age=Math.floor(now/86400000)-Date.parse(s)/86400000;return N(age)&&age>=0&&age<=days};
 let bundle=null,market=null,stocks={},coins={},adaptive=null,loading=null;
 function confidence(m={},options={}){
  const dates=m.dates||0,n=m.n||0,grade=dates>=20?'충분':dates>=6?'제한적':'자료 부족';
@@ -13,11 +15,15 @@ function risk(m,universe={},coin=null,now=Date.now()){
  const items=[], add=(label,value,asOf,severity,source,detail='')=>items.push({label,value,asOf,severity,source,detail});
  const current=fresh(m?.generatedAt,4,now);
  for(const q of m?.indicators||[]){
-  const ok=current&&q.status==='ready'&&fresh(q.asOf,q.maxAgeDays||7,now);
-  let severity=q.severity,detail=N(q.change)?'전기 대비 '+q.change.toFixed(2)+' '+q.unit:'';
+  const hasValue=N(q.value)&&N(Date.parse(q.asOf)),inRange=freshDay(q.asOf,q.maxAgeDays||7,now);
+  const ok=current&&q.status==='ready'&&hasValue&&inRange;
+  const delayed=q.fetchStatus==='unavailable'||q.status==='unavailable';
+  const state=!hasValue?'값 미확보':!inRange?'발표 간격 초과 · 판단 제외':!current?'수집 시각 오래됨 · 판단 제외':delayed?'수집 지연 · 마지막 확보값'+(ok?' 사용':' · 판단 제외'):'최신 수집값';
+  const frequency={daily:'일별',weekly:'주별',monthly:'월별',quarterly:'분기별'}[q.frequency]||'';
+  let severity=q.severity,detail=[state,frequency,N(q.change)?'전기 대비 '+q.change.toFixed(2)+' '+q.unit:'',q.lastSuccessAt?'마지막 수집 성공 '+q.lastSuccessAt.slice(0,10):''].filter(Boolean).join(' · ');
   if(q.id==='DGS10')severity=N(q.change)?Math.abs(q.change)>=.75?2:Math.abs(q.change)>=.35?1:0:null;
   if(q.id==='DTWEXBGS'){const change=q.previous>0?q.value/q.previous-1:null; severity=N(change)?change>=.05?2:change>=.02?1:0:null;}
-  add(q.label,ok?Number(q.value).toFixed(2)+' '+q.unit:'자료 부족',q.asOf,ok?severity:null,q.url,detail);
+  add(q.label,hasValue?q.value.toFixed(2)+' '+q.unit:'값 미확보',q.asOf,ok?severity:null,q.url,detail);
  }
  for(const [id,label] of [['GZ_SPREAD','회사채 GZ 신용스프레드'],['EBP','초과 채권 프리미엄 EBP'],['DGS10','미국 10년 국채 금리'],['DTWEXBGS','광의 달러 지수']])if(!(m?.indicators||[]).some(q=>q.id===id))add(label,'자료 부족',null,null,'');
  const valid=Object.values(universe).filter(e=>positive(e.price)&&fresh(e.asOf,5,now)&&e.inputs?.ma200>0),dateCounts=valid.reduce((a,e)=>(a[e.asOf]=(a[e.asOf]||0)+1,a),{}),latest=Object.keys(dateCounts).sort((a,b)=>dateCounts[a]-dateCounts[b]||a.localeCompare(b)).at(-1),same=valid.filter(e=>e.asOf===latest);
@@ -33,7 +39,9 @@ function risk(m,universe={},coin=null,now=Date.now()){
 function positive(x){return N(x)&&x>0}
 function riskPanel(coin){
  const r=risk(market,stocks,coin),labels={risk:'위험 상승',watch:'주의',stable:'관측 범위 내 안정',unknown:'자료 부족 · 판단 제한'};
- return '<section class="ds-risk"><div class="ds-heading"><div><small>EARLY WARNING · 시장 위험 상태</small><h2>'+labels[r.status]+'</h2></div><span>'+r.coverage+'/'+r.total+'개 위험 지표 확인</span></div><p>'+(r.reasons.length?r.reasons.map(esc).join(' · '):'현재 확인된 자료에서 강한 경고 없음 · 미연결 지표는 판단에서 제외')+'</p><details><summary>위험 근거 · 뉴스·일정 펼치기</summary><div class="ds-table"><table><thead><tr><th>지표</th><th>값</th><th>기준일 / 설명</th></tr></thead><tbody>'+r.items.map(q=>'<tr><td>'+esc(q.label)+'</td><td>'+esc(q.value)+'</td><td>'+esc(q.asOf||'—')+'<small>'+esc(q.detail)+'</small>'+(safeUrl(q.source)?'<a href="'+esc(q.source)+'" target="_blank" rel="noopener noreferrer">원자료</a>':'')+'</td></tr>').join('')+'</tbody></table></div><p>겹치는 신용·금융여건·주식 지표는 묶어서 종합 판단합니다. GZ는 회사채 스프레드, EBP는 그 일부인 초과 프리미엄입니다. 둘 다 Fed 월별 연구 자료이며 매일의 HY OAS가 아닙니다. 금리 급변은 4주 ±0.35/0.75%p, 달러 상승은 4주 2/5%, 나머지 경고도 운영 규칙이며 위기 확률이 아닙니다.</p>'+newsPanel()+'<p>기업별 실적은 거래 계획 아래에 표시합니다. 주요 경제 일정: <a href="https://www.bls.gov/schedule/news_release/" target="_blank" rel="noopener noreferrer">BLS 공식 일정</a> · <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer">FOMC 일정</a>. 일정 자동 수집은 미연결입니다.</p></details></section>';
+ const delayed=(market?.indicators||[]).filter(q=>q.fetchStatus==='unavailable'||q.status==='unavailable').length;
+ const collection='<p>수집 확인: '+esc(market?.generatedAt?.replace('T',' ').slice(0,19)||'확인 필요')+' UTC'+(delayed?' · '+delayed+'개 항목 수집 지연 · 마지막 확보값 표시':'')+'</p>';
+ return '<section class="ds-risk"><div class="ds-heading"><div><small>EARLY WARNING · 시장 위험 상태</small><h2>'+labels[r.status]+'</h2></div><span>'+r.total+'개 항목 중 '+r.coverage+'개 위험 판단에 사용</span></div><p>'+(r.reasons.length?r.reasons.map(esc).join(' · '):r.status==='unknown'?'확인된 위험 자료가 부족해 전체 시장 상태를 판단하기 어렵습니다.':'현재 확인된 자료에서 강한 경고 없음 · 미연결 지표는 판단에서 제외')+'</p>'+collection+'<details><summary>위험 근거 · 뉴스·일정 펼치기</summary><div class="ds-table"><table><thead><tr><th>지표</th><th>값</th><th>기준일 / 설명</th></tr></thead><tbody>'+r.items.map(q=>'<tr><td>'+esc(q.label)+'</td><td>'+esc(q.value)+'</td><td>'+esc(q.asOf||'—')+'<small>'+esc(q.detail)+'</small>'+(safeUrl(q.source)?'<a href="'+esc(q.source)+'" target="_blank" rel="noopener noreferrer">원자료</a>':'')+'</td></tr>').join('')+'</tbody></table></div><p>일별·주별·월별·분기별 지표는 발표 간격이 다릅니다. 기준일은 관측 대상 날짜이며 수집 시각과 다릅니다. 마지막 확보값도 표시하지만, 지표별 허용 기간을 넘으면 위험 판단에서 제외합니다. SOFR·IORB 자체는 참고값이며 같은 날짜의 두 금리 차이를 위험 판단에 사용합니다.</p><p>겹치는 신용·금융여건·주식 지표는 묶어서 종합 판단합니다. GZ는 회사채 스프레드, EBP는 그 일부인 초과 프리미엄입니다. 둘 다 Fed 월별 연구 자료이며 매일의 HY OAS가 아닙니다. 금리 급변은 4주 ±0.35/0.75%p, 달러 상승은 4주 2/5%, 나머지 경고도 운영 규칙이며 위기 확률이 아닙니다.</p>'+newsPanel()+'<p>기업별 실적은 거래 계획 아래에 표시합니다. 주요 경제 일정: <a href="https://www.bls.gov/schedule/news_release/" target="_blank" rel="noopener noreferrer">BLS 공식 일정</a> · <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer">FOMC 일정</a>. 일정 자동 수집은 미연결입니다.</p></details></section>';
 }
 function safeUrl(url){if(!url)return false;try{const u=new URL(url);return u.protocol==='https:'&&['www.federalreserve.gov','fred.stlouisfed.org','hyperliquid.gitbook.io'].includes(u.hostname)}catch(_){return false}}
 function newsPanel(){const news=(market?.news||[]).filter(n=>safeUrl(n.url)&&fresh(n.publishedAt,14));return '<h3>확인된 공식 발표</h3>'+(news.length?news.slice(0,3).map(n=>'<p><a href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer">'+esc(n.title)+'</a><small>'+esc(n.source)+' · 발행 '+esc(n.publishedAt)+'</small></p>').join(''):'<p>최근 발표 수집 자료가 없습니다.</p>')+'<p>Fed 공식 발표 범위입니다. 뉴스 제목을 가격 변화의 원인으로 단정하지 않습니다.</p>'}
