@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-09-16T08:39:16.745787+00:00",
+  "generatedAt": "2026-09-16T08:52:20.258144+00:00",
   "observations": {
     "DGS10": [
       [
@@ -9786,7 +9786,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "daily"
     },
     {
@@ -9808,7 +9808,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "daily"
     },
     {
@@ -9834,7 +9834,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "weekly"
     },
     {
@@ -9860,7 +9860,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "weekly"
     },
     {
@@ -9886,7 +9886,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9908,7 +9908,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "daily"
     },
     {
@@ -9930,7 +9930,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00",
       "frequency": "daily"
     },
     {
@@ -9958,7 +9958,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "동일 날짜 SOFR·IORB 자료 갱신 확인 필요",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00"
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9976,8 +9976,8 @@
       "change": -0.018514250043726865,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-09-16T08:39:16.745787+00:00",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00"
+      "lastSuccessAt": "2026-09-16T08:52:20.258144+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00"
     },
     {
       "id": "EBP",
@@ -9995,8 +9995,8 @@
       "change": -0.030485030000000024,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-09-16T08:39:16.745787+00:00",
-      "lastAttemptAt": "2026-09-16T08:39:16.745787+00:00"
+      "lastSuccessAt": "2026-09-16T08:52:20.258144+00:00",
+      "lastAttemptAt": "2026-09-16T08:52:20.258144+00:00"
     }
   ],
   "credit": {
@@ -10006,6 +10006,33 @@
     "expected": 3
   },
   "news": [
+    {
+      "title": "Agencies seek comment on proposed third-party risk management guidance and issue statement on community bank engagement with core service providers",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260911a.htm",
+      "publishedAt": "2026-09-11T14:00:00+00:00",
+      "source": "Fed 발표",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    },
+    {
+      "title": "Agencies reduce regulatory burden for community banks, increase eligibility for 18-month exam cycle",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260910a.htm",
+      "publishedAt": "2026-09-10T20:00:00+00:00",
+      "source": "Fed 발표",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    },
+    {
+      "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+      "publishedAt": "2026-09-04T15:00:00+00:00",
+      "source": "Fed 발표",
+      "topic": "기타 발표",
+      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
+      "assessment": "원문 검토 필요"
+    },
     {
       "title": "Waller, The Economic Outlook and Some Comments on My Policy Communication",
       "url": "https://www.federalreserve.gov/newsevents/speech/waller20260903a.htm",
@@ -10020,7 +10047,7 @@
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "status": "unavailable"
+      "status": "ready"
     },
     {
       "name": "Fed 연설",
@@ -10035,8 +10062,7 @@
     "STLFSI4: csv: TimeoutError; table: TimeoutError",
     "DRTSCILM: csv: TimeoutError; table: TimeoutError",
     "SOFR: csv: TimeoutError; table: TimeoutError",
-    "IORB: csv: TimeoutError; table: TimeoutError",
-    "Fed 발표: HTTPError"
+    "IORB: csv: TimeoutError; table: TimeoutError"
   ],
   "newsScope": "Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.",
   "exclusions": [
