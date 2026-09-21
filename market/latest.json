@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-09-20T22:28:45.181467+00:00",
+  "generatedAt": "2026-09-21T01:11:20.684321+00:00",
   "observations": {
     "DGS10": [
       [
@@ -9786,7 +9786,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "daily"
     },
     {
@@ -9808,7 +9808,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "daily"
     },
     {
@@ -9823,7 +9823,7 @@
         0.5,
         1
       ],
-      "status": "ready",
+      "status": "stale",
       "value": -0.564,
       "asOf": "2026-09-04",
       "previous": -0.546,
@@ -9834,7 +9834,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "weekly"
     },
     {
@@ -9849,7 +9849,7 @@
         1,
         2
       ],
-      "status": "ready",
+      "status": "stale",
       "value": -0.7884,
       "asOf": "2026-09-04",
       "previous": -0.769,
@@ -9860,7 +9860,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "weekly"
     },
     {
@@ -9886,7 +9886,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9908,7 +9908,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "daily"
     },
     {
@@ -9930,7 +9930,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00",
       "frequency": "daily"
     },
     {
@@ -9958,7 +9958,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "동일 날짜 SOFR·IORB 자료 갱신 확인 필요",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00"
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9976,8 +9976,8 @@
       "change": -0.018514250043726865,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-09-20T22:28:45.181467+00:00",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00"
+      "lastSuccessAt": "2026-09-21T01:11:20.684321+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00"
     },
     {
       "id": "EBP",
@@ -9995,14 +9995,14 @@
       "change": -0.030485030000000024,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-09-20T22:28:45.181467+00:00",
-      "lastAttemptAt": "2026-09-20T22:28:45.181467+00:00"
+      "lastSuccessAt": "2026-09-21T01:11:20.684321+00:00",
+      "lastAttemptAt": "2026-09-21T01:11:20.684321+00:00"
     }
   ],
   "credit": {
     "status": "unknown",
     "score": 0,
-    "coverage": 2,
+    "coverage": 1,
     "expected": 3
   },
   "news": [
