@@ -1,0 +1,52 @@
+name: Validate consistent stock assessment
+on:
+  push:
+    paths:
+      - 'index.html'
+      - 'advanced.html'
+      - 'advanced-legacy.html'
+      - 'assets/stock-assessment*'
+      - 'assets/technical-guide.js'
+      - 'assets/learned-guide.js'
+      - 'assets/decision-support.js'
+      - 'assets/advanced*'
+      - 'scripts/test_stock_assessment.cjs'
+      - 'scripts/test_legacy_assessment.cjs'
+      - 'scripts/test_technical_guide.cjs'
+      - 'scripts/test_learned_guide.cjs'
+      - 'scripts/test_advanced.cjs'
+      - '.github/workflows/validate-stock-assessment.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'advanced.html'
+      - 'advanced-legacy.html'
+      - 'assets/stock-assessment*'
+      - 'assets/technical-guide.js'
+      - 'assets/learned-guide.js'
+      - 'assets/decision-support.js'
+      - 'assets/advanced*'
+      - 'scripts/test_stock_assessment.cjs'
+      - 'scripts/test_legacy_assessment.cjs'
+      - 'scripts/test_technical_guide.cjs'
+      - 'scripts/test_learned_guide.cjs'
+      - 'scripts/test_advanced.cjs'
+      - '.github/workflows/validate-stock-assessment.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check assets/stock-assessment.js
+      - run: node --check assets/advanced-page.js
+      - run: node scripts/test_stock_assessment.cjs
+      - run: node scripts/test_legacy_assessment.cjs
+      - run: node scripts/test_technical_guide.cjs
+      - run: node scripts/test_learned_guide.cjs
+      - run: node scripts/test_decision_support.cjs
+      - run: node scripts/test_advanced.cjs

@@ -73,9 +73,10 @@
     @media (max-width:720px){.tradeGrid{grid-template-columns:1fr}.detailBlock{padding:11px}}
     @media (max-width:720px){.wrap{padding:14px}.homeGrid,.alertGrid{grid-template-columns:1fr}.pickGrid{grid-template-columns:1fr}.signalGrid{grid-template-columns:1fr}.mobileStockList{grid-template-columns:1fr}.heatGrid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.toolbar{position:static}.smallInput,.select,.search{width:100%;max-width:none;flex:auto}.btn{flex:1}.grid2{grid-template-columns:1fr}.sourceBox{padding:13px}.title h1{font-size:27px}.tableWrap{margin:0 -10px;padding-left:10px}.sectorTabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px}.tab{flex:0 0 auto}.card .v{font-size:23px}}
   </style>
+  <link rel="stylesheet" href="assets/stock-assessment.css?v=1">
 </head>
 <body>
-  <div class="wrap"><p class="note">이전 수동 화면 · 가족 공유 관심종목과 입력 기록을 확인할 수 있습니다. <a href="advanced.html">고급 분석</a> · <a href="research.html#previous">검증 자료실</a></p>
+  <div class="wrap"><p class="note">이전 수동 화면 · 가족 공유 관심종목과 입력 기록을 확인할 수 있습니다. 단기 추세 점수·신규 진입 판단은 홈과 같은 자동 종가 자료를 사용하며, 아래 가치·위험 가정과 구분합니다. <a href="advanced.html">고급 분석</a> · <a href="research.html#previous">검증 자료실</a></p>
     <div class="hero">
       <div class="title">
         <h1>S&P 500 섹터 밸류에이션 대시보드</h1><div class="versionBadge">가족용 v26 · 기간별 전망 + 예측 기록 + 섹터 히트맵</div>
@@ -114,14 +115,14 @@
       <button class="btn soft" id="btnFetchSharedWatchlist">공유 관심종목 동기화</button>
       <button class="btn soft" id="btnSave">저장</button>
       <button class="btn soft" id="btnMobileToggle">모바일 보기</button>
-      <select class="select" id="analysisMode" title="투자 스타일">
-        <option value="0.33" selected>4개월 스윙</option>
-        <option value="1">1년 단기</option>
-        <option value="3">3년 중기</option>
-        <option value="5">5년 기본</option>
+      <select class="select" id="analysisMode" title="수동 가치 비교 기간">
+        <option value="0.33" selected>가치 가정 4개월</option>
+        <option value="1">가치 가정 1년</option>
+        <option value="3">가치 가정 3년</option>
+        <option value="5">가치 가정 5년</option>
       </select>
       <input type="hidden" id="yearsInput" value="0.33" />
-      <span class="modeHint" id="modeHint">4개월 모드는 모멘텀과 단기 저평가 점수를 더 크게 봅니다.</span>
+      <span class="modeHint" id="modeHint">기간 선택은 수동 가치 가정에 적용하며 단기 추세 점수는 바뀌지 않습니다.</span>
       <input class="smallInput search" id="searchBox" placeholder="티커 또는 회사명 검색..." />
       <select class="select" id="statusFilter">
         <option value="All">전체 상태</option>
@@ -146,9 +147,10 @@
       </details>
     </div>
 
-    <section id="forecastPanel" class="forecast-panel" aria-label="가격과 방향 전망">
+    <details class="site-disclosure"><summary>이전 전망 화면 · 현재 추세 점수와 별도</summary>
+    <section id="forecastPanel" class="forecast-panel" aria-label="이전 가격과 방향 전망">
       <div class="fc-empty" role="status">전망 데이터를 불러오고 있습니다.</div>
-    </section>
+    </section></details>
 
     <section class="homeGrid">
       <div class="homeCard">
@@ -183,10 +185,10 @@
     <section class="heatPanel" id="sectorHeatmapPanel">
       <div class="sectionTitle">
         <h2>섹터 히트맵</h2>
-        <span>섹터별 평균 단기점수와 고평가 비중</span>
+        <span>섹터별 단기 추세 점수 중앙값 · 수동 가정 고평가 비중</span>
       </div>
       <div id="sectorHeatmap" class="heatGrid"></div>
-      <div class="simpleHint">타일을 누르면 해당 섹터로 바로 이동합니다. 점수가 높을수록 현재 필터 기준에서 상대적으로 매력적인 섹터입니다.</div>
+      <div class="simpleHint">타일을 누르면 해당 섹터로 바로 이동합니다. 추세 점수 중앙값은 가격 흐름을 비교하며, 섹터의 기업가치나 매수 확률을 뜻하지 않습니다.</div>
     </section>
 
     <div id="sectorTabs" class="sectorTabs"></div>
@@ -276,7 +278,7 @@
         </div>
 
         <div class="panel familyHidden">
-          <div class="panelHeader"><h2>관심종목 추천 TOP 10</h2><span>작은 종목/Watchlist</span></div>
+          <div class="panelHeader"><h2>관심종목 추세 TOP 10</h2><span>작은 종목/Watchlist</span></div>
           <div class="sideBody miniList" id="watchlistTopSide"></div>
         </div>
 
@@ -332,6 +334,10 @@
     </div>
   </div>
 
+  <script src="assets/technical-guide.js"></script>
+  <script src="assets/learned-guide.js?v=4"></script>
+  <script src="assets/decision-support.js?v=5"></script>
+  <script src="assets/stock-assessment.js?v=1"></script>
   <script>
     const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_family_v25';
     const EMBEDDED_FMP_KEY = ''; // v8에서는 FMP를 사용하지 않습니다. GitHub Actions가 생성한 CSV만 읽습니다.
@@ -402,6 +408,14 @@
       stocks: fallbackRows.map(rowToStock), lastConstituentRefresh:null, lastPriceRefresh:null
     };
 
+    let canonicalScores={},canonicalSnapshot=null;
+    function assessmentFor(symbol){const key=StockAssessment.normalize(symbol);return canonicalScores[key]||StockAssessment.evaluate({symbol:key},null,null,126);}
+    async function refreshScores(){
+      try{canonicalSnapshot=await StockAssessment.load(fetch,DecisionSupport);canonicalScores=StockAssessment.all(canonicalSnapshot.data,canonicalSnapshot.market,canonicalSnapshot.learned);}
+      catch(_){canonicalSnapshot=null;canonicalScores={};}
+      render();
+    }
+    function scoreState(c){const a=c.assessment;return `<span class="scoreState"><b>${escapeHtml(a.decision)}</b> · ${escapeHtml(a.reason)}</span><span class="scoreSource">단기 추세 점수 · 종가 ${escapeHtml(a.asOf||'확인 필요')}</span>`;}
     function rowToStock(r){
       const symbol = String(r[0]||'').trim().toUpperCase();
       const sector = String(r[2]||'Other').trim();
@@ -462,10 +476,10 @@
 
     function horizonProfile(){
       const raw = parseFloat(state.settings.analysisMode ?? state.settings.years ?? 0.33);
-      if(raw < 0.8) return {years:1/3, label:'4개월 스윙', hint:'4개월 모드는 모멘텀, 저평가, 리스크를 더 크게 봅니다.', weights:{upside:.14, percentile:.18, peg:.14, gap:.16, risk:.13, momentum:.25}};
-      if(raw < 2) return {years:1, label:'1년 단기', hint:'1년 모드는 단기 회복 가능성과 상대가치를 함께 봅니다.', weights:{upside:.20, percentile:.18, peg:.16, gap:.18, risk:.13, momentum:.15}};
-      if(raw < 4) return {years:3, label:'3년 중기', hint:'3년 모드는 성장률 갭과 적정가를 더 크게 봅니다.', weights:{upside:.25, percentile:.16, peg:.17, gap:.22, risk:.12, momentum:.08}};
-      return {years:5, label:'5년 기본', hint:'5년 모드는 장기 적정가와 필요 성장률을 중심으로 봅니다.', weights:{upside:.30, percentile:.14, peg:.17, gap:.24, risk:.10, momentum:.05}};
+      if(raw < 0.8) return {years:1/3, label:'4개월 스윙', hint:'수동 가치·모멘텀 비교 기간입니다. 단기 추세 점수와 신규 진입 판단은 별도입니다.', weights:{upside:.14, percentile:.18, peg:.14, gap:.16, risk:.13, momentum:.25}};
+      if(raw < 2) return {years:1, label:'1년 단기', hint:'수동 가치·모멘텀 비교 기간입니다. 단기 추세 점수와 신규 진입 판단은 별도입니다.', weights:{upside:.20, percentile:.18, peg:.16, gap:.18, risk:.13, momentum:.15}};
+      if(raw < 4) return {years:3, label:'3년 중기', hint:'수동 가치·모멘텀 비교 기간입니다. 단기 추세 점수와 신규 진입 판단은 별도입니다.', weights:{upside:.25, percentile:.16, peg:.17, gap:.22, risk:.12, momentum:.08}};
+      return {years:5, label:'5년 기본', hint:'수동 가치·모멘텀 비교 기간입니다. 단기 추세 점수와 신규 진입 판단은 별도입니다.', weights:{upside:.30, percentile:.14, peg:.17, gap:.24, risk:.10, momentum:.05}};
     }
     function currentMomentum(stock){
       const h=horizonProfile().years;
@@ -533,12 +547,6 @@
     function scoreFromPercentile(p){ if(!Number.isFinite(p)) return 50; return clamp(100 - p*100, 0, 100); }
     function scoreFromRisk(r){ if(!Number.isFinite(r)) return 55; return clamp(100 - ((r-1)/4)*100, 0, 100); }
     function scoreFromMomentum(m){ if(!Number.isFinite(m)) return 50; return clamp(50 + m*120, 0, 100); }
-    function shortScoreCalc(x){
-      const w=horizonProfile().weights;
-      const score = scoreFromUpside(x.upside)*w.upside + scoreFromPercentile(x.pePercentile)*w.percentile + scoreFromPeg(x.peg)*w.peg + scoreFromGap(x.growthGap)*w.gap + scoreFromRisk(x.riskScore)*w.risk + scoreFromMomentum(x.returnH)*w.momentum;
-      const confPenalty = Number.isFinite(x.confidence) ? (0.72 + x.confidence/360) : 0.86;
-      return clamp(score*confPenalty, 0, 100);
-    }
     function valueTrapFlag(x){
       let flags=0;
       if(Number.isFinite(x.currentPE) && x.currentPE<15) flags++;
@@ -550,7 +558,7 @@
       if(Number.isFinite(x.growthGap) && x.growthGap>0.08) return '기대 높음';
       return '';
     }
-    function scoreClass(score){ if(!Number.isFinite(score)) return 'gray'; if(score>=70) return 'good'; if(score>=50) return 'warn'; return 'bad'; }
+    function scoreClass(score){const c=StockAssessment.color(score);return c==='muted'?'gray':c;}
 
 
     function calc(stock, visibleSectorStocks=null){
@@ -596,11 +604,10 @@
       const drawdown52High=(price && high52)?price/high52-1:null;
       const from52Low=(price && low52)?price/low52-1:null;
       const earningsDays=Number.isFinite(n(stock.earningsDays))?n(stock.earningsDays):daysUntilDate(stock.nextEarningsDate);
-      let shortScore = shortScoreCalc({upside, pePercentile, peg, growthGap, riskScore, returnH, confidence});
-      if(Number.isFinite(earningsDays) && earningsDays>=0 && earningsDays<=7) shortScore = clamp(shortScore-4,0,100);
+      const assessment=assessmentFor(stock.symbol),shortScore=assessment.score;
       const valueTrap = valueTrapFlag({currentPE, peg, growthGap, riskScore, returnH, epsGrowthPct, revGrowthPct:n(stock.revGrowth)});
       const debtInfo=debtRiskInfo(stock);
-      return {debtInfo,currentPE,bearFV,baseFV,bullFV,upside,requiredGrowth,sectorPremium,riskScore,status,statusClass,pePercentile,peg,growthGap,sensitivity,confidence,shortScore,valueTrap,returnH,return3m:n(stock.return3m),return4m:n(stock.return4m),return1m:n(stock.return1m),return6m:n(stock.return6m),range52,high52,low52,drawdown52High,from52Low,earningsDays};
+      return {assessment,debtInfo,currentPE,bearFV,baseFV,bullFV,upside,requiredGrowth,sectorPremium,riskScore,status,statusClass,pePercentile,peg,growthGap,sensitivity,confidence,shortScore,valueTrap,returnH,return3m:n(stock.return3m),return4m:n(stock.return4m),return1m:n(stock.return1m),return6m:n(stock.return6m),range52,high52,low52,drawdown52High,from52Low,earningsDays};
     }
 
     function riskScoreCalc(stock){
@@ -703,13 +710,13 @@
       const box=document.getElementById('todayPicks'); if(!box) return; box.innerHTML='';
       const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
       const arr=getVisibleStocks().map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore));
-      const top=arr.sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,3);
-      const subtitle=document.getElementById('pickSubtitle'); if(subtitle) subtitle.textContent=horizonProfile().label+' · '+sectorLabel(state.selectedSector)+' 기준';
-      if(!top.length){ box.innerHTML='<div class="muted">가격과 펀더멘털을 불러오면 오늘 확인할 후보가 표시됩니다.</div>'; return; }
+      const top=arr.sort((a,b)=>b.c.shortScore-a.c.shortScore||StockAssessment.normalize(a.s.symbol).localeCompare(StockAssessment.normalize(b.s.symbol))).slice(0,3);
+      const subtitle=document.getElementById('pickSubtitle'); if(subtitle) subtitle.textContent='단기 추세 점수 순 · '+sectorLabel(state.selectedSector)+' · 가치 가정은 별도';
+      if(!top.length){ box.innerHTML='<div class="muted">자동 종가 이력이 확보되면 추세 순위가 표시됩니다. 자료가 부족하면 산출을 보류합니다.</div>'; return; }
       top.forEach((x,i)=>{
         const f=factorScores(x.s,x.c); const chips=reasonChips(x.s,x.c).map(r=>`<span class="reasonChip">${escapeHtml(r)}</span>`).join('');
         const div=document.createElement('div'); div.className='pickCard';
-        div.innerHTML=`<div class="pickHead"><div><div class="pickTicker">${x.s.symbol}</div><div class="pickName">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><div class="scoreBig ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div><div class="muted" style="font-size:10px;text-align:right">추천점수</div></div></div><div class="reasonList">${chips}</div><div class="metricTiny" style="margin-top:9px">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 52주 ${pct(x.c.range52,0)} · 부채 ${x.c.debtInfo.label} · 실적 ${earningsLabel(x.c.earningsDays)} · 모멘텀 ${pct(x.c.returnH,0)}</div><div class="factorRow"><div class="factor"><b>${grade(f.value)}</b><span>가치</span></div><div class="factor"><b>${grade(f.growth)}</b><span>성장</span></div><div class="factor"><b>${grade(f.momentum)}</b><span>모멘텀</span></div><div class="factor"><b>${grade(f.quality)}</b><span>품질</span></div><div class="factor"><b>${grade(f.risk)}</b><span>리스크</span></div></div>`;
+        div.innerHTML=`<div class="pickHead"><div><div class="pickTicker">${x.s.symbol}</div><div class="pickName">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><div class="scoreBig ${x.c.shortScore>=60?'positive':x.c.shortScore<35?'negative':'neutral'}">${StockAssessment.format(x.c.shortScore)}</div><div class="muted" style="font-size:10px;text-align:right">단기 추세 점수</div></div></div>${scoreState(x.c)}<div class="reasonList">${chips}</div><div class="metricTiny" style="margin-top:9px">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 52주 ${pct(x.c.range52,0)} · 부채 ${x.c.debtInfo.label} · 실적 ${earningsLabel(x.c.earningsDays)} · 모멘텀 ${pct(x.c.returnH,0)}</div><details><summary>수동 가정의 가치·성장·위험 참고</summary><div class="factorRow"><div class="factor"><b>${grade(f.value)}</b><span>가치</span></div><div class="factor"><b>${grade(f.growth)}</b><span>성장</span></div><div class="factor"><b>${grade(f.momentum)}</b><span>모멘텀</span></div><div class="factor"><b>${grade(f.quality)}</b><span>품질</span></div><div class="factor"><b>${grade(f.risk)}</b><span>리스크</span></div></div></details>`;
         div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; box.appendChild(div);
       });
     }
@@ -729,14 +736,14 @@
       const debtBox=document.getElementById('debtAlerts');
       const visible=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
       const enriched=visible.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore));
-      const best=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,3);
+      const best=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore||StockAssessment.normalize(a.s.symbol).localeCompare(StockAssessment.normalize(b.s.symbol))).slice(0,3);
       if(signalBox){
         signalBox.innerHTML='';
         if(!best.length){ signalBox.innerHTML='<div class="muted">가격과 펀더멘털을 불러오면 단기 신호가 표시됩니다.</div>'; }
         best.forEach(x=>{
           const reasons=reasonChips(x.s,x.c).slice(0,3).map(r=>`<span class="reasonChip">${escapeHtml(r)}</span>`).join('');
           const div=document.createElement('div'); div.className='signalCard';
-          div.innerHTML=`<div class="mobileTop"><div><div class="signalTicker">${x.s.symbol}</div><div class="signalMeta">${escapeHtml(x.s.name)} · ${sectorLabel(x.s.sector)}</div></div><div class="signalScore ${x.c.shortScore>=70?'positive':x.c.shortScore<50?'negative':'neutral'}">${fmt(x.c.shortScore,0)}</div></div><div class="reasonList">${reasons}</div><div class="signalMeta">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 모멘텀 ${pct(x.c.returnH,0)} · 실적 ${earningsLabel(x.c.earningsDays)}</div>`;
+          div.innerHTML=`<div class="mobileTop"><div><div class="signalTicker">${x.s.symbol}</div><div class="signalMeta">${escapeHtml(x.s.name)} · ${sectorLabel(x.s.sector)}</div></div><div class="signalScore ${x.c.shortScore>=60?'positive':x.c.shortScore<35?'negative':'neutral'}">${StockAssessment.format(x.c.shortScore)}</div></div>${scoreState(x.c)}<div class="reasonList">${reasons}</div><div class="signalMeta">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 모멘텀 ${pct(x.c.returnH,0)} · 실적 ${earningsLabel(x.c.earningsDays)}</div>`;
           div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; signalBox.appendChild(div);
         });
       }
@@ -754,8 +761,8 @@
         if(!earns.length) clearBox(earningsBox,'현재 표시 목록에는 14일 이내 실적 발표 종목이 없습니다.');
         earns.forEach(x=>{
           const title=`<b>${x.s.symbol}</b> <span class="pill ${earningsClass(x.c.earningsDays)}">${earningsLabel(x.c.earningsDays)}</span>`;
-          const detail=`${escapeHtml(x.s.nextEarningsDate||'날짜 미확정')} · ${horizonProfile().label} 모멘텀 ${pct(x.c.returnH,0)} · 점수 ${fmt(x.c.shortScore,0)}`;
-          earningsBox.appendChild(makeItem(x,'!',title,detail,`<span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span>`));
+          const detail=`${escapeHtml(x.s.nextEarningsDate||'날짜 미확정')} · ${horizonProfile().label} 모멘텀 ${pct(x.c.returnH,0)} · 점수 ${StockAssessment.format(x.c.shortScore)}`;
+          earningsBox.appendChild(makeItem(x,'!',title,detail,`<span class="pill ${scoreClass(x.c.shortScore)}">${StockAssessment.format(x.c.shortScore)}</span>`));
         });
       }
 
@@ -766,7 +773,7 @@
         traps.forEach(x=>{
           const title=`<b>${x.s.symbol}</b> <span class="pill bad">Value Trap?</span>`;
           const detail=`P/E ${fmt(x.c.currentPE,1)} · EPS 성장 ${fmt(n(x.s.epsGrowth),1)}% · PEG ${fmt(x.c.peg,2)} · 모멘텀 ${pct(x.c.returnH,0)}`;
-          trapBox.appendChild(makeItem(x,'VT',title,detail,`<span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span>`));
+          trapBox.appendChild(makeItem(x,'VT',title,detail,`<span class="pill ${scoreClass(x.c.shortScore)}">${StockAssessment.format(x.c.shortScore)}</span>`));
         });
       }
 
@@ -790,7 +797,7 @@
       document.getElementById('mobileListCount').textContent=visible.length+'개 중 상위 '+enriched.length+'개';
       box.innerHTML='';
       if(!enriched.length){ box.innerHTML='<div class="muted">표시할 종목이 없습니다.</div>'; return; }
-      enriched.forEach(x=>{ const div=document.createElement('div'); div.className='mobileStockCard'; if(state.selectedSymbol===x.s.symbol) div.style.borderColor='#38bdf8'; div.innerHTML=`<div class="mobileTop"><div><div class="mobileTicker">${x.s.symbol}</div><div class="mobileCompany">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">점수 ${fmt(x.c.shortScore,0)}</span></div></div><div class="mobileMetrics"><div class="mobileMetric"><span>가격</span><b>${money(n(x.s.price))}</b></div><div class="mobileMetric"><span>상승여력</span><b class="${x.c.upside>0?'positive':'negative'}">${pct(x.c.upside,0)}</b></div><div class="mobileMetric"><span>PEG</span><b>${fmt(x.c.peg,2)}</b></div><div class="mobileMetric"><span>실적</span><b>${earningsLabel(x.c.earningsDays)}</b></div><div class="mobileMetric"><span>52주 위치</span><b>${pct(x.c.range52,0)}</b></div><div class="mobileMetric"><span>부채</span><b><span class="pill ${x.c.debtInfo.cls}">${x.c.debtInfo.label}</span></b></div><div class="mobileMetric"><span>모멘텀</span><b class="${x.c.returnH>0?'positive':'negative'}">${pct(x.c.returnH,0)}</b></div></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; box.appendChild(div); });
+      enriched.forEach(x=>{ const div=document.createElement('div'); div.className='mobileStockCard'; if(state.selectedSymbol===x.s.symbol) div.style.borderColor='#38bdf8'; div.innerHTML=`<div class="mobileTop"><div><div class="mobileTicker">${x.s.symbol}</div><div class="mobileCompany">${escapeHtml(x.s.name)}</div><div class="sectorSmall">${escapeHtml(sectorLabel(x.s.sector))}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">점수 ${StockAssessment.format(x.c.shortScore)}</span></div></div>${scoreState(x.c)}<div class="mobileMetrics"><div class="mobileMetric"><span>가격</span><b>${money(n(x.s.price))}</b></div><div class="mobileMetric"><span>상승여력</span><b class="${x.c.upside>0?'positive':'negative'}">${pct(x.c.upside,0)}</b></div><div class="mobileMetric"><span>PEG</span><b>${fmt(x.c.peg,2)}</b></div><div class="mobileMetric"><span>실적</span><b>${earningsLabel(x.c.earningsDays)}</b></div><div class="mobileMetric"><span>52주 위치</span><b>${pct(x.c.range52,0)}</b></div><div class="mobileMetric"><span>부채</span><b><span class="pill ${x.c.debtInfo.cls}">${x.c.debtInfo.label}</span></b></div><div class="mobileMetric"><span>모멘텀</span><b class="${x.c.returnH>0?'positive':'negative'}">${pct(x.c.returnH,0)}</b></div></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render();}; box.appendChild(div); });
     }
 
     function setMobileMode(on){
@@ -801,6 +808,7 @@
     }
 
     function render(){
+      if(canonicalSnapshot)canonicalScores=StockAssessment.all(canonicalSnapshot.data,canonicalSnapshot.market,canonicalSnapshot.learned,126,Date.now());
       renderTabs(); renderTodaysPicks(); renderSectorHeatmap(); renderSignals(); renderTable(); renderCards(); renderMobileList(); renderSelected(); renderExtremes(); renderWatchlistTop(); renderAddSector();
       if(window.StockForecast) window.StockForecast.refresh();
       document.getElementById('tableTitle').textContent = state.selectedSector==='All'?'S&P 500 전체 기업':sectorLabel(state.selectedSector)+' 섹터';
@@ -877,14 +885,14 @@
       document.getElementById('cardOvervalued').textContent=visible.length?pct(over/visible.length,0):'–';
       document.getElementById('cardRisk').textContent=visible.length?pct(high/visible.length,0):'–';
       const cdr=document.getElementById('cardDebtRisk'); if(cdr) cdr.textContent=visible.length?pct(debtRiskCount/visible.length,0):'–';
-      const topShort=visible.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore)[0];
+      const topShort=visible.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore||StockAssessment.normalize(a.s.symbol).localeCompare(StockAssessment.normalize(b.s.symbol)))[0];
       document.getElementById('cardShortTop').textContent=topShort?topShort.s.symbol:'–';
-      document.getElementById('cardShortTopSub').textContent=topShort?('단기점수 '+fmt(topShort.c.shortScore,0)+' / '+sectorLabel(topShort.s.sector)):'점수 기반';
+      document.getElementById('cardShortTopSub').textContent=topShort?('단기 추세 점수 '+StockAssessment.format(topShort.c.shortScore)+' / '+sectorLabel(topShort.s.sector)):'점수 기반';
       const earningsSoon=visible.map(s=>calc(s,sectorSet)).filter(c=>Number.isFinite(c.earningsDays)&&c.earningsDays>=0&&c.earningsDays<=14).length;
       const ce=document.getElementById('cardEarningsSoon'); if(ce) ce.textContent=earningsSoon.toLocaleString();
       const watch=state.stocks.filter(s=>s.isCustom || s.sector==='Watchlist');
-      const topWatch=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore)[0];
-      const cw=document.getElementById('cardWatchTop'); const cws=document.getElementById('cardWatchTopSub'); if(cw) cw.textContent=topWatch?topWatch.s.symbol:'–'; if(cws) cws.textContent=topWatch?('점수 '+fmt(topWatch.c.shortScore,0)):'관심종목 기준';
+      const topWatch=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore||StockAssessment.normalize(a.s.symbol).localeCompare(StockAssessment.normalize(b.s.symbol)))[0];
+      const cw=document.getElementById('cardWatchTop'); const cws=document.getElementById('cardWatchTopSub'); if(cw) cw.textContent=topWatch?topWatch.s.symbol:'–'; if(cws) cws.textContent=topWatch?('점수 '+StockAssessment.format(topWatch.c.shortScore)):'관심종목 기준';
     }
 
 
@@ -932,45 +940,7 @@
       }
       return {label,cls,vol,dd};
     }
-    function tradePlan(stock,c){
-      const price=n(stock.price), base=n(c.baseFV), range52=n(c.range52), ret=n(c.returnH), vol=n(stock.volatility4m);
-      if(!price) return null;
-      const profile=horizonProfile();
-      const stopPct=clamp((Number.isFinite(vol)?vol*0.22:0.09),0.06,profile.key==='swing4m'?0.16:0.20);
-      let targetPct=0.10;
-      if(Number.isFinite(c.upside)) targetPct=clamp(c.upside*(profile.key==='swing4m'?0.45:0.60),0.06,profile.key==='swing4m'?0.25:0.35);
-      if(Number.isFinite(ret) && ret>0.10) targetPct+=0.02;
-      if(Number.isFinite(range52) && range52>0.85) targetPct=Math.min(targetPct,0.10);
-      const target1=base&&base>price?Math.min(price*(1+targetPct),base):price*(1+targetPct);
-      const target2=base&&base>target1?base:price*(1+targetPct*1.55);
-      const stop=price*(1-stopPct);
-      const buyLow=price*(Number.isFinite(range52)&&range52>0.80?0.94:0.97);
-      const buyHigh=price*(Number.isFinite(range52)&&range52>0.80?0.99:1.02);
-      const rr=(target1-price)/(price-stop);
-      let action='관찰'; let cls='warn'; let reason='가격/실적/추세 확인 후 접근';
-      if(Number.isFinite(c.shortScore)&&c.shortScore>=70 && rr>=1.5){action='후보'; cls='good'; reason='점수와 위험/보상 양호';}
-      else if((Number.isFinite(c.earningsDays)&&c.earningsDays>=0&&c.earningsDays<=7) || (c.debtInfo&&c.debtInfo.label==='높음')){action='주의'; cls='bad'; reason='실적 또는 부채 리스크 확인 필요';}
-      else if(rr<1.0){action='관찰'; cls='warn'; reason='위험 대비 보상 부족';}
-      return {buyLow,buyHigh,target1,target2,stop,rr,action,cls,reason};
-    }
-    function tradePlanHtml(stock,c){
-      const p=tradePlan(stock,c), liq=liquidityInfo(stock), tr=trendInfo(stock), vo=volatilityInfo(stock);
-      if(!p) return '<div class="detailBlock"><h3>매매 계획</h3><div class="muted">가격 데이터를 먼저 불러오면 매수가/목표가/손절가가 표시됩니다.</div></div>';
-      return `<div class="detailBlock"><h3>클릭 상세: 4개월~1년 매매 체크</h3>
-        <div class="signalLine"><span class="pill ${p.cls}">판단 ${p.action}</span><span class="pill ${liq.cls}">유동성 ${liq.label}</span><span class="pill ${tr.cls}">추세 ${tr.label}</span><span class="pill ${vo.cls}">변동성 ${vo.label}</span></div>
-        <div class="tradeGrid" style="margin-top:10px">
-          <div class="tradeBox"><span>관심 매수가</span><b>${money(p.buyLow)} ~ ${money(p.buyHigh)}</b><div class="tiny">현재가 기준 진입 범위</div></div>
-          <div class="tradeBox"><span>1차 / 2차 목표가</span><b>${money(p.target1)} / ${money(p.target2)}</b><div class="tiny">Base 적정가와 단기 점수 반영</div></div>
-          <div class="tradeBox"><span>손절 기준</span><b class="negative">${money(p.stop)}</b><div class="tiny">변동성 기반 보수적 기준</div></div>
-          <div class="tradeBox"><span>위험/보상비율</span><b class="${p.rr>=1.5?'positive':p.rr<1?'negative':'neutral'}">1 : ${fmt(p.rr,2)}</b><div class="tiny">${escapeHtml(p.reason)}</div></div>
-          <div class="tradeBox"><span>유동성</span><b>${compactMoney(liq.dollar)}</b><div class="tiny">평균 거래량 ${fmt(liq.avgVol,0)} · 거래량비 ${fmt(liq.volRatio,2)}</div></div>
-          <div class="tradeBox"><span>이동평균 위치</span><b>${tr.label}</b><div class="tiny">MA20 ${money(tr.ma20)} · MA50 ${money(tr.ma50)} · MA200 ${money(tr.ma200)}</div></div>
-          <div class="tradeBox"><span>변동성 / 최대하락</span><b>${pct(vo.vol,0)} / ${pct(vo.dd,0)}</b><div class="tiny">최근 약 4개월 기준</div></div>
-          <div class="tradeBox"><span>52주 위치</span><b>${pct(c.range52,0)}</b><div class="tiny">고점대비 ${pct(c.drawdown52High,0)} · 저점대비 ${pct(c.from52Low,0)}</div></div>
-        </div>
-        <div class="note">자동 계산은 스크리닝용입니다. 매수·매도 결정 전 뉴스, 실적 발표, 차트, 호가/거래량을 따로 확인하세요.</div>
-      </div>`;
-    }
+    function tradePlanHtml(stock,c){return StockAssessment.panel(c.assessment);}
 
     function renderSelected(){
       const box=document.getElementById('selectedDetails'); const label=document.getElementById('selectedTickerLabel');
@@ -991,8 +961,8 @@
         <div class="kv"><span>Forward P/E / 섹터 프리미엄</span><b>${fmt(c.currentPE,1)} / ${pct(c.sectorPremium,0)}</b></div>
         <div class="kv"><span>필요 EPS CAGR</span><b>${pct(c.requiredGrowth,1)}</b></div>
         <div class="kv"><span>성장률 갭 / PEG</span><b>${pct(c.growthGap,1)} / ${fmt(c.peg,2)}</b></div>
-        <div class="kv"><span>섹터 P/E 분위 / 단기 점수</span><b>${pct(c.pePercentile,0)} / ${fmt(c.shortScore,0)}</b></div>
-        <div class="kv"><span>선택 기간 모멘텀 / 데이터 신뢰도</span><b>${pct(c.returnH,1)} / ${fmt(c.confidence,0)}</b></div>
+        <div class="kv"><span>섹터 P/E 분위</span><b>${pct(c.pePercentile,0)}</b></div>
+        <div class="kv"><span>선택 기간 모멘텀 / 입력 출처</span><b>${pct(c.returnH,1)} / ${escapeHtml(s.fundamentalSource||'수동 입력')}</b></div>
         <div class="kv"><span>밸류에이션 상태</span><b><span class="pill ${c.statusClass}">${statusLabel(c.status)}</span></b></div>
         <div class="note">${s.symbol} 리스크 입력값. 기준: 1 = 낮은 리스크, 5 = 높은 리스크.</div>
         <div class="riskGrid" style="margin-top:10px">
@@ -1012,10 +982,10 @@
       const box=document.getElementById('extremes'); box.innerHTML=''; document.getElementById('extremeLabel').textContent=sectorLabel(state.selectedSector);
       const arr=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
       const enriched=arr.map(s=>({s,c:calc(s,sectorSet)})).filter(x=>Number.isFinite(x.c.shortScore));
-      const top=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,8);
+      const top=enriched.slice().sort((a,b)=>b.c.shortScore-a.c.shortScore||StockAssessment.normalize(a.s.symbol).localeCompare(StockAssessment.normalize(b.s.symbol))).slice(0,8);
       const traps=enriched.slice().filter(x=>x.c.valueTrap).sort((a,b)=>a.c.shortScore-b.c.shortScore).slice(0,4);
       const addHeader=t=>{const h=document.createElement('div'); h.className='muted'; h.style.margin='3px 0 0'; h.textContent=t; box.appendChild(h)};
-      const addItem=(x,i)=>{const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">${i}</div><div><b>${x.s.symbol}</b><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 52주 ${pct(x.c.range52,0)} · 실적 ${earningsLabel(x.c.earningsDays)} · ${horizonProfile().label} ${pct(x.c.returnH,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render()}; box.appendChild(div)};
+      const addItem=(x,i)=>{const div=document.createElement('div'); div.className='miniItem'; div.innerHTML=`<div class="rank">${i}</div><div><b>${x.s.symbol}</b><div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">상승여력 ${pct(x.c.upside,0)} · PEG ${fmt(x.c.peg,2)} · 52주 ${pct(x.c.range52,0)} · 실적 ${earningsLabel(x.c.earningsDays)} · ${horizonProfile().label} ${pct(x.c.returnH,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${StockAssessment.format(x.c.shortScore)}</span></div>`; div.onclick=()=>{state.selectedSymbol=x.s.symbol; render()}; box.appendChild(div)};
       addHeader('단기 저평가 후보 TOP'); top.forEach((x,i)=>addItem(x,i+1));
       if(traps.length){ addHeader('Value Trap / 기대 과다 경고'); traps.forEach((x,i)=>addItem(x,i+1)); }
       if(!enriched.length) box.innerHTML='<div class="muted">가격, EPS, 펀더멘털을 불러오면 단기 후보 점수가 표시됩니다.</div>';
@@ -1029,13 +999,13 @@
       const watch=state.stocks.filter(s=>s.isCustom || s.sector==='Watchlist');
       const setHtml=(html)=>boxes.forEach(box=>box.innerHTML=html);
       if(!watch.length){ setHtml('<div class="muted">관심종목을 추가하면 여기에서 Watchlist 전용 TOP 10이 표시됩니다.</div>'); return; }
-      const enriched=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore).slice(0,10);
-      if(!enriched.length){ setHtml('<div class="muted">관심종목 가격과 펀더멘털을 불러오면 랭킹이 표시됩니다.</div>'); return; }
+      const enriched=watch.map(s=>({s,c:calc(s,watch)})).filter(x=>Number.isFinite(x.c.shortScore)).sort((a,b)=>b.c.shortScore-a.c.shortScore||StockAssessment.normalize(a.s.symbol).localeCompare(StockAssessment.normalize(b.s.symbol))).slice(0,10);
+      if(!enriched.length){ setHtml('<div class="muted">관심종목의 자동 종가 이력이 부족하거나 오래돼 추세 점수 산출을 보류합니다.</div>'); return; }
       boxes.forEach(box=>{
         enriched.forEach((x,i)=>{
           const div=document.createElement('div'); div.className='miniItem';
           const warn=(Number.isFinite(x.c.earningsDays)&&x.c.earningsDays>=0&&x.c.earningsDays<=14)?`<span class="pill ${earningsClass(x.c.earningsDays)}">실적 ${earningsLabel(x.c.earningsDays)}</span>`:'';
-          div.innerHTML=`<div class="rank">${i+1}</div><div><b>${x.s.symbol}</b> ${warn}<div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">점수 ${fmt(x.c.shortScore,0)} · 부채 ${x.c.debtInfo.label} · 52주 ${pct(x.c.range52,0)} · 모멘텀 ${pct(x.c.returnH,0)} · 상승여력 ${pct(x.c.upside,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${fmt(x.c.shortScore,0)}</span></div>`;
+          div.innerHTML=`<div class="rank">${i+1}</div><div><b>${x.s.symbol}</b> ${warn}${scoreState(x.c)}<div class="sub">${escapeHtml(x.s.name)}</div><div class="metricTiny">점수 ${StockAssessment.format(x.c.shortScore)} · 부채 ${x.c.debtInfo.label} · 52주 ${pct(x.c.range52,0)} · 모멘텀 ${pct(x.c.returnH,0)} · 상승여력 ${pct(x.c.upside,0)}</div></div><div><span class="pill ${scoreClass(x.c.shortScore)}">${StockAssessment.format(x.c.shortScore)}</span></div>`;
           div.onclick=()=>{state.selectedSymbol=x.s.symbol; state.selectedSector=x.s.sector||'Watchlist'; render();};
           box.appendChild(div);
         });
@@ -1707,7 +1677,7 @@
       document.getElementById('wRate').value=state.settings.weights.rate; document.getElementById('wCyc').value=state.settings.weights.cyc; document.getElementById('wMargin').value=state.settings.weights.margin; document.getElementById('wBalance').value=state.settings.weights.balance; document.getElementById('wCrowding').value=state.settings.weights.crowding; document.getElementById('wReg').value=state.settings.weights.reg;
     }
     function bind(){
-      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=fetchPrices; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v25는 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
+      document.getElementById('btnFetchConstituents').onclick=fetchConstituents; document.getElementById('btnFetchPrices').onclick=async()=>{await fetchPrices();await refreshScores();}; document.getElementById('btnFetchFundamentals').onclick=fetchFundamentals; const sharedBtn=document.getElementById('btnFetchSharedWatchlist'); if(sharedBtn) sharedBtn.onclick=()=>fetchSharedWatchlist(false); document.getElementById('btnSaveApi').onclick=()=>{state.settings.fmpApiKey=''; state.settings.useFmp=false; saveState(); log('v25는 GitHub Actions CSV와 PIN 보호 Google Sheet 관심종목을 사용합니다. FMP 키는 사용하지 않습니다.');}; document.getElementById('btnSave').onclick=saveState; const mobileBtn=document.getElementById('btnMobileToggle'); if(mobileBtn) mobileBtn.onclick=()=>setMobileMode(!document.body.classList.contains('mobileMode')); document.getElementById('btnExport').onclick=exportJson; document.getElementById('btnImportJson').onclick=()=>document.getElementById('jsonFile').click(); document.getElementById('btnImportCsv').onclick=()=>document.getElementById('csvFile').click(); document.getElementById('jsonFile').onchange=e=>e.target.files[0]&&importJsonFile(e.target.files[0]); document.getElementById('csvFile').onchange=e=>e.target.files[0]&&importCsvFile(e.target.files[0]);
       document.getElementById('btnReset').onclick=()=>{ if(confirm('저장된 데이터를 삭제하고 기본 목록으로 초기화할까요?')){localStorage.removeItem(STORAGE_KEY); location.reload();} };
       document.getElementById('searchBox').oninput=e=>{state.search=e.target.value; render();}; document.getElementById('statusFilter').onchange=e=>{state.statusFilter=e.target.value; render();};
       document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort; if(state.sortKey===k) state.sortDir*=-1; else {state.sortKey=k; state.sortDir=1;} render(); persistMaybe();});
@@ -1726,7 +1696,7 @@
       document.getElementById('confirmAdd').onclick=async()=>{const sym=normalizeSymbol(document.getElementById('addSymbol').value); if(!sym) return alert('티커는 필수입니다.'); if(!isValidTicker(sym)) return alert('티커 형식이 이상합니다. 예: SOFI, IONQ, BRK.B, SHOP.TO'); const pinValue=(document.getElementById('watchlistPinInput')?.value||'').trim(); if(pinValue){state.settings.watchlistPin=pinValue; persistMaybe();} const row=[sym,document.getElementById('addName').value.trim()||sym,'Watchlist',document.getElementById('addSub').value.trim()||'관심종목']; const existing=state.stocks.find(s=>normalizeSymbol(s.symbol)===sym); if(existing) return alert('이미 존재하는 티커입니다. 이미 있는 티커를 지웠다면 먼저 공유 관심종목 동기화를 누르세요.'); const added=rowToStock(row); added.isCustom=true; added.sector='Watchlist'; added.watchlistSource='local'; state.stocks.push(added); state.selectedSymbol=sym; state.selectedSector='Watchlist'; document.getElementById('addModal').classList.remove('show'); render(); persistMaybe(); log(sym+' 관심종목에 추가됨. 가격/EPS는 GitHub Actions를 다시 실행한 뒤 가격 불러오기/펀더멘털 자동 적용을 눌러야 채워집니다.'); await submitWatchlistTicker(added);};
     }
 
-    loadState(); bind(); applySettingsToInputs(); setMobileMode(localStorage.getItem(STORAGE_KEY+'_mobileMode')==='1'); render(); loadWatchlistConfig().then(()=>fetchSharedWatchlist(true));
+    loadState(); bind(); applySettingsToInputs(); setMobileMode(localStorage.getItem(STORAGE_KEY+'_mobileMode')==='1'); render(); refreshScores(); loadWatchlistConfig().then(()=>fetchSharedWatchlist(true));
     // Try to pull the current list automatically. If it fails, the fallback list remains available.
     setTimeout(()=>{ if(!state.lastConstituentRefresh) fetchConstituents(); }, 500);
     window.forecastBridge = {
