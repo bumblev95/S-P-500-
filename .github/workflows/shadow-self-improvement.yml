@@ -1,0 +1,128 @@
+name: Shadow paper self-improvement
+on:
+  pull_request:
+    paths:
+      - 'scripts/shadow_*.cjs'
+      - 'scripts/test_shadow_improvement.cjs'
+      - 'scripts/build_shadow_status.cjs'
+      - 'scripts/test_shadow_status.cjs'
+      - 'assets/shadow-status.*'
+      - 'simulation.html'
+      - 'scripts/paper_engine.cjs'
+      - 'scripts/momentum_boost.cjs'
+      - 'simulation/self-improvement/**'
+      - '.github/workflows/shadow-self-improvement.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/shadow_*.cjs'
+      - 'scripts/test_shadow_improvement.cjs'
+      - 'scripts/build_shadow_status.cjs'
+      - 'scripts/test_shadow_status.cjs'
+      - 'assets/shadow-status.*'
+      - 'simulation.html'
+      - 'simulation/self-improvement/README.md'
+      - '.github/workflows/shadow-self-improvement.yml'
+  workflow_run:
+    workflows: ['Update public paper accounts']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Update existing shadow versions, or explicitly register a NEW stricter cutoff'
+        type: choice
+        options: [update, register]
+        default: update
+      threshold_r:
+        description: 'New-version cutoff only; must be > 0.10 and <= 1.0'
+        type: string
+        default: '0.15'
+      version:
+        description: 'Optional specific version for update; empty means all versions'
+        type: string
+        default: ''
+permissions:
+  contents: read
+jobs:
+  test:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Synthetic tests and real evidence regression
+        run: |
+          node scripts/test_shadow_improvement.cjs
+          node scripts/test_shadow_status.cjs
+  append-shadow:
+    needs: test
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    permissions:
+      contents: write
+      pages: write
+    # A separate writer; operating account jobs are never modified or blocked.
+    concurrency:
+      group: shadow-paper-self-improvement
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Register an explicitly requested new version or update shadow accounts
+        id: collector
+        continue-on-error: true
+        env:
+          SHADOW_ACTION: ${{ inputs.action || 'update' }}
+          SHADOW_CUTOFF: ${{ inputs.threshold_r || '0.15' }}
+          SHADOW_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$SHADOW_ACTION" = 'register' ]; then
+            # Explicit registration also stores its zero-trade assessment;
+            # neither command advances the new account through market bars.
+            node - <<'REGISTER'
+          const S=require('./scripts/shadow_improvement.cjs');
+          const candidate=S.register({thresholdR:Number(process.env.SHADOW_CUTOFF)});
+          console.log(JSON.stringify(S.assess({version:candidate.version})));
+          REGISTER
+          elif [ -n "$SHADOW_VERSION" ]; then
+            node scripts/shadow_improvement.cjs update --version "$SHADOW_VERSION"
+          else
+            node scripts/shadow_improvement.cjs update
+          fi
+      - name: Build read-only website status even if a version is blocked
+        run: node scripts/build_shadow_status.cjs
+      - name: Commit new shadow artifacts and the disposable status projection
+        id: publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add simulation/self-improvement/versions simulation/self-improvement/status.json
+          # Fail closed if a previously stored artifact would be edited/deleted,
+          # or any operating account/model/default path would enter this commit.
+          node - <<'JS'
+          const cp=require('node:child_process');
+          const rows=cp.execFileSync('git',['diff','--cached','--name-status'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
+          if(rows.some(row=>!/^A\tsimulation\/self-improvement\/versions\/shadow-threshold-v1-\d+-[a-f0-9]{12}\/(candidate\.json|(?:observations|assessments)\/\d+-[a-f0-9]{12}\.json)$/.test(row)&&!(/^[AM]\tsimulation\/self-improvement\/status\.json$/.test(row))))throw Error('Only NEW shadow artifacts and display-only status can be published');
+          JS
+          if ! git diff --cached --quiet; then
+            git commit -m 'Append shadow-only paper self-improvement evidence'
+            git pull --rebase origin main
+            git push origin HEAD:main
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Refresh the public status page
+        if: steps.publish.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
+      - name: Surface blocked collector runs after publishing their status
+        if: steps.collector.outcome == 'failure'
+        run: exit 1

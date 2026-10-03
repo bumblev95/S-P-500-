@@ -19,6 +19,15 @@ historical resets, or live-trading promotion occurs.
 
 See [the study rules and verification](momentum-boost/README.md).
 
+## Shadow-only self-improvement
+
+[Versioned shadow proposals and reproduction](self-improvement/README.md) read
+the existing immutable closed-trade events and hash-linked decisions. New cutoff
+versions use fresh, matched shadow accounts and can only be labelled a
+`promotion_candidate` after every prospective sample, purged walk-forward,
+cost-improvement, drawdown and risk gate passes. The pinned model, existing
+accounts/ledgers, current default and real trading are never automatically changed.
+
 ## Previous default: 14-day momentum + 6 ATR profit target
 
 By user request, the default crypto view now selects the separate

@@ -1,0 +1,57 @@
+name: Update company event timeline
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_company_events.py'
+      - 'scripts/test_company_events.py'
+      - '.github/workflows/update-company-events.yml'
+  workflow_run:
+    workflows: ['Update official earnings and retrain stock research', 'Update S&P 500 fundamentals']
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: '35 3 * * 2-6'
+permissions:
+  contents: write
+  pages: write
+# Share the SEC collector's group: no overlapping requests with stock research.
+concurrency:
+  group: environment-research
+  cancel-in-progress: false
+jobs:
+  events:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/cache@v4
+        with:
+          path: research/source-cache/events
+          key: company-submissions-${{ github.run_id }}
+          restore-keys: company-submissions-
+      - name: Validate source dates, issuer identity and failure recovery
+        run: python -m unittest discover -s scripts -p test_company_events.py
+      - name: Collect current filing metadata and dated calendar estimates
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: python scripts/build_company_events.py
+      - name: Preserve event coverage and request backoff
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add events/latest.json events/request-state.json
+          git diff --cached --quiet || git commit -m 'Update dated company events and collection coverage'
+          git pull --rebase origin main
+          git push
+      - name: Refresh dashboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

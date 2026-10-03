@@ -2,6 +2,7 @@
   'use strict';
   const technical=typeof module!=='undefined'?require('./technical-guide.js'):root.TechnicalGuide;
   const learnedGuide=typeof module!=='undefined'?require('./learned-guide.js'):root.LearnedGuide;
+  const visuals=typeof module!=='undefined'?require('./market-visuals.js'):root.MarketVisuals;
   const finite=Number.isFinite;
   const label='단기 추세 점수';
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -67,11 +68,12 @@
   function panel(a){
     const p=a.plan;
     return '<section class="stockAssessment" aria-label="'+esc(a.symbol)+' 공통 평가">'+
-      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 신규 진입 판단 · '+(a.horizon===252?'1년':'6개월')+' 검증 조건</small><strong class="sa-'+(p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'">'+esc(a.decision)+'</strong></div>'+
-      '<div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'"><small>'+label+'</small><b class="sa-'+a.color+'">'+format(a.score)+'</b><small>'+a.trend+'</small></div></div>'+
+      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 신규 진입 판단 · '+(a.horizon===252?'1년':'6개월')+' 검증 조건</small><strong class="sa-'+(a.score===null?'muted':p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'">'+esc(a.decision)+'</strong></div>'+
+      '<span class="sa-date">종가 '+esc(a.asOf||'확인 필요')+'</span></div>'+
+      '<div class="sa-indicators">'+visuals.entryGauge(p.code,a.decision)+'<div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'">'+visuals.trendGauge(a.score,a.trend)+'</div></div>'+
       '<p class="sa-reason">'+esc(a.reason)+'</p><div class="sa-meta"><span>종가 기준 '+esc(a.asOf||'확인 필요')+'</span><span>기준 종가 '+money(a.price)+'</span><span>'+esc(a.modelStatus)+'</span></div>'+
       '<p class="sa-note">추세 점수는 가격 흐름을 평가합니다. 높은 점수도 진입 조건을 자동 통과하지 않습니다.</p>'+
-      '<details><summary>진입 조건·가격 기준</summary><p>관심 구간 '+money(p.buyLow)+'–'+money(p.buyHigh)+' · 재평가 '+money(p.stop)+' · 관측 저항 '+money(p.target1)+'</p>'+
+      '<details><summary>진입 조건·가격 기준</summary>'+visuals.table([['관심 구간',money(p.buyLow)+'–'+money(p.buyHigh)],['재평가 기준',money(p.stop)],['관측 저항',money(p.target1)]],'진입 가격 기준')+
       '<p>'+esc(p.blocks.join(' · ')||p.action)+'</p><p>추세 점수는 상승 확률이나 기업가치 점수가 아닙니다. 6개월·1년 AI 전망과 가치 시나리오는 별도로 확인하세요.</p></details></section>';
   }
   async function load(fetcher=root.fetch.bind(root),decisionSupport=root.DecisionSupport){

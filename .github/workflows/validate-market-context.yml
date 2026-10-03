@@ -1,0 +1,49 @@
+name: Validate FRED collection
+on:
+  push:
+    paths:
+      - 'scripts/build_market_context.py'
+      - 'scripts/test_market_context.py'
+      - '.github/workflows/validate-market-context.yml'
+  pull_request:
+    paths:
+      - 'scripts/build_market_context.py'
+      - 'scripts/test_market_context.py'
+      - '.github/workflows/validate-market-context.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate timeout, fallback and observation freshness
+        run: python -m unittest discover -s scripts -p test_market_context.py
+      - name: Verify live FRED recovery in an isolated snapshot
+        run: |
+          python - <<'PY'
+          import json, shutil, sys, tempfile, time
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from build_market_context import SERIES, build
+          began = time.monotonic()
+          with tempfile.TemporaryDirectory() as tmp:
+              root = Path(tmp)
+              (root/'market').mkdir()
+              shutil.copyfile('market/latest.json', root/'market/latest.json')
+              result = build(root=root)
+          checked = [q for q in result['indicators'] if q['id'] in {*SERIES, 'FUNDING'}]
+          for q in checked:
+              print(json.dumps({k:q.get(k) for k in ('id','status','asOf','fetchStatus','fromCache','lastSuccessAt','fetchWarnings','fetchError')}, ensure_ascii=False))
+          failed = [q['id'] for q in checked if q['fetchStatus']!='ready' or q['fromCache'] or q.get('lastSuccessAt')!=result['generatedAt']]
+          if len(checked)!=len(SERIES)+1 or failed:
+              raise SystemExit('Live FRED collection failed: '+', '.join(failed))
+          print('Verified 7 live FRED series and aligned funding in', round(time.monotonic()-began,2), 'seconds')
+          PY

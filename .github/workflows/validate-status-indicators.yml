@@ -1,0 +1,92 @@
+name: Validate visual status indicators
+on:
+  push:
+    paths:
+      - 'index.html'
+      - 'advanced*.html'
+      - 'crypto.html'
+      - 'futures.html'
+      - 'assets/market-visuals.js'
+      - 'assets/status-indicators.css'
+      - 'assets/stock-assessment*'
+      - 'assets/decision-support*'
+      - 'assets/company-events*'
+      - 'scripts/*company_events*'
+      - 'events/**'
+      - 'news/**'
+      - 'scripts/*company_news*'
+      - 'assets/advanced*'
+      - 'assets/crypto*'
+      - 'assets/perp*'
+      - 'scripts/test_status_indicators*'
+      - 'scripts/test_crypto_page.cjs'
+      - 'scripts/test_perp.cjs'
+      - '.github/workflows/validate-status-indicators.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'advanced*.html'
+      - 'crypto.html'
+      - 'futures.html'
+      - 'assets/market-visuals.js'
+      - 'assets/status-indicators.css'
+      - 'assets/stock-assessment*'
+      - 'assets/decision-support*'
+      - 'assets/company-events*'
+      - 'scripts/*company_events*'
+      - 'events/**'
+      - 'news/**'
+      - 'scripts/*company_news*'
+      - 'assets/advanced*'
+      - 'assets/crypto*'
+      - 'assets/perp*'
+      - 'scripts/test_status_indicators*'
+      - 'scripts/test_crypto_page.cjs'
+      - 'scripts/test_perp.cjs'
+      - '.github/workflows/validate-status-indicators.yml'
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s scripts -p test_company_events.py
+      - run: node scripts/test_company_events.cjs
+      - run: python -m unittest discover -s scripts -p 'test_company_news*.py'
+      - run: node scripts/test_company_news.cjs
+      - run: node scripts/test_status_indicators.cjs
+      - run: node scripts/test_stock_assessment.cjs
+      - run: node scripts/test_crypto_page.cjs
+      - run: node scripts/test_perp.cjs
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/indicator-browser" --no-save playwright@1.51.1
+          node "$RUNNER_TEMP/indicator-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Check responsive indicators and unavailable feeds
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/indicator-browser/node_modules/playwright
+          INDICATOR_SCREENSHOTS: ${{ runner.temp }}/indicator-screenshots
+        run: node scripts/test_status_indicators_browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indicator-browser-screenshots
+          path: ${{ runner.temp }}/indicator-screenshots
+          if-no-files-found: ignore
+          retention-days: 7

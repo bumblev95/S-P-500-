@@ -31,6 +31,7 @@ SERIES = {
 }
 EBP_URL = 'https://www.federalreserve.gov/econres/notes/feds-notes/ebp_csv.csv'
 EBP_NOTE = 'https://www.federalreserve.gov/econres/notes/feds-notes/updating-the-recession-risk-and-the-excess-bond-premium-20161006.html'
+FRED_TIMEOUT_SECONDS = 10
 
 def bond_spreads(text, today):
     """Fed research bond spread, monthly; EBP is a component, not total spread."""
@@ -67,7 +68,13 @@ TOPICS = [
 ]
 
 def get(url):
-    with urlopen(Request(url, headers={'User-Agent': 'PublicMarketMonitor/1.0'}), timeout=30) as r:
+    headers = {'User-Agent': 'PublicMarketMonitor/1.0'}
+    timeout = 30
+    if urlparse(url).hostname == 'fred.stlouisfed.org':
+        # Explicit content negotiation fixes the observed Actions response timeout.
+        headers['Accept'] = 'text/csv,text/plain,text/html,*/*'
+        timeout = FRED_TIMEOUT_SECONDS
+    with urlopen(Request(url, headers=headers), timeout=timeout) as r:
         return r.read(3_000_000).decode('utf-8-sig')
 
 def age(d, today):

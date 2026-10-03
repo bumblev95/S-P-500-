@@ -59,8 +59,9 @@ const tabs=['screen','compare','value','validation'].map(view=>Object.assign(nod
 let fail=false;
 const snapshot=JSON.parse(fs.readFileSync('forecasts/latest.json')),market=JSON.parse(fs.readFileSync('market/latest.json')),ml=JSON.parse(fs.readFileSync('ml/latest.json'));
 let clock=Date.parse(market.generatedAt),exported='',marketPayload=market;
+const mountedSymbols=[];
 class TestDate extends Date{constructor(...args){super(...(args.length?args:[clock]))}static now(){return clock}}
-const context={AdvancedEngine:E,MarketVisuals:V,LearnedGuide:L,StockAssessment:{...A,all:(d,m,l,h)=>A.all(d,m,l,h,clock),evaluate:(e,m,l,h)=>A.evaluate(e,m,l,h,clock)},TechnicalGuide:{...T,marketState:m=>T.marketState(m,clock)},DecisionSupport:{load:async()=>{},applyStocks:x=>x},document:{getElementById:node,createElement:()=>({click(){}}),querySelectorAll:s=>s==='[data-view]'?tabs:s==='[data-assumption]'?[...node('content').innerHTML.matchAll(/data-assumption="([^"]+)"[^>]*value="([^"]*)"/g)].map(m=>{const n=node('assumption-'+m[1]);n.dataset.assumption=m[1];if(n.value==='')n.value=m[2];return n}):[],hidden:false},localStorage:{getItem:()=>null,setItem(){}},fetch:async url=>{if(fail)throw Error('offline');return {ok:true,text:async()=>fs.readFileSync(url,'utf8'),json:async()=>url.startsWith('market/')?marketPayload:JSON.parse(fs.readFileSync(url,'utf8'))}},Blob:class{constructor(parts){exported=parts.join('')}},URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},setInterval(){},setTimeout(){},console,Intl,Date:TestDate};
+const context={CompanyEvents:{mount:(_host,symbol)=>mountedSymbols.push(symbol)},AdvancedEngine:E,MarketVisuals:V,LearnedGuide:L,StockAssessment:{...A,all:(d,m,l,h)=>A.all(d,m,l,h,clock),evaluate:(e,m,l,h)=>A.evaluate(e,m,l,h,clock)},TechnicalGuide:{...T,marketState:m=>T.marketState(m,clock)},DecisionSupport:{load:async()=>{},applyStocks:x=>x},document:{getElementById:node,createElement:()=>({click(){}}),querySelectorAll:s=>s==='[data-view]'?tabs:s==='[data-assumption]'?[...node('content').innerHTML.matchAll(/data-assumption="([^"]+)"[^>]*value="([^"]*)"/g)].map(m=>{const n=node('assumption-'+m[1]);n.dataset.assumption=m[1];if(n.value==='')n.value=m[2];return n}):[],hidden:false},localStorage:{getItem:()=>null,setItem(){}},fetch:async url=>{if(fail)throw Error('offline');return {ok:true,text:async()=>fs.readFileSync(url,'utf8'),json:async()=>url.startsWith('market/')?marketPayload:JSON.parse(fs.readFileSync(url,'utf8'))}},Blob:class{constructor(parts){exported=parts.join('')}},URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},setInterval(){},setTimeout(){},console,Intl,Date:TestDate};
 vm.runInNewContext(fs.readFileSync('assets/advanced-page.js','utf8'),context);
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
 (async()=>{
@@ -72,8 +73,10 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
     node('search').value=sym;node('search').events.input();
     const a=A.evaluate(A.entry(snapshot,sym),market,ml,126,clock);
     assert(node('content').innerHTML.includes(a.score+'/100'),sym+' must resolve the canonical assessment');
+    assert(node('content').innerHTML.includes(V.entryBadge(a.plan.code,a.decision)),sym+' must retain the matching visual entry badge');
     node('asset').value=sym;node('asset').events.change();
     assert.match(node('inspector').innerHTML,new RegExp('data-trend-score="'+a.score+'"'));
+    assert.equal(mountedSymbols.at(-1),sym,'The company news panel must follow the selected class ticker');
     node('export').events.click();
     const row=E.csv(exported)[0];
     assert.equal(Number(row.trendScore),a.score);assert.equal(row.scoreAsOf,a.asOf);assert.equal(Number(row.scorePrice),a.price);
@@ -109,7 +112,7 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
     assert(node('content').innerHTML.includes('공통 이력이 짧습니다'));
   marketPayload={generatedAt:new Date(clock).toISOString(),credit:{status:'stable'},indicators:[]};
   await node('refresh').events.click();await settle();
-  assert.match(node('sourceStatus').innerHTML,/<span>미국 신용시장<\/span><b[^>]*>자료 확인 필요/,'A fresh timestamp alone must not hide missing market indicators');
+  assert.match(node('sourceStatus').innerHTML,/<span>미국 신용시장<\/span><span class="vi-badge vi-muted">자료 확인 필요/,'Missing market indicators must retain the unknown state and its grey visual badge');
   // No reload or horizon change: an export and an ordinary filter render must expire cached scores.
   clock+=6*86400000;
   node('export').events.click();assert.equal(E.csv(exported)[0].trendScore,'');assert.equal(E.csv(exported)[0].entryDecision,'판단 보류');

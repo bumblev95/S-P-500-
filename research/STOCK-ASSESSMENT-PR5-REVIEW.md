@@ -15,6 +15,17 @@ Review date: 2026-10-03 UTC. Code fixes and local regression checks are complete
 
 ## Findings and corrections
 
+### PR #6 synchronization with main (2026-10-03)
+
+- Preserve original PR #6 head `041ac105549aa60ba3b6db5383f9cc2fbbcc0d85` and merge main `896b0cddc89c1967e20eb01387d4d3dc9b10f302`; no history rewrite or automatic PR merge.
+- Resolve five actual content conflicts: `advanced-legacy.html`, `advanced.html`, `assets/advanced-page.js`, `index.html`, and `scripts/test_technical_guide.cjs`. `assets/stock-assessment.js` merges cleanly and is checked for calculation parity.
+- Keep main's company news/filings panels, Korean summaries, decision-support integrations, indicator badges, stylesheet/script dependencies, and FRED recovery. Retain the PR's normalized aliases, render/export expiry checks, overall AI performance gate, supported 126/252-day controls, deterministic sorting, and CSV reference/gate columns.
+- Combine the advanced market header's shared freshness/indicator gate with main's grey unknown-state badge. Resolve class-ticker entry badges through the canonical assessment and keep the matching selected company's news panel.
+- Bump common assessment and advanced-page asset versions so caches cannot reuse either pre-merge implementation.
+- Local validation: 16 JavaScript suites and 72 Python tests pass. The 1,010 current stock/horizon evaluations preserve the original PR's score, trend, color, reference date/price, decision, reason, and model status against the identical latest-main snapshot. The 697 protected data/backend/decision/news/visual files are byte-identical to main. JavaScript/inline-script syntax, asset paths, workflow YAML, and whitespace checks pass.
+- Extend the existing DOM tests to cover class-ticker visual badges/news selection, the grey unknown market badge, and selected-company news in the missing-horizon fallback.
+- Real-browser validation is run by `Validate visual status indicators` after the branch update. Local Chromium installation is unavailable in this environment; physical-phone touch behavior remains a manual check. Workflow conclusions are recorded in the PR description once available.
+
 | Priority | Reproduction / impact | Correction |
 | --- | --- | --- |
 | P1 | Advanced CSV rows use dotted class tickers, while `StockAssessment.all` indexes assessments by normalized hyphenated tickers. `BRK.B` and `BF.B` therefore lost valid scores of 47 and 37. | Normalize assessment lookup and resolve both spellings in raw forecast records. Table, inspector, CSV, comparison and validation use the same identity. |
