@@ -9,10 +9,8 @@ const root = path.resolve(__dirname, '..');
 const output = process.env.INDICATOR_SCREENSHOTS || '/tmp/sp500-indicator-qa';
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file)));
 const market = read('market/latest.json'), forecasts = read('forecasts/latest.json');
-// Each independent feed keeps its own observation clock. A later SEC update
-// must not become a future observation just because the market feed is older.
-const events = read('events/latest.json');
-const clock = Math.max(Date.parse(market.generatedAt), Date.parse(events.generatedAt)) + 1000;
+const events = read('events/latest.json'), news = read('news/latest.json');
+const clock = Math.max(...[market,events,news].map(x => Date.parse(x.generatedAt))) + 1000;
 const types = {'.html':'text/html', '.js':'application/javascript', '.css':'text/css', '.json':'application/json'};
 const server = http.createServer((req, res) => {
   const file = path.resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://localhost').pathname));
@@ -76,10 +74,14 @@ async function fits(page, selector) {
           assert.equal(css.color, palette[css.classes.match(/\bvi-(good|warn|bad|muted)\b/)[1]]);
         }
         if (file !== 'crypto.html') {
+          await page.locator('.company-events .ce-news-card').first().waitFor();
+          await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
           assert.equal(await page.locator('.company-events').getAttribute('data-event-symbol'), 'NVDA');
           await page.locator('.company-events .ce-event').first().locator('summary').click();
-          await fits(page, '.company-events, .ce-event, .ce-event summary, .ce-body');
+          await page.locator('.ce-news-detail > summary').first().click();
+          await fits(page, '.company-events, .ce-news-card, .ce-news-title, .ce-news-reason, .ce-news-counts, .ce-event, .ce-event summary, .ce-body');
+          assert.equal(await page.locator('.ce-news-card').count(), news.issuers[news.symbols.NVDA].articles.length);
           await page.locator('.company-events').screenshot({path:path.join(output, `events-${file.replace('.html','')}-${width}.png`)});
           assert.equal(await page.locator('#tradePlanner, .ds-planner').count(), 0);
         }
@@ -96,7 +98,10 @@ async function fits(page, selector) {
           await page.locator('#tickerInput').press('Enter');
           await page.locator('.company-events[data-event-symbol="XOM"]').waitFor();
           assert.equal(await page.locator('.company-events[data-event-symbol="NVDA"]').count(), 0);
+          await page.locator('.company-events .ce-news-card').first().waitFor();
+          await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
+          assert.equal(await page.locator('.ce-news-card').count(), news.issuers[news.symbols.XOM].articles.length);
         }
       }
       await page.close();
@@ -119,10 +124,19 @@ async function fits(page, selector) {
     await page.unrouteAll();
     await page.route('**/events/latest.json*', route => route.fulfill({status:503, json:{error:'QA unavailable'}}));
     await ready(page, base + 'index.html', '.company-events');
+    await page.locator('.ce-news-card').first().waitFor();
+    await page.locator('.ce-filings > summary').click();
     await page.locator('.ce-status').filter({hasText:'자료 읽기 실패'}).waitFor();
     assert.equal(await page.locator('.company-events .ce-event').count(), 0);
     await page.locator('.company-events').screenshot({path:path.join(output,'events-unavailable.png')});
     await page.unroute('**/events/latest.json*');
+    await page.route('**/news/latest.json*', route => route.fulfill({status:503,json:{error:'QA unavailable'}}));
+    await ready(page, base + 'index.html', '.company-events');
+    await page.locator('.ce-news-status').filter({hasText:'뉴스 읽기 실패'}).waitFor();
+    assert.equal(await page.locator('.ce-news-card').count(), 0);
+    await page.locator('.ce-filings > summary').click();
+    await page.locator('.ce-event').first().waitFor();
+    await page.unroute('**/news/latest.json*');
     await page.route('https://api.hyperliquid.xyz/info', route => {
       if (failed) return route.fulfill({status:403, json:{error:'QA blocked feed'}});
       const body = route.request().postDataJSON(), now = Date.now();
@@ -144,6 +158,6 @@ async function fits(page, selector) {
     assert.equal(await page.locator('[data-indicator="단기 선물 진입"] .vi-pointer').count(), 0);
     await page.locator('[data-indicator="단기 선물 진입"]').screenshot({path:path.join(output,'futures-unavailable.png')});
     assert.deepEqual(errors, [], 'No uncaught browser errors');
-    console.log('Browser: 320/390/1280 px, four stock/spot pages, event cards and source details, stock/horizon switches, failed event/stock/exchange feeds and risk table passed.');
+    console.log('Browser: 320/390/1280 px, four stock/spot pages, company news, impact reasons, supplementary filings and source details, stock/horizon switches, failed event/stock/exchange feeds and risk table passed.');
   } finally {await browser?.close(); await new Promise(resolve => server.close(resolve));}
 })().catch(e => {console.error(e); process.exitCode = 1;});

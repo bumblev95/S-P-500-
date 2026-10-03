@@ -43,19 +43,20 @@ for(const file of ['index.html','advanced.html','advanced-legacy.html']){
  vm.runInNewContext(fs.readFileSync('assets/company-events.js','utf8'),{window:root,Date:clock,URL,
   fetch:undefined});
  const api=root.CompanyEvents;
- const pending=api.load(()=>new Promise(resolve=>{release=resolve}));
+ const newsResponse={ok:true,json:async()=>({schemaVersion:1,classifierVersion:'company-impact-headline-v1',symbols:fixture.symbols,issuers:{}})};
+ const pending=api.load(url=>url.startsWith('news/')?Promise.resolve(newsResponse):new Promise(resolve=>{release=resolve}));
  const host={dataset:{},innerHTML:'',isConnected:true};api.mount(host,'NVDA');api.mount(host,'NVDA.B');
  release({ok:true,json:async()=>fixture});await pending;await Promise.resolve();
  assert(host.innerHTML.includes('data-event-symbol="NVDA-B"'));assert(!host.innerHTML.includes('data-event-symbol="NVDA"'));
- let reads=0;const fetcher=async()=>{reads++;return {ok:true,json:async()=>fixture}};
+ let reads=0;const fetcher=async url=>{if(url.startsWith('news/'))return newsResponse;reads++;return {ok:true,json:async()=>fixture}};
  await api.load(fetcher);assert.equal(reads,0,'Reuse the same minute, including horizon changes');
  testClock+=61000;await api.load(fetcher);assert.equal(reads,1,'A later stock/price refresh must read current events');
  await api.load(async()=>{throw Error('offline')},true);
  assert(api.panel('NVDA').includes('자료 읽기 실패'));
  await api.load(fetcher);assert.equal(reads,2,'Retry a failed event feed on the next refresh');
  assert(api.panel('NVDA').includes('최근 공시 확인'));
- let oldReply;const older=api.load(()=>new Promise(resolve=>oldReply=resolve),true);
- await api.load(async()=>({ok:true,json:async()=>({...fixture,issuers:{1045810:{...fixture.issuers[1045810],events:[]}}})}),true);
+ let oldReply;const older=api.load(url=>url.startsWith('news/')?Promise.resolve(newsResponse):new Promise(resolve=>oldReply=resolve),true);
+ await api.load(async url=>url.startsWith('news/')?newsResponse:({ok:true,json:async()=>({...fixture,issuers:{1045810:{...fixture.issuers[1045810],events:[]}}})}),true);
  oldReply({ok:true,json:async()=>fixture});await older;
  assert(!api.panel('NVDA').includes(event.title),'An older reply must not overwrite a newer refresh');
  console.log('Company events: public dates, estimates, source allowlist, stale/missing feeds, shared issuers, selection races and calculator removal passed.');
