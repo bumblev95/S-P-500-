@@ -173,21 +173,30 @@ def funding(sofr, iorb, today):
                 previous=round(matched[-2][1],3),previousDate=matched[-2][0],
                 change=round(v-matched[-2][1],3),severity=severity,persistent=persistent)
 
+CREDIT_FAMILIES = (
+    ('금융여건', ('NFCI', 'STLFSI4')),
+    ('단기자금조달', ('FUNDING',)),
+    ('은행대출', ('DRTSCILM',)),
+    ('회사채 GZ/EBP', ('GZ_SPREAD', 'EBP')),
+)
+
 def credit_state(indicators):
-    # NFCI and STLFSI overlap: combine as one family, not independent votes.
+    # Coverage counts families with at least one usable member, not every input.
+    # Overlapping conditions and GZ/EBP each supply one vote. Full coverage is
+    # separate from the unchanged minimum of three families for a stable verdict.
     by={x['id']:x for x in indicators if x['status']=='ready' and x.get('severity') is not None}
-    groups=[]
-    conditions=[by[k]['severity'] for k in ('NFCI','STLFSI4') if k in by]
-    if conditions: groups.append(max(conditions))
-    for k in ('FUNDING','DRTSCILM'):
-        if k in by: groups.append(by[k]['severity'])
-    bonds=[by[k]['severity'] for k in ('GZ_SPREAD','EBP') if k in by]
-    if bonds: groups.append(max(bonds))
-    if not groups: return dict(status='unknown',score=None,coverage=0)
+    groups=[]; missing=[]
+    for label, members in CREDIT_FAMILIES:
+        values=[by[k]['severity'] for k in members if k in by]
+        if values: groups.append(max(values))
+        else: missing.append(label)
+    coverage=dict(coverage=len(groups),expected=len(CREDIT_FAMILIES),
+                  complete=not missing,missingFamilies=missing)
+    if not groups: return dict(status='unknown',score=None,**coverage)
     score=round(statistics.mean(groups)/3*100)
     status='risk' if max(groups)>=3 or sum(v>=2 for v in groups)>=2 else 'watch' if max(groups)>=1 else 'stable'
     if len(groups)<3 and status=='stable': status='unknown'
-    return dict(status=status,score=score,coverage=len(groups),expected=3)
+    return dict(status=status,score=score,**coverage)
 
 def classify(title):
     for label,pattern,interpretation in TOPICS:

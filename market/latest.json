@@ -10009,7 +10009,11 @@
     "status": "stable",
     "score": 0,
     "coverage": 3,
-    "expected": 3
+    "expected": 4,
+    "complete": false,
+    "missingFamilies": [
+      "회사채 GZ/EBP"
+    ]
   },
   "news": [
     {

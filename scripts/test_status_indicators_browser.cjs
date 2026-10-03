@@ -88,12 +88,18 @@ async function fits(page, selector) {
           await detail.locator('summary').click();
         }
         if (file === 'advanced.html') {
+          await page.locator('details.site-disclosure > summary').click();
           const badge = page.locator('#sourceStatus .vi-badge');
           assert.equal(await badge.evaluate(n => getComputedStyle(n).display), 'inline-flex');
           const css = await badge.evaluate(n => ({classes:n.className,color:getComputedStyle(n).color}));
           const palette = {good:'rgb(110, 231, 183)',warn:'rgb(249, 207, 107)',
             bad:'rgb(255, 127, 145)',muted:'rgb(166, 184, 203)'};
           assert.equal(css.color, palette[css.classes.match(/\bvi-(good|warn|bad|muted)\b/)[1]]);
+          const coverage = await page.locator('#sourceStatus').innerText();
+          assert(coverage.includes(`${market.credit.coverage} / 4개 신용 묶음`), JSON.stringify(coverage));
+          for (const label of market.credit.missingFamilies) assert(coverage.includes(label));
+          assert(!coverage.includes(`${market.credit.coverage}개 지표`), 'Credit coverage counts families');
+          await fits(page, '#sourceStatus > div');
         }
         if (file !== 'crypto.html') {
           await page.locator('.company-events .ce-news-card').first().waitFor();
@@ -137,6 +143,43 @@ async function fits(page, selector) {
       }
       await page.close();
     }
+    // Credit stability and completeness are separate on the actual screener.
+    // Legacy 3/3 metadata cannot be presented as complete four-family coverage.
+    const coveragePage = await browser.newPage({viewport:{width:390,height:900}});
+    coveragePage.on('pageerror', e => errors.push(e.message));
+    await coveragePage.addInitScript(now => {
+      const OriginalDate = Date;
+      window.Date = class extends OriginalDate {
+        constructor(...args) {super(...(args.length ? args : [now]));}
+        static now() {return now;}
+      };
+    }, clock);
+    let creditFixture;
+    await coveragePage.route('**/market/latest.json*', route =>
+      route.fulfill({json:{...market,credit:creditFixture}}));
+    for (const [credit,text,missing,badge] of [
+      [{status:'stable',coverage:3,expected:4,complete:false,missingFamilies:['회사채 GZ/EBP']},
+        '3 / 4개 신용 묶음','회사채 GZ/EBP','관측 범위 내 안정'],
+      [{status:'stable',coverage:4,expected:4,complete:true,missingFamilies:[]},
+        '4 / 4개 신용 묶음',null,'관측 범위 내 안정'],
+      [{status:'unknown',coverage:0,expected:4,complete:false,
+        missingFamilies:['금융여건','단기자금조달','은행대출','회사채 GZ/EBP']},
+        '0 / 4개 신용 묶음','은행대출','자료 확인 필요'],
+      [{status:'stable',coverage:3,expected:3},'신용 묶음 범위 확인 필요',null,'관측 범위 내 안정'],
+      [{status:'unknown',expected:4},'신용 묶음 범위 확인 필요',null,'자료 확인 필요']
+    ]) {
+      creditFixture=credit;
+      await ready(coveragePage, base+'advanced.html', '.stockAssessment');
+      await coveragePage.locator('details.site-disclosure > summary').click();
+      const info=await coveragePage.locator('#sourceStatus').innerText();
+      assert(info.includes(text));
+      assert(!/3\s*\/\s*3|undefined|NaN/.test(info));
+      assert.equal(await coveragePage.locator('#sourceStatus .vi-badge').innerText(),badge);
+      if (missing) assert(info.includes('미사용:') && info.includes(missing));
+      else assert(!info.includes('미사용:'));
+      await fits(coveragePage,'#sourceStatus > div');
+    }
+    await coveragePage.close();
     // Failed/stale feeds get grey indicators without a pointer on the real page.
     const page = await browser.newPage({viewport:{width:390,height:900}});
     page.on('pageerror', e => errors.push(e.message));
