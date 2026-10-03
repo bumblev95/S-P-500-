@@ -9,7 +9,10 @@ const root = path.resolve(__dirname, '..');
 const output = process.env.INDICATOR_SCREENSHOTS || '/tmp/sp500-indicator-qa';
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file)));
 const market = read('market/latest.json'), forecasts = read('forecasts/latest.json');
-const clock = Date.parse(market.generatedAt) + 1000;
+// Each independent feed keeps its own observation clock. A later SEC update
+// must not become a future observation just because the market feed is older.
+const events = read('events/latest.json');
+const clock = Math.max(Date.parse(market.generatedAt), Date.parse(events.generatedAt)) + 1000;
 const types = {'.html':'text/html', '.js':'application/javascript', '.css':'text/css', '.json':'application/json'};
 const server = http.createServer((req, res) => {
   const file = path.resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://localhost').pathname));

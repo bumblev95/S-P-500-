@@ -2,7 +2,7 @@
 'use strict';
 const DAY=86400000,esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normalize=x=>String(x||'').trim().toUpperCase().replace(/\./g,'-');
-let data=null,loading=null,failed=false;
+let data=null,loading=null,failed=false,loadedAt=0,sequence=0;
 function dateMs(value){
  if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return NaN;
  const ms=Date.parse(value+'T00:00:00Z');return Number.isFinite(ms)&&new Date(ms).toISOString().slice(0,10)===value?ms:NaN;
@@ -51,8 +51,10 @@ function panel(ticker,snapshot=data,now=Date.now()){
  return '<section class="company-events" data-event-symbol="'+esc(s.key)+'" aria-label="'+esc(s.key)+' 회사 이벤트"><div class="ce-heading"><div><small>COMPANY EVENTS · '+esc(s.key)+'</small><h3>회사 이벤트 타임라인</h3></div><span class="ce-status'+(s.fresh?' ce-ready':'')+'">'+state+'</span></div>'+(!s.fresh&&s.checkedAt?'<p class="ce-collection">수집 지연 · 마지막 공시 확인 '+confirmed(s.checkedAt)+'</p>':'')+content+'<footer>'+edgar+'<details><summary>출처·수집 범위</summary><p>SEC 주요 사항·정기 보고서·주주총회 자료를 공시일 순으로 표시합니다. 회사 원문 실적 요약은 NVDA·MSFT에 연결되어 있습니다. 예상 실적일은 Yahoo 제공 자료로, 회사 확정 일정과 구분합니다.</p><p>SEC 확인 '+confirmed(s.checkedAt)+'. 수집 누락은 사건이 없다는 뜻이 아닙니다. 사건의 주가 영향은 별도로 판단하세요.</p></details></footer></section>';
 }
 async function load(fetcher=root.fetch?.bind(root),force=false){
- if(loading&&!force)return loading;
- loading=(async()=>{try{const r=await fetcher('events/latest.json',{cache:'no-store'});if(!r.ok)throw Error('events');const x=await r.json();if(x?.schemaVersion!==1||!x.issuers||!x.symbols)throw Error('schema');data=x;failed=false}catch(_){data=null;failed=true}return data})();
+ const age=Date.now()-loadedAt;
+ if(loading&&!force&&!failed&&age>=0&&age<60000)return loading;
+ const version=++sequence;loadedAt=Date.now();
+ loading=(async()=>{try{const r=await fetcher('events/latest.json',{cache:'no-store'});if(!r.ok)throw Error('events');const x=await r.json();if(x?.schemaVersion!==1||!x.issuers||!x.symbols)throw Error('schema');if(version===sequence){data=x;failed=false}}catch(_){if(version===sequence){data=null;failed=true}}return data})();
  return loading;
 }
 function mount(host,ticker){
