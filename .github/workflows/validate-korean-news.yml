@@ -1,0 +1,42 @@
+name: Validate Korean company news translation
+on:
+  pull_request:
+    paths:
+      - 'scripts/translate_company_news.py'
+      - 'scripts/requirements-news-translation.txt'
+      - '.github/workflows/validate-korean-news.yml'
+permissions:
+  contents: read
+concurrency:
+  group: korean-news-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: scripts/requirements-news-translation.txt
+      - uses: actions/cache@v4
+        with:
+          path: research/source-cache/news-ko
+          key: company-news-ko-v1-${{ github.run_id }}
+          restore-keys: company-news-ko-v1-
+      - name: Install translation runtime
+        run: |
+          pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r scripts/requirements-news-translation.txt
+      - name: Translate the retained public news snapshot
+        env:
+          OMP_NUM_THREADS: '2'
+          HF_HUB_DISABLE_XET: '1'
+        run: python scripts/translate_company_news.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: korean-company-news
+          path: news/latest.json
+          retention-days: 7
