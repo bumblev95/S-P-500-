@@ -16,6 +16,14 @@ assert.equal(wait.score,pass.score);assert.equal(wait.decision,'관망');assert.
 assert(wait.plan.blocks.includes('AI 예측 검증 조건 미충족'));
 assert(A.panel(wait).includes('AI 성능 기준 미통과'));
 assert(A.panel(wait).includes('단기 추세 점수'));
+// The first screen must explain high-trend / withheld-entry combinations.
+const before=JSON.stringify(wait),checks=A.entryChecks(wait),html=A.panel(wait);
+assert.equal(checks.find(c=>c.key==='trend').tone,'good');
+assert.equal(checks.find(c=>c.key==='ai').state,'미통과');
+assert(html.indexOf('sa-reason')<html.indexOf('sa-entry-layout'));
+assert(html.includes('class="sa-trend-details"><summary>'));
+assert(!html.includes('class="sa-trend-details" open'));
+assert.equal(JSON.stringify(wait),before,'Presentation must not mutate an assessment');
 const risk=A.evaluate(e,{...market,credit:{status:'risk'}},ml,126,now);
 assert.equal(risk.score,pass.score);assert.equal(risk.decision,'진입 보류');assert.match(risk.reason,/시장/);
 const unknown=A.evaluate(e,null,ml,126,now);
@@ -23,11 +31,13 @@ assert.equal(unknown.score,pass.score);assert.notEqual(unknown.decision,'진입 
 const bearish=structuredClone(ml);bearish.stocks.TEST.predictions[252]={status:'eligible',forecast:{...forecast,horizon:252,base:90,bear:80,bull:110,direction:'down',return:-.1,logReturn:Math.log(.9),lowLogReturn:Math.log(.8),highLogReturn:Math.log(1.1)}};
 const long=A.evaluate(e,market,bearish,252,now);
 assert.equal(long.score,pass.score);assert.equal(long.trend,pass.trend);assert.equal(long.color,pass.color);assert.equal(long.decision,'진입 보류');
+assert.equal(A.entryChecks(long).find(c=>c.key==='ai').state,'하락 우세');
 const extreme=structuredClone(withheld);extreme.stocks.TEST.predictions[126].forecast={...forecast,base:10000,bull:20000,logReturn:Math.log(100),highLogReturn:Math.log(200)};
 assert.equal(A.evaluate({...e,longTermScenario:{value:99999},predictions:{126:{return:9999}}},market,extreme,126,now).score,pass.score);
 for(const bad of [null,{...e,fresh:false},{...e,asOf:'2027-01-01'},{...e,history:history.slice(-30)},{...e,price:90},{...e,status:'insufficient'}]){
   const a=A.evaluate(bad,market,ml,126,now);assert.equal(a.score,null);assert.equal(a.decision,'판단 보류');
   assert(!A.rank({BAD:a}).length);assert(!/NaN|undefined|Infinity/.test(A.panel(a)));assert(A.panel(a).includes('산출 보류'));
+  assert(A.entryChecks(a).filter(c=>['trend','price','balance','heat'].includes(c.key)).every(c=>c.tone==='muted'));
 }
 const ranked=A.rank({Z:{...wait,symbol:'Z'},A:{...risk,symbol:'A'},missing:{...pass,symbol:'MISSING',score:null}});
 assert.deepEqual(ranked.map(a=>a.symbol),['A','Z'],'Rank only by the displayed score, with a stable symbol tie break');
@@ -39,7 +49,7 @@ assert(!D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('충분')
 // Explanations keep issuer risks visible even when shared data/model gates fail.
 const stressed={...e,symbol:'<TEST>',inputs:{...e.inputs,ma50:105,ma200:110,
   return1m:-.07,return3m:-.12,volatility4m:.75}};
-const stressedA=A.evaluate(stressed,null,withheld,126,now),before=JSON.stringify(stressedA);
+const stressedA=A.evaluate(stressed,null,withheld,126,now),stressedBefore=JSON.stringify(stressedA);
 const stressedSignals=A.signals(stressed,stressedA,null,now);
 assert(stressedSignals.negative.length>=5,'Distinct issuer conditions must not be clipped by shared warnings');
 assert(stressedSignals.negative.some(x=>x.id==='volatility'&&x.detail.includes('75.0%')));
@@ -49,7 +59,7 @@ assert(stressedSignals.limitations.some(x=>x.id==='market-data'));
 assert(stressedSignals.limitations.some(x=>x.id==='ai-validation'));
 assert(stressedSignals.limitations.some(x=>x.id==='weak-trend'));
 assert(!stressedSignals.negative.some(x=>x.id==='weak-trend'||x.id==='model-down'));
-assert.equal(JSON.stringify(stressedA),before,'Display explanations must not mutate the assessment');
+assert.equal(JSON.stringify(stressedA),stressedBefore,'Display explanations must not mutate the assessment');
 const explanationHtml=A.signalPanels(stressed,stressedA,null,now);
 assert(explanationHtml.includes('꼭 확인할 위험 · &lt;TEST&gt;'));
 assert(!explanationHtml.includes('<TEST>'));
