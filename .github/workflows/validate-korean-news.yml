@@ -24,12 +24,12 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: research/source-cache/news-ko
-          key: company-news-ko-v4-${{ github.run_id }}
+          key: company-news-ko-v5-${{ github.run_id }}
           restore-keys: |
-            company-news-ko-v4-
-            company-news-ko-v1-
+            company-news-ko-v5-
       - name: Install translation runtime
         run: |
+          pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
           pip install -r scripts/requirements-news-translation.txt
       - name: Translate the retained public news snapshot
         env:
