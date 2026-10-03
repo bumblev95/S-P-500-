@@ -8,12 +8,16 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: korean-news-${{ github.ref }}
+  group: korean-news-parallel-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   translate:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [0, 1, 2, 3]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,18 +28,84 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: research/source-cache/news-ko
-          key: company-news-ko-v5-${{ github.run_id }}
-          restore-keys: |
-            company-news-ko-v5-
+          key: company-news-ko-v5-${{ github.run_id }}-${{ matrix.part }}
+          restore-keys: company-news-ko-v5-
       - name: Install translation runtime
         run: |
           pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
           pip install -r scripts/requirements-news-translation.txt
-      - name: Translate the retained public news snapshot
+      - name: Translate one quarter of the retained public news snapshot
         env:
           OMP_NUM_THREADS: '2'
           HF_HUB_DISABLE_XET: '1'
-        run: python scripts/translate_company_news.py --reclassify
+          NEWS_PART: ${{ matrix.part }}
+        run: |
+          python - <<'PY'
+          import os, sys
+          sys.path.insert(0, 'scripts')
+          from build_company_news import reclassify_snapshot, ROOT, atomic_json
+          from translate_company_news import translate_snapshot
+          snapshot = reclassify_snapshot()
+          snapshot['issuers'] = {cik: row for i, (cik, row) in enumerate(sorted(snapshot['issuers'].items())) if i % 4 == int(os.environ['NEWS_PART'])}
+          atomic_json(ROOT/'news/latest.json', snapshot)
+          translate_snapshot()
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: korean-company-news-part-${{ matrix.part }}
+          path: news/latest.json
+          retention-days: 7
+  combine:
+    needs: translate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: korean-company-news-part-*
+          path: translated-parts
+      - name: Validate source bindings and combine Korean news
+        run: |
+          python - <<'PY'
+          import hashlib, json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from build_company_news import reclassify_snapshot, ROOT, atomic_json
+          from translate_company_news import VERSION, MODEL, valid_korean
+          snapshot = reclassify_snapshot()
+          expected = set(snapshot['issuers'])
+          seen, completed = set(), []
+          files = sorted(Path('translated-parts').glob('*/latest.json'))
+          assert len(files) == 4, 'All translation partitions are required'
+          for file in files:
+              part = json.loads(file.read_text())
+              assert part['generatedAt'] == snapshot['generatedAt'], 'Source collection clock changed'
+              assert part['classifierVersion'] == snapshot['classifierVersion']
+              completed.append(part['translation']['completedAt'])
+              for cik, issuer in part['issuers'].items():
+                  assert cik in expected and cik not in seen, 'Duplicate or unexpected issuer'
+                  previous = snapshot['issuers'][cik]
+                  assert issuer['feed'] == previous['feed'], 'Source observation changed'
+                  original = {a['id']: a for a in previous['articles']}
+                  assert set(original) == {a['id'] for a in issuer['articles']}
+                  for article in issuer['articles']:
+                      before = original[article['id']]
+                      assert all(article[k] == before[k] for k in ['title', 'summary', 'publishedAt', 'observedAt', 'impact'])
+                      ko = article['ko']
+                      expected_hash = hashlib.sha256((article['title']+'\n'+article.get('summary', '')).encode()).hexdigest()
+                      assert ko['version'] == VERSION and ko['sourceHash'] == expected_hash
+                      assert ko['sourceTitle'] == article['title'] and ko['sourceExcerpt'] == article.get('summary', '')
+                      assert valid_korean(ko['summary']) or ko['status'] == 'unavailable'
+                  snapshot['issuers'][cik] = issuer
+                  seen.add(cik)
+          assert seen == expected, 'Translation coverage incomplete'
+          snapshot['translation'] = {'version': VERSION, 'language': 'ko', 'articleCount': sum(len(r['articles']) for r in snapshot['issuers'].values()), 'completedAt': max(completed), 'model': MODEL}
+          atomic_json(ROOT/'news/latest.json', snapshot)
+          print(json.dumps(snapshot['translation']))
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: korean-company-news
