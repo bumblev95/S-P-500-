@@ -62,7 +62,11 @@ try{
  test('compatible batch updates retain paused versions without touching their records',()=>{
   const before=files(temp),at=fixture.registeredAt,result=S.updateCompatible({root:temp,now:at});
   assert(result.some(r=>r.candidateVersion===version&&r.status==='insufficient'));assert(result.some(r=>r.status==='paused'));
-  assert.deepEqual(files(temp),before);
+  const after=files(temp);for(const [file,hash] of Object.entries(before))assert.equal(after[file],hash,'Existing file must remain unchanged: '+file);
+  for(const paused of result.filter(r=>r.status==='paused')){
+   const prefix=S.BASE+'/'+paused.candidateVersion+'/';
+   assert.deepEqual(Object.keys(after).filter(f=>f.startsWith(prefix)),Object.keys(before).filter(f=>f.startsWith(prefix)),'Paused versions must not receive new records');
+  }
  });
  test('future registration cannot be shown as current validated data',()=>assert.match(D.build({root:temp,now:fixture.registeredAt-1}).versions.find(v=>v.version===version).reason,/Future shadow timestamp/));
  test('workflow allows the mutable display only; all existing evidence stays append-only',()=>{
