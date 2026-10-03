@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 import re
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -56,6 +57,7 @@ def engine(model_dir):
     tokenizer = MarianTokenizer.from_pretrained(tokenizer_dir, local_files_only=True)
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
+        texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
         tokens = [tokenizer.convert_ids_to_tokens(tokenizer.encode(t, truncation=True, max_length=192)) for t in texts]
         rows = translator.translate_batch(tokens, beam_size=3, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
         return [tokenizer.decode(tokenizer.convert_tokens_to_ids(r.hypotheses[0]), skip_special_tokens=True).strip() for r in rows]
@@ -73,7 +75,7 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
         passage = short_passage(article)
         key = hashlib.sha256((VERSION+'\n'+passage).encode()).hexdigest()
         ko = article.get('ko', {})
-        if ko.get('sourceHash') == source_hash(article) and ko.get('version') == VERSION and valid_korean(ko.get('summary')):
+        if ko.get('sourceHash') == source_hash(article) and ko.get('sourceText') == passage and ko.get('version') == VERSION and valid_korean(ko.get('summary')):
             cache.setdefault(key, ko['summary'])
         if not valid_korean(cache.get(key)): tasks[key] = passage
     if tasks:
@@ -84,7 +86,9 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
             values = translate([tasks[k] for k in keys])
             if len(values) != len(keys): raise ValueError('Translation count mismatch')
             for key, value in zip(keys, values):
-                if not valid_korean(value): raise ValueError('Invalid Korean translation')
+                if not valid_korean(value):
+                    print(json.dumps({'translationUnavailable': key, 'source': tasks[key][:120], 'output': value[:120]}, ensure_ascii=False), flush=True)
+                    value = '한국어 요약 번역을 완료하지 못했습니다. 원문에서 내용을 확인해 주세요.'
                 cache[key] = value
             atomic_json(cache_path, cache)
             print(json.dumps({'translatedPassages': min(start+24, len(ordered)), 'total': len(ordered)}), flush=True)
@@ -92,7 +96,8 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
         passage = short_passage(article)
         key = hashlib.sha256((VERSION+'\n'+passage).encode()).hexdigest()
         article['ko'] = {'version': VERSION, 'language': 'ko', 'summary': cache[key], 'sourceHash': source_hash(article),
-                         'sourceText': passage, 'method': 'machine-translation', 'model': MODEL}
+                         'sourceText': passage, 'status': 'unavailable' if cache[key].startswith('한국어 요약 번역을 완료') else 'ready',
+                         'method': 'machine-translation', 'model': MODEL}
     snapshot['translation'] = {'version': VERSION, 'language': 'ko', 'articleCount': len(articles),
                                 'completedAt': datetime.now(timezone.utc).isoformat(), 'model': MODEL}
     atomic_json(path, snapshot)
