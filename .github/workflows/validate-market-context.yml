@@ -38,13 +38,12 @@ jobs:
                   print(json.dumps(dict(probe=name,elapsed=round(time.monotonic()-began,2),error=type(exc).__name__+': '+str(exc))),flush=True)
           headers = {'Accept':'text/csv,text/plain,text/html,*/*','Accept-Language':'en-US,en;q=0.9','Referer':'https://fred.stlouisfed.org/series/DGS10'}
           probes = [
-              ('full browser UA',url,browser_ua,{}),
-              ('full UA and accept headers',url,browser_ua,headers),
-              ('public UA and accept headers',url,ua,headers),
-              ('CSV id only','https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10',browser_ua,headers),
-              ('CSV explicit end',url+'&coed='+datetime.now(timezone.utc).date().isoformat(),browser_ua,headers),
-              ('table full UA','https://fred.stlouisfed.org/data/DGS10.txt',browser_ua,headers),
-              ('API reachability without key','https://api.stlouisfed.org/fred/series/observations?series_id=DGS10&file_type=json',ua,{}),
+              ('baseline again',url,ua,{}),
+              ('Accept only',url,ua,{'Accept':headers['Accept']}),
+              ('Referer only',url,ua,{'Referer':headers['Referer']}),
+              ('Accept-Language only',url,ua,{'Accept-Language':headers['Accept-Language']}),
+              ('all headers again',url,ua,headers),
+              ('table Accept only','https://fred.stlouisfed.org/data/DGS10.txt',ua,{'Accept':headers['Accept']}),
           ]
           with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
               list(pool.map(lambda args: probe(*args), probes))
