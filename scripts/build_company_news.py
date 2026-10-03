@@ -32,8 +32,12 @@ WINDOW_DAYS = 30
 MAX_ARTICLES = 12
 LABELS = {'positive': '호재', 'negative': '악재', 'mixed': '혼재',
           'neutral': '중립', 'unclear': '판단 유보'}
+TURNAROUND = r'\bfrom\s+(?:near[- ]bankruptcy|(?:the )?brink of bankruptcy|bankruptcy)\s+to\b.{0,90}\b(?:market cap(?:italization)?|profitability|profits?|revenue)\b'
+BANKRUPTCY_EXIT = r'\b(?:emerged|emerges|exited|exits)\s+(?:from\s+)?(?:Chapter\s+11\s+)?bankruptcy\b'
 # Event phrases, rather than sentiment adjectives such as "great" / "bad".
 RULES = [
+    ('positive', '회복·성장 성과', TURNAROUND, '과거 파산 위기에서 회복·성장한 성과를 다룬 긍정적인 내용입니다. 현재 파산 위험 보도가 아니며, 이미 이룬 성과가 추가 주가 상승을 보장하지는 않습니다.'),
+    ('positive', '파산 절차 종료', BANKRUPTCY_EXIT, '파산 절차를 벗어났다는 내용은 사업 지속에 유리한 변화입니다. 남은 부채와 재건 비용은 별도 확인이 필요합니다.'),
     ('positive', '분석가 기대', r'\bwall street\b.{0,25}\b(?:sees?|expects?)\b.{0,30}\bupside\b|\banalysts?\b.{0,25}\b(?:bullish|optimistic)\b', '분석가가 추가 상승 여력에 긍정적인 의견을 제시했습니다. 회사의 확정 실적 변화가 아니며 목표주가 도달을 보장하지 않습니다.'),
     ('positive', '사업 확장', r'\b(?:entered the smart home|opens? (?:a |its )?new (?:plant|factory|facility|store)|expands? (?:its )?(?:production|capacity))\b', '새로운 사업·생산 영역으로 확장하는 내용입니다. 향후 판매 기회에 유리할 수 있지만 투자 비용과 수익성도 함께 보세요.'),
     ('positive', '판매·인도 실적 개선', r'\b(?:deliveries|vehicle sales)\b.{0,50}\b(?:clear the street|topped|above analyst estimates|above estimates|surpass(?:ed|ing)? expectations)\b|\bdeliver(?:ed|s)\b.{0,75}\b(?:beating|beat|surpassing)\b.{0,25}\bestimates\b|\bbeat\b.{0,30}\bdeliveries\b|\bbetter.than.expected\b.{0,20}\bdeliveries\b', '판매·인도량이 시장 예상을 웃돌았습니다. 수요에 유리한 소식이며, 실제 이익은 판매 가격과 비용도 확인해야 합니다.'),
@@ -212,7 +216,7 @@ def classify(title, tickers, names, other_names=None, summary=''):
         n = ' '+normalize(text)+' '
         pool = tuple(sorted(name for name in pool if len(name) >= 3))
         return [(m.start(), m.end(), m.group(0)) for m in mention_pattern(pool).finditer(n)] if pool else []
-    uncertainty = r"\b(?:rumou?rs?|might|could|reportedly|expected to|poised to|set to|potential|possible|proposed|discuss|discussing|considering|analysts? expect(?:s|ing)?|projected to|would|denies?|does not|did not|no longer|fails? to|dismissed|cleared|avoids?|exits? bankruptcy|wins? (?:a )?lawsuit)\b|\bmay\s+(?:(?:soon|still|also|already)\s+)?(?:be|have|raise|cut|miss|beat|win|face|lose|increase|decrease|launch|announce|report|benefit|hurt|suffer|recover|boost|reduce|see)\b"
+    uncertainty = r"\b(?:rumou?rs?|might|could|reportedly|expected to|poised to|set to|potential|possible|proposed|discuss|discussing|considering|analysts? expect(?:s|ing)?|projected to|would|denies?|does not|did not|no longer|fails? to|dismissed|cleared|avoids?|wins? (?:a )?lawsuit)\b|\bmay\s+(?:(?:soon|still|also|already)\s+)?(?:be|have|go|raise|cut|miss|beat|win|face|lose|increase|decrease|launch|announce|report|benefit|hurt|suffer|recover|boost|reduce|see)\b"
     snippets = [(title, 'headline')] + [(s, 'excerpt') for s in complete_sentences(summary)]
     anchored = []
     for text, origin in snippets:
@@ -236,6 +240,12 @@ def classify(title, tickers, names, other_names=None, summary=''):
                     # Block uncertainty and negation only around this event.
                     window = clause[max(0, match.start()-45):min(len(clause), match.end()+45)]
                     if re.search(uncertainty, window, re.I): continue
+                    # Only the historical/resolved bankruptcy occurrence is
+                    # excluded. A separate current filing or other risk in the
+                    # same article must still count as adverse evidence.
+                    if topic == '재무·사업 위험' and 'bankruptcy' in match.group(0).lower():
+                        recovered = list(re.finditer(TURNAROUND+'|'+BANKRUPTCY_EXIT, clause, re.I))
+                        if any(r.start() <= match.start() and match.end() <= r.end() for r in recovered): continue
                     if topic == '소송·조사' and re.search(r'\b(?:files?|filed|brings?|brought)\b.{0,40}\blawsuit\b', clause, re.I): continue
                     if topic == '배당·환원 축소' and re.search(r'\bdividend growth\b', clause, re.I): continue
                     if topic in {'전망 상향', '전망 하향'} and re.search(r'\banalysts?\b.{0,50}\b(?:raises?|cuts?|lowers?|boosts?)\b', clause, re.I): continue
@@ -275,6 +285,7 @@ def classify(title, tickers, names, other_names=None, summary=''):
                         # omit its name in the supplied lead. Never inherit a
                         # rival's explicitly named action.
                         subject = bool(re.match(r'(?:the company|the tech giant|the automaker|instead.{0,10}the tech giant)\b', clause, re.I))
+                        if topic == '파산 절차 종료' and re.match(r'(?:an?\s+)?(?:important\s+)?subsidiary of the company\b', clause, re.I): subject = True
                     if topic in {'계약·수주', '제품 출시'} and not subject: continue
                     if not subject: continue
                     anchored.append((tone, topic, reason, clause.strip()[:350], origin))
