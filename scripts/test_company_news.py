@@ -47,9 +47,9 @@ class NewsTests(unittest.TestCase):
                       'Nvidia does not cut dividend', 'Will Nvidia beat earnings estimates?',
                       'Nvidia lawsuit dismissed', 'Nvidia wins a lawsuit',
                       'Nvidia hits record high', 'Nvidia vs Microsoft: earnings beat estimates',
-                      'Microsoft cuts outlook as Nvidia expands',
-                      'Apple sued while Nvidia unveils a product']:
+                      'Microsoft cuts outlook as Nvidia expands']:
             with self.subTest(title=title): self.assertEqual(self.label(title), 'unclear')
+        self.assertEqual(self.label('Apple sued while Nvidia unveils a product'), 'positive')
 
     def test_short_ticker_does_not_match_articles(self):
         self.assertFalse(m.mentions('A new thing is ON the way', ['A', 'ON'], ['agilent']))
@@ -93,6 +93,28 @@ class NewsTests(unittest.TestCase):
         self.assertNotIn('alert', rows[0]['summary'])
         double = raw.replace('</channel>', raw[raw.index('<item>'):raw.index('</item>')+7]+'</channel>')
         self.assertEqual(len(m.parse_feed(double, ['NVDA'], 'Nvidia', OBSERVED, NOW)[0]), 1)
+
+    def test_excerpt_recovers_events_without_borrowing_rivals_or_speculation(self):
+        examples = [
+            ('Why Tesla Stock Is Up Today', 'Tesla reported vehicle deliveries above analyst estimates.', 'TSLA', 'Tesla', 'positive'),
+            ('Can General Dynamics Keep Growing?', 'General Dynamics received a new Army contract extending through 2028.', 'GD', 'General Dynamics', 'positive'),
+            ('Nvidia stock rises', 'Microsoft raises revenue outlook.', 'NVDA', 'Nvidia', 'unclear'),
+            ('Nvidia stock rises', 'Nvidia could raise revenue outlook.', 'NVDA', 'Nvidia', 'unclear'),
+            ('Nvidia stock rises', 'Nvidia raises revenue outlook but', 'NVDA', 'Nvidia', 'unclear'),
+            ('What Does Valero Face?', 'Valero Energy is under pressure as officials discuss a possible diesel export ban.', 'VLO', 'Valero Energy', 'unclear'),
+            ('Ahead of EQT Earnings', 'EQT heads into its upcoming report with analysts expecting a profit decline.', 'EQT', 'EQT', 'unclear'),
+            ('Moody’s cuts Botswana credit rating', 'Investing.com -- Moody’s Ratings has downgraded Botswana’s rating.', 'MCO', "Moody's", 'unclear'),
+            ('Wells Fargo downgrades tech', 'Investing.com -- Wells Fargo downgraded its guidance on the technology sector.', 'WFC', 'Wells Fargo', 'unclear'),
+            ('Apple Says Some AT&T iPhone Users Must Replace Phones After Service-Loss Bug', '', 'AAPL', 'Apple', 'negative'),
+            ('Tesla Deliveries Clear The Street, Rivian Holds Forecast, Ford And GM EV Sales Fall Hard', '', 'TSLA', 'Tesla', 'positive'),
+            ('Tesla, Rivian Deliveries Beat Estimates', '', 'TSLA', 'Tesla', 'positive'),
+            ('Microsoft Entered the Smart Home Through Your Washing Machine, Not Your Phone', '', 'MSFT', 'Microsoft', 'positive'),
+        ]
+        for title, summary, ticker, name, expected in examples:
+            with self.subTest(title=title, ticker=ticker):
+                self.assertEqual(m.classify(title, [ticker], m.aliases([ticker], name), summary=summary)['status'], expected)
+        self.assertFalse(m.mentions('Super Group Ltd (JSE:SPG) Earnings Growth', ['SPG'], m.aliases(['SPG'], 'Simon Property Group')))
+        self.assertFalse(m.mentions('ARES CAPITAL CORPORATION SCHEDULES EARNINGS', ['ARES'], m.aliases(['ARES'], 'Ares Management')))
 
     def test_future_stale_invalid_urls_and_unrelated_articles_are_rejected(self):
         bad = [rss(date='Sun, 04 Oct 2026 00:00:00 GMT'), rss(date='Mon, 01 Jun 2026 00:00:00 GMT'),

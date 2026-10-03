@@ -24,8 +24,10 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: research/source-cache/news-ko
-          key: company-news-ko-v1-${{ github.run_id }}
-          restore-keys: company-news-ko-v1-
+          key: company-news-ko-v3-${{ github.run_id }}
+          restore-keys: |
+            company-news-ko-v3-
+            company-news-ko-v1-
       - name: Install translation runtime
         run: |
           pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
@@ -34,7 +36,7 @@ jobs:
         env:
           OMP_NUM_THREADS: '2'
           HF_HUB_DISABLE_XET: '1'
-        run: python scripts/translate_company_news.py
+        run: python scripts/translate_company_news.py --reclassify
       - uses: actions/upload-artifact@v4
         with:
           name: korean-company-news

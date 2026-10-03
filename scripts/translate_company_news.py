@@ -13,10 +13,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from build_forecasts import atomic_json
+from build_company_news import complete_sentences, normalize
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'Helsinki-NLP/opus-mt-tc-big-en-ko'
-VERSION = 'company-news-ko-v2'
+VERSION = 'company-news-ko-v3'
 
 
 def source_hash(article):
@@ -32,11 +33,13 @@ def short_passage(article):
     title, excerpt = article['title'], article.get('summary', '').strip()
     reference = article.get('impact', {}).get('status') == 'unclear'
     if reference: return title
-    # Protect decimals, corporate abbreviations and tickers from sentence cuts.
-    for match in re.finditer(r'[.!?](?:["”])?(?=\s+[A-Z]|$)', excerpt):
-        sentence = excerpt[:match.end()].strip()
-        if len(sentence) >= 45 and not re.search(r'\b(?:Inc|Corp|Co|U\.S|Mr|Dr)\.$', sentence):
-            return sentence if len(sentence) <= 320 else title
+    # Choose a complete sentence that actually contains the selected event.
+    # A vague lead such as "long history of dividends" cannot replace today's
+    # reported shareholder-return amount in the headline.
+    evidence = article.get('impact', {}).get('evidence', [])
+    for sentence in complete_sentences(excerpt):
+        if 40 <= len(sentence) <= 320 and any(normalize(e) in normalize(sentence) for e in evidence if len(e) >= 20):
+            return sentence
     return title
 
 
@@ -58,7 +61,9 @@ def engine(model_dir):
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
         texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
-        tokens = [tokenizer.convert_ids_to_tokens(tokenizer.encode(t, truncation=True, max_length=192)) for t in texts]
+        # convert_ids_to_tokens uses Marian's TARGET decoder even for English
+        # source IDs when vocabularies are separate. Keep the SOURCE pieces.
+        tokens = [tokenizer.tokenize(t)[:191]+[tokenizer.eos_token] for t in texts]
         rows = translator.translate_batch(tokens, beam_size=3, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
         # English/Korean Marian uses different source and target vocabularies.
         # Decode target SentencePiece strings directly; mapping through the
@@ -67,10 +72,20 @@ def engine(model_dir):
     return translate
 
 
+def verify_engine(translate):
+    samples = ['The company recalls 20 phones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']
+    outputs = translate(samples)
+    if len(outputs) != 3 or not all(valid_korean(t) for t in outputs) or '20' not in outputs[0] or '6' not in outputs[1] or '전망' not in outputs[2]:
+        raise ValueError('Translation smoke check failed: '+json.dumps(outputs, ensure_ascii=False))
+    print(json.dumps({'translationSmokeCheck': outputs}, ensure_ascii=False), flush=True)
+
+
 def translate_snapshot(root=ROOT, translate=None, model_dir=None):
     path = root/'news/latest.json'
     snapshot = json.loads(path.read_text())
     articles = [a for issuer in snapshot['issuers'].values() for a in issuer['articles']]
+    reviewed_path = root/'news/korean-reviewed.json'
+    reviewed = json.loads(reviewed_path.read_text()) if reviewed_path.exists() else {}
     cache_path = root/'research/source-cache/news-ko/translations.json'
     cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
     tasks = {}
@@ -78,11 +93,16 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
         passage = short_passage(article)
         key = hashlib.sha256((VERSION+'\n'+passage).encode()).hexdigest()
         ko = article.get('ko', {})
+        review = reviewed.get(article['id'], {})
+        if review.get('sourceHash') == source_hash(article) and valid_korean(review.get('summary')):
+            cache[key] = review['summary']
         if ko.get('sourceHash') == source_hash(article) and ko.get('sourceText') == passage and ko.get('version') == VERSION and valid_korean(ko.get('summary')):
             cache.setdefault(key, ko['summary'])
         if not valid_korean(cache.get(key)): tasks[key] = passage
     if tasks:
-        translate = translate or engine(model_dir or root/'research/source-cache/news-ko/model')
+        if translate is None:
+            translate = engine(model_dir or root/'research/source-cache/news-ko/model')
+            verify_engine(translate)
         ordered = list(tasks)
         for start in range(0, len(ordered), 24):
             keys = ordered[start:start+24]
@@ -98,9 +118,12 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
     for article in articles:
         passage = short_passage(article)
         key = hashlib.sha256((VERSION+'\n'+passage).encode()).hexdigest()
+        review = reviewed.get(article['id'], {})
+        checked = review.get('sourceHash') == source_hash(article) and cache[key] == review.get('summary')
         article['ko'] = {'version': VERSION, 'language': 'ko', 'summary': cache[key], 'sourceHash': source_hash(article),
+                         'sourceTitle': article['title'], 'sourceExcerpt': article.get('summary', ''),
                          'sourceText': passage, 'status': 'unavailable' if cache[key].startswith('한국어 요약 번역을 완료') else 'ready',
-                         'method': 'machine-translation', 'model': MODEL}
+                         'method': 'reviewed-summary' if checked else 'machine-translation', 'model': MODEL}
     snapshot['translation'] = {'version': VERSION, 'language': 'ko', 'articleCount': len(articles),
                                 'completedAt': datetime.now(timezone.utc).isoformat(), 'model': MODEL}
     atomic_json(path, snapshot)
@@ -110,5 +133,9 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model-dir', type=Path)
+    parser.add_argument('--reclassify', action='store_true')
     args = parser.parse_args()
+    if args.reclassify:
+        from build_company_news import reclassify_snapshot
+        reclassify_snapshot()
     translate_snapshot(model_dir=args.model_dir)
