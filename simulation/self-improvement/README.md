@@ -80,6 +80,26 @@ less timestamps and genuinely future inputs remain rejected. This adapter change
 requires a new version because its execution hash differs; prior descriptors,
 observations, assessments and accounts are never edited or backfilled.
 
+Freshness uses the actual shadow recording time, not `generatedAt` or the
+account's `lastProcessed` (a candle **start**). Completed 15-minute execution
+prices must be at most 900,000 ms old by candle **end**. Model features have a
+separate 4-hour limit; a recorded `decisionSamples.stale=false` describes that
+original decision, not the current execution price. New observations retain
+both current feature ages and execution candle start/end/ages independently.
+Invalid, missing, revised or stale public inputs now fail **before execution or
+append**; the next successful public collector update can retry without changing
+the shadow account or backdating the observation. Post-execution quality checks
+and every promotion gate remain unchanged.
+
+The first run of `shadow-threshold-v1-1790993347120-2506918ac511` at
+2026-10-03 02:13:11 UTC used the 01:51:19 collector snapshot, whose latest
+execution candles ended at 01:44:59 UTC (28.19 minutes old). Its feature ending
+2026-10-02 23:59:59 UTC was only 133.19 minutes old and correctly remained fresh. The next
+02:24:43 observation passed input quality (9.72-minute execution age), but
+`completeData` still failed because it checks **all** immutable observations.
+That failed history is retained as recorded. This preflight change requires a
+new runtime version with fresh paired cash genesis; no prior account is migrated.
+
 ## Proposal and matched forward experiment
 
 The implemented proposal family is deliberately narrow: raise the fixed model's

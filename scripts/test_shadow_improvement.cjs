@@ -43,6 +43,55 @@ try{
   assert.throws(()=>S.register({root:temp,thresholdR:NaN,now:now+1}),/finite/);
   assert.throws(()=>S.readCandidate(temp,'../momentum-boost'),/Invalid shadow version/);
  });
+ test('delayed public snapshot cannot start or advance a shadow account; fresh retry preserves both clocks',()=>{
+  const isolated=fs.mkdtempSync(path.join(os.tmpdir(),'shadow-delayed-input-'));
+  try{
+   fs.cpSync(temp,isolated,{recursive:true});const m=copy(market),lastBar=m.crypto.BTC.frames['15m'].at(-1);
+   const fresh=S.register({root:isolated,thresholdR:.15,now:now+2}),dir=path.join(isolated,S.BASE,fresh.version);
+   const descriptor=fs.readFileSync(path.join(dir,'candidate.json')),before=S.readObservations(isolated,fresh),operating=snapshot(isolated);
+   const delayedAt=lastBar.end+28*60000;
+   // Same delayed 28-minute execution age as the real 2026-10-03 first run.
+   // Source ISO generatedAt stays recent at collection; it cannot refresh OHLC.
+   m.generatedAt=new Date(delayedAt-1000).toISOString();write(isolated,'simulation/market.json',m);
+   const feed=S.providers(E.loadEvidence(isolated),m,fresh,delayedAt),quality=S.dataQuality(m,{},new Set(),delayedAt);
+   assert(feed.latest.every(q=>q.stale===false&&delayedAt-q.indicatorAt<14400000));
+   assert.deepEqual(quality.errors,['BTC stale execution prices','ETH stale execution prices','SOL stale execution prices']);
+   assert.equal(quality.executionPrices.BTC.barStartAt,lastBar.t);assert.equal(quality.executionPrices.BTC.barEndAt,lastBar.end);
+   assert.equal(quality.executionPrices.BTC.ageMs,28*60000);
+   assert.equal(S.dataQuality(m,{},new Set(),lastBar.end+STEP).passed,true);
+   assert.equal(S.dataQuality(m,{},new Set(),lastBar.end+STEP+1).passed,false);
+   assert.throws(()=>S.update({root:isolated,version:fresh.version,now:delayedAt}),/retry after a fresh public collector update.*BTC stale execution prices/);
+   assert.deepEqual(S.readObservations(isolated,fresh),before);assert(!fs.existsSync(path.join(dir,'assessments')));
+   // Keep the original causal model decision; append only completed public bars.
+   for(const source of Object.values(m.crypto))source.frames['15m'].push(bar(4000),bar(4001));
+   const retryAt=m.crypto.BTC.frames['15m'].at(-1).end+2*60000;m.generatedAt=new Date(retryAt-1).toISOString();write(isolated,'simulation/market.json',m);
+   const raw=fs.readFileSync(path.join(isolated,'simulation/market.json')),result=S.update({root:isolated,version:fresh.version,now:retryAt}),next=S.readObservations(isolated,fresh),record=next.records.at(-1);
+   assert.equal(result.gates.completeData,true);assert.equal(result.gates.matchedForwardSample,true);assert.equal(result.promotionCandidate,false);
+   assert.equal(next.accounts.incumbent.startedAt,retryAt);assert.equal(next.accounts.candidate.startedAt,retryAt);
+   assert.equal(record.inputs.marketSha256,E.bytesHash(raw));assert.deepEqual(fs.readFileSync(path.join(isolated,'simulation/market.json')),raw);
+   for(const symbol of ['BTC','ETH','SOL']){
+    assert.equal(record.inputs.quality.executionPrices[symbol].stale,false);assert.equal(record.inputs.quality.executionPrices[symbol].ageMs,2*60000);
+    assert.equal(record.inputs.featureFreshness[symbol].recordedStale,false);assert.equal(record.inputs.featureFreshness[symbol].stale,false);
+    assert.equal(record.inputs.featureFreshness[symbol].maxAgeMs,14400000);
+   }
+   assert.equal(next.accounts.incumbent.lastProcessed,record.inputs.quality.executionPrices.BTC.barStartAt);
+   assert.equal(next.accounts.incumbent.marketAsOf,record.inputs.quality.executionPrices.BTC.barEndAt);
+   assert.throws(()=>S.update({root:isolated,version:fresh.version,now:retryAt+STEP}),/Shadow input not ready/);
+   assert.deepEqual(S.readObservations(isolated,fresh),next);assert.deepEqual(fs.readFileSync(path.join(dir,'candidate.json')),descriptor);
+   // Fresh executions cannot renew an expired original model feature.
+   for(const source of Object.values(m.crypto))for(let i=4002;i<4020;i++)source.frames['15m'].push(bar(i));
+   const expiredAt=m.crypto.BTC.frames['15m'].at(-1).end+2*60000;m.generatedAt=new Date(expiredAt-1).toISOString();write(isolated,'simulation/market.json',m);
+   S.update({root:isolated,version:fresh.version,now:expiredAt});const expired=S.readObservations(isolated,fresh);
+   for(const symbol of ['BTC','ETH','SOL']){
+    assert.equal(expired.records.at(-1).inputs.quality.executionPrices[symbol].stale,false);
+    assert.equal(expired.records.at(-1).inputs.featureFreshness[symbol].recordedStale,false);
+    assert.equal(expired.records.at(-1).inputs.featureFreshness[symbol].stale,true);
+   }
+   for(const account of Object.values(expired.accounts))assert(account.signals.every(q=>q.side===null));
+   // Only this private market fixture changed; every operating file is intact.
+   const after=snapshot(isolated);delete operating['simulation/market.json'];delete after['simulation/market.json'];assert.deepEqual(after,operating);
+  }finally{fs.rmSync(isolated,{recursive:true,force:true});}
+ });
  let report;
  test('real engine update keeps original files and uses recorded decision gates',()=>{
   const before=snapshot(temp);report=S.update({root:temp,version:c.version,now:now+1});assert.deepEqual(snapshot(temp),before);

@@ -106,17 +106,19 @@ function providers(evidence,market,candidate,now){
  return {incumbent:make(model.thresholdR),candidate:make(candidate.thresholdR),latest:[...latest.values()],mismatches};
 }
 function dataQuality(market,accounts,mismatches,now){
- const errors=[...(market.errors||[])];
+ const errors=[...(market.errors||[])],executionPrices={};
  for(const s of ['BTC','ETH','SOL']){
   const source=market.crypto?.[s],rows=source?.frames?.['15m']||[];
   if(!rows.length)errors.push('Missing '+s);
   const completed=rows.filter(r=>r.end<now),last=completed.at(-1);
-  if(!last||now-last.end>900000)errors.push(s+' stale execution prices');
+  const stale=!last||now-last.end>900000;
+  executionPrices[s]={barStartAt:last?.t??null,barEndAt:last?.end??null,ageMs:last?now-last.end:null,maxAgeMs:900000,stale};
+  if(stale)errors.push(s+' stale execution prices');
   if(rows.some((r,i)=>!Number.isSafeInteger(r.t)||r.end!==r.t+899999||i&&r.t!==rows[i-1].t+900000||!['open','close','high','low','volume'].every(k=>Number.isFinite(r[k]))||r.low<=0||r.high<Math.max(r.open,r.close)||r.low>Math.min(r.open,r.close)||r.volume<0))errors.push(s+' invalid or noncontiguous execution prices');
   errors.push(...(source?.errors||[]),...(source?.revisions||[]).map(()=>s+' revised history'));
  }
  for(const [k,a] of Object.entries(accounts)){if(a.incompleteExecution)errors.push(k+' incomplete execution');if(a.estimatedFundingHours>0)errors.push(k+' estimated funding');}
- errors.push(...[...mismatches].map(s=>'Decision mismatch '+s));return {passed:errors.length===0,errors};
+ errors.push(...[...mismatches].map(s=>'Decision mismatch '+s));return {passed:errors.length===0,errors,executionPrices};
 }
 function saveAssessment(root,candidate,evidence,chain){
  const accounts=chain.accounts||{incumbent:P.create('crypto',candidate.registeredAt,candidate.profile),candidate:P.create('crypto',candidate.registeredAt,candidate.profile)};
@@ -139,13 +141,18 @@ function update({root=ROOT,version,now=Date.now()}={}){
  const marketGeneratedAt=inputTimestamp(market.generatedAt);
  if(now<evidence.decisions.at(-1).recordedAt||marketGeneratedAt>now)throw Error('Future input timestamp');
  if(last&&now===last.recordedAt){if(last.registration)return saveAssessment(root,candidate,evidence,chain);if(last.inputs.marketSha256!==marketSha256||JSON.stringify(last.inputs.heads)!==JSON.stringify(evidence.heads))throw Error('Changed input at same observation time');return saveAssessment(root,candidate,evidence,chain);}
+ // A delayed workflow must wait for the next public snapshot, not execute and
+ // permanently append an incomplete first observation. Never backdate `now`.
+ const inputQuality=dataQuality(market,{},new Set(),now);
+ if(!inputQuality.passed)throw Error('Shadow input not ready; retry after a fresh public collector update: '+JSON.stringify(inputQuality));
  const feed=providers(evidence,market,candidate,now),accounts={};
  for(const key of ['incumbent','candidate']){
   const prior=chain.accounts?.[key]||P.create('crypto',candidate.registeredAt,candidate.profile);
   accounts[key]=P.run(prior,market,{mode:'forward',now,provider:feed[key]});
  }
  const record={schemaVersion:1,candidateHash:candidate.hash,recordedAt:now,previousHash:chain.head,sourceRevision:revision(root),
-  inputs:{marketSha256,marketGeneratedAt,sourceMarketGeneratedAt:market.generatedAt,heads:evidence.heads,immutableFileAdditions:Object.fromEntries(Object.entries(evidence.files).filter(([f])=>!(f in checkpoint))),sourceFilesSha256:E.manifestHash(evidence.files),quality:dataQuality(market,accounts,feed.mismatches,now)},
+  inputs:{marketSha256,marketGeneratedAt,sourceMarketGeneratedAt:market.generatedAt,heads:evidence.heads,immutableFileAdditions:Object.fromEntries(Object.entries(evidence.files).filter(([f])=>!(f in checkpoint))),sourceFilesSha256:E.manifestHash(evidence.files),quality:dataQuality(market,accounts,feed.mismatches,now),
+   featureFreshness:Object.fromEntries(feed.latest.map(q=>[q.symbol,{indicatorAt:q.indicatorAt,observedAt:q.observedAt,ageMs:now-q.indicatorAt,maxAgeMs:H4,recordedStale:q.stale,stale:q.stale||now-q.indicatorAt>=H4}]))},
   decisionSamples:feed.latest,accounts:Object.fromEntries(Object.entries(accounts).map(([k,a])=>[k,delta(chain.accounts?.[k],a)]))};
  const hash=E.sha(record),stored={...record,hash};appendFile(root,BASE+'/'+version+'/observations/'+now+'-'+hash.slice(0,12)+'.json',stored);
  return saveAssessment(root,candidate,evidence,{records:[...chain.records,stored],head:hash,accounts});
