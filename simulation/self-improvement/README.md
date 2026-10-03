@@ -66,8 +66,19 @@ together. Missing/truncated observations, changed pinned models, candidate
 tampering, or changed execution code stop that version; they never recreate or
 migrate its balances. Files are created without overwriting existing paths.
 After an execution-code change, explicitly register a new version and update its
-ID. An all-versions update reports incompatible versions as blocked while still
-processing compatible ones, and exits nonzero to expose every blocked version.
+ID. An all-versions update audits every historical checkpoint, then reports
+incompatible versions as paused and updates only compatible ones. Paused files
+are retained read-only. Actual update/integrity failures still exit nonzero;
+explicitly targeting an incompatible version also fails. The status panel keeps
+that old version visible as blocked rather than migrating its account.
+
+The public collector stores `market.generatedAt` as timezone-qualified ISO text
+(including Python microseconds). The adapter accepts that format and integer
+epoch milliseconds, preserving the raw source value and SHA256 while storing a
+normalized millisecond timestamp in new observations. Missing/invalid/timezone-
+less timestamps and genuinely future inputs remain rejected. This adapter change
+requires a new version because its execution hash differs; prior descriptors,
+observations, assessments and accounts are never edited or backfilled.
 
 ## Proposal and matched forward experiment
 

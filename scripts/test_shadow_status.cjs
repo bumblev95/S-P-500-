@@ -1,22 +1,26 @@
 'use strict';
-const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),vm=require('node:vm');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),vm=require('node:vm'),cp=require('node:child_process');
 const D=require('./build_shadow_status.cjs'),S=require('./shadow_improvement.cjs'),E=require('./shadow_evidence.cjs');
 const ROOT=S.ROOT,copy=x=>JSON.parse(JSON.stringify(x));let count=0;
 function test(name,run){run();count++;console.log('PASS '+name);}
 function files(root,dir='simulation'){
  const result={};function walk(relative){for(const entry of fs.readdirSync(path.join(root,relative),{withFileTypes:true})){const name=relative+'/'+entry.name;if(name===D.OUTPUT)continue;if(entry.isDirectory())walk(name);else result[name]=E.bytesHash(fs.readFileSync(path.join(root,name)));}}walk(dir);return result;
 }
-const initial=D.build(),version=initial.versions[0].version,versionDir=S.BASE+'/'+version;
+let initial,version,versionDir;
 const originalFiles=files(ROOT),runtime=S.runtimeHashes(ROOT);
 test('real assessment is independently recomputed with no state or runtime writes',()=>{
- assert.equal(initial.sourceIntegrity.passed,true);assert(initial.sources.decisionRecords>=95);
- const row=initial.versions.find(v=>v.version===version);assert.equal(row.status,'insufficient');assert.equal(row.promotionCandidate,false);assert.equal(row.integrityPassed,true);
+ const actual=D.build();assert.equal(actual.sourceIntegrity.passed,true);assert(actual.sources.decisionRecords>=95);
+ for(const row of actual.versions){if(row.integrityPassed){assert.equal(row.status,row.assessment.status);assert.equal(row.promotionCandidate,Object.values(row.assessment.gates).every(Boolean));}else{assert.equal(row.status,'blocked');assert.equal(row.promotionCandidate,false);}}
  assert.deepEqual(files(ROOT),originalFiles);assert.deepEqual(S.runtimeHashes(ROOT),runtime);
 });
 const temp=fs.mkdtempSync(path.join(os.tmpdir(),'shadow-status-'));
 try{
  for(const f of [...S.RUNTIME,'ml/adaptive-summary.json']){fs.mkdirSync(path.dirname(path.join(temp,f)),{recursive:true});fs.copyFileSync(path.join(ROOT,f),path.join(temp,f));}
  for(const dir of ['simulation/momentum-boost',S.BASE])fs.cpSync(path.join(ROOT,dir),path.join(temp,dir),{recursive:true});
+ fs.copyFileSync(path.join(ROOT,'simulation/market.json'),path.join(temp,'simulation/market.json'));
+ cp.execFileSync('git',['init','-q'],{cwd:temp});cp.execFileSync('git',['-c','user.name=Test','-c','user.email=test@example.invalid','commit','-q','--allow-empty','-m','Private shadow status fixture'],{cwd:temp});
+ const fixture=S.register({root:temp,thresholdR:.15});S.assess({root:temp,version:fixture.version});
+ initial=D.build({root:temp});version=fixture.version;versionDir=S.BASE+'/'+version;
  const now=Date.now(),row=()=>D.build({root:temp,now}).versions.find(v=>v.version===version);
  function changed(file,transform,check){const name=path.join(temp,file),before=fs.readFileSync(name);try{fs.writeFileSync(name,transform(before));check();}finally{fs.writeFileSync(name,before);}}
  const blocked=()=>{const r=row();assert.equal(r.status,'blocked');assert.equal(r.promotionCandidate,false);assert.equal(r.integrityPassed,false);return r;};
@@ -55,7 +59,16 @@ try{
   });
   fs.mkdirSync(path.join(temp,S.BASE,'not-a-version'));try{const d=D.build({root:temp,now});assert.equal(d.sourceIntegrity.passed,false);assert.deepEqual(d.versions,[]);}finally{fs.rmdirSync(path.join(temp,S.BASE,'not-a-version'));}
  });
- test('future registration cannot be shown as current validated data',()=>assert.match(D.build({root:temp,now:initial.versions[0].registeredAt-1}).versions[0].reason,/Future shadow timestamp/));
+ test('compatible batch updates retain paused versions without touching their records',()=>{
+  const before=files(temp),at=fixture.registeredAt,result=S.updateCompatible({root:temp,now:at});
+  assert(result.some(r=>r.candidateVersion===version&&r.status==='insufficient'));assert(result.some(r=>r.status==='paused'));
+  const after=files(temp);for(const [file,hash] of Object.entries(before))assert.equal(after[file],hash,'Existing file must remain unchanged: '+file);
+  for(const paused of result.filter(r=>r.status==='paused')){
+   const prefix=S.BASE+'/'+paused.candidateVersion+'/';
+   assert.deepEqual(Object.keys(after).filter(f=>f.startsWith(prefix)),Object.keys(before).filter(f=>f.startsWith(prefix)),'Paused versions must not receive new records');
+  }
+ });
+ test('future registration cannot be shown as current validated data',()=>assert.match(D.build({root:temp,now:fixture.registeredAt-1}).versions.find(v=>v.version===version).reason,/Future shadow timestamp/));
  test('workflow allows the mutable display only; all existing evidence stays append-only',()=>{
   const y=fs.readFileSync(path.join(ROOT,'.github/workflows/shadow-self-improvement.yml'),'utf8');
   const body=y.match(/node - <<'JS'\n([\s\S]*?)\n\s*JS/)[1].split('\n').map(l=>l.replace(/^          /,'')).join('\n');
@@ -69,7 +82,7 @@ const nodes={},document={getElementById(id){return nodes[id]||null;}},context=vm
 vm.runInContext(fs.readFileSync(path.join(ROOT,'assets/shadow-status.js'),'utf8'),context);
 const UI=context.window.ShadowStatus,uiNow=initial.versions[0].assessment.asOf+1000,fresh=copy(initial);fresh.generatedAt=uiNow;
 test('insufficient UI shows paired counts, gates, waiting state and no invented returns',()=>{
- const html=UI.render(fresh,version,uiNow);assert(html.includes('표본 부족'));assert(html.includes('첫 수집 대기'));assert(html.includes('최소 표본'));assert(html.includes('/ 100 건'));assert(html.includes('/ 90 일'));assert(html.includes('2 / 30건'));assert(!html.includes('NaN')&&!html.includes('undefined'));assert(!html.includes('shadow-review'));
+ const html=UI.render(fresh,version,uiNow);assert(html.includes('표본 부족'));assert(html.includes('첫 수집 대기'));assert(html.includes('최소 표본'));assert(html.includes('/ 100 건'));assert(html.includes('/ 90 일'));assert(html.includes(initial.versions[0].initialTrainingTrades+' / 30건'));assert(!html.includes('NaN')&&!html.includes('undefined'));assert(!html.includes('shadow-review'));
  assert.equal((html.match(/<progress /g)||[]).length,3);assert(html.includes('<td>—</td>'));
 });
 function passing(){const d=copy(fresh),v=d.versions[0],a=v.assessment;v.status=a.status='promotion_candidate';v.promotionCandidate=a.promotionCandidate=true;v.activity='collecting';for(const key of Object.keys(a.gates))a.gates[key]=true;return d;}

@@ -4,6 +4,11 @@ const E=require('./shadow_evidence.cjs'),G=require('./shadow_gates.cjs'),B=requi
 const ROOT=path.resolve(__dirname,'..'),BASE='simulation/self-improvement/versions',H4=14400000;
 const RUNTIME=['scripts/shadow_evidence.cjs','scripts/shadow_gates.cjs','scripts/shadow_improvement.cjs','scripts/paper_engine.cjs','scripts/momentum_boost.cjs','scripts/trend_methods.cjs','scripts/selector_data.cjs','assets/simulation-signals.js','assets/perp-engine.js'];
 const copy=x=>JSON.parse(JSON.stringify(x));
+function inputTimestamp(value){
+ const parsed=typeof value==='number'?value:typeof value==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value)?Date.parse(value):NaN;
+ if(!Number.isSafeInteger(parsed)||parsed<0)throw Error('Invalid market generatedAt: require epoch milliseconds or timezone-qualified ISO timestamp');
+ return parsed;
+}
 function revision(root){return cp.execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();}
 function runtimeHashes(root){return Object.fromEntries(RUNTIME.map(f=>[f,E.bytesHash(fs.readFileSync(path.join(root,f)))]));}
 function safeVersion(version){if(!/^shadow-threshold-v1-\d+-[a-f0-9]{12}$/.test(version))throw Error('Invalid shadow version');return version;}
@@ -131,7 +136,8 @@ function update({root=ROOT,version,now=Date.now()}={}){
  if(!Number.isSafeInteger(now)||now<candidate.registeredAt||last&&now<last.recordedAt)throw Error('Shadow clock went backward');
  const checkpoint=chain.checkpoint,evidence=E.loadEvidence(root,checkpoint);
  const {value:market,sha256:marketSha256}=E.readFile(root,'simulation/market.json');
- if(now<evidence.decisions.at(-1).recordedAt||!Number.isSafeInteger(market.generatedAt)||market.generatedAt>now)throw Error('Future input timestamp');
+ const marketGeneratedAt=inputTimestamp(market.generatedAt);
+ if(now<evidence.decisions.at(-1).recordedAt||marketGeneratedAt>now)throw Error('Future input timestamp');
  if(last&&now===last.recordedAt){if(last.registration)return saveAssessment(root,candidate,evidence,chain);if(last.inputs.marketSha256!==marketSha256||JSON.stringify(last.inputs.heads)!==JSON.stringify(evidence.heads))throw Error('Changed input at same observation time');return saveAssessment(root,candidate,evidence,chain);}
  const feed=providers(evidence,market,candidate,now),accounts={};
  for(const key of ['incumbent','candidate']){
@@ -139,7 +145,7 @@ function update({root=ROOT,version,now=Date.now()}={}){
   accounts[key]=P.run(prior,market,{mode:'forward',now,provider:feed[key]});
  }
  const record={schemaVersion:1,candidateHash:candidate.hash,recordedAt:now,previousHash:chain.head,sourceRevision:revision(root),
-  inputs:{marketSha256,marketGeneratedAt:market.generatedAt,heads:evidence.heads,immutableFileAdditions:Object.fromEntries(Object.entries(evidence.files).filter(([f])=>!(f in checkpoint))),sourceFilesSha256:E.manifestHash(evidence.files),quality:dataQuality(market,accounts,feed.mismatches,now)},
+  inputs:{marketSha256,marketGeneratedAt,sourceMarketGeneratedAt:market.generatedAt,heads:evidence.heads,immutableFileAdditions:Object.fromEntries(Object.entries(evidence.files).filter(([f])=>!(f in checkpoint))),sourceFilesSha256:E.manifestHash(evidence.files),quality:dataQuality(market,accounts,feed.mismatches,now)},
   decisionSamples:feed.latest,accounts:Object.fromEntries(Object.entries(accounts).map(([k,a])=>[k,delta(chain.accounts?.[k],a)]))};
  const hash=E.sha(record),stored={...record,hash};appendFile(root,BASE+'/'+version+'/observations/'+now+'-'+hash.slice(0,12)+'.json',stored);
  return saveAssessment(root,candidate,evidence,{records:[...chain.records,stored],head:hash,accounts});
@@ -153,14 +159,22 @@ function audit(root=ROOT){
   closedTrades:Object.fromEntries(Object.entries(e.accounts).map(([k,v])=>[k,v.trades.length])),forecastResearch:e.forecastResearch,
   versions:listVersions(root).map(v=>{const c=readCandidate(root,v,{checkRuntime:false}),chain=readObservations(root,c);E.assertAppendOnly(chain.checkpoint,e.files);return {version:v,observations:chain.records.length,head:chain.head,runtimeCompatible:JSON.stringify(c.runtimeHashes)===JSON.stringify(runtimeHashes(root))};})};
 }
+function updateCompatible({root=ROOT,now=Date.now()}={}){
+ // Verify every historical checkpoint, including paused versions. A code
+ // change never migrates an old account or hides a corrupted source record.
+ return audit(root).versions.map(v=>{
+  if(!v.runtimeCompatible)return {candidateVersion:v.version,status:'paused',promotionCandidate:false,reason:'Frozen runtime differs; retained read-only, never migrated'};
+  try{return update({root,version:v.version,now});}catch(e){return {candidateVersion:v.version,status:'blocked',promotionCandidate:false,reason:e.message};}
+ });
+}
 function main(args=process.argv.slice(2)){
  const [command,...rest]=args,options={};for(let i=0;i<rest.length;i+=2){if(!['--version','--threshold-r'].includes(rest[i])||rest[i+1]===undefined)throw Error('Usage: shadow_improvement.cjs audit | register [--threshold-r 0.15] | update [--version ID] | assess --version ID');if(options[rest[i]]!==undefined)throw Error('Duplicate option');options[rest[i]]=rest[i+1];}
  let result;if(command==='audit')result=audit();
  else if(command==='register'){if(options['--version'])throw Error('Registration generates a NEW version');result=register({thresholdR:options['--threshold-r']===undefined?.15:Number(options['--threshold-r'])});}
- else if(command==='update'){if(options['--threshold-r'])throw Error('An existing cutoff cannot change');const versions=options['--version']?[options['--version']]:listVersions();const now=Date.now();result=versions.map(version=>{try{return update({version,now});}catch(e){process.exitCode=1;return {candidateVersion:version,status:'blocked',promotionCandidate:false,reason:e.message};}});}
+ else if(command==='update'){if(options['--threshold-r'])throw Error('An existing cutoff cannot change');if(options['--version']){try{result=[update({version:options['--version']})];}catch(e){result=[{candidateVersion:options['--version'],status:'blocked',promotionCandidate:false,reason:e.message}];}}else result=updateCompatible();if(result.some(r=>r.status==='blocked'))process.exitCode=1;}
  else if(command==='assess'&&options['--version']&&!options['--threshold-r'])result=assess({version:options['--version']});
  else throw Error('Unknown shadow command');
  console.log(JSON.stringify(result,null,2));
 }
 if(require.main===module)try{main();}catch(e){console.error(e.message);process.exitCode=1;}
-module.exports={ROOT,BASE,RUNTIME,runtimeHashes,listVersions,readCandidate,register,readObservations,providers,dataQuality,update,assess,audit,main};
+module.exports={ROOT,BASE,RUNTIME,inputTimestamp,runtimeHashes,listVersions,readCandidate,register,readObservations,providers,dataQuality,update,assess,audit,updateCompatible,main};

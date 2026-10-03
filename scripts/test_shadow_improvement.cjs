@@ -109,6 +109,16 @@ try{
   const feed=S.providers(e,market,c,market.generatedAt);for(const symbol of ['BTC','ETH','SOL'])assert.equal(feed.incumbent(symbol,market.crypto[symbol].frames['15m']).side,null);
   assert.ok(feed.mismatches.size>0);
  });
+ test('real collector ISO timestamps preserve raw bytes and still reject future inputs',()=>{
+  const stamp=market.generatedAt,last=S.readObservations(temp,c).records.at(-1).recordedAt;
+  const iso=new Date(stamp).toISOString().replace('Z','000+00:00');
+  assert.equal(S.inputTimestamp(iso),stamp);assert.equal(S.inputTimestamp(stamp),stamp);
+  for(const bad of ['2026-10-03','2026-10-03T01:51:19','invalid',null,NaN,-1])assert.throws(()=>S.inputTimestamp(bad),/Invalid market/);
+  market.generatedAt=iso;write(temp,'simulation/market.json',market);const raw=fs.readFileSync(path.join(temp,'simulation/market.json'));
+  S.update({root:temp,version:c.version,now:last+1});const record=S.readObservations(temp,c).records.at(-1);
+  assert.equal(record.inputs.marketGeneratedAt,stamp);assert.equal(record.inputs.sourceMarketGeneratedAt,iso);assert.equal(record.inputs.marketSha256,E.bytesHash(raw));assert.deepEqual(fs.readFileSync(path.join(temp,'simulation/market.json')),raw);
+  market.generatedAt=new Date(last+20000).toISOString();write(temp,'simulation/market.json',market);assert.throws(()=>S.update({root:temp,version:c.version,now:last+2}),/Future input/);
+ });
 }finally{fs.rmSync(temp,{recursive:true,force:true});}
 
 // Fabricated outcomes below test gate logic only. They are never registered in
