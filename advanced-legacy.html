@@ -143,7 +143,7 @@
           <label class="miniLabel">적정 범위 허용치 % <input class="smallInput" id="overvaluedThreshold" type="number" step="1" value="-10" style="width:72px;padding:6px 8px;min-height:28px"></label>
           <label class="miniLabel"><input id="autoSaveToggle" type="checkbox" checked> 자동 저장</label>
         </div>
-        <div class="criteriaNote">가족용 기본값: 할인율 10%, Bear/Bull 성장률 조정 ±5%p, 적정 범위 허용치 -10%. 4개월/1년 모드는 장기 적정가보다 상대가치, 모멘텀, 리스크를 더 크게 봅니다.</div>
+        <div class="criteriaNote">가족용 가치 가정 기본값: 할인율 10%, Bear/Bull 성장률 조정 ±5%p, 적정 범위 허용치 -10%. 수동 비교 기간과 가정은 가치 시나리오에만 사용하며, 단기 추세 점수는 바꾸지 않습니다.</div>
       </details>
     </div>
 
@@ -289,8 +289,8 @@
             <div class="kv"><span>Bear/Bull</span><b>성장률, 멀티플, 할인율 조정</b></div>
             <div class="kv"><span>필요 EPS 성장률</span><b>현재가를 정당화하는 성장률</b></div>
             <div class="kv"><span>상태</span><b>상승여력 + 섹터 P/E 프리미엄</b></div>
-            <div class="kv"><span>추천 점수</span><b>상대가치 + 성장률 갭 + 모멘텀 + 리스크</b></div>
-            <div class="note">이 모델은 매수 지시가 아니라 스크리닝용 모델입니다. 4개월/1년 모드는 모멘텀과 상대가치를 더 크게 보고, 3년/5년 모드는 적정가와 성장률 갭을 더 크게 봅니다.</div>
+            <div class="kv"><span>단기 추세 점수</span><b>자동 종가의 이동평균·수익률·RSI·MACD 흐름</b></div>
+            <div class="note">단기 추세 점수는 홈과 같은 자동 종가 자료로 계산합니다. 위의 가치 가정과 수동 비교 기간은 점수에 합산하지 않습니다. 신규 진입 판단과 AI 성능 기준 통과 여부는 별도로 확인하세요.</div>
           </div>
         </div>
 
