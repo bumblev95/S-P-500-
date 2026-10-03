@@ -240,6 +240,7 @@ def classify(title, tickers, names, other_names=None, summary=''):
                     if topic == '배당·환원 축소' and re.search(r'\bdividend growth\b', clause, re.I): continue
                     if topic in {'전망 상향', '전망 하향'} and re.search(r'\banalysts?\b.{0,50}\b(?:raises?|cuts?|lowers?|boosts?)\b', clause, re.I): continue
                     if topic in {'전망 상향', '전망 하향'} and re.search(r'\banalysts?\b', text, re.I): continue
+                    if topic in {'전망 상향', '전망 하향'} and re.search(r'\b(?:interest rate|rate outlook|economic outlook|sector outlook|s&p 500|industrials sector)\b', clause, re.I): continue
                     firm_subject = any(normalized.strip().startswith(f+' ') and f in names for f in firms)
                     if firm_subject and topic in {'전망 상향', '전망 하향'} and not re.search(r'\b(?:its|own|20\d\d|fiscal|annual|quarterly|revenue|profit|earnings)\b', match.group(0), re.I): continue
                     is_rating = topic.startswith('분석가')

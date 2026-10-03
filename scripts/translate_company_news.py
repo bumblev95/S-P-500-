@@ -17,7 +17,7 @@ from build_company_news import complete_sentences, normalize
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'Helsinki-NLP/opus-mt-tc-big-en-ko'
-VERSION = 'company-news-ko-v3'
+VERSION = 'company-news-ko-v4'
 
 
 def source_hash(article):
@@ -47,65 +47,56 @@ def valid_korean(text):
     return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text
 
 
-def separate_vocabularies(model_dir, tokenizer):
-    """CTranslate2's Marian converter registers one vocabulary for both sides.
-
-    This OPUS model uses separate English/Korean vocabularies with equal sizes.
-    Retain the converted weight row order, but give each side its own token
-    strings; otherwise even correctly decoded Korean produces unrelated text.
-    """
-    if not getattr(tokenizer, 'separate_vocabs', False): return
-    shared = model_dir/'shared_vocabulary.json'
-    source_path = model_dir/'source_vocabulary.json'
-    size = len(json.loads((shared if shared.exists() else source_path).read_text()))
-    for side, encoder in [('source', tokenizer.encoder), ('target', tokenizer.target_encoder)]:
-        ordered = {value: token for token, value in encoder.items()}
-        if any(i not in ordered for i in range(size)): raise ValueError('Incomplete '+side+' vocabulary')
-        atomic_json(model_dir/(side+'_vocabulary.json'), [ordered[i] for i in range(size)])
-    if shared.exists(): shared.unlink()
-
-
 def engine(model_dir):
     import ctranslate2
-    from transformers import MarianTokenizer
-    model_dir = Path(model_dir)
-    tokenizer_dir = model_dir/'tokenizer'
+    import sentencepiece
+    import tempfile
+    import zipfile
+    import shutil
+    import yaml
+    from urllib.request import urlopen
+    model_dir = Path(model_dir)/'marian-2022'
+    source_model = model_dir/'source.spm'
+    target_model = model_dir/'target.spm'
     if not (model_dir/'model.bin').exists():
-        from ctranslate2.converters import TransformersConverter
+        from ctranslate2.converters import MarianConverter
         model_dir.parent.mkdir(parents=True, exist_ok=True)
-        TransformersConverter(MODEL).convert(str(model_dir), quantization='int8')
-        MarianTokenizer.from_pretrained(MODEL).save_pretrained(tokenizer_dir)
-    tokenizer = MarianTokenizer.from_pretrained(tokenizer_dir, local_files_only=True)
-    print(json.dumps({'tokenizer': {'separateVocabularies': tokenizer.separate_vocabs, 'vocabularySize': len(tokenizer.encoder),
-                      'sampleTokens': tokenizer.tokenize('Revenue rose 6%.'), 'sampleIds': tokenizer.encode('Revenue rose 6%.')}}, ensure_ascii=False), flush=True)
-    separate_vocabularies(model_dir, tokenizer)
+        # Convert the original release with separate vocabularies/embeddings.
+        url = 'https://object.pouta.csc.fi/Tatoeba-MT-models/eng-kor/opusTCv20210807-sepvoc_transformer-big_2022-07-28.zip'
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary); archive = folder/'model.zip'
+            with urlopen(url, timeout=60) as response, archive.open('wb') as output:
+                shutil.copyfileobj(response, output)
+            digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+            with zipfile.ZipFile(archive) as bundle:
+                entries = {Path(n).name: n for n in bundle.namelist() if not n.endswith('/')}
+                print(json.dumps({'originalModelFiles': sorted(entries)}, ensure_ascii=False), flush=True)
+                selected = [name for name in entries if name.endswith(('.npz', '.spm', '.yml'))]
+                for name in selected:
+                    (folder/name).write_bytes(bundle.read(entries[name]))
+            weights = sorted(folder.glob('*.npz'))
+            if not weights: raise ValueError('Original model weights missing')
+            model_path = next((p for p in weights if p.name == 'model.npz'), weights[0])
+            vocab_paths = None
+            for config in folder.glob('*.decoder.yml'):
+                options = yaml.safe_load(config.read_text())
+                if options.get('vocabs'):
+                    vocab_paths = [folder/Path(n).name for n in options['vocabs']]
+                    break
+            if vocab_paths is None:
+                vocab_paths = [folder/'source.spm.yml', folder/'target.spm.yml']
+            MarianConverter(str(model_path), [str(p) for p in vocab_paths]).convert(str(model_dir), quantization='int8')
+            shutil.copyfile(folder/'source.spm', source_model)
+            shutil.copyfile(folder/'target.spm', target_model)
+            atomic_json(model_dir/'source.json', {'url': url, 'sha256': digest, 'license': 'CC-BY-4.0'})
+    source = sentencepiece.SentencePieceProcessor(model_file=str(source_model))
+    target = sentencepiece.SentencePieceProcessor(model_file=str(target_model))
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
         texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
-        # convert_ids_to_tokens uses Marian's TARGET decoder even for English
-        # source IDs when vocabularies are separate. Keep the SOURCE pieces.
-        tokens = [tokenizer.tokenize(t)[:191]+[tokenizer.eos_token] for t in texts]
+        tokens = [source.encode(t, out_type=str)[:191] for t in texts]
         rows = translator.translate_batch(tokens, beam_size=3, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
-        # English/Korean Marian uses different source and target vocabularies.
-        # Decode target SentencePiece strings directly; mapping through the
-        # source token IDs corrupts names, numbers and the entire translation.
-        return [tokenizer.spm_target.decode([t for t in r.hypotheses[0] if t not in tokenizer.all_special_tokens]).strip() for r in rows]
-    # Verify this converted runtime against the original model if its smoke
-    # output is invalid. A broken runtime never publishes generated summaries.
-    try: verify_engine(translate)
-    except ValueError:
-        import torch
-        from transformers import MarianMTModel
-        torch.set_num_threads(2)
-        original_tokenizer = MarianTokenizer.from_pretrained(MODEL)
-        original_model = MarianMTModel.from_pretrained(MODEL).eval()
-        def original(texts):
-            with torch.inference_mode():
-                ids = original_model.generate(**original_tokenizer(texts, padding=True, truncation=True, max_length=192, return_tensors='pt'), num_beams=3, max_new_tokens=160)
-            return original_tokenizer.batch_decode(ids, skip_special_tokens=True)
-        print(json.dumps({'originalModelCheck': original(['The company recalls 20 phones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']),
-                         'originalTokenizer': {'separateVocabularies': original_tokenizer.separate_vocabs, 'vocabularySize': len(original_tokenizer.encoder)}}, ensure_ascii=False), flush=True)
-        raise
+        return [target.decode([t for t in r.hypotheses[0] if t not in {'<s>', '</s>', '<pad>'}]).strip() for r in rows]
     return translate
 
 
