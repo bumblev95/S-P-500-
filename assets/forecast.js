@@ -3,7 +3,8 @@
   const root = document.getElementById('forecastPanel');
   if (!root) return;
   const bridge = window.forecastBridge;
-  const labels = {21:'1개월',84:'4개월',252:'1년'};
+  const labels = {126:'6개월',252:'1년'};
+  const normalize = StockAssessment.normalize;
   const directions = {up:'상승 우세',neutral:'방향 혼재',down:'하락 우세'};
   const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g,
     ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -13,11 +14,11 @@
     (signed && value > 0 ? '+' : '') + (value*100).toFixed(1) + '%' : '—';
   const finite = Number.isFinite;
   const embedded=document.getElementById('forecastEmbeddedData');
-  let data = null, error = '', loading = false, symbol = bridge.selected() || 'NVDA', horizon = 84;
-  let lastBridgeSymbol = bridge.selected();
+  let data = null, error = '', loading = false, symbol = normalize(bridge.selected()) || 'NVDA', horizon = 126;
+  let lastBridgeSymbol = normalize(bridge.selected());
   try {
     const pref = JSON.parse(localStorage.getItem('sp500.forecast.preferences.v1') || '{}');
-    if (!lastBridgeSymbol && pref.symbol) symbol = pref.symbol;
+    if (!lastBridgeSymbol && pref.symbol) symbol = normalize(pref.symbol);
     if (labels[pref.horizon]) horizon = Number(pref.horizon);
   } catch (_) { /* Device preferences are optional. */ }
 
@@ -136,13 +137,13 @@
   }
 
   function controls() {
-    const names=new Map(bridge.stocks().map(s=>[s.symbol,s.name]));
+    const names=new Map(bridge.stocks().map(s=>[normalize(s.symbol),s.name]));
     const symbols=data?Object.keys(data.stocks).sort():[];
     return '<header class="fc-header"><div><h2>가격·방향 전망</h2>'+
       '<div class="fc-caption">가격 기반 모델 · 실적·뉴스 미반영</div></div>'+
       '<div class="fc-controls"><label><span class="sr-only">전망 종목</span>'+
       '<select id="fcSymbol" aria-label="전망 종목">'+symbols.map(s=>'<option value="'+esc(s)+'"'+
-        (s===symbol?' selected':'')+'>'+esc(s+' · '+(names.get(s)||s))+'</option>').join('')+
+        (s===symbol?' selected':'')+'>'+esc(s+' · '+(names.get(normalize(s))||s))+'</option>').join('')+
       '</select></label><div class="fc-periods" role="group" aria-label="예측 기간">'+
       Object.entries(labels).map(([h,label])=>'<button type="button" data-fc-horizon="'+h+
         '" aria-pressed="'+(Number(h)===horizon)+'">'+label+'</button>').join('')+
@@ -157,13 +158,14 @@
         '</p>'+(error?'<button class="fc-refresh" type="button" data-fc-reload>다시 불러오기</button>':'')+'</div>';
       return;
     }
-    const entry=data.stocks[symbol];
+    const entry=StockAssessment.entry(data,symbol);
     if(!entry){
       root.innerHTML=controls()+'<div class="fc-empty">이 종목의 예측 입력 데이터가 아직 없습니다. 다른 종목을 선택하세요.</div>';
       return;
     }
-    const pred=entry.predictions[String(horizon)];
-    const stale=entry.status==='stale'||age(entry)>5||age(entry)<0;
+    symbol=entry.symbol;
+    const pred=entry.predictions?.[String(horizon)];
+    const stale=entry.status!=='ready'||!entry.fresh||age(entry)>5||age(entry)<0;
     let out=controls()+'<div class="fc-body"><div class="fc-topline"><span class="fc-ticker">'+esc(symbol)+
       '</span>'+(stale?'<span class="fc-badge fc-caution">기준 종가 갱신 필요</span>':pred?badge(pred.direction):
         '<span class="fc-badge">데이터 부족</span>')+'<span class="fc-meta">기준 종가 '+amount(entry.price)+
@@ -174,7 +176,7 @@
       root.innerHTML=out+'</div>';
       return;
     }
-    out+='<div class="fc-main"><div class="fc-chart">'+chart(entry,pred)+
+    out+='<p class="fc-help">기존 추세 전망 · 공통 단기 추세 점수와 AI 진입 검증은 별도로 확인하세요.</p><div class="fc-main"><div class="fc-chart">'+chart(entry,pred)+
       '<p class="fc-help">로그 가격축 · '+horizon+'거래일 후 · 가격은 종목의 거래 통화 기준</p></div>'+
       '<div><div class="fc-scenarios">';
     for(const [key,label] of [['bear','약세 시나리오'],['base','기준 전망'],['bull','강세 시나리오']]){
@@ -182,7 +184,7 @@
         '</strong><span class="fc-caption">기준 종가 대비 '+percent(pred[key]/pred.anchor-1,true)+'</span></div>';
     }
     out+='</div><p class="fc-help">범위는 과거 변동성을 적용한 조건별 시나리오입니다. 상승 확률이나 보장된 가격 구간을 뜻하지 않습니다.</p>';
-    const previous=entry.previous[String(horizon)];
+    const previous=entry.previous?.[String(horizon)];
     if(previous) out+='<p class="fc-help">직전 전망 '+esc(previous.asOf)+' · '+esc(directions[previous.direction])+
       (previous.direction===pred.direction?' 유지':' → '+esc(directions[pred.direction]))+'</p>';
     out+='</div></div>';
@@ -241,7 +243,7 @@
   });
   window.StockForecast={
     refresh(){
-      const selected=bridge.selected();
+      const selected=normalize(bridge.selected());
       if(selected && selected!==lastBridgeSymbol){symbol=selected;lastBridgeSymbol=selected;remember();}
       render();
     }

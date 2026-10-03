@@ -12,10 +12,11 @@
     const causal=!training||[training.trainTargetThrough,training.calibrationTargetThrough].every(d=>Number.isFinite(Date.parse(d))&&Date.parse(d)<reference);
     const researchValid=data?.status==='trained'&&consistent&&Number.isFinite(reference)&&reference<=now&&causal;
     const current=aligned&&age>=0&&age<=5&&priceAge>=0&&priceAge<=5;
-    const eligible=researchValid&&record?.status==='eligible'&&current;
-    const reason=!record?'학습에 필요한 가격 이력 확인 중':!researchValid?'예측 파일·학습 기준일 검증 필요':!current?'이전 기준 전망 · 최신 가격과 날짜가 다릅니다':(record.reasons||[]).join(' · ')||'과거 검증 기준 통과';
+    const performanceStatus=data?.validation?.[String(h)]?.passed,performancePassed=performanceStatus===true;
+    const eligible=researchValid&&record?.status==='eligible'&&current&&performancePassed;
+    const reason=!record?'학습에 필요한 가격 이력 확인 중':!researchValid?'예측 파일·학습 기준일 검증 필요':!current?'이전 기준 전망 · 최신 가격과 날짜가 다릅니다':!performancePassed?performanceStatus===false?'전체 AI 성능 기준 미통과':'전체 AI 성능 검증 자료 확인 필요':(record.reasons||[]).join(' · ')||'과거 검증 기준 통과';
     // Research display is independent of eligibility for trading/ranking.
-    return {eligible,current,record,reason,asOf:item?.asOf,forecast:eligible?f:null,researchForecast:researchValid?f:null};
+    return {eligible,current,performancePassed,performanceStatus,record,reason,asOf:item?.asOf,forecast:eligible?f:null,researchForecast:researchValid?f:null};
   }
   function chartEntry(data,e,h){
     const a=inspect(data,e,h);if(!a.researchForecast)return e;

@@ -335,9 +335,9 @@
   </div>
 
   <script src="assets/technical-guide.js"></script>
-  <script src="assets/learned-guide.js?v=4"></script>
+  <script src="assets/learned-guide.js?v=5"></script>
   <script src="assets/decision-support.js?v=5"></script>
-  <script src="assets/stock-assessment.js?v=1"></script>
+  <script src="assets/stock-assessment.js?v=2"></script>
   <script>
     const STORAGE_KEY = 'sp500_sector_valuation_dashboard_ko_family_v25';
     const EMBEDDED_FMP_KEY = ''; // v8에서는 FMP를 사용하지 않습니다. GitHub Actions가 생성한 CSV만 읽습니다.
@@ -793,7 +793,7 @@
     function renderMobileList(){
       const box=document.getElementById('mobileStockList'); if(!box) return;
       const visible=getVisibleStocks(); const sectorSet=state.selectedSector==='All'?state.stocks:state.stocks.filter(s=>s.sector===state.selectedSector);
-      const enriched=visible.map(s=>({s,c:calc(s,sectorSet)})).sort((a,b)=>(b.c.shortScore||0)-(a.c.shortScore||0)).slice(0,30);
+      const enriched=visible.map(s=>({s,c:calc(s,sectorSet)})).sort((a,b)=>StockAssessment.compare(a.c.assessment,b.c.assessment)).slice(0,30);
       document.getElementById('mobileListCount').textContent=visible.length+'개 중 상위 '+enriched.length+'개';
       box.innerHTML='';
       if(!enriched.length){ box.innerHTML='<div class="muted">표시할 종목이 없습니다.</div>'; return; }
@@ -804,7 +804,7 @@
       document.body.classList.toggle('mobileMode', !!on);
       localStorage.setItem(STORAGE_KEY+'_mobileMode', on?'1':'0');
       const btn=document.getElementById('btnMobileToggle'); if(btn) btn.textContent=on?'데스크톱 보기':'모바일 보기';
-      renderMobileList();
+      render();
     }
 
     function render(){
@@ -1702,9 +1702,9 @@
     window.forecastBridge = {
       selected:()=>state.selectedSymbol,
       stocks:()=>state.stocks,
-      select:(symbol)=>{state.selectedSymbol=symbol; render(); persistMaybe();}
+      select:(symbol)=>{const saved=state.stocks.find(s=>StockAssessment.normalize(s.symbol)===StockAssessment.normalize(symbol));state.selectedSymbol=saved?.symbol||symbol; render(); persistMaybe();}
     };
   </script>
-  <script src="assets/forecast.js"></script>
+  <script src="assets/forecast.js?v=2"></script>
 </body>
 </html>
