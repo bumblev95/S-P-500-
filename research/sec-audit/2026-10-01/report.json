@@ -1,0 +1,1113 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "35a3316fe23c7306d9114bcc60f04a116814842c",
+  "asOfDate": "2026-10-01",
+  "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+  "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+  "codeHashes": {
+    "build_research_inputs.py": "89a85ea6f6ff008fb836c99db36e66036f58d0ddd2ab91b6ce7e1f2fcc8dc2b6",
+    "sec_fallbacks.py": "bb37dc21a6a20c4dff8386202dbf0ef117390b45d3bfbaabb7dbcee7b7388f7d",
+    "import_sec_companyfacts.py": "7857f4d6956c22964de3515ee924e1b96a407df8d7daaa00fc4c5c9319b66dc4",
+    "audit_sec_coverage.py": "d7865dc779bef58a2c96052816302964158b02af2001905a4b268a99c48f6abb"
+  },
+  "sourceManifestHash": "e1d2255744e238302313944a27d0e0ccea105efba394a2339c3576cddbb21c3e",
+  "universe": {
+    "membersUnchanged": true,
+    "sourceHashUnchanged": true,
+    "sourceHash": "8e8c5a9aa27079a1feb6f92f9d56c5ad7a2084263a66d4191c54705a5b77c2ed"
+  },
+  "baselineCoverage": {
+    "targetIssuers": 500,
+    "usableIssuers": 488,
+    "targetTickers": 503,
+    "usableTickers": 491
+  },
+  "offlineCoverage": {
+    "targetIssuers": 500,
+    "usableIssuers": 497,
+    "targetTickers": 503,
+    "usableTickers": 500,
+    "fallbackIssuers": 9,
+    "missingSymbols": [
+      "APA",
+      "HONA",
+      "SYF"
+    ]
+  },
+  "retainedCoveredTickers": 491,
+  "issuers": {
+    "APA": {
+      "cik": 1841666,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "custom_or_dimensioned_revenue_not_in_companyfacts",
+      "state": "missing",
+      "fallbacks": [],
+      "sourcePayloadHashes": {
+        "1841666": "7f0b5fffe19baea8e7fe8e891de0aed9413554eacf53bed59ed53b9ab525cd2b"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 0,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 18,
+      "historyRows": 0,
+      "latestAvailableDate": null,
+      "latestPeriodEnd": null,
+      "latestEvidence": [],
+      "latestFeatures": null,
+      "mappingEvidence": null
+    },
+    "CRWD": {
+      "cik": 1535527,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "standard_revenue_tag_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "standard_revenue_tag"
+      ],
+      "sourcePayloadHashes": {
+        "1535527": "09310e9d1aae06fda5f075f8a870a77c4049712f4cebbe9085e808ee810eb38f"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 21,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 40,
+      "historyRows": 27,
+      "latestAvailableDate": "2026-08-27",
+      "latestPeriodEnd": "2026-01-31",
+      "latestEvidence": [
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-03-05",
+          "periodEnd": "2026-01-31",
+          "accession": "0001535527-26-000010",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1535527,
+          "periodStart": "2025-02-01",
+          "value": 4812005000,
+          "form": "10-K"
+        },
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-03-05",
+          "periodEnd": "2025-01-31",
+          "accession": "0001535527-26-000010",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1535527,
+          "periodStart": "2024-02-01",
+          "value": 3953624000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-03-05",
+          "periodEnd": "2026-01-31",
+          "accession": "0001535527-26-000010",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1535527,
+          "periodStart": "2025-02-01",
+          "value": -162502000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-03-05",
+          "periodEnd": "2026-01-31",
+          "accession": "0001535527-26-000010",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1535527,
+          "periodStart": "2025-02-01",
+          "value": 1612349000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-08-27",
+          "periodEnd": "2026-01-31",
+          "accession": "0001535527-26-000031",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1535527,
+          "periodStart": null,
+          "value": 11086684000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-08-27",
+          "periodEnd": "2026-01-31",
+          "accession": "0001535527-26-000031",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1535527,
+          "periodStart": null,
+          "value": 6614079000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": 0.21711245176577232,
+        "netMargin": -0.03377012284899953,
+        "cashflowMargin": 0.3350680225810239,
+        "liabilitiesToAssets": 0.5965786523725218
+      },
+      "mappingEvidence": null
+    },
+    "FITB": {
+      "cik": 35527,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "bank_revenue_components_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "bank_reported_components"
+      ],
+      "sourcePayloadHashes": {
+        "35527": "37b33b15380ee73ba8a96fbb864e77078fca05cf5e4fe65b75d839f7bab49a62"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 18,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 51,
+        "NoninterestIncome": 51
+      },
+      "otherAnnualFlowFacts": 84,
+      "historyRows": 67,
+      "latestAvailableDate": "2026-08-04",
+      "latestPeriodEnd": "2025-12-31",
+      "latestEvidence": [
+        {
+          "tag": "InterestIncomeExpenseNet",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000035527-26-000124",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": "2025-01-01",
+          "value": 5982000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NoninterestIncome",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000035527-26-000124",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": "2025-01-01",
+          "value": 3035000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "InterestIncomeExpenseNet",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0000035527-26-000124",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": "2024-01-01",
+          "value": 5630000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NoninterestIncome",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0000035527-26-000124",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": "2024-01-01",
+          "value": 2849000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000035527-26-000124",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": "2025-01-01",
+          "value": 2522000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000035527-26-000124",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": "2025-01-01",
+          "value": 4514000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-08-04",
+          "periodEnd": "2025-12-31",
+          "accession": "0000035527-26-000202",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": null,
+          "value": 214376000000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-08-04",
+          "periodEnd": "2025-12-31",
+          "accession": "0000035527-26-000202",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 35527,
+          "periodStart": null,
+          "value": 192652000000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": 0.06345087864134924,
+        "netMargin": 0.27969391150049905,
+        "cashflowMargin": 0.5006099589663968,
+        "liabilitiesToAssets": 0.8986640295555473
+      },
+      "mappingEvidence": null
+    },
+    "HONA": {
+      "cik": 2089271,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "quarterly_only_no_annual_revenue",
+      "state": "missing",
+      "fallbacks": [],
+      "sourcePayloadHashes": {
+        "2089271": "a036d699f2c5400e9b3726dbe76d37da49c834f1c453d247a5b3ab70aa7a6993"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 0,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 0,
+      "historyRows": 0,
+      "latestAvailableDate": null,
+      "latestPeriodEnd": null,
+      "latestEvidence": [],
+      "latestFeatures": null,
+      "mappingEvidence": null
+    },
+    "KHC": {
+      "cik": 1637459,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "standard_revenue_tag_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "standard_revenue_tag"
+      ],
+      "sourcePayloadHashes": {
+        "1637459": "0ff5641db393ec511f392149fd3bd44edb07c0295eb6034348cd17aa3e427006"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 24,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 60,
+      "historyRows": 30,
+      "latestAvailableDate": "2026-08-05",
+      "latestPeriodEnd": "2025-12-27",
+      "latestEvidence": [
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-02-12",
+          "periodEnd": "2025-12-27",
+          "accession": "0001637459-26-000009",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1637459,
+          "periodStart": "2024-12-29",
+          "value": 24942000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-02-12",
+          "periodEnd": "2024-12-28",
+          "accession": "0001637459-26-000009",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1637459,
+          "periodStart": "2023-12-31",
+          "value": 25846000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-02-12",
+          "periodEnd": "2025-12-27",
+          "accession": "0001637459-26-000009",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1637459,
+          "periodStart": "2024-12-29",
+          "value": -5846000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-12",
+          "periodEnd": "2025-12-27",
+          "accession": "0001637459-26-000009",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1637459,
+          "periodStart": "2024-12-29",
+          "value": 4462000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-08-05",
+          "periodEnd": "2025-12-27",
+          "accession": "0001637459-26-000054",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1637459,
+          "periodStart": null,
+          "value": 81786000000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-08-05",
+          "periodEnd": "2025-12-27",
+          "accession": "0001637459-26-000054",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1637459,
+          "periodStart": null,
+          "value": 39997000000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": -0.03497639866903968,
+        "netMargin": -0.2343837703472055,
+        "cashflowMargin": 0.1788950364846444,
+        "liabilitiesToAssets": 0.4890445797569266
+      },
+      "mappingEvidence": null
+    },
+    "ODFL": {
+      "cik": 878927,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "standard_revenue_tag_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "standard_revenue_tag"
+      ],
+      "sourcePayloadHashes": {
+        "878927": "b639b7b603cee57632026f2fb42965d24224900eb683db4697eb11e05e0ae660"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 24,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 96,
+      "historyRows": 31,
+      "latestAvailableDate": "2026-08-05",
+      "latestPeriodEnd": "2025-12-31",
+      "latestEvidence": [
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001193125-26-067161",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 878927,
+          "periodStart": "2025-01-01",
+          "value": 5496389000,
+          "form": "10-K"
+        },
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0001193125-26-067161",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 878927,
+          "periodStart": "2024-01-01",
+          "value": 5814810000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001193125-26-067161",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 878927,
+          "periodStart": "2025-01-01",
+          "value": 1023703000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001193125-26-067161",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 878927,
+          "periodStart": "2025-01-01",
+          "value": 1370133000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-08-05",
+          "periodEnd": "2025-12-31",
+          "accession": "0000878927-26-000023",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 878927,
+          "periodStart": null,
+          "value": 5470160000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-08-05",
+          "periodEnd": "2025-12-31",
+          "accession": "0000878927-26-000023",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 878927,
+          "periodStart": null,
+          "value": 1159103000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": -0.05476034470601787,
+        "netMargin": 0.18625009983827565,
+        "cashflowMargin": 0.24927875374177483,
+        "liabilitiesToAssets": 0.21189563010953977
+      },
+      "mappingEvidence": null
+    },
+    "RF": {
+      "cik": 1281761,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "bank_revenue_components_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "bank_reported_components"
+      ],
+      "sourcePayloadHashes": {
+        "1281761": "7792c635597c4a175914bb1e0b6abd65406224ecbd42b9155cfe2beeda5b5ce7"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 12,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 51,
+        "NoninterestIncome": 51
+      },
+      "otherAnnualFlowFacts": 102,
+      "historyRows": 67,
+      "latestAvailableDate": "2026-08-06",
+      "latestPeriodEnd": "2025-12-31",
+      "latestEvidence": [
+        {
+          "tag": "InterestIncomeExpenseNet",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001281761-26-000019",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": "2025-01-01",
+          "value": 4991000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NoninterestIncome",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001281761-26-000019",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": "2025-01-01",
+          "value": 2535000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "InterestIncomeExpenseNet",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0001281761-26-000019",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": "2024-01-01",
+          "value": 4818000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NoninterestIncome",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0001281761-26-000019",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": "2024-01-01",
+          "value": 2265000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001281761-26-000019",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": "2025-01-01",
+          "value": 2156000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0001281761-26-000019",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": "2025-01-01",
+          "value": 2181000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-08-06",
+          "periodEnd": "2025-12-31",
+          "accession": "0001281761-26-000055",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": null,
+          "value": 158814000000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-08-06",
+          "periodEnd": "2025-12-31",
+          "accession": "0001281761-26-000055",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1281761,
+          "periodStart": null,
+          "value": 139711000000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": 0.062544119723281,
+        "netMargin": 0.28647355833111876,
+        "cashflowMargin": 0.28979537602976346,
+        "liabilitiesToAssets": 0.8797146347299356
+      },
+      "mappingEvidence": null
+    },
+    "SJM": {
+      "cik": 91419,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "standard_revenue_tag_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "standard_revenue_tag"
+      ],
+      "sourcePayloadHashes": {
+        "91419": "8efb715c2cf4fc2c3c390ad9aa732af10c04768f5bfc798464525998a2ec1d07"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 24,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 24,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 75,
+      "historyRows": 30,
+      "latestAvailableDate": "2026-08-26",
+      "latestPeriodEnd": "2026-04-30",
+      "latestEvidence": [
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-06-09",
+          "periodEnd": "2026-04-30",
+          "accession": "0000091419-26-000050",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 91419,
+          "periodStart": "2025-05-01",
+          "value": 9050900000,
+          "form": "10-K"
+        },
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-06-09",
+          "periodEnd": "2025-04-30",
+          "accession": "0000091419-26-000050",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 91419,
+          "periodStart": "2024-05-01",
+          "value": 8726100000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-06-09",
+          "periodEnd": "2026-04-30",
+          "accession": "0000091419-26-000050",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 91419,
+          "periodStart": "2025-05-01",
+          "value": -138700000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-06-09",
+          "periodEnd": "2026-04-30",
+          "accession": "0000091419-26-000050",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 91419,
+          "periodStart": "2025-05-01",
+          "value": 1473600000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-08-26",
+          "periodEnd": "2026-04-30",
+          "accession": "0000091419-26-000080",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 91419,
+          "periodStart": null,
+          "value": 16219400000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-08-26",
+          "periodEnd": "2026-04-30",
+          "accession": "0000091419-26-000080",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 91419,
+          "periodStart": null,
+          "value": 10675600000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": 0.03722166832834839,
+        "netMargin": -0.015324442873084444,
+        "cashflowMargin": 0.16281253797964843,
+        "liabilitiesToAssets": 0.6581994401765786
+      },
+      "mappingEvidence": null
+    },
+    "SYF": {
+      "cik": 1601712,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "custom_retailer_share_adjustment_required",
+      "state": "missing",
+      "fallbacks": [],
+      "sourcePayloadHashes": {
+        "1601712": "aa28307e4f652d49d3e30fcd90acd308e704067a86ab823975397f832f2e4013"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 0,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 36,
+        "NoninterestIncome": 36
+      },
+      "otherAnnualFlowFacts": 69,
+      "historyRows": 0,
+      "latestAvailableDate": null,
+      "latestPeriodEnd": null,
+      "latestEvidence": [],
+      "latestFeatures": null,
+      "mappingEvidence": null
+    },
+    "TFC": {
+      "cik": 92230,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "bank_revenue_components_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "bank_reported_components"
+      ],
+      "sourcePayloadHashes": {
+        "92230": "d3954f9cf9908e62fea9b8b4123341caec49e15e7f849fd6680a47d4fe061bd8"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 0,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 51,
+        "NoninterestIncome": 51
+      },
+      "otherAnnualFlowFacts": 51,
+      "historyRows": 67,
+      "latestAvailableDate": "2026-07-31",
+      "latestPeriodEnd": "2025-12-31",
+      "latestEvidence": [
+        {
+          "tag": "InterestIncomeExpenseNet",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000092230-26-000030",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": "2025-01-01",
+          "value": 14423000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NoninterestIncome",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000092230-26-000030",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": "2025-01-01",
+          "value": 5896000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "InterestIncomeExpenseNet",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0000092230-26-000030",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": "2024-01-01",
+          "value": 14091000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NoninterestIncome",
+          "filed": "2026-02-24",
+          "periodEnd": "2024-12-31",
+          "accession": "0000092230-26-000030",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": "2024-01-01",
+          "value": -813000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-24",
+          "periodEnd": "2025-12-31",
+          "accession": "0000092230-26-000030",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": "2025-01-01",
+          "value": 5739000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-07-31",
+          "periodEnd": "2025-12-31",
+          "accession": "0000092230-26-000099",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": null,
+          "value": 547538000000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-07-31",
+          "periodEnd": "2025-12-31",
+          "accession": "0000092230-26-000099",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 92230,
+          "periodStart": null,
+          "value": 482349000000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": 0.5302756439222776,
+        "netMargin": null,
+        "cashflowMargin": 0.28244500221467594,
+        "liabilitiesToAssets": 0.880941596747623
+      },
+      "mappingEvidence": null
+    },
+    "VLO": {
+      "cik": 1035002,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "standard_revenue_tag_not_selected",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "standard_revenue_tag"
+      ],
+      "sourcePayloadHashes": {
+        "1035002": "80977f6e2a0b6ad4fa951c29e4f3ba38d6e3353fe8541ff1414e17ed8b076204"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 24,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 102,
+      "historyRows": 31,
+      "latestAvailableDate": "2026-07-30",
+      "latestPeriodEnd": "2025-12-31",
+      "latestEvidence": [
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-02-25",
+          "periodEnd": "2025-12-31",
+          "accession": "0001628280-26-011499",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1035002,
+          "periodStart": "2025-01-01",
+          "value": 122687000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "RevenueFromContractWithCustomerIncludingAssessedTax",
+          "filed": "2026-02-25",
+          "periodEnd": "2024-12-31",
+          "accession": "0001628280-26-011499",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1035002,
+          "periodStart": "2024-01-01",
+          "value": 129881000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-02-25",
+          "periodEnd": "2025-12-31",
+          "accession": "0001628280-26-011499",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1035002,
+          "periodStart": "2025-01-01",
+          "value": 2348000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-25",
+          "periodEnd": "2025-12-31",
+          "accession": "0001628280-26-011499",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1035002,
+          "periodStart": "2025-01-01",
+          "value": 5826000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-07-30",
+          "periodEnd": "2025-12-31",
+          "accession": "0001628280-26-050937",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 1035002,
+          "periodStart": null,
+          "value": 57988000000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": -0.055389163926979346,
+        "netMargin": 0.019138131994424837,
+        "cashflowMargin": 0.04748669378173727,
+        "liabilitiesToAssets": null
+      },
+      "mappingEvidence": null
+    },
+    "XOM": {
+      "cik": 2115436,
+      "parserVersion": "sec-annual-v2-reviewed-fallbacks",
+      "policyHash": "5307e3d8602d55b36f2c63eadab0b2cfe70120cbf36b4b8e845b620b9f6c37f8",
+      "reason": "successor_cik_without_annual_history",
+      "state": "fallback_applied",
+      "fallbacks": [
+        "reviewed_predecessor"
+      ],
+      "sourcePayloadHashes": {
+        "2115436": "8aa44735433df66cd9da2081c388fe085a908da5b762c7c9d38c65e13d15786f",
+        "34088": "5b9ea1cec8bc0159991100e165b9990465a82543b0ae80fed4936d88a4f36fdc"
+      },
+      "baselineAnnualRevenueFacts": 0,
+      "includingTaxAnnualRevenueFacts": 0,
+      "bankComponentAnnualFacts": {
+        "InterestIncomeExpenseNet": 0,
+        "NoninterestIncome": 0
+      },
+      "otherAnnualFlowFacts": 0,
+      "historyRows": 2,
+      "latestAvailableDate": "2026-08-03",
+      "latestPeriodEnd": "2025-12-31",
+      "latestEvidence": [
+        {
+          "tag": "Revenues",
+          "filed": "2026-02-18",
+          "periodEnd": "2025-12-31",
+          "accession": "0000034088-26-000045",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 34088,
+          "periodStart": "2025-01-01",
+          "value": 332238000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Revenues",
+          "filed": "2026-02-18",
+          "periodEnd": "2024-12-31",
+          "accession": "0000034088-26-000045",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 34088,
+          "periodStart": "2024-01-01",
+          "value": 349585000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetIncomeLoss",
+          "filed": "2026-02-18",
+          "periodEnd": "2025-12-31",
+          "accession": "0000034088-26-000045",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 34088,
+          "periodStart": "2025-01-01",
+          "value": 28844000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-02-18",
+          "periodEnd": "2025-12-31",
+          "accession": "0000034088-26-000045",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 34088,
+          "periodStart": "2025-01-01",
+          "value": 51970000000,
+          "form": "10-K"
+        },
+        {
+          "tag": "Assets",
+          "filed": "2026-05-04",
+          "periodEnd": "2025-12-31",
+          "accession": "0000034088-26-000067",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 34088,
+          "periodStart": null,
+          "value": 448980000000,
+          "form": "10-Q"
+        },
+        {
+          "tag": "Liabilities",
+          "filed": "2026-05-04",
+          "periodEnd": "2025-12-31",
+          "accession": "0000034088-26-000067",
+          "taxonomy": "us-gaap",
+          "unit": "USD",
+          "sourceCIK": 34088,
+          "periodStart": null,
+          "value": 182354000000,
+          "form": "10-Q"
+        }
+      ],
+      "latestFeatures": {
+        "revenueGrowth": -0.049621694294663676,
+        "netMargin": 0.08681728158729586,
+        "cashflowMargin": 0.15642400929454187,
+        "liabilitiesToAssets": 0.40615172168025304
+      },
+      "mappingEvidence": {
+        "id": "xom-redomiciliation-2026",
+        "symbol": "XOM",
+        "sourceCIK": 34088,
+        "targetCIK": 2115436,
+        "effectiveDate": "2026-07-01",
+        "filed": "2026-07-01",
+        "accession": "0001193125-26-291990",
+        "source": "https://www.sec.gov/Archives/edgar/data/2115436/000119312526291990/d71068d8k12b.htm"
+      }
+    }
+  },
+  "limitations": [
+    "Newly acquired official payloads; baseline commit did not publish raw CompanyFacts hashes. These are not claimed to be its exact raw vintage.",
+    "Offline parser/coverage replay, not a production refresh or predictive performance test.",
+    "Filed dates are reconstructed from current CompanyFacts; not a certified vintage feed.",
+    "Bank denominator is explicitly net interest plus noninterest income, before credit provisions; tax-equivalent/non-GAAP adjustments are not guessed.",
+    "XOM predecessor facts stop at the conversion and are never admitted before its mapping filing date."
+  ]
+}

@@ -53,7 +53,7 @@
       ['가격 위치',location,inside],
       ['시장 위험',marketNames[plan.market]||marketNames.unknown,['stable','watch'].includes(plan.market)],
       ['손익비','현재 '+rr+' / 필요한 기준 '+threshold,Number.isFinite(plan.rr)&&plan.rr>=threshold],
-      ['추세 조건','현재 '+plan.ts+' / 진입 검토 기준 60',plan.ts>=60],
+      ['추세 조건',context.assessment&&context.assessment.score===null?'자료 부족 · 산출 보류':'현재 '+plan.ts+' / 진입 검토 기준 60',(!context.assessment||context.assessment.score!==null)&&plan.ts>=60],
     ];
     const waiting=plan.blocks.length?plan.blocks.join(' · '):plan.ts<60?'추세 점수가 진입 검토 기준 60에 못 미칩니다.':!inside?'현재가가 관심 구간 밖에 있습니다. 가격 위치와 지지를 다시 확인하세요.':'수치 조건은 충족했지만 실제 지지 유지와 최신 공시를 확인해야 합니다.';
     const trigger=!hasZone?'자료가 갱신된 뒤 관심 구간을 확인하세요.':inside?'관심 구간 안입니다. 아래 미충족 조건이 해결됐는지 먼저 확인하세요.':price>plan.buyHigh?money(plan.buyHigh)+' 부근까지 조정될 때 다시 확인하세요. 도달만으로 매수 조건이 충족되지는 않습니다.':money(plan.buyLow)+' 위로 회복하는지 확인하세요. 하락 중 추가 매수를 권하는 신호가 아닙니다.';

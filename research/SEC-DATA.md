@@ -1,5 +1,18 @@
 # SEC 실적 수집과 학습 연결
 
+## 2026-10-01 coverage 보강
+
+`35a3316`의 annual coverage 488/500 issuer, 491/503 ticker 누락 12개를
+공식 원문으로 조사했다. issuer별로 검증한 standard revenue 태그·은행 항목
+합산·XOM predecessor만 허용하며, 고정 원문의 offline 재현은 497 issuer /
+500 ticker다. APA·SYF·HONA는 결측을 유지한다. 실제 운영 snapshot·모델이나
+기존 고정 실험 결과를 갱신한 수치가 아니다.
+
+[원인 표·안전장치·재현 명령](sec-audit/2026-10-01/README.md),
+[원문 hash manifest](sec-audit/2026-10-01/manifest.json),
+[기계 판독 보고서](sec-audit/2026-10-01/report.json)를 확인할 수 있다.
+아래 2026-09-13 수치는 당시 실험의 완료 기록으로 유지한다.
+
 2026-09-13 수집·학습·재현 검증을 완료했습니다. 이전의 "15개 기업만 수집" 또는
 "연락처 설정 및 접근 성공 확인 필요" 상태는 이 완료 기록으로 갱신합니다.
 

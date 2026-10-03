@@ -95,9 +95,63 @@ shadow run's actual recording time. A passing model score cannot bypass breakout
 
 The independent `Shadow paper self-improvement` workflow runs **after a successful
 public-paper update**. It updates already registered shadow versions and stages
-only additions under this directory's `versions/`. No existing workflow, operating
-account publisher or UI default is modified. New candidate registration requires
+only additions under this directory's `versions/`, plus the disposable website
+status projection described below. No existing workflow, operating account
+publisher or UI default is modified. New candidate registration requires
 the workflow's explicit `register` action; no automatic retraining occurs.
+
+## Read-only website status
+
+Open `simulation.html#shadowImprovementApp`, or use its **자기개선 상태** link.
+The panel is separate from the selected paper account and its forward/replay tab.
+It shows every registered version, paired sample counts, actual shared forward
+days, all eight gates, and same-period cost/risk metrics. Missing, blocked and
+delayed data have explicit labels. Green **사람 검토 후보** appears only for a
+verified, fresh all-gates pass. It is never an approval or trading action.
+
+`scripts/build_shadow_status.cjs` verifies candidate/runtime identity, observation
+chains and source-byte checkpoints. It checks assessment hashes and their exact
+observation heads, then independently recomputes the reported gates. A missing
+latest assessment, changed runtime, tampering or incomplete registry produces
+blocked status instead of keeping an old successful result. Registration-only
+versions remain **첫 수집 대기**, with zero forward duration; registration waiting
+time is never counted as an experiment. The current initial 2-label pool remains
+visible as a first-window training shortfall.
+
+`simulation/self-improvement/status.json` is a **mutable, disposable display
+projection**, unlike the immutable candidates, observations and assessments.
+Neither the paper nor shadow engine reads it. Rebuilding it cannot register,
+execute, assess, reset, promote or change an account. The website only fetches
+this file and links to the underlying immutable records. Data older than 30 minutes
+(either the display projection or observation assessment) is labelled delayed,
+and cannot be presented as a current promotion candidate. Gate badges in a delayed
+snapshot explicitly describe the last evaluation. The independent 126/252-day
+forecast diagnostics have their own timestamp and never enter the trading score.
+An open page expires the eligibility badge on time and refetches only the display
+file every five minutes; version switching and refreshing never execute a trade.
+
+The shadow workflow builds and publishes status even after a blocked collector
+run, then leaves that workflow failed so the error remains visible. The staging
+guard permits **new** version artifacts plus additions/modifications of this one
+display file; edits/deletions of prior version artifacts remain forbidden. A
+successful status commit requests a GitHub Pages rebuild. Collection and live
+website publication start only after this feature is merged to `main`.
+
+Reproduce without advancing any account:
+
+```bash
+node scripts/test_shadow_improvement.cjs
+node scripts/test_shadow_status.cjs
+node scripts/build_shadow_status.cjs
+python -m http.server 8788
+# Open http://localhost:8788/simulation.html#shadowImprovementApp
+git diff -- simulation/self-improvement/status.json
+```
+
+Only the display file changes when running the builder. The regression suite uses
+private copies to test corrupted/missing records, changed runtimes, stale/future
+timestamps, all-pass/rejected/insufficient states, version switching, safe links,
+request failures, forecast separation and unchanged operating/immutable files.
 
 ## Promotion screen v1
 

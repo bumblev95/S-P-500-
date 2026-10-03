@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "35a3316fe23c7306d9114bcc60f04a116814842c",
+  "comparisonCommit": "6c537be0d4615aefff7706f034b8410569c217dc",
+  "asOfDate": "2026-10-01",
+  "sources": {
+    "CIK0000034088.json": {
+      "path": "sources/CIK0000034088.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json",
+      "sha256": "9b95535419e5662e3deed01de803e83deead477a4c81316e1c45186368fdd8b8",
+      "gzipSha256": "c8c659965d95dd756456edddd41a43713a4710af9d7bc97d981e95582e8f5fdd",
+      "canonicalPayloadHash": "5b9ea1cec8bc0159991100e165b9990465a82543b0ae80fed4936d88a4f36fdc",
+      "acquiredAt": "2026-10-01T13:07:26.087251+00:00"
+    },
+    "CIK0000035527.json": {
+      "path": "sources/CIK0000035527.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000035527.json",
+      "sha256": "157d008429b1041c042fa888b76be494fef2ad900a1c7e447ed46c2b9f0fd11c",
+      "gzipSha256": "1539eaea3d1a25ad0f24f1549e389ef2b28e29d8d582b95073d79779c91402ed",
+      "canonicalPayloadHash": "37b33b15380ee73ba8a96fbb864e77078fca05cf5e4fe65b75d839f7bab49a62",
+      "acquiredAt": "2026-10-01T13:05:38.389752+00:00"
+    },
+    "CIK0000091419.json": {
+      "path": "sources/CIK0000091419.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000091419.json",
+      "sha256": "61d6e06730d187ecb04ff6f4645810dc5bef6b6df0dca9754bc3afcd664503ab",
+      "gzipSha256": "f922a0bd8200da443864315b8f24605cb422b120464a2015e1156699f50d3052",
+      "canonicalPayloadHash": "8efb715c2cf4fc2c3c390ad9aa732af10c04768f5bfc798464525998a2ec1d07",
+      "acquiredAt": "2026-10-01T13:05:44.029831+00:00"
+    },
+    "CIK0000092230.json": {
+      "path": "sources/CIK0000092230.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000092230.json",
+      "sha256": "aa1667741edfd918113184d4dfead5246f6f8661cfb0c14d281b912572647508",
+      "gzipSha256": "89ff960e586ab1745aa805cf0afc6b63b7276435901dd8f8f7949bdffaea76b0",
+      "canonicalPayloadHash": "d3954f9cf9908e62fea9b8b4123341caec49e15e7f849fd6680a47d4fe061bd8",
+      "acquiredAt": "2026-10-01T13:05:49.869913+00:00"
+    },
+    "CIK0000878927.json": {
+      "path": "sources/CIK0000878927.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000878927.json",
+      "sha256": "cfe7fd09a23eb4d6d7bb463f37abe15444151e095b394a457b7e41b69d6f3046",
+      "gzipSha256": "d9c893a97e931201642afb0841cceddee0ea49ab4e89cb89b4335dfcbcb0e5a3",
+      "canonicalPayloadHash": "b639b7b603cee57632026f2fb42965d24224900eb683db4697eb11e05e0ae660",
+      "acquiredAt": "2026-10-01T13:05:56.194001+00:00"
+    },
+    "CIK0001035002.json": {
+      "path": "sources/CIK0001035002.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001035002.json",
+      "sha256": "d58ab6797025bd0f4e03b03c90f34905c2234e9f28749500726ec867d5443eb5",
+      "gzipSha256": "fdae5c988c3fff710e0be08963f404454b1007f1fff5eff81f04b5eb6672709d",
+      "canonicalPayloadHash": "80977f6e2a0b6ad4fa951c29e4f3ba38d6e3353fe8541ff1414e17ed8b076204",
+      "acquiredAt": "2026-10-01T13:06:02.210086+00:00"
+    },
+    "CIK0001281761.json": {
+      "path": "sources/CIK0001281761.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001281761.json",
+      "sha256": "b6dec3ef9f5ee90723b8efb243bd6e2bd9e71a6401bb93944a5411b7c5ebd729",
+      "gzipSha256": "fe25ce459875b84906f09a10b378b822bebadb36c9315b060eb8f07b88bf502d",
+      "canonicalPayloadHash": "7792c635597c4a175914bb1e0b6abd65406224ecbd42b9155cfe2beeda5b5ce7",
+      "acquiredAt": "2026-10-01T13:06:07.826164+00:00"
+    },
+    "CIK0001535527.json": {
+      "path": "sources/CIK0001535527.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001535527.json",
+      "sha256": "a71a92f1f11bd3032271ca55be7a7770a96a846ec809f925829ef952fd5f3fa1",
+      "gzipSha256": "b515e7c07bfadf5afa73ee97a77de82f0f9ddd25eca706a8f4f51438e0e087e5",
+      "canonicalPayloadHash": "09310e9d1aae06fda5f075f8a870a77c4049712f4cebbe9085e808ee810eb38f",
+      "acquiredAt": "2026-10-01T13:04:19.416655+00:00"
+    },
+    "CIK0001601712.json": {
+      "path": "sources/CIK0001601712.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001601712.json",
+      "sha256": "67f5bedaea7e4766a6632d790fc78cf507138e8b5b4ec3fb22a3609b73a0efe6",
+      "gzipSha256": "dabee21f1e4e378167b21028e37933725392980b926dd9d631c4401933c0c791",
+      "canonicalPayloadHash": "aa28307e4f652d49d3e30fcd90acd308e704067a86ab823975397f832f2e4013",
+      "acquiredAt": "2026-10-01T13:06:14.470256+00:00"
+    },
+    "CIK0001637459.json": {
+      "path": "sources/CIK0001637459.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001637459.json",
+      "sha256": "8fad66c16e535f7749f19126a986a9f43a087ca2472d063fa7742106196d88ac",
+      "gzipSha256": "ce5920c31275ea1077ddfd524ad43cc074ff3e38a1a33966ad0123217f4f67f2",
+      "canonicalPayloadHash": "0ff5641db393ec511f392149fd3bd44edb07c0295eb6034348cd17aa3e427006",
+      "acquiredAt": "2026-10-01T13:06:19.890332+00:00"
+    },
+    "CIK0001841666.json": {
+      "path": "sources/CIK0001841666.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001841666.json",
+      "sha256": "8412d6f4a709414b9d4630e6f969080aa608f9baf5f409fc296cbe071b1b7772",
+      "gzipSha256": "2e5c42a1145a93e1b78bcd365fcce8802f4bd41b5e469c9499609d643361e93e",
+      "canonicalPayloadHash": "7f0b5fffe19baea8e7fe8e891de0aed9413554eacf53bed59ed53b9ab525cd2b",
+      "acquiredAt": "2026-10-01T13:06:26.242417+00:00"
+    },
+    "CIK0002089271.json": {
+      "path": "sources/CIK0002089271.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002089271.json",
+      "sha256": "ec4ab25b4219f40e64811d5d2aded693e11085aaa66b6475971d8b20f947c12b",
+      "gzipSha256": "a5876be59d072c546e132f3a72543b52462dec66346e0be011d03beb575c0539",
+      "canonicalPayloadHash": "a036d699f2c5400e9b3726dbe76d37da49c834f1c453d247a5b3ab70aa7a6993",
+      "acquiredAt": "2026-10-01T13:06:31.910494+00:00"
+    },
+    "CIK0002115436.json": {
+      "path": "sources/CIK0002115436.json.gz",
+      "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002115436.json",
+      "sha256": "98bde704a8084ffb3578951641249b72c0172b88ed37d2e59f6f222027755d2d",
+      "gzipSha256": "5d4738958352d12e3fca20e328efcbddf077c4e3f74c9e5c5543a7d9ddca9231",
+      "canonicalPayloadHash": "8aa44735433df66cd9da2081c388fe085a908da5b762c7c9d38c65e13d15786f",
+      "acquiredAt": "2026-10-01T13:07:20.163167+00:00"
+    },
+    "statement-1281761-R5.htm": {
+      "path": "sources/statement-1281761-R5.htm.gz",
+      "source": "https://www.sec.gov/Archives/edgar/data/1281761/000128176126000019/R5.htm",
+      "sha256": "9f661680281441cecb373dd7b28bab15cdde46303a10278d1c68b3b92cfc9b78",
+      "gzipSha256": "f9980cecbe4e63309e4c78c0bb64c1beba074f8a67021c8076bfceaa0bd5a0b9",
+      "acquiredAt": "2026-10-01T13:09:41.713126+00:00"
+    },
+    "statement-1601712-R3.htm": {
+      "path": "sources/statement-1601712-R3.htm.gz",
+      "source": "https://www.sec.gov/Archives/edgar/data/1601712/000160171226000006/R3.htm",
+      "sha256": "6f75e0eab0d6187909e4f4850f1072c781aa40fd3cc1a2f363665d642bcef0d5",
+      "gzipSha256": "34faa3333162280cd93bcdcdbe25b62e4d6b660f95a5a49f9b4f0454a1c31ee7",
+      "acquiredAt": "2026-10-01T13:09:57.373342+00:00"
+    },
+    "statement-1841666-R3.htm": {
+      "path": "sources/statement-1841666-R3.htm.gz",
+      "source": "https://www.sec.gov/Archives/edgar/data/1841666/000184166626000015/R3.htm",
+      "sha256": "0d15015923d4091dde9d455f778e81783667a832f72218c157bc9d8525e2fa1f",
+      "gzipSha256": "a9526d042a124f8a0108a335f93304f17019cce11c66e1b07d5ed884ae3b0c7a",
+      "acquiredAt": "2026-10-01T13:10:16.081605+00:00"
+    },
+    "statement-35527-R5.htm": {
+      "path": "sources/statement-35527-R5.htm.gz",
+      "source": "https://www.sec.gov/Archives/edgar/data/35527/000003552726000124/R5.htm",
+      "sha256": "ed908b079a0840b1f7b090b487a759271004c22d9c68ea92289c447f6e07b3de",
+      "gzipSha256": "6e7ccd156a1f8b2ac331993d66f6b20c4f5d5f2084eb241b137700f4fd597bb8",
+      "acquiredAt": "2026-10-01T13:09:07.736666+00:00"
+    },
+    "statement-92230-R5.htm": {
+      "path": "sources/statement-92230-R5.htm.gz",
+      "source": "https://www.sec.gov/Archives/edgar/data/92230/000009223026000030/R5.htm",
+      "sha256": "e946d14804b2c5e7e4e481cea10330079a133007f158f9f78e47e72ac83cf988",
+      "gzipSha256": "33340cb7c0d307bdcc7ed48ff5835125bf06a2f74e4581720bcf11fb1abbb651",
+      "acquiredAt": "2026-10-01T13:09:25.664910+00:00"
+    },
+    "submissions-CIK0000034088.json": {
+      "path": "sources/submissions-CIK0000034088.json.gz",
+      "source": "https://data.sec.gov/submissions/CIK0000034088.json",
+      "sha256": "3fddaa4c53394cde1779537e9fd987eb3e62566b6c7f707472727f7227b3dc5d",
+      "gzipSha256": "47910a3b27130746a7d163f00545cc2f7040ba61b79e06b1735d813622ddb73b",
+      "acquiredAt": "2026-10-01T13:07:48.463565+00:00"
+    },
+    "submissions-CIK0001841666.json": {
+      "path": "sources/submissions-CIK0001841666.json.gz",
+      "source": "https://data.sec.gov/submissions/CIK0001841666.json",
+      "sha256": "e6c4996de281f1b14bcf57131a0150a2faabf7db4ed4b774539e7454984656b1",
+      "gzipSha256": "753a533a9dc6ba75abe4ef8d41af23733424f5f28a411dcf70209a5146c9e83f",
+      "acquiredAt": "2026-10-01T13:07:31.655329+00:00"
+    },
+    "submissions-CIK0002089271.json": {
+      "path": "sources/submissions-CIK0002089271.json.gz",
+      "source": "https://data.sec.gov/submissions/CIK0002089271.json",
+      "sha256": "4134dcd8318e38863694639c025c70d56dbb568cfc1d58301866830ce2ffd5b9",
+      "gzipSha256": "7454a036c5d61faa7441f69bd0c3f3122f6ac66892d2a6d24600364124864eb9",
+      "acquiredAt": "2026-10-01T13:07:36.963195+00:00"
+    },
+    "submissions-CIK0002115436.json": {
+      "path": "sources/submissions-CIK0002115436.json.gz",
+      "source": "https://data.sec.gov/submissions/CIK0002115436.json",
+      "sha256": "1a6e901c794592b13da83675297ead1bffa210bbb6a016ee13e9d41a26b1eb56",
+      "gzipSha256": "41bf8b358878be1afb4726a83330a56adf0c161d34e4508d347a2a3c0946d642",
+      "acquiredAt": "2026-10-01T13:07:42.775137+00:00"
+    },
+    "control-NVDA.json": {
+      "path": "sources/control-NVDA.json.gz",
+      "source": "https://github.com/bumblev95/S-P-500-/actions/runs/34776960624",
+      "artifactId": 10324101963,
+      "sha256": "19ef503a5770f5660964b3c3aea6937579d9b359da344afe6a9adf59c63d26ff",
+      "gzipSha256": "610949569a9f9301fee04407e267f6e75494070c791992ce5df2f41ac1c7313c"
+    },
+    "baseline-inputs.json": {
+      "path": "sources/baseline-inputs.json.gz",
+      "source": "https://github.com/bumblev95/S-P-500-/blob/35a3316fe23c7306d9114bcc60f04a116814842c/research/inputs.json",
+      "sha256": "48e31440f98ed3de8cacf14044c73dd0bdc296ff06c2982bb967b66bdcdffaa6",
+      "gzipSha256": "ff875d6c4bf89d631be1eae4af506a65a974d2c0729a64b107a73d3ef0ccac6e"
+    },
+    "baseline-universe.json": {
+      "path": "sources/baseline-universe.json.gz",
+      "source": "https://github.com/bumblev95/S-P-500-/blob/35a3316fe23c7306d9114bcc60f04a116814842c/research/universe.json",
+      "sha256": "ac10d88128488cd96261b00f67c62b2379a32c1e486b67c5b24a2edfcb5b6871",
+      "gzipSha256": "5ac8c904ebd608fe960c161ac02a23a992638d41a2225c58efb3dc05688cc319"
+    },
+    "comparison-universe.json": {
+      "path": "sources/comparison-universe.json.gz",
+      "source": "https://github.com/bumblev95/S-P-500-/blob/6c537be0d4615aefff7706f034b8410569c217dc/research/universe.json",
+      "sha256": "38534565d53e5413325f7c2d515041dbb623d059c2b98e395a0361723b8c1d16",
+      "gzipSha256": "f88efb56310f96b346c60af683291e1b52e0bb4101e85d4cfb46928048394461"
+    },
+    "baseline-parser.py": {
+      "path": "sources/baseline-parser.py.gz",
+      "source": "https://github.com/bumblev95/S-P-500-/blob/35a3316fe23c7306d9114bcc60f04a116814842c/scripts/build_research_inputs.py",
+      "sha256": "e680daab950a26764157cee5ca0c1eb0ef28660e317b7f49b6506beb9567467a",
+      "gzipSha256": "4cdaf65ee9beaaa8200e3be9d733c9746e6ed83ec3758dd793d5ff780c568a14"
+    }
+  },
+  "baselineInputsHash": "48e31440f98ed3de8cacf14044c73dd0bdc296ff06c2982bb967b66bdcdffaa6",
+  "baselineUniverseHash": "ac10d88128488cd96261b00f67c62b2379a32c1e486b67c5b24a2edfcb5b6871",
+  "scope": "Newly acquired official payloads; baseline commit did not publish raw CompanyFacts hashes. These are not claimed to be its exact raw vintage."
+}

@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "purpose": "display-only",
+  "mode": "shadow-only",
+  "generatedAt": 1790991012050,
+  "staleAfterMs": 1800000,
+  "automaticPromotion": false,
+  "defaultStrategyChanged": false,
+  "pinnedModelChanged": false,
+  "liveTrading": false,
+  "humanReviewRequired": true,
+  "sourceIntegrity": {
+    "passed": true,
+    "reason": null
+  },
+  "pinnedModel": {
+    "id": "momentum14-breakout3-boost-2026-frozen-v1",
+    "sha256": "eb059abb6a4b5a6cbf05d1bb2db5f1e89cffae99e7b76579ac25edbd6254c025",
+    "thresholdR": 0.1
+  },
+  "sources": {
+    "decisionRecords": 103,
+    "closedTrades": {
+      "control-three": 6,
+      "control-one": 3,
+      "boost-one": 3
+    }
+  },
+  "forecastResearch": {
+    "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
+    "generatedAt": "2026-10-03T00:40:16+00:00",
+    "horizons": {
+      "126": {
+        "status": "research",
+        "chosen": "biasCorrected",
+        "passed": false,
+        "checks": {
+          "enoughDates": true,
+          "average": false,
+          "tail": false,
+          "consistency": false,
+          "direction": false
+        },
+        "improvementVsOriginal": -0.0016494861961806606,
+        "liveForecastChanged": false,
+        "reason": null
+      },
+      "252": {
+        "status": "insufficient",
+        "chosen": null,
+        "passed": false,
+        "checks": {},
+        "improvementVsOriginal": null,
+        "liveForecastChanged": false,
+        "reason": "보정 후 독립 검증 시점 부족"
+      }
+    },
+    "usedForTrading": false
+  },
+  "versions": [
+    {
+      "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
+      "status": "insufficient",
+      "promotionCandidate": false,
+      "integrityPassed": true,
+      "automaticPromotion": false,
+      "defaultStrategyChanged": false,
+      "pinnedModelChanged": false,
+      "liveTrading": false,
+      "humanReviewRequired": true,
+      "registeredAt": 1790847209063,
+      "thresholdR": 0.15,
+      "incumbentThresholdR": 0.1,
+      "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
+      "activity": "registration_only",
+      "observations": 1,
+      "latestObservationAt": 1790847209063,
+      "initialTrainingTrades": 2,
+      "assessment": {
+        "schemaVersion": 1,
+        "mode": "shadow-only",
+        "candidateVersion": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
+        "policy": {
+          "id": "shadow-promotion-screen-v1",
+          "minClosedTrades": 100,
+          "minForwardDays": 90,
+          "minEntryDates": 30,
+          "purgedFolds": 3,
+          "foldDays": 30,
+          "minTrainTrades": 30,
+          "minTrainDates": 10,
+          "minTestTrades": 20,
+          "embargoMs": 86400000,
+          "minNetImprovement": 0.005,
+          "stressCostMultiplier": 2,
+          "maxDrawdown": 0.1
+        },
+        "asOf": 1790847209063,
+        "status": "insufficient",
+        "promotionCandidate": false,
+        "automaticPromotion": false,
+        "defaultStrategyChanged": false,
+        "pinnedModelChanged": false,
+        "liveTrading": false,
+        "gates": {
+          "immutableEvidence": true,
+          "completeData": true,
+          "matchedForwardSample": false,
+          "minimumTrades": false,
+          "purgedWalkForward": false,
+          "costIncludedImprovement": false,
+          "drawdownNotWorse": true,
+          "riskNotWorse": false
+        },
+        "failedGates": [
+          "matchedForwardSample",
+          "minimumTrades",
+          "purgedWalkForward",
+          "costIncludedImprovement",
+          "riskNotWorse"
+        ],
+        "matchedForward": {
+          "passed": false,
+          "commonStart": true,
+          "identicalCurveTimes": false,
+          "chronology": true,
+          "noBackfill": true,
+          "observations": 1,
+          "firstAt": 1790847209063,
+          "lastAt": 1790847209063,
+          "forwardDays": 0,
+          "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
+        },
+        "purgedWalkForward": {
+          "passed": false,
+          "status": "insufficient",
+          "folds": [],
+          "reason": "Prospective time coverage below frozen minimum"
+        },
+        "incumbent": {
+          "valid": false,
+          "closedTrades": 0,
+          "entryDates": 0,
+          "netReturn": 0,
+          "stressReturn": 0,
+          "markedReturn": null,
+          "expectancyR": null,
+          "stressExpectancyR": null,
+          "maxDrawdown": 0,
+          "maxGrossExposure": 0,
+          "maxOpenRisk": 0,
+          "maxEntryRisk": 0,
+          "maxEntryExposure": 0,
+          "maxConcurrentPositions": 0,
+          "maxLeverage": 0,
+          "dailyVolatility": null,
+          "worstDailyLoss": null,
+          "tailDailyLoss": null,
+          "funding": 0,
+          "estimatedFundingHours": 0,
+          "fees": 0,
+          "slippage": 0,
+          "openPositions": 0,
+          "pendingOrders": 0
+        },
+        "candidate": {
+          "valid": false,
+          "closedTrades": 0,
+          "entryDates": 0,
+          "netReturn": 0,
+          "stressReturn": 0,
+          "markedReturn": null,
+          "expectancyR": null,
+          "stressExpectancyR": null,
+          "maxDrawdown": 0,
+          "maxGrossExposure": 0,
+          "maxOpenRisk": 0,
+          "maxEntryRisk": 0,
+          "maxEntryExposure": 0,
+          "maxConcurrentPositions": 0,
+          "maxLeverage": 0,
+          "dailyVolatility": null,
+          "worstDailyLoss": null,
+          "tailDailyLoss": null,
+          "funding": 0,
+          "estimatedFundingHours": 0,
+          "fees": 0,
+          "slippage": 0,
+          "openPositions": 0,
+          "pendingOrders": 0
+        }
+      },
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790847209063-32d1b0a79b74/assessments/1790847209063-e77bdbb1e5cf.json",
+      "assessmentHash": "e77bdbb1e5cfa47a7e770eb5c6d886fe46c5cefb26e4dddd0a7a5d79c3aaaa27",
+      "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790847209063-32d1b0a79b74/candidate.json",
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790847209063-32d1b0a79b74/observations/1790847209063-b8902237f0d5.json"
+    }
+  ]
+}
