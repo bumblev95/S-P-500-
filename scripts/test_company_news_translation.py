@@ -67,5 +67,10 @@ class TranslationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.verify_engine(lambda _: [good[0], '장미가 6%입니다.', good[2]])
 
+    def test_headline_noun_disambiguation_keeps_verbs_and_nonfinancial_beats(self):
+        self.assertIn('better-than-expected earnings', m.translation_input('AMETEK Earnings Beat And Higher Outlook'))
+        self.assertEqual(m.translation_input('Nvidia earnings beat estimates'), 'Nvidia earnings beat estimates')
+        self.assertEqual(m.translation_input('Nvidia beats a rival in chip performance'), 'Nvidia beats a rival in chip performance')
+
 
 if __name__ == '__main__': unittest.main()

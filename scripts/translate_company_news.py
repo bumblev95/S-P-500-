@@ -47,6 +47,12 @@ def valid_korean(text):
     return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text and not text.startswith('한국어 요약 번역을 완료하지')
 
 
+def translation_input(text):
+    text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-')
+    # Expand a headline noun phrase; "beat" otherwise becomes a physical blow.
+    return re.sub(r'\bearnings beat\b(?=\s*(?:[:,.!?]|(?:and|but|puts?|fuels?)\b|$))', 'better-than-expected earnings', text, flags=re.I)
+
+
 def engine(model_dir):
     import ctranslate2
     import tempfile
@@ -66,7 +72,7 @@ def engine(model_dir):
     tokenizer = AutoTokenizer.from_pretrained(str(model_dir/'tokenizer'), src_lang='eng_Latn', local_files_only=True)
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
-        texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
+        texts = [translation_input(t) for t in texts]
         tokens = [tokenizer.convert_ids_to_tokens(tokenizer.encode(t, truncation=True, max_length=256)) for t in texts]
         rows = translator.translate_batch(tokens, target_prefix=[['kor_Hang'] for _ in tokens], beam_size=4, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
         return [tokenizer.decode(tokenizer.convert_tokens_to_ids(r.hypotheses[0][1:]), skip_special_tokens=True).strip() for r in rows]

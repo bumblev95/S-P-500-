@@ -50,6 +50,10 @@ or generative analysis. Proper names can retain their original spelling.
 The tokenizer sets English input and Korean output explicitly. A smoke check
 verifies product-recall meaning, a financial term and numeric preservation.
 
+Headline finance noun phrases are expanded before translation to avoid literal
+translations such as treating an earnings beat as a physical blow. Machine
+translations are labeled 자동 번역 요약 in the card.
+
 Summaries checked against their provided source are stored in
 `news/korean-reviewed.json`, bound to its exact headline/excerpt hash. Changed
 source text cannot inherit a reviewed summary. Machine translations are cached

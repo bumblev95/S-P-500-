@@ -9,7 +9,7 @@ permissions:
   contents: read
 concurrency:
   group: korean-news-parallel-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   translate:
     runs-on: ubuntu-latest
