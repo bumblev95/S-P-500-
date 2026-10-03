@@ -13,6 +13,8 @@ on:
       - 'assets/company-events*'
       - 'scripts/*company_events*'
       - 'events/**'
+      - 'news/**'
+      - 'scripts/*company_news*'
       - 'assets/advanced*'
       - 'assets/crypto*'
       - 'assets/perp*'
@@ -33,6 +35,8 @@ on:
       - 'assets/company-events*'
       - 'scripts/*company_events*'
       - 'events/**'
+      - 'news/**'
+      - 'scripts/*company_news*'
       - 'assets/advanced*'
       - 'assets/crypto*'
       - 'assets/perp*'
@@ -55,6 +59,8 @@ jobs:
           python-version: '3.11'
       - run: python -m unittest discover -s scripts -p test_company_events.py
       - run: node scripts/test_company_events.cjs
+      - run: python -m unittest discover -s scripts -p test_company_news.py
+      - run: node scripts/test_company_news.cjs
       - run: node scripts/test_status_indicators.cjs
       - run: node scripts/test_stock_assessment.cjs
       - run: node scripts/test_crypto_page.cjs
