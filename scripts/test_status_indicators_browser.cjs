@@ -64,6 +64,14 @@ async function fits(page, selector) {
         ['advanced-legacy.html','.stockAssessment'],['crypto.html','[data-indicator="신규 진입 판단"]']]) {
         await ready(page, base + file, selector);
         await fits(page, '.vi-gauge');
+        if (file === 'advanced.html') {
+          const badge = page.locator('#sourceStatus .vi-badge');
+          assert.equal(await badge.evaluate(n => getComputedStyle(n).display), 'inline-flex');
+          const css = await badge.evaluate(n => ({classes:n.className,color:getComputedStyle(n).color}));
+          const palette = {good:'rgb(110, 231, 183)',warn:'rgb(249, 207, 107)',
+            bad:'rgb(255, 127, 145)',muted:'rgb(166, 184, 203)'};
+          assert.equal(css.color, palette[css.classes.match(/\bvi-(good|warn|bad|muted)\b/)[1]]);
+        }
         const gauge = page.locator(selector).first();
         await gauge.screenshot({path:path.join(output, `${file.replace('.html','')}-${width}.png`)});
         if (file === 'index.html') {
