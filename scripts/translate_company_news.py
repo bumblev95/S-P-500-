@@ -54,6 +54,7 @@ def separate_vocabularies(model_dir, tokenizer):
     Retain the converted weight row order, but give each side its own token
     strings; otherwise even correctly decoded Korean produces unrelated text.
     """
+    if not getattr(tokenizer, 'separate_vocabs', False): return
     shared = model_dir/'shared_vocabulary.json'
     source_path = model_dir/'source_vocabulary.json'
     size = len(json.loads((shared if shared.exists() else source_path).read_text()))
@@ -75,6 +76,8 @@ def engine(model_dir):
         TransformersConverter(MODEL).convert(str(model_dir), quantization='int8')
         MarianTokenizer.from_pretrained(MODEL).save_pretrained(tokenizer_dir)
     tokenizer = MarianTokenizer.from_pretrained(tokenizer_dir, local_files_only=True)
+    print(json.dumps({'tokenizer': {'separateVocabularies': tokenizer.separate_vocabs, 'vocabularySize': len(tokenizer.encoder),
+                      'sampleTokens': tokenizer.tokenize('Revenue rose 6%.'), 'sampleIds': tokenizer.encode('Revenue rose 6%.')}}, ensure_ascii=False), flush=True)
     separate_vocabularies(model_dir, tokenizer)
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
@@ -87,6 +90,22 @@ def engine(model_dir):
         # Decode target SentencePiece strings directly; mapping through the
         # source token IDs corrupts names, numbers and the entire translation.
         return [tokenizer.spm_target.decode([t for t in r.hypotheses[0] if t not in tokenizer.all_special_tokens]).strip() for r in rows]
+    # Verify this converted runtime against the original model if its smoke
+    # output is invalid. A broken runtime never publishes generated summaries.
+    try: verify_engine(translate)
+    except ValueError:
+        import torch
+        from transformers import MarianMTModel
+        torch.set_num_threads(2)
+        original_tokenizer = MarianTokenizer.from_pretrained(MODEL)
+        original_model = MarianMTModel.from_pretrained(MODEL).eval()
+        def original(texts):
+            with torch.inference_mode():
+                ids = original_model.generate(**original_tokenizer(texts, padding=True, truncation=True, max_length=192, return_tensors='pt'), num_beams=3, max_new_tokens=160)
+            return original_tokenizer.batch_decode(ids, skip_special_tokens=True)
+        print(json.dumps({'originalModelCheck': original(['The company recalls 20 phones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']),
+                         'originalTokenizer': {'separateVocabularies': original_tokenizer.separate_vocabs, 'vocabularySize': len(original_tokenizer.encoder)}}, ensure_ascii=False), flush=True)
+        raise
     return translate
 
 
