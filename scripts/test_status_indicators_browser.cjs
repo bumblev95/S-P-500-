@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const A = require('../assets/stock-assessment.js');
 const root = path.resolve(__dirname, '..');
 const output = process.env.INDICATOR_SCREENSHOTS || '/tmp/sp500-indicator-qa';
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file)));
@@ -65,6 +66,27 @@ async function fits(page, selector) {
         ['advanced-legacy.html','.stockAssessment'],['crypto.html','[data-indicator="신규 진입 판단"]']]) {
         await ready(page, base + file, selector);
         await fits(page, '.vi-gauge');
+        if (file !== 'crypto.html') {
+          const assessment = page.locator('.stockAssessment').first();
+          const expected = A.evaluate(forecasts.stocks.NVDA, market, null, 126, clock);
+          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 1,
+            'Only the entry decision is a primary gauge');
+          assert.equal(await assessment.locator('.sa-checks li:visible').count(), 6,
+            'Entry conditions must be readable without opening details');
+          const detail = assessment.locator('.sa-trend-details');
+          assert.equal(await detail.evaluate(n => n.open), false);
+          assert((await detail.locator('summary').textContent()).includes(A.format(expected.score)));
+          if (expected.score !== null && Number.isFinite(expected.plan.rr)) {
+            assert((await assessment.locator('[data-entry-check="balance"] p').textContent())
+              .includes(expected.plan.rr.toFixed(2)), 'Show the actual entry-plan reward/risk ratio');
+          }
+          await fits(page, '.stockAssessment, .sa-entry-layout, .sa-conditions, .sa-checks, .sa-checks li');
+          await detail.locator('summary').click();
+          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 2);
+          assert((await detail.textContent()).includes('매수 추천'));
+          await fits(page, '.vi-gauge, .sa-trend-details');
+          await detail.locator('summary').click();
+        }
         if (file === 'advanced.html') {
           const badge = page.locator('#sourceStatus .vi-badge');
           assert.equal(await badge.evaluate(n => getComputedStyle(n).display), 'inline-flex');
@@ -97,6 +119,8 @@ async function fits(page, selector) {
           await risk.screenshot({path:path.join(output, `risk-${width}.png`)});
           await page.getByRole('button', {name:'1년',exact:true}).click();
           assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 2);
+          assert.equal(await page.locator('.stockAssessment .vi-gauge:visible').count(), 1);
+          assert((await page.locator('[data-entry-check="ai"] .sa-check-title').textContent()).includes('1년'));
           await page.locator('#tickerInput').fill('XOM');
           await page.locator('#tickerInput').press('Enter');
           await page.locator('.company-events[data-event-symbol="XOM"]').waitFor();
@@ -123,6 +147,10 @@ async function fits(page, selector) {
     await ready(page, base + 'index.html', '.stockAssessment');
     assert.equal(await page.locator('.stockAssessment .vi-unknown').count(), 2);
     assert.equal(await page.locator('.stockAssessment .vi-pointer').count(), 0);
+    for (const key of ['trend','price','balance','heat']) {
+      assert.equal(await page.locator(`[data-entry-check="${key}"] .vi-badge.vi-muted`).count(), 1,
+        'Unavailable price data must not receive a passing entry badge');
+    }
     await page.locator('#sharedRisk .vi-unknown').waitFor();
     assert.equal(await page.locator('#sharedRisk .vi-pointer').count(), 0);
     await page.locator('.stockAssessment').screenshot({path:path.join(output,'stock-unavailable.png')});
