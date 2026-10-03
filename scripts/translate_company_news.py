@@ -71,20 +71,25 @@ def engine(model_dir):
             with zipfile.ZipFile(archive) as bundle:
                 entries = {Path(n).name: n for n in bundle.namelist() if not n.endswith('/')}
                 print(json.dumps({'originalModelFiles': sorted(entries)}, ensure_ascii=False), flush=True)
-                selected = [name for name in entries if name.endswith(('.npz', '.spm', '.yml'))]
+                selected = [name for name in entries if name.endswith(('.npz', '.spm', '.yml', '.vocab'))]
                 for name in selected:
                     (folder/name).write_bytes(bundle.read(entries[name]))
             weights = sorted(folder.glob('*.npz'))
             if not weights: raise ValueError('Original model weights missing')
             model_path = next((p for p in weights if p.name == 'model.npz'), weights[0])
             vocab_paths = None
-            for config in folder.glob('*.decoder.yml'):
+            for config in folder.glob('*decoder.yml'):
                 options = yaml.safe_load(config.read_text())
                 if options.get('vocabs'):
                     vocab_paths = [folder/Path(n).name for n in options['vocabs']]
                     break
             if vocab_paths is None:
-                vocab_paths = [folder/'source.spm.yml', folder/'target.spm.yml']
+                source_vocabs, target_vocabs = list(folder.glob('*.src.vocab')), list(folder.glob('*.trg.vocab'))
+                if len(source_vocabs) != 1 or len(target_vocabs) != 1:
+                    raise ValueError('Original model source and target vocabularies missing')
+                vocab_paths = [source_vocabs[0], target_vocabs[0]]
+            if len(vocab_paths) != 2 or not all(p.exists() for p in vocab_paths):
+                raise ValueError('Original model decoder vocabulary paths invalid')
             MarianConverter(str(model_path), [str(p) for p in vocab_paths]).convert(str(model_dir), quantization='int8')
             shutil.copyfile(folder/'source.spm', source_model)
             shutil.copyfile(folder/'target.spm', target_model)
