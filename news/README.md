@@ -39,6 +39,13 @@ Rumors, conditional or negated events are not treated as completed business
 changes. A factual complete lead can clarify a question in the headline. Product
 upgrades are not stock-rating upgrades, and future earnings beats are unconfirmed.
 
+Historical recovery is read in context: a reported journey from near-bankruptcy
+to a market-cap/profitability milestone is positive **recovery/growth history**,
+not current bankruptcy risk. Completed bankruptcy exits are positive changes.
+Only the resolved occurrence is excluded from adverse evidence; a separate new
+filing, export ban or other burden still counts. Rumored recoveries remain
+unconfirmed, and past success does not predict another price increase.
+
 ## Korean summaries
 
 `scripts/translate_company_news.py` selects one short complete event sentence or

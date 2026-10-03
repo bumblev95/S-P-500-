@@ -46,14 +46,91 @@ assert(!D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('검증 �
 assert(D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('성능 기준 통과와 별개'));
 assert(!D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('충분'));
 
+// Explanations keep issuer risks visible even when shared data/model gates fail.
+const stressed={...e,symbol:'<TEST>',inputs:{...e.inputs,ma50:105,ma200:110,
+  return1m:-.07,return3m:-.12,volatility4m:.75}};
+const stressedA=A.evaluate(stressed,null,withheld,126,now),stressedBefore=JSON.stringify(stressedA);
+const stressedSignals=A.signals(stressed,stressedA,null,now);
+assert(stressedSignals.negative.length>=5,'Distinct issuer conditions must not be clipped by shared warnings');
+assert(stressedSignals.negative.some(x=>x.id==='volatility'&&x.detail.includes('75.0%')));
+assert(stressedSignals.negative.some(x=>x.id==='return1m'&&x.title.includes('-7.0%')));
+assert(!stressedSignals.negative.some(x=>/시장 상태|AI 예측 활용/.test(x.title)));
+assert(stressedSignals.limitations.some(x=>x.id==='market-data'));
+assert(stressedSignals.limitations.some(x=>x.id==='ai-validation'));
+assert(stressedSignals.limitations.some(x=>x.id==='weak-trend'));
+assert(!stressedSignals.negative.some(x=>x.id==='weak-trend'||x.id==='model-down'));
+assert.equal(JSON.stringify(stressedA),stressedBefore,'Display explanations must not mutate the assessment');
+const explanationHtml=A.signalPanels(stressed,stressedA,null,now);
+assert(explanationHtml.includes('꼭 확인할 위험 · &lt;TEST&gt;'));
+assert(!explanationHtml.includes('<TEST>'));
+assert(!/NaN|undefined|Infinity/.test(explanationHtml));
+const absent=A.evaluate({...e,history:[]},null,withheld,126,now);
+assert(!A.signals({...e,history:[]},absent,null,now).available);
+assert.equal(A.signals({...e,history:[]},absent,null,now).negative.length,0);
+assert(A.signalPanels({...e,history:[]},absent,null,now).includes('위험 판단에 필요한 가격 자료가 부족'));
+const noTarget={...pass,plan:{...pass.plan,target1:null,rr:null}};
+assert(A.signals(e,noTarget,market,now).negative.some(x=>x.id==='resistance-missing'));
+const modelMetrics=structuredClone(wait);modelMetrics.ai.record.validation={mae:.2,noChangeMae:.15,directionAccuracy:.4,alwaysUpAccuracy:.6,dates:12};
+assert(A.signals(e,modelMetrics,market,now).limitations.some(x=>x.id==='ai-validation'&&x.detail.includes('20.0%')&&x.detail.includes('12개 시점')));
+
+function assertVisibleBlockers(a,s){
+  const displayed=[...s.negative,...s.limitations].flatMap(x=>x.blocks||[]);
+  assert.deepEqual(displayed.slice().sort(),[...new Set(a.plan.blocks)].sort(),
+    'Every entry blocker must have exactly one visible risk or status explanation');
+}
+// Different technical states with the same unavailable market/model gates.
+// Compare risk IDs/titles, so different ticker labels cannot satisfy the test.
+const hot={...e,symbol:'HOT',history:history.map((q,i)=>({...q,close:60+40*i/(history.length-1)})),
+  inputs:{ma20:97,ma50:90,ma200:80,return1m:.25,return3m:.35,volatility4m:.75}};
+const hotA=A.evaluate(hot,null,null,126,now),hotSignals=A.signals(hot,hotA,null,now);
+const riskIds=s=>s.negative.map(x=>x.id);
+assert.notDeepEqual(riskIds(stressedSignals),riskIds(hotSignals));
+for(const id of ['ma50','ma-order','return1m','return3m','volatility'])assert(riskIds(stressedSignals).includes(id));
+assert(riskIds(hotSignals).includes('overheated'));
+assert(!riskIds(stressedSignals).includes('overheated'));
+assert(!riskIds(hotSignals).includes('ma50'));
+for(const [entry,a,s] of [[stressed,stressedA,stressedSignals],[hot,hotA,hotSignals]]){
+  assertVisibleBlockers(a,s);
+  assert(s.limitations.some(x=>x.id==='ai-validation'));
+  assert(s.limitations.some(x=>x.id==='market-data'));
+  const html=A.signalPanels(entry,a,null,now);
+  for(const id of riskIds(s))assert(html.includes('data-signal="'+id+'"'));
+  assert(html.includes('진입 조건·공통 상태'));
+}
+const downSignals=A.signals(e,long,market,now);
+assert(downSignals.limitations.some(x=>x.id==='model-down'&&x.title.includes('1년')));
+assert(!riskIds(downSignals).includes('model-down'));
+assertVisibleBlockers(long,downSignals);
+// New blockers and gates whose price inputs cannot be displayed stay visible.
+const extra='추가 진입 조건 <확인 필요>';
+const extraA={...wait,plan:{...wait.plan,blocks:[...wait.plan.blocks,extra,extra]}};
+assertVisibleBlockers(extraA,A.signals(e,extraA,market,now));
+const extraHtml=A.signalPanels(e,extraA,market,now);
+assert.equal(extraHtml.split('추가 진입 조건 &lt;확인 필요&gt;').length-1,1);
+for(const entry of [{...e,fresh:false},{...e,history:history.slice(-30)},
+  {...e,inputs:{...e.inputs,volatility4m:null}}]){
+  const a=A.evaluate(entry,null,null,126,now);
+  assertVisibleBlockers(a,A.signals(entry,a,null,now));
+}
+
 // Real snapshot checks: both horizons share the exact observed-price score.
 const data=JSON.parse(fs.readFileSync('forecasts/latest.json')),actualMarket=JSON.parse(fs.readFileSync('market/latest.json')),actualML=JSON.parse(fs.readFileSync('ml/latest.json'));
 const actualNow=Date.parse(actualMarket.generatedAt),six=A.all(data,actualMarket,actualML,126,actualNow),year=A.all(data,actualMarket,actualML,252,actualNow);
+const amdSignals=A.signals(data.stocks.AMD,six.AMD,actualMarket,actualNow);
+const nvdaSignals=A.signals(data.stocks.NVDA,six.NVDA,actualMarket,actualNow);
+const jnjSignals=A.signals(data.stocks.JNJ,six.JNJ,actualMarket,actualNow);
+if(six.AMD.score!==null&&six.JNJ.score!==null&&
+  (data.stocks.AMD.inputs.return1m<0)!==(data.stocks.JNJ.inputs.return1m<0))
+  assert.notDeepEqual(riskIds(amdSignals),riskIds(jnjSignals),'Opposite real monthly returns must produce distinct technical risks');
+if(six.AMD.score!==null&&!six.AMD.plan.target1)assert(amdSignals.negative.some(x=>x.id==='resistance-missing'));
+if(Number.isFinite(six.NVDA.plan.rr)&&six.NVDA.plan.rr<1.5)assert(nvdaSignals.negative.some(x=>x.id==='reward-risk'&&x.title.includes(six.NVDA.plan.rr.toFixed(2))));
 let checked=0,scored=0;
 for(const [symbol,a] of Object.entries(six)){
   assert.equal(a.score,year[symbol].score,symbol);assert.equal(a.trend,year[symbol].trend,symbol);
   if(a.score!==null){scored++;assert.equal(a.score,T.plan(data.stocks[a.symbol],null,actualMarket,actualNow).ts);}
   if(!a.ai.eligible)assert.notEqual(a.plan.code,'buy');checked++;
+  for(const assessment of [a,year[symbol]])assertVisibleBlockers(assessment,
+    A.signals(data.stocks[assessment.symbol],assessment,actualMarket,actualNow));
 }
 assert(checked>=400&&scored>0);assert(A.rank(six).every((a,i,arr)=>!i||a.score<=arr[i-1].score));
 
