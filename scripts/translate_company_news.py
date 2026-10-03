@@ -90,20 +90,27 @@ def engine(model_dir):
                 vocab_paths = [source_vocabs[0], target_vocabs[0]]
             if len(vocab_paths) != 2 or not all(p.exists() for p in vocab_paths):
                 raise ValueError('Original model decoder vocabulary paths invalid')
-            # Marian also ships JSON vocabularies with a .vocab extension;
-            # CTranslate2's Marian converter reads one YAML entry per line.
+            # Marian's .vocab format lists one token per line in model-index
+            # order. CTranslate2's converter instead requires indexed YAML.
             converted_paths = []
             for index, vocab in enumerate(vocab_paths):
                 raw = vocab.read_text()
-                if raw.lstrip().startswith('{'):
+                if vocab.suffix == '.vocab':
+                    tokens = raw.splitlines()
+                    if not tokens or any(not token for token in tokens) or len(set(tokens)) != len(tokens):
+                        raise ValueError('Original model flat vocabulary invalid')
+                    mapping = {token: position for position, token in enumerate(tokens)}
+                elif raw.lstrip().startswith('{'):
                     mapping = json.loads(raw)
+                else:
+                    converted_paths.append(vocab)
+                    continue
+                if mapping is not None:
                     if not isinstance(mapping, dict) or not all(isinstance(k, str) and isinstance(v, int) for k, v in mapping.items()):
                         raise ValueError('Original model vocabulary mapping invalid')
                     converted = folder/f'vocabulary-{index}.yml'
                     converted.write_text('\n'.join(json.dumps(k, ensure_ascii=False)+': '+str(v) for k, v in mapping.items())+'\n')
                     converted_paths.append(converted)
-                else:
-                    converted_paths.append(vocab)
             vocab_paths = converted_paths
             MarianConverter(str(model_path), [str(p) for p in vocab_paths]).convert(str(model_dir), quantization='int8')
             shutil.copyfile(folder/'source.spm', source_model)
