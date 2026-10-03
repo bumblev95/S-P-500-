@@ -1,15 +1,22 @@
 name: Validate FRED collection
 on:
   push:
-    branches: [codex/fred-actions-recovery]
     paths:
+      - 'scripts/build_market_context.py'
+      - 'scripts/test_market_context.py'
       - '.github/workflows/validate-market-context.yml'
+  pull_request:
+    paths:
+      - 'scripts/build_market_context.py'
+      - 'scripts/test_market_context.py'
+      - '.github/workflows/validate-market-context.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  diagnose:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,34 +24,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Compare FRED connection paths without publishing data
+      - name: Validate timeout, fallback and observation freshness
+        run: python -m unittest discover -s scripts -p test_market_context.py
+      - name: Verify live FRED recovery in an isolated snapshot
         run: |
           python - <<'PY'
-          import concurrent.futures, json, socket, ssl, subprocess, time, urllib.request
-          from datetime import datetime, timedelta, timezone
-          start = (datetime.now(timezone.utc).date()-timedelta(days=730)).isoformat()
-          url = 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd='+start
-          ua = 'PublicMarketMonitor/1.0'
-          print('Python TLS:', ssl.OPENSSL_VERSION, flush=True)
-          print('FRED DNS:', socket.getaddrinfo('fred.stlouisfed.org', 443, type=socket.SOCK_STREAM), flush=True)
-          browser_ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-          def probe(name, target, agent, headers):
-              began = time.monotonic()
-              try:
-                  with urllib.request.urlopen(urllib.request.Request(target, headers={'User-Agent':agent,**headers}), timeout=8) as r:
-                      sample = r.read(100).decode('utf-8-sig')
-                      print(json.dumps(dict(probe=name,status=r.status,elapsed=round(time.monotonic()-began,2),sample=sample)),flush=True)
-              except Exception as exc:
-                  print(json.dumps(dict(probe=name,elapsed=round(time.monotonic()-began,2),error=type(exc).__name__+': '+str(exc))),flush=True)
-          headers = {'Accept':'text/csv,text/plain,text/html,*/*','Accept-Language':'en-US,en;q=0.9','Referer':'https://fred.stlouisfed.org/series/DGS10'}
-          probes = [
-              ('baseline again',url,ua,{}),
-              ('Accept only',url,ua,{'Accept':headers['Accept']}),
-              ('Referer only',url,ua,{'Referer':headers['Referer']}),
-              ('Accept-Language only',url,ua,{'Accept-Language':headers['Accept-Language']}),
-              ('all headers again',url,ua,headers),
-              ('table Accept only','https://fred.stlouisfed.org/data/DGS10.txt',ua,{'Accept':headers['Accept']}),
-          ]
-          with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-              list(pool.map(lambda args: probe(*args), probes))
+          import json, shutil, sys, tempfile, time
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from build_market_context import SERIES, build
+          began = time.monotonic()
+          with tempfile.TemporaryDirectory() as tmp:
+              root = Path(tmp)
+              (root/'market').mkdir()
+              shutil.copyfile('market/latest.json', root/'market/latest.json')
+              result = build(root=root)
+          checked = [q for q in result['indicators'] if q['id'] in {*SERIES, 'FUNDING'}]
+          for q in checked:
+              print(json.dumps({k:q.get(k) for k in ('id','status','asOf','fetchStatus','fromCache','lastSuccessAt','fetchWarnings','fetchError')}, ensure_ascii=False))
+          failed = [q['id'] for q in checked if q['fetchStatus']!='ready' or q['fromCache'] or q.get('lastSuccessAt')!=result['generatedAt']]
+          if len(checked)!=len(SERIES)+1 or failed:
+              raise SystemExit('Live FRED collection failed: '+', '.join(failed))
+          print('Verified 7 live FRED series and aligned funding in', round(time.monotonic()-began,2), 'seconds')
           PY
