@@ -3,3 +3,4 @@
 .assumptionActions{display:flex;align-items:end;gap:6px;flex-wrap:wrap}.assumptionActions button{font-size:13px}#applyAssumptions{color:var(--green);border-color:#3b6b68}
 
 .researchGrid>*{min-width:0}
+.sourceGrid .vi-badge{max-width:100%;white-space:normal}
