@@ -71,8 +71,11 @@ async function fits(page, selector) {
           const expected = A.evaluate(forecasts.stocks.NVDA, market, null, 126, clock);
           assert.equal(await assessment.locator('.vi-gauge:visible').count(), 1,
             'Only the entry decision is a primary gauge');
-          assert.equal(await assessment.locator('.sa-checks li:visible').count(), 6,
+          assert.equal(await assessment.locator('.sa-checks li:visible').count(), 5,
             'Entry conditions must be readable without opening details');
+          assert.equal(await assessment.locator('.sa-ai-status:visible').count(), 1);
+          assert.equal(await assessment.locator('.sa-conditions [data-ai-reference]').count(), 0,
+            'AI research is outside the technical condition checklist');
           const detail = assessment.locator('.sa-trend-details');
           assert.equal(await detail.evaluate(n => n.open), false);
           assert((await detail.locator('summary').textContent()).includes(A.format(expected.score)));
@@ -127,7 +130,7 @@ async function fits(page, selector) {
           await page.getByRole('button', {name:'1년',exact:true}).click();
           assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 2);
           assert.equal(await page.locator('.stockAssessment .vi-gauge:visible').count(), 1);
-          assert((await page.locator('[data-entry-check="ai"] .sa-check-title').textContent()).includes('1년'));
+          assert((await page.locator('.sa-ai-status h3').textContent()).includes('1년'));
           await page.locator('#tickerInput').fill('XOM');
           await page.locator('#tickerInput').press('Enter');
           await page.locator('.company-events[data-event-symbol="XOM"]').waitFor();
@@ -254,6 +257,37 @@ async function fits(page, selector) {
     await riskPage.locator('.guide').filter({hasText:'선택 기간의 전망 자료가 부족'}).waitFor();
     assert.deepEqual(await ids(),hotIds,'Missing forecast must preserve observed price risks');
     assert((await riskPage.locator('.sa-limitations [data-signal="ai-validation"]').textContent()).includes('1년'));
+    // Complete rule-based conditions with a genuinely withheld AI record.
+    // This is isolated QA data; published market/forecast files are untouched.
+    const f={anchor:100,base:110,bear:90,bull:120,direction:'up',learned:true,
+      logReturn:Math.log(1.1),lowLogReturn:Math.log(.9),highLogReturn:Math.log(1.2)};
+    const readyEntry={...entry,symbol:'NVDA',
+      inputs:{ma20:100,ma50:95,ma200:90,return1m:.04,return3m:.12,volatility4m:.2},
+      predictions:{126:{...f,horizon:126},252:{...f,horizon:252}}};
+    const readyMarket={generatedAt:new Date(clock).toISOString(),
+      credit:{status:'stable',coverage:4,expected:4,complete:true,missingFamilies:[]},
+      indicators:['NFCI','STLFSI4','DRTSCILM','FUNDING','GZ_SPREAD','EBP'].map(id=>({
+        id,label:id,unit:'',url:'',status:'ready',asOf:day,maxAgeDays:5,value:0,severity:0}))};
+    const research={status:'trained',generatedAt:new Date(clock).toISOString(),
+      validation:{126:{passed:false},252:{passed:false}},stocks:{NVDA:{asOf:day,price:100,
+      predictions:Object.fromEntries([126,252].map(h=>[h,{status:'withheld',forecast:{...f,horizon:h},
+        reasons:['시험용 AI 검증 미통과']}]))}}};
+    await riskPage.unrouteAll();
+    await riskPage.route('**/config/*.json*',route=>route.fulfill({json:{sheetCsvUrl:'',submitUrl:''}}));
+    await riskPage.route('**/forecasts/latest.json*',route=>route.fulfill({json:{stocks:{NVDA:readyEntry}}}));
+    await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:readyMarket}));
+    await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:research}));
+    await ready(riskPage,base+'index.html','.stockAssessment');
+    assert.equal(await riskPage.locator('.stockAssessment .sa-heading strong').textContent(),'진입 검토');
+    assert.equal(await riskPage.locator('.stockAssessment').getAttribute('data-decision-basis'),'technical-rules');
+    assert.equal(await riskPage.locator('.sa-ai-status').getAttribute('data-ai-reference'),'unavailable');
+    assert((await riskPage.locator('.sa-ai-status .vi-badge').textContent()).includes('검증 미통과'));
+    assert.equal(await riskPage.locator('[data-indicator="규칙 기반 진입 조건"]').getAttribute('data-state'),'buy');
+    await riskPage.getByRole('button',{name:'1년',exact:true}).click();
+    assert.equal(await riskPage.locator('.stockAssessment .sa-heading strong').textContent(),'진입 검토');
+    assert((await riskPage.locator('.sa-ai-status h3').textContent()).includes('1년'));
+    await fits(riskPage,'.stockAssessment, .sa-checks, .sa-ai-status');
+    await riskPage.locator('.stockAssessment').screenshot({path:path.join(output,'entry-ready-withheld-ai-fixture.png')});
     await riskPage.close();
     // Failed/stale feeds get grey indicators without a pointer on the real page.
     const page = await browser.newPage({viewport:{width:390,height:900}});
