@@ -13,6 +13,7 @@ import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
+from functools import lru_cache
 from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
@@ -26,13 +27,26 @@ from research_universe import load_universe
 
 ROOT = Path(__file__).resolve().parents[1]
 PARSER = 'company-news-v1'
-CLASSIFIER = 'company-impact-headline-v1'
+CLASSIFIER = 'company-impact-source-v2'
 WINDOW_DAYS = 30
 MAX_ARTICLES = 12
 LABELS = {'positive': '호재', 'negative': '악재', 'mixed': '혼재',
           'neutral': '중립', 'unclear': '판단 유보'}
 # Event phrases, rather than sentiment adjectives such as "great" / "bad".
 RULES = [
+    ('positive', '분석가 기대', r'\bwall street\b.{0,25}\b(?:sees?|expects?)\b.{0,30}\bupside\b|\banalysts?\b.{0,25}\b(?:bullish|optimistic)\b', '분석가가 추가 상승 여력에 긍정적인 의견을 제시했습니다. 회사의 확정 실적 변화가 아니며 목표주가 도달을 보장하지 않습니다.'),
+    ('positive', '사업 확장', r'\b(?:entered the smart home|opens? (?:a |its )?new (?:plant|factory|facility|store)|expands? (?:its )?(?:production|capacity))\b', '새로운 사업·생산 영역으로 확장하는 내용입니다. 향후 판매 기회에 유리할 수 있지만 투자 비용과 수익성도 함께 보세요.'),
+    ('positive', '판매·인도 실적 개선', r'\b(?:deliveries|vehicle sales)\b.{0,50}\b(?:clear the street|topped|above analyst estimates|above estimates|surpass(?:ed|ing)? expectations)\b|\bdeliver(?:ed|s)\b.{0,75}\b(?:beating|beat|surpassing)\b.{0,25}\bestimates\b|\bbeat\b.{0,30}\bdeliveries\b|\bbetter.than.expected\b.{0,20}\bdeliveries\b', '판매·인도량이 시장 예상을 웃돌았습니다. 수요에 유리한 소식이며, 실제 이익은 판매 가격과 비용도 확인해야 합니다.'),
+    ('positive', '매출·이익 증가', r'\b(?:revenue|profit|income|earnings|eps|sales)\b.{0,35}\b(?:rose|grew|increased|growth|ahead of expectations)\b|\b(?:posts?|reports?)\b.{0,25}\b\d+(?:\.\d+)?%\b.{0,20}\b(?:revenue|profit|income)\b.{0,15}\bgrowth\b', '매출·이익 증가가 보도됐습니다. 사업 성과에 유리하지만 시장 예상보다 좋았는지도 함께 보세요.'),
+    ('positive', '계약·수주', r'\b(?:receives?|received|awarded)\b.{0,65}\b(?:contract|award|order)\b|\bcontract modification\b.{0,50}\b(?:lifts?|increases?)\b', '신규 계약·수주가 향후 매출 확보에 도움이 될 수 있습니다. 매출 인식 시점과 수익성은 별도 확인이 필요합니다.'),
+    ('positive', '제품 출시', r'\b(?:unveils?|launched|introduces?|launches?)\b.{0,50}\b(?:gemini|argon|roadster|novus|new)\b', '신제품·서비스 출시로 사업 기회가 넓어질 수 있습니다. 출시 자체가 판매 성공을 뜻하지는 않습니다.'),
+    ('positive', '사업 제휴', r'\b(?:partners? with|partnering with|teamed up with|teams? up with|collaborates? with)\b', '다른 기업과의 사업 제휴는 고객·판매 기회를 넓힐 수 있습니다. 실제 매출과 이익 효과는 아직 확인이 필요합니다.'),
+    ('negative', '노사·운영 부담', r'\b(?:workers?|employees?|union)\b.{0,45}\b(?:strike|strikes|walkout)\b|\b(?:workers?|employees?) strike\b', '파업·운영 차질은 비용과 서비스 제공에 부담이 될 수 있습니다. 영향 규모와 해결 여부를 함께 확인하세요.'),
+    ('negative', '성장·판매 부담', r'\b(?:sales|revenue|earnings|profit|income)\b.{0,25}\b(?:declining|down from|dropped|declined)\b|\b(?:steep|sharp) profit drop\b|\b(?:revenue|sales)\b.{0,50}\b(?:much slower|more slowly)\b', '매출·이익 감소나 성장 둔화가 보도됐습니다. 일시적인 요인인지도 함께 확인해야 합니다.'),
+    ('neutral', '경영진 변경', r'\b(?:names?|named|appoints?|appointed|announces?|promotes?)\b.{0,90}\b(?:ceo|cfo|chief executive|chief financial|retirement)\b|\b(?:retires?|retirement|succeeding)\b.{0,65}\b(?:ceo|cfo|chief executive|chief financial)\b', '경영진 교체·은퇴 소식입니다. 교체만으로 실적이 좋아지거나 나빠진다고 판단할 근거는 없습니다.'),
+    ('neutral', '발표·행사 안내', r'\b(?:schedules?|announces?)\b.{0,55}\b(?:conference call|webcast|earnings release)\b|\b(?:to webcast|will host)\b.{0,35}\b(?:earnings|conference call)\b', '실적 발표·설명회 일정 안내입니다. 실적 결과가 아직 발표된 것은 아닙니다.'),
+    ('neutral', '정기 배당', r'\bquarterly dividend\b.{0,20}\bdeclared\b', '정기 배당 공지입니다. 배당의 증가·감소가 확인되지 않아 영향은 중립으로 표시합니다.'),
+    ('neutral', '전망 유지', r'\b(?:reaffirms?|maintains?|holds?)\b.{0,25}\b(?:guidance|outlook|forecast|targets)\b', '기존 사업 전망을 유지했다는 내용입니다. 상향·하향이 확인되지 않아 중립으로 표시합니다.'),
     ('positive', '매출·이익 증가', r'\b(?:revenue|profit|earnings|sales)\b.{0,30}\b(?:rises?|rose|jumps?|surges?|grew|grows?|increases?|increased|\d+(?:\.\d+)?% higher)\b', '매출·이익 증가를 보도해 사업 성과에 유리한 내용입니다. 예상 대비 수준은 별도 확인이 필요합니다.'),
     ('positive', '제품 출시', r'\b(?:introduces?|launches?|unveils?)\b.{0,80}\b(?:product|system|platform|module|chip|service|model|software|engine|device|kiosk|app)\b', '신제품·서비스 출시는 사업 기회를 넓힐 수 있습니다. 판매 성과와 수익성은 아직 별도 확인이 필요합니다.'),
     ('positive', '임상·허가 진전', r'\bpositive\b.{0,35}\b(?:trial|phase [123][ab]?|study)\b.{0,40}\b(?:results?|data)\b|\b(?:trial|study)\b.{0,35}\bmeets?\b.{0,25}\b(?:endpoint|goal)\b|\b(?:receives?|wins?)\b.{0,30}\bexpanded indication\b', '긍정적인 임상 결과·허가 범위 확대는 사업 진행에 유리할 수 있습니다. 후속 시험·판매 성과는 별도 확인이 필요합니다.'),
@@ -67,6 +81,7 @@ ALIASES = {
     'AMD': ['Advanced Micro Devices', 'AMD'], 'INTC': ['Intel'],
     'ON': ['onsemi', 'ON Semiconductor'], 'C': ['Citigroup', 'Citi'],
     'T': ['AT&T'], 'V': ['Visa'], 'BF-B': ['Brown-Forman'],
+    'F': ['Ford'], 'GM': ['General Motors', 'GM'],
     'PG': ['P&G', 'Procter and Gamble'], 'JNJ': ['J&J', 'Johnson and Johnson'],
 }
 ANALYST_FIRMS = ['Morgan Stanley', 'Goldman Sachs', 'Wells Fargo', 'JPMorgan',
@@ -127,6 +142,11 @@ def aliases(tickers, name):
 def mentions(text, tickers, names):
     n = ' ' + normalize(text) + ' '
     if any(' '+a+' ' in n for a in names): return True
+    # A reused ticker on another exchange or a similarly named listed vehicle
+    # is not this issuer. These feeds contain both real collision examples.
+    if 'SPG' in tickers and re.search(r'\b(?:Super Group|JSE:\s*SPG)\b', text, re.I): return False
+    if 'ARES' in tickers and re.search(r'\b(?:Ares Capital|ARCC)\b', text, re.I): return False
+    if re.search(r'\b(?:JSE|TSX|ASX|LSE|NSE|BSE|HKEX):', text): return False
     for t in tickers:
         # Short English-word tickers (A, ON, IT...) require explicit stock syntax.
         if re.search(r'\((?:NASDAQ: ?|NYSE: ?)?'+re.escape(t)+r'\)|\$(?:'+re.escape(t)+r')\b|\b(?:NYSE|NASDAQ):\s*'+re.escape(t)+r'\b', text): return True
@@ -148,78 +168,148 @@ def safe_url(value):
         return None
 
 
-def classify(title, tickers, names, other_names=None):
-    """Classify the headline only; snippets may refer to a different company.
+def complete_sentences(text):
+    """Only complete supplied sentences; never use a cut-off RSS tail as proof."""
+    text = re.sub(r"\b(?:Inc|Corp|Co|Ltd|Mr|Dr)\.(?=\s)", lambda m: m.group(0)[:-1], text)
+    text = text.replace('U.S.', 'US').replace('U.K.', 'UK')
+    ends = [m.end() for m in re.finditer(r'[.!?](?:["”])?(?=\s+[A-Z]|$)', text)]
+    start = 0
+    for end in ends:
+        if end-start > 12: yield text[start:end].strip()
+        start = end
 
-    Cross-company comparisons, questions, rumors and negated developments are
-    deferred. A positive word or a share-price rise is insufficient evidence.
+
+def news_kind(title):
+    if re.search(r'\b(?:upgrades?|upgraded|downgrades?|downgraded|price target|analyst.{0,20}(?:rating|rated))\b', title, re.I): return 'analyst'
+    if re.search(r'\b(?:stock|shares?|market returns|all.time high|record high)\b', title, re.I): return 'market'
+    if re.search(r'\?|\b(?:vs\.?|versus|better buy|should you|undervalued|overvalued|investment case|cramer|stocks to (?:buy|watch|consider)|buy now|perfect time to buy)\b', title, re.I): return 'opinion'
+    return 'company'
+
+
+@lru_cache(maxsize=1200)
+def mention_pattern(pool):
+    return re.compile(r'(?<![a-z0-9])(?:'+'|'.join(re.escape(name) for name in sorted(pool, key=len, reverse=True))+r')(?![a-z0-9])')
+
+
+def classify(title, tickers, names, other_names=None, summary=''):
+    """Use issuer-anchored event clauses in the headline and complete RSS leads.
+
+    The translated display text is never input. Rival actions, speculation,
+    price moves and buying opinions are not evidence of company improvement.
     """
-    base = {'classifier': CLASSIFIER, 'basis': 'headline', 'confidence': 'limited'}
-    def result(status, reason, topics=None, evidence=None):
+    base = {'classifier': CLASSIFIER, 'basis': 'headline-and-excerpt', 'confidence': 'limited'}
+    def result(status, reason, topics=None, evidence=None, kind=None):
         return dict(base, status=status, label=LABELS[status], reason=reason,
-                    topics=topics or [], evidence=evidence or [])
+                    topics=topics or [], evidence=evidence or [], kind=kind or news_kind(title))
     if not mentions(title, tickers, names):
-        return result('unclear', '제목에 해당 회사가 확인되지 않아 영향을 단정하기 어렵습니다.')
+        return result('unclear', '기사에 해당 회사가 확인되지 않아 영향을 구분할 근거가 부족합니다.')
     if 'ADP' in tickers and re.search(r'\b(?:private payrolls|jobs report|employment report)\b', title, re.I):
-        return result('neutral', 'ADP가 발표한 고용 통계입니다. ADP 회사의 매출·이익 개선과는 구분합니다.', ['경제 통계 발표'])
-    # A headline mentioning multiple issuers can be favorable to one and
-    # unfavorable to another. Defer rather than copy a rival's development.
-    others = other_names if other_names is not None else {normalize(a) for t, aa in ALIASES.items() if t not in tickers for a in aa} - set(names)
-    normalized = ' '+normalize(title)+' '
-    if re.search(r'\b(?:upgrade[sd]?|upgrades|downgrade[sd]?|downgrades|price target)\b', title, re.I):
-        # A broker can be the source of a rating, rather than its recipient.
-        # In the broker's feed, the rated issuer stays a different company.
-        firms = {normalize(f) for f in ANALYST_FIRMS}
-        others = {a for a in others if not any(a == f or a.startswith(f+' ') for f in firms)}
-    if any(' '+a+' ' in normalized for a in others if len(a) >= 4):
-        return result('unclear', '여러 회사가 함께 등장해 회사별 수혜·부담을 원문에서 구분해야 합니다.')
-    if re.search(r'\b(?:files?|filed|brings?|brought)\b.{0,40}\blawsuit\b', title, re.I):
-        return result('unclear', '소송을 제기한 회사의 비용·권리 보호 효과가 엇갈릴 수 있어 원문 확인이 필요합니다.')
-    if re.search(r'\?|\b(?:rumou?rs?|might|could|reportedly|expected to|poised to|set to|potential|should you|would|if|denies?|not|no longer|fails? to|vs\.?|versus|dismissed|cleared|avoids?|exits? bankruptcy|wins? (?:a )?lawsuit)\b|\bmay\s+(?:(?:soon|still|also|already)\s+)?(?:be|have|raise|cut|miss|beat|win|face|lose|increase|decrease|launch|announce|report|benefit|hurt|suffer|recover|boost|reduce|see)\b', title, re.I):
-        return result('unclear', '전망·의견·미확정 보도 또는 비교·부정 표현이 있어 원문 확인 후 판단이 필요합니다.')
-    matches = []
-    for tone, topic, pattern, reason in RULES:
-        m = re.search(pattern, title, re.I)
-        if not m: continue
-        if topic.startswith('분석가'):
-            # "Upgrade" can describe pizza, software or a membership tier.
-            # Require a stock/rating context or a named financial analyst.
-            context = re.search(r'\b(?:analysts?|rating|rated|stock|shares?|price target|wall street|buy|sell|outperform|underperform|overweight|underweight)\b', title, re.I)
-            broker = any(' '+normalize(f)+' ' in normalized for f in ANALYST_FIRMS)
-            if not context and not broker: continue
-            if re.search(r'\b(?:engine|software|system|platform|product|technology|model|chip|hardware|cloud|data|ai|gpu)\s+upgrades?\b', title, re.I): continue
-            # A rating provider mentioned as the source is not the rated issuer.
-            if any(re.search(r'\b(?:from|by)\s+'+re.escape(a)+r'(?:\s|$)', normalized) for a in names): continue
-        firm_subject = any(normalized.lstrip().startswith(normalize(f)+' ') and normalize(f) in names for f in ANALYST_FIRMS)
-        if firm_subject and topic.startswith('분석가') and re.search(r'\b(?:upgrades|downgrades)\b', m.group(0), re.I): continue
-        if firm_subject and topic in {'전망 상향', '전망 하향'} and not re.search(r'\b(?:its|own|20\d\d|fiscal|annual|quarterly|revenue|profit|earnings)\b', m.group(0), re.I): continue
-        if topic in {'계약·수주', '제품 출시'} and not mentions(title[:m.start()], tickers, names): continue
-        if topic in {'전망 상향', '전망 하향'} and re.search(r'\banalyst\b.{0,50}\b(?:raises?|cuts?|lowers?|boosts?)\b', title, re.I): continue
-        if topic == '배당·환원 축소' and re.search(r'\bdividend growth\b', title, re.I): continue
-        matches.append((tone, topic, reason, m.group(0)[:100], m.start(), m.end()))
-    # A named competitor's earnings/guidance/analyst action must not become this
-    # company's label. Anchor directional phrases to a nearby company mention.
+        return result('neutral', 'ADP가 발표한 고용 통계입니다. ADP 회사의 매출·이익 변화와 구분해서 보세요.', ['경제 통계 발표'], kind='company')
+    others = (set(other_names) if other_names is not None else {normalize(a) for t, aa in ALIASES.items() if t not in tickers for a in aa}) - set(names)
+    firms = {normalize(f) for f in ANALYST_FIRMS}
+    own_full = set(names) | {normalize(t) for t in tickers if len(t) >= 3 and t not in {'ALL', 'ARE', 'CAT', 'DAY', 'FOR', 'HAS', 'KEY', 'NOW', 'PAY'}}
+    def positions(text, pool):
+        n = ' '+normalize(text)+' '
+        pool = tuple(sorted(name for name in pool if len(name) >= 3))
+        return [(m.start(), m.end(), m.group(0)) for m in mention_pattern(pool).finditer(n)] if pool else []
+    uncertainty = r"\b(?:rumou?rs?|might|could|reportedly|expected to|poised to|set to|potential|possible|proposed|discuss|discussing|considering|analysts? expect(?:s|ing)?|projected to|would|denies?|does not|did not|no longer|fails? to|dismissed|cleared|avoids?|exits? bankruptcy|wins? (?:a )?lawsuit)\b|\bmay\s+(?:(?:soon|still|also|already)\s+)?(?:be|have|raise|cut|miss|beat|win|face|lose|increase|decrease|launch|announce|report|benefit|hurt|suffer|recover|boost|reduce|see)\b"
+    snippets = [(title, 'headline')] + [(s, 'excerpt') for s in complete_sentences(summary)]
     anchored = []
-    for match in matches:
-        tone, topic, reason, evidence, start, end = match
-        # A comma-separated rival's upgrade cannot cancel the selected issuer's
-        # downgrade. A verb-only continuation can still refer to the same issuer.
-        boundaries = [m for m in re.finditer(r'[,;:]\s+(?=[A-Za-z])', title)]
-        left = max([m.end() for m in boundaries if m.end() <= start] or [0])
-        right = min([m.start() for m in boundaries if m.start() >= end] or [len(title)])
-        clause = title[left:right]
-        inherited = left > 0 and mentions(title[:left], tickers, names) and (
-            re.match(r'(?:(?:and|but|yet|then)\s+)?(?:cuts?|raises?|lowers?|misses?|beats?|tops?|reports?|unveils?|suspends?|withdraws?|faces?|loses?)\b', clause, re.I) or
-            topic in {'성장·판매 부담', '수익성 부담'} and re.match(r'(?:and|but|yet)\s+(?:its\s+)?(?:slow|slower|slowing|weak|soft|growth problem|margin pressure|margin compression)\b', clause, re.I) or
-            topic.startswith('분석가') and any(normalize(clause).startswith(normalize(f)+' ') for f in ANALYST_FIRMS))
-        if mentions(clause, tickers, names) or inherited: anchored.append(match[:4])
+    for text, origin in snippets:
+        # A factual lead can clarify an opinion headline, but a question itself
+        # cannot turn an anticipated event into a completed one.
+        if '?' in text or re.search(r'\b(?:vs\.?|versus)\b', text, re.I): continue
+        # Commas/contrast words separate rival subjects; shared subject lists
+        # (Tesla and Rivian beat ...) remain together.
+        # A short two-company list shares the delivery event that follows it.
+        text = re.sub(r'\b([A-Z][A-Za-z. ]{1,25}), ([A-Z][A-Za-z. ]{1,25})(?=\s+Deliveries\b)', r'\1 and \2', text)
+        clauses = re.split(r'[,;:]\s+(?=[A-Za-z])|\s+[—–]\s+|\s+(?:while|whereas|but|yet)\s+(?=[A-Za-z])', text)
+        prior_own = False
+        for clause in clauses:
+            own = positions(clause, own_full)
+            rival = positions(clause, others)
+            normalized = ' '+normalize(clause)+' '
+            for tone, topic, pattern, reason in RULES:
+                for match in re.finditer(pattern, clause, re.I):
+                    before = ' '+normalize(clause[:match.start()])+' '
+                    after = ' '+normalize(clause[match.end():])+' '
+                    # Block uncertainty and negation only around this event.
+                    window = clause[max(0, match.start()-45):min(len(clause), match.end()+45)]
+                    if re.search(uncertainty, window, re.I): continue
+                    if topic == '소송·조사' and re.search(r'\b(?:files?|filed|brings?|brought)\b.{0,40}\blawsuit\b', clause, re.I): continue
+                    if topic == '배당·환원 축소' and re.search(r'\bdividend growth\b', clause, re.I): continue
+                    if topic in {'전망 상향', '전망 하향'} and re.search(r'\banalysts?\b.{0,50}\b(?:raises?|cuts?|lowers?|boosts?)\b', clause, re.I): continue
+                    if topic in {'전망 상향', '전망 하향'} and re.search(r'\banalysts?\b', text, re.I): continue
+                    if topic in {'전망 상향', '전망 하향'} and re.search(r'\b(?:interest rate|rate outlook|economic outlook|sector outlook|s&p 500|industrials sector)\b', clause, re.I): continue
+                    firm_subject = any(normalized.strip().startswith(f+' ') and f in names for f in firms)
+                    if firm_subject and topic in {'전망 상향', '전망 하향'} and not re.search(r'\b(?:its|own|20\d\d|fiscal|annual|quarterly|revenue|profit|earnings)\b', match.group(0), re.I): continue
+                    is_rating = topic.startswith('분석가')
+                    if is_rating:
+                        context = re.search(r'\b(?:analysts?|rating|rated|stock|shares?|price target|wall street|buy|sell|outperform|underperform|overweight|underweight)\b', text, re.I)
+                        broker = any(' '+f+' ' in normalized for f in firms)
+                        if not context and not broker: continue
+                        if re.search(r'\b(?:engine|software|system|platform|product|technology|model|chip|hardware|cloud|data|ai|gpu)\s+upgrades?\b', clause, re.I): continue
+                        # A ratings/brokerage company is the source, not the recipient.
+                        if any(re.search(r'\b(?:from|by)\s+'+re.escape(a)+r'(?:\s|$)', normalized) for a in names): continue
+                        if any(re.search(r'\b'+re.escape(f)+r'(?: ratings| investment institute)?(?: has| had| on [a-z]+)?\s+(?:upgrades?|downgrades?|upgraded|downgraded)\b', normalized) for f in firms if f in names): continue
+                        if any(normalized.strip().startswith(f+' ') and f in names for f in firms) and not mentions(clause[match.end():], tickers, names): continue
+                    prefix_own = positions(clause[:match.start()], own_full)
+                    prefix_other = positions(clause[:match.start()], others - firms if is_rating else others)
+                    subject = bool(prefix_own) and (not prefix_other or max(p[1] for p in prefix_own) >= max(p[1] for p in prefix_other))
+                    if topic not in {'계약·수주', '제품 출시', '사업 제휴'} and mentions(match.group(0), tickers, names) and not positions(match.group(0), others-firms): subject = True
+                    # Explicit coordinated subjects share one actual event.
+                    if not subject and prefix_own and prefix_other:
+                        last = max(prefix_own+prefix_other, key=lambda p:p[1])
+                        first = max(prefix_own, key=lambda p:p[1])
+                        subject = ' and ' in before[min(first[0], last[0]):max(first[1], last[1])]
+                    # "downgrades Exxon" / "FDA approves Pfizer drug" state the recipient after the verb.
+                    if is_rating or topic == '승인·허가':
+                        subject = subject or mentions(clause[match.start():match.end()+60], tickers, names)
+                    if not subject and prior_own and (not rival or is_rating and not positions(clause, others-firms)):
+                        subject = bool(re.match(r'(?:(?:and|but|yet|then)\s+)?(?:cuts?|raises?|lowers?|misses?|beats?|tops?|reports?|unveils?|suspends?|withdraws?|faces?|loses?|its\b|the company\b|the tech giant\b|the automaker\b|inc\b)', clause, re.I))
+                        if topic in {'성장·판매 부담', '수익성 부담'} and re.match(r'(?:(?:and|but|yet)\s+)?(?:its\s+)?(?:slow|slower|slowing|weak|soft|growth problem|margin pressure|margin compression)\b', clause, re.I): subject = True
+                        if is_rating and any(normalize(clause).startswith(f+' ') for f in firms): subject = True
+                        if is_rating and normalize(clause).startswith('wall street '): subject = True
+                    if not subject and origin == 'excerpt' and not rival and len(snippets) > 1:
+                        # A standalone ticker-led feed may use "the company" or
+                        # omit its name in the supplied lead. Never inherit a
+                        # rival's explicitly named action.
+                        subject = bool(re.match(r'(?:the company|the tech giant|the automaker|instead.{0,10}the tech giant)\b', clause, re.I))
+                    if topic in {'계약·수주', '제품 출시'} and not subject: continue
+                    if not subject: continue
+                    anchored.append((tone, topic, reason, clause.strip()[:350], origin))
+            if own: prior_own = True
+            elif rival: prior_own = False
     tones = {m[0] for m in anchored}
     if not tones:
-        return result('unclear', '제목만으로 실적·사업 조건이 좋아졌는지 나빠졌는지 확인할 근거가 부족합니다.')
+        kind = news_kind(title)
+        reason = '주가 움직임·투자 의견 기사입니다. 회사 실적이나 사업 조건의 변화가 확인되지 않아 호재·악재로 분류하지 않았습니다.' if kind in {'market', 'opinion', 'analyst'} else '제공된 제목·짧은 요약에서 회사에 유리하거나 불리한 변화를 확인할 근거가 부족합니다.'
+        return result('unclear', reason, kind=kind)
     status = 'mixed' if {'positive', 'negative'} <= tones else 'negative' if 'negative' in tones else 'positive' if 'positive' in tones else 'neutral'
     chosen = [m for m in anchored if m[0] != 'neutral' or status == 'neutral']
-    reason = ('유리한 소식과 부담 요인이 함께 보도되어 영향을 한 방향으로 단정하기 어렵습니다. ' if status == 'mixed' else '') + ' '.join(dict.fromkeys(m[2] for m in chosen))
-    return result(status, reason, list(dict.fromkeys(m[1] for m in chosen)), list(dict.fromkeys(m[3] for m in chosen)))
+    reasons = {m[1]: m[2] for m in reversed(chosen)}
+    reason = ('좋은 소식과 부담 요인이 함께 있습니다. ' if status == 'mixed' else '') + ' '.join(reversed(list(reasons.values())))
+    analyst_view = all(m[1].startswith('분석가') or any(normalize(m[3]).startswith(f+' ') for f in firms) for m in chosen)
+    kind = 'analyst' if analyst_view else 'company'
+    return result(status, reason, list(dict.fromkeys(m[1] for m in chosen)), list(dict.fromkeys(m[3] for m in chosen)), kind)
+
+
+def reclassify_snapshot(root=ROOT):
+    """Refresh interpretations without changing article/source collection clocks."""
+    path = root/'news/latest.json'
+    snapshot = read(path)
+    all_names = {a for v in snapshot['issuers'].values() for a in aliases(v['tickers'], v['name'])}
+    for issuer in snapshot['issuers'].values():
+        names = aliases(issuer['tickers'], issuer['name'])
+        issuer['articles'] = [a for a in issuer['articles'] if mentions(a['title'], issuer['tickers'], names)]
+        for article in issuer['articles']:
+            article['impact'] = classify(article['title'], issuer['tickers'], names, all_names-set(names), article.get('summary', ''))
+    snapshot['classifierVersion'] = CLASSIFIER
+    snapshot['collection']['articleCount'] = sum(len(v['articles']) for v in snapshot['issuers'].values())
+    snapshot['collection']['issuersWithArticles'] = sum(bool(v['articles']) for v in snapshot['issuers'].values())
+    snapshot['limitations'][1] = 'Impact uses issuer-anchored headline clauses and complete supplied RSS sentences, not the full article or a price forecast.'
+    atomic_json(path, snapshot)
+    return snapshot
 
 
 def feed_url(ticker):
@@ -261,7 +351,7 @@ def parse_feed(raw, tickers, name, observed_at, now, other_names=None):
                          title=title, summary=summary[:300], publishedAt=published.isoformat(),
                          observedAt=observed_at, source={'name': source[:100], 'url': url},
                          provider='Yahoo Finance RSS', relevance='title' if mentions(title, tickers, names) else 'summary',
-                         impact=classify(title, tickers, names, other_names)))
+                         impact=classify(title, tickers, names, other_names, summary[:300])))
     rows.sort(key=lambda x: (x['publishedAt'], x['id']), reverse=True)
     unique, urls = {}, set()
     for row in rows:
@@ -350,6 +440,11 @@ def build(root=ROOT, download=True, now=None, fetcher=fetch, only=None, interval
         if raw is not None:
             try:
                 articles, rejected = parse_feed(raw, tickers, members[tickers[0]]['name'], observed, clock(), other_names)
+                previous_articles = {a['id']: a for a in prior.get('articles', []) if isinstance(a, dict) and 'id' in a}
+                for article in articles:
+                    previous = previous_articles.get(article['id'], {})
+                    if previous.get('title') == article['title'] and previous.get('summary', '') == article.get('summary', '') and isinstance(previous.get('ko'), dict):
+                        article['ko'] = dict(previous['ko'])
                 status = 'ready' if online else 'captured'
                 feed.update(lastSuccessAt=observed, rejectedRows=rejected, sourceHash=hashlib.sha256(raw.encode()).hexdigest())
                 if online:
@@ -357,7 +452,7 @@ def build(root=ROOT, download=True, now=None, fetcher=fetch, only=None, interval
             except (ValueError, TypeError, KeyError, ET.ParseError):
                 status = 'invalid_response'; errors.append({'cik': cik, 'code': status})
         # Retained articles preserve their source observation even if rules change.
-        for article in articles: article['impact'] = classify(article['title'], tickers, names_by_cik[cik], other_names)
+        for article in articles: article['impact'] = classify(article['title'], tickers, names_by_cik[cik], other_names, article.get('summary', ''))
         feed.update(status=status, sourceUrl=feed_url(sorted(tickers)[0]))
         issuers[cik] = dict(cik=int(cik), name=members[tickers[0]]['name'], tickers=tickers, feed=feed, articles=articles)
     if download and not blocked: state = {}
@@ -370,7 +465,7 @@ def build(root=ROOT, download=True, now=None, fetcher=fetch, only=None, interval
                                    freshIssuers=len(fresh), issuersWithArticles=sum(bool(v['articles']) for v in issuers.values()),
                                    articleCount=sum(len(v['articles']) for v in issuers.values()), blockedReason=blocked, errors=errors),
                    limitations=['Company-related Yahoo RSS headlines and supplied short excerpts, not comprehensive news coverage.',
-                                'Impact is a conservative headline-only preliminary interpretation, not full-article analysis or a price forecast.',
+                                'Impact uses issuer-anchored headline clauses and complete supplied RSS sentences, not the full article or a price forecast.',
                                 'Neutral is a matched informational event. Missing or ambiguous evidence is unclear, not neutral.',
                                 'Display-only: labels are not model features, stock scores or buy/sell signals.'])
     atomic_json(root/'news/latest.json', payload)
@@ -382,6 +477,8 @@ def build(root=ROOT, download=True, now=None, fetcher=fetch, only=None, interval
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--offline', action='store_true')
+    parser.add_argument('--reclassify', action='store_true', help='Reclassify the retained snapshot without any collection or clock changes')
     parser.add_argument('--symbols', help='Only refresh these comma-separated tickers; retain all other issuers')
     args = parser.parse_args()
-    build(download=not args.offline, only=[s.strip().upper().replace('.', '-') for s in args.symbols.split(',')] if args.symbols else None, workers=3)
+    if args.reclassify: reclassify_snapshot()
+    else: build(download=not args.offline, only=[s.strip().upper().replace('.', '-') for s in args.symbols.split(',')] if args.symbols else None, workers=3)

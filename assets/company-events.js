@@ -53,22 +53,43 @@ function selectNews(snapshot,ticker,now=Date.now()){
  const articles=[...new Map(rows.map(e=>[e.id,e])).values()].slice(0,12);
  const success=newsTime(issuer?.feed?.lastSuccessAt,now),sourceFresh=Number.isFinite(success)&&now-success<=2*DAY,fresh=issuer?.feed?.status==='ready'&&sourceFresh;
  const counts=Object.fromEntries(Object.keys(impacts).map(k=>[k,0]));
- const validImpact=e=>e?.impact?.classifier==='company-impact-headline-v1'&&e.impact.basis==='headline'&&Object.hasOwn(impacts,e.impact.status)&&typeof e.impact.reason==='string';
- for(const e of articles)counts[validImpact(e)?e.impact.status:'unclear']++;
- return {key,issuer,articles,fresh,sourceFresh,checkedAt:Number.isFinite(success)?issuer.feed.lastSuccessAt:null,counts,validImpact};
+ const validImpact=e=>e?.impact?.classifier==='company-impact-source-v2'&&e.impact.basis==='headline-and-excerpt'&&Object.hasOwn(impacts,e.impact.status)&&typeof e.impact.reason==='string';
+
+ const primary=articles.filter(e=>validImpact(e)&&e.impact.status!=='unclear'&&!(Array.isArray(e.impact.topics)&&e.impact.topics.length&&e.impact.topics.every(t=>['발표·행사 안내','경제 통계 발표'].includes(t)))).sort((a,b)=>{const rank=e=>e.impact.kind==='analyst'?2:e.impact.status==='neutral'?1:0;return rank(a)-rank(b)||b.publishedAt.localeCompare(a.publishedAt)||a.id.localeCompare(b.id)});
+ const reference=articles.filter(e=>!primary.includes(e));
+ for(const e of primary)counts[e.impact.status]++;counts.unclear=articles.filter(e=>!validImpact(e)||e.impact.status==='unclear').length;
+ return {key,issuer,articles,primary,reference,fresh,sourceFresh,checkedAt:Number.isFinite(success)?issuer.feed.lastSuccessAt:null,counts,validImpact};
+}
+function koreanSummary(e){
+ const ko=e?.ko;
+ return ko?.version==='company-news-ko-v5'&&ko.language==='ko'&&ko.status!=='unavailable'&&
+  ko.sourceTitle===e.title&&ko.sourceExcerpt===(e.summary||'')&&typeof ko.summary==='string'&&/[가-힣]{2}/.test(ko.summary)?ko.summary:null;
 }
 function newsCard(e,s){
- const impact=s.validImpact(e)?e.impact:{status:'unclear',reason:'판단 근거가 없어 원문 확인이 필요합니다.'};
+ const impact=s.validImpact(e)?e.impact:{status:'unclear',reason:'제공된 내용에서 회사에 미치는 영향을 추가로 확인해야 합니다.'};
  const topics=Array.isArray(impact.topics)?impact.topics.filter(x=>typeof x==='string'):[],evidence=Array.isArray(impact.evidence)?impact.evidence.filter(x=>typeof x==='string'):[];
- return '<li class="ce-news-card"><div class="ce-news-meta"><span class="ce-impact ce-'+impact.status+'">'+impacts[impact.status]+'</span><span>'+esc(topics.slice(0,2).join(' · '))+'</span><time datetime="'+esc(e.publishedAt)+'">'+esc(e.publishedAt.slice(0,10))+'</time></div><a class="ce-news-title" href="'+esc(e.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(e.title)+'</a><p class="ce-news-reason">'+esc(impact.reason)+'</p><div class="ce-news-source">'+esc(e.source.name||'기사 원문')+' · 발행일 UTC</div><details class="ce-news-detail"><summary>제공 요약·판단 근거</summary>'+(typeof e.summary==='string'&&e.summary?'<p>'+esc(e.summary)+'</p>':'<p>제공 요약이 없습니다.</p>')+(evidence.length?'<p>제목에서 확인한 표현: '+esc(evidence.slice(0,3).join(' · '))+'</p>':'')+'<small>제목 기반 예비 판단 · 확인 '+confirmed(e.observedAt)+'</small></details></li>';
+ const summary=koreanSummary(e),reference=impact.status==='unclear',label=reference?(['market','opinion','analyst'].includes(impact.kind)?'참고 뉴스':'추가 확인'):impacts[impact.status];
+ const summaryLabel=e?.ko?.method==='reviewed-summary'?'한국어 요약':'자동 번역 요약';
+ const kind=impact.kind==='analyst'?'분석가 의견':reference?'분류 근거 부족':'회사 소식';
+ return '<li class="ce-news-card" data-news-kind="'+esc(impact.kind||'unknown')+'"><div class="ce-news-meta"><span class="ce-impact ce-'+impact.status+'">'+label+'</span><span>'+kind+'</span><time datetime="'+esc(e.publishedAt)+'">'+esc(e.publishedAt.slice(0,10))+'</time></div><a class="ce-news-title" lang="ko" href="'+esc(e.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(summary||'한국어 요약을 준비하지 못했습니다. 원문에서 내용을 확인해 주세요.')+'</a><p class="ce-news-reason"><b>'+(reference?'읽는 법':'왜 '+impacts[impact.status]+'인가요?')+'</b>'+esc(impact.reason)+'</p><div class="ce-news-source">'+esc(e.source.name||'기사 원문')+' · '+(summary?summaryLabel+' · ':'')+'발행일 UTC</div><details class="ce-news-detail"><summary>영어 원문·판단 근거</summary><p lang="en"><b>'+esc(e.title)+'</b></p>'+(typeof e.summary==='string'&&e.summary?'<p lang="en">'+esc(e.summary)+'</p>':'<p>제공 요약이 없습니다.</p>')+(evidence.length?'<p>판단에 사용한 원문 표현: <span lang="en">'+esc(evidence.slice(0,3).join(' · '))+'</span></p>':'')+'<small>제목·제공 요약 기반 예비 판단 · 확인 '+confirmed(e.observedAt)+'</small></details></li>';
 }
 function newsPanel(ticker,snapshot=newsData,now=Date.now()){
  const s=selectNews(snapshot,ticker,now);
  const state=s.fresh?'최근 뉴스 확인':s.checkedAt?'마지막 확보 뉴스':newsFailed?'뉴스 읽기 실패':snapshot?'뉴스 수집 대기':'뉴스 확인 중';
- let content=s.articles.length?'<div class="ce-news-counts" aria-label="표시된 기사별 분류">'+Object.entries(impacts).map(([key,label])=>'<span class="ce-count ce-'+key+'">'+label+' <b>'+s.counts[key]+'</b></span>').join('')+'</div><p class="ce-news-scope">최근 30일 중 확보한 기사 '+s.articles.length+'개 · 최신순</p><ol class="ce-news-list">'+s.articles.slice(0,4).map(e=>newsCard(e,s)).join('')+'</ol>':'<p class="ce-empty">'+(s.fresh?'확인한 뉴스 피드에 최근 표시할 회사 기사가 없습니다.':'최근 회사 뉴스 확인 자료가 없습니다.')+' 뉴스가 없거나 영향이 중립이라는 뜻은 아닙니다.</p>';
- if(s.articles.length>4)content+='<details class="ce-more"><summary>회사 뉴스 '+(s.articles.length-4)+'개 더 보기</summary><ol class="ce-news-list">'+s.articles.slice(4).map(e=>newsCard(e,s)).join('')+'</ol></details>';
- return '<div class="ce-heading"><div><small>COMPANY NEWS · '+esc(s.key)+'</small><h3>회사 뉴스 · 호재와 악재</h3></div><span class="ce-status ce-news-status'+(s.fresh?' ce-ready':'')+'">'+state+'</span></div>'+(s.checkedAt?'<p class="ce-collection">'+(s.fresh?'뉴스 확인 ':s.sourceFresh?'마지막 원문 확보 ':'수집 지연 · 마지막 뉴스 확인 ')+confirmed(s.checkedAt)+'</p>':'')+content+'<p class="ce-news-note">호재·악재는 제목에서 확인한 내용의 예비 판단입니다. 유리한 소식과 부담 요인이 함께 있으면 혼재, 근거가 부족하면 판단 유보로 표시합니다. 실제 주가 방향·매수 신호와는 다를 수 있습니다.</p>';
+ let content='';
+ if(s.articles.length){
+  if(s.primary.length){
+   content='<div class="ce-news-counts" aria-label="근거가 확인된 기사별 분류">'+Object.entries(impacts).filter(([key])=>key!=='unclear'&&s.counts[key]).map(([key,label])=>'<span class="ce-count ce-'+key+'">'+label+' <b>'+s.counts[key]+'</b></span>').join('')+'</div><p class="ce-news-scope">회사 소식·분석가 의견 '+s.primary.length+'개 · 사업 소식 먼저, 같은 종류는 최신순</p><ol class="ce-news-list ce-primary-news">'+s.primary.slice(0,4).map(e=>newsCard(e,s)).join('')+'</ol>';
+   if(s.primary.length>4)content+='<details class="ce-more"><summary>회사 소식 '+(s.primary.length-4)+'개 더 보기</summary><ol class="ce-news-list">'+s.primary.slice(4).map(e=>newsCard(e,s)).join('')+'</ol></details>';
+  }else{
+   content='<p class="ce-empty">확보한 기사에서 회사 실적·사업 조건의 변화를 확인한 소식은 아직 없습니다. 아래 한국어 요약으로 최근 보도 내용을 확인하세요.</p><ol class="ce-news-list ce-reference-news">'+s.reference.slice(0,3).map(e=>newsCard(e,s)).join('')+'</ol>';
+  }
+  const rest=s.primary.length?s.reference:s.reference.slice(3);
+  if(rest.length)content+='<details class="ce-more ce-reference"><summary>참고 뉴스·회사 공지 '+rest.length+'개 보기</summary><p class="ce-news-scope">주가 움직임·종목 추천은 회사 실적의 개선·악화와 다를 수 있습니다. 사업 영향의 근거가 부족한 소식도 여기서 확인할 수 있습니다.</p><ol class="ce-news-list">'+rest.map(e=>newsCard(e,s)).join('')+'</ol></details>';
+ }else content='<p class="ce-empty">'+(s.fresh?'확인한 뉴스 피드에 최근 표시할 회사 기사가 없습니다.':'최근 회사 뉴스 확인 자료가 없습니다.')+' 뉴스가 없거나 영향이 중립이라는 뜻은 아닙니다.</p>';
+ return '<div class="ce-heading"><div><small>회사별 한국어 뉴스 · '+esc(s.key)+'</small><h3>회사 뉴스 · 호재와 악재</h3></div><span class="ce-status ce-news-status'+(s.fresh?' ce-ready':'')+'">'+state+'</span></div>'+(s.checkedAt?'<p class="ce-collection">'+(s.fresh?'뉴스 확인 ':s.sourceFresh?'마지막 원문 확보 ':'수집 지연 · 마지막 뉴스 확인 ')+confirmed(s.checkedAt)+'</p>':'')+content+'<p class="ce-news-note">호재는 사업·수익 기회에 유리한 내용, 악재는 비용·위험 등 부담 요인입니다. 두 요인이 함께 있으면 혼재, 발표 안내 등 방향 변화가 없으면 중립입니다. 제목·제공 요약에 근거한 예비 판단이며 주가 상승·하락을 예측하지 않습니다. 한국어 요약은 제공된 짧은 원문을 번역한 것으로, 영어 원문에서 함께 확인할 수 있습니다.</p>';
 }
+
 const categories={earnings:'실적',report:'보고서',contract:'계약',corporate:'기업 변화',capital:'자금·주식',governance:'지배구조',security:'보안',disclosure:'공시'};
 function card(e,today){
  const planned=e.dateKind==='estimated',type=planned?'예상 일정':categories[e.category]||'공시';
@@ -92,7 +113,7 @@ async function load(fetcher=root.fetch?.bind(root),force=false){
  const version=++sequence;loadedAt=Date.now();
  loading=(async()=>{await Promise.all([
   (async()=>{try{const r=await fetcher('events/latest.json',{cache:'no-store'});if(!r.ok)throw Error('events');const x=await r.json();if(x?.schemaVersion!==1||!x.issuers||!x.symbols)throw Error('schema');if(version===sequence){data=x;failed=false}}catch(_){if(version===sequence){data=null;failed=true}}})(),
-  (async()=>{try{const r=await fetcher('news/latest.json',{cache:'no-store'});if(!r.ok)throw Error('news');const x=await r.json();if(x?.schemaVersion!==1||x.classifierVersion!=='company-impact-headline-v1'||!x.issuers||!x.symbols)throw Error('schema');if(version===sequence){newsData=x;newsFailed=false}}catch(_){if(version===sequence){newsData=null;newsFailed=true}}})()
+  (async()=>{try{const r=await fetcher('news/latest.json',{cache:'no-store'});if(!r.ok)throw Error('news');const x=await r.json();if(x?.schemaVersion!==1||x.classifierVersion!=='company-impact-source-v2'||!x.issuers||!x.symbols)throw Error('schema');if(version===sequence){newsData=x;newsFailed=false}}catch(_){if(version===sequence){newsData=null;newsFailed=true}}})()
  ]);return data})();
  return loading;
 }
@@ -100,5 +121,5 @@ function mount(host,ticker){
  if(!host)return;const key=normalize(ticker);host.dataset.eventSymbol=key;host.innerHTML=panel(key);
  load().then(()=>{if(host.isConnected&&host.dataset.eventSymbol===key)host.innerHTML=panel(key)});
 }
-const api={load,panel,select,mount,safeSource,newsPanel,selectNews,safeNewsSource};if(typeof module!=='undefined')module.exports=api;else root.CompanyEvents=api;
+const api={load,panel,select,mount,safeSource,newsPanel,selectNews,safeNewsSource,koreanSummary};if(typeof module!=='undefined')module.exports=api;else root.CompanyEvents=api;
 })(typeof window!=='undefined'?window:globalThis);

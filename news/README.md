@@ -1,66 +1,96 @@
-# Company news and preliminary impact
+# Korean company news and preliminary impact
 
-The home, advanced and saved-company detail pages show the selected company's
-news first. SEC filings and estimated earnings dates remain in a collapsed
-supplementary section. The same article labels and reasons appear on all pages.
+The home, advanced and saved-company detail pages open with a short **Korean
+news summary**, followed by its impact and a plain-language reason. The original
+English headline, supplied excerpt, exact evidence and source link remain
+available in expandable details. SEC filings and estimated dates are supplementary.
 
-`scripts/build_company_news.py` fetches Yahoo Finance's per-symbol RSS feed for
-each current S&P 500 issuer. Share classes share one issuer and request. The
-snapshot uses at most twelve relevant articles per issuer published in the last
-30 days, in reverse publication order. It does not claim comprehensive coverage.
-Company-name/ticker checks require a mention in the headline, rather than only
-in a competitor's supplied excerpt; short tickers require explicit stock
-syntax. Personal inheritance/tax stories are excluded.
+The collector requests Yahoo Finance RSS once per current S&P 500 issuer, shared
+across share classes. It retains at most twelve company-related articles from the
+last 30 days. This is the coverage of the supplied feed, not exhaustive reporting.
+Names/tickers must match the headline; unrelated inheritance stories and known
+foreign-ticker/sibling-vehicle collisions are excluded.
 
-Impact labels are **headline-only preliminary interpretations**, with Korean
-reasons and the exact matched headline phrases available in article details:
+`company-impact-source-v2` uses issuer-anchored clauses from the English headline
+and **complete sentences** in the supplied excerpt (capped at 300 characters).
+It does not read article bodies or use translated text as classification evidence.
 
-- 호재: concrete favorable developments such as an earnings beat, raised
-  guidance, expanded shareholder returns, new products, contracts or approvals.
-- 악재: earnings misses, lowered guidance, dividend cuts, litigation, product or
-  security issues, financial/business risks or analyst downgrades.
-- 혼재: both favorable and adverse developments in the same headline.
-- 중립: a matched informational announcement such as a regular dividend or an
-  upcoming earnings-call date, without an evidenced change in conditions.
-- 판단 유보: insufficient evidence, questions, rumors, negation, opinions, or
-  multiple named companies whose different impacts require reading the article.
+- 호재: favorable reported developments, including an earnings beat, raised
+  guidance, shareholder returns, new products, contracts and business expansion.
+- 악재: misses, lowered guidance, dividend reductions, litigation, product or
+  security issues, strikes and other evidenced business burdens.
+- 혼재: favorable and adverse company developments are both evidenced.
+- 중립: an evidenced informational event without a direction in financial impact,
+  such as a leadership change or a regular dividend.
+- Unclear records remain unclear in data. The screen calls these 참고 뉴스 or
+  추가 확인, explains the missing evidence and groups them under reference news.
 
-Price movements alone are not evidence of a new favorable or adverse business
-event. Product or membership upgrades are not analyst upgrades; rating providers
-are distinguished from rated companies, and ADP employment statistics are not
-ADP earnings. Forecasts of a future earnings beat remain unconfirmed. Analyst
-actions and product launches include reasons explaining their limits. RSS
-excerpts are capped at 300 characters. Full articles are not read or
-reproduced. Counts describe the displayed articles, not probabilities or a
-company's overall outlook. Labels never affect stock scores, entry gates,
-forecasts, model research, paper accounts or backtests.
+Business developments appear first; analyst views are identified as 분석가 의견.
+Within each group, publication order is retained. Price moves, buying comparisons
+and records without sufficient company-impact evidence remain accessible in the
+reference section. Earnings schedules and ADP macro statistics are supplementary
+there, rather than filling the main company-news list. Counts describe articles
+with a supported interpretation; they are not probabilities or an aggregate
+company outlook. A positive price-target opinion is distinct from actual results.
 
-Each issuer records its feed status, source hash, check time and last successful
-observation. Failed refreshes retain articles with their original source clocks.
-The UI distinguishes confirmed empty feeds, unknown coverage, read failures and
-stale observations. Article timestamps must precede their observation and the
-current clock; malformed/future dates and unsafe links are hidden. News and SEC
-loads fail independently and refresh on the next visit/stock refresh after a
-one-minute cache. Overlapping older responses cannot replace newer news.
+Rival actions and a brokerage/ratings firm's actions on another issuer are not
+attributed to the selected issuer. Shared subjects can share a stated event.
+Rumors, conditional or negated events are not treated as completed business
+changes. A factual complete lead can clarify a question in the headline. Product
+upgrades are not stock-rating upgrades, and future earnings beats are unconfirmed.
 
-The existing GitHub Pages deployment receives a refreshed snapshot on weekdays
-at 14:15 and 22:15 UTC. The collector uses at most three concurrent requests,
-pauses between requests, and stops unstarted requests after access/rate-limit
-rejection or repeated transport failures. The persisted backoff lasts 24 hours
-after access denial, one hour after repeated transport failures. A few already
-in-flight requests can finish; no identity rotation or rejection workaround is
-used. Raw feed captures are ignored under `research/source-cache/news`.
+## Korean summaries
 
-Reproduction and validation:
+`scripts/translate_company_news.py` selects one short complete event sentence or
+the headline and translates it on the workflow runner, using the offline
+[Meta NLLB-200 600M translation model](https://huggingface.co/facebook/nllb-200-distilled-600M)
+(CC BY-NC 4.0; model use is restricted to noncommercial purposes), via CTranslate2. No translation API key or browser translation is
+required. This is a translation of supplied short metadata, not a full-article
+or generative analysis. Proper names can retain their original spelling.
+The tokenizer sets English input and Korean output explicitly. A smoke check
+verifies product-recall meaning, a financial term and numeric preservation.
+
+Headline finance noun phrases are expanded before translation to avoid literal
+translations such as treating an earnings beat as a physical blow. Machine
+translations are labeled 자동 번역 요약 in the card.
+
+Summaries checked against their provided source are stored in
+`news/korean-reviewed.json`, bound to its exact headline/excerpt hash. Changed
+source text cannot inherit a reviewed summary. Machine translations are cached
+by exact passage and translator version. Output additionally stores its source
+headline/excerpt, which the UI compares before display. Missing or failed Korean
+translations get a Korean unavailable message and the English source remains
+available in details. The site does not claim these translations are error-free.
+
+## Collection and freshness
+
+The existing GitHub Pages site refreshes on weekdays at 14:15 and 22:15 UTC.
+Collection is followed by Korean translation before the snapshot is published.
+At most three feed requests are in flight, with pauses. Access denial stops
+unstarted requests and persists a 24-hour backoff; repeated transport failures
+persist a one-hour backoff. Failed refreshes retain original source clocks.
+
+Dates must precede observation and the current clock. Unsafe links, malformed
+and future dates are hidden. News and SEC loads fail independently, retry on
+a later refresh and share a one-minute cache. Older overlapping responses cannot
+replace newer data or the selected stock. Translating/reclassifying a retained
+snapshot does not change publication, collection or observation times. Neither
+news data nor labels affect forecasts, stock assessments, models or trading data.
+
+## Reproduction and validation
 
 ```sh
 python scripts/build_company_news.py
 python scripts/build_company_news.py --offline
-python -m unittest discover -s scripts -p test_company_news.py
+python scripts/build_company_news.py --reclassify
+pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+pip install -r scripts/requirements-news-translation.txt
+python scripts/translate_company_news.py
+python -m unittest discover -s scripts -p 'test_company_news*.py'
 node scripts/test_company_news.cjs
 node scripts/test_status_indicators_browser.cjs
 ```
 
 Offline replay preserves capture times and does not claim a successful network
-refresh. `--symbols NVDA,MSFT` refreshes only those issuers and retains all other
-records. The collector writes only `news/latest.json` and request backoff state.
+refresh. `--symbols NVDA,MSFT` only refreshes those issuers. Raw RSS captures,
+translation models and translation caches are ignored under research/source-cache.

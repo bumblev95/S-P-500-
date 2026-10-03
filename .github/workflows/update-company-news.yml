@@ -6,6 +6,9 @@ on:
     paths:
       - 'scripts/build_company_news.py'
       - 'scripts/test_company_news.py'
+      - 'scripts/translate_company_news.py'
+      - 'scripts/requirements-news-translation.txt'
+      - 'news/korean-reviewed.json'
       - '.github/workflows/update-company-news.yml'
   schedule:
     - cron: '15 14,22 * * 1-5'
@@ -18,7 +21,7 @@ concurrency:
 jobs:
   news:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,10 +34,25 @@ jobs:
           path: research/source-cache/news
           key: company-news-${{ github.run_id }}
           restore-keys: company-news-
+      - uses: actions/cache@v4
+        with:
+          path: research/source-cache/news-ko
+          key: company-news-ko-v5-${{ github.run_id }}
+          restore-keys: |
+            company-news-ko-v5-
       - name: Validate dates, issuer relevance, labels and failure recovery
-        run: python -m unittest discover -s scripts -p test_company_news.py
+        run: python -m unittest discover -s scripts -p 'test_company_news*.py'
       - name: Collect current company headlines and explainable impact labels
         run: python scripts/build_company_news.py
+      - name: Install Korean translation runtime
+        run: |
+          pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r scripts/requirements-news-translation.txt
+      - name: Produce Korean news summaries
+        env:
+          OMP_NUM_THREADS: '2'
+          HF_HUB_DISABLE_XET: '1'
+        run: python scripts/translate_company_news.py
       - name: Publish news snapshot
         run: |
           git config user.name 'github-actions[bot]'

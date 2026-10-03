@@ -75,6 +75,9 @@ async function fits(page, selector) {
         }
         if (file !== 'crypto.html') {
           await page.locator('.company-events .ce-news-card').first().waitFor();
+          const newsTitles=await page.locator('.ce-news-title').allTextContents();
+          assert(newsTitles.every(t=>/[가-힣]{2}/.test(t)), 'News opens with Korean summaries');
+          assert(!newsTitles.some(t=>/한국어 요약을 준비하지/.test(t)), 'Selected stock summaries are available');
           await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
           assert.equal(await page.locator('.company-events').getAttribute('data-event-symbol'), 'NVDA');
@@ -102,6 +105,10 @@ async function fits(page, selector) {
           await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
           assert.equal(await page.locator('.ce-news-card').count(), news.issuers[news.symbols.XOM].articles.length);
+          const primary=page.locator('.ce-primary-news .ce-news-card');
+          assert(await primary.count()>0);
+          assert((await primary.locator('.ce-news-reason').allTextContents()).every(t=>t.includes('왜 ')));
+          assert((await primary.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
         }
       }
       await page.close();
