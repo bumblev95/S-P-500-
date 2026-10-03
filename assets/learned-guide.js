@@ -45,6 +45,10 @@
   }
   function nextSteps(plan,price,context={}){
     const money=x=>Number.isFinite(x)?'$'+x.toFixed(2):'자료 확인 후';
+    if(plan.policy){
+      const invalid=Number.isFinite(plan.stop)?money(plan.stop)+' 아래로 종가가 내려가면 진입 가정을 재검토하세요. 실제 체결 손실은 표시된 폭과 다를 수 있습니다.':'유효한 무효화 가격을 확인한 뒤 판단하세요.';
+      return '<section class="nextSteps"><h3>현재 전략의 확인 순서</h3><ol><li><b>지금 판단</b><span>'+esc(plan.action)+'. '+esc(plan.reason)+'</span></li><li><b>다음 확인 조건</b><span>'+esc(plan.next)+'</span></li><li><b>계획이 무효가 되는 경우</b><span>'+esc(invalid)+'</span></li></ol><details><summary>가격 기준의 의미</summary><p>돌파는 현재 종가가 이전 55거래일 고점을 넘는지 확인합니다. 거래량은 확인 강도를 보강합니다. 눌림목은 이전 이동평균 구간에서 반등 종가와 관측 고점까지의 손익비를 함께 확인합니다.</p><p>변동폭: '+esc(plan.range.label)+'. 고가·저가 이력이 충분하면 실제 변동폭을 사용하고, 기존 종가 이력만 있으면 종가 수익률 변동폭을 사용합니다. 두 계산은 서로 다른 기준입니다.</p><p>가격 기준일 '+esc(context.asOf||'확인 필요')+' · 종가 기준. 회사 뉴스·실적 일정과 개인 보유 계획은 별도로 확인하세요.</p></details></section>';
+    }
     const hasZone=Number.isFinite(plan.buyLow)&&Number.isFinite(plan.buyHigh),inside=hasZone&&price>=plan.buyLow&&price<=plan.buyHigh;
     const location=!hasZone?'관심 구간 자료 부족':inside?'관심 구간 안':price>plan.buyHigh?'관심 구간보다 '+pct(price/plan.buyHigh-1)+'% 위':'관심 구간보다 '+pct(1-price/plan.buyLow)+'% 아래';
     const threshold=plan.market==='watch'?2:1.5,rr=Number.isFinite(plan.rr)?plan.rr.toFixed(2):'계산 불가';
