@@ -30,6 +30,12 @@ jobs:
           restore-keys: environment-history-
       - run: pip install -r scripts/requirements-crypto-ml.txt
       - run: python -m unittest discover -s scripts -p test_sp500_research.py
+      - name: Verify SEC publication dates, imports and reviewed fallbacks
+        run: |
+          python -m unittest discover -s scripts -p test_research_inputs.py
+          python -m unittest discover -s scripts -p test_sec_import.py
+          python -m unittest discover -s scripts -p test_sec_coverage.py
+          python scripts/audit_sec_coverage.py --check
       - name: Refresh current S&P 500 membership
         run: python scripts/research_universe.py
       - run: python -m unittest discover -s scripts -p test_earnings_inputs.py
