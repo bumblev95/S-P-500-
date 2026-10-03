@@ -47,8 +47,8 @@ const context={MarketVisuals:require('../assets/market-visuals.js'),PerpEngine:{
 }};
 vm.runInNewContext(fs.readFileSync('assets/perp-page.js','utf8'),context);
 setImmediate(()=>{
- let html=node('app').innerHTML;assert(html.includes('롱 조건 충족'));assert(html.includes('손절 기준'));assert(html.includes('과거 방향 오류율'));assert(html.includes('0.5% 초과 비율'));assert(!/NaN|Infinity|undefined/.test(html));
+ let html=node('app').innerHTML;assert(html.includes('롱 조건 충족'));assert(html.includes('data-state="long"'));assert(html.includes('손절 기준'));assert(html.includes('과거 방향 오류율'));assert(html.includes('0.5% 초과 비율'));assert(!/NaN|Infinity|undefined/.test(html));
  for(const b of buttons){b.click();assert(node('app').innerHTML.includes(b.dataset.tf==='1d'?'일봉':b.dataset.tf==='15m'?'15분봉':'5분봉'));}
- buttons[0].click();aheadButtons.find(b=>b.dataset.ahead==='72').click();assert(node('app').innerHTML.includes('6시간 뒤 기준 시나리오'));clock+=120000;timers[1]();assert(node('app').innerHTML.includes('관망'));assert(!node('app').innerHTML.includes('롱 조건 충족'));
+ buttons[0].click();aheadButtons.find(b=>b.dataset.ahead==='72').click();assert(node('app').innerHTML.includes('6시간 뒤 기준 시나리오'));clock+=120000;timers[1]();assert(node('app').innerHTML.includes('관망'));assert(!node('app').innerHTML.includes('롱 조건 충족'));assert(node('app').innerHTML.includes('data-state="unknown"'));assert(!node('app').innerHTML.includes('class="vi-pointer"'));
  fail=true;node('refresh').events.click();setImmediate(()=>{assert(node('app').innerHTML.includes('갱신하지 못해'));console.log('Perp: long/short candidates, stale/gap/cost guards, completed candles, 3 timeframe UI and failed refresh passed');});
 });
