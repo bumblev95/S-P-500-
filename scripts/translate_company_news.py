@@ -16,7 +16,7 @@ from build_forecasts import atomic_json
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'Helsinki-NLP/opus-mt-tc-big-en-ko'
-VERSION = 'company-news-ko-v1'
+VERSION = 'company-news-ko-v2'
 
 
 def source_hash(article):
@@ -60,7 +60,10 @@ def engine(model_dir):
         texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
         tokens = [tokenizer.convert_ids_to_tokens(tokenizer.encode(t, truncation=True, max_length=192)) for t in texts]
         rows = translator.translate_batch(tokens, beam_size=3, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
-        return [tokenizer.decode(tokenizer.convert_tokens_to_ids(r.hypotheses[0]), skip_special_tokens=True).strip() for r in rows]
+        # English/Korean Marian uses different source and target vocabularies.
+        # Decode target SentencePiece strings directly; mapping through the
+        # source token IDs corrupts names, numbers and the entire translation.
+        return [tokenizer.spm_target.decode([t for t in r.hypotheses[0] if t not in tokenizer.all_special_tokens]).strip() for r in rows]
     return translate
 
 
