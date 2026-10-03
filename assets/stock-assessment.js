@@ -8,6 +8,7 @@
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money=x=>finite(x)?'$'+x.toLocaleString('en-US',{maximumFractionDigits:2}):'—';
   const normalize=s=>String(s||'').trim().toUpperCase().replace(/\./g,'-');
+  function entry(data,symbol){const key=normalize(symbol);return data?.stocks?.[key]||data?.stocks?.[key.replace(/-/g,'.')]||null;}
 
   function trend(score){
     if(!finite(score))return '산출 보류';
@@ -26,7 +27,7 @@
     const e=entry||{},h=horizon===252?252:126;
     const plan=technical.plan(e,null,market,now),ai=learnedGuide.inspect(learned,e,h,now);
     const age=(now-Date.parse(e.asOf))/86400000;
-    const valid=e.status==='ready'&&e.fresh&&finite(age)&&age>=0&&age<=5&&plan.indicators.rows.length>=60;
+    const valid=!!normalize(e.symbol)&&e.status==='ready'&&e.fresh&&finite(age)&&age>=0&&age<=5&&plan.indicators.rows.length>=60;
     const score=valid&&finite(plan.ts)?plan.ts:null;
     const blocks=[...plan.blocks];
     if(!valid&&!blocks.some(x=>/가격|종가/.test(x)))blocks.unshift('추세 자료 확인 필요');
@@ -43,19 +44,26 @@
       plan.code==='avoid'&&score<35?'하락 흐름: 신규 진입 보류':
       plan.blocks[0]|| (plan.code==='pullback'?'관심 가격대까지 눌림을 기다립니다.':
         plan.code==='confirm'?'관심 구간 위로 지지가 회복되는지 확인하세요.':'관심 가격대의 지지 유지와 최신 공시를 확인하세요.');
-    const modelStatus=ai.eligible?'AI 성능 기준 통과':
-      !ai.record?'AI 검증 자료 없음':ai.record.status==='eligible'?'AI 기준일·자료 확인 필요':
+    const modelStatus=ai.eligible?'AI 성능 기준 통과':!ai.record?'AI 검증 자료 없음':
+      !ai.performancePassed?(ai.performanceStatus===false?'AI 성능 기준 미통과':'AI 성능 검증 자료 확인 필요'):ai.record.status==='eligible'?'AI 기준일·자료 확인 필요':
       ai.researchForecast?'AI 성능 기준 미통과':'AI 검증 자료 확인 필요';
     return {symbol:e.symbol||'',asOf:e.asOf||'',price:finite(e.price)?e.price:null,horizon:h,
       label,score,trend:trend(score),color:color(score),decision,reason,modelStatus,plan,ai};
   }
   function all(data,market,learned,horizon=126,now=Date.now()){
-    return Object.fromEntries(Object.entries(data?.stocks||{}).map(([symbol,e])=>
-      [normalize(symbol),evaluate(e,market,learned,horizon,now)]));
+    return Object.fromEntries(Object.entries(data?.stocks||{}).map(([symbol,e])=>{
+      const key=normalize(symbol),matched=e&&normalize(e.symbol)===key;
+      return [key,evaluate(matched?e:{symbol:key},market,learned,horizon,now)];
+    }));
   }
   function rank(assessments,limit=10){
     return Object.values(assessments||{}).filter(a=>finite(a.score))
-      .sort((a,b)=>b.score-a.score||a.symbol.localeCompare(b.symbol)).slice(0,limit);
+      .sort(compare).slice(0,limit);
+  }
+  function compare(a,b,dir=-1){
+    const missing=!finite(a.score),otherMissing=!finite(b.score);
+    if(missing!==otherMissing)return missing?1:-1;
+    return (!missing?(a.score-b.score)*dir:0)||normalize(a.symbol).localeCompare(normalize(b.symbol));
   }
   // Explain observed conditions without changing scores, forecasts or gates.
   // Data/model limitations do not consume the slots for issuer price risks.
@@ -229,6 +237,6 @@
     return {data:values[0],market:values[1],learned:values[2],errors:results.flatMap((r,i)=>
       r.status==='rejected'?[['추세 자료 읽기 실패','시장 자료 읽기 실패','AI 검증 자료 읽기 실패'][i]]:[])};
   }
-  const api={label,normalize,trend,color,format,evaluate,all,rank,entryChecks,entryExplanation,panel,signals,signalPanels,load};
+  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,entryExplanation,panel,signals,signalPanels,load};
   if(typeof module!=='undefined')module.exports=api;else root.StockAssessment=api;
 })(typeof window!=='undefined'?window:globalThis);
