@@ -3,13 +3,14 @@ const C=require('../assets/company-events.js'),now=Date.parse('2026-10-03T03:00:
 const article={id:'news:one',title:'Nvidia raises revenue outlook',summary:'Supplied excerpt',
  publishedAt:'2026-10-02T22:00:00+00:00',observedAt:'2026-10-03T02:00:00+00:00',
  source:{name:'Yahoo Finance',url:'https://finance.yahoo.com/news/nvidia-update.html'},
- impact:{classifier:'company-impact-headline-v1',basis:'headline',status:'positive',reason:'회사의 실적 전망 상향은 수익 기대에 유리합니다.',topics:['전망 상향'],evidence:['raises revenue outlook']}};
-const fixture={schemaVersion:1,classifierVersion:'company-impact-headline-v1',symbols:{NVDA:'1045810','NVDA-B':'1045810'},
+ impact:{classifier:'company-impact-source-v2',basis:'headline-and-excerpt',status:'positive',reason:'회사의 실적 전망 상향은 수익 기대에 유리합니다.',topics:['전망 상향'],evidence:['raises revenue outlook'],kind:'company'}};
+article.ko={version:'company-news-ko-v5',language:'ko',status:'ready',summary:'엔비디아가 매출 전망을 상향했습니다.',sourceTitle:article.title,sourceExcerpt:article.summary};
+const fixture={schemaVersion:1,classifierVersion:'company-impact-source-v2',symbols:{NVDA:'1045810','NVDA-B':'1045810'},
  issuers:{1045810:{cik:1045810,feed:{status:'ready',lastSuccessAt:article.observedAt},articles:[article]}}};
 const events={schemaVersion:1,symbols:fixture.symbols,issuers:{1045810:{cik:1045810,sec:{status:'ready',lastSuccessAt:article.observedAt},events:[]}},upcoming:{}};
 let s=C.selectNews(fixture,'nvda.b',now);assert(s.fresh);assert.equal(s.counts.positive,1);assert.equal(s.articles[0].id,article.id);
 let html=C.panel('NVDA',events,now,fixture);assert(html.indexOf('회사 뉴스 · 호재와 악재')<html.indexOf('공시·일정 보조 자료'));
-assert(html.includes('호재'));assert(html.includes(article.impact.reason));assert(html.includes('noopener noreferrer'));assert(html.includes('예비 판단'));
+assert(html.includes('호재'));assert.equal(C.koreanSummary(article),article.ko.summary);assert(html.includes('엔비디아가 매출 전망을 상향했습니다.'));assert(html.includes(article.impact.reason));assert(html.includes('noopener noreferrer'));assert(html.includes('예비 판단'));
 assert.equal(C.selectNews(fixture,'MISSING',now).articles.length,0);
 assert(C.newsPanel('MISSING',fixture,now).includes('중립이라는 뜻은 아닙니다'));
 assert(!C.selectNews(fixture,'NVDA',now+3*86400000).fresh);
@@ -27,14 +28,18 @@ for(const change of [{publishedAt:'2026-10-04T00:00:00Z'},{publishedAt:'2026-09-
  const bad=structuredClone(fixture);bad.issuers[1045810].articles=[{...article,...change}];
  assert.equal(C.selectNews(bad,'NVDA',now).articles.length,0);
 }
+const ordering=structuredClone(fixture);ordering.issuers[1045810].articles=[{...article,id:'opinion',publishedAt:'2026-10-03T01:00:00Z',impact:{...article.impact,status:'unclear',kind:'market'}},{...article,id:'rating',impact:{...article.impact,kind:'analyst'}},article];
+assert.equal(C.selectNews(ordering,'NVDA',now).primary[0].id,article.id);assert.equal(C.selectNews(ordering,'NVDA',now).reference[0].id,'opinion');
+assert(C.newsPanel('NVDA',ordering,now).includes('참고 뉴스·회사 공지 1개 보기'));
+const changed=structuredClone(article);changed.title+=' changed';assert.equal(C.koreanSummary(changed),null);changed.title=article.title;changed.summary+=' changed';assert.equal(C.koreanSummary(changed),null);
 const poisoned=structuredClone(fixture);poisoned.issuers[1045810].articles[0].title='<img src=x onerror=alert(1)>';
 poisoned.issuers[1045810].articles[0].impact.reason='<script>alert(1)</script>';
 html=C.newsPanel('NVDA',poisoned,now);assert(!html.includes('<script'));assert(!html.includes('<img'));assert(html.includes('&lt;img'));
 const corrupt=structuredClone(fixture);corrupt.issuers[1045810].articles[0].impact={status:'positive',reason:'no provenance',topics:{}};
-assert.equal(C.selectNews(corrupt,'NVDA',now).counts.unclear,1);assert(C.newsPanel('NVDA',corrupt,now).includes('판단 유보'));
+assert.equal(C.selectNews(corrupt,'NVDA',now).counts.unclear,1);assert(C.newsPanel('NVDA',corrupt,now).includes('추가 확인'));
 corrupt.issuers[1045810].articles[0].impact={...article.impact,topics:{},evidence:{}};assert.doesNotThrow(()=>C.newsPanel('NVDA',corrupt,now));
 for(const file of ['index.html','advanced.html','advanced-legacy.html']){
- const text=fs.readFileSync(file,'utf8');assert(text.includes('company-events.js?v=3'));assert(text.includes('company-events.css?v=2'));
+ const text=fs.readFileSync(file,'utf8');assert(text.includes('company-events.js?v=4'));assert(text.includes('company-events.css?v=3'));
 }
 (async()=>{
  let clockNow=now,releases=[],reads=[];const root={};

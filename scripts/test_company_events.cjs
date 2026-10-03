@@ -43,7 +43,7 @@ for(const file of ['index.html','advanced.html','advanced-legacy.html']){
  vm.runInNewContext(fs.readFileSync('assets/company-events.js','utf8'),{window:root,Date:clock,URL,
   fetch:undefined});
  const api=root.CompanyEvents;
- const newsResponse={ok:true,json:async()=>({schemaVersion:1,classifierVersion:'company-impact-headline-v1',symbols:fixture.symbols,issuers:{}})};
+ const newsResponse={ok:true,json:async()=>({schemaVersion:1,classifierVersion:'company-impact-source-v2',symbols:fixture.symbols,issuers:{}})};
  const pending=api.load(url=>url.startsWith('news/')?Promise.resolve(newsResponse):new Promise(resolve=>{release=resolve}));
  const host={dataset:{},innerHTML:'',isConnected:true};api.mount(host,'NVDA');api.mount(host,'NVDA.B');
  release({ok:true,json:async()=>fixture});await pending;await Promise.resolve();
