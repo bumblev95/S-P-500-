@@ -68,13 +68,13 @@ def engine(model_dir):
     def translate(texts):
         texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
         tokens = [tokenizer.convert_ids_to_tokens(tokenizer.encode(t, truncation=True, max_length=256)) for t in texts]
-        rows = translator.translate_batch(tokens, target_prefix=[['kor_Hang'] for _ in tokens], beam_size=2, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
+        rows = translator.translate_batch(tokens, target_prefix=[['kor_Hang'] for _ in tokens], beam_size=4, max_batch_size=24, max_decoding_length=160, repetition_penalty=1.1)
         return [tokenizer.decode(tokenizer.convert_tokens_to_ids(r.hypotheses[0][1:]), skip_special_tokens=True).strip() for r in rows]
     return translate
 
 
 def verify_engine(translate):
-    samples = ['The company announced a product recall for 20 faulty phones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']
+    samples = ['Apple recalled 20 defective iPhones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']
     outputs = translate(samples)
     if len(outputs) != 3 or not all(valid_korean(t) for t in outputs) or '20' not in outputs[0] or not re.search('리콜|회수|제품 철수', outputs[0]) or '6' not in outputs[1] or not re.search('매출|수익|수입', outputs[1]) or not re.search('전망|예상', outputs[2]):
         raise ValueError('Translation smoke check failed: '+json.dumps(outputs, ensure_ascii=False))
