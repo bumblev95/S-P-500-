@@ -6,7 +6,7 @@ from unittest.mock import patch
 from pathlib import Path
 from urllib.error import HTTPError
 from datetime import date, datetime, timezone
-from build_market_context import get, parse_csv, parse_table, collect_series, summarize, funding, credit_state, parse_news, build
+from build_market_context import get, parse_csv, parse_table, collect_series, summarize, funding, bond_spreads, credit_state, parse_news, build
 
 class Tests(unittest.TestCase):
     def setUp(self):
@@ -105,6 +105,118 @@ class Tests(unittest.TestCase):
         self.assertNotEqual(credit_state(rows)['status'],'risk')
         rows.append(dict(id='FUNDING',status='ready',severity=2))
         self.assertEqual(credit_state(rows)['status'],'risk')
+
+    def test_credit_full_coverage_counts_four_families_not_indicators(self):
+        rows=[dict(id=key,status='ready',severity=0) for key in
+              ('NFCI','STLFSI4','FUNDING','DRTSCILM','GZ_SPREAD','EBP')]
+        rows.append(dict(id='DGS10',status='ready',severity=3)) # outside credit
+        result=credit_state(rows)
+        self.assertEqual((result['coverage'],result['expected']),(4,4))
+        self.assertTrue(result['complete'])
+        self.assertEqual(result['missingFamilies'],[])
+        self.assertEqual((result['status'],result['score']),('stable',0))
+
+    def test_credit_successful_fetch_cannot_make_stale_bonds_complete(self):
+        rows=[dict(id=key,status='ready',severity=0) for key in
+              ('NFCI','STLFSI4','FUNDING','DRTSCILM')]
+        rows.extend(dict(id=key,status='stale',severity=3,fetchStatus='ready',fromCache=False)
+                    for key in ('GZ_SPREAD','EBP'))
+        result=credit_state(rows)
+        self.assertEqual((result['coverage'],result['expected']),(3,4))
+        self.assertFalse(result['complete'])
+        self.assertEqual(result['missingFamilies'],['회사채 GZ/EBP'])
+        self.assertEqual((result['status'],result['score']),('stable',0))
+
+    def test_credit_empty_coverage_keeps_expected_and_missing_families(self):
+        result=credit_state([])
+        self.assertEqual((result['coverage'],result['expected']),(0,4))
+        self.assertFalse(result['complete'])
+        self.assertEqual(result['missingFamilies'],
+                         ['금융여건','단기자금조달','은행대출','회사채 GZ/EBP'])
+        self.assertEqual(result['status'],'unknown')
+        self.assertIsNone(result['score'])
+
+    def test_credit_each_family_needs_a_ready_member_with_severity(self):
+        rows=[dict(id=key,status='ready',severity=0) for key in
+              ('NFCI','STLFSI4','FUNDING','DRTSCILM','GZ_SPREAD','EBP')]
+        for ids,label in [(('NFCI','STLFSI4'),'금융여건'),(('FUNDING',),'단기자금조달'),
+                          (('DRTSCILM',),'은행대출'),(('GZ_SPREAD','EBP'),'회사채 GZ/EBP')]:
+            for status,severity in [('stale',3),('missing',None),('unavailable',3),('ready',None)]:
+                with self.subTest(family=label,status=status,severity=severity):
+                    partial=[dict(q,status=status,severity=severity) if q['id'] in ids else q for q in rows]
+                    result=credit_state(partial)
+                    self.assertEqual((result['coverage'],result['expected']),(3,4))
+                    self.assertFalse(result['complete'])
+                    self.assertEqual(result['missingFamilies'],[label])
+
+    def test_credit_one_usable_member_covers_an_overlapping_family(self):
+        rows=[dict(id=key,status='ready',severity=0) for key in
+              ('STLFSI4','FUNDING','DRTSCILM','EBP')]
+        rows.extend(dict(id=key,status='stale',severity=3) for key in ('NFCI','GZ_SPREAD'))
+        result=credit_state(rows)
+        self.assertEqual((result['coverage'],result['expected']),(4,4))
+        self.assertTrue(result['complete']) # family coverage, not every input fresh
+        self.assertEqual((result['status'],result['score']),('stable',0))
+
+    def test_credit_partial_coverage_preserves_existing_risk_thresholds(self):
+        cases=[({'NFCI':0},'unknown',0,1),
+               ({'NFCI':0,'FUNDING':0},'unknown',0,2),
+               ({'NFCI':0,'FUNDING':0,'DRTSCILM':0},'stable',0,3),
+               ({'NFCI':1},'watch',33,1),
+               ({'NFCI':2,'STLFSI4':2},'watch',67,1),
+               ({'GZ_SPREAD':2,'EBP':2},'watch',67,1),
+               ({'NFCI':3},'risk',100,1),
+               ({'NFCI':2,'EBP':2},'risk',67,2)]
+        for levels,status,score,coverage in cases:
+            with self.subTest(levels=levels):
+                result=credit_state([dict(id=k,status='ready',severity=v) for k,v in levels.items()])
+                self.assertEqual((result['status'],result['score'],result['coverage']),
+                                 (status,score,coverage))
+                self.assertEqual(result['expected'],4)
+                self.assertFalse(result['complete'])
+
+    def test_credit_bond_freshness_boundary_remains_75_calendar_days(self):
+        rows=[dict(id=key,status='ready',severity=0) for key in ('NFCI','FUNDING','DRTSCILM')]
+        csv='date,gz_spread,ebp\n2026-07-01,1,-.1\n'
+        for today,covered in [(date(2026,9,14),4),(date(2026,9,15),3)]:
+            with self.subTest(today=today):
+                bonds=bond_spreads(csv,today)
+                self.assertTrue(all(q['maxAgeDays']==75 for q in bonds))
+                result=credit_state(rows+bonds)
+                self.assertEqual((result['coverage'],result['expected']),(covered,4))
+                self.assertEqual(result['complete'],covered==4)
+                self.assertEqual(result['status'],'stable')
+
+    def test_build_recovered_fred_with_july_bonds_reports_partial_credit(self):
+        now=datetime(2026,10,3,16,25,3,tzinfo=timezone.utc)
+        def recovered(url):
+            if 'fredgraph' in url:
+                key=url.split('id=')[1].split('&')[0]
+                value={'NFCI':-.5,'STLFSI4':-.4,'DRTSCILM':5,'SOFR':3.6,'IORB':3.65}.get(key,0)
+                return 'observation_date,'+key+'\n'+''.join(f'{d},{value}\n' for d in
+                       ('2026-09-30','2026-10-01','2026-10-02'))
+            if 'ebp_csv' in url: return 'date,gz_spread,ebp\n2026-07-01,1,-.1\n'
+            return '<rss><channel/></rss>'
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            result=build(root,now,recovered)
+            self.assertEqual(json.loads((root/'market/latest.json').read_text())['credit'],result['credit'])
+        by={q['id']:q for q in result['indicators']}
+        for key in ('DGS10','DTWEXBGS','NFCI','STLFSI4','DRTSCILM','SOFR','IORB','FUNDING'):
+            self.assertEqual(by[key]['status'],'ready',key)
+        for key in ('GZ_SPREAD','EBP'):
+            self.assertEqual(by[key]['status'],'stale',key)
+            self.assertEqual(by[key]['asOf'],'2026-07-01',key)
+        for q in result['indicators']:
+            self.assertEqual(q['fetchStatus'],'ready')
+            self.assertFalse(q['fromCache'])
+            self.assertEqual(q['lastSuccessAt'],now.isoformat())
+        self.assertEqual(result['errors'],[])
+        self.assertEqual((result['credit']['coverage'],result['credit']['expected']),(3,4))
+        self.assertFalse(result['credit']['complete'])
+        self.assertEqual(result['credit']['missingFamilies'],['회사채 GZ/EBP'])
+        self.assertEqual((result['credit']['status'],result['credit']['score']),('stable',0))
+
     def test_news_link(self):
         xml='<rss><channel><item><title>risk</title><link>https://evil.example/</link><pubDate>Thu, 10 Sep 2026 12:00:00 GMT</pubDate></item></channel></rss>'
         self.assertEqual(parse_news(xml,'test',datetime(2026,9,11,tzinfo=timezone.utc)),[])
