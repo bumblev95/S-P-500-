@@ -24,7 +24,10 @@ class PricePipelineTests(unittest.TestCase):
             target.write_text("symbol,date,close,source\nAAA,2026-09-09,100,old\nBBB,2026-09-01,50,old\n")
             dates = pd.bdate_range(end="2026-09-10", periods=260)
             frame = pd.DataFrame({"Close":[100+i/100 for i in range(260)],
-                                  "Adj Close":[100+i/100 for i in range(260)],
+                                  "Adj Close":[(100+i/100)/2 for i in range(260)],
+                                  "High":[101+i/100 for i in range(260)],
+                                  "Low":[99+i/100 for i in range(260)],
+                                  "Open":[100+i/100 for i in range(260)],
                                   "Volume":[1000]*260}, index=dates)
             downloaded = pd.concat({"AAA":frame}, axis=1)
             with patch.object(eod,"OUT_PATH",target), patch.object(eod,"read_symbols") as shared, \
@@ -39,6 +42,9 @@ class PricePipelineTests(unittest.TestCase):
             saved = json.loads((target.parent/"history/AAA.json").read_text())
             self.assertEqual(len(saved["prices"]),260)
             self.assertEqual(saved["prices"][-1]["close"],102.59)
+            self.assertEqual(saved["prices"][-1]["high"],103.59)
+            self.assertEqual(saved["prices"][-1]["low"],101.59)
+            self.assertEqual(saved["prices"][-1]["open"],102.59)
 
     def test_total_provider_failure_keeps_previous_file_byte_for_byte(self):
         with tempfile.TemporaryDirectory() as directory:

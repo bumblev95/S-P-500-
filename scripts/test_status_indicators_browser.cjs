@@ -69,10 +69,19 @@ async function fits(page, selector) {
         if (file !== 'crypto.html') {
           const assessment = page.locator('.stockAssessment').first();
           const expected = A.evaluate(forecasts.stocks.NVDA, market, null, 126, clock);
-          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 1,
-            'Only the entry decision is a primary gauge');
-          assert.equal(await assessment.locator('.sa-checks li:visible').count(), 5,
-            'Entry conditions must be readable without opening details');
+          if(file==='index.html'){
+            const headline=await assessment.locator('.sa-heading').boundingBox(),controls=await page.locator('.controlBar').boundingBox();
+            assert(headline.y>=controls.y+controls.height,'The final decision must be clear of the controls on initial load');
+            await page.screenshot({path:path.join(output,`initial-index-${width}.png`)});
+          }
+          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 0,
+            'A strategy decision is categorical; the trend gauge stays in details');
+          assert.equal(await assessment.locator('.sa-setup:visible').count(),2);
+          assert.equal(await assessment.locator('[data-entry-state]').textContent(),expected.decision);
+          assert.equal(await assessment.locator('[data-holding-state]').getAttribute('data-holding-state'),expected.plan.holding.code);
+          assert.equal(await assessment.locator('.sa-checks li:visible').count(), 0);
+          await assessment.locator('.sa-condition-details > summary').click();
+          assert.equal(await assessment.locator('.sa-checks li:visible').count(), 5);
           assert.equal(await assessment.locator('.sa-ai-status:visible').count(), 1);
           assert.equal(await assessment.locator('.sa-conditions [data-ai-reference]').count(), 0,
             'AI research is outside the technical condition checklist');
@@ -83,12 +92,13 @@ async function fits(page, selector) {
             assert((await assessment.locator('[data-entry-check="balance"] p').textContent())
               .includes(expected.plan.rr.toFixed(2)), 'Show the actual entry-plan reward/risk ratio');
           }
-          await fits(page, '.stockAssessment, .sa-entry-layout, .sa-conditions, .sa-checks, .sa-checks li');
+          await fits(page, '.stockAssessment, .sa-context, .sa-next, .sa-setup-grid, .sa-setup, .sa-setup dl, .sa-holding, .sa-entry-layout, .sa-conditions, .sa-checks, .sa-checks li');
           await detail.locator('summary').click();
-          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 2);
+          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 1);
           assert((await detail.textContent()).includes('매수 추천'));
           await fits(page, '.vi-gauge, .sa-trend-details');
           await detail.locator('summary').click();
+          await assessment.locator('.sa-condition-details > summary').click();
         }
         if (file === 'advanced.html') {
           await page.locator('details.site-disclosure > summary').click();
@@ -128,8 +138,8 @@ async function fits(page, selector) {
           await fits(page, '.ds-risk-overview, .ds-risk-table');
           await risk.screenshot({path:path.join(output, `risk-${width}.png`)});
           await page.getByRole('button', {name:'1년',exact:true}).click();
-          assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 2);
-          assert.equal(await page.locator('.stockAssessment .vi-gauge:visible').count(), 1);
+          assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 1);
+          assert.equal(await page.locator('.stockAssessment .vi-gauge:visible').count(), 0);
           assert((await page.locator('.sa-ai-status h3').textContent()).includes('1년'));
           await page.locator('#tickerInput').fill('XOM');
           await page.locator('#tickerInput').press('Enter');
@@ -261,7 +271,8 @@ async function fits(page, selector) {
     // This is isolated QA data; published market/forecast files are untouched.
     const f={anchor:100,base:110,bear:90,bull:120,direction:'up',learned:true,
       logReturn:Math.log(1.1),lowLogReturn:Math.log(.9),highLogReturn:Math.log(1.2)};
-    const readyEntry={...entry,symbol:'NVDA',
+    const readyHistory=Array.from({length:260},(_,i)=>({date:new Date(end-(259-i)*86400000).toISOString().slice(0,10),close:i===259?100:90+i*.036+Math.sin(i*.3)*.25,volume:1000}));
+    const readyEntry={...entry,symbol:'NVDA',history:readyHistory,
       inputs:{ma20:100,ma50:95,ma200:90,return1m:.04,return3m:.12,volatility4m:.2},
       predictions:{126:{...f,horizon:126},252:{...f,horizon:252}}};
     const readyMarket={generatedAt:new Date(clock).toISOString(),
@@ -282,7 +293,8 @@ async function fits(page, selector) {
     assert.equal(await riskPage.locator('.stockAssessment').getAttribute('data-decision-basis'),'technical-rules');
     assert.equal(await riskPage.locator('.sa-ai-status').getAttribute('data-ai-reference'),'unavailable');
     assert((await riskPage.locator('.sa-ai-status .vi-badge').textContent()).includes('검증 미통과'));
-    assert.equal(await riskPage.locator('[data-indicator="규칙 기반 진입 조건"]').getAttribute('data-state'),'buy');
+    assert.equal(await riskPage.locator('[data-entry-state]').getAttribute('data-entry-state'),'buy');
+    assert.equal(await riskPage.locator('[data-setup="breakout"]').getAttribute('data-setup-state'),'ready');
     await riskPage.getByRole('button',{name:'1년',exact:true}).click();
     assert.equal(await riskPage.locator('.stockAssessment .sa-heading strong').textContent(),'진입 검토');
     assert((await riskPage.locator('.sa-ai-status h3').textContent()).includes('1년'));
@@ -297,7 +309,9 @@ async function fits(page, selector) {
     }}}));
     await page.route('**/market/latest.json*', route => route.fulfill({json:null}));
     await ready(page, base + 'index.html', '.stockAssessment');
-    assert.equal(await page.locator('.stockAssessment .vi-unknown').count(), 2);
+    assert.equal(await page.locator('.stockAssessment .vi-unknown').count(), 1);
+    assert.equal(await page.locator('[data-entry-state]').getAttribute('data-entry-state'),'unavailable');
+    assert.equal(await page.locator('[data-setup-state="unavailable"]').count(),2);
     assert.equal(await page.locator('.stockAssessment .vi-pointer').count(), 0);
     for (const key of ['trend','price','balance','heat']) {
       assert.equal(await page.locator(`[data-entry-check="${key}"] .vi-badge.vi-muted`).count(), 1,

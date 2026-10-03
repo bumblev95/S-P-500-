@@ -43,6 +43,16 @@ class ForecastTests(unittest.TestCase):
             self.assertEqual(published[0]["date"], sample[-253]["date"])
             self.assertEqual(published[-1]["close"], sample[-1]["close"])
 
+    def test_ohlc_is_preserved_only_in_the_close_basis(self):
+        bars = engine.clean_history([
+            {"date": "2026-10-01", "close": 100, "high": 102, "low": 98, "open": 99},
+            {"date": "2026-10-02", "close": 200, "high": 102, "low": 98, "open": 99},
+        ])
+        self.assertEqual((bars[0]["high"], bars[0]["low"], bars[0]["open"]), (102, 98, 99))
+        self.assertNotIn("high", bars[1])
+        self.assertNotIn("low", bars[1])
+        self.assertEqual(bars[1]["close"], 200)
+
     def test_missing_inputs_never_invent_a_forecast(self):
         row = engine.snapshot(history(250), 249)
         for bad in ("", None, "NaN", "-1"):

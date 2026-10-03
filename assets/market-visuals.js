@@ -46,15 +46,15 @@ function riskGauge(status){
 }
 function entryGauge(code,value,options={}){
  const states=[{key:'avoid',label:'진입 보류',tone:'bad'},{key:'watch',label:'관망',tone:'warn'},{key:'buy',label:'진입 검토',tone:'good'}];
- const key=['pullback','confirm'].includes(code)?'watch':code;
+ const key=['pullback','confirm','breakout','overextended','riskwait'].includes(code)?'watch':code;
  return gauge({title:options.title||'신규 진입 판단',states,index:states.findIndex(s=>s.key===key),value,description:'신규 진입 기준 · 보유 자산 매도와 별도'});
 }
 function entrySteps(code){
- const key=['pullback','confirm'].includes(code)?'watch':code;
+ const key=['pullback','confirm','breakout','overextended','riskwait'].includes(code)?'watch':code;
  return steps([{key:'avoid',label:'진입 보류',tone:'bad'},{key:'watch',label:'관망',tone:'warn'},{key:'buy',label:'진입 검토',tone:'good'}],key,'신규 진입 판단');
 }
 function entryBadge(code,value){
- const key=['pullback','confirm'].includes(code)?'watch':code;
+ const key=['pullback','confirm','breakout','overextended','riskwait'].includes(code)?'watch':code;
  return badge(value,{avoid:'bad',watch:'warn',buy:'good'}[key]||'muted');
 }
 function trendGauge(score,label){

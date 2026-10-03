@@ -28,21 +28,19 @@
     const e=entry||{},h=horizon===252?252:126;
     const plan=technical.plan(e,null,market,now),ai=learnedGuide.inspect(learned,e,h,now);
     const age=(now-Date.parse(e.asOf))/86400000;
-    const valid=!!normalize(e.symbol)&&e.status==='ready'&&e.fresh&&finite(age)&&age>=0&&age<=5&&plan.indicators.rows.length>=60;
+    const valid=!!normalize(e.symbol)&&finite(e.price)&&e.price>0&&['ready','missing'].includes(e.status)&&e.fresh&&finite(age)&&age>=0&&age<=5&&plan.indicators.rows.length>=60;
     const score=valid&&finite(plan.ts)?plan.ts:null;
     const blocks=[...plan.blocks];
     if(!valid&&!blocks.some(x=>/가격|종가/.test(x)))blocks.unshift('추세 자료 확인 필요');
-    if(score!==null&&score<60)blocks.push('추세 점수가 진입 검토 기준 60에 못 미칩니다.');
     plan.blocks=[...new Set(blocks)];
-    if(score===null){plan.action='자료 확인 · 판단 보류';plan.tone='wait';plan.code='unavailable';}
-    else if(plan.tone==='avoid'){plan.action='신규 진입 보류';plan.tone='avoid';plan.code='avoid';}
-    else if(plan.blocks.length){plan.action='조건 확인 · 관망';plan.tone='wait';plan.code='watch';}
-    const decision=plan.code==='unavailable'?'판단 보류':plan.code==='avoid'?'진입 보류':plan.code==='buy'?'진입 검토':
-      plan.code==='pullback'?'눌림목 대기':plan.code==='confirm'?'지지 회복 대기':'관망';
-    const reason=plan.code==='avoid'&&plan.market==='risk'?'시장·신용 경고: 신규 진입 보류':
-      plan.code==='avoid'&&score<35?'하락 흐름: 신규 진입 보류':
-      plan.blocks[0]|| (plan.code==='pullback'?'관심 가격대까지 눌림을 기다립니다.':
-        plan.code==='confirm'?'관심 구간 위로 지지가 회복되는지 확인하세요.':'관심 가격대의 지지 유지와 최신 공시를 확인하세요.');
+    if(score===null){
+      plan.action='판단 보류';plan.tone='wait';plan.code='unavailable';plan.reason=blocks[0]||'추세 자료 확인 필요';
+      plan.next='최신 가격과 일별 종가 이력을 확인하세요.';
+      for(const key of ['buyMid','buyLow','buyHigh','stop','target1','target2','rr','riskPct'])plan[key]=null;
+      plan.holding={code:'unavailable',label:'판단 보류',tone:'muted',reason:'보유 대응에 필요한 가격 자료가 부족합니다.',level:null};
+      plan.setups=plan.setups.map(s=>({...s,state:'unavailable',reason:plan.reason}));
+    }
+    const decision=plan.action,reason=plan.reason;
     const modelStatus=ai.eligible?'AI 성능 기준 통과':!ai.record?'AI 검증 자료 없음':
       !ai.performancePassed?(ai.performanceStatus===false?'AI 성능 기준 미통과':'AI 성능 검증 자료 확인 필요'):ai.record.status==='eligible'?'AI 기준일·자료 확인 필요':
       ai.researchForecast?'AI 성능 기준 미통과':'AI 검증 자료 확인 필요';
@@ -87,16 +85,23 @@
         add(i[key]>=0?positive:negative,key,'최근 '+name+' 수익률 '+signed(i[key]),
           e.symbol+'의 실제 종가 변화입니다. 기준일 '+e.asOf);
       }
-      if(finite(p.rr)){
+      if(p.strategy==='pullback'&&finite(p.rr)){
         const enough=p.rr>=minimum,up=(p.target1-p.buyHigh)/p.buyHigh,down=(p.buyHigh-p.stop)/p.buyHigh;
-        add(enough?positive:negative,'reward-risk','관측 저항선 손익비 '+p.rr.toFixed(2)+'배'+(enough?'':' · 기준 미달'),
-          '관심 구간 상단 '+money(p.buyHigh)+'에서 저항 '+money(p.target1)+'까지 '+percent(up)+
+        add(enough?positive:negative,'reward-risk','눌림목 손익비 '+p.rr.toFixed(2)+'배'+(enough?'':' · 기준 미달'),
+          '관심 구간 상단 '+money(p.buyHigh)+'에서 이전 55거래일 고점 '+money(p.target1)+'까지 '+percent(up)+
           ', 재평가 '+money(p.stop)+'까지 하락폭 '+percent(down)+'. 확인 기준 '+minimum.toFixed(1)+'배입니다.');
-      }else if(!p.target1&&finite(p.buyHigh)&&finite(p.stop)){
-        add(negative,'resistance-missing','위쪽 관측 저항이 없어 손익비 계산 불가',
-          '관심 구간 상단 '+money(p.buyHigh)+' · 재평가 '+money(p.stop)+
-          '. 수익 목표를 정할 저항선이 확보되지 않았습니다. 추가 상승을 보장하는 뜻이 아닙니다.');
+      }else if(p.strategy==='pullback'&&!p.target1&&finite(p.buyHigh)&&finite(p.stop)){
+        add(negative,'resistance-missing','눌림목 목표까지의 보상 여유 확인 필요',
+          '관심 구간 상단 '+money(p.buyHigh)+' 위에 이전 55거래일 고점 목표가 없습니다. 고점 돌파 전략은 별도로 평가합니다.');
       }
+      if(p.strategy==='breakout'&&p.code==='buy')add(positive,'breakout','이전 고점 돌파 확인',
+        '직전 55거래일 '+p.levelBasis+' 고점 '+money(p.breakoutLevel)+'. 고정 목표 대신 추세 이탈 기준을 사용합니다.');
+      if(p.strategy==='breakout'&&p.code==='buy'&&(!finite(p.indicators.relativeVolume)||p.indicators.relativeVolume<1.2))add(negative,'volume-confirm','돌파 거래량 보강 없음',
+        '상대 거래량 '+(finite(p.indicators.relativeVolume)?p.indicators.relativeVolume.toFixed(2)+'배':'자료 확인 필요')+'. 가격 돌파 조건과 거래량 동반 여부를 함께 확인하세요.');
+      if(finite(p.riskPct)&&p.riskPct>(p.market==='watch'?.05:.08))add(negative,'entry-risk','손절까지의 위험 폭이 큼',
+        '선택 전략의 계획 위험 폭 '+percent(p.riskPct)+' · 변동폭 기준 '+p.range.label);
+      if(finite(p.exitLevel)&&e.price<p.exitLevel)add(negative,'support-break','이전 20거래일 지지 이탈',
+        '이전 지지 '+money(p.exitLevel)+' · 종가 '+money(e.price)+'. 이탈한 지지는 현재가 아래의 다른 값으로 바꾸지 않습니다.');
       if(finite(i.volatility4m)&&i.volatility4m>.5){
         add(negative,'volatility','변동성이 높음 · 하루 환산 약 '+percent(p.sig),
           '최근 4개월 종가에서 계산한 연환산 변동성 '+percent(i.volatility4m)+
@@ -105,7 +110,7 @@
       if(p.indicators.rsi>75||p.indicators.z>2.5){
         const values=[finite(p.indicators.rsi)?'RSI '+p.indicators.rsi.toFixed(1):'',
           finite(p.indicators.z)?'20일 가격 편차 '+p.indicators.z.toFixed(2):''].filter(Boolean).join(' · ');
-        add(negative,'overheated','단기 과열 · 추격 주의',values+'. RSI 75 또는 가격 편차 2.5를 넘어 단기 되돌림에 주의할 구간입니다.');
+        add(negative,'overheated',p.extended?'진입가 이격이 큼 · 추격 주의':'단기 상승 탄력이 높음 · 이격 확인',values+'. 강한 추세에서는 RSI가 높게 유지될 수 있습니다. 진입 제한은 실제 가격 이격으로 판단합니다.');
       }
     }
     if(a.score!==null&&a.score<60)add(limitations,'weak-trend','추세 점수 진입 기준 미달 · '+a.score+'/100',
@@ -131,7 +136,7 @@
     }else if(p.market==='risk'||p.market==='watch'){
       add(limitations,'market-warning',p.market==='risk'?'시장·신용 경고 · 모든 종목 공통':'시장·신용 주의 · 모든 종목 공통',
         p.market==='risk'?'공통 시장 지표의 경고로 신규 진입을 보류합니다. 위의 시장 위험 패널에서 근거를 확인하세요.':
-        '공통 시장 지표가 주의 상태라 최소 손익비를 2.0배로 높여 확인합니다.');
+        '눌림목 손익비는 2.0배 이상, 두 전략의 계획 위험 폭은 5% 이내로 확인합니다.');
     }
     if(!a.ai.eligible){
       const v=a.ai.record?.validation,metrics=[];
@@ -178,26 +183,27 @@
   // Presentation only: expose the existing plan's separate entry conditions.
   // A favourable trend must never imply that price or risk checks passed.
   function entryChecks(a){
-    const p=a.plan,known=a.score!==null,threshold=p.market==='watch'?2:1.5;
+    const p=a.plan,known=a.score!==null,threshold=p.market==='watch'?2:1.5,cap=p.market==='watch'?.05:.08;
     const zone=known&&finite(a.price)&&finite(p.buyLow)&&finite(p.buyHigh);
     const inside=zone&&a.price>=p.buyLow&&a.price<=p.buyHigh;
     const location=!zone?'자료 확인':inside?'구간 안':a.price>p.buyHigh?'구간 위':'구간 아래';
-    const balance=known&&finite(p.rr),reward=balance&&p.rr>=threshold;
+    const follow=p.strategy==='breakout',balance=known&&(follow?finite(p.riskPct):finite(p.rr));
+    const reward=balance&&(follow?p.riskPct<=cap:p.rr>=threshold&&p.riskPct<=cap);
     const marketKnown=['stable','watch','risk'].includes(p.market);
-    const heatKnown=known&&finite(p.indicators.rsi)&&finite(p.indicators.z);
-    const hot=p.blocks.some(x=>x.startsWith('단기 과열'));
+    const heatKnown=known&&finite(p.maExtension),hot=p.extended;
     return [
       {key:'trend',label:'최근 가격 흐름',state:!known?'확인 필요':a.trend,tone:!known?'muted':a.color,
-        detail:known?'추세 '+format(a.score)+' · 진입 검토 기준 60 이상':'최신 가격·종가 이력 확인 필요'},
+        detail:known?'추세 '+format(a.score)+' · 50·200일선 배열 '+(p.upstream?'충족':'확인 필요'):'최신 가격·종가 이력 확인 필요'},
       {key:'price',label:'진입 가격',state:location,tone:!zone?'muted':inside?'good':'warn',
         detail:'관심 구간 '+money(p.buyLow)+'–'+money(p.buyHigh)+' · 종가 '+money(a.price)},
-      {key:'balance',label:'수익·위험 균형',state:!balance?'확인 필요':reward?'충족':'부족',tone:!balance?'muted':reward?'good':'warn',
-        detail:balance?'손익비 '+p.rr.toFixed(2)+' / 기준 '+threshold+' 이상 · 관심 구간 상단 기준':'변동성·지지·관측 저항 자료 확인 필요'},
+      {key:'balance',label:follow?'돌파 위험 관리':'눌림목 손익비',state:!balance?'확인 필요':reward?'충족':'부족',tone:!balance?'muted':reward?'good':'warn',
+        detail:!balance?'선택 전략의 가격·변동폭 자료 확인 필요':follow?'계획 위험 '+(p.riskPct*100).toFixed(1)+'% / 상한 '+(cap*100)+'% · 고정 목표 대신 추세 이탈 청산':
+          '손익비 '+p.rr.toFixed(2)+' / 기준 '+threshold+' 이상 · 이전 55거래일 고점 기준'},
       {key:'market',label:'시장 위험',state:!marketKnown?'확인 필요':p.market==='risk'?'경보':p.market==='watch'?'주의':'경고 없음',
         tone:!marketKnown?'muted':p.market==='risk'?'bad':p.market==='watch'?'warn':'good',
-        detail:!marketKnown?'최신 시장 위험 자료 확인 필요':p.market==='risk'?'시장·신용 경고로 신규 진입 보류':p.market==='watch'?'손익비 기준을 2 이상으로 강화':'관측 지표 기준'},
-      {key:'heat',label:'단기 과열',state:!heatKnown?'확인 필요':hot?'추격 주의':'신호 없음',tone:!heatKnown?'muted':hot?'warn':'good',
-        detail:heatKnown?'RSI '+p.indicators.rsi.toFixed(1)+' · 가격 z-score '+p.indicators.z.toFixed(2):'최신 종가 이력 확인 필요'}
+        detail:!marketKnown?'최신 시장 위험 자료 확인 필요':p.market==='risk'?'시장·신용 경고로 신규 진입 보류':p.market==='watch'?'계획 위험 폭 5% 이내 · 눌림목 손익비 2 이상':'관측 지표 기준'},
+      {key:'heat',label:'진입가 이격',state:!heatKnown?'확인 필요':hot?'추격 주의':'허용 범위',tone:!heatKnown?'muted':hot?'warn':'good',
+        detail:heatKnown?'20일선에서 변동폭 '+p.maExtension.toFixed(1)+'배 · RSI '+(finite(p.indicators.rsi)?p.indicators.rsi.toFixed(1):'확인 필요'):'최신 종가 이력 확인 필요'}
     ];
   }
   function aiReference(a){
@@ -215,17 +221,35 @@
     };
     return descriptions[a.reason]||a.reason;
   }
+  function setupPanels(a){
+    const p=a.plan,names={ready:'조건 충족',wait:'조건 대기',blocked:'진입 차단',unavailable:'자료 확인'};
+    return '<div class="sa-setup-grid" aria-label="두 가지 진입 전략">'+p.setups.map(s=>{
+      const tone=s.state==='ready'?'good':s.state==='blocked'?'bad':s.state==='unavailable'?'muted':'warn';
+      const valid=s.state!=='unavailable',follow=s.key==='breakout';
+      return '<section class="sa-setup sa-setup-'+tone+'" data-setup="'+s.key+'" data-setup-state="'+s.state+'"><div class="sa-check-title"><h3>'+esc(s.label)+'</h3>'+visuals.badge(names[s.state],tone)+'</div><p>'+esc(s.reason)+'</p><dl>'+[
+        ['관심 구간',valid?money(s.low)+'–'+money(s.high):'자료 확인'],
+        ['무효화 기준',valid?money(s.stop):'자료 확인'],
+        [follow?'청산 방식':'관측 고점 목표',valid?(follow?'추세 이탈 · '+money(p.exitLevel):money(s.target)):'자료 확인'],
+        [follow?'거래량 보강':'손익비',valid?(follow?(finite(p.indicators.relativeVolume)?p.indicators.relativeVolume.toFixed(2)+'배 · 보강 1.2배':'자료 확인'):(finite(s.rr)?s.rr.toFixed(2)+'배 / 기준 '+(p.market==='watch'?2:1.5)+'배':'보상 여유 확인')):'자료 확인']
+      ].map(([k,v])=>'<div><dt>'+esc(k)+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl></section>';
+    }).join('')+'</div>';
+  }
+  function holdingPanel(a){
+    const h=a.plan.holding;
+    return '<section class="sa-holding" data-holding-state="'+h.code+'" aria-label="보유 중 대응"><div class="sa-check-title"><h3>보유 중이라면</h3>'+visuals.badge(h.label,h.tone)+'</div><p>'+esc(h.reason)+'</p><p>이전 20거래일 '+esc(a.plan.levelBasis)+' 이탈 기준 <b>'+money(h.level)+'</b></p><small>매수가·보유 비중·개인 손절 기준은 별도 확인</small></section>';
+  }
   function panel(a){
     const p=a.plan,reference=aiReference(a);
     return '<section class="stockAssessment" data-decision-basis="technical-rules" aria-label="'+esc(a.symbol)+' 공통 평가">'+
-      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 신규 진입 조건 · 규칙 기반</small><strong class="sa-'+(a.score===null?'muted':p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'">'+esc(a.decision)+'</strong></div>'+
+      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 최종 진입 판단</small><strong class="sa-'+(p.code==='unavailable'?'muted':p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'" data-entry-state="'+p.code+'">'+esc(a.decision)+'</strong></div>'+
       '<span class="sa-date">종가 '+esc(a.asOf||'확인 필요')+'</span></div>'+
-      '<p class="sa-basis">가격·추세·손익비·시장 위험 기준의 참고 판단 · 매매 성과 미검증</p>'+
+      '<div class="sa-context"><div><small>가격 방향</small>'+visuals.badge(a.trend.replace(' 흐름',''),a.color)+'</div><div><small>진입 방식</small>'+visuals.badge(p.code==='unavailable'?'자료 확인':p.strategy==='breakout'?'고점 돌파':'눌림목 반등',p.code==='buy'?'good':p.code==='unavailable'?'muted':'info')+'</div><div><small>보유 중 대응</small>'+visuals.badge(p.holding.label,p.holding.tone)+'</div></div>'+
       '<p class="sa-reason"><b>'+(p.code==='buy'?'진입 검토 이유':a.score===null?'판단 보류 이유':a.decision+' 이유')+'</b> '+esc(entryExplanation(a))+'</p>'+
-      '<div class="sa-entry-layout">'+visuals.entryGauge(p.code,a.decision,{title:'규칙 기반 진입 조건'})+'<div class="sa-conditions"><h3>기술·가격 조건</h3><p class="sa-condition-note">아래 조건으로 판단합니다. AI 검증은 별도 상태입니다.</p><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div>'+
-      '<section class="sa-ai-status" data-ai-reference="'+(a.ai.eligible?'eligible':'unavailable')+'" aria-label="AI 연구 참고 상태"><div class="sa-check-title"><h3>'+esc(reference.label)+'</h3>'+visuals.badge(reference.state,reference.tone)+'</div><p>'+esc(reference.detail)+'</p><p class="sa-note">위 진입 조건은 기술·가격 자료로 판단합니다. AI 연구는 추가 참고 정보로 확인하세요.</p></section>'+
+      '<p class="sa-next"><b>다음 확인 조건</b><span>'+esc(p.next)+'</span></p>'+
+      setupPanels(a)+'<details class="sa-condition-details"><summary>판단에 사용한 조건 5개</summary><div class="sa-entry-layout"><div class="sa-conditions"><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div></details>'+holdingPanel(a)+
+      '<details class="sa-ai-status" data-ai-reference="'+(a.ai.eligible?'eligible':'unavailable')+'" aria-label="AI 연구 참고 상태"><summary class="sa-check-title"><h3>'+esc(reference.label)+'</h3>'+visuals.badge(reference.state,reference.tone)+'</summary><p>'+esc(reference.detail)+'</p><p class="sa-note">위 진입 조건은 기술·가격 자료로 판단합니다. AI 연구는 추가 참고 정보로 확인하세요.</p></details>'+
       '<details class="sa-trend-details"><summary>단기 추세 점수 자세히 · '+esc(format(a.score))+'</summary><p class="sa-note">최근 가격의 상승·하락 흐름을 평가한 점수입니다. 95점은 상승 확률 95%나 매수 추천 95점이라는 뜻이 아닙니다. 신규 매수는 위 진입 조건을 함께 확인하세요.</p><div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'">'+visuals.trendGauge(a.score,a.trend)+'</div></details>'+
-      '<div class="sa-meta"><span>기준 종가 '+money(a.price)+'</span></div>'+
+      '<div class="sa-meta"><span>기준 종가 '+money(a.price)+'</span><span>규칙 기반 · 매매 성과 미검증</span><span>변동폭: '+esc(p.range.label)+'</span></div>'+
       '<details><summary>진입 조건·가격 기준</summary>'+visuals.table([['관심 구간',money(p.buyLow)+'–'+money(p.buyHigh)],['재평가 기준',money(p.stop)],['관측 저항',money(p.target1)]],'진입 가격 기준')+
       '<p>'+esc(p.blocks.join(' · ')||p.action)+'</p><p>추세 점수는 상승 확률이나 기업가치 점수가 아닙니다. 6개월·1년 AI 전망과 가치 시나리오는 별도로 확인하세요.</p></details></section>';
   }
@@ -240,6 +264,6 @@
     return {data:values[0],market:values[1],learned:values[2],errors:results.flatMap((r,i)=>
       r.status==='rejected'?[['추세 자료 읽기 실패','시장 자료 읽기 실패','AI 검증 자료 읽기 실패'][i]]:[])};
   }
-  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,aiReference,entryExplanation,panel,signals,signalPanels,load};
+  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,aiReference,entryExplanation,panel,setupPanels,holdingPanel,signals,signalPanels,load};
   if(typeof module!=='undefined')module.exports=api;else root.StockAssessment=api;
 })(typeof window!=='undefined'?window:globalThis);

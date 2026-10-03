@@ -13,6 +13,7 @@ on:
       - 'assets/decision-support.js'
       - 'assets/advanced*'
       - 'scripts/test_stock_assessment.cjs'
+      - 'scripts/test_entry_indicator.cjs'
       - 'scripts/test_legacy_assessment.cjs'
       - 'scripts/test_legacy_forecast.cjs'
       - 'scripts/test_technical_guide.cjs'
@@ -32,6 +33,7 @@ on:
       - 'assets/decision-support.js'
       - 'assets/advanced*'
       - 'scripts/test_stock_assessment.cjs'
+      - 'scripts/test_entry_indicator.cjs'
       - 'scripts/test_legacy_assessment.cjs'
       - 'scripts/test_legacy_forecast.cjs'
       - 'scripts/test_technical_guide.cjs'
@@ -52,6 +54,7 @@ jobs:
       - run: node --check assets/advanced-page.js
       - run: node --check assets/forecast.js
       - run: node scripts/test_stock_assessment.cjs
+      - run: node scripts/test_entry_indicator.cjs
       - run: node scripts/test_legacy_assessment.cjs
       - run: node scripts/test_legacy_forecast.cjs
       - run: node scripts/test_technical_guide.cjs

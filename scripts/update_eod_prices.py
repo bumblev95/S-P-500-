@@ -304,11 +304,21 @@ def main(argv=None) -> int:
             if pd.isna(daily_close) or float(daily_close) <= 0:
                 continue
             daily_volume = daily.get("Volume")
-            history.append({
+            bar = {
                 "date": day.date().isoformat(),
                 "close": float(daily_close),
                 "volume": int(daily_volume) if pd.notna(daily_volume) else None,
-            })
+            }
+            daily_high, daily_low = daily.get("High"), daily.get("Low")
+            if (pd.notna(daily_high) and pd.notna(daily_low) and
+                    0 < float(daily_low) <= float(daily_close) <= float(daily_high)):
+                # Use Yahoo OHLC in the same split-adjusted, dividends-excluded
+                # basis as Close; never mix Adj Close with unadjusted High/Low.
+                bar.update(high=float(daily_high), low=float(daily_low))
+                daily_open = daily.get("Open")
+                if pd.notna(daily_open) and float(daily_low) <= float(daily_open) <= float(daily_high):
+                    bar["open"] = float(daily_open)
+            history.append(bar)
         if re.fullmatch(r"[A-Z0-9^][A-Z0-9.^=-]{0,19}", original_symbol):
             atomic_json(OUT_PATH.parent / "history" / (original_symbol + ".json"),
                         {"symbol": original_symbol, "updatedAt": updated_at,

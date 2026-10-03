@@ -21,7 +21,7 @@ vm.runInNewContext(fs.readFileSync('advanced-legacy.html','utf8').match(/<script
  const data=JSON.parse(fs.readFileSync('forecasts/latest.json')),market=JSON.parse(fs.readFileSync('market/latest.json')),ml=JSON.parse(fs.readFileSync('ml/latest.json'));
  const expected=A.evaluate(data.stocks.NVDA,market,ml,126,clock).score;
  assert.match(node('selectedDetails').innerHTML,new RegExp('data-trend-score="'+expected+'"'));
- const watch=node('watchlistTop').children.at(-1);assert(watch.innerHTML.includes(expected+'/100'));assert(watch.innerHTML.includes('관망'));
+ const watch=node('watchlistTop').children.at(-1);assert(watch.innerHTML.includes(expected+'/100'));assert(watch.innerHTML.includes(A.evaluate(data.stocks.NVDA,market,ml,126,clock).decision));
  assert.deepEqual(JSON.parse(storage.get(key)),fixture,'Loading shared scores must preserve saved watchlist/notes/assumptions');
  node('analysisMode').onchange({target:{value:'5'}});
  assert.match(node('selectedDetails').innerHTML,new RegExp('data-trend-score="'+expected+'"'));

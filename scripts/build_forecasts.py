@@ -149,7 +149,14 @@ def clean_history(items):
         except ValueError:
             continue
         if p is not None and p > 0:
-            by_date[d] = {"date": d, "close": p, "volume": number(item.get("volume"))}
+            bar = {"date": d, "close": p, "volume": number(item.get("volume"))}
+            high, low = number(item.get("high")), number(item.get("low"))
+            if high is not None and low is not None and 0 < low <= p <= high:
+                bar.update(high=high, low=low)
+                opened = number(item.get("open"))
+                if opened is not None and low <= opened <= high:
+                    bar["open"] = opened
+            by_date[d] = bar
     return [by_date[d] for d in sorted(by_date)]
 
 
