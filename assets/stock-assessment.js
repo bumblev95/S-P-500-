@@ -22,7 +22,8 @@
   function format(score){return finite(score)?score+'/100':'산출 보류';}
 
   // Forecast prices, valuation assumptions and model accuracy never enter this score.
-  // Keep the established technical calculation and its conservative entry gates.
+  // Keep observed-price, freshness and market gates. AI research is independent:
+  // failing (or passing) its horizon-specific validation never changes this plan.
   function evaluate(entry,market,learned,horizon=126,now=Date.now()){
     const e=entry||{},h=horizon===252?252:126;
     const plan=technical.plan(e,null,market,now),ai=learnedGuide.inspect(learned,e,h,now);
@@ -31,15 +32,13 @@
     const score=valid&&finite(plan.ts)?plan.ts:null;
     const blocks=[...plan.blocks];
     if(!valid&&!blocks.some(x=>/가격|종가/.test(x)))blocks.unshift('추세 자료 확인 필요');
-    if(!ai.eligible)blocks.push('AI 예측 검증 조건 미충족');
-    const down=ai.eligible&&ai.forecast.direction==='down';
-    if(down)blocks.unshift('학습 모델 하락 우세');
     if(score!==null&&score<60)blocks.push('추세 점수가 진입 검토 기준 60에 못 미칩니다.');
     plan.blocks=[...new Set(blocks)];
     if(score===null){plan.action='자료 확인 · 판단 보류';plan.tone='wait';plan.code='unavailable';}
-    else if(plan.tone==='avoid'||down){plan.action='신규 진입 보류';plan.tone='avoid';plan.code='avoid';}
+    else if(plan.tone==='avoid'){plan.action='신규 진입 보류';plan.tone='avoid';plan.code='avoid';}
     else if(plan.blocks.length){plan.action='조건 확인 · 관망';plan.tone='wait';plan.code='watch';}
-    const decision=plan.code==='unavailable'?'판단 보류':plan.code==='avoid'?'진입 보류':plan.code==='buy'?'진입 검토':'관망';
+    const decision=plan.code==='unavailable'?'판단 보류':plan.code==='avoid'?'진입 보류':plan.code==='buy'?'진입 검토':
+      plan.code==='pullback'?'눌림목 대기':plan.code==='confirm'?'지지 회복 대기':'관망';
     const reason=plan.code==='avoid'&&plan.market==='risk'?'시장·신용 경고: 신규 진입 보류':
       plan.code==='avoid'&&score<35?'하락 흐름: 신규 진입 보류':
       plan.blocks[0]|| (plan.code==='pullback'?'관심 가격대까지 눌림을 기다립니다.':
@@ -48,7 +47,7 @@
       !ai.performancePassed?(ai.performanceStatus===false?'AI 성능 기준 미통과':'AI 성능 검증 자료 확인 필요'):ai.record.status==='eligible'?'AI 기준일·자료 확인 필요':
       ai.researchForecast?'AI 성능 기준 미통과':'AI 검증 자료 확인 필요';
     return {symbol:e.symbol||'',asOf:e.asOf||'',price:finite(e.price)?e.price:null,horizon:h,
-      label,score,trend:trend(score),color:color(score),decision,reason,modelStatus,plan,ai};
+      label,score,trend:trend(score),color:color(score),decision,reason,modelStatus,decisionBasis:'technical-rules',plan,ai};
   }
   function all(data,market,learned,horizon=126,now=Date.now()){
     return Object.fromEntries(Object.entries(data?.stocks||{}).map(([symbol,e])=>{
@@ -112,8 +111,8 @@
     if(a.score!==null&&a.score<60)add(limitations,'weak-trend','추세 점수 진입 기준 미달 · '+a.score+'/100',
       '신규 진입 검토 기준은 60점입니다. 가격 흐름의 점수이며 상승 확률이 아닙니다.');
     if(a.ai.eligible&&a.ai.forecast.direction==='down')add(limitations,'model-down',
-      (a.horizon===252?'1년':'6개월')+' AI 전망이 하락 방향 · 신규 진입 보류',
-      '검증 조건을 통과한 연구 전망이 하락 방향이어서 신규 진입을 보류합니다. 하락을 보장하는 뜻은 아닙니다.');
+      (a.horizon===252?'1년':'6개월')+' AI 전망이 하락 방향 · 별도 참고',
+      '검증 조건을 통과한 연구 전망은 하락 방향입니다. 단기 기술 조건과 기간·계산 근거가 다른 참고 정보입니다. 하락을 보장하는 뜻은 아닙니다.');
     if(a.score===null||p.blocks.some(b=>/가격 데이터|종가|변동성·지지|추세 자료/.test(b))){
       add(limitations,'price-data','종목 가격 자료 확인 필요',
         '기준일 '+(e.asOf||'없음')+' · 확인된 일별 종가 '+p.indicators.rows.length+'개. '+
@@ -173,11 +172,11 @@
       '<section class="panel signalPanel sa-specific-risks"><h3 class="badText">꼭 확인할 위험 · '+esc(entry.symbol)+'</h3><div class="signals">'+
       (rows(s.negative,'negative','!')||'<p>'+empty+' 기업 실적·회사 뉴스는 별도로 확인하세요.</p>')+'</div></section></div>'+
       (s.limitations.length?'<section class="panel signalPanel sa-limitations" aria-label="진입 조건·공통 상태"><h3>진입 조건·공통 상태</h3>'+
-      '<p class="sa-limitations-note">현재 판단: '+esc(a.decision)+'. 시장 상태·자료 갱신·AI 검증·추세 점수 조건을 함께 확인하세요.</p><div class="signals">'+
+      '<p class="sa-limitations-note">규칙 기반 진입 조건: '+esc(a.decision)+'. 시장 상태·자료 갱신·추세 조건을 확인하세요. AI 연구의 검증 상태는 별도 참고 정보입니다.</p><div class="signals">'+
       rows(s.limitations,'caution','i')+'</div></section>':'');
   }
   // Presentation only: expose the existing plan's separate entry conditions.
-  // A favourable trend must never imply that price, risk or AI checks passed.
+  // A favourable trend must never imply that price or risk checks passed.
   function entryChecks(a){
     const p=a.plan,known=a.score!==null,threshold=p.market==='watch'?2:1.5;
     const zone=known&&finite(a.price)&&finite(p.buyLow)&&finite(p.buyHigh);
@@ -185,7 +184,6 @@
     const location=!zone?'자료 확인':inside?'구간 안':a.price>p.buyHigh?'구간 위':'구간 아래';
     const balance=known&&finite(p.rr),reward=balance&&p.rr>=threshold;
     const marketKnown=['stable','watch','risk'].includes(p.market);
-    const down=a.ai.eligible&&a.ai.forecast?.direction==='down';
     const heatKnown=known&&finite(p.indicators.rsi)&&finite(p.indicators.z);
     const hot=p.blocks.some(x=>x.startsWith('단기 과열'));
     return [
@@ -199,15 +197,18 @@
         tone:!marketKnown?'muted':p.market==='risk'?'bad':p.market==='watch'?'warn':'good',
         detail:!marketKnown?'최신 시장 위험 자료 확인 필요':p.market==='risk'?'시장·신용 경고로 신규 진입 보류':p.market==='watch'?'손익비 기준을 2 이상으로 강화':'관측 지표 기준'},
       {key:'heat',label:'단기 과열',state:!heatKnown?'확인 필요':hot?'추격 주의':'신호 없음',tone:!heatKnown?'muted':hot?'warn':'good',
-        detail:heatKnown?'RSI '+p.indicators.rsi.toFixed(1)+' · 가격 z-score '+p.indicators.z.toFixed(2):'최신 종가 이력 확인 필요'},
-      {key:'ai',label:(a.horizon===252?'1년':'6개월')+' AI 검증',state:down?'하락 우세':a.ai.eligible?'통과':a.modelStatus==='AI 성능 기준 미통과'?'미통과':'확인 필요',
-        tone:down?'bad':a.ai.eligible?'good':a.modelStatus==='AI 성능 기준 미통과'?'warn':'muted',detail:a.ai.reason}
+        detail:heatKnown?'RSI '+p.indicators.rsi.toFixed(1)+' · 가격 z-score '+p.indicators.z.toFixed(2):'최신 종가 이력 확인 필요'}
     ];
+  }
+  function aiReference(a){
+    const down=a.ai.eligible&&a.ai.forecast?.direction==='down';
+    return {label:(a.horizon===252?'1년':'6개월')+' AI 연구 · 별도 상태',
+      state:down?'하락 전망':a.ai.eligible?'검증 기준 통과':a.modelStatus==='AI 성능 기준 미통과'?'검증 미통과':'자료 확인',
+      tone:down?'warn':a.ai.eligible?'info':a.modelStatus==='AI 성능 기준 미통과'?'warn':'muted',detail:a.ai.reason};
   }
   function entryExplanation(a){
     const descriptions={
       '실제 저항선 기준 손익비 부족':'가까운 저항까지의 상승폭이 재평가 기준까지의 하락폭에 비해 작습니다.',
-      'AI 예측 검증 조건 미충족':'선택 기간의 AI 검증 조건이 충족되지 않았습니다.',
       '단기 과열: 추격 주의':'가격이 단기에 과열되어 추격 매수를 기다립니다.',
       '시장 위험 데이터 확인 필요':'최신 시장 위험 자료를 확인할 때까지 매수를 기다립니다.',
       '추세 점수가 진입 검토 기준 60에 못 미칩니다.':'최근 가격 흐름이 진입 검토 기준에 못 미칩니다.'
@@ -215,14 +216,16 @@
     return descriptions[a.reason]||a.reason;
   }
   function panel(a){
-    const p=a.plan;
-    return '<section class="stockAssessment" aria-label="'+esc(a.symbol)+' 공통 평가">'+
-      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 신규 진입 판단 · '+(a.horizon===252?'1년':'6개월')+' 검증 조건</small><strong class="sa-'+(a.score===null?'muted':p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'">'+esc(a.decision)+'</strong></div>'+
+    const p=a.plan,reference=aiReference(a);
+    return '<section class="stockAssessment" data-decision-basis="technical-rules" aria-label="'+esc(a.symbol)+' 공통 평가">'+
+      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 신규 진입 조건 · 규칙 기반</small><strong class="sa-'+(a.score===null?'muted':p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'">'+esc(a.decision)+'</strong></div>'+
       '<span class="sa-date">종가 '+esc(a.asOf||'확인 필요')+'</span></div>'+
+      '<p class="sa-basis">가격·추세·손익비·시장 위험 기준의 참고 판단 · 매매 성과 미검증</p>'+
       '<p class="sa-reason"><b>'+(p.code==='buy'?'진입 검토 이유':a.score===null?'판단 보류 이유':a.decision+' 이유')+'</b> '+esc(entryExplanation(a))+'</p>'+
-      '<div class="sa-entry-layout">'+visuals.entryGauge(p.code,a.decision)+'<div class="sa-conditions"><h3>지금 진입하려면?</h3><p class="sa-condition-note">가격 흐름과 아래 조건을 함께 확인합니다.</p><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div>'+
+      '<div class="sa-entry-layout">'+visuals.entryGauge(p.code,a.decision,{title:'규칙 기반 진입 조건'})+'<div class="sa-conditions"><h3>기술·가격 조건</h3><p class="sa-condition-note">아래 조건으로 판단합니다. AI 검증은 별도 상태입니다.</p><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div>'+
+      '<section class="sa-ai-status" data-ai-reference="'+(a.ai.eligible?'eligible':'unavailable')+'" aria-label="AI 연구 참고 상태"><div class="sa-check-title"><h3>'+esc(reference.label)+'</h3>'+visuals.badge(reference.state,reference.tone)+'</div><p>'+esc(reference.detail)+'</p><p class="sa-note">위 진입 조건은 기술·가격 자료로 판단합니다. AI 연구는 추가 참고 정보로 확인하세요.</p></section>'+
       '<details class="sa-trend-details"><summary>단기 추세 점수 자세히 · '+esc(format(a.score))+'</summary><p class="sa-note">최근 가격의 상승·하락 흐름을 평가한 점수입니다. 95점은 상승 확률 95%나 매수 추천 95점이라는 뜻이 아닙니다. 신규 매수는 위 진입 조건을 함께 확인하세요.</p><div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'">'+visuals.trendGauge(a.score,a.trend)+'</div></details>'+
-      '<div class="sa-meta"><span>기준 종가 '+money(a.price)+'</span><span>'+esc(a.modelStatus)+'</span></div>'+
+      '<div class="sa-meta"><span>기준 종가 '+money(a.price)+'</span></div>'+
       '<details><summary>진입 조건·가격 기준</summary>'+visuals.table([['관심 구간',money(p.buyLow)+'–'+money(p.buyHigh)],['재평가 기준',money(p.stop)],['관측 저항',money(p.target1)]],'진입 가격 기준')+
       '<p>'+esc(p.blocks.join(' · ')||p.action)+'</p><p>추세 점수는 상승 확률이나 기업가치 점수가 아닙니다. 6개월·1년 AI 전망과 가치 시나리오는 별도로 확인하세요.</p></details></section>';
   }
@@ -237,6 +240,6 @@
     return {data:values[0],market:values[1],learned:values[2],errors:results.flatMap((r,i)=>
       r.status==='rejected'?[['추세 자료 읽기 실패','시장 자료 읽기 실패','AI 검증 자료 읽기 실패'][i]]:[])};
   }
-  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,entryExplanation,panel,signals,signalPanels,load};
+  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,aiReference,entryExplanation,panel,signals,signalPanels,load};
   if(typeof module!=='undefined')module.exports=api;else root.StockAssessment=api;
 })(typeof window!=='undefined'?window:globalThis);

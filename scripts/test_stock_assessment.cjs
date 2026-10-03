@@ -12,20 +12,28 @@ assert.equal(pass.score,T.plan(e,null,market,now).ts);
 assert.equal(pass.decision,'진입 검토','Control must satisfy the existing entry checks');
 const withheld=structuredClone(ml);withheld.stocks.TEST.predictions[126].status='withheld';
 const wait=A.evaluate(e,market,withheld,126,now);
-assert.equal(wait.score,pass.score);assert.equal(wait.decision,'관망');assert.equal(wait.plan.code,'watch');
-assert(wait.plan.blocks.includes('AI 예측 검증 조건 미충족'));
-assert(A.panel(wait).includes('AI 성능 기준 미통과'));
+assert.equal(wait.score,pass.score);assert.equal(wait.decision,'진입 검토');assert.equal(wait.plan.code,'buy');
+assert(!wait.plan.blocks.includes('AI 예측 검증 조건 미충족'));
+assert.deepEqual(wait.plan,pass.plan,'AI failure must not change the technical entry plan');
+assert.equal(wait.ai.eligible,false);assert.equal(wait.ai.forecast,null,'Withheld research stays withheld');
+assert(A.panel(wait).includes('검증 미통과'));
 assert(A.panel(wait).includes('단기 추세 점수'));
 const failedGlobal=structuredClone(ml);failedGlobal.validation={126:{passed:false},252:{passed:true}};
 const globalWait=A.evaluate(e,market,failedGlobal,126,now);
-assert.equal(globalWait.score,pass.score);assert.equal(globalWait.decision,'관망');assert.equal(globalWait.modelStatus,'AI 성능 기준 미통과');
+assert.equal(globalWait.score,pass.score);assert.equal(globalWait.decision,'진입 검토');assert.equal(globalWait.modelStatus,'AI 성능 기준 미통과');
 assert.equal(globalWait.ai.eligible,false,'An eligible record must not override an explicit failed overall performance gate');
+assert.deepEqual(globalWait.plan,pass.plan,'Failed overall AI performance stays separate from technical entry');
+assert.equal(globalWait.ai.forecast,null);
 const missingGrade=structuredClone(ml);delete missingGrade.validation;
-const ungraded=A.evaluate(e,market,missingGrade,126,now);assert.equal(ungraded.score,pass.score);assert.equal(ungraded.decision,'관망');assert.equal(ungraded.modelStatus,'AI 성능 검증 자료 확인 필요');
-// The first screen must explain high-trend / withheld-entry combinations.
+const ungraded=A.evaluate(e,market,missingGrade,126,now);assert.equal(ungraded.score,pass.score);assert.equal(ungraded.decision,'진입 검토');assert.equal(ungraded.modelStatus,'AI 성능 검증 자료 확인 필요');
+assert.deepEqual(ungraded.plan,pass.plan);assert.equal(ungraded.ai.eligible,false);assert.equal(ungraded.ai.forecast,null);
+// Technical conditions and withheld AI research are separate first-screen states.
 const before=JSON.stringify(wait),checks=A.entryChecks(wait),html=A.panel(wait);
 assert.equal(checks.find(c=>c.key==='trend').tone,'good');
-assert.equal(checks.find(c=>c.key==='ai').state,'미통과');
+assert(!checks.some(c=>c.key==='ai'));
+assert.equal(A.aiReference(wait).state,'검증 미통과');
+assert(html.includes('data-decision-basis="technical-rules"'));
+assert(html.includes('data-ai-reference="unavailable"'));
 assert(html.indexOf('sa-reason')<html.indexOf('sa-entry-layout'));
 assert(html.includes('class="sa-trend-details"><summary>'));
 assert(!html.includes('class="sa-trend-details" open'));
@@ -36,8 +44,16 @@ const unknown=A.evaluate(e,null,ml,126,now);
 assert.equal(unknown.score,pass.score);assert.notEqual(unknown.decision,'진입 검토');
 const bearish=structuredClone(ml);bearish.stocks.TEST.predictions[252]={status:'eligible',forecast:{...forecast,horizon:252,base:90,bear:80,bull:110,direction:'down',return:-.1,logReturn:Math.log(.9),lowLogReturn:Math.log(.8),highLogReturn:Math.log(1.1)}};
 const long=A.evaluate(e,market,bearish,252,now);
-assert.equal(long.score,pass.score);assert.equal(long.trend,pass.trend);assert.equal(long.color,pass.color);assert.equal(long.decision,'진입 보류');
-assert.equal(A.entryChecks(long).find(c=>c.key==='ai').state,'하락 우세');
+assert.equal(long.score,pass.score);assert.equal(long.trend,pass.trend);assert.equal(long.color,pass.color);assert.equal(long.decision,'진입 검토');
+assert.deepEqual(long.plan,pass.plan,'Long-horizon AI direction is separate research evidence');
+assert.equal(A.aiReference(long).state,'하락 전망');
+for(const input of [null,{...ml,generatedAt:'2026-09-01T00:00:00Z'},
+  {...ml,stocks:{TEST:{...ml.stocks.TEST,price:90}}},
+  {...ml,stocks:{TEST:{...ml.stocks.TEST,predictions:{126:{status:'eligible',forecast:{...forecast,base:Infinity}}}}}}]){
+  const a=A.evaluate(e,market,input,126,now);
+  assert.deepEqual(a.plan,pass.plan,'Absent, stale, misaligned and invalid AI must not veto price conditions');
+  assert.equal(a.ai.eligible,false,'Invalid AI must never become eligible research');
+}
 const extreme=structuredClone(withheld);extreme.stocks.TEST.predictions[126].forecast={...forecast,base:10000,bull:20000,logReturn:Math.log(100),highLogReturn:Math.log(200)};
 assert.equal(A.evaluate({...e,longTermScenario:{value:99999},predictions:{126:{return:9999}}},market,extreme,126,now).score,pass.score);
 for(const bad of [null,{...e,symbol:''},{...e,fresh:false},{...e,asOf:'2027-01-01'},{...e,history:history.slice(-30)},{...e,price:90},{...e,status:'insufficient'}]){
@@ -140,7 +156,11 @@ let checked=0,scored=0;
 for(const [symbol,a] of Object.entries(six)){
   assert.equal(a.score,year[symbol].score,symbol);assert.equal(a.trend,year[symbol].trend,symbol);
   if(a.score!==null){scored++;assert.equal(a.score,T.plan(data.stocks[a.symbol],null,actualMarket,actualNow).ts);}
-  if(!a.ai.eligible)assert.notEqual(a.plan.code,'buy');checked++;
+  assert.deepEqual(a.plan,A.evaluate(data.stocks[a.symbol],actualMarket,null,126,actualNow).plan,
+    'Technical entry plans do not depend on AI availability');
+  assert.deepEqual(a.plan,year[symbol].plan,'Changing the AI horizon cannot change technical entry conditions');
+  if(a.plan.code==='buy')assert(!a.plan.blocks.length&&a.score>=60&&a.plan.rr>=(a.plan.market==='watch'?2:1.5));
+  checked++;
   for(const assessment of [a,year[symbol]])assertVisibleBlockers(assessment,
     A.signals(data.stocks[assessment.symbol],assessment,actualMarket,actualNow));
 }
@@ -149,5 +169,5 @@ assert(checked>=400&&scored>0);assert(A.rank(six).every((a,i,arr)=>!i||a.score<=
 (async()=>{
   const result=await A.load(async url=>{if(url.startsWith('forecasts'))throw Error('offline');return {ok:true,json:async()=>url.startsWith('market')?market:ml};},null);
   assert.equal(result.data,null);assert.equal(result.errors.length,1);assert.deepEqual(A.all(result.data,result.market,result.learned),{});
-  console.log(`Stock assessment: entry control, withheld/risk gates, horizon-independent scores, missing/stale guards, forecast independence, deterministic ranking and ${checked} real records (${scored} scored) passed.`);
+  console.log(`Stock assessment: independent technical entry and AI research, market/freshness gates, horizon-independent scores, withheld research, deterministic ranking and ${checked} real records (${scored} scored) passed.`);
 })().catch(e=>{console.error(e);process.exitCode=1});

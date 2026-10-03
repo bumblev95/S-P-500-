@@ -44,10 +44,10 @@ function riskGauge(status){
  const states=[{key:'stable',label:'원활',tone:'good'},{key:'watch',label:'주의',tone:'warn'},{key:'risk',label:'경보',tone:'bad'}];
  return gauge({title:'시장 위험 상태',states,index:states.findIndex(s=>s.key===status),description:'관측된 지표 기준 · 위기 확률 아님'});
 }
-function entryGauge(code,value){
+function entryGauge(code,value,options={}){
  const states=[{key:'avoid',label:'진입 보류',tone:'bad'},{key:'watch',label:'관망',tone:'warn'},{key:'buy',label:'진입 검토',tone:'good'}];
  const key=['pullback','confirm'].includes(code)?'watch':code;
- return gauge({title:'신규 진입 판단',states,index:states.findIndex(s=>s.key===key),value,description:'신규 진입 기준 · 보유 자산 매도와 별도'});
+ return gauge({title:options.title||'신규 진입 판단',states,index:states.findIndex(s=>s.key===key),value,description:'신규 진입 기준 · 보유 자산 매도와 별도'});
 }
 function entrySteps(code){
  const key=['pullback','confirm'].includes(code)?'watch':code;

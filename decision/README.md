@@ -43,17 +43,34 @@ Data/AI conditions have a separate visible panel. Market gaps name the stale or
 missing observations and dates; a real common market warning remains explicit.
 AI conditions show the selected issuer/horizon's validation metrics and baseline
 when supplied, with unavailable metrics left absent. Missing price data cannot
-look like an absence of risk. This changes explanations only: scores, horizons,
-entry gates, model eligibility and market thresholds are unchanged.
+look like an absence of risk. Scores, forecast horizons, model eligibility and
+market thresholds are unchanged.
 
 The visible `진입 조건·공통 상태` panel also holds the trend-score entry
-threshold and an eligible AI model's downward direction. These gates do not
-occupy the issuer's technical/price risk list. Every original `plan.blocks`
+threshold and an eligible AI model's downward direction as separate research
+evidence. Model evidence does not occupy the issuer's technical/price risk list.
+Every `plan.blocks`
 entry maps to exactly one risk or status explanation; an unknown blocker or
 one whose technical inputs cannot be shown is retained explicitly in the
 status panel. Missing forecast periods still render both explanation panels.
 Regression tests compare risk identifiers for weakening and overheated price
 states under the same shared gates, rather than merely comparing ticker names.
+
+## Technical entry conditions and AI research
+
+`StockAssessment.evaluate` provides a rule-based entry assessment from observed
+price/technical conditions, price-data freshness and market risk. AI validation
+failure, absence, stale data or long-horizon direction does not alter this plan.
+The AI panel keeps the original 126/252-day research eligibility and reason; it
+is not a mandatory technical-entry condition or an upgraded trading forecast.
+Pullback and support-recovery conditions retain their specific waiting labels.
+
+The entry rules themselves are not validated trading performance. Existing
+reward/risk thresholds, overheating guards, missing/stale-price guards and
+market-warning gates remain in force. No rule is relaxed to manufacture buy
+signals. Forecast targets, model promotion, research data and paper accounts are
+unmodified. A synthetic control verifies that complete technical conditions can
+be shown as `진입 검토` while AI research remains withheld.
 
 ## Prospective ledger and model promotion
 
