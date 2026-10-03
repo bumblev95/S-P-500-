@@ -57,6 +57,99 @@
     return Object.values(assessments||{}).filter(a=>finite(a.score))
       .sort((a,b)=>b.score-a.score||a.symbol.localeCompare(b.symbol)).slice(0,limit);
   }
+  // Explain observed conditions without changing scores, forecasts or gates.
+  // Data/model limitations do not consume the slots for issuer price risks.
+  function signals(entry,a,market,now=Date.now()){
+    const e=entry||{},i=e.inputs||{},p=a.plan,positive=[],negative=[],limitations=[];
+    const add=(list,id,title,detail)=>list.push({id,title,detail});
+    const percent=x=>finite(x)?(100*x).toFixed(1)+'%':'—';
+    const signed=x=>(x>0?'+':'')+percent(x);
+    const minimum=p.market==='watch'?2:1.5;
+    if(a.score!==null){
+      if(finite(i.ma50)&&i.ma50>0){
+        const above=e.price>=i.ma50;
+        add(above?positive:negative,'ma50',above?'현재가가 50일선 위에 있음':'현재가가 50일선 아래에 있음',
+          '종가 '+money(e.price)+' · 50일 평균 '+money(i.ma50)+' · 평균 대비 '+signed(e.price/i.ma50-1));
+      }
+      if(finite(i.ma50)&&finite(i.ma200)&&i.ma50>0&&i.ma200>0){
+        const above=i.ma50>=i.ma200;
+        add(above?positive:negative,'ma-order',above?'중기 이동평균 배열이 우호적':'중기 이동평균 배열이 약함',
+          '50일 평균 '+money(i.ma50)+' · 200일 평균 '+money(i.ma200));
+      }
+      for(const [key,name] of [['return1m','1개월'],['return3m','3개월']])if(finite(i[key])){
+        add(i[key]>=0?positive:negative,key,'최근 '+name+' 수익률 '+signed(i[key]),
+          e.symbol+'의 실제 종가 변화입니다. 기준일 '+e.asOf);
+      }
+      if(finite(p.rr)){
+        const enough=p.rr>=minimum,up=(p.target1-p.buyHigh)/p.buyHigh,down=(p.buyHigh-p.stop)/p.buyHigh;
+        add(enough?positive:negative,'reward-risk','관측 저항선 손익비 '+p.rr.toFixed(2)+'배'+(enough?'':' · 기준 미달'),
+          '관심 구간 상단 '+money(p.buyHigh)+'에서 저항 '+money(p.target1)+'까지 '+percent(up)+
+          ', 재평가 '+money(p.stop)+'까지 하락폭 '+percent(down)+'. 확인 기준 '+minimum.toFixed(1)+'배입니다.');
+      }else if(!p.target1&&finite(p.buyHigh)&&finite(p.stop)){
+        add(negative,'resistance-missing','위쪽 관측 저항이 없어 손익비 계산 불가',
+          '관심 구간 상단 '+money(p.buyHigh)+' · 재평가 '+money(p.stop)+
+          '. 수익 목표를 정할 저항선이 확보되지 않았습니다. 추가 상승을 보장하는 뜻이 아닙니다.');
+      }
+      if(finite(i.volatility4m)&&i.volatility4m>.5){
+        add(negative,'volatility','변동성이 높음 · 하루 환산 약 '+percent(p.sig),
+          '최근 4개월 종가에서 계산한 연환산 변동성 '+percent(i.volatility4m)+
+          '. 하루 환산치는 손실 상한이 아니며 실제 움직임은 더 클 수 있습니다.');
+      }
+      if(p.indicators.rsi>75||p.indicators.z>2.5){
+        const values=[finite(p.indicators.rsi)?'RSI '+p.indicators.rsi.toFixed(1):'',
+          finite(p.indicators.z)?'20일 가격 편차 '+p.indicators.z.toFixed(2):''].filter(Boolean).join(' · ');
+        add(negative,'overheated','단기 과열 · 추격 주의',values+'. RSI 75 또는 가격 편차 2.5를 넘어 단기 되돌림에 주의할 구간입니다.');
+      }
+      if(a.score<60)add(negative,'weak-trend','단기 추세 '+a.score+'/100 · 진입 검토 기준 미달',
+        '이동평균·실제 수익률로 본 가격 흐름입니다. 확인 기준은 60점이며 상승 확률이 아닙니다.');
+      if(a.ai.eligible&&a.ai.forecast.direction==='down')add(negative,'model-down',
+        (a.horizon===252?'1년':'6개월')+' AI 전망이 하락 방향',
+        '검증 조건을 통과한 연구 전망도 하락을 보장하지는 않습니다.');
+    }
+    if(a.score===null||p.blocks.some(b=>/가격 데이터|종가|변동성·지지|추세 자료/.test(b))){
+      add(limitations,'price-data','종목 가격 자료 확인 필요',
+        '기준일 '+(e.asOf||'없음')+' · 확인된 일별 종가 '+p.indicators.rows.length+'개. '+
+        p.blocks.filter(b=>/가격 데이터|종가|변동성·지지|추세 자료/.test(b)).join(' · '));
+    }
+    if(p.market==='unknown'){
+      const names={NFCI:'금융여건',STLFSI4:'금융 스트레스',DRTSCILM:'대출 태도',FUNDING:'자금조달'};
+      const needs=Object.entries(names).flatMap(([id,name])=>{
+        const q=market?.indicators?.find(x=>x.id===id),days=q?(now-Date.parse(q.asOf))/86400000:NaN;
+        const max=q?.maxAgeDays||(id==='DRTSCILM'?150:id==='FUNDING'?5:16);
+        return q?.status==='ready'&&finite(days)&&days>=0&&days<=max?[]:[name+' '+(q?.asOf||'자료 없음')];
+      });
+      add(limitations,'market-data','시장 상태 확인 보류 · 모든 종목 공통',
+        (needs.length?'갱신이 필요한 관측 자료: '+needs.join(' · '):'시장 자료의 수집 시점·상태를 다시 확인해야 합니다.')+
+        '. 자료가 부족해 시장이 안전한지 판단하지 못한 상태입니다.');
+    }else if(p.market==='risk'||p.market==='watch'){
+      add(limitations,'market-warning',p.market==='risk'?'시장·신용 경고 · 모든 종목 공통':'시장·신용 주의 · 모든 종목 공통',
+        p.market==='risk'?'공통 시장 지표의 경고로 신규 진입을 보류합니다. 위의 시장 위험 패널에서 근거를 확인하세요.':
+        '공통 시장 지표가 주의 상태라 최소 손익비를 2.0배로 높여 확인합니다.');
+    }
+    if(!a.ai.eligible){
+      const v=a.ai.record?.validation,metrics=[];
+      if(finite(v?.mae)&&finite(v?.noChangeMae))metrics.push('이 종목 과거 가격오차 '+percent(v.mae)+' · 가격 유지 기준 '+percent(v.noChangeMae));
+      if(finite(v?.directionAccuracy)&&finite(v?.alwaysUpAccuracy))metrics.push('방향 적중 '+percent(v.directionAccuracy)+' · 항상 상승 기준 '+percent(v.alwaysUpAccuracy));
+      if(finite(v?.dates))metrics.push('독립 검증 '+v.dates+'개 시점');
+      add(limitations,'ai-validation',(a.horizon===252?'1년':'6개월')+' AI 예측 활용 보류',
+        [a.ai.reason,...metrics].filter(Boolean).join('. ')+'. 검증 결과가 부족해 신규 진입 판단에 활용하지 않습니다.');
+    }
+    return {positive,negative,limitations,available:a.score!==null};
+  }
+  function signalPanels(entry,a,market,now=Date.now()){
+    const s=signals(entry,a,market,now);
+    const rows=(list,tone,icon)=>list.map(x=>'<div class="signal '+tone+'" data-signal="'+esc(x.id)+'"><span class="signalIcon">'+icon+
+      '</span><span class="sa-signal-copy"><strong>'+esc(x.title)+'</strong><small>'+esc(x.detail)+'</small></span></div>').join('');
+    const empty=s.available?'확인한 가격 지표에서 뚜렷한 위험이 감지되지 않았습니다.':'종목별 위험 판단에 필요한 가격 자료가 부족합니다.';
+    return '<div class="explainGrid sa-signals" data-signals-symbol="'+esc(entry.symbol)+'">'+
+      '<section class="panel signalPanel"><h3 class="goodText">지금 좋은 신호 · '+esc(entry.symbol)+'</h3><div class="signals">'+
+      (rows(s.positive,'positive','✓')||'<p>확인한 가격 지표에서 뚜렷한 긍정 신호가 없습니다.</p>')+'</div></section>'+
+      '<section class="panel signalPanel sa-specific-risks"><h3 class="badText">꼭 확인할 위험 · '+esc(entry.symbol)+'</h3><div class="signals">'+
+      (rows(s.negative,'negative','!')||'<p>'+empty+' 기업 실적·회사 뉴스는 별도로 확인하세요.</p>')+'</div></section></div>'+
+      (s.limitations.length?'<section class="panel signalPanel sa-limitations" aria-label="데이터·AI 확인 사항"><h3>데이터·AI 확인 사항</h3>'+
+      '<p class="sa-limitations-note">자료 갱신과 모델 검증 조건도 신규 진입을 보류하는 이유가 됩니다.</p><div class="signals">'+
+      rows(s.limitations,'caution','i')+'</div></section>':'');
+  }
   function panel(a){
     const p=a.plan;
     return '<section class="stockAssessment" aria-label="'+esc(a.symbol)+' 공통 평가">'+
@@ -79,6 +172,6 @@
     return {data:values[0],market:values[1],learned:values[2],errors:results.flatMap((r,i)=>
       r.status==='rejected'?[['추세 자료 읽기 실패','시장 자료 읽기 실패','AI 검증 자료 읽기 실패'][i]]:[])};
   }
-  const api={label,normalize,trend,color,format,evaluate,all,rank,panel,load};
+  const api={label,normalize,trend,color,format,evaluate,all,rank,panel,signals,signalPanels,load};
   if(typeof module!=='undefined')module.exports=api;else root.StockAssessment=api;
 })(typeof window!=='undefined'?window:globalThis);

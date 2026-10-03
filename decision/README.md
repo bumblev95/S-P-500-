@@ -30,6 +30,22 @@ Risk thresholds are operating heuristics. Related indicators share one family so
 GZ/EBP or NFCI/STLFSI do not cast independent warning votes. This risk panel does
 not silently retrain price forecasts or reinterpret news as a causal attribution.
 
+## Stock-specific explanations
+
+The home page's good-signal/risk cards use the public `StockAssessment.signals`
+display function. Issuer price conditions include source-date returns, moving
+average levels, annualized volatility with its daily conversion, overheating and
+the actual observed-resistance reward/risk calculation. Missing resistance is
+distinct from a computable ratio below the existing 1.5/2.0 threshold. Specific
+risks are not clipped after shared gate messages.
+
+Data/AI conditions have a separate visible panel. Market gaps name the stale or
+missing observations and dates; a real common market warning remains explicit.
+AI conditions show the selected issuer/horizon's validation metrics and baseline
+when supplied, with unavailable metrics left absent. Missing price data cannot
+look like an absence of risk. This changes explanations only: scores, horizons,
+entry gates, model eligibility and market thresholds are unchanged.
+
 ## Prospective ledger and model promotion
 
 `build_decision_support.py` captures publicly displayed stock/spot learned

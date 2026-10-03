@@ -109,6 +109,29 @@ async function fits(page, selector) {
           assert(await primary.count()>0);
           assert((await primary.locator('.ce-news-reason').allTextContents()).every(t=>t.includes('왜 ')));
           assert((await primary.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
+          // The reported turnaround stays favorable on the actual page; shared
+          // warnings cannot hide issuer-specific price risks after a switch.
+          await page.getByRole('button', {name:'6개월',exact:true}).click();
+          await page.locator('#tickerInput').fill('AMD');
+          await page.locator('#tickerInput').press('Enter');
+          await page.locator('.company-events[data-event-symbol="AMD"] .ce-news-card').first().waitFor();
+          const amdHistory=page.locator('.ce-primary-news .ce-news-card').filter({hasText:'회복·성장 성과'});
+          if(news.issuers[news.symbols.AMD].articles.some(a=>a.id==='news:f602f5defbad7eb740fda350')){
+            assert(await amdHistory.count()>=1);
+            assert((await amdHistory.locator('.ce-impact').allTextContents()).every(x=>x==='호재'));
+            assert((await amdHistory.locator('.ce-news-title').allTextContents()).some(x=>x.includes('시가총액 1조 달러')));
+          }
+          assert(!(await page.locator('.sa-specific-risks').textContent()).includes('시장 상태 확인 보류'));
+          assert(!(await page.locator('.sa-specific-risks').textContent()).includes('AI 예측 활용 보류'));
+          const amdRisk=await page.locator('.sa-specific-risks').textContent();
+          await fits(page,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
+          await page.locator('.sa-signals').screenshot({path:path.join(output,`issuer-risks-amd-${width}.png`)});
+          await page.locator('#tickerInput').fill('JNJ');
+          await page.locator('#tickerInput').press('Enter');
+          await page.locator('[data-signals-symbol="JNJ"]').waitFor();
+          assert.notEqual(await page.locator('.sa-specific-risks').textContent(),amdRisk);
+          if(forecasts.stocks.JNJ.inputs.return1m<0)assert((await page.locator('.sa-specific-risks').textContent()).includes('1개월 수익률'));
+          await fits(page,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
         }
       }
       await page.close();

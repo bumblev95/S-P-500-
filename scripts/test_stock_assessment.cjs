@@ -36,9 +36,40 @@ assert(!D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('검증 �
 assert(D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('성능 기준 통과와 별개'));
 assert(!D.confidence({dates:25,n:1000,mae:.2,noChangeMae:.1}).includes('충분'));
 
+// Explanations keep issuer risks visible even when shared data/model gates fail.
+const stressed={...e,symbol:'<TEST>',inputs:{...e.inputs,ma50:105,ma200:110,
+  return1m:-.07,return3m:-.12,volatility4m:.75}};
+const stressedA=A.evaluate(stressed,null,withheld,126,now),before=JSON.stringify(stressedA);
+const stressedSignals=A.signals(stressed,stressedA,null,now);
+assert(stressedSignals.negative.length>=5,'Distinct issuer conditions must not be clipped by shared warnings');
+assert(stressedSignals.negative.some(x=>x.id==='volatility'&&x.detail.includes('75.0%')));
+assert(stressedSignals.negative.some(x=>x.id==='return1m'&&x.title.includes('-7.0%')));
+assert(!stressedSignals.negative.some(x=>/시장 상태|AI 예측 활용/.test(x.title)));
+assert(stressedSignals.limitations.some(x=>x.id==='market-data'));
+assert(stressedSignals.limitations.some(x=>x.id==='ai-validation'));
+assert.equal(JSON.stringify(stressedA),before,'Display explanations must not mutate the assessment');
+const explanationHtml=A.signalPanels(stressed,stressedA,null,now);
+assert(explanationHtml.includes('꼭 확인할 위험 · &lt;TEST&gt;'));
+assert(!explanationHtml.includes('<TEST>'));
+assert(!/NaN|undefined|Infinity/.test(explanationHtml));
+const absent=A.evaluate({...e,history:[]},null,withheld,126,now);
+assert(!A.signals({...e,history:[]},absent,null,now).available);
+assert.equal(A.signals({...e,history:[]},absent,null,now).negative.length,0);
+assert(A.signalPanels({...e,history:[]},absent,null,now).includes('위험 판단에 필요한 가격 자료가 부족'));
+const noTarget={...pass,plan:{...pass.plan,target1:null,rr:null}};
+assert(A.signals(e,noTarget,market,now).negative.some(x=>x.id==='resistance-missing'));
+const modelMetrics=structuredClone(wait);modelMetrics.ai.record.validation={mae:.2,noChangeMae:.15,directionAccuracy:.4,alwaysUpAccuracy:.6,dates:12};
+assert(A.signals(e,modelMetrics,market,now).limitations.some(x=>x.id==='ai-validation'&&x.detail.includes('20.0%')&&x.detail.includes('12개 시점')));
+
 // Real snapshot checks: both horizons share the exact observed-price score.
 const data=JSON.parse(fs.readFileSync('forecasts/latest.json')),actualMarket=JSON.parse(fs.readFileSync('market/latest.json')),actualML=JSON.parse(fs.readFileSync('ml/latest.json'));
 const actualNow=Date.parse(actualMarket.generatedAt),six=A.all(data,actualMarket,actualML,126,actualNow),year=A.all(data,actualMarket,actualML,252,actualNow);
+const amdSignals=A.signals(data.stocks.AMD,six.AMD,actualMarket,actualNow);
+const nvdaSignals=A.signals(data.stocks.NVDA,six.NVDA,actualMarket,actualNow);
+const jnjSignals=A.signals(data.stocks.JNJ,six.JNJ,actualMarket,actualNow);
+assert.notDeepEqual(amdSignals.negative,jnjSignals.negative,'Stocks show their own observed risks');
+if(six.AMD.score!==null&&!six.AMD.plan.target1)assert(amdSignals.negative.some(x=>x.id==='resistance-missing'));
+if(Number.isFinite(six.NVDA.plan.rr)&&six.NVDA.plan.rr<1.5)assert(nvdaSignals.negative.some(x=>x.id==='reward-risk'&&x.title.includes(six.NVDA.plan.rr.toFixed(2))));
 let checked=0,scored=0;
 for(const [symbol,a] of Object.entries(six)){
   assert.equal(a.score,year[symbol].score,symbol);assert.equal(a.trend,year[symbol].trend,symbol);
