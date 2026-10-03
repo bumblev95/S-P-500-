@@ -60,3 +60,22 @@ SEC 유효 이력 미확보: APA, HONA, SYF
 가격 자료 부족: FDXF, HONA
 
 수집 상태와 업종별 비교는 [요약 데이터](sp500-summary.json), 전체 시점별 결과는 [연구 데이터](environment.json)에서 확인할 수 있습니다.
+
+## 2026-10-03 adaptive 후속 평가 (UTC)
+
+출처: [`ml/adaptive-summary.json`](../ml/adaptive-summary.json) · 생성 `2026-10-03T02:45:20+00:00` · 확인한 main commit [`e127b04`](https://github.com/bumblev95/S-P-500-/commit/e127b04e095adcc75ec1a87fd8e9cde63ca8285e). 원본 모델: `pooled-hgb-pattern-v3-medium-long`.
+
+아래 수치는 `horizons.126.comparison.evaluation`의 별도 평가 구간(2024-09-26~2026-04-01, 4시점, 1999개 종목·시점) 기준입니다. 위의 기존 연구 표·과거 결과 및 본문 생성 시각은 유지하며, 서로 다른 평가 표본의 수치를 직접 합치거나 대체하지 않습니다.
+
+126거래일 선택 후보는 `biasCorrected`이지만 `status=research`, `passed=false`입니다. Checks: `enoughDates=true`, `average=false`, `tail=false`, `consistency=false`, `direction=false`.
+
+| 126거래일 평가 지표 | biasCorrected | 같은 평가 구간의 기준선 |
+|---|---:|---:|
+| 방향 적중률 | 34.77% | 항상 상승(always-up) 48.35% |
+| 가격 오차(MAPE) | 18.74% | 가격 불변(no-change) 17.52% |
+
+`improvementVsOriginal=-0.00085960031148824`로 원본 대비 개선이 음수이고, 방향 적중률과 MAPE도 각각 기준선보다 불리합니다. 평균·꼬리 오차·시점별 일관성·방향 조건이 미통과이므로 후보 선택을 승격 승인으로 해석하지 않으며, 승격하지 않습니다.
+
+252거래일은 `status=insufficient`, `passed=false`이며 이유는 **보정 후 독립 검증 시점 부족**입니다. 보정 후 독립 평가가 없어 성능 개선이나 승격을 주장할 수 없습니다.
+
+**Live forecast는 바뀌지 않았습니다**(`horizons.126.comparison.liveForecastChanged=false`). 이번 추가는 문서 기록만 갱신하며, 모델·전망 데이터·promotion 기준·paper account는 변경하지 않습니다.
