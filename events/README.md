@@ -1,7 +1,9 @@
 # Company event timeline
 
-The stock home, advanced inspector and saved-company detail share the selected
-company's dated event cards. The stock, spot and futures trade calculator UI has
+The stock home, advanced inspector and saved-company detail show company news
+with preliminary impact labels first (see `news/README.md`). The selected
+company's dated SEC event cards and earnings estimates remain in a collapsed
+supplementary section. The stock, spot and futures trade calculator UI has
 been removed. Saved watchlists, notes and valuation assumptions are unchanged.
 
 ## Sources and dates
