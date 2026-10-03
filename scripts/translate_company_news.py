@@ -44,7 +44,7 @@ def short_passage(article):
 
 
 def valid_korean(text):
-    return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text
+    return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text and not text.startswith('한국어 요약 번역을 완료하지')
 
 
 def engine(model_dir):
@@ -76,7 +76,7 @@ def engine(model_dir):
 def verify_engine(translate):
     samples = ['The company announced a product recall for 20 faulty phones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']
     outputs = translate(samples)
-    if len(outputs) != 3 or not all(valid_korean(t) for t in outputs) or '20' not in outputs[0] or not re.search('리콜|회수', outputs[0]) or '6' not in outputs[1] or not re.search('매출|수익|수입', outputs[1]) or not re.search('전망|예상', outputs[2]):
+    if len(outputs) != 3 or not all(valid_korean(t) for t in outputs) or '20' not in outputs[0] or not re.search('리콜|회수|제품 철수', outputs[0]) or '6' not in outputs[1] or not re.search('매출|수익|수입', outputs[1]) or not re.search('전망|예상', outputs[2]):
         raise ValueError('Translation smoke check failed: '+json.dumps(outputs, ensure_ascii=False))
     print(json.dumps({'translationSmokeCheck': outputs}, ensure_ascii=False), flush=True)
 

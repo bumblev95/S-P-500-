@@ -440,6 +440,11 @@ def build(root=ROOT, download=True, now=None, fetcher=fetch, only=None, interval
         if raw is not None:
             try:
                 articles, rejected = parse_feed(raw, tickers, members[tickers[0]]['name'], observed, clock(), other_names)
+                previous_articles = {a['id']: a for a in prior.get('articles', []) if isinstance(a, dict) and 'id' in a}
+                for article in articles:
+                    previous = previous_articles.get(article['id'], {})
+                    if previous.get('title') == article['title'] and previous.get('summary', '') == article.get('summary', '') and isinstance(previous.get('ko'), dict):
+                        article['ko'] = dict(previous['ko'])
                 status = 'ready' if online else 'captured'
                 feed.update(lastSuccessAt=observed, rejectedRows=rejected, sourceHash=hashlib.sha256(raw.encode()).hexdigest())
                 if online:

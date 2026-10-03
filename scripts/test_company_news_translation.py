@@ -58,6 +58,14 @@ class TranslationTests(unittest.TestCase):
             ko = m.translate_snapshot(root, lambda _: ['English only'])['issuers']['1']['articles'][0]['ko']
             self.assertEqual(ko['status'], 'unavailable')
             self.assertIn('번역을 완료하지 못했습니다', ko['summary'])
+            fixed = m.translate_snapshot(root, lambda _: ['테슬라가 차량 486,532대를 인도해 예상을 웃돌았습니다.'])['issuers']['1']['articles'][0]['ko']
+            self.assertEqual(fixed['status'], 'ready')
+
+    def test_financial_smoke_check_rejects_missing_financial_meaning(self):
+        good = ['이 회사는 20개의 결함이 있는 휴대폰에 대한 제품 철수를 발표했습니다.', '매출은 6% 증가했습니다.', '엔비디아는 수익 전망을 높이고 있습니다.']
+        m.verify_engine(lambda _: good)
+        with self.assertRaises(ValueError):
+            m.verify_engine(lambda _: [good[0], '장미가 6%입니다.', good[2]])
 
 
 if __name__ == '__main__': unittest.main()

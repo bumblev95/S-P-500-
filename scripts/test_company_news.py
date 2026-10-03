@@ -181,5 +181,16 @@ class NewsTests(unittest.TestCase):
             self.assertEqual(result['issuers']['1045810']['articles'], [])
             self.assertEqual(result['issuers']['1045810']['feed']['status'], 'ready')
 
+    def test_refresh_reuses_korean_only_when_source_is_identical(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); self.prepare(root)
+            first = m.build(root, now=NOW, fetcher=lambda _: rss(), interval=0)
+            first['issuers']['1045810']['articles'][0]['ko'] = {'summary': '엔비디아가 매출 전망을 높였습니다.'}
+            (root/'news/latest.json').write_text(json.dumps(first))
+            again = m.build(root, now=NOW+timedelta(minutes=1), fetcher=lambda _: rss(), interval=0)
+            self.assertEqual(again['issuers']['1045810']['articles'][0]['ko']['summary'], '엔비디아가 매출 전망을 높였습니다.')
+            changed = m.build(root, now=NOW+timedelta(minutes=2), fetcher=lambda _: rss(description='Changed supplied excerpt'), interval=0)
+            self.assertNotIn('ko', changed['issuers']['1045810']['articles'][0])
+
 
 if __name__ == '__main__': unittest.main()
