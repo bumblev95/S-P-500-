@@ -71,9 +71,11 @@ def engine(model_dir):
             with zipfile.ZipFile(archive) as bundle:
                 entries = {Path(n).name: n for n in bundle.namelist() if not n.endswith('/')}
                 print(json.dumps({'originalModelFiles': sorted(entries)}, ensure_ascii=False), flush=True)
-                selected = [name for name in entries if name.endswith(('.npz', '.spm', '.yml', '.vocab'))]
+                selected = [name for name in entries if name.endswith(('.npz', '.spm', '.yml', '.vocab', '.sh')) or name == 'README.md']
                 for name in selected:
                     (folder/name).write_bytes(bundle.read(entries[name]))
+            for name in ['preprocess.sh', 'postprocess.sh', 'decoder.yml']:
+                print(json.dumps({'originalConfig': name, 'content': (folder/name).read_text()[:2500]}, ensure_ascii=False), flush=True)
             weights = sorted(folder.glob('*.npz'))
             if not weights: raise ValueError('Original model weights missing')
             model_path = next((p for p in weights if p.name == 'model.npz'), weights[0])
@@ -118,6 +120,9 @@ def engine(model_dir):
             atomic_json(model_dir/'source.json', {'url': url, 'sha256': digest, 'license': 'CC-BY-4.0'})
     source = sentencepiece.SentencePieceProcessor(model_file=str(source_model))
     target = sentencepiece.SentencePieceProcessor(model_file=str(target_model))
+    source_vocab = json.loads((model_dir/'source_vocabulary.json').read_text())
+    probes = ['Revenue rose 6%.', 'revenue rose 6%.', 'The company recalls 20 phones.', 'the company recalls 20 phones.']
+    print(json.dumps({'tokenizationProbe': [{'text': t, 'tokens': source.encode(t, out_type=str), 'missing': [p for p in source.encode(t, out_type=str) if p not in source_vocab]} for t in probes]}, ensure_ascii=False), flush=True)
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
         texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
@@ -130,6 +135,7 @@ def engine(model_dir):
 def verify_engine(translate):
     samples = ['The company recalls 20 phones.', 'Revenue rose 6%.', 'Nvidia raises revenue outlook.']
     outputs = translate(samples)
+    print(json.dumps({'translationDiagnostics': translate(['revenue rose 6%.', 'the company recalls 20 phones.', 'The company reported a 6% increase in revenue.', 'The company will recall 20 defective phones.'])}, ensure_ascii=False), flush=True)
     if len(outputs) != 3 or not all(valid_korean(t) for t in outputs) or '20' not in outputs[0] or '6' not in outputs[1] or '전망' not in outputs[2]:
         raise ValueError('Translation smoke check failed: '+json.dumps(outputs, ensure_ascii=False))
     print(json.dumps({'translationSmokeCheck': outputs}, ensure_ascii=False), flush=True)
