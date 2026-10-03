@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "display-only",
   "mode": "shadow-only",
-  "generatedAt": 1790993347198,
+  "generatedAt": 1790993591598,
   "staleAfterMs": 1800000,
   "automaticPromotion": false,
   "defaultStrategyChanged": false,
@@ -28,7 +28,7 @@
   },
   "forecastResearch": {
     "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
-    "generatedAt": "2026-10-03T01:45:06+00:00",
+    "generatedAt": "2026-10-03T02:12:36+00:00",
     "horizons": {
       "126": {
         "status": "research",
@@ -41,7 +41,7 @@
           "consistency": false,
           "direction": false
         },
-        "improvementVsOriginal": -0.0016494861961806606,
+        "improvementVsOriginal": -0.00085960031148824,
         "liveForecastChanged": false,
         "reason": null
       },
@@ -72,9 +72,9 @@
       "thresholdR": 0.15,
       "incumbentThresholdR": 0.1,
       "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
-      "activity": "registration_only",
-      "observations": 1,
-      "latestObservationAt": 1790993347120,
+      "activity": "collecting",
+      "observations": 2,
+      "latestObservationAt": 1790993591313,
       "initialTrainingTrades": 3,
       "assessment": {
         "schemaVersion": 1,
@@ -95,7 +95,7 @@
           "stressCostMultiplier": 2,
           "maxDrawdown": 0.1
         },
-        "asOf": 1790993347120,
+        "asOf": 1790993591313,
         "status": "insufficient",
         "promotionCandidate": false,
         "automaticPromotion": false,
@@ -104,30 +104,29 @@
         "liveTrading": false,
         "gates": {
           "immutableEvidence": true,
-          "completeData": true,
-          "matchedForwardSample": false,
+          "completeData": false,
+          "matchedForwardSample": true,
           "minimumTrades": false,
           "purgedWalkForward": false,
           "costIncludedImprovement": false,
           "drawdownNotWorse": true,
-          "riskNotWorse": false
+          "riskNotWorse": true
         },
         "failedGates": [
-          "matchedForwardSample",
+          "completeData",
           "minimumTrades",
           "purgedWalkForward",
-          "costIncludedImprovement",
-          "riskNotWorse"
+          "costIncludedImprovement"
         ],
         "matchedForward": {
-          "passed": false,
+          "passed": true,
           "commonStart": true,
-          "identicalCurveTimes": false,
+          "identicalCurveTimes": true,
           "chronology": true,
           "noBackfill": true,
-          "observations": 1,
+          "observations": 2,
           "firstAt": 1790993347120,
-          "lastAt": 1790993347120,
+          "lastAt": 1790993591313,
           "forwardDays": 0,
           "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
         },
@@ -138,12 +137,12 @@
           "reason": "Prospective time coverage below frozen minimum"
         },
         "incumbent": {
-          "valid": false,
+          "valid": true,
           "closedTrades": 0,
           "entryDates": 0,
           "netReturn": 0,
           "stressReturn": 0,
-          "markedReturn": null,
+          "markedReturn": 0,
           "expectancyR": null,
           "stressExpectancyR": null,
           "maxDrawdown": 0,
@@ -153,9 +152,9 @@
           "maxEntryExposure": 0,
           "maxConcurrentPositions": 0,
           "maxLeverage": 0,
-          "dailyVolatility": null,
-          "worstDailyLoss": null,
-          "tailDailyLoss": null,
+          "dailyVolatility": 0,
+          "worstDailyLoss": 0,
+          "tailDailyLoss": 0,
           "funding": 0,
           "estimatedFundingHours": 0,
           "fees": 0,
@@ -164,12 +163,12 @@
           "pendingOrders": 0
         },
         "candidate": {
-          "valid": false,
+          "valid": true,
           "closedTrades": 0,
           "entryDates": 0,
           "netReturn": 0,
           "stressReturn": 0,
-          "markedReturn": null,
+          "markedReturn": 0,
           "expectancyR": null,
           "stressExpectancyR": null,
           "maxDrawdown": 0,
@@ -179,9 +178,9 @@
           "maxEntryExposure": 0,
           "maxConcurrentPositions": 0,
           "maxLeverage": 0,
-          "dailyVolatility": null,
-          "worstDailyLoss": null,
-          "tailDailyLoss": null,
+          "dailyVolatility": 0,
+          "worstDailyLoss": 0,
+          "tailDailyLoss": 0,
           "funding": 0,
           "estimatedFundingHours": 0,
           "fees": 0,
@@ -190,10 +189,10 @@
           "pendingOrders": 0
         }
       },
-      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790993347120-2506918ac511/assessments/1790993347120-2414fe2ea7ae.json",
-      "assessmentHash": "2414fe2ea7ae42b2260510c85db83ef8973c696f142b0b76320d6cfd4424c314",
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790993347120-2506918ac511/assessments/1790993591313-7aba8468cd13.json",
+      "assessmentHash": "7aba8468cd13a13733d8bf410ea84488ef87468e19b4341b8ba5f391b895e0a7",
       "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790993347120-2506918ac511/candidate.json",
-      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790993347120-2506918ac511/observations/1790993347120-1b3e5ad1709d.json"
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790993347120-2506918ac511/observations/1790993591313-c77b82376cf7.json"
     },
     {
       "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
