@@ -140,6 +140,31 @@ async function fits(page, selector) {
           assert(await primary.count()>0);
           assert((await primary.locator('.ce-news-reason').allTextContents()).every(t=>t.includes('왜 ')));
           assert((await primary.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
+          // The reported turnaround stays favorable on the actual page; shared
+          // warnings cannot hide issuer-specific price risks after a switch.
+          await page.getByRole('button', {name:'6개월',exact:true}).click();
+          await page.locator('#tickerInput').fill('AMD');
+          await page.locator('#tickerInput').press('Enter');
+          await page.locator('.company-events[data-event-symbol="AMD"] .ce-news-card').first().waitFor();
+          const amdHistory=page.locator('.ce-primary-news .ce-news-card').filter({hasText:'회복·성장 성과'});
+          if(news.issuers[news.symbols.AMD].articles.some(a=>a.id==='news:f602f5defbad7eb740fda350')){
+            assert(await amdHistory.count()>=1);
+            assert((await amdHistory.locator('.ce-impact').allTextContents()).every(x=>x==='호재'));
+            assert((await amdHistory.locator('.ce-news-title').allTextContents()).some(x=>x.includes('시가총액 1조 달러')));
+          }
+          assert(!(await page.locator('.sa-specific-risks').textContent()).includes('시장 상태 확인 보류'));
+          assert(!(await page.locator('.sa-specific-risks').textContent()).includes('AI 예측 활용 보류'));
+          const amdRiskIds=await page.locator('.sa-specific-risks [data-signal]').evaluateAll(nodes=>nodes.map(n=>n.dataset.signal));
+          await fits(page,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
+          await page.locator('.sa-signals').screenshot({path:path.join(output,`issuer-risks-amd-${width}.png`)});
+          await page.locator('#tickerInput').fill('JNJ');
+          await page.locator('#tickerInput').press('Enter');
+          await page.locator('[data-signals-symbol="JNJ"]').waitFor();
+          if((forecasts.stocks.AMD.inputs.return1m<0)!==(forecasts.stocks.JNJ.inputs.return1m<0))
+            assert.notDeepEqual(await page.locator('.sa-specific-risks [data-signal]').evaluateAll(nodes=>nodes.map(n=>n.dataset.signal)),amdRiskIds,
+              'Opposite monthly returns must produce different technical risks');
+          if(forecasts.stocks.JNJ.inputs.return1m<0)assert((await page.locator('.sa-specific-risks').textContent()).includes('1개월 수익률'));
+          await fits(page,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
         }
       }
       await page.close();
@@ -181,6 +206,55 @@ async function fits(page, selector) {
       await fits(coveragePage,'#sourceStatus > div');
     }
     await coveragePage.close();
+    // Deterministic price states share the same failed market/AI gates. Verify
+    // actual risk rows survive stock switches and a missing forecast horizon.
+    const riskPage=await browser.newPage({viewport:{width:390,height:900}});
+    riskPage.on('pageerror',e=>errors.push(e.message));
+    await riskPage.addInitScript(now=>{
+      const OriginalDate=Date;
+      window.Date=class extends OriginalDate {
+        constructor(...args){super(...(args.length?args:[now]));}
+        static now(){return now;}
+      };
+    },clock);
+    const day=new Date(clock).toISOString().slice(0,10),end=Date.parse(day);
+    const history=Array.from({length:80},(_,i)=>({date:new Date(end-(79-i)*86400000).toISOString().slice(0,10),
+      close:i===79?100:[100,110,100,90,100][i%5]}));
+    const entry={status:'ready',fresh:true,asOf:day,price:100,history,
+      predictions:{126:{...forecasts.stocks.NVDA.predictions[126],anchor:100,base:110,bear:90,bull:120}}};
+    const fixtures={...forecasts,stocks:{
+      NVDA:{...entry,symbol:'NVDA',inputs:{ma20:100,ma50:105,ma200:110,return1m:-.07,return3m:-.12,volatility4m:.75}},
+      XOM:{...entry,symbol:'XOM',history:history.map((q,i)=>({...q,close:60+40*i/79})),
+        inputs:{ma20:97,ma50:90,ma200:80,return1m:.25,return3m:.35,volatility4m:.75}}
+    }};
+    await riskPage.route('**/config/*.json*',route=>route.fulfill({json:{sheetCsvUrl:'',submitUrl:''}}));
+    await riskPage.route('**/forecasts/latest.json*',route=>route.fulfill({json:fixtures}));
+    await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:null}));
+    await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:null}));
+    await ready(riskPage,base+'index.html','.sa-specific-risks');
+    const ids=()=>riskPage.locator('.sa-specific-risks [data-signal]').evaluateAll(nodes=>nodes.map(n=>n.dataset.signal));
+    const weakIds=await ids();
+    for(const id of ['ma50','ma-order','return1m','return3m','volatility'])assert(weakIds.includes(id));
+    assert(weakIds.length>=5,'Common gates must not consume the first four price-risk slots');
+    assert.equal(await riskPage.locator('.sa-specific-risks [data-signal="weak-trend"]').count(),0);
+    for(const id of ['market-data','ai-validation','weak-trend'])assert.equal(await riskPage.locator('.sa-limitations [data-signal="'+id+'"]').count(),1);
+    await fits(riskPage,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
+    await riskPage.locator('.sa-signals').screenshot({path:path.join(output,'risk-weak-fixture.png')});
+    await riskPage.locator('#tickerInput').fill('XOM');
+    await riskPage.locator('#tickerInput').press('Enter');
+    await riskPage.locator('[data-signals-symbol="XOM"]').waitFor();
+    const hotIds=await ids();
+    assert.notDeepEqual(hotIds,weakIds);
+    assert(hotIds.includes('overheated'));
+    assert(!hotIds.includes('ma50'));
+    for(const id of ['market-data','ai-validation'])assert.equal(await riskPage.locator('.sa-limitations [data-signal="'+id+'"]').count(),1);
+    await fits(riskPage,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
+    await riskPage.locator('.sa-signals').screenshot({path:path.join(output,'risk-hot-fixture.png')});
+    await riskPage.getByRole('button',{name:'1년',exact:true}).click();
+    await riskPage.locator('.guide').filter({hasText:'선택 기간의 전망 자료가 부족'}).waitFor();
+    assert.deepEqual(await ids(),hotIds,'Missing forecast must preserve observed price risks');
+    assert((await riskPage.locator('.sa-limitations [data-signal="ai-validation"]').textContent()).includes('1년'));
+    await riskPage.close();
     // Failed/stale feeds get grey indicators without a pointer on the real page.
     const page = await browser.newPage({viewport:{width:390,height:900}});
     page.on('pageerror', e => errors.push(e.message));
@@ -237,6 +311,6 @@ async function fits(page, selector) {
     assert.equal(await page.locator('[data-indicator="단기 선물 진입"] .vi-pointer').count(), 0);
     await page.locator('[data-indicator="단기 선물 진입"]').screenshot({path:path.join(output,'futures-unavailable.png')});
     assert.deepEqual(errors, [], 'No uncaught browser errors');
-    console.log('Browser: 320/390/1280 px, four stock/spot pages, company news, impact reasons, supplementary filings and source details, stock/horizon switches, failed event/stock/exchange feeds and risk table passed.');
+    console.log('Browser: 320/390/1280 px, four stock/spot pages, company news, distinct weak/overheated risks, shared entry states, missing forecast horizon, stock/horizon switches, failed feeds and risk table passed.');
   } finally {await browser?.close(); await new Promise(resolve => server.close(resolve));}
 })().catch(e => {console.error(e); process.exitCode = 1;});

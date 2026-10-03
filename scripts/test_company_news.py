@@ -56,6 +56,32 @@ class NewsTests(unittest.TestCase):
         self.assertTrue(m.mentions('Agilent (NYSE: A) reports results', ['A'], ['agilent']))
         self.assertTrue(m.mentions('AT&T reports results', ['T'], m.aliases(['T'], 'AT&T')))
 
+    def test_historical_turnaround_and_completed_exit_are_not_current_bankruptcy(self):
+        title = 'AMD is the first woman-led company to hit $1 trillion'
+        summary = 'AMD CEO Lisa Su led the AI chipmaker from near-bankruptcy to a $1 trillion market cap.'
+        result = m.classify(title, ['AMD'], m.aliases(['AMD'], 'Advanced Micro Devices'), summary=summary)
+        self.assertEqual(result['status'], 'positive')
+        self.assertEqual(result['topics'], ['회복·성장 성과'])
+        self.assertEqual(result['evidence'], [summary])
+        self.assertIn('과거', result['reason'])
+        for current in ['AMD files for bankruptcy', 'AMD is near-bankruptcy', 'AMD faces an export ban']:
+            with self.subTest(current=current): self.assertEqual(self.label(current, 'AMD', 'AMD'), 'negative')
+        mixed = m.classify(title, ['AMD'], ['amd'], summary=summary+' AMD faces an export ban.')
+        self.assertEqual(mixed['status'], 'mixed')
+        still_adverse = m.classify(title, ['AMD'], ['amd'], summary=summary[:-1]+' and AMD files for bankruptcy again.')
+        self.assertEqual(still_adverse['status'], 'mixed')
+        for uncertain in ['AMD could go from near-bankruptcy to a $1 trillion market cap',
+                          'AMD may go from near-bankruptcy to profitability',
+                          'AMD is expected to emerge from bankruptcy']:
+            with self.subTest(uncertain=uncertain): self.assertEqual(self.label(uncertain, 'AMD', 'AMD'), 'unclear')
+        for recovered in ['AMD emerged from Chapter 11 bankruptcy', 'AMD exits bankruptcy']:
+            with self.subTest(recovered=recovered): self.assertEqual(self.label(recovered, 'AMD', 'AMD'), 'positive')
+        rival = m.classify('AMD company update', ['AMD'], ['amd'], summary='Intel went from near-bankruptcy to profitability.')
+        self.assertEqual(rival['status'], 'unclear')
+        subsidiary = m.classify('Why EchoStar Stock Crushed it on Friday', ['ECHO'], ['echostar'],
+                               summary='An important subsidiary of the company emerged from Chapter 11 bankruptcy.')
+        self.assertEqual(subsidiary['status'], 'positive')
+
     def test_brand_names_technical_upgrade_and_buyer_or_plaintiff_roles(self):
         self.assertEqual(self.label('Agilent introduces a new sample preparation system', 'A', 'Agilent Technologies'), 'positive')
         label=m.classify('NetApp unveils Novus, AI data engine upgrades to power AI', ['NTAP'], ['netapp'])
