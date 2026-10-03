@@ -10,6 +10,9 @@ on:
       - 'assets/status-indicators.css'
       - 'assets/stock-assessment*'
       - 'assets/decision-support*'
+      - 'assets/company-events*'
+      - 'scripts/*company_events*'
+      - 'events/**'
       - 'assets/advanced*'
       - 'assets/crypto*'
       - 'assets/perp*'
@@ -27,6 +30,9 @@ on:
       - 'assets/status-indicators.css'
       - 'assets/stock-assessment*'
       - 'assets/decision-support*'
+      - 'assets/company-events*'
+      - 'scripts/*company_events*'
+      - 'events/**'
       - 'assets/advanced*'
       - 'assets/crypto*'
       - 'assets/perp*'
@@ -44,6 +50,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s scripts -p test_company_events.py
+      - run: node scripts/test_company_events.cjs
       - run: node scripts/test_status_indicators.cjs
       - run: node scripts/test_stock_assessment.cjs
       - run: node scripts/test_crypto_page.cjs

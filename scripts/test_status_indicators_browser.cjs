@@ -72,6 +72,14 @@ async function fits(page, selector) {
             bad:'rgb(255, 127, 145)',muted:'rgb(166, 184, 203)'};
           assert.equal(css.color, palette[css.classes.match(/\bvi-(good|warn|bad|muted)\b/)[1]]);
         }
+        if (file !== 'crypto.html') {
+          await page.locator('.company-events .ce-event').first().waitFor();
+          assert.equal(await page.locator('.company-events').getAttribute('data-event-symbol'), 'NVDA');
+          await page.locator('.company-events .ce-event').first().locator('summary').click();
+          await fits(page, '.company-events, .ce-event, .ce-event summary, .ce-body');
+          await page.locator('.company-events').screenshot({path:path.join(output, `events-${file.replace('.html','')}-${width}.png`)});
+          assert.equal(await page.locator('#tradePlanner, .ds-planner').count(), 0);
+        }
         const gauge = page.locator(selector).first();
         await gauge.screenshot({path:path.join(output, `${file.replace('.html','')}-${width}.png`)});
         if (file === 'index.html') {
@@ -81,6 +89,11 @@ async function fits(page, selector) {
           await risk.screenshot({path:path.join(output, `risk-${width}.png`)});
           await page.getByRole('button', {name:'1년',exact:true}).click();
           assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 2);
+          await page.locator('#tickerInput').fill('XOM');
+          await page.locator('#tickerInput').press('Enter');
+          await page.locator('.company-events[data-event-symbol="XOM"]').waitFor();
+          assert.equal(await page.locator('.company-events[data-event-symbol="NVDA"]').count(), 0);
+          await page.locator('.company-events .ce-event').first().waitFor();
         }
       }
       await page.close();
@@ -101,6 +114,12 @@ async function fits(page, selector) {
     // Fixture responses exercise the exchange page only; no market files change.
     let failed = false;
     await page.unrouteAll();
+    await page.route('**/events/latest.json*', route => route.fulfill({status:503, json:{error:'QA unavailable'}}));
+    await ready(page, base + 'index.html', '.company-events');
+    await page.locator('.ce-status').filter({hasText:'자료 읽기 실패'}).waitFor();
+    assert.equal(await page.locator('.company-events .ce-event').count(), 0);
+    await page.locator('.company-events').screenshot({path:path.join(output,'events-unavailable.png')});
+    await page.unroute('**/events/latest.json*');
     await page.route('https://api.hyperliquid.xyz/info', route => {
       if (failed) return route.fulfill({status:403, json:{error:'QA blocked feed'}});
       const body = route.request().postDataJSON(), now = Date.now();
@@ -122,6 +141,6 @@ async function fits(page, selector) {
     assert.equal(await page.locator('[data-indicator="단기 선물 진입"] .vi-pointer').count(), 0);
     await page.locator('[data-indicator="단기 선물 진입"]').screenshot({path:path.join(output,'futures-unavailable.png')});
     assert.deepEqual(errors, [], 'No uncaught browser errors');
-    console.log('Browser: 320/390/1280 px, four stock/spot pages, risk table, horizon switch and failed stock/exchange feeds passed.');
+    console.log('Browser: 320/390/1280 px, four stock/spot pages, event cards and source details, stock/horizon switches, failed event/stock/exchange feeds and risk table passed.');
   } finally {await browser?.close(); await new Promise(resolve => server.close(resolve));}
 })().catch(e => {console.error(e); process.exitCode = 1;});
