@@ -47,6 +47,23 @@ def valid_korean(text):
     return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text
 
 
+def separate_vocabularies(model_dir, tokenizer):
+    """CTranslate2's Marian converter registers one vocabulary for both sides.
+
+    This OPUS model uses separate English/Korean vocabularies with equal sizes.
+    Retain the converted weight row order, but give each side its own token
+    strings; otherwise even correctly decoded Korean produces unrelated text.
+    """
+    shared = model_dir/'shared_vocabulary.json'
+    source_path = model_dir/'source_vocabulary.json'
+    size = len(json.loads((shared if shared.exists() else source_path).read_text()))
+    for side, encoder in [('source', tokenizer.encoder), ('target', tokenizer.target_encoder)]:
+        ordered = {value: token for token, value in encoder.items()}
+        if any(i not in ordered for i in range(size)): raise ValueError('Incomplete '+side+' vocabulary')
+        atomic_json(model_dir/(side+'_vocabulary.json'), [ordered[i] for i in range(size)])
+    if shared.exists(): shared.unlink()
+
+
 def engine(model_dir):
     import ctranslate2
     from transformers import MarianTokenizer
@@ -58,6 +75,7 @@ def engine(model_dir):
         TransformersConverter(MODEL).convert(str(model_dir), quantization='int8')
         MarianTokenizer.from_pretrained(MODEL).save_pretrained(tokenizer_dir)
     tokenizer = MarianTokenizer.from_pretrained(tokenizer_dir, local_files_only=True)
+    separate_vocabularies(model_dir, tokenizer)
     translator = ctranslate2.Translator(str(model_dir), device='cpu', compute_type='int8', inter_threads=1, intra_threads=2)
     def translate(texts):
         texts = [unicodedata.normalize('NFKC', t).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-') for t in texts]
