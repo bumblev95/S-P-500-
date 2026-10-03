@@ -1,11 +1,12 @@
 import unittest
 import json
+import io
 import tempfile
 from unittest.mock import patch
 from pathlib import Path
 from urllib.error import HTTPError
 from datetime import date, datetime, timezone
-from build_market_context import parse_csv, parse_table, collect_series, summarize, funding, credit_state, parse_news, build
+from build_market_context import get, parse_csv, parse_table, collect_series, summarize, funding, credit_state, parse_news, build
 
 class Tests(unittest.TestCase):
     def setUp(self):
@@ -15,6 +16,84 @@ class Tests(unittest.TestCase):
         self.assertEqual(parse_csv('DATE,NFCI\n2026-09-01,.\n2026-09-02,nan\n2026-09-03,0.4\n2027-01-01,2','NFCI',date(2026,9,11)), [('2026-09-03',0.4)])
     def test_stale(self):
         self.assertEqual(summarize('NFCI',[('2026-01-01',-1)],date(2026,9,11))['status'],'stale')
+
+    def test_fred_timeout_is_shorter_without_changing_other_sources(self):
+        for url, timeout in [
+            ('https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI',10),
+            ('https://fred.stlouisfed.org/data/NFCI.txt',10),
+            ('https://www.federalreserve.gov/feeds/press_all.xml',30),
+        ]:
+            with self.subTest(url=url), patch('build_market_context.urlopen',return_value=io.BytesIO(b'\xef\xbb\xbfdata')) as opened:
+                self.assertEqual(get(url),'data')
+                self.assertEqual(opened.call_args.kwargs['timeout'],timeout)
+                request=opened.call_args.args[0]
+                self.assertEqual(request.get_header('User-agent'),'PublicMarketMonitor/1.0')
+                if timeout==10:
+                    self.assertEqual(request.get_header('Accept'),'text/csv,text/plain,text/html,*/*')
+                else:
+                    self.assertIsNone(request.get_header('Accept'))
+
+    def test_both_endpoints_timeout_is_unavailable_and_records_both_errors(self):
+        calls=[]
+        def fail(url):
+            calls.append(url)
+            raise TimeoutError()
+        rows, meta=collect_series('NFCI',date(2026,10,3),fail)
+        self.assertEqual(rows,[])
+        self.assertEqual(meta['fetchStatus'],'unavailable')
+        self.assertEqual(meta['fetchError'],'csv: TimeoutError; table: TimeoutError')
+        self.assertEqual(len(calls),2)
+
+    def test_real_get_timeout_still_uses_table_fallback(self):
+        table=b'<tr><th scope="row">2026-10-02</th><td>0</td></tr>'
+        with patch('build_market_context.urlopen',side_effect=[TimeoutError(),io.BytesIO(table)]) as opened:
+            rows, meta=collect_series('NFCI',date(2026,10,3),get)
+        self.assertEqual(rows,[('2026-10-02',0)])
+        self.assertEqual(meta['fetchStatus'],'ready')
+        self.assertEqual(meta['fetchWarnings'],['csv: TimeoutError'])
+        self.assertTrue(meta['dataUrl'].endswith('/data/NFCI.txt'))
+        self.assertTrue(all(call.kwargs['timeout']==10 for call in opened.call_args_list))
+
+    def test_http_200_without_observations_is_not_collection_success(self):
+        responses=['<html>Service unavailable</html>', '#2026-10-02|nan\n#2026-10-03|.']
+        with patch('build_market_context.get',side_effect=responses) as fetch:
+            rows, meta=collect_series('NFCI',date(2026,10,3),fetch)
+        self.assertEqual(rows,[])
+        self.assertEqual(meta['fetchStatus'],'unavailable')
+        self.assertEqual(meta['fetchError'],'csv: ValueError; table: ValueError')
+        self.assertEqual(fetch.call_count,2)
+
+    def test_successful_fetch_of_old_observations_stays_stale(self):
+        now=datetime(2026,10,3,tzinfo=timezone.utc)
+        def old_data(url):
+            if 'fredgraph' in url:
+                key=url.split('id=')[1].split('&')[0]
+                return 'observation_date,'+key+'\n2026-09-01,0\n'
+            if 'ebp_csv' in url: return 'date,gz_spread,ebp\n2026-07-01,1,0\n'
+            return '<rss><channel/></rss>'
+        with tempfile.TemporaryDirectory() as tmp:
+            result=build(Path(tmp),now,old_data)
+        by={q['id']:q for q in result['indicators']}
+        for key in ('DGS10','DTWEXBGS','NFCI','STLFSI4','SOFR','IORB'):
+            self.assertEqual(by[key]['status'],'stale',key)
+            self.assertEqual(by[key]['fetchStatus'],'ready',key)
+            self.assertFalse(by[key]['fromCache'],key)
+            self.assertEqual(by[key]['lastSuccessAt'],now.isoformat(),key)
+        self.assertEqual(result['credit']['status'],'unknown')
+
+    def test_total_failure_without_cache_never_becomes_ready_or_zero(self):
+        def fail(url): raise TimeoutError()
+        with tempfile.TemporaryDirectory() as tmp:
+            result=build(Path(tmp),datetime(2026,10,3,tzinfo=timezone.utc),fail)
+        self.assertEqual(result['credit']['status'],'unknown')
+        self.assertIsNone(result['credit']['score'])
+        self.assertTrue(result['errors'])
+        for entry in result['indicators']:
+            self.assertEqual(entry['status'],'missing')
+            self.assertEqual(entry['fetchStatus'],'unavailable')
+            self.assertIsNone(entry['value'])
+            self.assertFalse(entry['fromCache'])
+            self.assertNotIn('lastSuccessAt',entry)
     def test_funding_aligned(self):
         a=[('2026-09-08',4),('2026-09-09',4),('2026-09-10',4)]
         b=[('2026-09-08',3.6),('2026-09-09',3.6),('2026-09-10',3.6),('2026-09-11',8)]
@@ -74,11 +153,19 @@ class Tests(unittest.TestCase):
                 self.assertEqual(b[key]['asOf'],a[key]['asOf'])
                 self.assertEqual(b[key].get('lastSuccessAt'),a[key].get('lastSuccessAt'), key)
                 self.assertTrue(b[key]['fromCache'])
+                self.assertEqual(b[key]['fetchStatus'],'unavailable')
+                self.assertEqual(b[key]['lastAttemptAt'],'2026-09-15T20:00:00+00:00')
             self.assertEqual(b['NFCI']['status'],'ready')
             self.assertEqual(b['NFCI']['value'],0)
             self.assertEqual(b['GZ_SPREAD']['status'],'stale')
             self.assertEqual(a['GZ_SPREAD']['status'],'ready') # 75 calendar days
             self.assertEqual(b['FUNDING']['severity'],a['FUNDING']['severity'])
+            repeated=build(root,datetime(2026,9,16,20,tzinfo=timezone.utc),fail)
+            for q in repeated['indicators']:
+                self.assertEqual(q.get('lastSuccessAt'),a[q['id']].get('lastSuccessAt'))
+                self.assertEqual(q['asOf'],a[q['id']]['asOf'])
+                self.assertTrue(q['fromCache'])
+                self.assertEqual(q['fetchStatus'],'unavailable')
             stale=build(root,datetime(2026,10,15,tzinfo=timezone.utc),fail)
             self.assertEqual(next(q for q in stale['indicators'] if q['id']=='NFCI')['status'],'stale')
             recovered=build(root,now,success)

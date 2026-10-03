@@ -46,6 +46,15 @@ when supplied, with unavailable metrics left absent. Missing price data cannot
 look like an absence of risk. This changes explanations only: scores, horizons,
 entry gates, model eligibility and market thresholds are unchanged.
 
+The visible `진입 조건·공통 상태` panel also holds the trend-score entry
+threshold and an eligible AI model's downward direction. These gates do not
+occupy the issuer's technical/price risk list. Every original `plan.blocks`
+entry maps to exactly one risk or status explanation; an unknown blocker or
+one whose technical inputs cannot be shown is retained explicitly in the
+status panel. Missing forecast periods still render both explanation panels.
+Regression tests compare risk identifiers for weakening and overheated price
+states under the same shared gates, rather than merely comparing ticker names.
+
 ## Prospective ledger and model promotion
 
 `build_decision_support.py` captures publicly displayed stock/spot learned

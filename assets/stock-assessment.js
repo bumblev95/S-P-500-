@@ -100,12 +100,12 @@
           finite(p.indicators.z)?'20일 가격 편차 '+p.indicators.z.toFixed(2):''].filter(Boolean).join(' · ');
         add(negative,'overheated','단기 과열 · 추격 주의',values+'. RSI 75 또는 가격 편차 2.5를 넘어 단기 되돌림에 주의할 구간입니다.');
       }
-      if(a.score<60)add(negative,'weak-trend','단기 추세 '+a.score+'/100 · 진입 검토 기준 미달',
-        '이동평균·실제 수익률로 본 가격 흐름입니다. 확인 기준은 60점이며 상승 확률이 아닙니다.');
-      if(a.ai.eligible&&a.ai.forecast.direction==='down')add(negative,'model-down',
-        (a.horizon===252?'1년':'6개월')+' AI 전망이 하락 방향',
-        '검증 조건을 통과한 연구 전망도 하락을 보장하지는 않습니다.');
     }
+    if(a.score!==null&&a.score<60)add(limitations,'weak-trend','추세 점수 진입 기준 미달 · '+a.score+'/100',
+      '신규 진입 검토 기준은 60점입니다. 가격 흐름의 점수이며 상승 확률이 아닙니다.');
+    if(a.ai.eligible&&a.ai.forecast.direction==='down')add(limitations,'model-down',
+      (a.horizon===252?'1년':'6개월')+' AI 전망이 하락 방향 · 신규 진입 보류',
+      '검증 조건을 통과한 연구 전망이 하락 방향이어서 신규 진입을 보류합니다. 하락을 보장하는 뜻은 아닙니다.');
     if(a.score===null||p.blocks.some(b=>/가격 데이터|종가|변동성·지지|추세 자료/.test(b))){
       add(limitations,'price-data','종목 가격 자료 확인 필요',
         '기준일 '+(e.asOf||'없음')+' · 확인된 일별 종가 '+p.indicators.rows.length+'개. '+
@@ -134,6 +134,24 @@
       add(limitations,'ai-validation',(a.horizon===252?'1년':'6개월')+' AI 예측 활용 보류',
         [a.ai.reason,...metrics].filter(Boolean).join('. ')+'. 검증 결과가 부족해 신규 진입 판단에 활용하지 않습니다.');
     }
+    // Assign every entry blocker to one visible explanation. New or unrenderable
+    // blockers remain explicit in the status panel rather than disappearing.
+    const destinations={
+      '가격 데이터 갱신 필요':'price-data','실제 일별 종가 60개 이상 필요':'price-data',
+      '변동성·지지 자료 부족':'price-data','추세 자료 확인 필요':'price-data',
+      '시장 위험 데이터 확인 필요':'market-data','시장·신용 경고: 신규 진입 보류':'market-warning',
+      '실제 저항선 기준 손익비 부족':negative.some(x=>x.id==='reward-risk')?'reward-risk':'resistance-missing',
+      '단기 과열: 추격 주의':'overheated','AI 예측 검증 조건 미충족':'ai-validation',
+      '학습 모델 하락 우세':'model-down','추세 점수가 진입 검토 기준 60에 못 미칩니다.':'weak-trend'
+    };
+    for(const [index,block] of [...new Set(p.blocks)].entries()){
+      let row=[...negative,...limitations].find(x=>x.id===destinations[block]);
+      if(!row){
+        add(limitations,'entry-blocker-'+index,block,'이 진입 조건이 충족되지 않아 신규 진입을 보류합니다.');
+        row=limitations.at(-1);
+      }
+      (row.blocks||(row.blocks=[])).push(block);
+    }
     return {positive,negative,limitations,available:a.score!==null};
   }
   function signalPanels(entry,a,market,now=Date.now()){
@@ -146,8 +164,8 @@
       (rows(s.positive,'positive','✓')||'<p>확인한 가격 지표에서 뚜렷한 긍정 신호가 없습니다.</p>')+'</div></section>'+
       '<section class="panel signalPanel sa-specific-risks"><h3 class="badText">꼭 확인할 위험 · '+esc(entry.symbol)+'</h3><div class="signals">'+
       (rows(s.negative,'negative','!')||'<p>'+empty+' 기업 실적·회사 뉴스는 별도로 확인하세요.</p>')+'</div></section></div>'+
-      (s.limitations.length?'<section class="panel signalPanel sa-limitations" aria-label="데이터·AI 확인 사항"><h3>데이터·AI 확인 사항</h3>'+
-      '<p class="sa-limitations-note">자료 갱신과 모델 검증 조건도 신규 진입을 보류하는 이유가 됩니다.</p><div class="signals">'+
+      (s.limitations.length?'<section class="panel signalPanel sa-limitations" aria-label="진입 조건·공통 상태"><h3>진입 조건·공통 상태</h3>'+
+      '<p class="sa-limitations-note">현재 판단: '+esc(a.decision)+'. 시장 상태·자료 갱신·AI 검증·추세 점수 조건을 함께 확인하세요.</p><div class="signals">'+
       rows(s.limitations,'caution','i')+'</div></section>':'');
   }
   function panel(a){
