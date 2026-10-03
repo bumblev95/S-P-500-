@@ -100,6 +100,7 @@ async function fits(page, selector) {
           for (const label of market.credit.missingFamilies) assert(coverage.includes(label));
           assert(!coverage.includes(`${market.credit.coverage}개 지표`), 'Credit coverage counts families');
           await fits(page, '#sourceStatus > div');
+          await page.locator('#sourceStatus').screenshot({path:path.join(output, `credit-coverage-${width}.png`)});
         }
         if (file !== 'crypto.html') {
           await page.locator('.company-events .ce-news-card').first().waitFor();
