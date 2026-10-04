@@ -1,0 +1,5035 @@
+{
+  "version": "indicator-blends-v1",
+  "generatedAt": "2026-10-04T04:33:44.242002+00:00",
+  "registeredAt": "2026-10-04T04:28:20.473516+00:00",
+  "sourceCommit": "c67f12f1242c85bb570561ed5fed9d635c8afd8e",
+  "parentResearchCommit": "87478265474562eac52137f690b8a3fd9fb94102",
+  "sourceModel": "environment-challenger-v7-direction-selection",
+  "sourceGeneratedAt": "2026-10-03T08:44:27.996567+00:00",
+  "sourceHash": "ec8d4e97347d3ef7a92028bb09f6ba68d818c6e31970d82f5b197f48586c3ecc",
+  "protocolHash": "69a717847de8391182e625c3f293cb13d4afa79893f84c12452571762175a285",
+  "codeHash": "b1f22c876086e20a7926351f5bbedc650a9520b534faba258a38b5603893a2a9",
+  "jointCodeHash": "75f5ebaa9c6a61b2aea14475102de2f5720022b32c7fcaa4376054d6ec88df19",
+  "universeHash": "239e4ba986a7b3acfb5bbc415caa0251a80e76bf927ccba4e75a1e8d0e47763a",
+  "sklearnVersion": "1.8.0",
+  "historicalHoldoutRevisited": true,
+  "numericalBlendHasNoProbabilityClaim": true,
+  "uiChanged": false,
+  "liveForecastChanged": false,
+  "selection": "none",
+  "horizons": {
+    "126": {
+      "status": "research",
+      "evaluationStart": "2021-09-03",
+      "evaluatedDates": [
+        "2021-09-03",
+        "2022-03-11",
+        "2022-09-16",
+        "2023-03-24",
+        "2023-09-29",
+        "2024-04-05",
+        "2024-10-11",
+        "2025-04-25",
+        "2025-10-31"
+      ],
+      "evaluation": {
+        "noChange": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.16701942589253566,
+          "dateMeanMape": 0.166970505099378,
+          "p90Mape": 0.34293308223340707,
+          "logMae": 0.17113326187095246,
+          "directionAccuracy": 0.08512565089427213,
+          "returnDirectionAccuracy": 0.08512565089427213,
+          "balancedDirectionAccuracy": 0.3333333333333333,
+          "upRecall": 0.0,
+          "downRecall": 0.0,
+          "flatRecall": 1.0,
+          "downPrecision": null,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 0,
+            "0": 4417,
+            "1": 0
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.19507084260678975,
+              "directionAccuracy": 0.07867494824016563,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.168470675295513
+            },
+            "2022-03-11": {
+              "mape": 0.127300363793591,
+              "directionAccuracy": 0.10245901639344263,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.12118545172360838
+            },
+            "2022-09-16": {
+              "mape": 0.13997487076760246,
+              "directionAccuracy": 0.10429447852760736,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.13945218225703387
+            },
+            "2023-03-24": {
+              "mape": 0.13629329250889305,
+              "directionAccuracy": 0.10816326530612246,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.16062319903224798
+            },
+            "2023-09-29": {
+              "mape": 0.18453138195693683,
+              "directionAccuracy": 0.04897959183673469,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.2530044955509967
+            },
+            "2024-04-05": {
+              "mape": 0.14585192363147537,
+              "directionAccuracy": 0.09959349593495935,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.1638354005965737
+            },
+            "2024-10-11": {
+              "mape": 0.19634229845407677,
+              "directionAccuracy": 0.07302231237322515,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.16122572925532153
+            },
+            "2025-04-25": {
+              "mape": 0.18262740889297416,
+              "directionAccuracy": 0.07056451612903226,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.26466426636245316
+            },
+            "2025-10-31": {
+              "mape": 0.19474216328206254,
+              "directionAccuracy": 0.08064516129032258,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.2336341937081895
+            }
+          },
+          "returnMae": 0.1853354905795245,
+          "dateMeanReturnMae": 0.18512173264243753,
+          "p90ReturnError": 0.37232832113261777,
+          "downWarnings": 0,
+          "falseDownWarnings": 0,
+          "falseDownWarningRate": 0.0,
+          "pointDirectionAgreement": 1.0
+        },
+        "priceOnly": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.16986403692592933,
+          "dateMeanMape": 0.169860865436272,
+          "p90Mape": 0.356465673416555,
+          "logMae": 0.1678386276350327,
+          "directionAccuracy": 0.5112067013810279,
+          "returnDirectionAccuracy": 0.5112067013810279,
+          "balancedDirectionAccuracy": 0.3218665086674608,
+          "upRecall": 0.9011299435028248,
+          "downRecall": 0.0006397952655150352,
+          "flatRecall": 0.06382978723404255,
+          "downPrecision": 0.2,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 5,
+            "0": 363,
+            "1": 4049
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.21849881989385833,
+              "directionAccuracy": 0.3498964803312629,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.18306766243363387
+            },
+            "2022-03-11": {
+              "mape": 0.13732015520851576,
+              "directionAccuracy": 0.45491803278688525,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.12527394524076974
+            },
+            "2022-09-16": {
+              "mape": 0.14859147800535522,
+              "directionAccuracy": 0.45194274028629855,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.14305721054466464
+            },
+            "2023-03-24": {
+              "mape": 0.1341187354252249,
+              "directionAccuracy": 0.5040816326530613,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.15441823419447356
+            },
+            "2023-09-29": {
+              "mape": 0.16297047917082322,
+              "directionAccuracy": 0.8489795918367347,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.2240032679734959
+            },
+            "2024-04-05": {
+              "mape": 0.13788989926071551,
+              "directionAccuracy": 0.6422764227642277,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.15018242405845716
+            },
+            "2024-10-11": {
+              "mape": 0.21872369158109548,
+              "directionAccuracy": 0.2738336713995943,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.17672754571002136
+            },
+            "2025-04-25": {
+              "mape": 0.17584718904749302,
+              "directionAccuracy": 0.5342741935483871,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.252586370211326
+            },
+            "2025-10-31": {
+              "mape": 0.19478734133336645,
+              "directionAccuracy": 0.5383064516129032,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.2271745456039745
+            }
+          },
+          "returnMae": 0.18200469213669399,
+          "dateMeanReturnMae": 0.1818323562189796,
+          "p90ReturnError": 0.3652696411969696,
+          "downWarnings": 5,
+          "falseDownWarnings": 4,
+          "falseDownWarningRate": 0.001401541695865452,
+          "pointDirectionAgreement": 1.0
+        },
+        "joint_logistic": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.18827969169025308,
+          "dateMeanMape": 0.18837777991136587,
+          "p90Mape": 0.3994900218757943,
+          "logMae": 0.17983963922373203,
+          "directionAccuracy": 0.547430382612633,
+          "returnDirectionAccuracy": 0.46162553769526826,
+          "balancedDirectionAccuracy": 0.33951569718836055,
+          "upRecall": 0.9027441485068604,
+          "downRecall": 0.11580294305822136,
+          "flatRecall": 0.0,
+          "downPrecision": 0.3842887473460722,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 471,
+            "0": 0,
+            "1": 3946
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.26856859057254123,
+              "directionAccuracy": 0.35196687370600416,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.2209700318042405
+            },
+            "2022-03-11": {
+              "mape": 0.19741163385217259,
+              "directionAccuracy": 0.46311475409836067,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.1746374646252767
+            },
+            "2022-09-16": {
+              "mape": 0.14075088521233559,
+              "directionAccuracy": 0.4110429447852761,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.14316685690066214
+            },
+            "2023-03-24": {
+              "mape": 0.1329556700797757,
+              "directionAccuracy": 0.6061224489795919,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.1518481466208326
+            },
+            "2023-09-29": {
+              "mape": 0.17341165793332072,
+              "directionAccuracy": 0.8653061224489796,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.23786818426458706
+            },
+            "2024-04-05": {
+              "mape": 0.14108172496158453,
+              "directionAccuracy": 0.6646341463414634,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.14325846924587257
+            },
+            "2024-10-11": {
+              "mape": 0.2761798386059417,
+              "directionAccuracy": 0.2920892494929006,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.22061556938690788
+            },
+            "2025-04-25": {
+              "mape": 0.16756378976583836,
+              "directionAccuracy": 0.7116935483870968,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.23531120225150343
+            },
+            "2025-10-31": {
+              "mape": 0.19747622821878258,
+              "directionAccuracy": 0.5564516129032258,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.22745139223744187
+            }
+          },
+          "brier": 0.6760845102185179,
+          "priorBrier": 0.5719376434473429,
+          "rangeCoverage": 0.6255765197505733,
+          "directionReturnAgreement": 0.8333710663346162,
+          "returnMae": 0.19508673142406482,
+          "dateMeanReturnMae": 0.19501414637081385,
+          "p90ReturnError": 0.3912735902089087,
+          "downWarnings": 471,
+          "falseDownWarnings": 290,
+          "falseDownWarningRate": 0.10161177295024527,
+          "pointDirectionAgreement": 0.8333710663346162
+        },
+        "fixed_half": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.1770887870908041,
+          "dateMeanMape": 0.17713217809570506,
+          "p90Mape": 0.37065814214265486,
+          "logMae": 0.1719674865588391,
+          "directionAccuracy": 0.512112293411818,
+          "returnDirectionAccuracy": 0.512112293411818,
+          "balancedDirectionAccuracy": 0.3421930222313061,
+          "upRecall": 0.8910411622276029,
+          "downRecall": 0.0025591810620601407,
+          "flatRecall": 0.13297872340425532,
+          "downPrecision": 0.19047619047619047,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 21,
+            "0": 485,
+            "1": 3911
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.24170556101293864,
+              "directionAccuracy": 0.3498964803312629,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.20003853205318886
+            },
+            "2022-03-11": {
+              "mape": 0.16116353752155052,
+              "directionAccuracy": 0.46311475409836067,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.14320199578051346
+            },
+            "2022-09-16": {
+              "mape": 0.14233394520628176,
+              "directionAccuracy": 0.15132924335378323,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.1407086960340023
+            },
+            "2023-03-24": {
+              "mape": 0.13344492075174624,
+              "directionAccuracy": 0.5918367346938775,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.15303797957667573
+            },
+            "2023-09-29": {
+              "mape": 0.1677804482620611,
+              "directionAccuracy": 0.8510204081632653,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.23051255407130464
+            },
+            "2024-04-05": {
+              "mape": 0.13651610481937945,
+              "directionAccuracy": 0.6646341463414634,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.14351481131561172
+            },
+            "2024-10-11": {
+              "mape": 0.24521186533359696,
+              "directionAccuracy": 0.29006085192697767,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.19627263627983926
+            },
+            "2025-04-25": {
+              "mape": 0.17037890399408015,
+              "directionAccuracy": 0.7076612903225806,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.24254977617488477
+            },
+            "2025-10-31": {
+              "mape": 0.1956543159597109,
+              "directionAccuracy": 0.5342741935483871,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.22682232308460099
+            }
+          },
+          "returnMae": 0.18642240363519694,
+          "dateMeanReturnMae": 0.18629547826340243,
+          "p90ReturnError": 0.3780938361662627,
+          "downWarnings": 21,
+          "falseDownWarnings": 17,
+          "falseDownWarningRate": 0.005956552207428171,
+          "pointDirectionAgreement": 1.0
+        },
+        "causal_error_blend": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.1787569851298667,
+          "dateMeanMape": 0.17885276692611923,
+          "p90Mape": 0.377330716629865,
+          "logMae": 0.17558101555176212,
+          "directionAccuracy": 0.3796694589087616,
+          "returnDirectionAccuracy": 0.3796694589087616,
+          "balancedDirectionAccuracy": 0.29567936505299675,
+          "upRecall": 0.6384180790960452,
+          "downRecall": 0.0012795905310300703,
+          "flatRecall": 0.2473404255319149,
+          "downPrecision": 0.4,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 5,
+            "0": 1240,
+            "1": 3172
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.26856859057254123,
+              "directionAccuracy": 0.35196687370600416,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.2209700318042405
+            },
+            "2022-03-11": {
+              "mape": 0.14914263455057447,
+              "directionAccuracy": 0.46311475409836067,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.13375709297751057
+            },
+            "2022-09-16": {
+              "mape": 0.14859147800535522,
+              "directionAccuracy": 0.45194274028629855,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.14305721054466464
+            },
+            "2023-03-24": {
+              "mape": 0.13442453312087038,
+              "directionAccuracy": 0.10816326530612246,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.15737803839482234
+            },
+            "2023-09-29": {
+              "mape": 0.18169954486306136,
+              "directionAccuracy": 0.04897959183673469,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.24916777367074627
+            },
+            "2024-04-05": {
+              "mape": 0.13788989926071551,
+              "directionAccuracy": 0.6422764227642277,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.15018242405845716
+            },
+            "2024-10-11": {
+              "mape": 0.21872369158109548,
+              "directionAccuracy": 0.2738336713995943,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.17672754571002136
+            },
+            "2025-04-25": {
+              "mape": 0.17584718904749302,
+              "directionAccuracy": 0.5342741935483871,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.252586370211326
+            },
+            "2025-10-31": {
+              "mape": 0.19478734133336645,
+              "directionAccuracy": 0.5383064516129032,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.2271745456039745
+            }
+          },
+          "returnMae": 0.19020653328483889,
+          "dateMeanReturnMae": 0.19011122588619592,
+          "p90ReturnError": 0.3827407536172096,
+          "downWarnings": 5,
+          "falseDownWarnings": 3,
+          "falseDownWarningRate": 0.001051156271899089,
+          "pointDirectionAgreement": 1.0
+        },
+        "causal_joint_blend": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.1787569851298667,
+          "dateMeanMape": 0.17885276692611923,
+          "p90Mape": 0.377330716629865,
+          "logMae": 0.17558101555176212,
+          "directionAccuracy": 0.3796694589087616,
+          "returnDirectionAccuracy": 0.3796694589087616,
+          "balancedDirectionAccuracy": 0.29567936505299675,
+          "upRecall": 0.6384180790960452,
+          "downRecall": 0.0012795905310300703,
+          "flatRecall": 0.2473404255319149,
+          "downPrecision": 0.4,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 5,
+            "0": 1240,
+            "1": 3172
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.26856859057254123,
+              "directionAccuracy": 0.35196687370600416,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.2209700318042405
+            },
+            "2022-03-11": {
+              "mape": 0.14914263455057447,
+              "directionAccuracy": 0.46311475409836067,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.13375709297751057
+            },
+            "2022-09-16": {
+              "mape": 0.14859147800535522,
+              "directionAccuracy": 0.45194274028629855,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.14305721054466464
+            },
+            "2023-03-24": {
+              "mape": 0.13442453312087038,
+              "directionAccuracy": 0.10816326530612246,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.15737803839482234
+            },
+            "2023-09-29": {
+              "mape": 0.18169954486306136,
+              "directionAccuracy": 0.04897959183673469,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.24916777367074627
+            },
+            "2024-04-05": {
+              "mape": 0.13788989926071551,
+              "directionAccuracy": 0.6422764227642277,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.15018242405845716
+            },
+            "2024-10-11": {
+              "mape": 0.21872369158109548,
+              "directionAccuracy": 0.2738336713995943,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.17672754571002136
+            },
+            "2025-04-25": {
+              "mape": 0.17584718904749302,
+              "directionAccuracy": 0.5342741935483871,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.252586370211326
+            },
+            "2025-10-31": {
+              "mape": 0.19478734133336645,
+              "directionAccuracy": 0.5383064516129032,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.2271745456039745
+            }
+          },
+          "returnMae": 0.19020653328483889,
+          "dateMeanReturnMae": 0.19011122588619592,
+          "p90ReturnError": 0.3827407536172096,
+          "downWarnings": 5,
+          "falseDownWarnings": 3,
+          "falseDownWarningRate": 0.001051156271899089,
+          "pointDirectionAgreement": 1.0
+        },
+        "down_soft_mix": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.1717848258503969,
+          "dateMeanMape": 0.1717572967712765,
+          "p90Mape": 0.3490660551774242,
+          "logMae": 0.17592859190737584,
+          "directionAccuracy": 0.2426986642517546,
+          "returnDirectionAccuracy": 0.2426986642517546,
+          "balancedDirectionAccuracy": 0.2929593850696573,
+          "upRecall": 0.22921711057304278,
+          "downRecall": 0.21880998080614203,
+          "flatRecall": 0.4308510638297872,
+          "downPrecision": 0.32355723746452225,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 1057,
+            "0": 2099,
+            "1": 1261
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.20628364493258816,
+              "directionAccuracy": 0.2815734989648033,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.17530099739387334
+            },
+            "2022-03-11": {
+              "mape": 0.13730218386605209,
+              "directionAccuracy": 0.45491803278688525,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.1252708049025993
+            },
+            "2022-09-16": {
+              "mape": 0.14386545482925026,
+              "directionAccuracy": 0.3721881390593047,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.1487792307851495
+            },
+            "2023-03-24": {
+              "mape": 0.1409287770217455,
+              "directionAccuracy": 0.17755102040816326,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.16784249744618313
+            },
+            "2023-09-29": {
+              "mape": 0.19079605933353397,
+              "directionAccuracy": 0.061224489795918366,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.2610833674563885
+            },
+            "2024-04-05": {
+              "mape": 0.14116279424544464,
+              "directionAccuracy": 0.2886178861788618,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.15669889637394602
+            },
+            "2024-10-11": {
+              "mape": 0.20294459060162978,
+              "directionAccuracy": 0.1947261663286004,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.16544988520281598
+            },
+            "2025-04-25": {
+              "mape": 0.18638091590590458,
+              "directionAccuracy": 0.11693548387096774,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.270027925719144
+            },
+            "2025-10-31": {
+              "mape": 0.1961512502053394,
+              "directionAccuracy": 0.2399193548387097,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.23834420980424625
+            }
+          },
+          "returnMae": 0.1900711980598775,
+          "dateMeanReturnMae": 0.1898664238982607,
+          "p90ReturnError": 0.3830744420657518,
+          "downWarnings": 1057,
+          "falseDownWarnings": 715,
+          "falseDownWarningRate": 0.25052557813594956,
+          "pointDirectionAgreement": 1.0
+        },
+        "guarded_down_route": {
+          "n": 4417,
+          "dates": 9,
+          "mape": 0.1787569851298667,
+          "dateMeanMape": 0.17885276692611923,
+          "p90Mape": 0.377330716629865,
+          "logMae": 0.17558101555176212,
+          "directionAccuracy": 0.3796694589087616,
+          "returnDirectionAccuracy": 0.3796694589087616,
+          "balancedDirectionAccuracy": 0.29567936505299675,
+          "upRecall": 0.6384180790960452,
+          "downRecall": 0.0012795905310300703,
+          "flatRecall": 0.2473404255319149,
+          "downPrecision": 0.4,
+          "downPrevalence": 0.3538600860312429,
+          "alwaysUpAccuracy": 0.561014263074485,
+          "directionCounts": {
+            "-1": 5,
+            "0": 1240,
+            "1": 3172
+          },
+          "byDate": {
+            "2021-09-03": {
+              "mape": 0.26856859057254123,
+              "directionAccuracy": 0.35196687370600416,
+              "alwaysUpAccuracy": 0.3498964803312629,
+              "returnMae": 0.2209700318042405
+            },
+            "2022-03-11": {
+              "mape": 0.14914263455057447,
+              "directionAccuracy": 0.46311475409836067,
+              "alwaysUpAccuracy": 0.46311475409836067,
+              "returnMae": 0.13375709297751057
+            },
+            "2022-09-16": {
+              "mape": 0.14859147800535522,
+              "directionAccuracy": 0.45194274028629855,
+              "alwaysUpAccuracy": 0.5132924335378323,
+              "returnMae": 0.14305721054466464
+            },
+            "2023-03-24": {
+              "mape": 0.13442453312087038,
+              "directionAccuracy": 0.10816326530612246,
+              "alwaysUpAccuracy": 0.6061224489795919,
+              "returnMae": 0.15737803839482234
+            },
+            "2023-09-29": {
+              "mape": 0.18169954486306136,
+              "directionAccuracy": 0.04897959183673469,
+              "alwaysUpAccuracy": 0.8653061224489796,
+              "returnMae": 0.24916777367074627
+            },
+            "2024-04-05": {
+              "mape": 0.13788989926071551,
+              "directionAccuracy": 0.6422764227642277,
+              "alwaysUpAccuracy": 0.6646341463414634,
+              "returnMae": 0.15018242405845716
+            },
+            "2024-10-11": {
+              "mape": 0.21872369158109548,
+              "directionAccuracy": 0.2738336713995943,
+              "alwaysUpAccuracy": 0.29006085192697767,
+              "returnMae": 0.17672754571002136
+            },
+            "2025-04-25": {
+              "mape": 0.17584718904749302,
+              "directionAccuracy": 0.5342741935483871,
+              "alwaysUpAccuracy": 0.7116935483870968,
+              "returnMae": 0.252586370211326
+            },
+            "2025-10-31": {
+              "mape": 0.19478734133336645,
+              "directionAccuracy": 0.5383064516129032,
+              "alwaysUpAccuracy": 0.5806451612903226,
+              "returnMae": 0.2271745456039745
+            }
+          },
+          "returnMae": 0.19020653328483889,
+          "dateMeanReturnMae": 0.19011122588619592,
+          "p90ReturnError": 0.3827407536172096,
+          "downWarnings": 5,
+          "falseDownWarnings": 3,
+          "falseDownWarningRate": 0.001051156271899089,
+          "pointDirectionAgreement": 1.0
+        }
+      },
+      "regimes": {
+        "상승·보통변동": {
+          "noChange": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.17546580163715517,
+            "dateMeanMape": 0.17547198374003906,
+            "p90Mape": 0.3561489251259864,
+            "logMae": 0.1778414027239109,
+            "directionAccuracy": 0.08152173913043478,
+            "returnDirectionAccuracy": 0.08152173913043478,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 0,
+              "0": 2944,
+              "1": 0
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.19507084260678975,
+                "directionAccuracy": 0.07867494824016563,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.168470675295513
+              },
+              "2023-03-24": {
+                "mape": 0.13629329250889305,
+                "directionAccuracy": 0.10816326530612246,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.16062319903224798
+              },
+              "2023-09-29": {
+                "mape": 0.18453138195693683,
+                "directionAccuracy": 0.04897959183673469,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.2530044955509967
+              },
+              "2024-04-05": {
+                "mape": 0.14585192363147537,
+                "directionAccuracy": 0.09959349593495935,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.1638354005965737
+              },
+              "2024-10-11": {
+                "mape": 0.19634229845407677,
+                "directionAccuracy": 0.07302231237322515,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.16122572925532153
+              },
+              "2025-10-31": {
+                "mape": 0.19474216328206254,
+                "directionAccuracy": 0.08064516129032258,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.2336341937081895
+              }
+            },
+            "returnMae": 0.19022512507105044,
+            "dateMeanReturnMae": 0.19013228223980705,
+            "p90ReturnError": 0.37802135087544914,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "priceOnly": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.177783891592357,
+            "dateMeanMape": 0.17783149444418064,
+            "p90Mape": 0.3704081911551959,
+            "logMae": 0.17366972578463052,
+            "directionAccuracy": 0.5264945652173914,
+            "returnDirectionAccuracy": 0.5264945652173914,
+            "balancedDirectionAccuracy": 0.3254909532215357,
+            "upRecall": 0.9338592233009708,
+            "downRecall": 0.000946969696969697,
+            "flatRecall": 0.041666666666666664,
+            "downPrecision": 1.0,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 1,
+              "0": 187,
+              "1": 2756
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.21849881989385833,
+                "directionAccuracy": 0.3498964803312629,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.18306766243363387
+              },
+              "2023-03-24": {
+                "mape": 0.1341187354252249,
+                "directionAccuracy": 0.5040816326530613,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.15441823419447356
+              },
+              "2023-09-29": {
+                "mape": 0.16297047917082322,
+                "directionAccuracy": 0.8489795918367347,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.2240032679734959
+              },
+              "2024-04-05": {
+                "mape": 0.13788989926071551,
+                "directionAccuracy": 0.6422764227642277,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.15018242405845716
+              },
+              "2024-10-11": {
+                "mape": 0.21872369158109548,
+                "directionAccuracy": 0.2738336713995943,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.17672754571002136
+              },
+              "2025-10-31": {
+                "mape": 0.19478734133336645,
+                "directionAccuracy": 0.5383064516129032,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.2271745456039745
+              }
+            },
+            "returnMae": 0.18598614956152273,
+            "dateMeanReturnMae": 0.18592894666234272,
+            "p90ReturnError": 0.3690385088973791,
+            "downWarnings": 1,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "joint_logistic": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.19815071273209908,
+            "dateMeanMape": 0.19827895172865773,
+            "p90Mape": 0.41946512464340596,
+            "logMae": 0.1869948399174025,
+            "directionAccuracy": 0.5563858695652174,
+            "returnDirectionAccuracy": 0.4639945652173913,
+            "balancedDirectionAccuracy": 0.3325579827400216,
+            "upRecall": 0.9872572815533981,
+            "downRecall": 0.010416666666666666,
+            "flatRecall": 0.0,
+            "downPrecision": 0.2972972972972973,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 37,
+              "0": 0,
+              "1": 2907
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.26856859057254123,
+                "directionAccuracy": 0.35196687370600416,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.2209700318042405
+              },
+              "2023-03-24": {
+                "mape": 0.1329556700797757,
+                "directionAccuracy": 0.6061224489795919,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.1518481466208326
+              },
+              "2023-09-29": {
+                "mape": 0.17341165793332072,
+                "directionAccuracy": 0.8653061224489796,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.23786818426458706
+              },
+              "2024-04-05": {
+                "mape": 0.14108172496158453,
+                "directionAccuracy": 0.6646341463414634,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.14325846924587257
+              },
+              "2024-10-11": {
+                "mape": 0.2761798386059417,
+                "directionAccuracy": 0.2920892494929006,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.22061556938690788
+              },
+              "2025-10-31": {
+                "mape": 0.19747622821878258,
+                "directionAccuracy": 0.5564516129032258,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.22745139223744187
+              }
+            },
+            "brier": 0.6595850513721996,
+            "priorBrier": 0.5739554303985752,
+            "rangeCoverage": 0.6263450935802743,
+            "directionReturnAgreement": 0.8597146739130435,
+            "returnMae": 0.200323390156858,
+            "dateMeanReturnMae": 0.20033529892664706,
+            "p90ReturnError": 0.3986629331627576,
+            "downWarnings": 37,
+            "falseDownWarnings": 26,
+            "falseDownWarningRate": 0.013771186440677966,
+            "pointDirectionAgreement": 0.8597146739130435
+          },
+          "fixed_half": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.186631837867741,
+            "dateMeanMape": 0.18671886935657223,
+            "p90Mape": 0.3943620382635517,
+            "logMae": 0.17908598385176944,
+            "directionAccuracy": 0.5472146739130435,
+            "returnDirectionAccuracy": 0.5472146739130435,
+            "balancedDirectionAccuracy": 0.33178263214670983,
+            "upRecall": 0.9745145631067961,
+            "downRecall": 0.0,
+            "flatRecall": 0.020833333333333332,
+            "downPrecision": null,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 0,
+              "0": 65,
+              "1": 2879
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.24170556101293864,
+                "directionAccuracy": 0.3498964803312629,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.20003853205318886
+              },
+              "2023-03-24": {
+                "mape": 0.13344492075174624,
+                "directionAccuracy": 0.5918367346938775,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.15303797957667573
+              },
+              "2023-09-29": {
+                "mape": 0.1677804482620611,
+                "directionAccuracy": 0.8510204081632653,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.23051255407130464
+              },
+              "2024-04-05": {
+                "mape": 0.13651610481937945,
+                "directionAccuracy": 0.6646341463414634,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.14351481131561172
+              },
+              "2024-10-11": {
+                "mape": 0.24521186533359696,
+                "directionAccuracy": 0.29006085192697767,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.19627263627983926
+              },
+              "2025-10-31": {
+                "mape": 0.1956543159597109,
+                "directionAccuracy": 0.5342741935483871,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.22682232308460099
+              }
+            },
+            "returnMae": 0.19172348558845256,
+            "dateMeanReturnMae": 0.19169980606353687,
+            "p90ReturnError": 0.38063827745800266,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_error_blend": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.1891666301446215,
+            "dateMeanMape": 0.18934893345527506,
+            "p90Mape": 0.3996101765627955,
+            "logMae": 0.18396582745031786,
+            "directionAccuracy": 0.32778532608695654,
+            "returnDirectionAccuracy": 0.32778532608695654,
+            "balancedDirectionAccuracy": 0.2891561243502991,
+            "upRecall": 0.5364077669902912,
+            "downRecall": 0.001893939393939394,
+            "flatRecall": 0.32916666666666666,
+            "downPrecision": 1.0,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 2,
+              "0": 1068,
+              "1": 1874
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.26856859057254123,
+                "directionAccuracy": 0.35196687370600416,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.2209700318042405
+              },
+              "2023-03-24": {
+                "mape": 0.13442453312087038,
+                "directionAccuracy": 0.10816326530612246,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.15737803839482234
+              },
+              "2023-09-29": {
+                "mape": 0.18169954486306136,
+                "directionAccuracy": 0.04897959183673469,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.24916777367074627
+              },
+              "2024-04-05": {
+                "mape": 0.13788989926071551,
+                "directionAccuracy": 0.6422764227642277,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.15018242405845716
+              },
+              "2024-10-11": {
+                "mape": 0.21872369158109548,
+                "directionAccuracy": 0.2738336713995943,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.17672754571002136
+              },
+              "2025-10-31": {
+                "mape": 0.19478734133336645,
+                "directionAccuracy": 0.5383064516129032,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.2271745456039745
+              }
+            },
+            "returnMae": 0.19688552328972472,
+            "dateMeanReturnMae": 0.1969333932070437,
+            "p90ReturnError": 0.39094419590991897,
+            "downWarnings": 2,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_joint_blend": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.1891666301446215,
+            "dateMeanMape": 0.18934893345527506,
+            "p90Mape": 0.3996101765627955,
+            "logMae": 0.18396582745031786,
+            "directionAccuracy": 0.32778532608695654,
+            "returnDirectionAccuracy": 0.32778532608695654,
+            "balancedDirectionAccuracy": 0.2891561243502991,
+            "upRecall": 0.5364077669902912,
+            "downRecall": 0.001893939393939394,
+            "flatRecall": 0.32916666666666666,
+            "downPrecision": 1.0,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 2,
+              "0": 1068,
+              "1": 1874
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.26856859057254123,
+                "directionAccuracy": 0.35196687370600416,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.2209700318042405
+              },
+              "2023-03-24": {
+                "mape": 0.13442453312087038,
+                "directionAccuracy": 0.10816326530612246,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.15737803839482234
+              },
+              "2023-09-29": {
+                "mape": 0.18169954486306136,
+                "directionAccuracy": 0.04897959183673469,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.24916777367074627
+              },
+              "2024-04-05": {
+                "mape": 0.13788989926071551,
+                "directionAccuracy": 0.6422764227642277,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.15018242405845716
+              },
+              "2024-10-11": {
+                "mape": 0.21872369158109548,
+                "directionAccuracy": 0.2738336713995943,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.17672754571002136
+              },
+              "2025-10-31": {
+                "mape": 0.19478734133336645,
+                "directionAccuracy": 0.5383064516129032,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.2271745456039745
+              }
+            },
+            "returnMae": 0.19688552328972472,
+            "dateMeanReturnMae": 0.1969333932070437,
+            "p90ReturnError": 0.39094419590991897,
+            "downWarnings": 2,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "down_soft_mix": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.17967899740276416,
+            "dateMeanMape": 0.17971118605671355,
+            "p90Mape": 0.3658682224298432,
+            "logMae": 0.18185453802025592,
+            "directionAccuracy": 0.20720108695652173,
+            "returnDirectionAccuracy": 0.20720108695652173,
+            "balancedDirectionAccuracy": 0.300017774835736,
+            "upRecall": 0.20024271844660194,
+            "downRecall": 0.13731060606060605,
+            "flatRecall": 0.5625,
+            "downPrecision": 0.31938325991189426,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 454,
+              "0": 1728,
+              "1": 762
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.20628364493258816,
+                "directionAccuracy": 0.2815734989648033,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.17530099739387334
+              },
+              "2023-03-24": {
+                "mape": 0.1409287770217455,
+                "directionAccuracy": 0.17755102040816326,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.16784249744618313
+              },
+              "2023-09-29": {
+                "mape": 0.19079605933353397,
+                "directionAccuracy": 0.061224489795918366,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.2610833674563885
+              },
+              "2024-04-05": {
+                "mape": 0.14116279424544464,
+                "directionAccuracy": 0.2886178861788618,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.15669889637394602
+              },
+              "2024-10-11": {
+                "mape": 0.20294459060162978,
+                "directionAccuracy": 0.1947261663286004,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.16544988520281598
+              },
+              "2025-10-31": {
+                "mape": 0.1961512502053394,
+                "directionAccuracy": 0.2399193548387097,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.23834420980424625
+              }
+            },
+            "returnMae": 0.19420021536256005,
+            "dateMeanReturnMae": 0.19411997561290886,
+            "p90ReturnError": 0.38612039164079726,
+            "downWarnings": 454,
+            "falseDownWarnings": 309,
+            "falseDownWarningRate": 0.16366525423728814,
+            "pointDirectionAgreement": 1.0
+          },
+          "guarded_down_route": {
+            "n": 2944,
+            "dates": 6,
+            "mape": 0.1891666301446215,
+            "dateMeanMape": 0.18934893345527506,
+            "p90Mape": 0.3996101765627955,
+            "logMae": 0.18396582745031786,
+            "directionAccuracy": 0.32778532608695654,
+            "returnDirectionAccuracy": 0.32778532608695654,
+            "balancedDirectionAccuracy": 0.2891561243502991,
+            "upRecall": 0.5364077669902912,
+            "downRecall": 0.001893939393939394,
+            "flatRecall": 0.32916666666666666,
+            "downPrecision": 1.0,
+            "downPrevalence": 0.358695652173913,
+            "alwaysUpAccuracy": 0.5597826086956522,
+            "directionCounts": {
+              "-1": 2,
+              "0": 1068,
+              "1": 1874
+            },
+            "byDate": {
+              "2021-09-03": {
+                "mape": 0.26856859057254123,
+                "directionAccuracy": 0.35196687370600416,
+                "alwaysUpAccuracy": 0.3498964803312629,
+                "returnMae": 0.2209700318042405
+              },
+              "2023-03-24": {
+                "mape": 0.13442453312087038,
+                "directionAccuracy": 0.10816326530612246,
+                "alwaysUpAccuracy": 0.6061224489795919,
+                "returnMae": 0.15737803839482234
+              },
+              "2023-09-29": {
+                "mape": 0.18169954486306136,
+                "directionAccuracy": 0.04897959183673469,
+                "alwaysUpAccuracy": 0.8653061224489796,
+                "returnMae": 0.24916777367074627
+              },
+              "2024-04-05": {
+                "mape": 0.13788989926071551,
+                "directionAccuracy": 0.6422764227642277,
+                "alwaysUpAccuracy": 0.6646341463414634,
+                "returnMae": 0.15018242405845716
+              },
+              "2024-10-11": {
+                "mape": 0.21872369158109548,
+                "directionAccuracy": 0.2738336713995943,
+                "alwaysUpAccuracy": 0.29006085192697767,
+                "returnMae": 0.17672754571002136
+              },
+              "2025-10-31": {
+                "mape": 0.19478734133336645,
+                "directionAccuracy": 0.5383064516129032,
+                "alwaysUpAccuracy": 0.5806451612903226,
+                "returnMae": 0.2271745456039745
+              }
+            },
+            "returnMae": 0.19688552328972472,
+            "dateMeanReturnMae": 0.1969333932070437,
+            "p90ReturnError": 0.39094419590991897,
+            "downWarnings": 2,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          }
+        },
+        "하락·고변동": {
+          "noChange": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.18262740889297416,
+            "dateMeanMape": 0.18262740889297416,
+            "p90Mape": 0.3906716420151024,
+            "logMae": 0.21296960670247606,
+            "directionAccuracy": 0.07056451612903226,
+            "returnDirectionAccuracy": 0.07056451612903226,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 0,
+              "0": 496,
+              "1": 0
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.18262740889297416,
+                "directionAccuracy": 0.07056451612903226,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.26466426636245316
+              }
+            },
+            "returnMae": 0.26466426636245316,
+            "dateMeanReturnMae": 0.26466426636245316,
+            "p90ReturnError": 0.5504705753314799,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "priceOnly": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.17584718904749302,
+            "dateMeanMape": 0.17584718904749302,
+            "p90Mape": 0.36704908911751466,
+            "logMae": 0.20114300990926404,
+            "directionAccuracy": 0.5342741935483871,
+            "returnDirectionAccuracy": 0.5342741935483871,
+            "balancedDirectionAccuracy": 0.31029272898961285,
+            "upRecall": 0.7308781869688386,
+            "downRecall": 0.0,
+            "flatRecall": 0.2,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 1,
+              "0": 114,
+              "1": 381
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.17584718904749302,
+                "directionAccuracy": 0.5342741935483871,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.252586370211326
+              }
+            },
+            "returnMae": 0.252586370211326,
+            "dateMeanReturnMae": 0.252586370211326,
+            "p90ReturnError": 0.5227635113674725,
+            "downWarnings": 1,
+            "falseDownWarnings": 1,
+            "falseDownWarningRate": 0.002577319587628866,
+            "pointDirectionAgreement": 1.0
+          },
+          "joint_logistic": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.16756378976583836,
+            "dateMeanMape": 0.16756378976583836,
+            "p90Mape": 0.354986702604137,
+            "logMae": 0.1846850464101105,
+            "directionAccuracy": 0.7116935483870968,
+            "returnDirectionAccuracy": 0.7096774193548387,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 1.0,
+            "downRecall": 0.0,
+            "flatRecall": 0.0,
+            "downPrecision": null,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 0,
+              "0": 0,
+              "1": 496
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.16756378976583836,
+                "directionAccuracy": 0.7116935483870968,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.23531120225150343
+              }
+            },
+            "brier": 0.4450469194720082,
+            "priorBrier": 0.4575485389655452,
+            "rangeCoverage": 0.7016129032258065,
+            "directionReturnAgreement": 0.9979838709677419,
+            "returnMae": 0.23531120225150343,
+            "dateMeanReturnMae": 0.23531120225150343,
+            "p90ReturnError": 0.4720868514950396,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 0.9979838709677419
+          },
+          "fixed_half": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.17037890399408015,
+            "dateMeanMape": 0.17037890399408015,
+            "p90Mape": 0.3670268952588525,
+            "logMae": 0.19146505188352386,
+            "directionAccuracy": 0.7076612903225806,
+            "returnDirectionAccuracy": 0.7076612903225806,
+            "balancedDirectionAccuracy": 0.3314447592067989,
+            "upRecall": 0.9943342776203966,
+            "downRecall": 0.0,
+            "flatRecall": 0.0,
+            "downPrecision": null,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 0,
+              "0": 2,
+              "1": 494
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.17037890399408015,
+                "directionAccuracy": 0.7076612903225806,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.24254977617488477
+              }
+            },
+            "returnMae": 0.24254977617488477,
+            "dateMeanReturnMae": 0.24254977617488477,
+            "p90ReturnError": 0.4984517874288851,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_error_blend": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.17584718904749302,
+            "dateMeanMape": 0.17584718904749302,
+            "p90Mape": 0.36704908911751466,
+            "logMae": 0.20114300990926404,
+            "directionAccuracy": 0.5342741935483871,
+            "returnDirectionAccuracy": 0.5342741935483871,
+            "balancedDirectionAccuracy": 0.31029272898961285,
+            "upRecall": 0.7308781869688386,
+            "downRecall": 0.0,
+            "flatRecall": 0.2,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 1,
+              "0": 114,
+              "1": 381
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.17584718904749302,
+                "directionAccuracy": 0.5342741935483871,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.252586370211326
+              }
+            },
+            "returnMae": 0.252586370211326,
+            "dateMeanReturnMae": 0.252586370211326,
+            "p90ReturnError": 0.5227635113674725,
+            "downWarnings": 1,
+            "falseDownWarnings": 1,
+            "falseDownWarningRate": 0.002577319587628866,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_joint_blend": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.17584718904749302,
+            "dateMeanMape": 0.17584718904749302,
+            "p90Mape": 0.36704908911751466,
+            "logMae": 0.20114300990926404,
+            "directionAccuracy": 0.5342741935483871,
+            "returnDirectionAccuracy": 0.5342741935483871,
+            "balancedDirectionAccuracy": 0.31029272898961285,
+            "upRecall": 0.7308781869688386,
+            "downRecall": 0.0,
+            "flatRecall": 0.2,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 1,
+              "0": 114,
+              "1": 381
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.17584718904749302,
+                "directionAccuracy": 0.5342741935483871,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.252586370211326
+              }
+            },
+            "returnMae": 0.252586370211326,
+            "dateMeanReturnMae": 0.252586370211326,
+            "p90ReturnError": 0.5227635113674725,
+            "downWarnings": 1,
+            "falseDownWarnings": 1,
+            "falseDownWarningRate": 0.002577319587628866,
+            "pointDirectionAgreement": 1.0
+          },
+          "down_soft_mix": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.18638091590590458,
+            "dateMeanMape": 0.18638091590590458,
+            "p90Mape": 0.3817924685578602,
+            "logMae": 0.21848856656660812,
+            "directionAccuracy": 0.11693548387096774,
+            "returnDirectionAccuracy": 0.11693548387096774,
+            "balancedDirectionAccuracy": 0.3185477464514292,
+            "upRecall": 0.0453257790368272,
+            "downRecall": 0.1388888888888889,
+            "flatRecall": 0.7714285714285715,
+            "downPrecision": 0.12195121951219512,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 123,
+              "0": 357,
+              "1": 16
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.18638091590590458,
+                "directionAccuracy": 0.11693548387096774,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.270027925719144
+              }
+            },
+            "returnMae": 0.270027925719144,
+            "dateMeanReturnMae": 0.270027925719144,
+            "p90ReturnError": 0.5622969429225568,
+            "downWarnings": 123,
+            "falseDownWarnings": 108,
+            "falseDownWarningRate": 0.27835051546391754,
+            "pointDirectionAgreement": 1.0
+          },
+          "guarded_down_route": {
+            "n": 496,
+            "dates": 1,
+            "mape": 0.17584718904749302,
+            "dateMeanMape": 0.17584718904749302,
+            "p90Mape": 0.36704908911751466,
+            "logMae": 0.20114300990926404,
+            "directionAccuracy": 0.5342741935483871,
+            "returnDirectionAccuracy": 0.5342741935483871,
+            "balancedDirectionAccuracy": 0.31029272898961285,
+            "upRecall": 0.7308781869688386,
+            "downRecall": 0.0,
+            "flatRecall": 0.2,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.21774193548387097,
+            "alwaysUpAccuracy": 0.7116935483870968,
+            "directionCounts": {
+              "-1": 1,
+              "0": 114,
+              "1": 381
+            },
+            "byDate": {
+              "2025-04-25": {
+                "mape": 0.17584718904749302,
+                "directionAccuracy": 0.5342741935483871,
+                "alwaysUpAccuracy": 0.7116935483870968,
+                "returnMae": 0.252586370211326
+              }
+            },
+            "returnMae": 0.252586370211326,
+            "dateMeanReturnMae": 0.252586370211326,
+            "p90ReturnError": 0.5227635113674725,
+            "downWarnings": 1,
+            "falseDownWarnings": 1,
+            "falseDownWarningRate": 0.002577319587628866,
+            "pointDirectionAgreement": 1.0
+          }
+        },
+        "하락·보통변동": {
+          "noChange": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.13364410372224156,
+            "dateMeanMape": 0.13363761728059673,
+            "p90Mape": 0.2625364123615418,
+            "logMae": 0.12968024886425303,
+            "directionAccuracy": 0.10337768679631525,
+            "returnDirectionAccuracy": 0.10337768679631525,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 0,
+              "0": 977,
+              "1": 0
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.127300363793591,
+                "directionAccuracy": 0.10245901639344263,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.12118545172360838
+              },
+              "2022-09-16": {
+                "mape": 0.13997487076760246,
+                "directionAccuracy": 0.10429447852760736,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.13945218225703387
+              }
+            },
+            "returnMae": 0.13032816536828093,
+            "dateMeanReturnMae": 0.13031881699032113,
+            "p90ReturnError": 0.2717220214242976,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "priceOnly": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.14296158493999425,
+            "dateMeanMape": 0.1429558166069355,
+            "p90Mape": 0.28120725662062945,
+            "logMae": 0.13335989011155808,
+            "directionAccuracy": 0.4534288638689867,
+            "returnDirectionAccuracy": 0.4534288638689867,
+            "balancedDirectionAccuracy": 0.32778435076212026,
+            "upRecall": 0.9140461215932913,
+            "downRecall": 0.0,
+            "flatRecall": 0.06930693069306931,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 3,
+              "0": 62,
+              "1": 912
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.13732015520851576,
+                "directionAccuracy": 0.45491803278688525,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.12527394524076974
+              },
+              "2022-09-16": {
+                "mape": 0.14859147800535522,
+                "directionAccuracy": 0.45194274028629855,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.14305721054466464
+              }
+            },
+            "returnMae": 0.13417467884732512,
+            "dateMeanReturnMae": 0.13416557789271719,
+            "p90ReturnError": 0.27590160917743695,
+            "downWarnings": 3,
+            "falseDownWarnings": 3,
+            "falseDownWarningRate": 0.005190311418685121,
+            "pointDirectionAgreement": 1.0
+          },
+          "joint_logistic": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.16905226221974648,
+            "dateMeanMape": 0.16908125953225409,
+            "p90Mape": 0.34356653932172443,
+            "logMae": 0.155818930107448,
+            "directionAccuracy": 0.43705220061412486,
+            "returnDirectionAccuracy": 0.3285568065506653,
+            "balancedDirectionAccuracy": 0.32161640999774066,
+            "upRecall": 0.5387840670859538,
+            "downRecall": 0.42606516290726815,
+            "flatRecall": 0.0,
+            "downPrecision": 0.391705069124424,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 434,
+              "0": 0,
+              "1": 543
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.19741163385217259,
+                "directionAccuracy": 0.46311475409836067,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.1746374646252767
+              },
+              "2022-09-16": {
+                "mape": 0.14075088521233559,
+                "directionAccuracy": 0.4110429447852761,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.14316685690066214
+              }
+            },
+            "brier": 0.841101682130727,
+            "priorBrier": 0.6230788348345441,
+            "rangeCoverage": 0.5852526065238526,
+            "directionReturnAgreement": 0.6704196519959058,
+            "returnMae": 0.15888605502718406,
+            "dateMeanReturnMae": 0.15890216076296942,
+            "p90ReturnError": 0.31920825194538865,
+            "downWarnings": 434,
+            "falseDownWarnings": 264,
+            "falseDownWarningRate": 0.45674740484429066,
+            "pointDirectionAgreement": 0.6704196519959058
+          },
+          "fixed_half": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.15173910492977324,
+            "dateMeanMape": 0.15174874136391614,
+            "p90Mape": 0.3093056623800169,
+            "logMae": 0.14061881876822452,
+            "directionAccuracy": 0.3070624360286592,
+            "returnDirectionAccuracy": 0.3070624360286592,
+            "balancedDirectionAccuracy": 0.32725835594861324,
+            "upRecall": 0.5262054507337526,
+            "downRecall": 0.010025062656641603,
+            "flatRecall": 0.44554455445544555,
+            "downPrecision": 0.19047619047619047,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 21,
+              "0": 418,
+              "1": 538
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.16116353752155052,
+                "directionAccuracy": 0.46311475409836067,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.14320199578051346
+              },
+              "2022-09-16": {
+                "mape": 0.14233394520628176,
+                "directionAccuracy": 0.15132924335378323,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.1407086960340023
+              }
+            },
+            "returnMae": 0.14195406990943468,
+            "dateMeanReturnMae": 0.1419553459072579,
+            "p90ReturnError": 0.2867854214280282,
+            "downWarnings": 21,
+            "falseDownWarnings": 17,
+            "falseDownWarningRate": 0.029411764705882353,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_error_blend": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.14886677421217914,
+            "dateMeanMape": 0.14886705627796484,
+            "p90Mape": 0.30071978998643706,
+            "logMae": 0.13733778583766879,
+            "directionAccuracy": 0.45752302968270214,
+            "returnDirectionAccuracy": 0.45752302968270214,
+            "balancedDirectionAccuracy": 0.3305795988403872,
+            "upRecall": 0.9224318658280922,
+            "downRecall": 0.0,
+            "flatRecall": 0.06930693069306931,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 2,
+              "0": 58,
+              "1": 917
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.14914263455057447,
+                "directionAccuracy": 0.46311475409836067,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.13375709297751057
+              },
+              "2022-09-16": {
+                "mape": 0.14859147800535522,
+                "directionAccuracy": 0.45194274028629855,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.14305721054466464
+              }
+            },
+            "returnMae": 0.13841191128901348,
+            "dateMeanReturnMae": 0.1384071517610876,
+            "p90ReturnError": 0.28219523659465434,
+            "downWarnings": 2,
+            "falseDownWarnings": 2,
+            "falseDownWarningRate": 0.0034602076124567475,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_joint_blend": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.14886677421217914,
+            "dateMeanMape": 0.14886705627796484,
+            "p90Mape": 0.30071978998643706,
+            "logMae": 0.13733778583766879,
+            "directionAccuracy": 0.45752302968270214,
+            "returnDirectionAccuracy": 0.45752302968270214,
+            "balancedDirectionAccuracy": 0.3305795988403872,
+            "upRecall": 0.9224318658280922,
+            "downRecall": 0.0,
+            "flatRecall": 0.06930693069306931,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 2,
+              "0": 58,
+              "1": 917
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.14914263455057447,
+                "directionAccuracy": 0.46311475409836067,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.13375709297751057
+              },
+              "2022-09-16": {
+                "mape": 0.14859147800535522,
+                "directionAccuracy": 0.45194274028629855,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.14305721054466464
+              }
+            },
+            "returnMae": 0.13841191128901348,
+            "dateMeanReturnMae": 0.1384071517610876,
+            "p90ReturnError": 0.28219523659465434,
+            "downWarnings": 2,
+            "falseDownWarnings": 2,
+            "falseDownWarningRate": 0.0034602076124567475,
+            "pointDirectionAgreement": 1.0
+          },
+          "down_soft_mix": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.14058717823760164,
+            "dateMeanMape": 0.14058381934765118,
+            "p90Mape": 0.27484060340568234,
+            "logMae": 0.13646520113224977,
+            "directionAccuracy": 0.413510747185261,
+            "returnDirectionAccuracy": 0.413510747185261,
+            "balancedDirectionAccuracy": 0.3071830519695465,
+            "upRecall": 0.46540880503144655,
+            "downRecall": 0.45614035087719296,
+            "flatRecall": 0.0,
+            "downPrecision": 0.37916666666666665,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 480,
+              "0": 14,
+              "1": 483
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.13730218386605209,
+                "directionAccuracy": 0.45491803278688525,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.1252708049025993
+              },
+              "2022-09-16": {
+                "mape": 0.14386545482925026,
+                "directionAccuracy": 0.3721881390593047,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.1487792307851495
+              }
+            },
+            "returnMae": 0.13703704876807224,
+            "dateMeanReturnMae": 0.13702501784387439,
+            "p90ReturnError": 0.2879825521737334,
+            "downWarnings": 480,
+            "falseDownWarnings": 298,
+            "falseDownWarningRate": 0.5155709342560554,
+            "pointDirectionAgreement": 1.0
+          },
+          "guarded_down_route": {
+            "n": 977,
+            "dates": 2,
+            "mape": 0.14886677421217914,
+            "dateMeanMape": 0.14886705627796484,
+            "p90Mape": 0.30071978998643706,
+            "logMae": 0.13733778583766879,
+            "directionAccuracy": 0.45752302968270214,
+            "returnDirectionAccuracy": 0.45752302968270214,
+            "balancedDirectionAccuracy": 0.3305795988403872,
+            "upRecall": 0.9224318658280922,
+            "downRecall": 0.0,
+            "flatRecall": 0.06930693069306931,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.4083930399181167,
+            "alwaysUpAccuracy": 0.4882292732855681,
+            "directionCounts": {
+              "-1": 2,
+              "0": 58,
+              "1": 917
+            },
+            "byDate": {
+              "2022-03-11": {
+                "mape": 0.14914263455057447,
+                "directionAccuracy": 0.46311475409836067,
+                "alwaysUpAccuracy": 0.46311475409836067,
+                "returnMae": 0.13375709297751057
+              },
+              "2022-09-16": {
+                "mape": 0.14859147800535522,
+                "directionAccuracy": 0.45194274028629855,
+                "alwaysUpAccuracy": 0.5132924335378323,
+                "returnMae": 0.14305721054466464
+              }
+            },
+            "returnMae": 0.13841191128901348,
+            "dateMeanReturnMae": 0.1384071517610876,
+            "p90ReturnError": 0.28219523659465434,
+            "downWarnings": 2,
+            "falseDownWarnings": 2,
+            "falseDownWarningRate": 0.0034602076124567475,
+            "pointDirectionAgreement": 1.0
+          }
+        }
+      },
+      "checks": {
+        "fixed_half": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": true,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "causal_error_blend": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "causal_joint_blend": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "down_soft_mix": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": false,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "guarded_down_route": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        }
+      },
+      "folds": [
+        {
+          "origin": "2017-01-27",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2017-08-04",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2018-02-09",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2018-08-17",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2019-02-22",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2019-08-23",
+          "status": "warmup",
+          "fitTargetThrough": "2018-08-10",
+          "calibrationStart": "2018-08-17",
+          "calibrationTargetThrough": "2019-08-22",
+          "shapeTargetThrough": "2019-08-22",
+          "testRows": 473,
+          "conditionalDownValue": 0.9047452093936512,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "route": {
+              "status": "insufficient_dates_use_error_blend"
+            },
+            "history": {
+              "rows": 0,
+              "dates": 0,
+              "targetThrough": null,
+              "lastOrigin": null
+            }
+          }
+        },
+        {
+          "origin": "2020-02-28",
+          "status": "warmup",
+          "fitTargetThrough": "2019-02-20",
+          "calibrationStart": "2019-02-22",
+          "calibrationTargetThrough": "2020-02-25",
+          "shapeTargetThrough": "2020-02-25",
+          "testRows": 477,
+          "conditionalDownValue": 0.906436142796563,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "route": {
+              "status": "insufficient_dates_use_error_blend"
+            },
+            "history": {
+              "rows": 473,
+              "dates": 1,
+              "targetThrough": "2020-02-25",
+              "lastOrigin": "2019-08-23"
+            }
+          }
+        },
+        {
+          "origin": "2020-08-28",
+          "status": "warmup",
+          "fitTargetThrough": "2019-08-22",
+          "calibrationStart": "2019-08-23",
+          "calibrationTargetThrough": "2020-08-27",
+          "shapeTargetThrough": "2020-08-27",
+          "testRows": 480,
+          "conditionalDownValue": 0.8992932446949614,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "route": {
+              "status": "insufficient_dates_use_error_blend"
+            },
+            "history": {
+              "rows": 950,
+              "dates": 2,
+              "targetThrough": "2020-08-27",
+              "lastOrigin": "2020-02-28"
+            }
+          }
+        },
+        {
+          "origin": "2021-03-05",
+          "status": "warmup",
+          "fitTargetThrough": "2020-02-25",
+          "calibrationStart": "2020-02-28",
+          "calibrationTargetThrough": "2021-03-02",
+          "shapeTargetThrough": "2021-03-02",
+          "testRows": 482,
+          "conditionalDownValue": 0.9013762236856033,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 1,
+              "metrics": {
+                "mape": 0.1565950994050809,
+                "returnMae": 0.1925902869726646,
+                "balancedAccuracy": 0.3281618181961145,
+                "upRecall": 0.9752623350420249,
+                "downRecall": 0.009223119546318714,
+                "downPrecision": 0.16722681462527536,
+                "downWarnings": 18,
+                "downPrevalence": 0.22730227534966457
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 1,
+              "metrics": {
+                "mape": 0.1565950994050809,
+                "returnMae": 0.1925902869726646,
+                "balancedAccuracy": 0.3281618181961145,
+                "upRecall": 0.9752623350420249,
+                "downRecall": 0.009223119546318714,
+                "downPrecision": 0.16722681462527536,
+                "downWarnings": 18,
+                "downPrevalence": 0.22730227534966457
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 1430,
+              "dates": 3,
+              "targetThrough": "2021-03-02",
+              "lastOrigin": "2020-08-28"
+            }
+          }
+        },
+        {
+          "origin": "2021-09-03",
+          "status": "evaluated",
+          "fitTargetThrough": "2020-08-27",
+          "calibrationStart": "2020-08-28",
+          "calibrationTargetThrough": "2021-09-02",
+          "shapeTargetThrough": "2021-09-02",
+          "testRows": 483,
+          "conditionalDownValue": 0.903667577058135,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 1,
+              "metrics": {
+                "mape": 0.14976385593652178,
+                "returnMae": 0.18354217220472807,
+                "balancedAccuracy": 0.3299233570305617,
+                "upRecall": 0.9821086944450488,
+                "downRecall": 0.007661376646636238,
+                "downPrecision": 0.1672268146252754,
+                "downWarnings": 18,
+                "downPrevalence": 0.20522774385664674
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 1,
+              "metrics": {
+                "mape": 0.14976385593652178,
+                "returnMae": 0.18354217220472807,
+                "balancedAccuracy": 0.3299233570305617,
+                "upRecall": 0.9821086944450488,
+                "downRecall": 0.007661376646636238,
+                "downPrecision": 0.1672268146252754,
+                "downWarnings": 18,
+                "downPrevalence": 0.20522774385664674
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 1912,
+              "dates": 4,
+              "targetThrough": "2021-09-02",
+              "lastOrigin": "2021-03-05"
+            }
+          }
+        },
+        {
+          "origin": "2022-03-11",
+          "status": "evaluated",
+          "fitTargetThrough": "2021-03-02",
+          "calibrationStart": "2021-03-05",
+          "calibrationTargetThrough": "2022-03-07",
+          "shapeTargetThrough": "2022-03-07",
+          "testRows": 488,
+          "conditionalDownValue": 0.8980375332005891,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.5,
+              "metrics": {
+                "mape": 0.17002289079428917,
+                "returnMae": 0.1939995715233736,
+                "balancedAccuracy": 0.3189337036482784,
+                "upRecall": 0.9364218622664366,
+                "downRecall": 0.0015056931072850554,
+                "downPrecision": 0.14332383270048388,
+                "downWarnings": 7,
+                "downPrevalence": 0.2784679093710317
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.5,
+              "metrics": {
+                "mape": 0.17002289079428917,
+                "returnMae": 0.1939995715233736,
+                "balancedAccuracy": 0.3189337036482784,
+                "upRecall": 0.9364218622664366,
+                "downRecall": 0.0015056931072850554,
+                "downPrecision": 0.14332383270048388,
+                "downWarnings": 7,
+                "downPrevalence": 0.2784679093710317
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 2395,
+              "dates": 5,
+              "targetThrough": "2022-03-07",
+              "lastOrigin": "2021-09-03"
+            }
+          }
+        },
+        {
+          "origin": "2022-09-16",
+          "status": "evaluated",
+          "fitTargetThrough": "2021-09-02",
+          "calibrationStart": "2021-09-03",
+          "calibrationTargetThrough": "2022-09-12",
+          "shapeTargetThrough": "2022-09-12",
+          "testRows": 489,
+          "conditionalDownValue": 0.8966138751659503,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.16463236613335497,
+                "returnMae": 0.18249484849322367,
+                "balancedAccuracy": 0.306786699596663,
+                "upRecall": 0.8726041806762895,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 11,
+                "downPrevalence": 0.30446096272722584
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.16463236613335497,
+                "returnMae": 0.18249484849322367,
+                "balancedAccuracy": 0.306786699596663,
+                "upRecall": 0.8726041806762895,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 11,
+                "downPrevalence": 0.30446096272722584
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 2883,
+              "dates": 6,
+              "targetThrough": "2022-09-12",
+              "lastOrigin": "2022-03-11"
+            }
+          }
+        },
+        {
+          "origin": "2023-03-24",
+          "status": "evaluated",
+          "fitTargetThrough": "2022-03-07",
+          "calibrationStart": "2022-03-11",
+          "calibrationTargetThrough": "2023-03-20",
+          "shapeTargetThrough": "2023-03-20",
+          "testRows": 490,
+          "conditionalDownValue": 0.8955954117385004,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.16123361170032927,
+                "returnMae": 0.17925143457383547,
+                "balancedAccuracy": 0.32567976842576485,
+                "upRecall": 0.4366019485800187,
+                "downRecall": 0.0018513573600578775,
+                "downPrecision": 0.39999999999999997,
+                "downWarnings": 5,
+                "downPrevalence": 0.31559698061398794
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.16123361170032927,
+                "returnMae": 0.17925143457383547,
+                "balancedAccuracy": 0.32567976842576485,
+                "upRecall": 0.4366019485800187,
+                "downRecall": 0.0018513573600578775,
+                "downPrecision": 0.39999999999999997,
+                "downWarnings": 5,
+                "downPrevalence": 0.31559698061398794
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 3372,
+              "dates": 7,
+              "targetThrough": "2023-03-20",
+              "lastOrigin": "2022-09-16"
+            }
+          }
+        },
+        {
+          "origin": "2023-09-29",
+          "status": "evaluated",
+          "fitTargetThrough": "2022-09-12",
+          "calibrationStart": "2022-09-16",
+          "calibrationTargetThrough": "2023-09-25",
+          "shapeTargetThrough": "2023-09-25",
+          "testRows": 490,
+          "conditionalDownValue": 0.896618829070758,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.15788247687789694,
+                "returnMae": 0.17651726005145887,
+                "balancedAccuracy": 0.3330734627787848,
+                "upRecall": 0.3821057946472716,
+                "downRecall": 0.0016393405665818786,
+                "downPrecision": 0.4,
+                "downWarnings": 5,
+                "downPrevalence": 0.3118616437515252
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.15788247687789694,
+                "returnMae": 0.17651726005145887,
+                "balancedAccuracy": 0.3330734627787848,
+                "upRecall": 0.3821057946472716,
+                "downRecall": 0.0016393405665818786,
+                "downPrecision": 0.4,
+                "downWarnings": 5,
+                "downPrevalence": 0.3118616437515252
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 3862,
+              "dates": 8,
+              "targetThrough": "2023-09-25",
+              "lastOrigin": "2023-03-24"
+            }
+          }
+        },
+        {
+          "origin": "2024-04-05",
+          "status": "evaluated",
+          "fitTargetThrough": "2023-03-20",
+          "calibrationStart": "2023-03-24",
+          "calibrationTargetThrough": "2024-04-02",
+          "shapeTargetThrough": "2024-04-02",
+          "testRows": 492,
+          "conditionalDownValue": 0.8975284090611194,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.1592749877112814,
+                "returnMae": 0.1796053115191084,
+                "balancedAccuracy": 0.31793179572089714,
+                "upRecall": 0.8800302007522569,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 13,
+                "downPrevalence": 0.2867341595251652
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.1592749877112814,
+                "returnMae": 0.1796053115191084,
+                "balancedAccuracy": 0.31793179572089714,
+                "upRecall": 0.8800302007522569,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 13,
+                "downPrevalence": 0.2867341595251652
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 4352,
+              "dates": 9,
+              "targetThrough": "2024-04-02",
+              "lastOrigin": "2023-09-29"
+            }
+          }
+        },
+        {
+          "origin": "2024-10-11",
+          "status": "evaluated",
+          "fitTargetThrough": "2023-09-25",
+          "calibrationStart": "2023-09-29",
+          "calibrationTargetThrough": "2024-10-04",
+          "shapeTargetThrough": "2024-10-04",
+          "testRows": 493,
+          "conditionalDownValue": 0.896844773052018,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.15713647886622484,
+                "returnMae": 0.1766630227730433,
+                "balancedAccuracy": 0.31860006863693874,
+                "upRecall": 0.8886969957355524,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 13,
+                "downPrevalence": 0.28163797934500645
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.15713647886622484,
+                "returnMae": 0.1766630227730433,
+                "balancedAccuracy": 0.31860006863693874,
+                "upRecall": 0.8886969957355524,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 13,
+                "downPrevalence": 0.28163797934500645
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 4844,
+              "dates": 10,
+              "targetThrough": "2024-10-04",
+              "lastOrigin": "2024-04-05"
+            }
+          }
+        },
+        {
+          "origin": "2025-04-25",
+          "status": "evaluated",
+          "fitTargetThrough": "2024-04-02",
+          "calibrationStart": "2024-04-05",
+          "calibrationTargetThrough": "2025-04-15",
+          "shapeTargetThrough": "2025-04-15",
+          "testRows": 496,
+          "conditionalDownValue": 0.8923469808615323,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.16273531638575855,
+                "returnMae": 0.17666888849458676,
+                "balancedAccuracy": 0.3175258883441961,
+                "upRecall": 0.8911022414610691,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 13,
+                "downPrevalence": 0.31393605719544193
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.16273531638575855,
+                "returnMae": 0.17666888849458676,
+                "balancedAccuracy": 0.3175258883441961,
+                "upRecall": 0.8911022414610691,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 13,
+                "downPrevalence": 0.31393605719544193
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 5337,
+              "dates": 11,
+              "targetThrough": "2025-04-15",
+              "lastOrigin": "2024-10-11"
+            }
+          }
+        },
+        {
+          "origin": "2025-10-31",
+          "status": "evaluated",
+          "fitTargetThrough": "2024-10-04",
+          "calibrationStart": "2024-10-11",
+          "calibrationTargetThrough": "2025-10-24",
+          "shapeTargetThrough": "2025-10-24",
+          "testRows": 496,
+          "conditionalDownValue": 0.8924060271287078,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.16382797244090308,
+                "returnMae": 0.18299534530431508,
+                "balancedAccuracy": 0.3158425194139779,
+                "upRecall": 0.8756670927781096,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 14,
+                "downPrevalence": 0.30591988038614437
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.16382797244090308,
+                "returnMae": 0.18299534530431508,
+                "balancedAccuracy": 0.3158425194139779,
+                "upRecall": 0.8756670927781096,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 14,
+                "downPrevalence": 0.30591988038614437
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 5833,
+              "dates": 12,
+              "targetThrough": "2025-10-24",
+              "lastOrigin": "2025-04-25"
+            }
+          }
+        }
+      ],
+      "diagnostics": {
+        "logErrorCorrelation": 0.9780700369145077,
+        "specialistHasLowerPriceError": 0.40681871429475863,
+        "directionDisagreement": 0.27105338420956854,
+        "impossibleOracleEndpointMape": 0.15374110299580115,
+        "oracleIsExecutable": false,
+        "downsideScoreBins": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "n": 529,
+            "meanScore": 0.007796273819666133,
+            "realizedDownRate": 0.4273122728300298
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "n": 1340,
+            "meanScore": 0.14618012477634823,
+            "realizedDownRate": 0.46852705427328273
+          },
+          {
+            "low": 0.2,
+            "high": 0.30000000000000004,
+            "n": 331,
+            "meanScore": 0.25270550808130965,
+            "realizedDownRate": 0.33016547712065875
+          },
+          {
+            "low": 0.30000000000000004,
+            "high": 0.4,
+            "n": 1530,
+            "meanScore": 0.3528998832935818,
+            "realizedDownRate": 0.22261747859327816
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "n": 513,
+            "meanScore": 0.4568857232769362,
+            "realizedDownRate": 0.3880747265999046
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "n": 140,
+            "meanScore": 0.5379290525371713,
+            "realizedDownRate": 0.34278581397714963
+          },
+          {
+            "low": 0.6000000000000001,
+            "high": 0.7000000000000001,
+            "n": 24,
+            "meanScore": 0.630494679963793,
+            "realizedDownRate": 0.3334460601961447
+          },
+          {
+            "low": 0.7000000000000001,
+            "high": 0.8,
+            "n": 4,
+            "meanScore": 0.766101168382567,
+            "realizedDownRate": 0.75
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "n": 3,
+            "meanScore": 0.8599588588292294,
+            "realizedDownRate": 0.3333333333333333
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "n": 3,
+            "meanScore": 0.9049063767597677,
+            "realizedDownRate": 0.3333333333333333
+          }
+        ],
+        "probabilityNote": "Reference classifier scores only; numerical combinations have no probability claim."
+      },
+      "historicalPassed": {
+        "fixed_half": false,
+        "causal_error_blend": false,
+        "causal_joint_blend": false,
+        "down_soft_mix": false,
+        "guarded_down_route": false
+      },
+      "passed": {
+        "fixed_half": false,
+        "causal_error_blend": false,
+        "causal_joint_blend": false,
+        "down_soft_mix": false,
+        "guarded_down_route": false
+      },
+      "selected": null,
+      "settingsStatus": {
+        "error": {
+          "selected_on_matured_oos": 9
+        },
+        "joint": {
+          "infeasible_guard_use_error_blend": 9
+        },
+        "route": {
+          "infeasible_guard_use_error_blend": 9
+        }
+      },
+      "pairedRowsHash": "75c5f4ce3ea768f1d9690b2cae81151f187fc8b602415ac16fb759ebac36fdf8",
+      "directionImprovementCI": {
+        "fixed_half": [
+          -0.13096049631839016,
+          -0.0031685227854583156
+        ],
+        "causal_error_blend": [
+          -0.391846233213861,
+          -0.031395829850928064
+        ],
+        "causal_joint_blend": [
+          -0.391846233213861,
+          -0.031395829850928064
+        ],
+        "down_soft_mix": [
+          -0.49253887941095226,
+          -0.16166596812141068
+        ],
+        "guarded_down_route": [
+          -0.391846233213861,
+          -0.031395829850928064
+        ]
+      }
+    },
+    "252": {
+      "status": "research",
+      "evaluationStart": "2017-12-29",
+      "evaluatedDates": [
+        "2017-12-29",
+        "2019-01-04",
+        "2020-01-10",
+        "2021-01-15",
+        "2022-01-21",
+        "2023-01-27",
+        "2024-02-02",
+        "2025-02-07"
+      ],
+      "evaluation": {
+        "noChange": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.21994395880231693,
+          "dateMeanMape": 0.21984319061798263,
+          "p90Mape": 0.4133283505416705,
+          "logMae": 0.23598369922103796,
+          "directionAccuracy": 0.05699481865284974,
+          "returnDirectionAccuracy": 0.05699481865284974,
+          "balancedDirectionAccuracy": 0.3333333333333333,
+          "upRecall": 0.0,
+          "downRecall": 0.0,
+          "flatRecall": 1.0,
+          "downPrecision": null,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 0,
+            "0": 3860,
+            "1": 0
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.19003175344330184,
+              "directionAccuracy": 0.07692307692307693,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.17110406046463053
+            },
+            "2019-01-04": {
+              "mape": 0.24375601572129968,
+              "directionAccuracy": 0.016985138004246284,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.34939155892586343
+            },
+            "2020-01-10": {
+              "mape": 0.21820427251698282,
+              "directionAccuracy": 0.06512605042016807,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.3025473996157844
+            },
+            "2021-01-15": {
+              "mape": 0.20883417928653125,
+              "directionAccuracy": 0.03941908713692946,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.2851046749842211
+            },
+            "2022-01-21": {
+              "mape": 0.23107868290325284,
+              "directionAccuracy": 0.08436213991769548,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.18479599099675872
+            },
+            "2023-01-27": {
+              "mape": 0.19712263255256357,
+              "directionAccuracy": 0.08163265306122448,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.271968638864957
+            },
+            "2024-02-02": {
+              "mape": 0.23160466421356243,
+              "directionAccuracy": 0.034623217922606926,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.3423226881647253
+            },
+            "2025-02-07": {
+              "mape": 0.23811332430636672,
+              "directionAccuracy": 0.056451612903225805,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.3241354533625554
+            }
+          },
+          "returnMae": 0.2792746760455953,
+          "dateMeanReturnMae": 0.278921308172437,
+          "p90ReturnError": 0.5578163854564341,
+          "downWarnings": 0,
+          "falseDownWarnings": 0,
+          "falseDownWarningRate": 0.0,
+          "pointDirectionAgreement": 1.0
+        },
+        "priceOnly": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.22458052124347958,
+          "dateMeanMape": 0.2246037901408552,
+          "p90Mape": 0.43956161001295285,
+          "logMae": 0.22426347630121093,
+          "directionAccuracy": 0.6132124352331606,
+          "returnDirectionAccuracy": 0.6132124352331606,
+          "balancedDirectionAccuracy": 0.3185123031030162,
+          "upRecall": 0.9180713445707566,
+          "downRecall": 0.01928374655647383,
+          "flatRecall": 0.01818181818181818,
+          "downPrecision": 0.2079207920792079,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 101,
+            "0": 168,
+            "1": 3591
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.25078323877754793,
+              "directionAccuracy": 0.391025641025641,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.2138056774290769
+            },
+            "2019-01-04": {
+              "mape": 0.22338658691077504,
+              "directionAccuracy": 0.6072186836518046,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.3214633886680515
+            },
+            "2020-01-10": {
+              "mape": 0.21274130224963464,
+              "directionAccuracy": 0.6869747899159664,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.27691577215924235
+            },
+            "2021-01-15": {
+              "mape": 0.17271949275281157,
+              "directionAccuracy": 0.8589211618257261,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.2336337995304376
+            },
+            "2022-01-21": {
+              "mape": 0.2793595281259745,
+              "directionAccuracy": 0.448559670781893,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.20266799348263337
+            },
+            "2023-01-27": {
+              "mape": 0.19844341830147982,
+              "directionAccuracy": 0.6,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.25962862642833184
+            },
+            "2024-02-02": {
+              "mape": 0.21665543718813776,
+              "directionAccuracy": 0.725050916496945,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.31303012455891316
+            },
+            "2025-02-07": {
+              "mape": 0.2427413168204801,
+              "directionAccuracy": 0.5826612903225806,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.3141385481178423
+            }
+          },
+          "returnMae": 0.2671292473648314,
+          "dateMeanReturnMae": 0.2669104912968161,
+          "p90ReturnError": 0.5178012407203566,
+          "downWarnings": 101,
+          "falseDownWarnings": 80,
+          "falseDownWarningRate": 0.028870443883074703,
+          "pointDirectionAgreement": 1.0
+        },
+        "joint_logistic": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.2417028014825428,
+          "dateMeanMape": 0.24169280922995318,
+          "p90Mape": 0.4894944005120441,
+          "logMae": 0.23526569622309296,
+          "directionAccuracy": 0.5562176165803109,
+          "returnDirectionAccuracy": 0.5341968911917099,
+          "balancedDirectionAccuracy": 0.32597826500395904,
+          "upRecall": 0.7401019208153665,
+          "downRecall": 0.23783287419651056,
+          "flatRecall": 0.0,
+          "downPrecision": 0.26482617586912066,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 978,
+            "0": 0,
+            "1": 2882
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.33563522744538343,
+              "directionAccuracy": 0.3888888888888889,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.2812412591125538
+            },
+            "2019-01-04": {
+              "mape": 0.15747621849598623,
+              "directionAccuracy": 0.9065817409766455,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.21956713105858405
+            },
+            "2020-01-10": {
+              "mape": 0.22281236907881607,
+              "directionAccuracy": 0.6659663865546218,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.2918751082863468
+            },
+            "2021-01-15": {
+              "mape": 0.15947125163272605,
+              "directionAccuracy": 0.8630705394190872,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.21167218493282067
+            },
+            "2022-01-21": {
+              "mape": 0.35747512710530727,
+              "directionAccuracy": 0.4588477366255144,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.26531608265597423
+            },
+            "2023-01-27": {
+              "mape": 0.21348579573182772,
+              "directionAccuracy": 0.3224489795918367,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.302830084579816
+            },
+            "2024-02-02": {
+              "mape": 0.2370101042180154,
+              "directionAccuracy": 0.22606924643584522,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.3511574084645889
+            },
+            "2025-02-07": {
+              "mape": 0.25017638013156335,
+              "directionAccuracy": 0.6310483870967742,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.30665091851470333
+            }
+          },
+          "brier": 0.6098686396761529,
+          "priorBrier": 0.5015636411743783,
+          "rangeCoverage": 0.6594870599690369,
+          "directionReturnAgreement": 0.905958549222798,
+          "returnMae": 0.27923395684702285,
+          "dateMeanReturnMae": 0.27878877220067344,
+          "p90ReturnError": 0.535268712831551,
+          "downWarnings": 978,
+          "falseDownWarnings": 719,
+          "falseDownWarningRate": 0.2594731143991339,
+          "pointDirectionAgreement": 0.905958549222798
+        },
+        "fixed_half": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.22928507293089614,
+          "dateMeanMape": 0.22928751964500083,
+          "p90Mape": 0.4579657591725463,
+          "logMae": 0.2255863828761131,
+          "directionAccuracy": 0.5702072538860103,
+          "returnDirectionAccuracy": 0.5702072538860103,
+          "balancedDirectionAccuracy": 0.3413003681133826,
+          "upRecall": 0.840062720501764,
+          "downRecall": 0.020202020202020204,
+          "flatRecall": 0.16363636363636364,
+          "downPrecision": 0.4230769230769231,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 52,
+            "0": 588,
+            "1": 3220
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.2907153001565438,
+              "directionAccuracy": 0.3888888888888889,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.2446590098067073
+            },
+            "2019-01-04": {
+              "mape": 0.18183017591882114,
+              "directionAccuracy": 0.8959660297239915,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.261080511347282
+            },
+            "2020-01-10": {
+              "mape": 0.21682712260457218,
+              "directionAccuracy": 0.6869747899159664,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.28334172102965466
+            },
+            "2021-01-15": {
+              "mape": 0.1650379242616551,
+              "directionAccuracy": 0.8630705394190872,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.22150469433705267
+            },
+            "2022-01-21": {
+              "mape": 0.3129952552941701,
+              "directionAccuracy": 0.4588477366255144,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.22783624937156935
+            },
+            "2023-01-27": {
+              "mape": 0.19754049363360318,
+              "directionAccuracy": 0.15918367346938775,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.2727975629893053
+            },
+            "2024-02-02": {
+              "mape": 0.22488894585050076,
+              "directionAccuracy": 0.49490835030549896,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.3300889459936581
+            },
+            "2025-02-07": {
+              "mape": 0.2444649394401405,
+              "directionAccuracy": 0.625,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.30825629992580245
+            }
+          },
+          "returnMae": 0.2690345283989923,
+          "dateMeanReturnMae": 0.26869562435012895,
+          "p90ReturnError": 0.5191890320033856,
+          "downWarnings": 52,
+          "falseDownWarnings": 30,
+          "falseDownWarningRate": 0.010826416456153013,
+          "pointDirectionAgreement": 1.0
+        },
+        "causal_error_blend": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.2277920420758798,
+          "dateMeanMape": 0.22789326292981066,
+          "p90Mape": 0.4277578131283241,
+          "logMae": 0.23811395861441947,
+          "directionAccuracy": 0.36347150259067357,
+          "returnDirectionAccuracy": 0.36347150259067357,
+          "balancedDirectionAccuracy": 0.277466413058516,
+          "upRecall": 0.49901999215993725,
+          "downRecall": 0.06519742883379247,
+          "flatRecall": 0.2681818181818182,
+          "downPrecision": 0.3008474576271186,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 236,
+            "0": 1456,
+            "1": 2168
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.25078323877754793,
+              "directionAccuracy": 0.391025641025641,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.2138056774290769
+            },
+            "2019-01-04": {
+              "mape": 0.24375601572129968,
+              "directionAccuracy": 0.016985138004246284,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.34939155892586343
+            },
+            "2020-01-10": {
+              "mape": 0.21674594037584063,
+              "directionAccuracy": 0.3382352941176471,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.2971423401140119
+            },
+            "2021-01-15": {
+              "mape": 0.19232015828502688,
+              "directionAccuracy": 0.8506224066390041,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.26234547551482296
+            },
+            "2022-01-21": {
+              "mape": 0.24995057755077227,
+              "directionAccuracy": 0.4588477366255144,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.1912264290004483
+            },
+            "2023-01-27": {
+              "mape": 0.19931698957593622,
+              "directionAccuracy": 0.18775510204081633,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.27784881925489113
+            },
+            "2024-02-02": {
+              "mape": 0.23290901546366785,
+              "directionAccuracy": 0.03665987780040733,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.34448471392806346
+            },
+            "2025-02-07": {
+              "mape": 0.2373641676883939,
+              "directionAccuracy": 0.6209677419354839,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.3157915235850635
+            }
+          },
+          "returnMae": 0.2817024120594014,
+          "dateMeanReturnMae": 0.2815045672190302,
+          "p90ReturnError": 0.5468923776635174,
+          "downWarnings": 236,
+          "falseDownWarnings": 165,
+          "falseDownWarningRate": 0.059545290508841574,
+          "pointDirectionAgreement": 1.0
+        },
+        "causal_joint_blend": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.2277920420758798,
+          "dateMeanMape": 0.22789326292981066,
+          "p90Mape": 0.4277578131283241,
+          "logMae": 0.23811395861441947,
+          "directionAccuracy": 0.36347150259067357,
+          "returnDirectionAccuracy": 0.36347150259067357,
+          "balancedDirectionAccuracy": 0.277466413058516,
+          "upRecall": 0.49901999215993725,
+          "downRecall": 0.06519742883379247,
+          "flatRecall": 0.2681818181818182,
+          "downPrecision": 0.3008474576271186,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 236,
+            "0": 1456,
+            "1": 2168
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.25078323877754793,
+              "directionAccuracy": 0.391025641025641,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.2138056774290769
+            },
+            "2019-01-04": {
+              "mape": 0.24375601572129968,
+              "directionAccuracy": 0.016985138004246284,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.34939155892586343
+            },
+            "2020-01-10": {
+              "mape": 0.21674594037584063,
+              "directionAccuracy": 0.3382352941176471,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.2971423401140119
+            },
+            "2021-01-15": {
+              "mape": 0.19232015828502688,
+              "directionAccuracy": 0.8506224066390041,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.26234547551482296
+            },
+            "2022-01-21": {
+              "mape": 0.24995057755077227,
+              "directionAccuracy": 0.4588477366255144,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.1912264290004483
+            },
+            "2023-01-27": {
+              "mape": 0.19931698957593622,
+              "directionAccuracy": 0.18775510204081633,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.27784881925489113
+            },
+            "2024-02-02": {
+              "mape": 0.23290901546366785,
+              "directionAccuracy": 0.03665987780040733,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.34448471392806346
+            },
+            "2025-02-07": {
+              "mape": 0.2373641676883939,
+              "directionAccuracy": 0.6209677419354839,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.3157915235850635
+            }
+          },
+          "returnMae": 0.2817024120594014,
+          "dateMeanReturnMae": 0.2815045672190302,
+          "p90ReturnError": 0.5468923776635174,
+          "downWarnings": 236,
+          "falseDownWarnings": 165,
+          "falseDownWarningRate": 0.059545290508841574,
+          "pointDirectionAgreement": 1.0
+        },
+        "down_soft_mix": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.23109967135157938,
+          "dateMeanMape": 0.2310257279371435,
+          "p90Mape": 0.43416100989999096,
+          "logMae": 0.24373112556315887,
+          "directionAccuracy": 0.3764248704663212,
+          "returnDirectionAccuracy": 0.3764248704663212,
+          "balancedDirectionAccuracy": 0.29677623916246915,
+          "upRecall": 0.44413955311642495,
+          "downRecall": 0.25528007346189163,
+          "flatRecall": 0.19090909090909092,
+          "downPrecision": 0.260543580131209,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 1067,
+            "0": 929,
+            "1": 1864
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.2351932808737747,
+              "directionAccuracy": 0.391025641025641,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.20166284544401716
+            },
+            "2019-01-04": {
+              "mape": 0.23135584829323042,
+              "directionAccuracy": 0.5329087048832272,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.3345995417153961
+            },
+            "2020-01-10": {
+              "mape": 0.21781618241279144,
+              "directionAccuracy": 0.39285714285714285,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.29870524360783485
+            },
+            "2021-01-15": {
+              "mape": 0.19538513778059496,
+              "directionAccuracy": 0.520746887966805,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.2673130467914137
+            },
+            "2022-01-21": {
+              "mape": 0.2703306508009449,
+              "directionAccuracy": 0.4382716049382716,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.19668452065471992
+            },
+            "2023-01-27": {
+              "mape": 0.21643106571671966,
+              "directionAccuracy": 0.3040816326530612,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.30746134653207413
+            },
+            "2024-02-02": {
+              "mape": 0.24048809723972078,
+              "directionAccuracy": 0.219959266802444,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.3586224778134629
+            },
+            "2025-02-07": {
+              "mape": 0.241205560379371,
+              "directionAccuracy": 0.22379032258064516,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.3253668247368945
+            }
+          },
+          "returnMae": 0.2867133416687468,
+          "dateMeanReturnMae": 0.2863019809119767,
+          "p90ReturnError": 0.5692677467929438,
+          "downWarnings": 1067,
+          "falseDownWarnings": 789,
+          "falseDownWarningRate": 0.28473475279682425,
+          "pointDirectionAgreement": 1.0
+        },
+        "guarded_down_route": {
+          "n": 3860,
+          "dates": 8,
+          "mape": 0.2277920420758798,
+          "dateMeanMape": 0.22789326292981066,
+          "p90Mape": 0.4277578131283241,
+          "logMae": 0.23811395861441947,
+          "directionAccuracy": 0.36347150259067357,
+          "returnDirectionAccuracy": 0.36347150259067357,
+          "balancedDirectionAccuracy": 0.277466413058516,
+          "upRecall": 0.49901999215993725,
+          "downRecall": 0.06519742883379247,
+          "flatRecall": 0.2681818181818182,
+          "downPrecision": 0.3008474576271186,
+          "downPrevalence": 0.2821243523316062,
+          "alwaysUpAccuracy": 0.660880829015544,
+          "directionCounts": {
+            "-1": 236,
+            "0": 1456,
+            "1": 2168
+          },
+          "byDate": {
+            "2017-12-29": {
+              "mape": 0.25078323877754793,
+              "directionAccuracy": 0.391025641025641,
+              "alwaysUpAccuracy": 0.3888888888888889,
+              "returnMae": 0.2138056774290769
+            },
+            "2019-01-04": {
+              "mape": 0.24375601572129968,
+              "directionAccuracy": 0.016985138004246284,
+              "alwaysUpAccuracy": 0.9129511677282378,
+              "returnMae": 0.34939155892586343
+            },
+            "2020-01-10": {
+              "mape": 0.21674594037584063,
+              "directionAccuracy": 0.3382352941176471,
+              "alwaysUpAccuracy": 0.6932773109243697,
+              "returnMae": 0.2971423401140119
+            },
+            "2021-01-15": {
+              "mape": 0.19232015828502688,
+              "directionAccuracy": 0.8506224066390041,
+              "alwaysUpAccuracy": 0.8630705394190872,
+              "returnMae": 0.26234547551482296
+            },
+            "2022-01-21": {
+              "mape": 0.24995057755077227,
+              "directionAccuracy": 0.4588477366255144,
+              "alwaysUpAccuracy": 0.4588477366255144,
+              "returnMae": 0.1912264290004483
+            },
+            "2023-01-27": {
+              "mape": 0.19931698957593622,
+              "directionAccuracy": 0.18775510204081633,
+              "alwaysUpAccuracy": 0.6020408163265306,
+              "returnMae": 0.27784881925489113
+            },
+            "2024-02-02": {
+              "mape": 0.23290901546366785,
+              "directionAccuracy": 0.03665987780040733,
+              "alwaysUpAccuracy": 0.7372708757637475,
+              "returnMae": 0.34448471392806346
+            },
+            "2025-02-07": {
+              "mape": 0.2373641676883939,
+              "directionAccuracy": 0.6209677419354839,
+              "alwaysUpAccuracy": 0.6310483870967742,
+              "returnMae": 0.3157915235850635
+            }
+          },
+          "returnMae": 0.2817024120594014,
+          "dateMeanReturnMae": 0.2815045672190302,
+          "p90ReturnError": 0.5468923776635174,
+          "downWarnings": 236,
+          "falseDownWarnings": 165,
+          "falseDownWarningRate": 0.059545290508841574,
+          "pointDirectionAgreement": 1.0
+        }
+      },
+      "regimes": {
+        "상승·보통변동": {
+          "noChange": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.21663458175633263,
+            "dateMeanMape": 0.2164270727460802,
+            "p90Mape": 0.41657072368584214,
+            "logMae": 0.22879215079989532,
+            "directionAccuracy": 0.06255532605488345,
+            "returnDirectionAccuracy": 0.06255532605488345,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 0,
+              "0": 3389,
+              "1": 0
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.19003175344330184,
+                "directionAccuracy": 0.07692307692307693,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.17110406046463053
+              },
+              "2020-01-10": {
+                "mape": 0.21820427251698282,
+                "directionAccuracy": 0.06512605042016807,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.3025473996157844
+              },
+              "2021-01-15": {
+                "mape": 0.20883417928653125,
+                "directionAccuracy": 0.03941908713692946,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.2851046749842211
+              },
+              "2022-01-21": {
+                "mape": 0.23107868290325284,
+                "directionAccuracy": 0.08436213991769548,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.18479599099675872
+              },
+              "2023-01-27": {
+                "mape": 0.19712263255256357,
+                "directionAccuracy": 0.08163265306122448,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.271968638864957
+              },
+              "2024-02-02": {
+                "mape": 0.23160466421356243,
+                "directionAccuracy": 0.034623217922606926,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.3423226881647253
+              },
+              "2025-02-07": {
+                "mape": 0.23811332430636672,
+                "directionAccuracy": 0.056451612903225805,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.3241354533625554
+              }
+            },
+            "returnMae": 0.2695298982832447,
+            "dateMeanReturnMae": 0.26885412949337606,
+            "p90ReturnError": 0.5430444885362957,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "priceOnly": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.22474645310264274,
+            "dateMeanMape": 0.2247776763165809,
+            "p90Mape": 0.4441186194735494,
+            "logMae": 0.21892932451196034,
+            "directionAccuracy": 0.6140454411330776,
+            "returnDirectionAccuracy": 0.6140454411330776,
+            "balancedDirectionAccuracy": 0.33162080527459753,
+            "upRecall": 0.975011786892975,
+            "downRecall": 0.010416666666666666,
+            "flatRecall": 0.009433962264150943,
+            "downPrecision": 0.3548387096774194,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 31,
+              "0": 60,
+              "1": 3298
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.25078323877754793,
+                "directionAccuracy": 0.391025641025641,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.2138056774290769
+              },
+              "2020-01-10": {
+                "mape": 0.21274130224963464,
+                "directionAccuracy": 0.6869747899159664,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.27691577215924235
+              },
+              "2021-01-15": {
+                "mape": 0.17271949275281157,
+                "directionAccuracy": 0.8589211618257261,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.2336337995304376
+              },
+              "2022-01-21": {
+                "mape": 0.2793595281259745,
+                "directionAccuracy": 0.448559670781893,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.20266799348263337
+              },
+              "2023-01-27": {
+                "mape": 0.19844341830147982,
+                "directionAccuracy": 0.6,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.25962862642833184
+              },
+              "2024-02-02": {
+                "mape": 0.21665543718813776,
+                "directionAccuracy": 0.725050916496945,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.31303012455891316
+              },
+              "2025-02-07": {
+                "mape": 0.2427413168204801,
+                "directionAccuracy": 0.5826612903225806,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.3141385481178423
+              }
+            },
+            "returnMae": 0.2595779400311587,
+            "dateMeanReturnMae": 0.2591172202437825,
+            "p90ReturnError": 0.5010151308273703,
+            "downWarnings": 31,
+            "falseDownWarnings": 20,
+            "falseDownWarningRate": 0.008572653236176597,
+            "pointDirectionAgreement": 1.0
+          },
+          "joint_logistic": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.2534085319595768,
+            "dateMeanMape": 0.25372375076337705,
+            "p90Mape": 0.5092886389553815,
+            "logMae": 0.24459753159379624,
+            "directionAccuracy": 0.5075243434641488,
+            "returnDirectionAccuracy": 0.48273827087636473,
+            "balancedDirectionAccuracy": 0.3112052276656237,
+            "upRecall": 0.6892975011786893,
+            "downRecall": 0.24431818181818182,
+            "flatRecall": 0.0,
+            "downPrecision": 0.26515930113052416,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 973,
+              "0": 0,
+              "1": 2416
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.33563522744538343,
+                "directionAccuracy": 0.3888888888888889,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.2812412591125538
+              },
+              "2020-01-10": {
+                "mape": 0.22281236907881607,
+                "directionAccuracy": 0.6659663865546218,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.2918751082863468
+              },
+              "2021-01-15": {
+                "mape": 0.15947125163272605,
+                "directionAccuracy": 0.8630705394190872,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.21167218493282067
+              },
+              "2022-01-21": {
+                "mape": 0.35747512710530727,
+                "directionAccuracy": 0.4588477366255144,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.26531608265597423
+              },
+              "2023-01-27": {
+                "mape": 0.21348579573182772,
+                "directionAccuracy": 0.3224489795918367,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.302830084579816
+              },
+              "2024-02-02": {
+                "mape": 0.2370101042180154,
+                "directionAccuracy": 0.22606924643584522,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.3511574084645889
+              },
+              "2025-02-07": {
+                "mape": 0.25017638013156335,
+                "directionAccuracy": 0.6310483870967742,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.30665091851470333
+              }
+            },
+            "brier": 0.6719145624939526,
+            "priorBrier": 0.5429854509860896,
+            "rangeCoverage": 0.6469357725093513,
+            "directionReturnAgreement": 0.8931838300383594,
+            "returnMae": 0.28752639560369286,
+            "dateMeanReturnMae": 0.2872490066495434,
+            "p90ReturnError": 0.5454185825782344,
+            "downWarnings": 973,
+            "falseDownWarnings": 715,
+            "falseDownWarningRate": 0.30647235319331334,
+            "pointDirectionAgreement": 0.8931838300383594
+          },
+          "fixed_half": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.235880309429181,
+            "dateMeanMape": 0.23606714017731223,
+            "p90Mape": 0.47390675038170954,
+            "logMae": 0.22854908171554228,
+            "directionAccuracy": 0.5249336087341399,
+            "returnDirectionAccuracy": 0.5249336087341399,
+            "balancedDirectionAccuracy": 0.3326029536915956,
+            "upRecall": 0.8118811881188119,
+            "downRecall": 0.020833333333333332,
+            "flatRecall": 0.1650943396226415,
+            "downPrecision": 0.4583333333333333,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 48,
+              "0": 580,
+              "1": 2761
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.2907153001565438,
+                "directionAccuracy": 0.3888888888888889,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.2446590098067073
+              },
+              "2020-01-10": {
+                "mape": 0.21682712260457218,
+                "directionAccuracy": 0.6869747899159664,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.28334172102965466
+              },
+              "2021-01-15": {
+                "mape": 0.1650379242616551,
+                "directionAccuracy": 0.8630705394190872,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.22150469433705267
+              },
+              "2022-01-21": {
+                "mape": 0.3129952552941701,
+                "directionAccuracy": 0.4588477366255144,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.22783624937156935
+              },
+              "2023-01-27": {
+                "mape": 0.19754049363360318,
+                "directionAccuracy": 0.15918367346938775,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.2727975629893053
+              },
+              "2024-02-02": {
+                "mape": 0.22488894585050076,
+                "directionAccuracy": 0.49490835030549896,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.3300889459936581
+              },
+              "2025-02-07": {
+                "mape": 0.2444649394401405,
+                "directionAccuracy": 0.625,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.30825629992580245
+              }
+            },
+            "returnMae": 0.2701399701314667,
+            "dateMeanReturnMae": 0.26978349763625,
+            "p90ReturnError": 0.5186300692200286,
+            "downWarnings": 48,
+            "falseDownWarnings": 26,
+            "falseDownWarningRate": 0.011144449207029576,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_error_blend": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.22557338418653408,
+            "dateMeanMape": 0.2256271553881694,
+            "p90Mape": 0.43949256029825157,
+            "logMae": 0.23121847161973974,
+            "directionAccuracy": 0.41162584833284155,
+            "returnDirectionAccuracy": 0.41162584833284155,
+            "balancedDirectionAccuracy": 0.30266315883609923,
+            "upRecall": 0.6001885902876002,
+            "downRecall": 0.06723484848484848,
+            "flatRecall": 0.24056603773584906,
+            "downPrecision": 0.3008474576271186,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 236,
+              "0": 985,
+              "1": 2168
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.25078323877754793,
+                "directionAccuracy": 0.391025641025641,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.2138056774290769
+              },
+              "2020-01-10": {
+                "mape": 0.21674594037584063,
+                "directionAccuracy": 0.3382352941176471,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.2971423401140119
+              },
+              "2021-01-15": {
+                "mape": 0.19232015828502688,
+                "directionAccuracy": 0.8506224066390041,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.26234547551482296
+              },
+              "2022-01-21": {
+                "mape": 0.24995057755077227,
+                "directionAccuracy": 0.4588477366255144,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.1912264290004483
+              },
+              "2023-01-27": {
+                "mape": 0.19931698957593622,
+                "directionAccuracy": 0.18775510204081633,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.27784881925489113
+              },
+              "2024-02-02": {
+                "mape": 0.23290901546366785,
+                "directionAccuracy": 0.03665987780040733,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.34448471392806346
+              },
+              "2025-02-07": {
+                "mape": 0.2373641676883939,
+                "directionAccuracy": 0.6209677419354839,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.3157915235850635
+              }
+            },
+            "returnMae": 0.2722950387415779,
+            "dateMeanReturnMae": 0.27180642554662543,
+            "p90ReturnError": 0.5355376353833771,
+            "downWarnings": 236,
+            "falseDownWarnings": 165,
+            "falseDownWarningRate": 0.07072438919845692,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_joint_blend": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.22557338418653408,
+            "dateMeanMape": 0.2256271553881694,
+            "p90Mape": 0.43949256029825157,
+            "logMae": 0.23121847161973974,
+            "directionAccuracy": 0.41162584833284155,
+            "returnDirectionAccuracy": 0.41162584833284155,
+            "balancedDirectionAccuracy": 0.30266315883609923,
+            "upRecall": 0.6001885902876002,
+            "downRecall": 0.06723484848484848,
+            "flatRecall": 0.24056603773584906,
+            "downPrecision": 0.3008474576271186,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 236,
+              "0": 985,
+              "1": 2168
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.25078323877754793,
+                "directionAccuracy": 0.391025641025641,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.2138056774290769
+              },
+              "2020-01-10": {
+                "mape": 0.21674594037584063,
+                "directionAccuracy": 0.3382352941176471,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.2971423401140119
+              },
+              "2021-01-15": {
+                "mape": 0.19232015828502688,
+                "directionAccuracy": 0.8506224066390041,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.26234547551482296
+              },
+              "2022-01-21": {
+                "mape": 0.24995057755077227,
+                "directionAccuracy": 0.4588477366255144,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.1912264290004483
+              },
+              "2023-01-27": {
+                "mape": 0.19931698957593622,
+                "directionAccuracy": 0.18775510204081633,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.27784881925489113
+              },
+              "2024-02-02": {
+                "mape": 0.23290901546366785,
+                "directionAccuracy": 0.03665987780040733,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.34448471392806346
+              },
+              "2025-02-07": {
+                "mape": 0.2373641676883939,
+                "directionAccuracy": 0.6209677419354839,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.3157915235850635
+              }
+            },
+            "returnMae": 0.2722950387415779,
+            "dateMeanReturnMae": 0.27180642554662543,
+            "p90ReturnError": 0.5355376353833771,
+            "downWarnings": 236,
+            "falseDownWarnings": 165,
+            "falseDownWarningRate": 0.07072438919845692,
+            "pointDirectionAgreement": 1.0
+          },
+          "down_soft_mix": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.2310640681236308,
+            "dateMeanMape": 0.2309785678862739,
+            "p90Mape": 0.4356933285729118,
+            "logMae": 0.2393697839364389,
+            "directionAccuracy": 0.3546768958394807,
+            "returnDirectionAccuracy": 0.3546768958394807,
+            "balancedDirectionAccuracy": 0.28783030762644995,
+            "upRecall": 0.421970768505422,
+            "downRecall": 0.2528409090909091,
+            "flatRecall": 0.18867924528301888,
+            "downPrecision": 0.2724489795918367,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 980,
+              "0": 799,
+              "1": 1610
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.2351932808737747,
+                "directionAccuracy": 0.391025641025641,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.20166284544401716
+              },
+              "2020-01-10": {
+                "mape": 0.21781618241279144,
+                "directionAccuracy": 0.39285714285714285,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.29870524360783485
+              },
+              "2021-01-15": {
+                "mape": 0.19538513778059496,
+                "directionAccuracy": 0.520746887966805,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.2673130467914137
+              },
+              "2022-01-21": {
+                "mape": 0.2703306508009449,
+                "directionAccuracy": 0.4382716049382716,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.19668452065471992
+              },
+              "2023-01-27": {
+                "mape": 0.21643106571671966,
+                "directionAccuracy": 0.3040816326530612,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.30746134653207413
+              },
+              "2024-02-02": {
+                "mape": 0.24048809723972078,
+                "directionAccuracy": 0.219959266802444,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.3586224778134629
+              },
+              "2025-02-07": {
+                "mape": 0.241205560379371,
+                "directionAccuracy": 0.22379032258064516,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.3253668247368945
+              }
+            },
+            "returnMae": 0.2800581630845119,
+            "dateMeanReturnMae": 0.2794023293686311,
+            "p90ReturnError": 0.5548389334853788,
+            "downWarnings": 980,
+            "falseDownWarnings": 713,
+            "falseDownWarningRate": 0.30561508786969566,
+            "pointDirectionAgreement": 1.0
+          },
+          "guarded_down_route": {
+            "n": 3389,
+            "dates": 7,
+            "mape": 0.22557338418653408,
+            "dateMeanMape": 0.2256271553881694,
+            "p90Mape": 0.43949256029825157,
+            "logMae": 0.23121847161973974,
+            "directionAccuracy": 0.41162584833284155,
+            "returnDirectionAccuracy": 0.41162584833284155,
+            "balancedDirectionAccuracy": 0.30266315883609923,
+            "upRecall": 0.6001885902876002,
+            "downRecall": 0.06723484848484848,
+            "flatRecall": 0.24056603773584906,
+            "downPrecision": 0.3008474576271186,
+            "downPrevalence": 0.3115963411035704,
+            "alwaysUpAccuracy": 0.6258483328415462,
+            "directionCounts": {
+              "-1": 236,
+              "0": 985,
+              "1": 2168
+            },
+            "byDate": {
+              "2017-12-29": {
+                "mape": 0.25078323877754793,
+                "directionAccuracy": 0.391025641025641,
+                "alwaysUpAccuracy": 0.3888888888888889,
+                "returnMae": 0.2138056774290769
+              },
+              "2020-01-10": {
+                "mape": 0.21674594037584063,
+                "directionAccuracy": 0.3382352941176471,
+                "alwaysUpAccuracy": 0.6932773109243697,
+                "returnMae": 0.2971423401140119
+              },
+              "2021-01-15": {
+                "mape": 0.19232015828502688,
+                "directionAccuracy": 0.8506224066390041,
+                "alwaysUpAccuracy": 0.8630705394190872,
+                "returnMae": 0.26234547551482296
+              },
+              "2022-01-21": {
+                "mape": 0.24995057755077227,
+                "directionAccuracy": 0.4588477366255144,
+                "alwaysUpAccuracy": 0.4588477366255144,
+                "returnMae": 0.1912264290004483
+              },
+              "2023-01-27": {
+                "mape": 0.19931698957593622,
+                "directionAccuracy": 0.18775510204081633,
+                "alwaysUpAccuracy": 0.6020408163265306,
+                "returnMae": 0.27784881925489113
+              },
+              "2024-02-02": {
+                "mape": 0.23290901546366785,
+                "directionAccuracy": 0.03665987780040733,
+                "alwaysUpAccuracy": 0.7372708757637475,
+                "returnMae": 0.34448471392806346
+              },
+              "2025-02-07": {
+                "mape": 0.2373641676883939,
+                "directionAccuracy": 0.6209677419354839,
+                "alwaysUpAccuracy": 0.6310483870967742,
+                "returnMae": 0.3157915235850635
+              }
+            },
+            "returnMae": 0.2722950387415779,
+            "dateMeanReturnMae": 0.27180642554662543,
+            "p90ReturnError": 0.5355376353833771,
+            "downWarnings": 236,
+            "falseDownWarnings": 165,
+            "falseDownWarningRate": 0.07072438919845692,
+            "pointDirectionAgreement": 1.0
+          }
+        },
+        "하락·보통변동": {
+          "noChange": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.24375601572129968,
+            "dateMeanMape": 0.24375601572129968,
+            "p90Mape": 0.3894142660096952,
+            "logMae": 0.2877292567566057,
+            "directionAccuracy": 0.016985138004246284,
+            "returnDirectionAccuracy": 0.016985138004246284,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 0,
+              "0": 471,
+              "1": 0
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.24375601572129968,
+                "directionAccuracy": 0.016985138004246284,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.34939155892586343
+              }
+            },
+            "returnMae": 0.34939155892586343,
+            "dateMeanReturnMae": 0.34939155892586343,
+            "p90ReturnError": 0.6197096217985611,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "priceOnly": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.22338658691077504,
+            "dateMeanMape": 0.22338658691077504,
+            "p90Mape": 0.3911654344406216,
+            "logMae": 0.26264445382513923,
+            "directionAccuracy": 0.6072186836518046,
+            "returnDirectionAccuracy": 0.6072186836518046,
+            "balancedDirectionAccuracy": 0.3967465351186281,
+            "upRecall": 0.6372093023255814,
+            "downRecall": 0.30303030303030304,
+            "flatRecall": 0.25,
+            "downPrecision": 0.14285714285714285,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 70,
+              "0": 108,
+              "1": 293
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.22338658691077504,
+                "directionAccuracy": 0.6072186836518046,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.3214633886680515
+              }
+            },
+            "returnMae": 0.3214633886680515,
+            "dateMeanReturnMae": 0.3214633886680515,
+            "p90ReturnError": 0.6219260625875306,
+            "downWarnings": 70,
+            "falseDownWarnings": 60,
+            "falseDownWarningRate": 0.136986301369863,
+            "pointDirectionAgreement": 1.0
+          },
+          "joint_logistic": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.15747621849598623,
+            "dateMeanMape": 0.15747621849598623,
+            "p90Mape": 0.29967908974231117,
+            "logMae": 0.16812006974472038,
+            "directionAccuracy": 0.9065817409766455,
+            "returnDirectionAccuracy": 0.9044585987261147,
+            "balancedDirectionAccuracy": 0.340333568240545,
+            "upRecall": 0.9906976744186047,
+            "downRecall": 0.030303030303030304,
+            "flatRecall": 0.0,
+            "downPrecision": 0.2,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 5,
+              "0": 0,
+              "1": 466
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.15747621849598623,
+                "directionAccuracy": 0.9065817409766455,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.21956713105858405
+              }
+            },
+            "brier": 0.17554717995155372,
+            "priorBrier": 0.21161097249239869,
+            "rangeCoverage": 0.7473460721868365,
+            "directionReturnAgreement": 0.9978768577494692,
+            "returnMae": 0.21956713105858405,
+            "dateMeanReturnMae": 0.21956713105858405,
+            "p90ReturnError": 0.45212036174918113,
+            "downWarnings": 5,
+            "falseDownWarnings": 4,
+            "falseDownWarningRate": 0.0091324200913242,
+            "pointDirectionAgreement": 0.9978768577494692
+          },
+          "fixed_half": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.18183017591882114,
+            "dateMeanMape": 0.18183017591882114,
+            "p90Mape": 0.3485012776061299,
+            "logMae": 0.2042687897406023,
+            "directionAccuracy": 0.8959660297239915,
+            "returnDirectionAccuracy": 0.8959660297239915,
+            "balancedDirectionAccuracy": 0.3680232558139535,
+            "upRecall": 0.9790697674418605,
+            "downRecall": 0.0,
+            "flatRecall": 0.125,
+            "downPrecision": 0.0,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 4,
+              "0": 8,
+              "1": 459
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.18183017591882114,
+                "directionAccuracy": 0.8959660297239915,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.261080511347282
+              }
+            },
+            "returnMae": 0.261080511347282,
+            "dateMeanReturnMae": 0.261080511347282,
+            "p90ReturnError": 0.5224202825880799,
+            "downWarnings": 4,
+            "falseDownWarnings": 4,
+            "falseDownWarningRate": 0.0091324200913242,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_error_blend": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.24375601572129968,
+            "dateMeanMape": 0.24375601572129968,
+            "p90Mape": 0.3894142660096952,
+            "logMae": 0.2877292567566057,
+            "directionAccuracy": 0.016985138004246284,
+            "returnDirectionAccuracy": 0.016985138004246284,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 0,
+              "0": 471,
+              "1": 0
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.24375601572129968,
+                "directionAccuracy": 0.016985138004246284,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.34939155892586343
+              }
+            },
+            "returnMae": 0.34939155892586343,
+            "dateMeanReturnMae": 0.34939155892586343,
+            "p90ReturnError": 0.6197096217985611,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "causal_joint_blend": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.24375601572129968,
+            "dateMeanMape": 0.24375601572129968,
+            "p90Mape": 0.3894142660096952,
+            "logMae": 0.2877292567566057,
+            "directionAccuracy": 0.016985138004246284,
+            "returnDirectionAccuracy": 0.016985138004246284,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 0,
+              "0": 471,
+              "1": 0
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.24375601572129968,
+                "directionAccuracy": 0.016985138004246284,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.34939155892586343
+              }
+            },
+            "returnMae": 0.34939155892586343,
+            "dateMeanReturnMae": 0.34939155892586343,
+            "p90ReturnError": 0.6197096217985611,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          },
+          "down_soft_mix": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.23135584829323042,
+            "dateMeanMape": 0.23135584829323042,
+            "p90Mape": 0.4037315783290897,
+            "logMae": 0.2751124138284541,
+            "directionAccuracy": 0.5329087048832272,
+            "returnDirectionAccuracy": 0.5329087048832272,
+            "balancedDirectionAccuracy": 0.37894056847545216,
+            "upRecall": 0.5534883720930233,
+            "downRecall": 0.3333333333333333,
+            "flatRecall": 0.25,
+            "downPrecision": 0.12643678160919541,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 87,
+              "0": 130,
+              "1": 254
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.23135584829323042,
+                "directionAccuracy": 0.5329087048832272,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.3345995417153961
+              }
+            },
+            "returnMae": 0.3345995417153961,
+            "dateMeanReturnMae": 0.3345995417153961,
+            "p90ReturnError": 0.6313507361285167,
+            "downWarnings": 87,
+            "falseDownWarnings": 76,
+            "falseDownWarningRate": 0.1735159817351598,
+            "pointDirectionAgreement": 1.0
+          },
+          "guarded_down_route": {
+            "n": 471,
+            "dates": 1,
+            "mape": 0.24375601572129968,
+            "dateMeanMape": 0.24375601572129968,
+            "p90Mape": 0.3894142660096952,
+            "logMae": 0.2877292567566057,
+            "directionAccuracy": 0.016985138004246284,
+            "returnDirectionAccuracy": 0.016985138004246284,
+            "balancedDirectionAccuracy": 0.3333333333333333,
+            "upRecall": 0.0,
+            "downRecall": 0.0,
+            "flatRecall": 1.0,
+            "downPrecision": null,
+            "downPrevalence": 0.07006369426751592,
+            "alwaysUpAccuracy": 0.9129511677282378,
+            "directionCounts": {
+              "-1": 0,
+              "0": 471,
+              "1": 0
+            },
+            "byDate": {
+              "2019-01-04": {
+                "mape": 0.24375601572129968,
+                "directionAccuracy": 0.016985138004246284,
+                "alwaysUpAccuracy": 0.9129511677282378,
+                "returnMae": 0.34939155892586343
+              }
+            },
+            "returnMae": 0.34939155892586343,
+            "dateMeanReturnMae": 0.34939155892586343,
+            "p90ReturnError": 0.6197096217985611,
+            "downWarnings": 0,
+            "falseDownWarnings": 0,
+            "falseDownWarningRate": 0.0,
+            "pointDirectionAgreement": 1.0
+          }
+        }
+      },
+      "checks": {
+        "fixed_half": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": true,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": true,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "causal_error_blend": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "causal_joint_blend": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "down_soft_mix": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        },
+        "guarded_down_route": {
+          "enoughDates": true,
+          "priceError": false,
+          "returnError": false,
+          "tail": false,
+          "returnTail": false,
+          "dateConsistency": false,
+          "direction": false,
+          "returnDirection": false,
+          "balancedDirection": false,
+          "upRecall": true,
+          "downRecall": false,
+          "downPrecision": false,
+          "directionEvidence": false,
+          "prospective": false
+        }
+      },
+      "folds": [
+        {
+          "origin": "2009-11-13",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2010-11-19",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2011-11-25",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2012-11-30",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2013-12-06",
+          "status": "insufficient_joint_history"
+        },
+        {
+          "origin": "2014-12-12",
+          "status": "warmup",
+          "fitTargetThrough": "2012-11-28",
+          "calibrationStart": "2012-11-30",
+          "calibrationTargetThrough": "2014-12-08",
+          "shapeTargetThrough": "2014-12-08",
+          "testRows": 451,
+          "conditionalDownValue": 0.8785063430809869,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "route": {
+              "status": "insufficient_dates_use_error_blend"
+            },
+            "history": {
+              "rows": 0,
+              "dates": 0,
+              "targetThrough": null,
+              "lastOrigin": null
+            }
+          }
+        },
+        {
+          "origin": "2015-12-18",
+          "status": "warmup",
+          "fitTargetThrough": "2013-12-02",
+          "calibrationStart": "2013-12-06",
+          "calibrationTargetThrough": "2015-12-14",
+          "shapeTargetThrough": "2015-12-14",
+          "testRows": 456,
+          "conditionalDownValue": 0.8749040224565453,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "route": {
+              "status": "insufficient_dates_use_error_blend"
+            },
+            "history": {
+              "rows": 451,
+              "dates": 1,
+              "targetThrough": "2015-12-14",
+              "lastOrigin": "2014-12-12"
+            }
+          }
+        },
+        {
+          "origin": "2016-12-23",
+          "status": "warmup",
+          "fitTargetThrough": "2014-12-08",
+          "calibrationStart": "2014-12-12",
+          "calibrationTargetThrough": "2016-12-19",
+          "shapeTargetThrough": "2016-12-19",
+          "testRows": 463,
+          "conditionalDownValue": 0.8782340488167258,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0.5,
+              "status": "insufficient_dates_fixed_half"
+            },
+            "route": {
+              "status": "insufficient_dates_use_error_blend"
+            },
+            "history": {
+              "rows": 907,
+              "dates": 2,
+              "targetThrough": "2016-12-19",
+              "lastOrigin": "2015-12-18"
+            }
+          }
+        },
+        {
+          "origin": "2017-12-29",
+          "status": "evaluated",
+          "fitTargetThrough": "2015-12-14",
+          "calibrationStart": "2015-12-18",
+          "calibrationTargetThrough": "2017-12-26",
+          "shapeTargetThrough": "2017-12-26",
+          "testRows": 468,
+          "conditionalDownValue": 0.8806334256238165,
+          "settings": {
+            "error": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.185785372152831,
+                "returnMae": 0.221420145007581,
+                "balancedAccuracy": 0.3353523573714487,
+                "upRecall": 0.808811627041277,
+                "downRecall": 0.11671554743672151,
+                "downPrecision": 0.22672429760524285,
+                "downWarnings": 142,
+                "downPrevalence": 0.20178072882189027
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "priceOnly",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.185785372152831,
+                "returnMae": 0.221420145007581,
+                "balancedAccuracy": 0.3353523573714487,
+                "upRecall": 0.808811627041277,
+                "downRecall": 0.11671554743672151,
+                "downPrecision": 0.22672429760524285,
+                "downWarnings": 142,
+                "downPrevalence": 0.20178072882189027
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 1370,
+              "dates": 3,
+              "targetThrough": "2017-12-26",
+              "lastOrigin": "2016-12-23"
+            }
+          }
+        },
+        {
+          "origin": "2019-01-04",
+          "status": "evaluated",
+          "fitTargetThrough": "2016-12-19",
+          "calibrationStart": "2016-12-23",
+          "calibrationTargetThrough": "2019-01-02",
+          "shapeTargetThrough": "2019-01-02",
+          "testRows": 471,
+          "conditionalDownValue": 0.8769393758028854,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.1937584386824813,
+                "returnMae": 0.2243417613173811,
+                "balancedAccuracy": 0.3333333333333333,
+                "upRecall": 0.0,
+                "downRecall": 0.0,
+                "downPrecision": null,
+                "downWarnings": 0,
+                "downPrevalence": 0.2848825551634263
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0,
+              "metrics": {
+                "mape": 0.1937584386824813,
+                "returnMae": 0.2243417613173811,
+                "balancedAccuracy": 0.3333333333333333,
+                "upRecall": 0.0,
+                "downRecall": 0.0,
+                "downPrecision": null,
+                "downWarnings": 0,
+                "downPrevalence": 0.2848825551634263
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 1838,
+              "dates": 4,
+              "targetThrough": "2019-01-02",
+              "lastOrigin": "2017-12-29"
+            }
+          }
+        },
+        {
+          "origin": "2020-01-10",
+          "status": "evaluated",
+          "fitTargetThrough": "2017-12-26",
+          "calibrationStart": "2017-12-29",
+          "calibrationTargetThrough": "2020-01-06",
+          "shapeTargetThrough": "2020-01-06",
+          "testRows": 476,
+          "conditionalDownValue": 0.8785063430809869,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20034567061264405,
+                "returnMae": 0.23820521436312386,
+                "balancedAccuracy": 0.28923292685786706,
+                "upRecall": 0.7244097892384151,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 3,
+                "downPrevalence": 0.2419187829842443
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20034567061264405,
+                "returnMae": 0.23820521436312386,
+                "balancedAccuracy": 0.28923292685786706,
+                "upRecall": 0.7244097892384151,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 3,
+                "downPrevalence": 0.2419187829842443
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 2309,
+              "dates": 5,
+              "targetThrough": "2020-01-06",
+              "lastOrigin": "2019-01-04"
+            }
+          }
+        },
+        {
+          "origin": "2021-01-15",
+          "status": "evaluated",
+          "fitTargetThrough": "2019-01-02",
+          "calibrationStart": "2019-01-04",
+          "calibrationTargetThrough": "2021-01-11",
+          "shapeTargetThrough": "2021-01-11",
+          "testRows": 482,
+          "conditionalDownValue": 0.8758540006881766,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20307904890651007,
+                "returnMae": 0.24802806865493846,
+                "balancedAccuracy": 0.2867481596611766,
+                "upRecall": 0.6806480401851374,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 4,
+                "downPrevalence": 0.24186509226278052
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20307904890651007,
+                "returnMae": 0.24802806865493846,
+                "balancedAccuracy": 0.2867481596611766,
+                "upRecall": 0.6806480401851374,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 4,
+                "downPrevalence": 0.24186509226278052
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 2785,
+              "dates": 6,
+              "targetThrough": "2021-01-11",
+              "lastOrigin": "2020-01-10"
+            }
+          }
+        },
+        {
+          "origin": "2022-01-21",
+          "status": "evaluated",
+          "fitTargetThrough": "2020-01-06",
+          "calibrationStart": "2020-01-10",
+          "calibrationTargetThrough": "2022-01-14",
+          "shapeTargetThrough": "2022-01-14",
+          "testRows": 486,
+          "conditionalDownValue": 0.8747628510872517,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20154206453201248,
+                "returnMae": 0.25007341249206483,
+                "balancedAccuracy": 0.29744542888103903,
+                "upRecall": 0.7323495680385285,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 4,
+                "downPrevalence": 0.221242989574381
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20154206453201248,
+                "returnMae": 0.25007341249206483,
+                "balancedAccuracy": 0.29744542888103903,
+                "upRecall": 0.7323495680385285,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 4,
+                "downPrevalence": 0.221242989574381
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 3267,
+              "dates": 7,
+              "targetThrough": "2022-01-14",
+              "lastOrigin": "2021-01-15"
+            }
+          }
+        },
+        {
+          "origin": "2023-01-27",
+          "status": "evaluated",
+          "fitTargetThrough": "2021-01-11",
+          "calibrationStart": "2021-01-15",
+          "calibrationTargetThrough": "2023-01-24",
+          "shapeTargetThrough": "2023-01-24",
+          "testRows": 490,
+          "conditionalDownValue": 0.8679536797365166,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20759312865935747,
+                "returnMae": 0.2427175395556127,
+                "balancedAccuracy": 0.29472134111951337,
+                "upRecall": 0.7544811265734772,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 4,
+                "downPrevalence": 0.25068638130968207
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20759312865935747,
+                "returnMae": 0.2427175395556127,
+                "balancedAccuracy": 0.29472134111951337,
+                "upRecall": 0.7544811265734772,
+                "downRecall": 0.0,
+                "downPrecision": 0.0,
+                "downWarnings": 4,
+                "downPrevalence": 0.25068638130968207
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 3753,
+              "dates": 8,
+              "targetThrough": "2023-01-24",
+              "lastOrigin": "2022-01-21"
+            }
+          }
+        },
+        {
+          "origin": "2024-02-02",
+          "status": "evaluated",
+          "fitTargetThrough": "2022-01-14",
+          "calibrationStart": "2022-01-21",
+          "calibrationTargetThrough": "2024-01-30",
+          "shapeTargetThrough": "2024-01-30",
+          "testRows": 491,
+          "conditionalDownValue": 0.8691194196956413,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20667355765008846,
+                "returnMae": 0.2466210150777548,
+                "balancedAccuracy": 0.31413098513157517,
+                "upRecall": 0.6809686255642371,
+                "downRecall": 0.058891230297850164,
+                "downPrecision": 0.2873259421685742,
+                "downWarnings": 233,
+                "downPrevalence": 0.2579797312321891
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.20667355765008846,
+                "returnMae": 0.2466210150777548,
+                "balancedAccuracy": 0.31413098513157517,
+                "upRecall": 0.6809686255642371,
+                "downRecall": 0.058891230297850164,
+                "downPrecision": 0.2873259421685742,
+                "downWarnings": 233,
+                "downPrevalence": 0.2579797312321891
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 4243,
+              "dates": 9,
+              "targetThrough": "2024-01-30",
+              "lastOrigin": "2023-01-27"
+            }
+          }
+        },
+        {
+          "origin": "2025-02-07",
+          "status": "evaluated",
+          "fitTargetThrough": "2023-01-24",
+          "calibrationStart": "2023-01-27",
+          "calibrationTargetThrough": "2025-02-05",
+          "shapeTargetThrough": "2025-02-05",
+          "testRows": 496,
+          "conditionalDownValue": 0.8660994550233526,
+          "settings": {
+            "error": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.2092971034314464,
+                "returnMae": 0.25640738496278576,
+                "balancedAccuracy": 0.30456581351464584,
+                "upRecall": 0.6083800740399474,
+                "downRecall": 0.05362305753604846,
+                "downPrecision": 0.28732594216857427,
+                "downWarnings": 233,
+                "downPrevalence": 0.2549923487403347
+              },
+              "status": "selected_on_matured_oos"
+            },
+            "joint": {
+              "default": "noChange",
+              "weight": 0.25,
+              "metrics": {
+                "mape": 0.2092971034314464,
+                "returnMae": 0.25640738496278576,
+                "balancedAccuracy": 0.30456581351464584,
+                "upRecall": 0.6083800740399474,
+                "downRecall": 0.05362305753604846,
+                "downPrecision": 0.28732594216857427,
+                "downWarnings": 233,
+                "downPrevalence": 0.2549923487403347
+              },
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "route": {
+              "status": "infeasible_guard_use_error_blend"
+            },
+            "history": {
+              "rows": 4734,
+              "dates": 10,
+              "targetThrough": "2025-02-05",
+              "lastOrigin": "2024-02-02"
+            }
+          }
+        }
+      ],
+      "diagnostics": {
+        "logErrorCorrelation": 0.9469773545217581,
+        "specialistHasLowerPriceError": 0.4287991004192409,
+        "directionDisagreement": 0.3198583139740002,
+        "impossibleOracleEndpointMape": 0.1919072769648642,
+        "oracleIsExecutable": false,
+        "downsideScoreBins": [
+          {
+            "low": 0.0,
+            "high": 0.1,
+            "n": 1072,
+            "meanScore": 0.08022731502541869,
+            "realizedDownRate": 0.3705729249155573
+          },
+          {
+            "low": 0.1,
+            "high": 0.2,
+            "n": 352,
+            "meanScore": 0.11554285514279387,
+            "realizedDownRate": 0.31441182263827266
+          },
+          {
+            "low": 0.2,
+            "high": 0.30000000000000004,
+            "n": 995,
+            "meanScore": 0.26716658454090714,
+            "realizedDownRate": 0.22196820499056327
+          },
+          {
+            "low": 0.30000000000000004,
+            "high": 0.4,
+            "n": 339,
+            "meanScore": 0.3467475299433658,
+            "realizedDownRate": 0.22146226911298583
+          },
+          {
+            "low": 0.4,
+            "high": 0.5,
+            "n": 450,
+            "meanScore": 0.46975464881425677,
+            "realizedDownRate": 0.21713257382718398
+          },
+          {
+            "low": 0.5,
+            "high": 0.6,
+            "n": 190,
+            "meanScore": 0.5126556224321543,
+            "realizedDownRate": 0.20526088393728942
+          },
+          {
+            "low": 0.6000000000000001,
+            "high": 0.7000000000000001,
+            "n": 75,
+            "meanScore": 0.6613794468296278,
+            "realizedDownRate": 0.33307210031347956
+          },
+          {
+            "low": 0.7000000000000001,
+            "high": 0.8,
+            "n": 299,
+            "meanScore": 0.7577614849471449,
+            "realizedDownRate": 0.3110152287972579
+          },
+          {
+            "low": 0.8,
+            "high": 0.9,
+            "n": 79,
+            "meanScore": 0.8230653586099813,
+            "realizedDownRate": 0.3414706572223059
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "n": 9,
+            "meanScore": 0.9254816957046338,
+            "realizedDownRate": 0.1111111111111111
+          }
+        ],
+        "probabilityNote": "Reference classifier scores only; numerical combinations have no probability claim."
+      },
+      "historicalPassed": {
+        "fixed_half": false,
+        "causal_error_blend": false,
+        "causal_joint_blend": false,
+        "down_soft_mix": false,
+        "guarded_down_route": false
+      },
+      "passed": {
+        "fixed_half": false,
+        "causal_error_blend": false,
+        "causal_joint_blend": false,
+        "down_soft_mix": false,
+        "guarded_down_route": false
+      },
+      "selected": null,
+      "settingsStatus": {
+        "error": {
+          "selected_on_matured_oos": 8
+        },
+        "joint": {
+          "infeasible_guard_use_error_blend": 8
+        },
+        "route": {
+          "infeasible_guard_use_error_blend": 8
+        }
+      },
+      "pairedRowsHash": "f83b88799134f2b46baee78f886f4633050d79ff41b21e994d9fdd444aaada47",
+      "directionImprovementCI": {
+        "fixed_half": [
+          -0.20312262095022324,
+          -0.0030877270262943957
+        ],
+        "causal_error_blend": [
+          -0.540084567388073,
+          -0.08884264544644813
+        ],
+        "causal_joint_blend": [
+          -0.540084567388073,
+          -0.08884264544644813
+        ],
+        "down_soft_mix": [
+          -0.39274167678866045,
+          -0.1521887899086296
+        ],
+        "guarded_down_route": [
+          -0.540084567388073,
+          -0.08884264544644813
+        ]
+      }
+    }
+  }
+}
