@@ -4,6 +4,9 @@ on:
     paths:
       - 'advanced.html'
       - 'assets/advanced*'
+      - 'assets/company-names.js'
+      - 'assets/company-search*'
+      - 'scripts/test_company_search.cjs'
       - 'scripts/test_advanced.cjs'
       - 'scripts/build_forecasts.py'
       - 'tests/test_forecasts.py'
@@ -14,6 +17,9 @@ on:
     paths:
       - 'advanced.html'
       - 'assets/advanced*'
+      - 'assets/company-names.js'
+      - 'assets/company-search*'
+      - 'scripts/test_company_search.cjs'
       - 'scripts/test_advanced.cjs'
       - 'scripts/build_forecasts.py'
       - 'tests/test_forecasts.py'
@@ -33,8 +39,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - run: node --check assets/company-names.js && node --check assets/company-search.js
+      - run: node scripts/test_company_search.cjs
       - run: node --check assets/advanced-page.js
       - run: node scripts/test_advanced.cjs
       - run: python -m unittest discover -s tests -p test_forecasts.py
       - run: pip install pandas==2.3.3 yfinance==0.2.66
       - run: python -m unittest discover -s tests -p test_eod_pipeline.py
+
