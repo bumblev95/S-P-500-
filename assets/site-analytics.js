@@ -5,6 +5,7 @@
   const ID = 'G-0C529GQ91Z';
   const BASE = '/S-P-500-/';
   const KEY = 'sp500.analytics.consent.v1';
+  function isRootHome(pathname) { return pathname === '/' || pathname === '/index.html'; }
   const pages = {
     'index.html': '메인', 'stocks.html': '주식', 'crypto.html': '코인 현물',
     'futures.html': '선물', 'simulation.html': '모의운용', 'advanced.html': '고급 분석',
@@ -14,9 +15,11 @@
     'selector-experiment.html': '선택 연구', 'privacy.html': '개인정보 안내'
   };
   const filename = root.location.pathname.split('/').pop() || 'index.html';
+  const rootHome = isRootHome(root.location.pathname);
+  const cookiePath = rootHome ? '/' : BASE;
   const eligible = root.location.hostname === 'bumblev95.github.io' &&
-    root.location.pathname.startsWith(BASE) && Object.hasOwn(pages, filename);
-  const canonical = 'https://bumblev95.github.io' + BASE + (filename === 'index.html' ? '' : filename);
+    (rootHome || root.location.pathname.startsWith(BASE)) && Object.hasOwn(pages, filename);
+  const canonical = 'https://bumblev95.github.io' + cookiePath + (filename === 'index.html' ? '' : filename);
   const pageName = pages[filename] || '';
   const features = {
     horizon: ['30', '120', '126', '252', '365'],
@@ -36,13 +39,14 @@
     catch (_) { return null; }
   }
   consent = readChoice();
-  if (new URLSearchParams(root.location.search).get('analytics') === 'off') {
+  const excluded = new URLSearchParams(root.location.search).getAll('analytics').includes('off');
+  if (excluded) {
     consent = 'denied';
     try { root.localStorage.setItem(KEY, consent); } catch (_) {}
   }
   root['ga-disable-' + ID] = true;
   function gtag() { root.dataLayer.push(arguments); }
-  function canSend() { return eligible && consent === 'granted' && started && !root['ga-disable-' + ID]; }
+  function canSend() { return eligible && !excluded && consent === 'granted' && started && !root['ga-disable-' + ID]; }
   function send(name, parameters) {
     if (!canSend()) return;
     gtag('event', name, Object.assign({page_name: pageName, page_location: canonical}, parameters));
@@ -65,7 +69,7 @@
     if (features[name] && features[name].includes(choice)) send('feature_use', {feature: name, choice: choice});
   }
   function start() {
-    if (!eligible || consent !== 'granted') return;
+    if (!eligible || excluded || consent !== 'granted') return;
     root['ga-disable-' + ID] = false;
     if (started) {
       gtag('consent', 'update', {analytics_storage: 'granted'});
@@ -86,7 +90,7 @@
     gtag('config', ID, {
       page_title: pageName + ' · S&P 500', page_location: canonical, page_referrer: referrer,
       allow_google_signals: false, allow_ad_personalization_signals: false,
-      cookie_domain: 'none', cookie_path: BASE, cookie_flags: 'SameSite=Lax;Secure'
+      cookie_domain: 'none', cookie_path: cookiePath, cookie_flags: 'SameSite=Lax;Secure'
     });
     const script = doc.createElement('script');
     script.async = true;
@@ -97,10 +101,14 @@
   }
   function clearCookies() {
     const names = ['_ga', '_ga_' + ID.slice(2)];
-    for (const name of names) doc.cookie = name + '=; Max-Age=0; Path=' + BASE + '; SameSite=Lax; Secure';
+    // Consent is shared across both entry points; revoke cookies from either one.
+    for (const path of ['/', BASE]) {
+      for (const name of names) doc.cookie = name + '=; Max-Age=0; Path=' + path + '; SameSite=Lax; Secure';
+    }
   }
   function setConsent(choice) {
     if (!['granted', 'denied'].includes(choice)) return;
+    if (excluded) choice = 'denied';
     consent = choice;
     try { root.localStorage.setItem(KEY, choice); } catch (_) {}
     if (choice === 'granted') start();
@@ -131,7 +139,7 @@
     try {
       const url = new URL(target.href, root.location.href);
       if (!['https:', 'http:'].includes(url.protocol)) return;
-      if (url.origin === root.location.origin && url.pathname.startsWith(BASE)) {
+      if (url.origin === root.location.origin && (isRootHome(url.pathname) || url.pathname.startsWith(BASE))) {
         const file = url.pathname.split('/').pop() || 'index.html';
         if (pages[file]) send('nav_click', {destination: pages[file]});
       } else if (target.closest('#home-news,#companyEvents')) {
