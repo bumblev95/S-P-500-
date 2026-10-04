@@ -24,7 +24,7 @@ function action(e){
 }
 const kv=(k,v)=>'<div class="kv"><span>'+esc(k)+'</span><b>'+v+'</b></div>',note=s=>'<p class="bodyNote">'+s+'</p>',panel=(title,body,cls='')=>'<section class="panel '+cls+'">'+(title?'<h3>'+title+'</h3>':'')+body+'</section>',details=(title,body)=>'<details><summary>'+title+'</summary>'+body+'</details>';
 function render(){
- if(!data)return;const e=data.coins[symbol];if(!e)return;
+ if(!data)return;const e=data.coins[symbol];if(!e)return;root.SiteAnalytics?.viewAsset('spot',symbol);
  const a=e.spotAnalysis||{},ind=a.indicators||{},s=e.spot||{},u=e.supply||{},v=a.levels||{},ai=F.inspect(e,horizon),simulation=F.simulate(e),f=ai.forecast,b=ai.record?.validation||{},macro=data.macro||{};
  const stale=!fresh(data.generatedAt)||!fresh(s.at),mstate=fresh(macro.generatedAt,96)?macro.status:'unknown',labels={stable:'뚜렷한 경고 없음',watch:'주의',risk:'위험',unknown:'자료 확인 필요'},sa=action(e);
  document.getElementById('updated').textContent=(fresh(data.generatedAt)?'':'지난 자료 · ')+new Date(data.generatedAt).toLocaleString('ko-KR')+' · 매시간 갱신 시도';
@@ -54,3 +54,4 @@ async function load(){try{const r=await fetch('crypto/latest.json?refresh='+Math
 const api={path,chart,fresh};if(typeof module!=='undefined')module.exports=api;else root.CryptoGuide=api;
 if(typeof document!=='undefined'){document.getElementById('coin').addEventListener('change',e=>{symbol=e.target.value;render()});document.querySelectorAll('[data-h]').forEach(b=>b.addEventListener('click',()=>{horizon=Number(b.dataset.h);document.querySelectorAll('[data-h]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()}));load();setInterval(render,60000);setInterval(load,3600000);}
 })(typeof window!=='undefined'?window:globalThis);
+
