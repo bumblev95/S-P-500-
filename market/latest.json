@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-10-04T00:41:03.833475+00:00",
+  "generatedAt": "2026-10-04T01:56:20.829533+00:00",
   "observations": {
     "DGS10": [
       [
@@ -9774,8 +9774,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "daily"
     },
     {
@@ -9797,8 +9797,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "daily"
     },
     {
@@ -9824,8 +9824,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "weekly"
     },
     {
@@ -9851,8 +9851,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "weekly"
     },
     {
@@ -9878,8 +9878,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9901,8 +9901,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "daily"
     },
     {
@@ -9924,8 +9924,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-10-04",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00",
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00",
       "frequency": "daily"
     },
     {
@@ -9951,8 +9951,8 @@
       "frequency": "daily",
       "fromCache": false,
       "fetchStatus": "ready",
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00"
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9970,8 +9970,8 @@
       "change": -0.018514250043726865,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00"
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00"
     },
     {
       "id": "EBP",
@@ -9989,8 +9989,8 @@
       "change": -0.030485030000000024,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-04T00:41:03.833475+00:00",
-      "lastAttemptAt": "2026-10-04T00:41:03.833475+00:00"
+      "lastSuccessAt": "2026-10-04T01:56:20.829533+00:00",
+      "lastAttemptAt": "2026-10-04T01:56:20.829533+00:00"
     }
   ],
   "credit": {
