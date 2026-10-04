@@ -1,0 +1,73 @@
+{
+  "version": "conditional-loss-v1",
+  "registeredAt": "2026-10-04T04:57:33.894195+00:00",
+  "sourceCommit": "c67f12f1242c85bb570561ed5fed9d635c8afd8e",
+  "parentResearchCommit": "3285477661083358dec9de255d184ae8597c1a83",
+  "source": "research/environment.json",
+  "sourceHash": "ec8d4e97347d3ef7a92028bb09f6ba68d818c6e31970d82f5b197f48586c3ecc",
+  "jointProtocolHash": "9b44644a8977b295082b89c77a1c1e89479c99d193ff8cde9a178fecc0d83df9",
+  "horizons": [
+    126,
+    252
+  ],
+  "hypotheses": {
+    "A": "Direct robust loss on future price ratios can outperform squared-error regression on both error and final return direction, without fixed convex blend weights.",
+    "B": "Feature-dependent class magnitude experts combined with the existing causal classifier can outperform pooled class shapes; compare MAE-optimal and MAPE-optimal point decisions."
+  },
+  "candidates": [
+    "direct_return_mae",
+    "direct_price_mape",
+    "conditional_return_mae",
+    "conditional_price_mape"
+  ],
+  "controls": [
+    "noChange",
+    "priceOnly",
+    "joint_logistic",
+    "direct_squared"
+  ],
+  "features": "Exactly research_joint_indicator.matrix: prior OOS forecast ratios/raw direction scores, contemporaneous market regime and input count. No new raw-price, sector-relative or drawdown features are available in this snapshot.",
+  "regressor": {
+    "max_iter": 70,
+    "max_leaf_nodes": 7,
+    "min_samples_leaf": 50,
+    "learning_rate": 0.04,
+    "l2_regularization": 20,
+    "early_stopping": false,
+    "random_state": 41
+  },
+  "regressorLoss": "absolute_error for candidates, squared_error for direct_squared control; target is future-price/current-price ratio, not log return",
+  "returnLossWeights": "Equal total weight per origin date; no class quota or inverse-frequency rebalancing.",
+  "mapeLossWeights": "Date-equal weights divided by realized target ratio, rescaled to mean one; weighted absolute error equals MAPE objective up to a positive constant.",
+  "magnitudeTraining": "All previous source OOS outcome rows with origin < new origin AND targetDate < new origin. Direct and class-specific regressors use identical available mature labels. Class-specific experts use their own class only and date weights within class.",
+  "classifier": "Reuse unchanged joint_logistic trained on purged fit and latest two mature calibration dates, per joint protocol. Isolates magnitude and decision-loss changes, not a new direction detector.",
+  "conditionalModel": "Three feature-dependent representative price ratios, one per down/flat/up class; clipped to that class historical support. This is a three-atom approximation, not a full calibrated conditional distribution.",
+  "conditionalPoint": "Weighted median of class support atoms; weights p(class) for return MAE, p(class)/atom for price MAPE. Do not use argmax class to overwrite forecast sign.",
+  "supportBounds": "Clip numeric outputs to min/max of previously matured training support; class experts use only their class support. Record clipping counts. No holdout-derived bounds.",
+  "minimumMagnitudeClassRows": 50,
+  "fallback": "If any class has fewer than 50 mature rows, retain full evaluation date using pooled class loss-optimal medians for conditional experts; report fallback.",
+  "evaluationSplit": "Same fixed last half of origin dates as joint v1 and blend v1; same issuer/date paired rows; previously inspected exploratory data.",
+  "directionRule": "Final numeric ratio above 1.02 is up, below 0.98 is down, otherwise neutral. Reference classifier argmax reported separately.",
+  "probabilityRule": "No new probability-performance claim for numeric candidate outputs; report unchanged reference Brier and reliability separately.",
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "priceErrorImprovement": 0.02,
+    "minimumDateWinRate": 0.6,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "requireDirectionImprovementCI": true,
+    "prospectiveEvidenceRequired": true
+  },
+  "additionalErrorGate": "Return MAE at least 2% better than both noChange and priceOnly; p90 return error no worse; also retain blend v1 historical gates.",
+  "diagnostics": [
+    "paired date error/direction difference bootstrap, exploratory only",
+    "within-class magnitude error with future true class used ONLY for a non-executable diagnostic"
+  ],
+  "noUIOrLiveChanges": true,
+  "prospectiveEvidenceRequired": true,
+  "historicalHoldoutRevisited": true,
+  "selection": "none; keep all declared candidates, squared control, and fallback dates",
+  "noPostResultTuning": true,
+  "warning": "Research design hypotheses, not best parameters or validated trading returns. This experiment uses existing OOS forecasts as meta features; it is not a production-model comparison."
+}

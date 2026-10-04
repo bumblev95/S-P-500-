@@ -40,6 +40,16 @@ python scripts/research_joint_indicator.py --source research/environment.json --
 - 가격 패턴/공동 분포의 로그 오차 상관은 6개월 0.978·1년 0.947. 다른 정보의 후보를 찾고 기존 후보와 오차가 덜 겹치는지 검증하는 연구를 우선한다.
 - 재현: `python scripts/test_indicator_blends.py` 및 `python scripts/research_indicator_blends.py`.
 
+## 다른 학습 방법 1차 기록
+
+- `conditional/PROTOCOL.json`: 직접 MAE/MAPE 학습과 방향별 수익률 크기라는 두 가설, 네 후보와 동일 구조 제곱오차 대조군.
+- `scripts/research_conditional_indicator.py`: 해당 기준일 전에 확정된 결과만 회귀 학습에 사용한다. 기존 분류기를 유지해 크기 학습의 효과를 구분하고, 세 대표값 근사에서 각 손실에 따른 최종 예측을 평가한다.
+- `conditional/RESULTS.md`, `conditional/results.json`, `conditional/FINDINGS.md`: 네 후보 모두 미통과. 1년 직접 MAPE 학습은 기준 대비 하락 포착 1.93→12.21%, 상승 포착 91.81→90.32%의 부분 변화가 있었지만 수익률 MAE 26.69→27.71%p·가격 MAPE 22.46→24.47%로 악화했다. 잘못된 경고도 늘어 전체 개선이 아니다.
+- 6개월은 직접 MAPE 학습의 수익률 MAE 18.18→18.56%p·하락 포착 0.06→0.38%로 약했다. 1년 결과를 다른 기간으로 일반화하지 않는다.
+- 기존 외부표본 예측·시장 상황·방향 점수만 재사용한 방법 변경이다. 새 원시 가격·업종 상대 강도·기간 중 낙폭 입력을 보강한 결과가 아니므로 같은 입력의 반복 튜닝보다 새로운 구별 정보를 확보하는 일을 우선한다.
+- 미래 정답 방향을 이용한 전문가 선택 진단은 실행 불가능하다. 이 수치를 성과·승격·달성 가능한 목표로 사용하지 않는다.
+- 재현: `python scripts/test_conditional_indicator.py` 및 `python scripts/research_conditional_indicator.py`.
+
 ## 다음 가설의 우선순위
 
 0. **보완적인 후보의 결합.** 하락 포착과 수익률 오차가 강점인 후보를 따로 찾고 오류가 겹치는 정도를 확인한다. 단순 평균, 이전 확정 결과로 정한 비중, 시장 상황별 역할 전환을 비교한다. 이미 실패한 결합 그리드를 후반 결과에 맞춰 수정하는 반복을 새 증거로 취급하지 않는다.
