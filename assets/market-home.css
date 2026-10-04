@@ -19,12 +19,18 @@
     #market-home .hp-number{font-size:11px;color:var(--hp-muted);letter-spacing:1px;white-space:nowrap}
     #market-home .hp-rank-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:0;margin:0;list-style:none}
     #market-home .hp-pick{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0;padding:10px 11px;border:1px solid #263c53;border-radius:13px;background:#091422}
-    #market-home .hp-buy .hp-pick:first-child{background:var(--hp-greensurface)}
+    #market-home .hp-buy .hp-pick:not(.hp-wait-pick):first-child{background:var(--hp-greensurface)}
     #market-home .hp-sell .hp-pick:first-child{background:var(--hp-redsurface)}
     #market-home .hp-rank{font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--hp-muted);flex-shrink:0}
     #market-home .hp-buy .hp-pick:first-child .hp-rank{color:var(--hp-green)}
     #market-home .hp-sell .hp-pick:first-child .hp-rank{color:var(--hp-red)}
     #market-home .hp-name{font-size:16px;font-weight:600;letter-spacing:-.4px;white-space:nowrap}
+    #market-home .hp-entry-wait{margin-top:10px;padding-top:10px;border-top:1px solid var(--hp-line)}
+    #market-home .hp-wait-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+    #market-home .hp-wait-head h3{font-size:13px;color:var(--hp-amber)}
+    #market-home .hp-wait-head>span{font-size:11px;color:var(--hp-muted)}
+    #market-home .hp-wait-pick{flex-direction:column;gap:5px;background:var(--hp-ambersurface);text-align:center}
+    #market-home .hp-wait-state{font-size:11px;line-height:1.4;color:var(--hp-amber)}
     #market-home .hp-main-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start}
     #market-home .hp-section-head{margin:0}
     #market-home .hp-story{padding:17px 18px;min-width:0}

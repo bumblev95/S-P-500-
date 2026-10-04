@@ -78,6 +78,9 @@ jobs:
           snapshot=json.loads(Path('market/home.json').read_text())
           assert len(snapshot['recap']['sectors'])==11
           assert len(snapshot['rankings']['buy'])<=3 and len(snapshot['rankings']['sell'])<=3
+          waiting=snapshot['rankings']['waiting']
+          assert len(waiting)<=3 and not (snapshot['rankings']['buy'] and waiting)
+          assert all(q['code'] in ('breakout','pullback','riskwait') for q in waiting)
           print('MARKET_HOME_SNAPSHOT='+json.dumps(snapshot,ensure_ascii=False,separators=(',',':')))
           PY
       - name: Install browser validation runtime
