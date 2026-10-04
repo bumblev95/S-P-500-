@@ -1,0 +1,13 @@
+.companySearch{position:relative;min-width:0}
+.companySearch #tickerInput{text-transform:none;letter-spacing:0;font-weight:700}
+.companySearch-menu{position:absolute;top:calc(100% + 7px);left:0;right:0;z-index:30;padding:6px;border:1px solid #36536d;border-radius:14px;background:#0b1727;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.companySearch-menu[hidden]{display:none}
+.companySearch-options{max-height:320px;overflow-y:auto;overscroll-behavior:contain}
+.cs-option{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:45px;padding:10px;border:0;border-radius:8px;background:transparent;color:#e6eef7;text-align:left;cursor:pointer}
+.cs-option:hover,.cs-option[aria-selected=true]{background:#16354b;color:#fff}
+.cs-name{min-width:0;overflow-wrap:anywhere;font-size:.9rem}
+.cs-symbol{flex:none;color:#7dddf5;font-size:.8rem}
+.companySearch-status{margin:6px 9px 3px;color:#91a5bb;font-size:.76rem}
+.companyName{color:#b7c9d9;font-size:.95rem;overflow-wrap:anywhere}
+.candidate .candidateCompany{white-space:normal;overflow-wrap:anywhere;font-size:.74rem}
+@media(max-width:720px){.companySearch{z-index:30}.companySearch-menu{max-width:100%}.companySearch-options{max-height:270px}}
