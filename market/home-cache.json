@@ -1,94 +1,5 @@
 {
   "quotes": {
-    "^GSPC": {
-      "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 7747.7099609375
-        },
-        {
-          "date": "2026-09-04",
-          "close": 7718.60009765625
-        },
-        {
-          "date": "2026-09-08",
-          "close": 7673.52001953125
-        },
-        {
-          "date": "2026-09-09",
-          "close": 7636.35986328125
-        },
-        {
-          "date": "2026-09-10",
-          "close": 7591.7001953125
-        },
-        {
-          "date": "2026-09-11",
-          "close": 7656.97998046875
-        },
-        {
-          "date": "2026-09-14",
-          "close": 7619.97998046875
-        },
-        {
-          "date": "2026-09-15",
-          "close": 7585.72998046875
-        },
-        {
-          "date": "2026-09-16",
-          "close": 7551.81005859375
-        },
-        {
-          "date": "2026-09-17",
-          "close": 7637.759765625
-        },
-        {
-          "date": "2026-09-18",
-          "close": 7650.5
-        },
-        {
-          "date": "2026-09-21",
-          "close": 7764.7001953125
-        },
-        {
-          "date": "2026-09-22",
-          "close": 7764.64013671875
-        },
-        {
-          "date": "2026-09-23",
-          "close": 7706.02978515625
-        },
-        {
-          "date": "2026-09-24",
-          "close": 7704.1298828125
-        },
-        {
-          "date": "2026-09-25",
-          "close": 7743.41015625
-        },
-        {
-          "date": "2026-09-28",
-          "close": 7683.68994140625
-        },
-        {
-          "date": "2026-09-29",
-          "close": 7670.83984375
-        },
-        {
-          "date": "2026-09-30",
-          "close": 7651.5400390625
-        },
-        {
-          "date": "2026-10-01",
-          "close": 7666.4501953125
-        },
-        {
-          "date": "2026-10-02",
-          "close": 7722.72021484375
-        }
-      ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
-    },
     "^DJI": {
       "rows": [
         {
@@ -176,7 +87,96 @@
           "close": 51176.9609375
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
+    },
+    "^GSPC": {
+      "rows": [
+        {
+          "date": "2026-09-03",
+          "close": 7747.7099609375
+        },
+        {
+          "date": "2026-09-04",
+          "close": 7718.60009765625
+        },
+        {
+          "date": "2026-09-08",
+          "close": 7673.52001953125
+        },
+        {
+          "date": "2026-09-09",
+          "close": 7636.35986328125
+        },
+        {
+          "date": "2026-09-10",
+          "close": 7591.7001953125
+        },
+        {
+          "date": "2026-09-11",
+          "close": 7656.97998046875
+        },
+        {
+          "date": "2026-09-14",
+          "close": 7619.97998046875
+        },
+        {
+          "date": "2026-09-15",
+          "close": 7585.72998046875
+        },
+        {
+          "date": "2026-09-16",
+          "close": 7551.81005859375
+        },
+        {
+          "date": "2026-09-17",
+          "close": 7637.759765625
+        },
+        {
+          "date": "2026-09-18",
+          "close": 7650.5
+        },
+        {
+          "date": "2026-09-21",
+          "close": 7764.7001953125
+        },
+        {
+          "date": "2026-09-22",
+          "close": 7764.64013671875
+        },
+        {
+          "date": "2026-09-23",
+          "close": 7706.02978515625
+        },
+        {
+          "date": "2026-09-24",
+          "close": 7704.1298828125
+        },
+        {
+          "date": "2026-09-25",
+          "close": 7743.41015625
+        },
+        {
+          "date": "2026-09-28",
+          "close": 7683.68994140625
+        },
+        {
+          "date": "2026-09-29",
+          "close": 7670.83984375
+        },
+        {
+          "date": "2026-09-30",
+          "close": 7651.5400390625
+        },
+        {
+          "date": "2026-10-01",
+          "close": 7666.4501953125
+        },
+        {
+          "date": "2026-10-02",
+          "close": 7722.72021484375
+        }
+      ],
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "^IXIC": {
       "rows": [
@@ -265,7 +265,7 @@
           "close": 27190.859375
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLK": {
       "rows": [
@@ -354,7 +354,7 @@
           "close": 199.80999755859375
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLC": {
       "rows": [
@@ -443,7 +443,7 @@
           "close": 110.31999969482422
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLY": {
       "rows": [
@@ -532,7 +532,7 @@
           "close": 110.04000091552734
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLF": {
       "rows": [
@@ -621,7 +621,7 @@
           "close": 53.4900016784668
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLI": {
       "rows": [
@@ -710,7 +710,7 @@
           "close": 169.9499969482422
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLV": {
       "rows": [
@@ -799,96 +799,7 @@
           "close": 166.17999267578125
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
-    },
-    "XLU": {
-      "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 43.029998779296875
-        },
-        {
-          "date": "2026-09-04",
-          "close": 43.08000183105469
-        },
-        {
-          "date": "2026-09-08",
-          "close": 43.45000076293945
-        },
-        {
-          "date": "2026-09-09",
-          "close": 42.939998626708984
-        },
-        {
-          "date": "2026-09-10",
-          "close": 42.52000045776367
-        },
-        {
-          "date": "2026-09-11",
-          "close": 42.38999938964844
-        },
-        {
-          "date": "2026-09-14",
-          "close": 41.81999969482422
-        },
-        {
-          "date": "2026-09-15",
-          "close": 41.31999969482422
-        },
-        {
-          "date": "2026-09-16",
-          "close": 41.31999969482422
-        },
-        {
-          "date": "2026-09-17",
-          "close": 41.689998626708984
-        },
-        {
-          "date": "2026-09-18",
-          "close": 41.099998474121094
-        },
-        {
-          "date": "2026-09-21",
-          "close": 40.65999984741211
-        },
-        {
-          "date": "2026-09-22",
-          "close": 40.529998779296875
-        },
-        {
-          "date": "2026-09-23",
-          "close": 39.75
-        },
-        {
-          "date": "2026-09-24",
-          "close": 39.36000061035156
-        },
-        {
-          "date": "2026-09-25",
-          "close": 39.5099983215332
-        },
-        {
-          "date": "2026-09-28",
-          "close": 39.25
-        },
-        {
-          "date": "2026-09-29",
-          "close": 39.709999084472656
-        },
-        {
-          "date": "2026-09-30",
-          "close": 39.439998626708984
-        },
-        {
-          "date": "2026-10-01",
-          "close": 39.68000030517578
-        },
-        {
-          "date": "2026-10-02",
-          "close": 39.83000183105469
-        }
-      ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLRE": {
       "rows": [
@@ -977,7 +888,7 @@
           "close": 40.810001373291016
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLP": {
       "rows": [
@@ -1066,96 +977,96 @@
           "close": 80.52999877929688
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
-    "XLE": {
+    "XLU": {
       "rows": [
         {
           "date": "2026-09-03",
-          "close": 64.62000274658203
+          "close": 43.029998779296875
         },
         {
           "date": "2026-09-04",
-          "close": 64.05999755859375
+          "close": 43.08000183105469
         },
         {
           "date": "2026-09-08",
-          "close": 64.7699966430664
+          "close": 43.45000076293945
         },
         {
           "date": "2026-09-09",
-          "close": 65.30999755859375
+          "close": 42.939998626708984
         },
         {
           "date": "2026-09-10",
-          "close": 64.93000030517578
+          "close": 42.52000045776367
         },
         {
           "date": "2026-09-11",
-          "close": 65.13999938964844
+          "close": 42.38999938964844
         },
         {
           "date": "2026-09-14",
-          "close": 64.52999877929688
+          "close": 41.81999969482422
         },
         {
           "date": "2026-09-15",
-          "close": 65.93000030517578
+          "close": 41.31999969482422
         },
         {
           "date": "2026-09-16",
-          "close": 64.02999877929688
+          "close": 41.31999969482422
         },
         {
           "date": "2026-09-17",
-          "close": 64.4800033569336
+          "close": 41.689998626708984
         },
         {
           "date": "2026-09-18",
-          "close": 64.30999755859375
+          "close": 41.099998474121094
         },
         {
           "date": "2026-09-21",
-          "close": 62.459999084472656
+          "close": 40.65999984741211
         },
         {
           "date": "2026-09-22",
-          "close": 61.779998779296875
+          "close": 40.529998779296875
         },
         {
           "date": "2026-09-23",
-          "close": 62.369998931884766
+          "close": 39.75
         },
         {
           "date": "2026-09-24",
-          "close": 62.599998474121094
+          "close": 39.36000061035156
         },
         {
           "date": "2026-09-25",
-          "close": 62.040000915527344
+          "close": 39.5099983215332
         },
         {
           "date": "2026-09-28",
-          "close": 62.099998474121094
+          "close": 39.25
         },
         {
           "date": "2026-09-29",
-          "close": 61.540000915527344
+          "close": 39.709999084472656
         },
         {
           "date": "2026-09-30",
-          "close": 61.5
+          "close": 39.439998626708984
         },
         {
           "date": "2026-10-01",
-          "close": 62.70000076293945
+          "close": 39.68000030517578
         },
         {
           "date": "2026-10-02",
-          "close": 62.81999969482422
+          "close": 39.83000183105469
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     },
     "XLB": {
       "rows": [
@@ -1244,7 +1155,96 @@
           "close": 48.86000061035156
         }
       ],
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00"
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
+    },
+    "XLE": {
+      "rows": [
+        {
+          "date": "2026-09-03",
+          "close": 64.62000274658203
+        },
+        {
+          "date": "2026-09-04",
+          "close": 64.05999755859375
+        },
+        {
+          "date": "2026-09-08",
+          "close": 64.7699966430664
+        },
+        {
+          "date": "2026-09-09",
+          "close": 65.30999755859375
+        },
+        {
+          "date": "2026-09-10",
+          "close": 64.93000030517578
+        },
+        {
+          "date": "2026-09-11",
+          "close": 65.13999938964844
+        },
+        {
+          "date": "2026-09-14",
+          "close": 64.52999877929688
+        },
+        {
+          "date": "2026-09-15",
+          "close": 65.93000030517578
+        },
+        {
+          "date": "2026-09-16",
+          "close": 64.02999877929688
+        },
+        {
+          "date": "2026-09-17",
+          "close": 64.4800033569336
+        },
+        {
+          "date": "2026-09-18",
+          "close": 64.30999755859375
+        },
+        {
+          "date": "2026-09-21",
+          "close": 62.459999084472656
+        },
+        {
+          "date": "2026-09-22",
+          "close": 61.779998779296875
+        },
+        {
+          "date": "2026-09-23",
+          "close": 62.369998931884766
+        },
+        {
+          "date": "2026-09-24",
+          "close": 62.599998474121094
+        },
+        {
+          "date": "2026-09-25",
+          "close": 62.040000915527344
+        },
+        {
+          "date": "2026-09-28",
+          "close": 62.099998474121094
+        },
+        {
+          "date": "2026-09-29",
+          "close": 61.540000915527344
+        },
+        {
+          "date": "2026-09-30",
+          "close": 61.5
+        },
+        {
+          "date": "2026-10-01",
+          "close": 62.70000076293945
+        },
+        {
+          "date": "2026-10-02",
+          "close": 62.81999969482422
+        }
+      ],
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00"
     }
   },
   "news": [
@@ -1255,7 +1255,7 @@
       "firstPublishedAt": "2026-10-03T23:30:06+00:00",
       "source": "BBC 국제",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1274,7 +1274,7 @@
       "firstPublishedAt": "2026-10-03T22:39:06+00:00",
       "source": "BBC 국제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1293,7 +1293,7 @@
       "firstPublishedAt": "2026-10-03T08:58:44+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1312,7 +1312,7 @@
       "firstPublishedAt": "2026-10-03T08:58:44+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1331,7 +1331,7 @@
       "firstPublishedAt": "2026-10-03T05:27:43+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1350,7 +1350,7 @@
       "firstPublishedAt": "2026-10-03T04:38:31+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1369,7 +1369,7 @@
       "firstPublishedAt": "2026-10-03T04:38:31+00:00",
       "source": "BBC 국제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1388,7 +1388,7 @@
       "firstPublishedAt": "2026-10-02T20:45:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1403,7 +1403,7 @@
       "firstPublishedAt": "2026-10-02T20:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1418,7 +1418,7 @@
       "firstPublishedAt": "2026-10-02T15:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1433,7 +1433,7 @@
       "firstPublishedAt": "2026-10-02T14:30:48+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1452,7 +1452,7 @@
       "firstPublishedAt": "2026-10-01T18:38:22+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1471,7 +1471,7 @@
       "firstPublishedAt": "2026-10-01T17:30:00+00:00",
       "source": "Fed 연설",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1490,7 +1490,7 @@
       "firstPublishedAt": "2026-10-01T10:05:25+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1503,7 +1503,7 @@
       "firstPublishedAt": "2026-10-01T07:08:22+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1516,7 +1516,7 @@
       "firstPublishedAt": "2026-09-30T15:03:22+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1529,7 +1529,7 @@
       "firstPublishedAt": "2026-09-30T14:36:45+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1542,7 +1542,7 @@
       "firstPublishedAt": "2026-09-30T13:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1561,7 +1561,7 @@
       "firstPublishedAt": "2026-09-29T16:40:00+00:00",
       "source": "Fed 연설",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1580,7 +1580,7 @@
       "firstPublishedAt": "2026-09-28T17:25:00+00:00",
       "source": "Fed 연설",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1593,7 +1593,7 @@
       "firstPublishedAt": "2026-09-25T20:30:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1606,7 +1606,7 @@
       "firstPublishedAt": "2026-09-25T08:31:56+00:00",
       "source": "BBC 경제",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1619,7 +1619,7 @@
       "firstPublishedAt": "2026-09-24T18:30:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1632,7 +1632,7 @@
       "firstPublishedAt": "2026-09-24T15:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1645,7 +1645,7 @@
       "firstPublishedAt": "2026-09-23T23:12:22+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1658,7 +1658,7 @@
       "firstPublishedAt": "2026-09-22T20:30:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1671,7 +1671,7 @@
       "firstPublishedAt": "2026-09-22T14:20:00+00:00",
       "source": "Fed 연설",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1683,32 +1683,32 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T09:34:14.673162+00:00",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastAttemptAt": "2026-10-04T09:53:35.799810+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T09:34:14.673162+00:00",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastAttemptAt": "2026-10-04T09:53:35.799810+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T09:34:14.673162+00:00",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastAttemptAt": "2026-10-04T09:53:35.799810+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T09:34:14.673162+00:00",
-      "lastSuccessAt": "2026-10-04T09:34:14.673162+00:00",
+      "lastAttemptAt": "2026-10-04T09:53:35.799810+00:00",
+      "lastSuccessAt": "2026-10-04T09:53:35.799810+00:00",
       "fromCache": false
     }
   ]
