@@ -24,6 +24,14 @@ selects the state. Both strategy cards and five condition checks use the same
 plan on the home page, screener and legacy page. Trend-based ranking remains
 unchanged and is explicitly labelled as trend ranking.
 
+The beginner view uses a three-category dial (entry withheld, conditions
+pending, entry review) with all nine actual states in an icon map. The current
+state is marked with a check and outline. Missing data has no dial pointer.
+Tapping a state reveals its meaning, not a simulated change to the assessment.
+Holding responses use a separate three-state strip. Detailed strategies,
+calculations and signal explanations start collapsed; the underlying rules,
+score, data and AI validation gates are unchanged.
+
 ## Rules and limitations
 
 These constants are design hypotheses, not empirically optimal thresholds.
