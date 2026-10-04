@@ -103,3 +103,25 @@ class PricePipelineTests(unittest.TestCase):
                 with self.assertRaises(RuntimeError):
                     eod.main(["--public-prices-only"])
             self.assertEqual(target.read_bytes(),original)
+
+    def test_csv_ohlc_precision_matches_close_at_provider_low(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)/"prices/latest_prices.csv"
+            target.parent.mkdir()
+            target.write_text("symbol,date,close\nAAA,2026-10-01,535\n")
+            close = 535.9500122070312
+            frame = pd.DataFrame({"Close":[close],"Adj Close":[close-1],
+                                  "Open":[546.47998046875],"High":[549.8900146484375],
+                                  "Low":[close],"Volume":[487600]},
+                                 index=pd.to_datetime(["2026-10-02"]))
+            with patch.object(eod,"OUT_PATH",target), \
+                    patch.object(eod,"download_public_chart",return_value=pd.concat({"AAA":frame},axis=1)), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                eod.main(["--public-prices-only"])
+            row = pd.read_csv(target).iloc[0]
+            self.assertEqual(row["low"],row["close"])
+            self.assertLessEqual(row["low"],row["open"])
+            self.assertLessEqual(row["open"],row["high"])
+            bar = json.loads((target.parent/"history/AAA.json").read_text())["prices"][-1]
+            self.assertEqual(bar["close"],close)
+            self.assertEqual(bar["low"],close)

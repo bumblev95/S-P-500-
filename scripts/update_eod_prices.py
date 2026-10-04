@@ -341,9 +341,9 @@ def main(argv=None) -> int:
             "yahooSymbol": ysym,
             "date": last_date.date().isoformat() if hasattr(last_date, "date") else str(last_date)[:10],
             "close": round(close, 6),
-            "open": history[-1].get("open", ""),
-            "high": history[-1].get("high", ""),
-            "low": history[-1].get("low", ""),
+            # Match Close's CSV precision; full provider precision stays in history.
+            **{key: round(history[-1][key], 6) if key in history[-1] else ""
+               for key in ("open", "high", "low")},
             "adjClose": adj_close,
             "volume": volume,
             "avgVolume3m": avgVolume3m,
