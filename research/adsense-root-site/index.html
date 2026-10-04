@@ -3,11 +3,13 @@
 <head>
   <base href="https://bumblev95.github.io/S-P-500-/">
   <meta charset="utf-8">
+  <link rel="stylesheet" href="assets/site-analytics.css?v=1">
+  <script src="assets/site-analytics.js?v=1"></script>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="S&P 500 매수·매도 후보, 한국어 시장 뉴스, 오늘과 이번 주 섹터 등락을 한눈에 확인하세요.">
   <title>오늘 시장, 한눈에 · S&P 500</title>
-  <link rel="stylesheet" href="assets/market-home.css?v=2">
-  <link rel="stylesheet" href="assets/site-shell.css?v=1">
+  <link rel="stylesheet" href="assets/market-home.css?v=3">
+  <link rel="stylesheet" href="assets/site-shell.css?v=2">
   <link rel="stylesheet" href="assets/site-ads.css?v=1">
   <style>.SiteAd_home{display:block;min-width:200px;max-width:970px;width:100%;height:90px}@media(max-width:600px){.SiteAd_home{height:100px}}</style>
   <meta name="google-adsense-account" content="ca-pub-9723666081819297">
@@ -16,24 +18,24 @@
   <script defer src="assets/site-ads-config.js?v=2"></script>
   <script defer src="assets/site-ads.js?v=1"></script>
 </head>
-<body>
+<body class="site-theme">
   <main id="market-home">
-    <div class="hp-shell">
-      <header class="hp-header">
-        <div class="hp-brand">S&amp;P 500 <span class="hp-muted">MARKET HOME</span></div>
+    <div class="hp-shell site-frame">
+      <header class="site-header">
+        <div class="site-brand"><span class="site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="site-eyebrow">MARKET BRIEF</div><h1>오늘 시장, 한눈에.</h1></div></div>
         <nav class="site-nav" aria-label="주요 페이지"><a href="./" aria-current="page">메인</a><a href="stocks.html">주식</a><a href="crypto.html">코인 현물</a><a href="futures.html">선물</a><a href="simulation.html">모의운용</a></nav>
       </header>
       <section class="hp-intro">
-        <div><div class="hp-eyebrow">MARKET BRIEF</div><h1>오늘 시장, 한눈에.</h1><p class="hp-muted" data-home-brief>최신 시장 자료를 확인하고 있습니다.</p></div>
+        <p class="hp-muted" data-home-brief>최신 시장 자료를 확인하고 있습니다.</p>
         <div class="hp-date" data-home-date></div>
       </section>
       <section class="hp-picks" aria-label="매수·매도 후보">
-        <div class="hp-column hp-buy"><div class="hp-column-head"><h2><i data-lucide="arrow-up-right" aria-hidden="true"></i>매수 후보</h2><span class="hp-number">TOP 3</span></div><div data-home-buy><p class="hp-muted">순위 불러오는 중</p></div></div>
-        <div class="hp-column hp-sell"><div class="hp-column-head"><h2><i data-lucide="arrow-down-right" aria-hidden="true"></i>매도 검토</h2><span class="hp-number">TOP 3</span></div><div data-home-sell><p class="hp-muted">순위 불러오는 중</p></div></div>
+        <div class="hp-column hp-buy site-panel"><div class="hp-column-head"><h2><i data-lucide="arrow-up-right" aria-hidden="true"></i>매수 후보</h2><span class="hp-number">TOP 3</span></div><div data-home-buy><p class="hp-muted">순위 불러오는 중</p></div></div>
+        <div class="hp-column hp-sell site-panel"><div class="hp-column-head"><h2><i data-lucide="arrow-down-right" aria-hidden="true"></i>매도 검토</h2><span class="hp-number">TOP 3</span></div><div data-home-sell><p class="hp-muted">순위 불러오는 중</p></div></div>
       </section>
       <div class="hp-main-grid">
-        <section id="home-news" aria-labelledby="home-news-title"><div class="hp-section-head"><h2 id="home-news-title">꼭 알아야 할 뉴스</h2><span class="hp-muted">핵심만 짧게</span></div><div class="hp-panel" data-home-news aria-live="polite"><p class="hp-empty">뉴스 불러오는 중</p></div></section>
-        <section id="home-recap" aria-labelledby="home-recap-title"><div class="hp-section-head"><h2 id="home-recap-title">오늘 · 이번 주 Recap</h2><span class="hp-muted" data-recap-state>마감 기준</span></div><div class="hp-panel" data-home-recap><p class="hp-empty">섹터 그래프 불러오는 중</p></div></section>
+        <section class="site-panel hp-panel" id="home-news" aria-labelledby="home-news-title"><div class="hp-section-head site-panel-head"><h2 id="home-news-title">꼭 알아야 할 뉴스</h2><span class="hp-muted">핵심만 짧게</span></div><div data-home-news aria-live="polite"><p class="hp-empty">뉴스 불러오는 중</p></div></section>
+        <section class="site-panel hp-panel" id="home-recap" aria-labelledby="home-recap-title"><div class="hp-section-head site-panel-head"><h2 id="home-recap-title">오늘 · 이번 주 Recap</h2><span class="hp-muted" data-recap-state>마감 기준</span></div><div data-home-recap><p class="hp-empty">섹터 그래프 불러오는 중</p></div></section>
       </div>
       <aside class="site-ad" data-site-ad="home" aria-label="광고" hidden><span class="site-ad-label">광고</span><div class="site-ad-body" data-site-ad-body></div></aside>
       <p class="hp-caption" data-home-status role="status"></p>
@@ -44,3 +46,4 @@
   </main>
 </body>
 </html>
+
