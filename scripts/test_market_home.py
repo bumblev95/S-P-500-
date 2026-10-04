@@ -224,6 +224,48 @@ class SemanticPublication(unittest.TestCase):
         _,log=self.build(later+timedelta(hours=1))
         self.assertFalse(log['changed']);self.assertEqual(before,self.files())
 
+    def test_news_only_change_keeps_quote_cache_order_despite_completion_order(self):
+        symbols=[s for s,_,_ in h.INDICES+h.SECTORS]
+        with patch.object(h,'as_completed',side_effect=lambda futures:iter(futures)):
+            first,_=self.build(self.now)
+        original=self.cache()['quotes']
+        self.assertEqual(list(original),symbols)
+        self.title='U.S. economy and inflation outlook'
+        self.headline='미국 경제·물가 전망 갱신'
+        later=self.now+timedelta(hours=1)
+        with patch.object(h,'as_completed',side_effect=lambda futures:reversed(futures)):
+            second,log=self.build(later)
+        updated=self.cache()['quotes']
+        self.assertTrue(log['changed'])
+        self.assertNotEqual(first['news'][0]['sourceHash'],second['news'][0]['sourceHash'])
+        self.assertEqual(second['news'][0]['headlineKo'],self.headline)
+        self.assertEqual(list(updated),symbols)
+        self.assertEqual(h.semantic_content(original),h.semantic_content(updated))
+        self.assertEqual(h.semantic_content(first['recap']),h.semantic_content(second['recap']))
+        for key,specs in [('indices',h.INDICES),('sectors',h.SECTORS)]:
+            self.assertEqual([q['symbol'] for q in second['recap'][key]],[s for s,_,_ in specs])
+        before=self.files()
+        with patch.object(h,'as_completed',side_effect=lambda futures:iter(futures[::2]+futures[1::2])):
+            _,log=self.build(later+timedelta(hours=1))
+        self.assertFalse(log['changed']);self.assertEqual(before,self.files())
+
+    def test_legacy_quote_key_order_is_preserved_on_no_op_until_news_changes(self):
+        first,_=self.build(self.now)
+        cache=self.cache()
+        cache['quotes']=dict(reversed(list(cache['quotes'].items())))
+        h.atomic(self.root/'market/home-cache.json',cache)
+        before=self.files()
+        saved,log=self.build(self.now+timedelta(hours=1))
+        self.assertFalse(log['changed']);self.assertEqual(before,self.files())
+        self.assertEqual(saved,first)
+        self.title='U.S. economy and inflation outlook'
+        self.headline='미국 경제·물가 전망 갱신'
+        with patch.object(h,'as_completed',side_effect=lambda futures:reversed(futures)):
+            _,log=self.build(self.now+timedelta(hours=2))
+        self.assertTrue(log['changed'])
+        self.assertEqual(list(self.cache()['quotes']),[s for s,_,_ in h.INDICES+h.SECTORS])
+        self.assertEqual(h.semantic_content(cache['quotes']),h.semantic_content(self.cache()['quotes']))
+
     def test_feed_failure_repeated_failure_and_recovery_publish_only_transitions(self):
         first,_=self.build(self.now)
         self.failed.add(h.FEEDS[0][1])
