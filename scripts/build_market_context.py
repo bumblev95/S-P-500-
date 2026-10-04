@@ -220,6 +220,22 @@ def parse_news(text, name, now):
                           topic=topic,interpretation=interpretation,assessment='원문 검토 필요'))
     return items
 
+def retain_news(prior, name, now, last_success_at):
+    """Retain only this feed's valid 14-day items without renewing provenance."""
+    items=[]
+    for item in prior:
+        if not isinstance(item, dict) or item.get('source')!=name: continue
+        try:
+            link=urlparse(item.get('url') or '')
+            dt=datetime.fromisoformat(item.get('publishedAt') or '')
+            if dt.tzinfo is None: dt=dt.replace(tzinfo=timezone.utc)
+            if link.scheme!='https' or link.hostname!='www.federalreserve.gov': continue
+            if not 0 <= (now-dt).total_seconds() <= 14*86400: continue
+        except (ValueError, TypeError, AttributeError): continue
+        items.append(dict(item, fromCache=True,
+                          lastSuccessAt=item.get('lastSuccessAt') or last_success_at))
+    return items
+
 def build(root=ROOT, now=None, fetcher=get):
     now=now or datetime.now(timezone.utc); today=now.date()
     target=root/'market/latest.json'
@@ -262,13 +278,28 @@ def build(root=ROOT, now=None, fetcher=get):
         error = type(exc).__name__; errors.append('Fed bond spread: '+error)
         indicators.extend(retain_observation(q, old_by.get(q['id']), today, error, now) for q in bond_spreads('', today))
     news=[]; feeds=[]
+    old_feeds={feed['name']:feed for feed in old.get('feeds', [])}
     for name,url in FEEDS:
+        prior=old_feeds.get(name, {})
+        # Schema-2 snapshots had no fetch timestamp. Only a ready feed proves
+        # that the previous snapshot time was also a successful collection.
+        last_success=prior.get('lastSuccessAt') or (old.get('generatedAt') if prior.get('status')=='ready' else None)
+        feed=dict(name=name,url=url,lastAttemptAt=now.isoformat())
         try:
-            news.extend(parse_news(fetcher(url),name,now));feeds.append(dict(name=name,url=url,status='ready'))
+            feed_news=[dict(item,fromCache=False,lastSuccessAt=now.isoformat())
+                       for item in parse_news(fetcher(url),name,now)]
+            feed.update(status='ready',fromCache=False,lastSuccessAt=now.isoformat())
         except Exception as exc:
-            feeds.append(dict(name=name,url=url,status='unavailable'));errors.append(name+': '+type(exc).__name__)
+            error=type(exc).__name__
+            feed_news=retain_news(old.get('news', []),name,now,last_success)
+            feed.update(status='unavailable',fromCache=bool(feed_news),
+                        lastSuccessAt=last_success,fetchError=error)
+            errors.append(name+': '+error)
+        news.extend(feed_news);feeds.append(feed)
     unique={x['url']:x for x in news}
-    news=sorted(unique.values(),key=lambda x:x['publishedAt'],reverse=True)[:15]
+    # A shared count limit would let a healthy feed evict another feed's cache.
+    # Preserve the 14-day snapshot; the UI already limits displayed articles.
+    news=sorted(unique.values(),key=lambda x:x['publishedAt'],reverse=True)
     payload=dict(schemaVersion=2,model='public-early-warning-v1',generatedAt=now.isoformat(),observations=observations,
                  indicators=indicators,credit=credit_state(indicators),news=news,feeds=feeds,errors=errors,
                  newsScope='Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.',
