@@ -151,7 +151,8 @@ def prices(prior, now, fetch=get):
         for future in as_completed(futures):
             symbol,q,rows=future.result();quotes[symbol]=q
             cache[symbol]={'rows':rows,'lastSuccessAt':q['lastSuccessAt']}
-    return quotes,cache
+    # Persist cache blocks in spec order, independent of worker completion.
+    return quotes,{symbol:cache[symbol] for symbol,_,_ in INDICES+SECTORS}
 
 
 class Text(HTMLParser):
