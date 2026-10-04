@@ -5,8 +5,10 @@ import tempfile
 from unittest.mock import patch
 from pathlib import Path
 from urllib.error import HTTPError
-from datetime import date, datetime, timezone
-from build_market_context import get, parse_csv, parse_table, collect_series, summarize, funding, bond_spreads, credit_state, parse_news, build
+from datetime import date, datetime, timedelta, timezone
+from email.utils import format_datetime
+from xml.sax.saxutils import escape
+from build_market_context import FEEDS, get, parse_csv, parse_table, collect_series, summarize, funding, bond_spreads, credit_state, parse_news, build
 
 class Tests(unittest.TestCase):
     def setUp(self):
@@ -298,5 +300,166 @@ class Tests(unittest.TestCase):
             self.assertEqual(by['NFCI']['severity'],2)
             self.assertIsNone(by['FUNDING']['value'])
             self.assertIsNone(by['DGS10']['value'])
+
+class FedNewsTests(unittest.TestCase):
+    def setUp(self):
+        silence = patch('builtins.print')
+        silence.start(); self.addCleanup(silence.stop)
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name)
+        self.now = datetime(2026,10,3,21,30,tzinfo=timezone.utc)
+
+    def article_url(self, slug):
+        return 'https://www.federalreserve.gov/newsevents/'+slug+'.htm'
+
+    def xml(self, articles):
+        return '<rss><channel>'+''.join(
+            '<item><title>'+escape(slug)+'</title><link>'+self.article_url(slug)+
+            '</link><pubDate>'+format_datetime(published)+'</pubDate></item>'
+            for slug,published in articles)+'</channel></rss>'
+
+    def collect(self, now, responses):
+        by_url = {url:responses[name] for name,url in FEEDS}
+        def fetch(url):
+            if url in by_url:
+                response = by_url[url]
+                if isinstance(response, Exception): raise response
+                return self.xml(response)
+            if 'fredgraph' in url:
+                key = url.split('id=')[1].split('&')[0]
+                value = 3.6 if key=='SOFR' else 3.65 if key=='IORB' else 0
+                return 'observation_date,'+key+'\n'+''.join(
+                    f'{d},{value}\n' for d in ('2026-09-30','2026-10-01','2026-10-02'))
+            if 'ebp_csv' in url: return 'date,gz_spread,ebp\n2026-10-01,1,-.1\n'
+            raise AssertionError('Unexpected URL: '+url)
+        result = build(self.root, now, fetch)
+        self.assertEqual(json.loads((self.root/'market/latest.json').read_text()),
+                         json.loads(json.dumps(result)))
+        return result
+
+    def test_one_failed_feed_retains_only_its_legacy_cache(self):
+        published = self.now-timedelta(days=1)
+        original = {'Fed 발표':[('press-old',published)], 'Fed 연설':[('speech-old',published)]}
+        for failed,healthy in [('Fed 발표','Fed 연설'),('Fed 연설','Fed 발표')]:
+            with self.subTest(failed=failed):
+                first = self.collect(self.now,original)
+                # Migrate the existing schema-2 snapshot without inventing a new fetch time.
+                for item in first['news']:
+                    item.pop('fromCache',None); item.pop('lastSuccessAt',None)
+                first['feeds'] = [dict(name=name,url=url,status='ready') for name,url in FEEDS]
+                (self.root/'market/latest.json').write_text(json.dumps(first))
+                later = self.now+timedelta(hours=1)
+                failed_url = dict(FEEDS)[failed]
+                responses = {failed:HTTPError(failed_url,503,'unavailable',None,None),
+                             healthy:[('healthy-new',published)]}
+                result = self.collect(later,responses)
+                by_source = {item['source']:item for item in result['news']}
+                self.assertEqual(len(result['news']),2)
+                cached = by_source[failed]
+                self.assertEqual(cached['url'],self.article_url(original[failed][0][0]))
+                self.assertEqual(cached['publishedAt'],published.isoformat())
+                self.assertTrue(cached['fromCache'])
+                self.assertEqual(cached['lastSuccessAt'],self.now.isoformat())
+                self.assertEqual(by_source[healthy]['url'],self.article_url('healthy-new'))
+                self.assertFalse(by_source[healthy]['fromCache'])
+                self.assertEqual(by_source[healthy]['lastSuccessAt'],later.isoformat())
+                feeds = {feed['name']:feed for feed in result['feeds']}
+                self.assertEqual(feeds[failed]['status'],'unavailable')
+                self.assertEqual(feeds[failed]['fetchError'],'HTTPError')
+                self.assertTrue(feeds[failed]['fromCache'])
+                self.assertEqual(feeds[failed]['lastSuccessAt'],self.now.isoformat())
+                self.assertEqual(feeds[healthy]['status'],'ready')
+                self.assertFalse(feeds[healthy]['fromCache'])
+                self.assertEqual(feeds[healthy]['lastSuccessAt'],later.isoformat())
+                self.assertTrue(all(feed['lastAttemptAt']==later.isoformat() for feed in feeds.values()))
+                self.assertEqual(result['errors'],[failed+': HTTPError'])
+                # News collection cannot change financial observations or the credit result.
+                self.assertEqual(result['observations'],first['observations'])
+                self.assertEqual(result['credit'],first['credit'])
+                self.assertEqual([{k:v for k,v in q.items() if k not in ('lastSuccessAt','lastAttemptAt')}
+                                  for q in result['indicators']],
+                                 [{k:v for k,v in q.items() if k not in ('lastSuccessAt','lastAttemptAt')}
+                                  for q in first['indicators']])
+
+    def test_cache_expires_at_the_same_14_day_boundary_as_live_news(self):
+        boundary = self.now-timedelta(days=14)
+        articles = [('boundary',boundary),('inside',boundary+timedelta(seconds=1)),
+                    ('expired',boundary-timedelta(seconds=1))]
+        first = self.collect(self.now-timedelta(hours=1),{'Fed 발표':articles,'Fed 연설':[]})
+        responses = {'Fed 발표':TimeoutError(),'Fed 연설':[]}
+        at_boundary = self.collect(self.now,responses)
+        self.assertEqual({n['url'] for n in at_boundary['news']},
+                         {self.article_url('boundary'),self.article_url('inside')})
+        after_boundary = self.collect(self.now+timedelta(seconds=1),responses)
+        self.assertEqual([n['url'] for n in after_boundary['news']],[self.article_url('inside')])
+        expired = self.collect(self.now+timedelta(seconds=2),responses)
+        self.assertEqual(expired['news'],[])
+        feed = expired['feeds'][0]
+        self.assertEqual(feed['status'],'unavailable')
+        self.assertFalse(feed['fromCache'])
+        self.assertEqual(feed['lastSuccessAt'],first['generatedAt'])
+
+    def test_repeated_failure_then_both_feeds_recover_without_old_cache(self):
+        published = self.now-timedelta(days=1)
+        first = self.collect(self.now,{'Fed 발표':[('press-old',published)],
+                                     'Fed 연설':[('speech-old',published)]})
+        later = self.now+timedelta(hours=1)
+        self.collect(later,{'Fed 발표':TimeoutError(),'Fed 연설':[('speech-new',published)]})
+        failed = self.collect(later+timedelta(hours=1),
+                              {'Fed 발표':TimeoutError(),'Fed 연설':TimeoutError()})
+        feeds = {feed['name']:feed for feed in failed['feeds']}
+        self.assertTrue(all(f['status']=='unavailable' and f['fromCache'] for f in feeds.values()))
+        self.assertEqual(feeds['Fed 발표']['lastSuccessAt'],first['generatedAt'])
+        self.assertEqual(feeds['Fed 연설']['lastSuccessAt'],later.isoformat())
+        self.assertTrue(all(n['fromCache'] for n in failed['news']))
+        recovered_at = later+timedelta(hours=2)
+        recovered = self.collect(recovered_at,{'Fed 발표':[('press-recovered',published)],
+                                               'Fed 연설':[('speech-recovered',published)]})
+        self.assertEqual({n['url'] for n in recovered['news']},
+                         {self.article_url('press-recovered'),self.article_url('speech-recovered')})
+        self.assertEqual(recovered['errors'],[])
+        for entry in recovered['feeds']+recovered['news']:
+            self.assertFalse(entry['fromCache'])
+            self.assertEqual(entry['lastSuccessAt'],recovered_at.isoformat())
+            self.assertNotIn('fetchError',entry)
+        self.assertTrue(all(f['status']=='ready' for f in recovered['feeds']))
+
+    def test_successful_empty_feed_replaces_failed_cache(self):
+        published = self.now-timedelta(days=1)
+        self.collect(self.now,{'Fed 발표':[('press-old',published)],'Fed 연설':[]})
+        self.collect(self.now+timedelta(hours=1),{'Fed 발표':TimeoutError(),'Fed 연설':[]})
+        result = self.collect(self.now+timedelta(hours=2),{'Fed 발표':[],'Fed 연설':[]})
+        self.assertEqual(result['news'],[])
+        self.assertEqual(result['errors'],[])
+        self.assertTrue(all(f['status']=='ready' and not f['fromCache'] for f in result['feeds']))
+
+    def test_healthy_feed_cannot_evict_other_feeds_valid_cache(self):
+        published = self.now-timedelta(days=2)
+        press = [('press-'+str(i),published) for i in range(3)]
+        self.collect(self.now,{'Fed 발표':press,'Fed 연설':[]})
+        speeches = [('speech-'+str(i),self.now-timedelta(minutes=i)) for i in range(20)]
+        result = self.collect(self.now+timedelta(hours=1),{'Fed 발표':TimeoutError(),'Fed 연설':speeches})
+        self.assertEqual(len(result['news']),23)
+        cached = [n for n in result['news'] if n['source']=='Fed 발표']
+        self.assertEqual({n['url'] for n in cached},{self.article_url(slug) for slug,_ in press})
+        self.assertTrue(all(n['fromCache'] and n['lastSuccessAt']==self.now.isoformat() for n in cached))
+
+    def test_legacy_unavailable_feed_cannot_claim_snapshot_time_as_last_success(self):
+        published = self.now-timedelta(days=1)
+        old = dict(generatedAt=self.now.isoformat(),
+                   news=parse_news(self.xml([('press-old',published)]),'Fed 발표',self.now),
+                   feeds=[dict(name=name,url=url,status='unavailable') for name,url in FEEDS])
+        old['news'].extend([dict(old['news'][0],url='https://evil.example/article'),
+                           dict(old['news'][0],publishedAt='invalid'),
+                           dict(old['news'][0],publishedAt=(self.now+timedelta(days=1)).isoformat()),
+                           dict(old['news'][0],source='Unknown feed')])
+        (self.root/'market').mkdir()
+        (self.root/'market/latest.json').write_text(json.dumps(old))
+        result = self.collect(self.now+timedelta(hours=1),{'Fed 발표':TimeoutError(),'Fed 연설':[]})
+        self.assertEqual(len(result['news']),1)
+        self.assertTrue(result['news'][0]['fromCache'])
+        self.assertIsNone(result['news'][0]['lastSuccessAt'])
+        self.assertIsNone(result['feeds'][0]['lastSuccessAt'])
 
 if __name__=='__main__':unittest.main()
