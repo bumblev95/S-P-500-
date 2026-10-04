@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'index.html'
+      - 'stocks.html'
       - 'advanced.html'
       - 'advanced-legacy.html'
       - 'family-v24-archive.html'
@@ -23,6 +24,7 @@ on:
   pull_request:
     paths:
       - 'index.html'
+      - 'stocks.html'
       - 'advanced.html'
       - 'advanced-legacy.html'
       - 'family-v24-archive.html'

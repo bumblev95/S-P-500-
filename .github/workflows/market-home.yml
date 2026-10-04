@@ -1,0 +1,112 @@
+name: Update and validate market home
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'stocks.html'
+      - 'assets/market-home*'
+      - 'scripts/build_market_home.py'
+      - 'scripts/build_home_rankings.cjs'
+      - 'scripts/test_market_home*'
+      - 'scripts/check_market_home_browser.cjs'
+      - 'market/home-reviewed-news.json'
+      - '.github/workflows/market-home.yml'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'stocks.html'
+      - 'assets/market-home*'
+      - 'scripts/build_market_home.py'
+      - 'scripts/build_home_rankings.cjs'
+      - 'scripts/test_market_home*'
+      - 'scripts/check_market_home_browser.cjs'
+      - 'market/home-reviewed-news.json'
+      - '.github/workflows/market-home.yml'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Update S&P 500 EOD prices', 'Update public market context', 'Update decision support and live scorecard']
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: '20 * * * *'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: market-home-${{ github.event.pull_request.number || 'publish' }}
+  cancel-in-progress: false
+jobs:
+  home:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.sha || 'main' }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate periods, independent cache recovery and ranking gates
+        run: |
+          python -m unittest discover -s scripts -p test_market_home.py
+          node scripts/test_market_home.cjs
+          node --check assets/market-home.js
+      - uses: actions/cache@v4
+        with:
+          path: research/source-cache/home-news-ko
+          key: home-news-ko-v1-${{ github.run_id }}
+          restore-keys: home-news-ko-v1-
+      - name: Install Korean summary translation runtime
+        run: |
+          pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r scripts/requirements-news-translation.txt
+      - name: Collect closed prices, source news and Korean summaries
+        env:
+          OMP_NUM_THREADS: '2'
+          HF_HUB_DISABLE_XET: '1'
+        run: python scripts/build_market_home.py
+      - name: Show public snapshot for verification
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          snapshot=json.loads(Path('market/home.json').read_text())
+          assert len(snapshot['recap']['sectors'])==11
+          assert len(snapshot['rankings']['buy'])<=3 and len(snapshot['rankings']['sell'])<=3
+          print('MARKET_HOME_SNAPSHOT='+json.dumps(snapshot,ensure_ascii=False,separators=(',',':')))
+          PY
+      - name: Install browser validation runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify mobile, desktop, charts and existing stock navigation
+        run: node scripts/check_market_home_browser.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-home-preview
+          path: |
+            market/home.json
+            market/home-cache.json
+            home-preview/
+          retention-days: 7
+      - name: Publish current homepage snapshot
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add market/home.json market/home-cache.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update market homepage briefing'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Refresh the published website
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

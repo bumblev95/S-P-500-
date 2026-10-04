@@ -38,7 +38,7 @@ html=C.newsPanel('NVDA',poisoned,now);assert(!html.includes('<script'));assert(!
 const corrupt=structuredClone(fixture);corrupt.issuers[1045810].articles[0].impact={status:'positive',reason:'no provenance',topics:{}};
 assert.equal(C.selectNews(corrupt,'NVDA',now).counts.unclear,1);assert(C.newsPanel('NVDA',corrupt,now).includes('추가 확인'));
 corrupt.issuers[1045810].articles[0].impact={...article.impact,topics:{},evidence:{}};assert.doesNotThrow(()=>C.newsPanel('NVDA',corrupt,now));
-for(const file of ['index.html','advanced.html','advanced-legacy.html']){
+for(const file of ['stocks.html','advanced.html','advanced-legacy.html']){
  const text=fs.readFileSync(file,'utf8');assert(text.includes('company-events.js?v=4'));assert(text.includes('company-events.css?v=3'));
 }
 (async()=>{

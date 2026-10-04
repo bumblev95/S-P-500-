@@ -86,7 +86,7 @@ async function renderRisk(snapshot, clock) {
   assert(old.includes('vi-badge vi-muted">판단 제외'));
   assert(!old.includes('vi-badge vi-good'));
   // Every consumer loads both the renderer and its stylesheet.
-  for (const file of ['index.html','advanced.html','advanced-legacy.html','crypto.html','futures.html']) {
+  for (const file of ['stocks.html','advanced.html','advanced-legacy.html','crypto.html','futures.html']) {
     const html = fs.readFileSync(file, 'utf8');
     assert(html.includes('assets/status-indicators.css'), file);
     assert(html.indexOf('assets/market-visuals.js') < html.indexOf('assets/decision-support.js'), file);

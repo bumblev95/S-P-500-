@@ -62,14 +62,14 @@ async function fits(page, selector) {
         }
       }, clock);
       await page.route('**/config/*.json*', route => route.fulfill({json:{sheetCsvUrl:'',submitUrl:''}}));
-      for (const [file,selector] of [['index.html','.stockAssessment'],['advanced.html','.stockAssessment'],
+      for (const [file,selector] of [['stocks.html','.stockAssessment'],['advanced.html','.stockAssessment'],
         ['advanced-legacy.html','.stockAssessment'],['crypto.html','[data-indicator="신규 진입 판단"]']]) {
         await ready(page, base + file, selector);
         await fits(page, '.vi-gauge');
         if (file !== 'crypto.html') {
           const assessment = page.locator('.stockAssessment').first();
           const expected = A.evaluate(forecasts.stocks.NVDA, market, null, 126, clock);
-          if(file==='index.html'){
+          if(file==='stocks.html'){
             const headline=await assessment.locator('.sa-heading').boundingBox(),controls=await page.locator('.controlBar').boundingBox();
             assert(headline.y>=controls.y+controls.height,'The final decision must be clear of the controls on initial load');
             await page.screenshot({path:path.join(output,`initial-index-${width}.png`)});
@@ -163,7 +163,7 @@ async function fits(page, selector) {
         }
         const gauge = page.locator(selector).first();
         await gauge.screenshot({path:path.join(output, `${file.replace('.html','')}-${width}.png`)});
-        if (file === 'index.html') {
+        if (file === 'stocks.html') {
           const risk = page.locator('#sharedRisk');
           await risk.locator('details').first().evaluate(n => n.open = true);
           await fits(page, '.ds-risk-overview, .ds-risk-table');
@@ -275,7 +275,7 @@ async function fits(page, selector) {
     await riskPage.route('**/forecasts/latest.json*',route=>route.fulfill({json:fixtures}));
     await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:null}));
     await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:null}));
-    await ready(riskPage,base+'index.html','.sa-specific-risks');
+    await ready(riskPage,base+'stocks.html','.sa-specific-risks');
     const ids=()=>riskPage.locator('.sa-specific-risks [data-signal]').evaluateAll(nodes=>nodes.map(n=>n.dataset.signal));
     const weakIds=await ids();
     for(const id of ['ma50','ma-order','return1m','return3m','volatility'])assert(weakIds.includes(id));
@@ -319,7 +319,7 @@ async function fits(page, selector) {
     await riskPage.route('**/forecasts/latest.json*',route=>route.fulfill({json:{stocks:{NVDA:readyEntry}}}));
     await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:readyMarket}));
     await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:research}));
-    await ready(riskPage,base+'index.html','.stockAssessment');
+    await ready(riskPage,base+'stocks.html','.stockAssessment');
     assert.equal(await riskPage.locator('.stockAssessment [data-entry-state]').textContent(),'진입 검토');
     assert.equal(await riskPage.locator('.stockAssessment').getAttribute('data-decision-basis'),'technical-rules');
     assert.equal(await riskPage.locator('.sa-ai-status').getAttribute('data-ai-reference'),'unavailable');
@@ -339,7 +339,7 @@ async function fits(page, selector) {
       NVDA:{...forecasts.stocks.NVDA, fresh:false}
     }}}));
     await page.route('**/market/latest.json*', route => route.fulfill({json:null}));
-    await ready(page, base + 'index.html', '.stockAssessment');
+    await ready(page, base + 'stocks.html', '.stockAssessment');
     assert.equal(await page.locator('.stockAssessment .vi-unknown:visible').count(), 1);
     assert.equal(await page.locator('[data-entry-state]').getAttribute('data-entry-state'),'unavailable');
     assert.equal(await page.locator('[data-setup-state="unavailable"]').count(),2);
@@ -355,7 +355,7 @@ async function fits(page, selector) {
     let failed = false;
     await page.unrouteAll();
     await page.route('**/events/latest.json*', route => route.fulfill({status:503, json:{error:'QA unavailable'}}));
-    await ready(page, base + 'index.html', '.company-events');
+    await ready(page, base + 'stocks.html', '.company-events');
     await page.locator('.ce-news-card').first().waitFor();
     await page.locator('.ce-filings > summary').click();
     await page.locator('.ce-status').filter({hasText:'자료 읽기 실패'}).waitFor();
@@ -363,7 +363,7 @@ async function fits(page, selector) {
     await page.locator('.company-events').screenshot({path:path.join(output,'events-unavailable.png')});
     await page.unroute('**/events/latest.json*');
     await page.route('**/news/latest.json*', route => route.fulfill({status:503,json:{error:'QA unavailable'}}));
-    await ready(page, base + 'index.html', '.company-events');
+    await ready(page, base + 'stocks.html', '.company-events');
     await page.locator('.ce-news-status').filter({hasText:'뉴스 읽기 실패'}).waitFor();
     assert.equal(await page.locator('.ce-news-card').count(), 0);
     await page.locator('.ce-filings > summary').click();
