@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
@@ -203,6 +204,24 @@ def calc_max_drawdown(series: pd.Series, lookback: int = 84) -> float | str:
     return round(float(dd.min()), 6)
 
 
+def ohlc_fields(daily: pd.Series, close: float) -> dict[str, float]:
+    """Retain only supplied OHLC consistent with this bar's Yahoo Close."""
+    def value(key):
+        try:
+            result = float(daily.get(key))
+            return result if math.isfinite(result) else None
+        except (TypeError, ValueError):
+            return None
+
+    high, low, opened = value("High"), value("Low"), value("Open")
+    if high is None or low is None or not 0 < low <= close <= high:
+        return {}
+    fields = {"high": high, "low": low}
+    if opened is not None and low <= opened <= high:
+        fields["open"] = opened
+    return fields
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', choices=('chart','yfinance'), default='chart')
@@ -309,15 +328,8 @@ def main(argv=None) -> int:
                 "close": float(daily_close),
                 "volume": int(daily_volume) if pd.notna(daily_volume) else None,
             }
-            daily_high, daily_low = daily.get("High"), daily.get("Low")
-            if (pd.notna(daily_high) and pd.notna(daily_low) and
-                    0 < float(daily_low) <= float(daily_close) <= float(daily_high)):
-                # Use Yahoo OHLC in the same split-adjusted, dividends-excluded
-                # basis as Close; never mix Adj Close with unadjusted High/Low.
-                bar.update(high=float(daily_high), low=float(daily_low))
-                daily_open = daily.get("Open")
-                if pd.notna(daily_open) and float(daily_low) <= float(daily_open) <= float(daily_high):
-                    bar["open"] = float(daily_open)
+            # Never mix dividend-adjusted Adj Close with these OHLC fields.
+            bar.update(ohlc_fields(daily, float(daily_close)))
             history.append(bar)
         if re.fullmatch(r"[A-Z0-9^][A-Z0-9.^=-]{0,19}", original_symbol):
             atomic_json(OUT_PATH.parent / "history" / (original_symbol + ".json"),
@@ -329,6 +341,9 @@ def main(argv=None) -> int:
             "yahooSymbol": ysym,
             "date": last_date.date().isoformat() if hasattr(last_date, "date") else str(last_date)[:10],
             "close": round(close, 6),
+            "open": history[-1].get("open", ""),
+            "high": history[-1].get("high", ""),
+            "low": history[-1].get("low", ""),
             "adjClose": adj_close,
             "volume": volume,
             "avgVolume3m": avgVolume3m,
