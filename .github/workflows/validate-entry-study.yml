@@ -1,0 +1,45 @@
+name: Validate forward entry paper study
+on:
+  push:
+    paths:
+      - 'scripts/entry_study.cjs'
+      - 'scripts/build_entry_study.cjs'
+      - 'scripts/verify_entry_study.cjs'
+      - 'scripts/test_entry_study.cjs'
+      - 'scripts/entry-study-v1/**'
+      - 'scripts/build_simulation.cjs'
+      - 'simulation/entry-study/**'
+      - '.github/workflows/validate-entry-study.yml'
+  pull_request:
+    paths:
+      - 'scripts/entry_study.cjs'
+      - 'scripts/build_entry_study.cjs'
+      - 'scripts/verify_entry_study.cjs'
+      - 'scripts/test_entry_study.cjs'
+      - 'scripts/entry-study-v1/**'
+      - 'scripts/build_simulation.cjs'
+      - 'simulation/entry-study/**'
+      - '.github/workflows/validate-entry-study.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/test_entry_study.cjs
+      - run: node scripts/test_paper_engine.cjs
+      - run: node scripts/test_entry_indicator.cjs
+      - name: Verify immutable records and forbid historical rewrites
+        env:
+          STUDY_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if ! git cat-file -e "${STUDY_BASE_REF}^{commit}" 2>/dev/null; then
+            STUDY_BASE_REF=origin/main
+          fi
+          node scripts/verify_entry_study.cjs --base "$STUDY_BASE_REF"

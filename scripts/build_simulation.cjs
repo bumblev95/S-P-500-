@@ -58,6 +58,12 @@ function build(now=Date.now()){
  output.longResearch=read('long-research/latest.json',null);
  output.research=read('research/latest.json',null);
  output.researchAttempt=read('research/attempt.json',null);
+ try{output.entryStudy=require('./build_entry_study.cjs').build(market,now,folder,{existing:live.accounts.stocks,existingCostRisk:P.CONFIG.stocks});}
+ catch(error){
+  // A paused independent study must not prevent existing accounts publishing.
+  output.entryStudy={status:'paused',error:String(error.message),autoPromotion:false};
+  console.error('Entry paper study paused:',error.message);
+ }
  for(const asset of ['crypto','stocks']){
   const sources=market[asset]||{};
   const candles=s=>asset==='crypto'?sources[s]?.frames?.['15m']||[]:sources[s]?.rows||[];

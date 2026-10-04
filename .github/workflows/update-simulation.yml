@@ -7,6 +7,8 @@ on:
       - 'scripts/collect_simulation_data.py'
       - 'scripts/paper_engine.cjs'
       - 'scripts/build_simulation.cjs'
+      - 'scripts/*entry_study.cjs'
+      - 'scripts/entry-study-v1/**'
       - 'scripts/build_leveraged.cjs'
       - 'scripts/*momentum*'
       - 'scripts/*signal*tournament*'
@@ -56,6 +58,8 @@ jobs:
       - name: Test simulated execution and data chronology
         run: |
           node scripts/test_paper_engine.cjs
+          node scripts/test_entry_study.cjs
+          node scripts/verify_entry_study.cjs
           node scripts/test_leveraged.cjs
           node scripts/test_wide_recovery.cjs
           node scripts/test_trend_methods.cjs
@@ -105,7 +109,9 @@ jobs:
           p.write_text(json.dumps({'at':int(time.time()*1000),'status':os.environ['TRAIN_RESULT']}))
           PY
       - name: Settle paper orders and preserve account records
-        run: node scripts/build_simulation.cjs
+        run: |
+          node scripts/build_simulation.cjs
+          node scripts/verify_entry_study.cjs --base HEAD
       - name: Publish paper accounts
         run: |
           git config user.name 'github-actions[bot]'
