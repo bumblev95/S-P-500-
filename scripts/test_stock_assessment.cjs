@@ -38,10 +38,20 @@ assert(html.indexOf('sa-reason')<html.indexOf('sa-entry-layout'));
 assert(html.includes('class="sa-trend-details"><summary>'));
 assert(!html.includes('class="sa-trend-details" open'));
 assert.equal(JSON.stringify(wait),before,'Presentation must not mutate an assessment');
+assert.equal((html.match(/data-state-option=/g)||[]).length,9,
+  'The full set of entry judgments is shown in the beginner panel');
+assert(html.includes('data-state-option="buy"><summary aria-current="true"'));
+assert(!html.includes('class="sa-condition-details" open'),
+  'Detailed strategy/calculation text is opt-in');
 const risk=A.evaluate(e,{...market,credit:{status:'risk'}},ml,126,now);
 assert.equal(risk.score,pass.score);assert.equal(risk.decision,'진입 보류');assert.match(risk.reason,/시장/);
 const unknown=A.evaluate(e,null,ml,126,now);
 assert.equal(unknown.score,pass.score);assert.notEqual(unknown.decision,'진입 검토');
+assert(A.entryVisual(risk).includes('data-state="avoid"'));
+assert(A.entryVisual(wait).includes('data-state="buy"'));
+assert(!A.entryVisual(unknown).includes('class="vi-pointer"'),
+  'Missing market observations have no neutral-looking needle');
+assert(A.entryVisual(unknown).includes('data-state-option="unavailable"><summary aria-current="true"'));
 const bearish=structuredClone(ml);bearish.stocks.TEST.predictions[252]={status:'eligible',forecast:{...forecast,horizon:252,base:90,bear:80,bull:110,direction:'down',return:-.1,logReturn:Math.log(.9),lowLogReturn:Math.log(.8),highLogReturn:Math.log(1.1)}};
 const long=A.evaluate(e,market,bearish,252,now);
 assert.equal(long.score,pass.score);assert.equal(long.trend,pass.trend);assert.equal(long.color,pass.color);assert.equal(long.decision,'진입 검토');

@@ -6,7 +6,7 @@
   const finite=Number.isFinite;
   const label='단기 추세 점수';
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const money=x=>finite(x)?'$'+x.toLocaleString('en-US',{maximumFractionDigits:2}):'—';
+  const money=x=>finite(x)?'$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
   const normalize=s=>String(s||'').trim().toUpperCase().replace(/\./g,'-');
   function entry(data,symbol){const key=normalize(symbol);return data?.stocks?.[key]||data?.stocks?.[key.replace(/-/g,'.')]||null;}
 
@@ -168,8 +168,8 @@
   }
   function signalPanels(entry,a,market,now=Date.now()){
     const s=signals(entry,a,market,now);
-    const rows=(list,tone,icon)=>list.map(x=>'<div class="signal '+tone+'" data-signal="'+esc(x.id)+'"><span class="signalIcon">'+icon+
-      '</span><span class="sa-signal-copy"><strong>'+esc(x.title)+'</strong><small>'+esc(x.detail)+'</small></span></div>').join('');
+    const rows=(list,tone,icon)=>list.map(x=>'<details class="signal '+tone+'" data-signal="'+esc(x.id)+'"><summary><span class="signalIcon">'+icon+
+      '</span><span class="sa-signal-copy"><strong>'+esc(x.title)+'</strong></span></summary><p class="sa-signal-detail">'+esc(x.detail)+'</p></details>').join('');
     const empty=s.available?'확인한 가격 지표에서 뚜렷한 위험이 감지되지 않았습니다.':'종목별 위험 판단에 필요한 가격 자료가 부족합니다.';
     return '<div class="explainGrid sa-signals" data-signals-symbol="'+esc(entry.symbol)+'">'+
       '<section class="panel signalPanel"><h3 class="goodText">지금 좋은 신호 · '+esc(entry.symbol)+'</h3><div class="signals">'+
@@ -177,7 +177,7 @@
       '<section class="panel signalPanel sa-specific-risks"><h3 class="badText">꼭 확인할 위험 · '+esc(entry.symbol)+'</h3><div class="signals">'+
       (rows(s.negative,'negative','!')||'<p>'+empty+' 기업 실적·회사 뉴스는 별도로 확인하세요.</p>')+'</div></section></div>'+
       (s.limitations.length?'<section class="panel signalPanel sa-limitations" aria-label="진입 조건·공통 상태"><h3>진입 조건·공통 상태</h3>'+
-      '<p class="sa-limitations-note">규칙 기반 진입 조건: '+esc(a.decision)+'. 시장 상태·자료 갱신·추세 조건을 확인하세요. AI 연구의 검증 상태는 별도 참고 정보입니다.</p><div class="signals">'+
+      '<p class="sa-limitations-note">시장·AI·자료 상태 · 눌러서 근거 보기</p><div class="signals">'+
       rows(s.limitations,'caution','i')+'</div></section>':'');
   }
   // Presentation only: expose the existing plan's separate entry conditions.
@@ -236,22 +236,53 @@
   }
   function holdingPanel(a){
     const h=a.plan.holding;
-    return '<section class="sa-holding" data-holding-state="'+h.code+'" aria-label="보유 중 대응"><div class="sa-check-title"><h3>보유 중이라면</h3>'+visuals.badge(h.label,h.tone)+'</div><p>'+esc(h.reason)+'</p><p>이전 20거래일 '+esc(a.plan.levelBasis)+' 이탈 기준 <b>'+money(h.level)+'</b></p><small>매수가·보유 비중·개인 손절 기준은 별도 확인</small></section>';
+    return '<section class="sa-holding" data-holding-state="'+h.code+'" aria-label="보유 중 대응"><div class="sa-check-title"><h3>이미 보유 중이라면</h3>'+(h.code==='unavailable'?visuals.badge('판단 보류','muted'):'')+'</div>'+visuals.steps([
+      {key:'hold',label:'추세 유지',tone:'good'},{key:'protect',label:'이탈 주의',tone:'warn'},{key:'reduce',label:'축소 검토',tone:'bad'}
+    ],h.code,'보유 중 대응')+(finite(h.level)?'<small>추세 이탈 기준 <b>'+money(h.level)+'</b> · 매수가 별도 확인</small>':'')+'</section>';
+  }
+  // Display categories, not a numeric buy probability. All nine real states
+  // stay visible; native disclosures explain a state without changing it.
+  const entryStates=Object.freeze([
+    {key:'avoid',label:'진입 보류',tone:'bad',icon:'<circle cx="12" cy="12" r="8"/><path d="m6 18 12-12"/>',meaning:'하락 추세 또는 시장 경보. 신규 진입을 미룹니다.'},
+    {key:'watch',label:'관망',tone:'warn',icon:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',meaning:'상승·하락 신호가 섞여 방향을 더 확인합니다.'},
+    {key:'buy',label:'진입 검토',tone:'good',icon:'<circle cx="12" cy="12" r="9"/><path d="m7 12 3 3 7-7"/>',meaning:'돌파 또는 눌림 반등과 위험 조건이 충족됐습니다.'},
+    {key:'pullback',label:'눌림목 대기',tone:'warn',icon:'<path d="m3 6 7 10 10-10m-6 0h6v6"/>',meaning:'상승 추세에서 관심 가격까지 내려오기를 기다립니다.'},
+    {key:'breakout',label:'돌파 대기',tone:'warn',icon:'<path d="M3 12h18M12 21V3m-5 5 5-5 5 5"/>',meaning:'이전 고점을 넘는 종가를 기다립니다.'},
+    {key:'confirm',label:'지지 회복 대기',tone:'warn',icon:'<path d="M3 20h18M12 16V3m-5 5 5-5 5 5"/>',meaning:'이탈한 지지 가격 위로 회복하는지 확인합니다.'},
+    {key:'overextended',label:'추격 주의',tone:'warn',icon:'<path d="m3 18 6-6 4 3 8-12m-6 0h6v6M5 3v4m0 3v.1"/>',meaning:'가격이 많이 올라 바로 따라 사기에는 이격이 큽니다.'},
+    {key:'riskwait',label:'위험 조절 대기',tone:'warn',icon:'<path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6l8-4Zm0 5v6m0 3v.1"/>',meaning:'손절까지의 가격 폭이나 손익비가 기준에 맞지 않습니다.'},
+    {key:'unavailable',label:'판단 보류',tone:'muted',icon:'<circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5m0 3v.1"/>',meaning:'가격 또는 시장 자료가 부족해 판단을 기다립니다.'}
+  ].map(s=>Object.freeze(s)));
+  function entryVisual(a){
+    const code=a.plan.code,group=code==='buy'?'buy':code==='avoid'?'avoid':entryStates.some(s=>s.key===code&&s.tone==='warn')?'wait':null;
+    const groups=[{key:'avoid',label:'진입 보류',tone:'bad'},{key:'wait',label:'조건 대기',tone:'warn'},{key:'buy',label:'진입 검토',tone:'good'}];
+    const dial=visuals.gauge({title:'신규 진입 판단',states:groups,index:groups.findIndex(s=>s.key===group),value:a.decision})
+      .replace('<strong ','<strong data-entry-state="'+esc(code)+'" ');
+    return '<div class="sa-decision-visual"><div class="sa-decision-dial">'+dial+'</div><section class="sa-state-legend" aria-label="전체 판단 종류"><div class="sa-legend-heading"><b>9가지 판단</b><small>눌러서 뜻 보기</small></div><div class="sa-state-map">'+entryStates.map(s=>{
+      const current=s.key===code;
+      return '<details class="sa-state-card sa-state-'+s.tone+(current?' sa-state-current':'')+'" name="sa-states-'+esc(normalize(a.symbol))+'" data-state-option="'+s.key+'"><summary'+(current?' aria-current="true"':'')+' aria-label="'+esc(s.label+(current?' · 현재 판단':''))+'"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+s.icon+'</svg><span>'+esc(s.label.replaceAll(' ',''))+'</span>'+(current?'<i aria-hidden="true">✓</i>':'')+'</summary><p>'+esc(s.meaning)+'</p></details>';
+    }).join('')+'</div></section></div>';
+  }
+  function shortReason(a){
+    const p=a.plan,cap=p.market==='watch'?5:8;
+    if(p.code==='buy')return p.strategy==='breakout'?'고점 돌파 + 위험 조건 충족':'눌림 반등 + 위험 조건 충족';
+    if(p.code==='avoid')return p.market==='risk'?'시장 위험 경보':'중기 하락 추세';
+    if(p.code==='riskwait')return finite(p.riskPct)&&p.riskPct*100>cap?'손절 폭 '+(p.riskPct*100).toFixed(1)+'% · 기준 '+cap+'%':finite(p.rr)?'손익비 '+p.rr.toFixed(1)+'배 · 기준 '+(p.market==='watch'?2:1.5)+'배':'위험 조건 확인 필요';
+    if(p.code==='unavailable')return a.score===null?'가격 자료 확인 필요':p.market==='unknown'?'시장 자료 확인 필요':'가격·변동폭 자료 확인 필요';
+    return {watch:'상승·하락 신호가 섞임',pullback:'관심 가격까지 눌림 대기',breakout:'이전 고점 돌파 전',overextended:'가격이 많이 올라 추격 주의',confirm:'지지 가격 회복 전'}[p.code]||a.reason;
   }
   function panel(a){
     const p=a.plan,reference=aiReference(a);
     return '<section class="stockAssessment" data-decision-basis="technical-rules" aria-label="'+esc(a.symbol)+' 공통 평가">'+
-      '<div class="sa-heading"><div><small>'+esc(a.symbol)+' · 최종 진입 판단</small><strong class="sa-'+(p.code==='unavailable'?'muted':p.tone==='avoid'?'bad':p.tone==='buy'?'good':'warn')+'" data-entry-state="'+p.code+'">'+esc(a.decision)+'</strong></div>'+
+      '<div class="sa-heading"><small>'+esc(a.symbol)+' · 매수 전 확인</small>'+
       '<span class="sa-date">종가 '+esc(a.asOf||'확인 필요')+'</span></div>'+
-      '<div class="sa-context"><div><small>가격 방향</small>'+visuals.badge(a.trend.replace(' 흐름',''),a.color)+'</div><div><small>진입 방식</small>'+visuals.badge(p.code==='unavailable'?'자료 확인':p.strategy==='breakout'?'고점 돌파':'눌림목 반등',p.code==='buy'?'good':p.code==='unavailable'?'muted':'info')+'</div><div><small>보유 중 대응</small>'+visuals.badge(p.holding.label,p.holding.tone)+'</div></div>'+
-      '<p class="sa-reason"><b>'+(p.code==='buy'?'진입 검토 이유':a.score===null?'판단 보류 이유':a.decision+' 이유')+'</b> '+esc(entryExplanation(a))+'</p>'+
-      '<p class="sa-next"><b>다음 확인 조건</b><span>'+esc(p.next)+'</span></p>'+
-      setupPanels(a)+'<details class="sa-condition-details"><summary>판단에 사용한 조건 5개</summary><div class="sa-entry-layout"><div class="sa-conditions"><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div></details>'+holdingPanel(a)+
-      '<details class="sa-ai-status" data-ai-reference="'+(a.ai.eligible?'eligible':'unavailable')+'" aria-label="AI 연구 참고 상태"><summary class="sa-check-title"><h3>'+esc(reference.label)+'</h3>'+visuals.badge(reference.state,reference.tone)+'</summary><p>'+esc(reference.detail)+'</p><p class="sa-note">위 진입 조건은 기술·가격 자료로 판단합니다. AI 연구는 추가 참고 정보로 확인하세요.</p></details>'+
-      '<details class="sa-trend-details"><summary>단기 추세 점수 자세히 · '+esc(format(a.score))+'</summary><p class="sa-note">최근 가격의 상승·하락 흐름을 평가한 점수입니다. 95점은 상승 확률 95%나 매수 추천 95점이라는 뜻이 아닙니다. 신규 매수는 위 진입 조건을 함께 확인하세요.</p><div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'">'+visuals.trendGauge(a.score,a.trend)+'</div></details>'+
-      '<div class="sa-meta"><span>기준 종가 '+money(a.price)+'</span><span>규칙 기반 · 매매 성과 미검증</span><span>변동폭: '+esc(p.range.label)+'</span></div>'+
-      '<details><summary>진입 조건·가격 기준</summary>'+visuals.table([['관심 구간',money(p.buyLow)+'–'+money(p.buyHigh)],['재평가 기준',money(p.stop)],['관측 저항',money(p.target1)]],'진입 가격 기준')+
-      '<p>'+esc(p.blocks.join(' · ')||p.action)+'</p><p>추세 점수는 상승 확률이나 기업가치 점수가 아닙니다. 6개월·1년 AI 전망과 가치 시나리오는 별도로 확인하세요.</p></details></section>';
+      entryVisual(a)+'<p class="sa-reason sa-short-reason">'+esc(shortReason(a))+'</p>'+
+      '<div class="sa-context"><div><small>추세 점수</small>'+visuals.badge(a.trend.replace(' 흐름','').replaceAll(' ','')+(finite(a.score)?'·'+a.score:''),a.color)+'</div><div><small>진입 전략</small>'+visuals.badge(p.code==='unavailable'?'자료 확인':p.strategy==='breakout'?'고점 돌파':'눌림목 반등',p.code==='buy'?'good':p.code==='unavailable'?'muted':'info')+'</div></div>'+
+      '<dl class="sa-price-strip">'+[['기준 가격',money(a.price)],['관심 가격',finite(p.buyLow)&&finite(p.buyHigh)?money(p.buyLow)+'–'+money(p.buyHigh):'—'],['손절 기준',money(p.stop)]].map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl>'+holdingPanel(a)+
+      '<details class="sa-condition-details"><summary>가격·판단 근거 자세히</summary><p class="sa-full-reason">'+esc(entryExplanation(a))+'</p><p class="sa-next"><b>다음 확인 조건</b><span>'+esc(p.next)+'</span></p>'+setupPanels(a)+'<div class="sa-entry-layout"><div class="sa-conditions"><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div><p class="sa-note">'+esc(p.holding.reason)+' 매수가·보유 비중·개인 손절 기준은 별도 확인하세요.</p><p class="sa-note">변동폭: '+esc(p.range.label)+'</p></details>'+
+      '<details class="sa-ai-status" data-ai-reference="'+(a.ai.eligible?'eligible':'unavailable')+'" aria-label="AI 연구 참고 상태"><summary class="sa-check-title"><h3>'+esc(reference.label.replace(' · 별도 상태',''))+'</h3>'+visuals.badge(reference.state,reference.tone)+'</summary><p>'+esc(reference.detail)+'</p><p class="sa-note">위 진입 조건은 기술·가격 자료로 판단합니다. AI 연구는 추가 참고 정보로 확인하세요.</p></details>'+
+      '<details class="sa-trend-details"><summary>추세 점수 · '+esc(format(a.score))+'</summary><p class="sa-note">최근 가격의 상승·하락 흐름을 평가한 점수입니다. 95점은 상승 확률 95%나 매수 추천 95점이라는 뜻이 아닙니다. 신규 매수는 위 진입 조건을 함께 확인하세요.</p><div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'">'+visuals.trendGauge(a.score,a.trend)+'</div></details>'+
+      '<div class="sa-meta"><span>규칙 기반 · 매매 성과 미검증</span></div></section>';
   }
   async function load(fetcher=root.fetch.bind(root),decisionSupport=root.DecisionSupport){
     const urls=['forecasts/latest.json','market/latest.json','ml/latest.json'];
@@ -264,6 +295,6 @@
     return {data:values[0],market:values[1],learned:values[2],errors:results.flatMap((r,i)=>
       r.status==='rejected'?[['추세 자료 읽기 실패','시장 자료 읽기 실패','AI 검증 자료 읽기 실패'][i]]:[])};
   }
-  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,aiReference,entryExplanation,panel,setupPanels,holdingPanel,signals,signalPanels,load};
+  const api={label,normalize,entry,trend,color,format,evaluate,all,rank,compare,entryChecks,aiReference,entryExplanation,entryStates,entryVisual,shortReason,panel,setupPanels,holdingPanel,signals,signalPanels,load};
   if(typeof module!=='undefined')module.exports=api;else root.StockAssessment=api;
 })(typeof window!=='undefined'?window:globalThis);

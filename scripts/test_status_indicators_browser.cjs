@@ -74,13 +74,35 @@ async function fits(page, selector) {
             assert(headline.y>=controls.y+controls.height,'The final decision must be clear of the controls on initial load');
             await page.screenshot({path:path.join(output,`initial-index-${width}.png`)});
           }
-          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 0,
-            'A strategy decision is categorical; the trend gauge stays in details');
-          assert.equal(await assessment.locator('.sa-setup:visible').count(),2);
+          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 1,
+            'The entry category is visual; the numeric trend gauge stays in details');
+          assert.equal(await assessment.locator('.sa-setup:visible').count(),0,
+            'Detailed strategies start collapsed for beginners');
+          assert.equal(await assessment.locator('.sa-state-card > summary:visible').count(),9,
+            'All possible entry states are discoverable without opening a disclosure');
+          assert.equal(await assessment.locator('.sa-state-map [aria-current="true"]').count(),1);
+          assert.equal(await assessment.locator('.sa-state-current').getAttribute('data-state-option'),expected.plan.code);
           assert.equal(await assessment.locator('[data-entry-state]').textContent(),expected.decision);
           assert.equal(await assessment.locator('[data-holding-state]').getAttribute('data-holding-state'),expected.plan.holding.code);
+          assert.equal(await assessment.locator('.sa-holding .vi-steps > span:visible').count(),3);
+          const holdingActive=assessment.locator('.sa-holding .vi-steps .vi-active');
+          assert.equal(await holdingActive.count(),expected.plan.holding.code==='unavailable'?0:1);
+          if(expected.plan.holding.code!=='unavailable')assert.equal(await holdingActive.evaluate(n=>getComputedStyle(n).color),
+            {good:'rgb(110, 231, 183)',warn:'rgb(249, 207, 107)',bad:'rgb(255, 127, 145)'}[expected.plan.holding.tone],
+            'The selected holding response must be visually distinct');
+          for(const state of A.entryStates){
+            const option=assessment.locator('[data-state-option="'+state.key+'"]');
+            await option.locator('summary').click();
+            assert.equal(await option.locator('p:visible').count(),1);
+            assert.equal(await assessment.locator('.sa-state-card[open]').count(),1);
+            assert.equal(await assessment.locator('[data-entry-state]').textContent(),expected.decision,
+              'Exploring a state meaning cannot change the actual judgment');
+            await fits(page,'.sa-state-card, .sa-state-card summary, .sa-state-card p');
+          }
+          await assessment.locator('.sa-state-card[open] > summary').click();
           assert.equal(await assessment.locator('.sa-checks li:visible').count(), 0);
           await assessment.locator('.sa-condition-details > summary').click();
+          assert.equal(await assessment.locator('.sa-setup:visible').count(),2);
           assert.equal(await assessment.locator('.sa-checks li:visible').count(), 5);
           assert.equal(await assessment.locator('.sa-ai-status:visible').count(), 1);
           assert.equal(await assessment.locator('.sa-conditions [data-ai-reference]').count(), 0,
@@ -92,9 +114,9 @@ async function fits(page, selector) {
             assert((await assessment.locator('[data-entry-check="balance"] p').textContent())
               .includes(expected.plan.rr.toFixed(2)), 'Show the actual entry-plan reward/risk ratio');
           }
-          await fits(page, '.stockAssessment, .sa-context, .sa-next, .sa-setup-grid, .sa-setup, .sa-setup dl, .sa-holding, .sa-entry-layout, .sa-conditions, .sa-checks, .sa-checks li');
+          await fits(page, '.stockAssessment, .sa-decision-visual, .sa-state-map, .sa-price-strip, .sa-context, .sa-next, .sa-setup-grid, .sa-setup, .sa-setup dl, .sa-holding, .sa-entry-layout, .sa-conditions, .sa-checks, .sa-checks li');
           await detail.locator('summary').click();
-          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 1);
+          assert.equal(await assessment.locator('.vi-gauge:visible').count(), 2);
           assert((await detail.textContent()).includes('매수 추천'));
           await fits(page, '.vi-gauge, .sa-trend-details');
           await detail.locator('summary').click();
@@ -123,6 +145,15 @@ async function fits(page, selector) {
           await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
           assert.equal(await page.locator('.company-events').getAttribute('data-event-symbol'), 'NVDA');
+          assert.equal(await page.locator('.sa-signals .signal[open]').count(),0,
+            'Price signals start with concise titles');
+          const priceSignal=page.locator('.sa-signals details.signal').first();
+          if(await priceSignal.count()){
+            await priceSignal.locator('summary').click();
+            assert.equal(await priceSignal.locator('.sa-signal-detail:visible').count(),1);
+            await fits(page,'.sa-signal-detail');
+            await priceSignal.locator('summary').click();
+          }
           await page.locator('.company-events .ce-event').first().locator('summary').click();
           await page.locator('.ce-news-detail > summary').first().click();
           await fits(page, '.company-events, .ce-news-card, .ce-news-title, .ce-news-reason, .ce-news-counts, .ce-event, .ce-event summary, .ce-body');
@@ -138,8 +169,8 @@ async function fits(page, selector) {
           await fits(page, '.ds-risk-overview, .ds-risk-table');
           await risk.screenshot({path:path.join(output, `risk-${width}.png`)});
           await page.getByRole('button', {name:'1년',exact:true}).click();
-          assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 1);
-          assert.equal(await page.locator('.stockAssessment .vi-gauge:visible').count(), 0);
+          assert.equal(await page.locator('.stockAssessment .vi-gauge').count(), 2);
+          assert.equal(await page.locator('.stockAssessment .vi-gauge:visible').count(), 1);
           assert((await page.locator('.sa-ai-status h3').textContent()).includes('1년'));
           await page.locator('#tickerInput').fill('XOM');
           await page.locator('#tickerInput').press('Enter');
@@ -289,14 +320,14 @@ async function fits(page, selector) {
     await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:readyMarket}));
     await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:research}));
     await ready(riskPage,base+'index.html','.stockAssessment');
-    assert.equal(await riskPage.locator('.stockAssessment .sa-heading strong').textContent(),'진입 검토');
+    assert.equal(await riskPage.locator('.stockAssessment [data-entry-state]').textContent(),'진입 검토');
     assert.equal(await riskPage.locator('.stockAssessment').getAttribute('data-decision-basis'),'technical-rules');
     assert.equal(await riskPage.locator('.sa-ai-status').getAttribute('data-ai-reference'),'unavailable');
     assert((await riskPage.locator('.sa-ai-status .vi-badge').textContent()).includes('검증 미통과'));
     assert.equal(await riskPage.locator('[data-entry-state]').getAttribute('data-entry-state'),'buy');
     assert.equal(await riskPage.locator('[data-setup="breakout"]').getAttribute('data-setup-state'),'ready');
     await riskPage.getByRole('button',{name:'1년',exact:true}).click();
-    assert.equal(await riskPage.locator('.stockAssessment .sa-heading strong').textContent(),'진입 검토');
+    assert.equal(await riskPage.locator('.stockAssessment [data-entry-state]').textContent(),'진입 검토');
     assert((await riskPage.locator('.sa-ai-status h3').textContent()).includes('1년'));
     await fits(riskPage,'.stockAssessment, .sa-checks, .sa-ai-status');
     await riskPage.locator('.stockAssessment').screenshot({path:path.join(output,'entry-ready-withheld-ai-fixture.png')});
@@ -309,7 +340,7 @@ async function fits(page, selector) {
     }}}));
     await page.route('**/market/latest.json*', route => route.fulfill({json:null}));
     await ready(page, base + 'index.html', '.stockAssessment');
-    assert.equal(await page.locator('.stockAssessment .vi-unknown').count(), 1);
+    assert.equal(await page.locator('.stockAssessment .vi-unknown:visible').count(), 1);
     assert.equal(await page.locator('[data-entry-state]').getAttribute('data-entry-state'),'unavailable');
     assert.equal(await page.locator('[data-setup-state="unavailable"]').count(),2);
     assert.equal(await page.locator('.stockAssessment .vi-pointer').count(), 0);
