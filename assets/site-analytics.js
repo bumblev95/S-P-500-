@@ -27,7 +27,7 @@
     sector: ['XLK', 'XLC', 'XLY', 'XLF', 'XLI', 'XLV', 'XLP', 'XLRE', 'XLU', 'XLB', 'XLE'],
     profile: ['momentumBoost5xRisk4', 'momentumBoostOne', 'momentumBreakoutOne',
       'momentumBreakoutThree', 'momentum14Target6', 'momentum14', 'wideRecovery', 'leverage5x3x', 'baseline'],
-    advanced_view: ['screen', 'compare', 'validation', 'scenario'],
+    advanced_view: ['screen', 'compare', 'value', 'validation'],
     refresh: ['click'], levels: ['toggle'], trade_chart: ['open']
   };
   let consent = null, started = false, banner = null, latestAsset = null, lastAsset = '';
