@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="assets/decision-support.css?v=2">
   <link rel="stylesheet" href="assets/learned-guide.css">
   <link rel="stylesheet" href="assets/trade-journal.css?v=2">
+  <link rel="stylesheet" href="assets/site-ads.css?v=1">
+  <style>.SiteAd_stocks{display:block;min-width:200px;max-width:970px;width:100%;height:90px}@media(max-width:600px){.SiteAd_stocks{height:100px}}</style>
+  <!-- Add the account's exact AdSense verification meta tag here for site review. -->
+  <script defer src="assets/site-ads-config.js?v=1"></script>
+  <script defer src="assets/site-ads.js?v=1"></script>
   <style>
     :root{color-scheme:dark;--bg:#060d18;--surface:#0b1524;--surface-2:#101d2f;--surface-3:#07111e;--line:#21344a;--line-strong:#36536d;--text:#f3f7fb;--muted:#91a5bb;--cyan:#58d5f7;--blue:#6097ff;--green:#6ee7b7;--yellow:#f9cf6b;--red:#ff7f91;--purple:#b69cff;--shadow:0 24px 80px rgba(0,0,0,.32)}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:radial-gradient(900px 540px at 12% -12%,rgba(42,157,210,.20),transparent 62%),radial-gradient(720px 420px at 96% 2%,rgba(113,76,204,.16),transparent 64%),var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input{font:inherit}button{color:inherit}.shell{width:min(1480px,100%);margin:auto;padding:22px}
@@ -41,7 +46,8 @@
     <div id="sharedRisk"></div>
     <section class="candidatePanel" aria-labelledby="candidateTitle"><div class="candidateHead"><h2 id="candidateTitle">추세 관찰 후보</h2><span>단기 추세 점수 순 · 진입 조건은 별도 확인</span></div><div class="candidateRail skeleton" id="candidateRail" aria-live="polite"><button class="candidate"><strong>—</strong><span class="candidateScore">—</span><small>데이터 불러오는 중</small></button></div></section>
     <div id="app" aria-live="polite"><div class="empty"><strong>차트 데이터를 불러오는 중입니다</strong>잠시만 기다려 주세요.</div></div>
-    <footer><div class="site-secondary"><a href="advanced.html">고급 분석</a><a href="research.html">검증 자료실</a><a href="model-validation.html#stockStudy">SEC 업데이트 결과</a></div>교육용 규칙 기반 분석이며 수익을 보장하지 않습니다. 실적 발표·뉴스·개인 손실 감내 범위를 함께 확인하세요.</footer>
+    <aside class="site-ad" data-site-ad="stocks" aria-label="광고" hidden><span class="site-ad-label">광고</span><div class="site-ad-body" data-site-ad-body></div></aside>
+    <footer><div class="site-secondary"><a href="advanced.html">고급 분석</a><a href="research.html">검증 자료실</a><a href="model-validation.html#stockStudy">SEC 업데이트 결과</a><a href="privacy.html">개인정보·광고 안내</a></div>교육용 규칙 기반 분석이며 수익을 보장하지 않습니다. 실적 발표·뉴스·개인 손실 감내 범위를 함께 확인하세요.</footer>
   </main>
   <script src="assets/company-names.js?v=1"></script>
   <script src="assets/company-search.js?v=1"></script>
@@ -91,4 +97,3 @@
   </script>
 </body>
 </html>
-
