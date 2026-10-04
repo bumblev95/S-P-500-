@@ -24,6 +24,17 @@
     const list=rankRows(rows,now);
     return list.length?'<ol class="hp-rank-list" aria-label="'+(type==='buy'?'매수 후보':'매도 검토')+' 순위">'+list.map((q,i)=>'<li><a class="hp-pick" href="stocks.html?symbol='+encodeURIComponent(q.symbol)+'" aria-label="'+esc((i+1)+'위 '+q.name+' '+q.symbol)+'"><span class="hp-rank" aria-hidden="true">'+(i+1)+'</span><strong class="hp-name">'+esc(q.symbol)+'</strong></a></li>').join('')+'</ol>':'<p class="hp-muted">'+(type==='buy'?'현재 매수 후보 없음':'현재 매도 검토 후보 없음')+'</p>';
   }
+  const waitingLabels=Object.freeze({breakout:'돌파 대기',pullback:'눌림목 대기',riskwait:'위험 조절 대기'});
+  function waitingRows(rows,now){return rankRows((Array.isArray(rows)?rows:[]).filter(q=>q&&Object.hasOwn(waitingLabels,q.code)),now);}
+  function buyHtml(rankings,now){
+    const r=rankings||{};
+    if(!freshTime(r.marketGeneratedAt,now,r.marketMaxAgeDays||3))return '<p class="hp-muted">시장 자료 갱신 대기</p>';
+    const buy=rankingHtml(r.buy,'buy',now);
+    // A nonempty buy snapshot retains the existing TOP, even if its rows expire.
+    if(r.buy?.length)return buy;
+    const waiting=waitingRows(r.waiting,now);
+    return buy+(waiting.length?'<section class="hp-entry-wait" aria-label="진입 대기 후보"><div class="hp-wait-head"><h3>진입 대기 후보</h3><span>매수 조건 충족 전</span></div><ul class="hp-rank-list hp-wait-list" aria-label="진입 대기 후보">'+waiting.map(q=>'<li><a class="hp-pick hp-wait-pick" data-entry-state="'+q.code+'" href="stocks.html?symbol='+encodeURIComponent(q.symbol)+'" aria-label="'+esc(q.name+' '+q.symbol+' · '+waitingLabels[q.code]+' · 매수 조건 충족 전')+'"><strong class="hp-name">'+esc(q.symbol)+'</strong><span class="hp-wait-state">'+waitingLabels[q.code]+'</span></a></li>').join('')+'</ul></section>':'');
+  }
   function quoteValues(q,recap,now){
     const current=freshDate(q.asOf,now)&&q.asOf===recap.asOf;
     const sameWeek=recap.weekStart===weekBounds(now).start;
@@ -46,7 +57,7 @@
     const failed=(state.feeds||[]).filter(f=>f.status!=='ready');
     return (stories||'<p class="hp-empty">확인된 한국어 시장 뉴스가 아직 없습니다.</p>')+'<div class="hp-news-state">'+(failed.length?'<span class="hp-cache">'+esc(failed.map(f=>f.name).join(' · '))+' 갱신 지연</span>':'<span class="hp-ready-dot" aria-hidden="true"></span><span>Fed · BBC 뉴스</span>')+'</div>';
   }
-  const api={nyDate,weekBounds,freshDate,breaking,eligibleNews,rankingHtml,quoteValues,chartRows,scale,chartHtml,newsHtml,rankRows};
+  const api={nyDate,weekBounds,freshDate,breaking,eligibleNews,rankingHtml,buyHtml,waitingRows,quoteValues,chartRows,scale,chartHtml,newsHtml,rankRows};
   if(typeof module!=='undefined')module.exports=api;else root.MarketHome=api;
   if(typeof document==='undefined')return;
   const host=document.getElementById('market-home');if(!host)return;
@@ -72,8 +83,8 @@
     periodKey=week.start;icons();
   }
   function render(now){
-    const r=data.rankings||{},marketFresh=freshTime(r.marketGeneratedAt,now,r.marketMaxAgeDays||3);
-    $('[data-home-buy]').innerHTML=marketFresh?rankingHtml(r.buy,'buy',now):'<p class="hp-muted">시장 자료 갱신 대기</p>';
+    const r=data.rankings||{};
+    $('[data-home-buy]').innerHTML=buyHtml(r,now);
     $('[data-home-sell]').innerHTML=rankingHtml(r.sell,'sell',now);
     $('[data-home-news]').innerHTML=newsHtml(data,now);
     $('[data-home-brief]').textContent=data.recap?.asOf&&freshDate(data.recap.asOf,now)?data.brief:'최근 마감 자료 갱신 대기';
