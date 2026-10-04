@@ -31,9 +31,9 @@ assert(!html.includes('최근 공시 확인</span>'));
 const many=structuredClone(fixture);many.issuers[1045810].events=Array.from({length:8},(_,i)=>({...event,id:'sec:'+i}));
 html=C.panel('NVDA',many,now);assert(html.includes('이전 공시 4개 더 보기'));
 // The calculator is absent on every previously connected stock/spot/futures page.
-for(const file of ['index.html','assets/crypto.js','assets/perp-page.js','assets/decision-support.js'])
+for(const file of ['stocks.html','assets/crypto.js','assets/perp-page.js','assets/decision-support.js'])
  assert(!/tradePlanner|거래 계획 계산기|data-plan=/.test(fs.readFileSync(file,'utf8')),file);
-for(const file of ['index.html','advanced.html','advanced-legacy.html']){
+for(const file of ['stocks.html','advanced.html','advanced-legacy.html']){
  const text=fs.readFileSync(file,'utf8');assert(text.includes('assets/company-events.js'));assert(text.includes('assets/company-events.css'));
  assert(text.indexOf('assets/company-events.js')<text.indexOf('assets/decision-support.js'));
 }
