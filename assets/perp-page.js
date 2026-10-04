@@ -24,7 +24,7 @@ function chart(a){
  svg+='<text x="'+L+'" y="'+(H-12)+'" fill="#9aacc1" font-size="13">'+shortTime(rows[0].t)+'</text><text x="'+x(rows.length-1)+'" y="'+(H-12)+'" text-anchor="end" fill="#9aacc1" font-size="13">'+'기준 봉</text><text x="'+(W-R)+'" y="'+(H-12)+'" text-anchor="end" fill="#69d9f8" font-size="13">+'+aheadLabel(tf,ahead)+'</text></svg>';return svg;
 }
 function render(){
- if(!snapshot)return;const a=E.analyze(snapshot,tf),q=snapshot.quote||{},tone=a.action.startsWith('롱')?'green':a.action.startsWith('숏')?'red':'yellow';
+ if(!snapshot)return;window.SiteAnalytics?.viewAsset('futures',symbol);const a=E.analyze(snapshot,tf),q=snapshot.quote||{},tone=a.action.startsWith('롱')?'green':a.action.startsWith('숏')?'red':'yellow';
  const fresh=N(snapshot.receivedAt)&&Date.now()-snapshot.receivedAt<=90000&&!snapshot.error;
  el('updated').textContent=(busy?'갱신 중 · ':fresh?'자동 갱신 · ':'갱신 확인 필요 · ')+time(snapshot.receivedAt)+' · 열려 있는 동안 60초마다 확인';
  const strip='<section class="marketStrip"><b>현재 '+label[tf]+' 분석</b><span>5분·15분은 봉 하나의 길이입니다.</span><span>완료 봉만 판단 · 진행 중인 봉 제외</span></section>';
@@ -75,3 +75,4 @@ document.querySelectorAll('[data-tf]').forEach(b=>b.addEventListener('click',()=
 el('refresh').addEventListener('click',load);document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
 setInterval(()=>{if(!document.hidden)load()},60000);setInterval(()=>{if(!document.hidden)render()},15000);load();
 })();
+

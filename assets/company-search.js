@@ -45,7 +45,7 @@ function mount({input,host,items=[],onSelect}){
   }
  }
  function choose(item){
-  if(blurTimer)clearTimeout(blurTimer);selected=item;input.value=name(item.symbol,item.name)+' · '+item.symbol;close();onSelect(item.symbol);
+  if(blurTimer)clearTimeout(blurTimer);selected=item;input.value=name(item.symbol,item.name)+' · '+item.symbol;close();root.SiteAnalytics?.searchSelected(item.symbol);onSelect(item.symbol);
  }
  function render(){
   if(composing)return;const query=input.value;
@@ -87,3 +87,4 @@ function mount({input,host,items=[],onSelect}){
 const api={symbol,normalize,koreanName,englishName,name,matches,search,resolve,mount};
 if(typeof module!=='undefined')module.exports=api;else root.CompanySearch=api;
 })(typeof window!=='undefined'?window:globalThis);
+
