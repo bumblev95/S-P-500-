@@ -6,8 +6,13 @@
   <meta name="description" content="S&P 500 매수·매도 후보, 한국어 시장 뉴스, 오늘과 이번 주 섹터 등락을 한눈에 확인하세요.">
   <title>오늘 시장, 한눈에 · S&P 500</title>
   <link rel="stylesheet" href="assets/market-home.css?v=1">
+  <link rel="stylesheet" href="assets/site-ads.css?v=1">
+  <style>.SiteAd_home{display:block;min-width:200px;max-width:970px;width:100%;height:90px}@media(max-width:600px){.SiteAd_home{height:100px}}</style>
+  <!-- Add the account's exact AdSense verification meta tag here for site review. -->
   <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script defer src="assets/market-home.js?v=1"></script>
+  <script defer src="assets/site-ads-config.js?v=1"></script>
+  <script defer src="assets/site-ads.js?v=1"></script>
 </head>
 <body>
   <main id="market-home">
@@ -28,8 +33,10 @@
         <section id="home-news" aria-labelledby="home-news-title"><div class="hp-section-head"><h2 id="home-news-title">꼭 알아야 할 뉴스</h2><span class="hp-muted">핵심만 짧게</span></div><div class="hp-panel" data-home-news aria-live="polite"><p class="hp-empty">뉴스 불러오는 중</p></div></section>
         <section id="home-recap" aria-labelledby="home-recap-title"><div class="hp-section-head"><h2 id="home-recap-title">오늘 · 이번 주 Recap</h2><span class="hp-muted" data-recap-state>마감 기준</span></div><div class="hp-panel" data-home-recap><p class="hp-empty">섹터 그래프 불러오는 중</p></div></section>
       </div>
+      <aside class="site-ad" data-site-ad="home" aria-label="광고" hidden><span class="site-ad-label">광고</span><div class="site-ad-body" data-site-ad-body></div></aside>
       <p class="hp-caption" data-home-status role="status"></p>
       <p class="hp-caption"><a href="stocks.html">종목별 자세한 분석 →</a></p>
+      <p class="hp-caption"><a class="site-policy-link" href="privacy.html">개인정보·광고 안내</a></p>
       <noscript><p class="hp-empty">시장 메인은 JavaScript가 필요합니다. <a href="stocks.html">주식 분석 페이지</a></p></noscript>
     </div>
   </main>
