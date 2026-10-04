@@ -94,7 +94,10 @@
     const r=data.rankings||{};
     $('[data-home-buy]').innerHTML=buyHtml(r,now);
     $('[data-home-sell]').innerHTML=rankingHtml(r.sell,'sell',now);
-    $('[data-home-ranking-note]').textContent=rankingNote(r,now);
+    // Cached copies of the root-domain wrapper may predate this caption.
+    let note=$('[data-home-ranking-note]');
+    if(!note){note=document.createElement('p');note.className='hp-rank-note';note.dataset.homeRankingNote='';$('.hp-picks').append(note);}
+    note.textContent=rankingNote(r,now);
   }
   function render(now){
     renderRankings(now);

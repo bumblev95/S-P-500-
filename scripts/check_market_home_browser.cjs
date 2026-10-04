@@ -79,6 +79,14 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn}=require
         await page.unroute('**/market/home.json?*');
       }
 
+      const legacy=fs.readFileSync('index.html','utf8').replace(/^.*data-home-ranking-note.*\n/m,'');
+      await page.route('**/legacy-home.html',route=>route.fulfill({contentType:'text/html',body:legacy}));
+      await page.goto('http://127.0.0.1:8765/legacy-home.html',{waitUntil:'networkidle'});
+      await page.waitForFunction(()=>document.querySelector('[data-home-status]').textContent.startsWith('갱신'));
+      assert.equal(await page.locator('[data-home-ranking-note]').count(),1,'Cached root wrappers acquire the new caption');
+      assert.equal(await page.locator('.hp-pick').count(),6,'Existing root wrapper markup remains compatible');
+      await page.unroute('**/legacy-home.html');
+
       // Keep a tab open: a new daily rank arrives, an HTTP failure preserves it,
       // then the next refresh recovers without a manual reload.
       let value={...data,rankings:ranks},fail=false,requests=0;
