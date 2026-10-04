@@ -154,6 +154,51 @@ class PriceCache(unittest.TestCase):
         self.assertTrue(all(f['status']=='ready' for f in feeds))
 
 
+class RankingPublication(unittest.TestCase):
+    def setUp(self):
+        self.directory=TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.root=Path(self.directory.name)
+        (self.root/'market').mkdir()
+        self.path=self.root/'market/home.json'
+        self.cache=self.root/'market/home-cache.json'
+        self.previous={'schemaVersion':1,'generatedAt':'2026-10-03T22:00:00Z','rankings':{'buy':[],'sell':[]},
+                       'news':[{'headlineKo':'기존 뉴스'}],'recap':{'asOf':'2026-10-02'},'brief':'기존 요약'}
+        h.atomic(self.path,self.previous)
+        self.cache.write_bytes(b'{"sentinel": "preserve cache bytes"}\n')
+        self.ranks={'buy':[{'symbol':'AAPL','asOf':'2026-10-02','code':'breakout'}],
+                    'sell':[{'symbol':'APP','asOf':'2026-10-02','holdingCode':'reduce'}],
+                    'asOf':'2026-10-02','evaluatedAt':'2026-10-04T09:00:00Z'}
+
+    def run_refresh(self, ranks, now=NOW):
+        with patch.object(h,'home_rankings',return_value=ranks), patch.object(h,'get',side_effect=AssertionError('No network')), patch('sys.stdout',io.StringIO()):
+            return h.refresh_rankings(self.root,now)
+
+    def test_rankings_publish_before_news_without_changing_other_data_or_cache(self):
+        original_cache=self.cache.read_bytes()
+        result=self.run_refresh(self.ranks)
+        self.assertEqual(result['rankings'],self.ranks)
+        for key in ('schemaVersion','news','recap','brief'):self.assertEqual(result[key],self.previous[key])
+        self.assertEqual(result['generatedAt'],NOW.isoformat())
+        self.assertEqual(self.cache.read_bytes(),original_cache)
+        self.assertEqual(json.loads(self.path.read_text()),result)
+
+    def test_ranking_only_clock_changes_do_not_write(self):
+        saved=self.run_refresh(self.ranks)
+        original=self.path.read_bytes()
+        with patch.object(h,'atomic') as atomic:
+            result=self.run_refresh({**self.ranks,'evaluatedAt':'2026-10-04T10:00:00Z'},NOW+timedelta(hours=1))
+        atomic.assert_not_called()
+        self.assertEqual(result,saved)
+        self.assertEqual(self.path.read_bytes(),original)
+
+    def test_failed_rankings_preserve_saved_snapshot(self):
+        original=self.path.read_bytes()
+        with patch.object(h,'home_rankings',side_effect=RuntimeError('Invalid input')):
+            with self.assertRaises(RuntimeError):h.refresh_rankings(self.root,NOW)
+        self.assertEqual(self.path.read_bytes(),original)
+
+
 class SemanticPublication(unittest.TestCase):
     def setUp(self):
         self.directory=TemporaryDirectory()

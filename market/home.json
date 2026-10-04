@@ -1,49 +1,78 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-04T17:56:32.469836+00:00",
+  "generatedAt": "2026-10-04T19:40:29.401704+00:00",
   "rankings": {
-    "buy": [],
-    "waiting": [
-      {
-        "symbol": "CRWD",
-        "name": "크라우드스트라이크",
-        "asOf": "2026-10-02",
-        "code": "riskwait"
-      },
-      {
-        "symbol": "HPE",
-        "name": "휴렛팩커드 엔터프라이즈",
-        "asOf": "2026-10-02",
-        "code": "riskwait"
-      },
+    "buy": [
       {
         "symbol": "ILMN",
         "name": "일루미나",
         "asOf": "2026-10-02",
-        "code": "breakout"
+        "score": 100,
+        "code": "breakout",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "직전 55거래일 고점 돌파 확인 대기"
+      },
+      {
+        "symbol": "RVTY",
+        "name": "레비티",
+        "asOf": "2026-10-02",
+        "score": 100,
+        "code": "pullback",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "상승 추세지만 눌림목 반등 조건 대기"
+      },
+      {
+        "symbol": "FTNT",
+        "name": "포티넷",
+        "asOf": "2026-10-02",
+        "score": 99,
+        "code": "breakout",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "직전 55거래일 고점 돌파 확인 대기"
       }
     ],
     "sell": [
       {
         "symbol": "AON",
         "name": "에이온",
-        "asOf": "2026-10-02"
+        "asOf": "2026-10-02",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
         "symbol": "APP",
         "name": "앱러빈",
-        "asOf": "2026-10-02"
+        "asOf": "2026-10-02",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
         "symbol": "CCI",
         "name": "크라운 캐슬",
-        "asOf": "2026-10-02"
+        "asOf": "2026-10-02",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "evaluatedAt": "2026-10-04T17:56:32.498Z",
+    "asOf": "2026-10-02",
+    "eligibleCount": 505,
+    "evaluatedAt": "2026-10-04T19:40:29.401Z",
     "priceGeneratedAt": "2026-10-04T01:27:08+00:00",
     "marketGeneratedAt": "2026-10-04T17:37:33.613616+00:00",
-    "basis": "technical-rules",
+    "basis": "technical-relative-ranking",
+    "policy": "daily-top3-v1",
     "priceMaxAgeDays": 5,
     "marketMaxAgeDays": 3
   },
