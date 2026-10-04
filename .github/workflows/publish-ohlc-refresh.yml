@@ -1,0 +1,105 @@
+name: Publish verified EOD OHLC without retraining
+
+on:
+  push:
+    branches: [codex/eod-ohlc-refresh-20261004]
+    paths:
+      - '.github/workflows/publish-ohlc-refresh.yml'
+      - '_refresh/forecast.json.gz'
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: market-data
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install price-test dependencies
+        run: python -m pip install pandas==2.3.3 yfinance==0.2.66
+      - name: Restore exact verified publication and check protected files
+        run: |
+          python - <<'PY'
+          import gzip, hashlib, json
+          from pathlib import Path
+          raw = gzip.decompress(Path('_refresh/forecast.json.gz').read_bytes())
+          digest = hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+          assert digest == '700611fb1c4cc2abfa9dddd74914800976838af1'
+          assert len(raw) == 19034042
+          assert len(json.loads(raw)['stocks']) == 505
+          Path('forecasts/latest.json').write_bytes(raw)
+          for name, expected in json.loads(Path('_refresh/guardrails.json').read_text()).items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == expected, name
+          PY
+      - name: Run price, forecast and interface regressions
+        run: |
+          python -m unittest discover -s tests -p test_eod_pipeline.py
+          python -m unittest discover -s tests -p test_forecasts.py
+          node scripts/test_entry_indicator.cjs
+          node scripts/test_stock_assessment.cjs
+          node scripts/test_technical_guide.cjs
+          node scripts/test_legacy_assessment.cjs
+          node scripts/test_legacy_forecast.cjs
+          node scripts/test_learned_guide.cjs
+          node scripts/test_decision_support.cjs
+          node scripts/test_advanced.cjs
+          node scripts/audit_eod_ohlc.cjs
+      - name: Publish only the verified price and forecast files
+        run: |
+          git fetch origin main
+          test "$(git rev-parse FETCH_HEAD)" = 'e0175f5c304d879ed7ffe870f8e739e05f965765'
+          git worktree add --detach /tmp/ohlc-publish FETCH_HEAD
+          python - <<'PY'
+          import csv, hashlib, json, shutil, subprocess
+          from pathlib import Path
+          target = Path('/tmp/ohlc-publish')
+          files = ['scripts/update_eod_prices.py','tests/test_eod_pipeline.py',
+                   'scripts/audit_eod_ohlc.cjs','prices/latest_prices.csv',
+                   'forecasts/latest.json','forecasts/archive/2026-10.csv',
+                   'research/eod-ohlc-coverage.json','research/eod-ohlc-coverage.csv',
+                   'research/ENTRY-INDICATOR.md']
+          protected = json.loads(Path('_refresh/guardrails.json').read_text())
+          for name, expected in protected.items():
+              assert hashlib.sha256((target/name).read_bytes()).hexdigest() == expected, name
+          previous = json.loads((target/'forecasts/latest.json').read_text())['stocks']
+          current = json.loads(Path('forecasts/latest.json').read_text())['stocks']
+          for symbol, stock in current.items():
+              prior = {bar['date']:bar['close'] for bar in previous[symbol]['history']}
+              for bar in stock['history']:
+                  if bar['date'] in prior: assert bar['close'] == prior[bar['date']], symbol
+          with Path('prices/latest_prices.csv').open() as stream:
+              rows = list(csv.DictReader(stream))
+          assert len(rows) == 505
+          for row in rows:
+              o,h,l,c = (float(row[k]) for k in ('open','high','low','close'))
+              assert 0 < l <= o <= h and l <= c <= h, row['symbol']
+          for name in files:
+              (target/name).parent.mkdir(parents=True,exist_ok=True)
+              shutil.copyfile(name,target/name)
+          for name, expected in protected.items():
+              assert hashlib.sha256((target/name).read_bytes()).hexdigest() == expected, name
+          subprocess.run(['git','-C',str(target),'add',*files],check=True)
+          changed = subprocess.check_output(['git','-C',str(target),'diff','--cached','--name-only'],text=True).splitlines()
+          assert set(changed) <= set(files), changed
+          PY
+          git -C /tmp/ohlc-publish diff --cached --check
+          git -C /tmp/ohlc-publish config user.name 'github-actions[bot]'
+          git -C /tmp/ohlc-publish config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C /tmp/ohlc-publish diff --cached --quiet || git -C /tmp/ohlc-publish commit -m 'Publish verified OHLC for all 505 EOD symbols without retraining'
+          git -C /tmp/ohlc-publish push origin HEAD:main
+      - name: Refresh the published dashboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

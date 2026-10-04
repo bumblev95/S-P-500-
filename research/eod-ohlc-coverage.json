@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-04T01:27:15.639Z",
+  "forecastGeneratedAt": "2026-10-04T01:27:08+00:00",
+  "priceBasis": "Yahoo Close; split-adjusted, dividends excluded",
+  "indicatorPolicy": "entry-context-v1",
+  "totalSymbols": 505,
+  "asOfDates": [
+    "2026-10-02"
+  ],
+  "latestOHLCComplete": {
+    "count": 505,
+    "total": 505,
+    "percent": 100
+  },
+  "allPublishedOHLCComplete": {
+    "count": 505,
+    "total": 505,
+    "percent": 100
+  },
+  "actual55BarHigh": {
+    "count": 505,
+    "total": 505,
+    "percent": 100
+  },
+  "trueRange20": {
+    "count": 505,
+    "total": 505,
+    "percent": 100
+  },
+  "closeOnlyBreakoutFallback": {
+    "count": 0,
+    "total": 505,
+    "percent": 0
+  },
+  "closeVolatilityFallback": {
+    "count": 0,
+    "total": 505,
+    "percent": 0
+  },
+  "anyCloseOnlyFallback": {
+    "count": 0,
+    "total": 505,
+    "percent": 0
+  },
+  "publishedBars": 127408,
+  "validOHLCBars": 127408,
+  "validHighLowBars": 127408,
+  "scoreUnchangedWithOHLC": true,
+  "panelBasisVerified": true,
+  "fallbackSymbols": []
+}
