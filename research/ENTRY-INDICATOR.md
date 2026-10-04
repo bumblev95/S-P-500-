@@ -112,3 +112,43 @@ bars, price scaling, complete OHLC and explicit close-only fallback.
 The existing assessment tests verify all 505 records, both AI horizons,
 withheld AI, deterministic ranking, escaping and complete blocker explanations.
 Responsive browser QA covers 320/390/1280 px and data failures.
+
+
+## OHLC publication refresh — 2026-10-04
+
+The first post-PR #19 EOD run (37152137572) downloaded all 505 symbols and
+built the forecast snapshot, but publication failed while rebasing concurrent
+changes to `ml/adaptive-summary.json`, `ml/adaptive.json` and
+`ml/adaptive/126.json`. The prior close-only snapshot consequently remained live.
+
+This refresh ran `update_eod_prices.py --public-prices-only` and
+`build_forecasts.py` without invoking learned-model training or adaptive
+research. The latest CSV now includes validated `open`, `high` and `low` in the
+same six-decimal precision as `close`. Full provider precision remains in the
+published history. Missing, non-finite or invalid OHLC is left absent; failed
+downloads retain their existing dated price row.
+
+| Published coverage | Symbols | Share |
+| --- | ---: | ---: |
+| Latest valid OHLC | 505 / 505 | 100% |
+| All published bars have valid OHLC | 505 / 505 | 100% |
+| Actual prior 55-bar high | 505 / 505 | 100% |
+| Actual 20-bar mean true range (21 required bars) | 505 / 505 | 100% |
+| Close-only breakout or volatility fallback | 0 / 505 | 0% |
+
+All 127,408 published bars have valid OHLC; every latest EOD observation is
+2026-10-02. Existing historical closes are unchanged. HUBB advances from its
+previous 2026-10-01 observation to the supplied 2026-10-02 observation. All
+38 protected files (tracked ML artifacts plus entry, trend and forecast code)
+remain byte-for-byte unchanged.
+
+`research/eod-ohlc-coverage.csv` contains the per-symbol completeness, 55/21-bar
+coverage and actual basis selections. `research/eod-ohlc-coverage.json` contains
+the aggregate counts. Reproduce the audit with `node scripts/audit_eod_ohlc.cjs`.
+The audit uses the production indicator and verifies each computed 55-bar high,
+20-bar true range, the rendered basis strings and unchanged trend scores when
+OHLC is removed from the same close observations, at both 126/252-day horizons.
+
+Validation: all 18 Python price/forecast tests and the eight stock-interface
+regression scripts passed. The invalid/missing OHLC fixture remains an explicit
+close-only fallback; a provider-close-at-low regression protects CSV precision.
