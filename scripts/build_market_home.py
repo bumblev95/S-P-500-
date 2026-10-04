@@ -317,13 +317,33 @@ def assemble(quotes, news, feeds, rankings, now):
             'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'importanceBasis':'source-event-and-reviewed-context'}}
 
 
+def home_rankings(root, now):
+    return json.loads(subprocess.check_output(
+        ['node',str(root/'scripts/build_home_rankings.cjs'),str(root),now.isoformat()],text=True))
+
+
+def refresh_rankings(root=ROOT, now=None):
+    """Publish the daily ranking without waiting for external news or models."""
+    now=now or datetime.now(timezone.utc)
+    path=root/'market/home.json'
+    previous=json.loads(path.read_text(encoding='utf-8'))
+    snapshot={**previous,'rankings':home_rankings(root,now),'generatedAt':now.isoformat()}
+    changed=semantic_content(previous)!=semantic_content(snapshot)
+    if changed:atomic(path,snapshot)
+    else:snapshot=previous
+    print(json.dumps({'attemptedAt':now.isoformat(),'changed':changed,'rankingsAsOf':snapshot['rankings'].get('asOf'),
+                      'buy':[a['symbol'] for a in snapshot['rankings']['buy']],
+                      'sell':[a['symbol'] for a in snapshot['rankings']['sell']]},ensure_ascii=False),flush=True)
+    return snapshot
+
+
 def build(root=ROOT, now=None, fetch=get, translate=None, translate_enabled=True):
     now=now or datetime.now(timezone.utc)
     path=root/'market/home-cache.json'
     prior=json.loads(path.read_text()) if path.exists() else {}
     reviewed_path=root/'market/home-reviewed-news.json'
     reviewed=json.loads(reviewed_path.read_text()) if reviewed_path.exists() else {}
-    rankings=json.loads(subprocess.check_output(['node',str(root/'scripts/build_home_rankings.cjs'),str(root)],text=True))
+    rankings=home_rankings(root,now)
     quotes,price_cache=prices(prior,now,fetch)
     articles,feeds=collect_news(prior,now,reviewed,fetch)
     if translate_enabled:
@@ -345,5 +365,7 @@ def build(root=ROOT, now=None, fetch=get, translate=None, translate_enabled=True
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--no-translate',action='store_true')
+    parser.add_argument('--rankings-only',action='store_true')
     args=parser.parse_args()
-    build(translate_enabled=not args.no_translate)
+    if args.rankings_only:refresh_rankings()
+    else:build(translate_enabled=not args.no_translate)

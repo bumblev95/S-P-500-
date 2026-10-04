@@ -6,6 +6,11 @@ on:
       - 'index.html'
       - 'stocks.html'
       - 'assets/market-home*'
+      - 'assets/stock-assessment.js'
+      - 'assets/technical-guide.js'
+      - 'assets/company-names.js'
+      - 'forecasts/latest.json'
+      - 'market/latest.json'
       - 'scripts/build_market_home.py'
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
@@ -17,6 +22,11 @@ on:
       - 'index.html'
       - 'stocks.html'
       - 'assets/market-home*'
+      - 'assets/stock-assessment.js'
+      - 'assets/technical-guide.js'
+      - 'assets/company-names.js'
+      - 'forecasts/latest.json'
+      - 'market/latest.json'
       - 'scripts/build_market_home.py'
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
@@ -51,11 +61,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Validate semantic no-ops, periods, cache recovery and ranking gates
+      - name: Validate daily TOP 3, semantic no-ops, periods and cache recovery
         run: |
           python -m unittest discover -s scripts -p test_market_home.py
           node scripts/test_market_home.cjs
           node --check assets/market-home.js
+      - name: Refresh daily TOP 3 before news translation
+        run: python scripts/build_market_home.py --rankings-only
+      - name: Publish updated daily rankings immediately
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add market/home.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update daily buy and sell TOP 3'
+            git pull --rebase origin main
+            git push
+            gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
+          fi
       - uses: actions/cache@v4
         with:
           path: research/source-cache/home-news-ko
@@ -78,9 +104,13 @@ jobs:
           snapshot=json.loads(Path('market/home.json').read_text())
           assert len(snapshot['recap']['sectors'])==11
           assert len(snapshot['rankings']['buy'])<=3 and len(snapshot['rankings']['sell'])<=3
-          waiting=snapshot['rankings']['waiting']
-          assert len(waiting)<=3 and not (snapshot['rankings']['buy'] and waiting)
-          assert all(q['code'] in ('breakout','pullback','riskwait') for q in waiting)
+          ranks=snapshot['rankings']
+          assert 'waiting' not in ranks and ranks['policy']=='daily-top3-v1'
+          if ranks['eligibleCount']>=6:
+              assert len(ranks['buy'])==3 and len(ranks['sell'])==3
+          symbols=[q['symbol'] for side in ('buy','sell') for q in ranks[side]]
+          assert len(symbols)==len(set(symbols))
+          assert all(q['asOf']==ranks['asOf'] for side in ('buy','sell') for q in ranks[side])
           print('MARKET_HOME_SNAPSHOT='+json.dumps(snapshot,ensure_ascii=False,separators=(',',':')))
           PY
       - name: Install browser validation runtime
