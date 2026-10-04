@@ -51,7 +51,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Validate periods, independent cache recovery and ranking gates
+      - name: Validate semantic no-ops, periods, cache recovery and ranking gates
         run: |
           python -m unittest discover -s scripts -p test_market_home.py
           node scripts/test_market_home.cjs
@@ -104,6 +104,8 @@ jobs:
             git commit -m 'Update market homepage briefing'
             git pull --rebase origin main
             git push origin HEAD:main
+          else
+            echo 'Homepage content and feed state unchanged; no commit needed.'
           fi
       - name: Refresh the published website
         if: github.event_name != 'pull_request'
