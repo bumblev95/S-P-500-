@@ -12,6 +12,8 @@ Fed 발표·연설과 BBC 경제·국제 RSS를 독립 수집합니다. 실패�
 
 `Update and validate market home`은 매시간 및 기존 시장/가격 수집 완료 후 `market/home.json`을 갱신합니다. 브라우저는 큰 전망 파일 대신 이 작은 브리핑 파일을 읽습니다. 검증: `python -m unittest discover -s scripts -p test_market_home.py`, `node scripts/test_market_home.cjs`, CI의 실제 브라우저·모바일 검수.
 
+홈과 캐시의 내용·상태가 같고 수집/평가 시각(`generatedAt`, `evaluatedAt`, `lastAttemptAt`, `lastSuccessAt`)만 바뀐 실행은 두 파일을 그대로 유지하므로 main에 새 커밋을 만들지 않습니다. `generatedAt`은 마지막으로 저장한 브리핑 시각이며 실제 실행 시각과 변경 여부는 Actions 로그의 `attemptedAt`·`changed`로 확인합니다. 순위와 순서, brief, 지수·섹터 값과 기준일, 뉴스·번역·중요도, 피드/종목의 실패·회복·캐시 상태, 캐시의 기사·가격 이력 변화는 저장합니다. 순위의 자료 신선도 판정에 쓰는 원본 `priceGeneratedAt`·`marketGeneratedAt`과 뉴스의 발표 시각은 비교에서 제외하지 않습니다. 의미 있는 변화가 있으면 두 파일을 함께 저장해 실패 fallback의 마지막 성공 시각과 회복 상태를 유지합니다. 주말 수집은 계속 실행합니다.
+
 ## 회사명 검색
 
 주식 분석에서 `엔비디아`, `애플`, `마이크로소프트` 또는 티커를 입력하면 회사명과 티커가 함께 표시됩니다. 한글·영문 부분 입력, 띄어쓰기 및 `BRK.B`/`BRK-B` 같은 티커 표기를 인식합니다. `구글`은 알파벳 A/C 두 종목을 보여주며, 모호한 이름은 임의로 선택하지 않습니다. 방향키·Enter·터치로 결과를 선택할 수 있습니다.

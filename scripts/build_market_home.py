@@ -22,6 +22,10 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 NY = ZoneInfo('America/New_York')
+# Only collector/evaluation clocks are volatile. Source freshness timestamps
+# (priceGeneratedAt/marketGeneratedAt), session dates and publication dates stay
+# significant, as do all values, statuses, cache flags and error details.
+POLLING_TIMESTAMPS = {'generatedAt', 'evaluatedAt', 'lastAttemptAt', 'lastSuccessAt'}
 FEEDS = [
     ('Fed 발표', 'https://www.federalreserve.gov/feeds/press_all.xml'),
     ('Fed 연설', 'https://www.federalreserve.gov/feeds/speeches.xml'),
@@ -48,6 +52,35 @@ def atomic(path, value):
     temporary = path.with_suffix(path.suffix+'.tmp')
     temporary.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     temporary.replace(path)
+
+
+def semantic_content(value):
+    """Compare JSON content without polling clocks; array order is significant."""
+    if isinstance(value, dict):
+        return {k:semantic_content(v) for k,v in value.items() if k not in POLLING_TIMESTAMPS}
+    if isinstance(value, list):
+        return [semantic_content(v) for v in value]
+    return value
+
+
+def publish_if_changed(root, snapshot, cache):
+    """Keep both files byte-for-byte on a no-op, including their saved clocks.
+
+    A meaningful change saves the pair together so fallback success times follow
+    a published failure/recovery. Cache-only news or history changes also count.
+    """
+    public_path, cache_path = root/'market/home.json', root/'market/home-cache.json'
+    try:
+        previous = json.loads(public_path.read_text(encoding='utf-8'))
+        previous_cache = json.loads(cache_path.read_text(encoding='utf-8'))
+    except (FileNotFoundError, UnicodeDecodeError, json.JSONDecodeError):
+        previous = previous_cache = None
+    if (semantic_content(previous) == semantic_content(snapshot)
+            and semantic_content(previous_cache) == semantic_content(cache)):
+        return previous, False
+    atomic(public_path, snapshot)
+    atomic(cache_path, cache)
+    return snapshot, True
 
 
 def get(url):
@@ -303,9 +336,8 @@ def build(root=ROOT, now=None, fetch=get, translate=None, translate_enabled=True
     else:
         for item in articles:item.pop('_translate',None);item.pop('_excerpt',None)
     snapshot=assemble(quotes,articles,feeds,rankings,now)
-    atomic(root/'market/home.json',snapshot)
-    atomic(path,{'quotes':price_cache,'news':articles,'feeds':feeds})
-    print(json.dumps({'generatedAt':snapshot['generatedAt'],'asOf':snapshot['recap']['asOf'],'buy':[a['symbol'] for a in rankings['buy']],'sell':[a['symbol'] for a in rankings['sell']],
+    snapshot,changed=publish_if_changed(root,snapshot,{'quotes':price_cache,'news':articles,'feeds':feeds})
+    print(json.dumps({'attemptedAt':now.isoformat(),'changed':changed,'generatedAt':snapshot['generatedAt'],'asOf':snapshot['recap']['asOf'],'buy':[a['symbol'] for a in rankings['buy']],'sell':[a['symbol'] for a in rankings['sell']],
                       'readyQuotes':sum(q['status']=='ready' for q in quotes.values()),'news':len(snapshot['news']),'feeds':[{k:f[k] for k in ['name','status']} for f in feeds]},ensure_ascii=False),flush=True)
     return snapshot
 
