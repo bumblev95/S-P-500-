@@ -142,4 +142,4 @@ repair a collection failure. Keep the manifest and ledger, investigate the
 failure, and resume collection without reconstructing missed rankings.
 
 Calendar source: [exchange_calendars documentation](https://github.com/gerrymanoim/exchange_calendars)
-and [pinned release](https://github.com/gerrymanoim/exchange_calendars/releases/tag/v4.13.2).
+and [pinned release](https://github.com/gerrymanoim/exchange_calendars/releases/tag/4.13.2).
