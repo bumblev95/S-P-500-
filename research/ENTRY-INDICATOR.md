@@ -105,6 +105,15 @@ indicator here is an adaptation, not a replication or proof of profitability.
 
 ## Validation
 
+The independent, forward-only paper path is documented in
+[`simulation/entry-study/README.md`](../simulation/entry-study/README.md).
+It freezes this PR's exact rules, first-run universe and settings, keeps the
+existing stock account/ledger unchanged, and starts a simultaneous cash control
+using the old stock rules. It records signal basis, costs, fills, cancellations
+and holding actions in an append-only hash chain. No historical fills or
+profitability conclusion are supplied by the regression tests, and there is no
+automatic promotion or live-trading connection.
+
 `node scripts/test_entry_indicator.cjs` tests both valid setups, optional/missing
 volume, high RSI with moderate price extension, retained broken support,
 independent holding responses, credit/data gates, future/malformed/duplicate

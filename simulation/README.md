@@ -370,3 +370,10 @@ The initial short replay is frozen on Hyperliquid data after sufficient 30-day i
 # 추세 반전 감지 비교 실험
 
 [14일 모멘텀 + 온라인 변화 감지 비교](../momentum-experiment.html)를 별도 공개했다. 통계적 BOCPD를 추가한 고정 규칙 실험이며, LSTM 전체 재현이나 진행 계좌 성적은 아니다. 2021–2026년 6개 구간 중 수익 개선 2개·낙폭 개선 1개였고, 최근 구간은 -3.53%에서 -4.11%로 악화됐다. 기존 모의계좌는 유지한다. [상세 결과와 재현 방법](cpd-research/README.md).
+## Independent PR #19 entry study
+
+The 55-bar breakout/pullback forward study and same-start legacy-rule control
+live in [`entry-study/`](entry-study/README.md). They retain separate immutable
+evidence and do not replace the existing stock account, ledger or replay.
+First production execution freezes the start/universe; no earlier performance
+is backfilled. The comparison is research-only and cannot auto-promote rules.
