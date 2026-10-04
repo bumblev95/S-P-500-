@@ -31,7 +31,7 @@ FEEDS = [
 INDICES = [('^GSPC', 'S&P 500', 'chart-no-axes-combined'), ('^IXIC', '나스닥 종합', 'chart-no-axes-combined'), ('^DJI', '다우', 'chart-no-axes-combined')]
 SECTORS = [('XLK','기술','cpu'),('XLC','커뮤니케이션','radio'),('XLY','경기소비재','shopping-bag'),('XLF','금융','landmark'),('XLI','산업재','factory'),('XLV','헬스케어','heart-pulse'),('XLP','필수소비재','shopping-basket'),('XLRE','부동산','house'),('XLU','유틸리티','zap'),('XLB','소재','flask-conical'),('XLE','에너지','fuel')]
 MACRO = re.compile(r'\b(econom\w*|inflation|jobs|employment|central bank|interest rate|federal reserve|fed|tariff\w*|sanction\w*|war|conflict|invasion|missile|strike\w*|ceasefire|oil|energy|gas|shipping|hormuz|market\w*|recession|treasury|stress test|financial stability)\b',re.I)
-OPINION = re.compile(r'\b(could|might|may|fear\w*|warn\w*|consider\w*|urge\w*|opinion|analysis|what if|war of words)\b',re.I)
+OPINION = re.compile(r'\b(could|might|may|fear\w*|warn\w*|consider\w*|urge\w*|opinion|analysis|what if|war of words|long shot|unlikely|prepar\w*|scenario\w*|drill\w*|why|how)\b',re.I)
 MAJOR = re.compile(r'\b((?:raises?|cuts?|holds?|hikes?) (?:the )?(?:interest |policy )?rates?|rate (?:cut|hike|decision)|inflation|consumer price|jobs report|payroll\w*|invades?|invasion|launches? (?:an? )?(?:attack|missile)|declares? war|ceasefire (?:agreed|signed|takes effect)|closes? (?:the )?strait|sanctions? (?:imposed|announced))\b',re.I)
 
 
@@ -210,9 +210,10 @@ def collect_news(prior, now, reviewed, fetch=get):
         previous=old_by_url.get(item['url'],{})
         first=stamp(previous.get('firstPublishedAt') or previous.get('publishedAt'))
         if first and first<=stamp(item['publishedAt']):item['firstPublishedAt']=first.isoformat()
-        title=item['title']
-        item['importance']='important' if MAJOR.search(title) and not OPINION.search(title) else 'normal'
-        item['importanceReason']='주요 경제지표·정책 또는 국제 사건 보도' if item['importance']=='important' else ''
+        if not item['fromCache']:
+            title=item['title']
+            item['importance']='important' if MAJOR.search(title) and not OPINION.search(title) else 'normal'
+            item['importanceReason']='주요 경제지표·정책 또는 국제 사건 보도' if item['importance']=='important' else ''
     ordered=sorted(articles,key=lambda a:(a['importance']=='important',a['publishedAt']),reverse=True)
     candidates=[item for index,item in enumerate(ordered) if index<12 or item['url'] in reviewed]
     for item in candidates:
@@ -223,9 +224,10 @@ def collect_news(prior, now, reviewed, fetch=get):
             lead=passage(item,body)
             digest=sha256((item['title']+'\n'+lead).encode()).hexdigest()
             item['sourceHash']=digest
+            item['sourceExcerpt']=lead
             review=reviewed.get(item['url'],{})
-            text=plain(body)
-            checked=(review.get('title')==item['title'] and review.get('evidence') and all(e.lower() in text.lower() for e in review['evidence']))
+            text=plain(body) if body else item.get('_excerpt','')
+            checked=(review.get('title')==item['title'] and ((review.get('sourceHash')==digest) or (review.get('evidence') and all(e.lower() in text.lower() for e in review['evidence']))))
             if checked:
                 item.update(headlineKo=review['headline'],summaryKo=review['summary'],translationStatus='ready',translationMethod='reviewed-summary',importance=review.get('importance','normal'),importanceReason=review.get('importanceReason',''))
             elif previous.get('sourceHash')==digest and previous.get('translationStatus')=='ready':
@@ -274,7 +276,7 @@ def assemble(quotes, news, feeds, rankings, now):
         # Identical event headlines from two sources do not fill the briefing twice.
         key=re.sub(r'\W','',item.get('headlineKo','')).lower()
         if item.get('translationStatus')!='ready' or key in seen:continue
-        seen.add(key);selected.append(item)
+        seen.add(key);selected.append({k:v for k,v in item.items() if k!='sourceExcerpt'})
         if len(selected)==5:break
     return {'schemaVersion':1,'generatedAt':now.isoformat(),'rankings':rankings,'brief':brief,
             'recap':{'asOf':asof,'weekStart':start.isoformat(),'weekEnd':end.isoformat(),'weekComplete':complete,'timezone':'America/New_York','method':'sector-etf-unadjusted-close-price-return',

@@ -47,7 +47,7 @@ class Periods(unittest.TestCase):
 class Feeds(unittest.TestCase):
     def setUp(self):
         self.old=h.parse_feed(rss(),'Fed 발표',NOW-timedelta(hours=1))[0]
-        self.old.update(headlineKo='이전 경제 전망',summaryKo='확인한 발표 요약',translationStatus='ready',translationMethod='reviewed-summary')
+        self.old.update(headlineKo='이전 경제 전망',summaryKo='확인한 발표 요약',translationStatus='ready',translationMethod='reviewed-summary',importance='important',importanceReason='검토한 정책 발언')
         self.prior={'news':[self.old], 'feeds':[{'name':'Fed 발표','lastSuccessAt':self.old['lastSuccessAt']}]}
 
     def test_only_failed_feed_keeps_its_cache_and_recovery_replaces_it(self):
@@ -60,6 +60,8 @@ class Feeds(unittest.TestCase):
         self.assertTrue(items[0]['fromCache']);self.assertEqual(items[0]['sourceStatus'],'unavailable')
         self.assertEqual(items[0]['publishedAt'],self.old['publishedAt'])
         self.assertEqual(items[0]['lastSuccessAt'],self.old['lastSuccessAt'])
+        self.assertEqual(items[0]['importance'],'important')
+        self.assertEqual(items[0]['importanceReason'],'검토한 정책 발언')
         self.assertEqual([f['status'] for f in feeds],['unavailable','ready','ready','ready'])
         items,feeds=h.collect_news({'news':items,'feeds':feeds},NOW,{},lambda _: '<rss><channel/></rss>')
         self.assertEqual(items,[]);self.assertTrue(all(f['status']=='ready' for f in feeds))
@@ -99,6 +101,26 @@ class Feeds(unittest.TestCase):
             return '<rss><channel/></rss>'
         items,_=h.collect_news({},NOW,{},fetch)
         self.assertEqual(items[0]['importance'],'normal')
+
+    def test_invasion_contingency_headline_is_not_a_confirmed_event(self):
+        def fetch(url):
+            if url==h.FEEDS[3][1]:return rss('Why Canada is preparing for a (long shot) US invasion','https://www.bbc.com/news/articles/test')
+            return '<rss><channel/></rss>'
+        items,_=h.collect_news({},NOW,{},fetch)
+        self.assertEqual(items[0]['importance'],'normal')
+
+    def test_bbc_review_is_bound_to_exact_title_and_source_excerpt(self):
+        url='https://www.bbc.com/news/articles/test'
+        xml=rss('Suppliers pile pressure on government over energy bills',url)
+        def fetch(request):return xml if request==h.FEEDS[2][1] else '<rss><channel/></rss>'
+        items,_=h.collect_news({},NOW,{},fetch)
+        digest=items[0]['sourceHash']
+        review={url:{'title':items[0]['title'],'sourceHash':digest,'headline':'에너지 업계, 요금 부담 완화 대책 촉구','summary':'에너지 업체들이 정부 조치를 요구했다.'}}
+        items,_=h.collect_news({},NOW,review,fetch)
+        self.assertEqual(items[0]['translationMethod'],'reviewed-summary')
+        review[url]['sourceHash']='changed'
+        items,_=h.collect_news({},NOW,review,fetch)
+        self.assertIn('_translate',items[0]);self.assertNotIn('headlineKo',items[0])
 
     def test_future_invalid_and_off_topic_feed_items_are_excluded(self):
         self.assertEqual(h.parse_feed(rss(published='Sun, 04 Oct 2026 16:00:00 GMT'),'BBC 국제',NOW),[])
