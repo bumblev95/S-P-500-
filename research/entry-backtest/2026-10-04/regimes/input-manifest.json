@@ -1,0 +1,23 @@
+{
+  "version": "entry-context-v1-regime-attribution-v1",
+  "originalPRHead": "e439161af57a418727ba14e03d73808821ceefe8",
+  "datasetSHA256": "0307d3266187abea5e008fbaefd71a447d78298365ff41d2f7939516a12cf92a",
+  "spyProviderSHA256": "5d449d3b0d4d7af7374f4e76f0acc638f3b45b70c3331a56d8aa160599c86f22",
+  "spyInputSHA256": "a57fc69f4020b48b8a4016acb0f6003c76cd6ff50c352bfa2c451d680e0b2fc0",
+  "rows": 2514,
+  "first": "2016-10-03",
+  "last": "2026-10-02",
+  "basis": "Yahoo quote OHLC; no AdjClose mixing",
+  "columns": [
+    "date",
+    "t",
+    "end",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "signalPrice"
+  ],
+  "extraction": "SPY rows directly from hash-verified fixed prices.json.gz; no new requests"
+}

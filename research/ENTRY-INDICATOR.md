@@ -40,6 +40,21 @@ market regimes, historical universe changes and all attempted configurations.
 The current 253-bar snapshot is enough to calculate indicators, not to establish
 profitability over a representative out-of-sample investment history.
 
+The [2026-10-04 retrospective report](entry-backtest/2026-10-04/README.md)
+evaluates the unchanged rules over the current 505 home tickers, under separate
+fixed stable/watch assumptions and explicit costs. It includes signal frequency,
+next-open 20/63-session outcomes and frozen paper execution. Historical credit
+vintages and historical membership are not reconstructed, so this is conditional
+research with survivorship bias, not an actual production or prospective record.
+
+The [fixed alternative-model comparison](entry-strategy-comparison/2026-10-04/README.md)
+reuses that exact price vintage and the unchanged stable/watch control results.
+It compares a 55-session channel breakout, 20-session pullback rebound and
+RSI(2) mean reversion, with a historical SPY price filter, common account limits,
+two cost scenarios and an early/recent chronological split. Entry, ranking and
+exits change together; this is exploratory model research, not a replacement
+for the production buy states or the immutable forward study.
+
 - Uptrend: trend score at least 60, close at/above the 50-day mean and the
   50-day mean at/above the 200-day mean. The existing trend score is unchanged.
 - Downtrend: close below the 50-day mean, 50-day mean below the 200-day mean,

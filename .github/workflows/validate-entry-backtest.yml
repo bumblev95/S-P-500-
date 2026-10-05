@@ -1,0 +1,54 @@
+name: Validate retrospective entry research
+on:
+  push:
+    paths:
+      - 'scripts/*entry_backtest*'
+      - 'scripts/backtest_entry_rules.cjs'
+      - 'scripts/render_entry_backtest.py'
+      - 'scripts/fixtures/entry-backtest-rounding.json'
+      - 'research/entry-backtest/2026-10-04/**'
+      - 'scripts/*entry_strategy_comparison*'
+      - 'scripts/*entry_regimes*'
+      - 'research/entry-strategy-comparison/2026-10-04/**'
+      - 'scripts/entry_study.cjs'
+      - 'scripts/entry-study-v1/**'
+      - 'assets/technical-guide.js'
+      - '.github/workflows/validate-entry-backtest.yml'
+  pull_request:
+    paths:
+      - 'scripts/*entry_backtest*'
+      - 'scripts/backtest_entry_rules.cjs'
+      - 'scripts/render_entry_backtest.py'
+      - 'scripts/fixtures/entry-backtest-rounding.json'
+      - 'research/entry-backtest/2026-10-04/**'
+      - 'scripts/*entry_strategy_comparison*'
+      - 'scripts/*entry_regimes*'
+      - 'research/entry-strategy-comparison/2026-10-04/**'
+      - 'scripts/entry_study.cjs'
+      - 'scripts/entry-study-v1/**'
+      - 'assets/technical-guide.js'
+      - '.github/workflows/validate-entry-backtest.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: node scripts/test_entry_backtest.cjs
+      - run: python -m unittest discover -s scripts -p test_entry_backtest.py
+      - run: node scripts/test_entry_indicator.cjs
+      - run: python scripts/render_entry_backtest.py --validate-only
+      - run: node scripts/test_entry_strategy_comparison.cjs
+      - run: python scripts/render_entry_strategy_comparison.py --validate-only
+      - run: python -m unittest discover -s scripts -p test_entry_regimes.py
+      - run: python scripts/analyze_entry_regimes.py --validate-only
+      - run: node scripts/test_market_home.cjs
+      - run: node scripts/test_entry_study.cjs
+      - run: node scripts/verify_entry_study.cjs
