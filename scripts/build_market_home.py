@@ -26,6 +26,7 @@ NY = ZoneInfo('America/New_York')
 # (priceGeneratedAt/marketGeneratedAt), session dates and publication dates stay
 # significant, as do all values, statuses, cache flags and error details.
 POLLING_TIMESTAMPS = {'generatedAt', 'evaluatedAt', 'lastAttemptAt', 'lastSuccessAt'}
+HOME_TRANSLATION_VERSION = 'home-news-ko-v2'
 FEEDS = [
     ('Fed 발표', 'https://www.federalreserve.gov/feeds/press_all.xml'),
     ('Fed 연설', 'https://www.federalreserve.gov/feeds/speeches.xml'),
@@ -272,13 +273,13 @@ def collect_news(prior, now, reviewed, fetch=get):
             text=plain(body) if body else item.get('_excerpt','')
             checked=(review.get('title')==item['title'] and ((review.get('sourceHash')==digest) or (review.get('evidence') and all(e.lower() in text.lower() for e in review['evidence']))))
             if checked:
-                item.update(headlineKo=review['headline'],summaryKo=review['summary'],translationStatus='ready',translationMethod='reviewed-summary',importance=review.get('importance','normal'),importanceReason=review.get('importanceReason',''))
-            elif previous.get('sourceHash')==digest and previous.get('translationStatus')=='ready':
-                for key in ['headlineKo','summaryKo','translationStatus','translationMethod']:item[key]=previous[key]
+                item.update(headlineKo=review['headline'],summaryKo=review['summary'],translationStatus='ready',translationMethod='reviewed-summary',translationVersion=HOME_TRANSLATION_VERSION,importance=review.get('importance','normal'),importanceReason=review.get('importanceReason',''))
+            elif previous.get('sourceHash')==digest and previous.get('translationStatus')=='ready' and previous.get('translationVersion')==HOME_TRANSLATION_VERSION:
+                for key in ['headlineKo','summaryKo','translationStatus','translationMethod','translationVersion']:item[key]=previous[key]
             else:item['_translate']=[item['title'],lead]
         except Exception as exc:
             if previous.get('title')==item['title'] and previous.get('translationStatus')=='ready':
-                for key in ['headlineKo','summaryKo','translationStatus','translationMethod','sourceHash','importance','importanceReason']:item[key]=previous.get(key)
+                for key in ['headlineKo','summaryKo','translationStatus','translationMethod','translationVersion','sourceHash','importance','importanceReason']:item[key]=previous.get(key)
                 item.update(fromCache=True,sourceStatus='unavailable',lastSuccessAt=previous.get('lastSuccessAt'))
             else:item['translationStatus']='unavailable'
             item['summaryError']=type(exc).__name__
@@ -298,7 +299,7 @@ def translate_news(articles, root, translate=None):
         if len(outputs)!=len(texts):raise ValueError('Translation count mismatch')
         for index,item in enumerate(tasks):
             headline,summary=outputs[index*2:index*2+2]
-            item.update(headlineKo=headline,summaryKo=summary,translationStatus='ready' if all(valid_korean(s) for s in [headline,summary]) else 'unavailable',translationMethod='machine-translation')
+            item.update(headlineKo=headline,summaryKo=summary,translationStatus='ready' if all(valid_korean(s) for s in [headline,summary]) else 'unavailable',translationMethod='machine-translation',translationVersion=HOME_TRANSLATION_VERSION)
     for item in articles:
         item.pop('_translate',None);item.pop('_excerpt',None)
     return articles
