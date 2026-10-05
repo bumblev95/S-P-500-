@@ -112,6 +112,20 @@ class Feeds(unittest.TestCase):
         items,_=h.collect_news({},NOW,{},fetch)
         self.assertEqual(items[0]['importance'],'normal')
 
+    def test_old_machine_translation_is_refreshed_when_translation_version_changes(self):
+        current=deepcopy(self.old)
+        current.update(source='CNBC 주요',url='https://www.cnbc.com/2026/10/03/stocks-market-test.html',
+                       title='Wall Street stocks rise after strong earnings',headlineKo='이전 번역',summaryKo='이전 요약',
+                       translationStatus='ready',translationMethod='machine-translation',sourceHash='old')
+        prior={'news':[current],'feeds':[{'name':name,'lastSuccessAt':NOW.isoformat()} for name,_ in h.FEEDS]}
+        xml=rss(current['title'],current['url'])
+        def fetch(request):
+            if request==h.FEEDS[4][1]:return xml
+            return '<rss><channel/></rss>'
+        items,_=h.collect_news(prior,NOW,{},fetch)
+        self.assertIn('_translate',items[0])
+        self.assertNotEqual(items[0].get('translationVersion'),h.HOME_TRANSLATION_VERSION)
+
     def test_bbc_review_is_bound_to_exact_title_and_source_excerpt(self):
         url='https://www.bbc.com/news/articles/test'
         xml=rss('Suppliers pile pressure on government over energy bills',url)
