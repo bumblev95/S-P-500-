@@ -72,5 +72,15 @@ class TranslationTests(unittest.TestCase):
         self.assertEqual(m.translation_input('Nvidia earnings beat estimates'), 'Nvidia earnings beat estimates')
         self.assertEqual(m.translation_input('Nvidia beats a rival in chip performance'), 'Nvidia beats a rival in chip performance')
 
+    def test_market_jargon_is_expanded_before_translation(self):
+        treasury=m.translation_input('Treasury yields inch lower as investors pare back Fed rate hike bets')
+        self.assertIn('interest rates on U.S. government bonds',treasury)
+        self.assertIn('reduce expectations for a Federal Reserve interest rate increase',treasury)
+        jobs=m.translation_input('Wall Street is looking for job growth of 84,000 after a soft labor market jobs report')
+        self.assertIn('Economists expect U.S. employers to add 84,000 jobs',jobs)
+        self.assertIn('weak labor market',jobs)
+        self.assertIn('employment report',jobs)
+        self.assertIn('Federal Reserve policy interest rate',m.translation_input('fed funds rate'))
+
 
 if __name__ == '__main__': unittest.main()
