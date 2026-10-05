@@ -31,10 +31,13 @@ FEEDS = [
     ('Fed 연설', 'https://www.federalreserve.gov/feeds/speeches.xml'),
     ('BBC 경제', 'https://feeds.bbci.co.uk/news/business/rss.xml'),
     ('BBC 국제', 'https://feeds.bbci.co.uk/news/world/rss.xml'),
+    ('CNBC 주요', 'https://www.cnbc.com/id/100003114/device/rss/rss.html'),
+    ('CNBC 금융', 'https://www.cnbc.com/id/10000664/device/rss/rss.html'),
+    ('CNBC 경제', 'https://www.cnbc.com/id/20910258/device/rss/rss.html'),
 ]
 INDICES = [('^GSPC', 'S&P 500', 'chart-no-axes-combined'), ('^IXIC', '나스닥 종합', 'chart-no-axes-combined'), ('^DJI', '다우', 'chart-no-axes-combined')]
 SECTORS = [('XLK','기술','cpu'),('XLC','커뮤니케이션','radio'),('XLY','경기소비재','shopping-bag'),('XLF','금융','landmark'),('XLI','산업재','factory'),('XLV','헬스케어','heart-pulse'),('XLP','필수소비재','shopping-basket'),('XLRE','부동산','house'),('XLU','유틸리티','zap'),('XLB','소재','flask-conical'),('XLE','에너지','fuel')]
-MACRO = re.compile(r'\b(econom\w*|inflation|jobs|employment|central bank|interest rate|federal reserve|fed|tariff\w*|sanction\w*|war|conflict|invasion|missile|strike\w*|ceasefire|oil|energy|gas|shipping|hormuz|market\w*|recession|treasury|stress test|financial stability)\b',re.I)
+MACRO = re.compile(r'\b(econom\w*|inflation|jobs|employment|central bank|interest rate|federal reserve|fed|tariff\w*|sanction\w*|war|conflict|invasion|missile|strike\w*|ceasefire|oil|energy|gas|shipping|hormuz|market\w*|stock\w*|equities|shares?|wall street|s&p(?: 500)?|nasdaq|dow|earnings?|recession|treasury|bond\w*|yield\w*|stress test|financial stability)\b',re.I)
 OPINION = re.compile(r'\b(could|might|may|fear\w*|warn\w*|consider\w*|urge\w*|opinion|analysis|what if|war of words|long shot|unlikely|prepar\w*|scenario\w*|drill\w*|why|how)\b',re.I)
 MAJOR = re.compile(r'\b((?:raises?|cuts?|holds?|hikes?) (?:the )?(?:interest |policy )?rates?|rate (?:cut|hike|decision)|inflation|consumer price|jobs report|payroll\w*|invades?|invasion|launches? (?:an? )?(?:attack|missile)|declares? war|ceasefire (?:agreed|signed|takes effect)|closes? (?:the )?strait|sanctions? (?:imposed|announced))\b',re.I)
 
@@ -177,14 +180,15 @@ def plain(value):
 def allowed(url):
     try:
         u=urllib.parse.urlsplit(url)
-        return u.scheme=='https' and u.hostname in {'www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk'} and not u.username and not u.password
+        return u.scheme=='https' and u.hostname in {'www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk','www.cnbc.com','cnbc.com'} and not u.username and not u.password
     except ValueError:return False
 
 
 def category(text):
     if re.search(r'\b(war|conflict|invasion|missile|ceasefire|sanction|hormuz)\b',text,re.I):return '전쟁·국제'
     if re.search(r'\b(oil|energy|gas|shipping)\b',text,re.I):return '유가·원자재'
-    if re.search(r'\b(fed|federal reserve|monetary|interest rate|stress test)\b',text,re.I):return 'Fed·금리'
+    if re.search(r'\b(fed|federal reserve|monetary|interest rate|treasury|bond|yield|stress test)\b',text,re.I):return 'Fed·금리'
+    if re.search(r'\b(stock\w*|equities|shares?|wall street|s&p(?: 500)?|nasdaq|dow|earnings?)\b',text,re.I):return '주식시장'
     return '경제·물가'
 
 
@@ -239,6 +243,11 @@ def collect_news(prior, now, reviewed, fetch=get):
             return retain_news(old_items,source,now),{'name':source,'url':url,'status':'unavailable','lastAttemptAt':now.isoformat(),'lastSuccessAt':before.get('lastSuccessAt'),'fromCache':True,'error':type(exc).__name__}
     with ThreadPoolExecutor(max_workers=4) as pool:
         for items,feed in pool.map(collect,FEEDS):articles.extend(items);feeds.append(feed)
+    # The same CNBC story can appear in several section feeds. Translate and rank it once.
+    unique={}
+    for item in articles:
+        unique.setdefault(item['url'],item)
+    articles=list(unique.values())
     # A recurring URL retains its first publication time; polling cannot restart breaking news.
     for item in articles:
         previous=old_by_url.get(item['url'],{})
