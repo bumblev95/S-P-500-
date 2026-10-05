@@ -1,0 +1,19 @@
+{
+  "version": "daily-top3-ranking-research-v1",
+  "baseMainCommit": "d3589069dd31c39791ec767e1bc757308bfd3dca",
+  "previousResearchHead": "e91396e432e1fd511ebf5f4ab80f4a9a50041c27",
+  "inputDatasetSHA256": "0307d3266187abea5e008fbaefd71a447d78298365ff41d2f7939516a12cf92a",
+  "inputPricePath": "research/history/entry-backtest-2026-10-04/prices.json.gz",
+  "inputBundle": "entry-backtest-2026-10-04.zip",
+  "period": {
+    "start": "2017-10-02",
+    "end": "2026-10-02"
+  },
+  "currentUniverse": 505,
+  "markets": [
+    "fixed stable",
+    "fixed watch"
+  ],
+  "productionChanged": false,
+  "forwardLedgersChanged": false
+}
