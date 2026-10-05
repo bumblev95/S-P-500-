@@ -98,6 +98,23 @@ class Feeds(unittest.TestCase):
         items,_=h.collect_news({},NOW,review,fetch)
         self.assertNotIn('headlineKo',items[0]);self.assertIn('_translate',items[0])
 
+    def test_recent_normal_news_precedes_older_important_news(self):
+        recent_url='https://www.cnbc.com/2026/10/03/stocks-market-test.html'
+        old_url='https://www.federalreserve.gov/newsevents/pressreleases/old.htm'
+        def fetch(url):
+            if url==h.FEEDS[0][1]:
+                return rss('Fed raises interest rates after inflation report',old_url,'Fri, 02 Oct 2026 12:00:00 GMT')
+            if url==h.FEEDS[4][1]:
+                return rss('Wall Street stocks rise after strong earnings',recent_url,'Sat, 03 Oct 2026 22:00:00 GMT')
+            if url in [f[1] for f in h.FEEDS]:
+                return '<rss><channel/></rss>'
+            return '<p>Federal Reserve policy statement on inflation and interest rates.</p>'
+        items,_=h.collect_news({},NOW,{},fetch)
+        self.assertEqual(items[0]['url'],recent_url)
+        self.assertEqual(items[0]['importance'],'normal')
+        self.assertEqual(items[1]['url'],old_url)
+        self.assertEqual(items[1]['importance'],'important')
+
     def test_speculation_is_not_promoted_to_confirmed_important_event(self):
         def fetch(url):
             if url==h.FEEDS[3][1]:return rss('Country could launch invasion as war fears grow','https://www.bbc.com/news/articles/test')
@@ -398,7 +415,7 @@ class SemanticPublication(unittest.TestCase):
             ('rankings','marketGeneratedAt','2026-10-04T10:15:59+00:00'),
             ('rankings','priceGeneratedAt','2026-10-04T02:27:08+00:00'),
             ('recap','asOf','2026-10-01'),('recap','weekStart','2026-10-05'),
-            ('recap','weekComplete',False),('newsPolicy','breakingMaxAgeHours',1),
+            ('recap','weekComplete',False),('newsPolicy','breakingMaxAgeHours',1),('newsPolicy','displayOrder','importance-first'),
         ]
         changes += [('recap','sectors', [{**snapshot['recap']['sectors'][0],key:value}]+snapshot['recap']['sectors'][1:])
                     for key,value in [('close',121),('day',10),('week',21),('asOf','2026-10-01'),
