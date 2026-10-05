@@ -1,58 +1,87 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-04T10:58:36.254081+00:00",
+  "generatedAt": "2026-10-05T16:18:05.977899+00:00",
   "rankings": {
-    "buy": [],
-    "waiting": [
-      {
-        "symbol": "CRWD",
-        "name": "크라우드스트라이크",
-        "asOf": "2026-10-02",
-        "code": "riskwait"
-      },
-      {
-        "symbol": "HPE",
-        "name": "휴렛팩커드 엔터프라이즈",
-        "asOf": "2026-10-02",
-        "code": "riskwait"
-      },
+    "buy": [
       {
         "symbol": "ILMN",
         "name": "일루미나",
         "asOf": "2026-10-02",
-        "code": "breakout"
+        "score": 100,
+        "code": "breakout",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "직전 55거래일 고점 돌파 확인 대기"
+      },
+      {
+        "symbol": "RVTY",
+        "name": "레비티",
+        "asOf": "2026-10-02",
+        "score": 100,
+        "code": "pullback",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "상승 추세지만 눌림목 반등 조건 대기"
+      },
+      {
+        "symbol": "FTNT",
+        "name": "포티넷",
+        "asOf": "2026-10-02",
+        "score": 99,
+        "code": "breakout",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "직전 55거래일 고점 돌파 확인 대기"
       }
     ],
     "sell": [
       {
         "symbol": "AON",
         "name": "에이온",
-        "asOf": "2026-10-02"
+        "asOf": "2026-10-02",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
         "symbol": "APP",
         "name": "앱러빈",
-        "asOf": "2026-10-02"
+        "asOf": "2026-10-02",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
         "symbol": "CCI",
         "name": "크라운 캐슬",
-        "asOf": "2026-10-02"
+        "asOf": "2026-10-02",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "evaluatedAt": "2026-10-04T10:58:36.280Z",
+    "asOf": "2026-10-02",
+    "eligibleCount": 505,
+    "evaluatedAt": "2026-10-05T16:18:05.977Z",
     "priceGeneratedAt": "2026-10-04T01:27:08+00:00",
-    "marketGeneratedAt": "2026-10-04T10:44:58.655328+00:00",
-    "basis": "technical-rules",
+    "marketGeneratedAt": "2026-10-05T16:04:13.445743+00:00",
+    "basis": "technical-relative-ranking",
+    "policy": "daily-top3-v1",
     "priceMaxAgeDays": 5,
     "marketMaxAgeDays": 3
   },
   "brief": "경기소비재 강세 · 헬스케어 약세",
   "recap": {
     "asOf": "2026-10-02",
-    "weekStart": "2026-09-28",
-    "weekEnd": "2026-10-02",
-    "weekComplete": true,
+    "weekStart": "2026-10-05",
+    "weekEnd": "2026-10-09",
+    "weekComplete": false,
     "timezone": "America/New_York",
     "method": "sector-etf-unadjusted-close-price-return",
     "indices": [
@@ -64,12 +93,12 @@
         "close": 7722.72021484375,
         "day": 0.7339775006385052,
         "dayBaseDate": "2026-10-01",
-        "week": -0.2671941817462775,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -79,12 +108,12 @@
         "close": 27190.859375,
         "day": 1.188093638882659,
         "dayBaseDate": "2026-10-01",
-        "week": 0.4512170087923595,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "^DJI",
@@ -94,12 +123,12 @@
         "close": 51176.9609375,
         "day": 0.4916930392793839,
         "dayBaseDate": "2026-10-01",
-        "week": -1.2573364725857683,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       }
     ],
     "sectors": [
@@ -111,12 +140,12 @@
         "close": 199.80999755859375,
         "day": 1.0110712424469703,
         "dayBaseDate": "2026-10-01",
-        "week": 1.8036343858323978,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLC",
@@ -126,12 +155,12 @@
         "close": 110.31999969482422,
         "day": 0.34564057211159405,
         "dayBaseDate": "2026-10-01",
-        "week": -2.33710996020301,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLY",
@@ -141,12 +170,12 @@
         "close": 110.04000091552734,
         "day": 1.130413918326978,
         "dayBaseDate": "2026-10-01",
-        "week": -0.4703298250262944,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLF",
@@ -156,12 +185,12 @@
         "close": 53.4900016784668,
         "day": 0.05612157595951128,
         "dayBaseDate": "2026-10-01",
-        "week": -2.461703994100717,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLI",
@@ -171,12 +200,12 @@
         "close": 169.9499969482422,
         "day": 0.7768012116549761,
         "dayBaseDate": "2026-10-01",
-        "week": -0.28163806147206705,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLV",
@@ -186,12 +215,12 @@
         "close": 166.17999267578125,
         "day": -0.012036265239623312,
         "dayBaseDate": "2026-10-01",
-        "week": -2.6479228783064634,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLP",
@@ -201,12 +230,12 @@
         "close": 80.52999877929688,
         "day": 0.24896918172965243,
         "dayBaseDate": "2026-10-01",
-        "week": -1.8644879658988533,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLRE",
@@ -216,12 +245,12 @@
         "close": 40.810001373291016,
         "day": 0.31956997822022437,
         "dayBaseDate": "2026-10-01",
-        "week": -1.8046197671254038,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLU",
@@ -231,12 +260,12 @@
         "close": 39.83000183105469,
         "day": 0.3780280361019628,
         "dayBaseDate": "2026-10-01",
-        "week": 0.8099304558742082,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLB",
@@ -246,12 +275,12 @@
         "close": 48.86000061035156,
         "day": 0.6592494618636424,
         "dayBaseDate": "2026-10-01",
-        "week": -1.8875474721080865,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       },
       {
         "symbol": "XLE",
@@ -261,105 +290,110 @@
         "close": 62.81999969482422,
         "day": 0.19138585394673502,
         "dayBaseDate": "2026-10-01",
-        "week": 1.2572513987530565,
-        "weekBaseDate": "2026-09-25",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-        "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00"
+        "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+        "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00"
       }
     ]
   },
   "news": [
     {
-      "url": "https://www.bbc.co.uk/news/articles/ck87zg8jnwngo?at_medium=RSS&at_campaign=rss",
-      "title": "G7 to release millions of barrels of oil and diesel after Trump threat",
-      "publishedAt": "2026-10-03T04:38:31+00:00",
-      "firstPublishedAt": "2026-10-03T04:38:31+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "url": "https://www.cnbc.com/2026/10/05/brazilian-stocks-jump-bolsonaro-now-heavy-favorite-to-win-presidency.html",
+      "title": "Brazilian stocks jump as Bolsonaro now seen as heavy favorite to win presidency",
+      "publishedAt": "2026-10-05T15:47:42+00:00",
+      "firstPublishedAt": "2026-10-05T15:47:42+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
-      "importance": "important",
-      "importanceReason": "G7의 공동 에너지 공급 대책",
-      "sourceHash": "e532d54b9ea31650d41abd8d568575e871f85c5f0c7e83531a46853c11d12f7c",
-      "headlineKo": "G7, 트럼프 압박 속 석유·디젤 수백만 배럴 방출 계획",
-      "summaryKo": "트럼프의 압박 이후 G7이 석유와 디젤 수백만 배럴을 방출하기로 했다.",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "187c4e1d5f3627f92a19774875668ffdfe00a492c0c7374d2eb0f129bdc3bb39",
+      "headlineKo": "브라질 주가가 급등하면서 볼소나로가 대통령직을 차지하는 데 가장 좋아하는 것으로 여겨지고 있습니다.",
+      "summaryKo": "이 움직임은 일요일 브라질 대통령 선거의 첫 번째 라운드 결과 이후입니다.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20261001a.htm",
-      "title": "Jefferson, The U.S. Economy and Monetary Policy",
-      "publishedAt": "2026-10-01T17:30:00+00:00",
-      "firstPublishedAt": "2026-10-01T17:30:00+00:00",
-      "source": "Fed 연설",
+      "url": "https://www.cnbc.com/2026/10/05/nvidia-groq-deal-stockholder-lawsuit.html",
+      "title": "Nvidia's $20 billion Groq deal faces lawsuit alleging startup's stockholders were shortchanged",
+      "publishedAt": "2026-10-05T15:46:49+00:00",
+      "firstPublishedAt": "2026-10-05T15:46:49+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "79460fff1c9f8765ca7ee0fff267751983c004e62ac197491ce0d3c337789247",
+      "headlineKo": "엔비디아의 20억 달러 규모의 '그로크' 거래는 스타트업 주주들이 부족하다는 소송에 직면해 있습니다.",
+      "summaryKo": "이 사건은 라이선스 계약이 주주들에게 \"저기 가격\"을 제공함으로써 주주들을 \"집어내었다\"고 주장한다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/cr0j0w3p8453o?at_medium=RSS&at_campaign=rss",
+      "title": "Zelensky condemns 'horrific' Russian strike on boat carrying corn in Black Sea",
+      "publishedAt": "2026-10-05T15:17:23+00:00",
+      "firstPublishedAt": "2026-10-05T15:17:23+00:00",
+      "source": "BBC 국제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "ae3ece244f2935ec399d6f66e853a9d0e3bb7df7931d3770d743142f6824fcbf",
+      "headlineKo": "젤렌스키는 흑해에서 옥수수를 운반하는 배에 대한 러시아의 '악스러운' 공격을 비난했습니다",
+      "summaryKo": "우크라이나 지도자는 터키 소유의 배에 대한 공격 후 선장의 주장이 사망하고 승무원 11명이 구조되었다고 말했습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/treasury-yields-bonds-fed-rates.html",
+      "title": "Treasury yields rise to start the week; traders look ahead to Fed minutes",
+      "publishedAt": "2026-10-05T14:53:55+00:00",
+      "firstPublishedAt": "2026-10-05T14:53:55+00:00",
+      "source": "CNBC 주요",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "important",
-      "importanceReason": "연준 부의장의 금리·물가 전망 발언",
-      "sourceHash": "0dd0ea0d4dfa6bb395c9deaa3f43871e59efcbab46fd8831bc974b51cc598504",
-      "headlineKo": "제퍼슨, 물가 상승 위험 경계…9월 금리 인상 지지",
-      "summaryKo": "에너지·AI 수요의 물가 압력을 경계하고, 후속 정책은 경제 데이터와 위험을 살펴 판단할 방침.",
-      "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/c9m2mjj3yvg4o?at_medium=RSS&at_campaign=rss",
-      "title": "Why Canada is preparing for a (long shot) US invasion",
-      "publishedAt": "2026-10-03T23:30:06+00:00",
-      "firstPublishedAt": "2026-10-03T23:30:06+00:00",
-      "source": "BBC 국제",
-      "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "f3a1a94a2a35039ef4363c60b30510766ac0ba89c4dd72b34741a042b1d2c826",
-      "headlineKo": "캐나다, 가능성 낮은 미국 침공 시나리오에 대비",
-      "summaryKo": "실제 침공 소식이 아닌, 가능성이 낮은 상황을 가정한 군사 대비에 관한 보도.",
+      "sourceHash": "ae33d56acf78ee884b1207d2a8ee3d57e6390c8e0cc7b11e73d3a7ba67dd3639",
+      "headlineKo": "주 초에 미국 정부 채권 금리율이 상승하고, 거래자들은 연방준비제도의 일정을 앞두고 있습니다.",
+      "summaryKo": "미국 정부 채권 금리가 급격히 하락한 뒤 상승하고 있습니다.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.bbc.co.uk/news/articles/c6qjnlk4r2jjo?at_medium=RSS&at_campaign=rss",
-      "title": "US father and son arrested after 'gas station heroin' deaths",
-      "publishedAt": "2026-10-03T22:39:06+00:00",
-      "firstPublishedAt": "2026-10-03T22:39:06+00:00",
-      "source": "BBC 국제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "url": "https://www.cnbc.com/2026/10/05/cerebras-cbrs-sam-altman-close-partner.html",
+      "title": "Cerebras stock pops 9% after Sam Altman calls the chipmaker a 'close partner'",
+      "publishedAt": "2026-10-05T13:37:15+00:00",
+      "firstPublishedAt": "2026-10-05T10:06:13+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "2f2beac80c6d30fb4e9dad3d17978b904443633d271c989f19d2a41afd78e1fe",
-      "headlineKo": "미국 아버지와 아들은 '가스 스테이션 헤로인'의 사망 후 체포되었습니다",
-      "summaryKo": "그들은 미국에서는 종종 \"가스 스테이션 헤로인\"이라고 불리는 크라텀의 유래물 중 적어도 한 가지 학생을 판매한 혐의를 받고 있습니다.",
+      "sourceHash": "022652733fe7f4dba18655b07371666f2fa8482981f09d79e6ae30211fae9635",
+      "headlineKo": "세레브라스 주가가 9% 상승했다",
+      "summaryKo": "세레브라스 주식은 오픈AI의 CEO 샘 알트먼이 투자자들에게 \"가근 파트너\"라는 확신을 준 후 시장 이전 거래에서 상승했다.",
       "translationStatus": "ready",
-      "translationMethod": "machine-translation"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/cq0ld88kzxw8o?at_medium=RSS&at_campaign=rss",
-      "title": "Suppliers pile pressure on government over energy bills",
-      "publishedAt": "2026-10-03T08:58:44+00:00",
-      "firstPublishedAt": "2026-10-03T08:58:44+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "fff7f5e52f1cefe09f2b894ff9392ba5af2ab399a7bfce88ca610fcc867f04ba",
-      "headlineKo": "에너지 업체들, 요금 부담에 정부 대응 촉구",
-      "summaryKo": "에너지 요금 문제를 두고 공급업체들이 정부 대응을 요구했다.",
-      "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
     }
   ],
   "feeds": [
@@ -367,38 +401,63 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false
+    },
+    {
+      "name": "CNBC 주요",
+      "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+      "status": "ready",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false
+    },
+    {
+      "name": "CNBC 금융",
+      "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
+      "status": "ready",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false
+    },
+    {
+      "name": "CNBC 경제",
+      "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
+      "status": "ready",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     }
   ],
   "newsPolicy": {
     "maxAgeDays": 14,
     "breakingMaxAgeHours": 2,
+    "displayOrder": "latest-first",
     "importanceBasis": "source-event-and-reviewed-context"
   }
 }

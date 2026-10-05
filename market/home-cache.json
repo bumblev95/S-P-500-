@@ -3,14 +3,6 @@
     "^GSPC": {
       "rows": [
         {
-          "date": "2026-09-03",
-          "close": 7747.7099609375
-        },
-        {
-          "date": "2026-09-04",
-          "close": 7718.60009765625
-        },
-        {
           "date": "2026-09-08",
           "close": 7673.52001953125
         },
@@ -87,18 +79,10 @@
           "close": 7722.72021484375
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "^IXIC": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 26584.060546875
-        },
-        {
-          "date": "2026-09-04",
-          "close": 26506.990234375
-        },
         {
           "date": "2026-09-08",
           "close": 26421.41015625
@@ -176,18 +160,10 @@
           "close": 27190.859375
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "^DJI": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 53686.109375
-        },
-        {
-          "date": "2026-09-04",
-          "close": 53414.25
-        },
         {
           "date": "2026-09-08",
           "close": 52786.0703125
@@ -265,18 +241,10 @@
           "close": 51176.9609375
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLK": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 185.97000122070312
-        },
-        {
-          "date": "2026-09-04",
-          "close": 187.27999877929688
-        },
         {
           "date": "2026-09-08",
           "close": 187.8699951171875
@@ -354,18 +322,10 @@
           "close": 199.80999755859375
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLC": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 113.37999725341797
-        },
-        {
-          "date": "2026-09-04",
-          "close": 112.02999877929688
-        },
         {
           "date": "2026-09-08",
           "close": 111.5199966430664
@@ -443,196 +403,10 @@
           "close": 110.31999969482422
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
-    },
-    "XLF": {
-      "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 58.560001373291016
-        },
-        {
-          "date": "2026-09-04",
-          "close": 58.099998474121094
-        },
-        {
-          "date": "2026-09-08",
-          "close": 57.29999923706055
-        },
-        {
-          "date": "2026-09-09",
-          "close": 57.060001373291016
-        },
-        {
-          "date": "2026-09-10",
-          "close": 56.869998931884766
-        },
-        {
-          "date": "2026-09-11",
-          "close": 57.25
-        },
-        {
-          "date": "2026-09-14",
-          "close": 57.029998779296875
-        },
-        {
-          "date": "2026-09-15",
-          "close": 56.849998474121094
-        },
-        {
-          "date": "2026-09-16",
-          "close": 55.93000030517578
-        },
-        {
-          "date": "2026-09-17",
-          "close": 55.880001068115234
-        },
-        {
-          "date": "2026-09-18",
-          "close": 55.86000061035156
-        },
-        {
-          "date": "2026-09-21",
-          "close": 55.900001525878906
-        },
-        {
-          "date": "2026-09-22",
-          "close": 54.79999923706055
-        },
-        {
-          "date": "2026-09-23",
-          "close": 54.540000915527344
-        },
-        {
-          "date": "2026-09-24",
-          "close": 54.529998779296875
-        },
-        {
-          "date": "2026-09-25",
-          "close": 54.84000015258789
-        },
-        {
-          "date": "2026-09-28",
-          "close": 54.189998626708984
-        },
-        {
-          "date": "2026-09-29",
-          "close": 54.0099983215332
-        },
-        {
-          "date": "2026-09-30",
-          "close": 53.400001525878906
-        },
-        {
-          "date": "2026-10-01",
-          "close": 53.459999084472656
-        },
-        {
-          "date": "2026-10-02",
-          "close": 53.4900016784668
-        }
-      ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
-    },
-    "XLI": {
-      "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 174.55999755859375
-        },
-        {
-          "date": "2026-09-04",
-          "close": 175.27000427246094
-        },
-        {
-          "date": "2026-09-08",
-          "close": 174.4199981689453
-        },
-        {
-          "date": "2026-09-09",
-          "close": 171.7899932861328
-        },
-        {
-          "date": "2026-09-10",
-          "close": 170.5500030517578
-        },
-        {
-          "date": "2026-09-11",
-          "close": 172.3699951171875
-        },
-        {
-          "date": "2026-09-14",
-          "close": 169.92999267578125
-        },
-        {
-          "date": "2026-09-15",
-          "close": 168.85000610351562
-        },
-        {
-          "date": "2026-09-16",
-          "close": 168.7100067138672
-        },
-        {
-          "date": "2026-09-17",
-          "close": 169.00999450683594
-        },
-        {
-          "date": "2026-09-18",
-          "close": 169.75
-        },
-        {
-          "date": "2026-09-21",
-          "close": 169.97999572753906
-        },
-        {
-          "date": "2026-09-22",
-          "close": 170.27000427246094
-        },
-        {
-          "date": "2026-09-23",
-          "close": 170.10000610351562
-        },
-        {
-          "date": "2026-09-24",
-          "close": 168.8300018310547
-        },
-        {
-          "date": "2026-09-25",
-          "close": 170.42999267578125
-        },
-        {
-          "date": "2026-09-28",
-          "close": 168.77999877929688
-        },
-        {
-          "date": "2026-09-29",
-          "close": 169.1300048828125
-        },
-        {
-          "date": "2026-09-30",
-          "close": 166.97999572753906
-        },
-        {
-          "date": "2026-10-01",
-          "close": 168.63999938964844
-        },
-        {
-          "date": "2026-10-02",
-          "close": 169.9499969482422
-        }
-      ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLY": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 116.45999908447266
-        },
-        {
-          "date": "2026-09-04",
-          "close": 114.91000366210938
-        },
         {
           "date": "2026-09-08",
           "close": 113.98999786376953
@@ -710,18 +484,172 @@
           "close": 110.04000091552734
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
+    },
+    "XLF": {
+      "rows": [
+        {
+          "date": "2026-09-08",
+          "close": 57.29999923706055
+        },
+        {
+          "date": "2026-09-09",
+          "close": 57.060001373291016
+        },
+        {
+          "date": "2026-09-10",
+          "close": 56.869998931884766
+        },
+        {
+          "date": "2026-09-11",
+          "close": 57.25
+        },
+        {
+          "date": "2026-09-14",
+          "close": 57.029998779296875
+        },
+        {
+          "date": "2026-09-15",
+          "close": 56.849998474121094
+        },
+        {
+          "date": "2026-09-16",
+          "close": 55.93000030517578
+        },
+        {
+          "date": "2026-09-17",
+          "close": 55.880001068115234
+        },
+        {
+          "date": "2026-09-18",
+          "close": 55.86000061035156
+        },
+        {
+          "date": "2026-09-21",
+          "close": 55.900001525878906
+        },
+        {
+          "date": "2026-09-22",
+          "close": 54.79999923706055
+        },
+        {
+          "date": "2026-09-23",
+          "close": 54.540000915527344
+        },
+        {
+          "date": "2026-09-24",
+          "close": 54.529998779296875
+        },
+        {
+          "date": "2026-09-25",
+          "close": 54.84000015258789
+        },
+        {
+          "date": "2026-09-28",
+          "close": 54.189998626708984
+        },
+        {
+          "date": "2026-09-29",
+          "close": 54.0099983215332
+        },
+        {
+          "date": "2026-09-30",
+          "close": 53.400001525878906
+        },
+        {
+          "date": "2026-10-01",
+          "close": 53.459999084472656
+        },
+        {
+          "date": "2026-10-02",
+          "close": 53.4900016784668
+        }
+      ],
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
+    },
+    "XLI": {
+      "rows": [
+        {
+          "date": "2026-09-08",
+          "close": 174.4199981689453
+        },
+        {
+          "date": "2026-09-09",
+          "close": 171.7899932861328
+        },
+        {
+          "date": "2026-09-10",
+          "close": 170.5500030517578
+        },
+        {
+          "date": "2026-09-11",
+          "close": 172.3699951171875
+        },
+        {
+          "date": "2026-09-14",
+          "close": 169.92999267578125
+        },
+        {
+          "date": "2026-09-15",
+          "close": 168.85000610351562
+        },
+        {
+          "date": "2026-09-16",
+          "close": 168.7100067138672
+        },
+        {
+          "date": "2026-09-17",
+          "close": 169.00999450683594
+        },
+        {
+          "date": "2026-09-18",
+          "close": 169.75
+        },
+        {
+          "date": "2026-09-21",
+          "close": 169.97999572753906
+        },
+        {
+          "date": "2026-09-22",
+          "close": 170.27000427246094
+        },
+        {
+          "date": "2026-09-23",
+          "close": 170.10000610351562
+        },
+        {
+          "date": "2026-09-24",
+          "close": 168.8300018310547
+        },
+        {
+          "date": "2026-09-25",
+          "close": 170.42999267578125
+        },
+        {
+          "date": "2026-09-28",
+          "close": 168.77999877929688
+        },
+        {
+          "date": "2026-09-29",
+          "close": 169.1300048828125
+        },
+        {
+          "date": "2026-09-30",
+          "close": 166.97999572753906
+        },
+        {
+          "date": "2026-10-01",
+          "close": 168.63999938964844
+        },
+        {
+          "date": "2026-10-02",
+          "close": 169.9499969482422
+        }
+      ],
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLV": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 173.25999450683594
-        },
-        {
-          "date": "2026-09-04",
-          "close": 171.4499969482422
-        },
         {
           "date": "2026-09-08",
           "close": 167.1300048828125
@@ -799,18 +727,10 @@
           "close": 166.17999267578125
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLP": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 85.26000213623047
-        },
-        {
-          "date": "2026-09-04",
-          "close": 84.58000183105469
-        },
         {
           "date": "2026-09-08",
           "close": 84.0199966430664
@@ -888,107 +808,10 @@
           "close": 80.52999877929688
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
-    },
-    "XLU": {
-      "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 43.029998779296875
-        },
-        {
-          "date": "2026-09-04",
-          "close": 43.08000183105469
-        },
-        {
-          "date": "2026-09-08",
-          "close": 43.45000076293945
-        },
-        {
-          "date": "2026-09-09",
-          "close": 42.939998626708984
-        },
-        {
-          "date": "2026-09-10",
-          "close": 42.52000045776367
-        },
-        {
-          "date": "2026-09-11",
-          "close": 42.38999938964844
-        },
-        {
-          "date": "2026-09-14",
-          "close": 41.81999969482422
-        },
-        {
-          "date": "2026-09-15",
-          "close": 41.31999969482422
-        },
-        {
-          "date": "2026-09-16",
-          "close": 41.31999969482422
-        },
-        {
-          "date": "2026-09-17",
-          "close": 41.689998626708984
-        },
-        {
-          "date": "2026-09-18",
-          "close": 41.099998474121094
-        },
-        {
-          "date": "2026-09-21",
-          "close": 40.65999984741211
-        },
-        {
-          "date": "2026-09-22",
-          "close": 40.529998779296875
-        },
-        {
-          "date": "2026-09-23",
-          "close": 39.75
-        },
-        {
-          "date": "2026-09-24",
-          "close": 39.36000061035156
-        },
-        {
-          "date": "2026-09-25",
-          "close": 39.5099983215332
-        },
-        {
-          "date": "2026-09-28",
-          "close": 39.25
-        },
-        {
-          "date": "2026-09-29",
-          "close": 39.709999084472656
-        },
-        {
-          "date": "2026-09-30",
-          "close": 39.439998626708984
-        },
-        {
-          "date": "2026-10-01",
-          "close": 39.68000030517578
-        },
-        {
-          "date": "2026-10-02",
-          "close": 39.83000183105469
-        }
-      ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLRE": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 44.25
-        },
-        {
-          "date": "2026-09-04",
-          "close": 43.93000030517578
-        },
         {
           "date": "2026-09-08",
           "close": 43.900001525878906
@@ -1066,18 +889,91 @@
           "close": 40.810001373291016
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
+    },
+    "XLU": {
+      "rows": [
+        {
+          "date": "2026-09-08",
+          "close": 43.45000076293945
+        },
+        {
+          "date": "2026-09-09",
+          "close": 42.939998626708984
+        },
+        {
+          "date": "2026-09-10",
+          "close": 42.52000045776367
+        },
+        {
+          "date": "2026-09-11",
+          "close": 42.38999938964844
+        },
+        {
+          "date": "2026-09-14",
+          "close": 41.81999969482422
+        },
+        {
+          "date": "2026-09-15",
+          "close": 41.31999969482422
+        },
+        {
+          "date": "2026-09-16",
+          "close": 41.31999969482422
+        },
+        {
+          "date": "2026-09-17",
+          "close": 41.689998626708984
+        },
+        {
+          "date": "2026-09-18",
+          "close": 41.099998474121094
+        },
+        {
+          "date": "2026-09-21",
+          "close": 40.65999984741211
+        },
+        {
+          "date": "2026-09-22",
+          "close": 40.529998779296875
+        },
+        {
+          "date": "2026-09-23",
+          "close": 39.75
+        },
+        {
+          "date": "2026-09-24",
+          "close": 39.36000061035156
+        },
+        {
+          "date": "2026-09-25",
+          "close": 39.5099983215332
+        },
+        {
+          "date": "2026-09-28",
+          "close": 39.25
+        },
+        {
+          "date": "2026-09-29",
+          "close": 39.709999084472656
+        },
+        {
+          "date": "2026-09-30",
+          "close": 39.439998626708984
+        },
+        {
+          "date": "2026-10-01",
+          "close": 39.68000030517578
+        },
+        {
+          "date": "2026-10-02",
+          "close": 39.83000183105469
+        }
+      ],
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLB": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 52.619998931884766
-        },
-        {
-          "date": "2026-09-04",
-          "close": 52.439998626708984
-        },
         {
           "date": "2026-09-08",
           "close": 51.939998626708984
@@ -1155,18 +1051,10 @@
           "close": 48.86000061035156
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     },
     "XLE": {
       "rows": [
-        {
-          "date": "2026-09-03",
-          "close": 64.62000274658203
-        },
-        {
-          "date": "2026-09-04",
-          "close": 64.05999755859375
-        },
         {
           "date": "2026-09-08",
           "close": 64.7699966430664
@@ -1244,47 +1132,229 @@
           "close": 62.81999969482422
         }
       ],
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00"
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00"
     }
   },
   "news": [
     {
+      "url": "https://www.cnbc.com/2026/10/05/brazilian-stocks-jump-bolsonaro-now-heavy-favorite-to-win-presidency.html",
+      "title": "Brazilian stocks jump as Bolsonaro now seen as heavy favorite to win presidency",
+      "publishedAt": "2026-10-05T15:47:42+00:00",
+      "firstPublishedAt": "2026-10-05T15:47:42+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "187c4e1d5f3627f92a19774875668ffdfe00a492c0c7374d2eb0f129bdc3bb39",
+      "sourceExcerpt": "The moves come after the first round results of Brazil's presidential election on Sunday.",
+      "headlineKo": "브라질 주가가 급등하면서 볼소나로가 대통령직을 차지하는 데 가장 좋아하는 것으로 여겨지고 있습니다.",
+      "summaryKo": "이 움직임은 일요일 브라질 대통령 선거의 첫 번째 라운드 결과 이후입니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/nvidia-groq-deal-stockholder-lawsuit.html",
+      "title": "Nvidia's $20 billion Groq deal faces lawsuit alleging startup's stockholders were shortchanged",
+      "publishedAt": "2026-10-05T15:46:49+00:00",
+      "firstPublishedAt": "2026-10-05T15:46:49+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "79460fff1c9f8765ca7ee0fff267751983c004e62ac197491ce0d3c337789247",
+      "sourceExcerpt": "The case alleges that the licensing deal \"squeezed out\" stockholders by giving them a \"lowball price.\"",
+      "headlineKo": "엔비디아의 20억 달러 규모의 '그로크' 거래는 스타트업 주주들이 부족하다는 소송에 직면해 있습니다.",
+      "summaryKo": "이 사건은 라이선스 계약이 주주들에게 \"저기 가격\"을 제공함으로써 주주들을 \"집어내었다\"고 주장한다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/cr0j0w3p8453o?at_medium=RSS&at_campaign=rss",
+      "title": "Zelensky condemns 'horrific' Russian strike on boat carrying corn in Black Sea",
+      "publishedAt": "2026-10-05T15:17:23+00:00",
+      "firstPublishedAt": "2026-10-05T15:17:23+00:00",
+      "source": "BBC 국제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "ae3ece244f2935ec399d6f66e853a9d0e3bb7df7931d3770d743142f6824fcbf",
+      "sourceExcerpt": "The vessel's captain was killed and 11 crew members were rescued after the attack on the Turkish-owned ship, Ukraine's leader says.",
+      "headlineKo": "젤렌스키는 흑해에서 옥수수를 운반하는 배에 대한 러시아의 '악스러운' 공격을 비난했습니다",
+      "summaryKo": "우크라이나 지도자는 터키 소유의 배에 대한 공격 후 선장의 주장이 사망하고 승무원 11명이 구조되었다고 말했습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/treasury-yields-bonds-fed-rates.html",
+      "title": "Treasury yields rise to start the week; traders look ahead to Fed minutes",
+      "publishedAt": "2026-10-05T14:53:55+00:00",
+      "firstPublishedAt": "2026-10-05T14:53:55+00:00",
+      "source": "CNBC 주요",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "ae33d56acf78ee884b1207d2a8ee3d57e6390c8e0cc7b11e73d3a7ba67dd3639",
+      "sourceExcerpt": "Treasury yields are bouncing after a sharp decline.",
+      "headlineKo": "주 초에 미국 정부 채권 금리율이 상승하고, 거래자들은 연방준비제도의 일정을 앞두고 있습니다.",
+      "summaryKo": "미국 정부 채권 금리가 급격히 하락한 뒤 상승하고 있습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/cerebras-cbrs-sam-altman-close-partner.html",
+      "title": "Cerebras stock pops 9% after Sam Altman calls the chipmaker a 'close partner'",
+      "publishedAt": "2026-10-05T13:37:15+00:00",
+      "firstPublishedAt": "2026-10-05T10:06:13+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "022652733fe7f4dba18655b07371666f2fa8482981f09d79e6ae30211fae9635",
+      "sourceExcerpt": "Cerebras stock climbed in premarket trading after OpenAI's CEO Sam Altman reassured investors that the firm is a \"close partner.\"",
+      "headlineKo": "세레브라스 주가가 9% 상승했다",
+      "summaryKo": "세레브라스 주식은 오픈AI의 CEO 샘 알트먼이 투자자들에게 \"가근 파트너\"라는 확신을 준 후 시장 이전 거래에서 상승했다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/investingclub/2026/10/05/jim-cramers-top-10-things-to-watch-in-the-stock-market-monday.html",
+      "title": "Jim Cramer's top 10 things to watch in the stock market Monday",
+      "publishedAt": "2026-10-05T12:59:40+00:00",
+      "firstPublishedAt": "2026-10-05T12:59:40+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "0806e6d63b7f7b1eea888845fdc093f49e3f2113b816475c1584d88120fe5864",
+      "sourceExcerpt": "Microsoft and Wells Fargo landed upgrades, and there's some encouraging M&A activity.",
+      "headlineKo": "월요일 주식시장에서 볼 수 있는 짐 크레이머의 10가지",
+      "summaryKo": "마이크로소프트와 웰스 파고가 업그레이드를 진행했고, 유도적인 M&A 활동이 있습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/aramco-saudi-arabia-iran-hormuz-oil-energy.html",
+      "title": "Saudi Aramco chief says replenishing global oil stockpiles could take two years",
+      "publishedAt": "2026-10-05T11:00:27+00:00",
+      "firstPublishedAt": "2026-10-05T11:00:27+00:00",
+      "source": "CNBC 주요",
+      "category": "유가·원자재",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "19676076fd387e0d7fb2a2a82060d4f5c8b258a9314e94b6c8dfe802b65d353e",
+      "sourceExcerpt": "Saudi Aramco's CEO warned it could take up to two years to rebuild global oil inventories, saying the squeeze could worsen as the U.S.-Iran war continues.",
+      "headlineKo": "사우디 아람코 대표는 세계 석유 저장량을 보충하는 데 2년이 걸릴 것이라고 말했습니다.",
+      "summaryKo": "사우디 아람코의 최고경영자는 미국과 이란 전쟁이 계속되면서 압축이 악화될 수 있다고 말하면서 글로벌 석유 재고를 재건하는 데 최대 2년이 걸릴 수도 있다고 경고했습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/euro-dollar-spain-france-risk.html",
+      "title": "Euro hits 17-month low as political uncertainty in Spain and France rattles markets",
+      "publishedAt": "2026-10-05T08:04:35+00:00",
+      "firstPublishedAt": "2026-10-05T08:04:35+00:00",
+      "source": "CNBC 주요",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "38e51cd877f3d35f850ec2dc67ed6d9f2627e8a386c3a6ffe2e897289ffd1767",
+      "sourceExcerpt": "Political and fiscal concerns are mounting in two of the euro area's biggest economies.",
+      "headlineKo": "스페인과 프랑스의 정치적 불확실성으로 인해 유로는 17개월 만에 최저치를 기록했다",
+      "summaryKo": "유로 영역의 두 개의 가장 큰 경제에서 정치적 및 재정적 우려가 증가하고 있습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/05/treasury-yields-fiscal-concerns-not-crisis-yet.html",
+      "title": "Surging Treasury yields don’t signal a U.S. 'fiscal apocalypse' — yet",
+      "publishedAt": "2026-10-05T02:24:07+00:00",
+      "firstPublishedAt": "2026-10-05T02:24:07+00:00",
+      "source": "CNBC 주요",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "e095e9582e7972c05cdec8fb3b40891e956c6963c7e9b857e609bbfddb9d225b",
+      "sourceExcerpt": "Treasury yields above 5% are raising fears that higher borrowing costs could fuel a debt spiral.",
+      "headlineKo": "미국 정부 채권 금리 상승은 미국의 '금융적 종말'의 신호가 아닙니다.",
+      "summaryKo": "5% 이상의 미국 정부 채권에 대한 금리율은 더 높은 대출 비용이 부채 스피랄을 유발할 수 있다는 우려를 불러일으키고 있습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
       "url": "https://www.bbc.co.uk/news/articles/c9m2mjj3yvg4o?at_medium=RSS&at_campaign=rss",
-      "title": "Why Canada is preparing for a (long shot) US invasion",
+      "title": "Why Canada is wargaming a (long shot) US invasion",
       "publishedAt": "2026-10-03T23:30:06+00:00",
       "firstPublishedAt": "2026-10-03T23:30:06+00:00",
       "source": "BBC 국제",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "f3a1a94a2a35039ef4363c60b30510766ac0ba89c4dd72b34741a042b1d2c826",
+      "sourceHash": "faf232e0cdd2480eb45c5ce6a39d5a137ca65ae0f6b3f32aed4303de935cfc76",
       "sourceExcerpt": "Prime Minister Mark Carney has said the military is running scenarios in the unlikely case the US invades Canada.",
-      "headlineKo": "캐나다, 가능성 낮은 미국 침공 시나리오에 대비",
-      "summaryKo": "실제 침공 소식이 아닌, 가능성이 낮은 상황을 가정한 군사 대비에 관한 보도.",
+      "headlineKo": "왜 캐나다가 미국 침략을 준비하고 있는 걸까요?",
+      "summaryKo": "마크 카니 총리는 미국이 캐나다에 침입할 가능성이 없는 상황에서 군대가 시나리오를 실행하고 있다고 말했습니다.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.bbc.co.uk/news/articles/c6qjnlk4r2jjo?at_medium=RSS&at_campaign=rss",
-      "title": "US father and son arrested after 'gas station heroin' deaths",
-      "publishedAt": "2026-10-03T22:39:06+00:00",
-      "firstPublishedAt": "2026-10-03T22:39:06+00:00",
-      "source": "BBC 국제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "url": "https://www.cnbc.com/2026/10/03/lula-or-bolsonaro-wall-street-braces-for-two-wildly-different-results-in-brazil-election.html",
+      "title": "Lula or Bolsonaro: Wall Street braces for two wildly different results in Brazil election",
+      "publishedAt": "2026-10-03T13:12:27+00:00",
+      "firstPublishedAt": "2026-10-03T13:12:27+00:00",
+      "source": "CNBC 금융",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "2f2beac80c6d30fb4e9dad3d17978b904443633d271c989f19d2a41afd78e1fe",
-      "sourceExcerpt": "They are accused of selling at least one student derivatives of kratom, often called \"gas station heroin\" in the US.",
-      "headlineKo": "미국 아버지와 아들은 '가스 스테이션 헤로인'의 사망 후 체포되었습니다",
-      "summaryKo": "그들은 미국에서는 종종 \"가스 스테이션 헤로인\"이라고 불리는 크라텀의 유래물 중 적어도 한 가지 학생을 판매한 혐의를 받고 있습니다.",
+      "sourceHash": "c254e5a12ed10e63761fee206a47205fd29cf76821335c632ee9d9c8d1374410",
+      "sourceExcerpt": "With the first round of Brazil's presidential election taking place Sunday, Wall Street is gearing up with starkly different market predictions.",
+      "headlineKo": "룰라 또는 볼소나로: 월스트리트는 브라질 선거에서 완전히 다른 두 가지 결과를 위해 준비합니다",
+      "summaryKo": "브라질 대통령 선거의 첫 번째 라운드가 일요일 열리는 가운데 월스트리트는 완전히 다른 시장 예측에 대비하고 있습니다.",
       "translationStatus": "ready",
-      "translationMethod": "machine-translation"
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/cq0ld88kzxw8o?at_medium=RSS&at_campaign=rss",
@@ -1293,7 +1363,7 @@
       "firstPublishedAt": "2026-10-03T08:58:44+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1303,45 +1373,8 @@
       "headlineKo": "에너지 업체들, 요금 부담에 정부 대응 촉구",
       "summaryKo": "에너지 요금 문제를 두고 공급업체들이 정부 대응을 요구했다.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/cq0ld88kzxw8o?at_medium=RSS&at_campaign=rss",
-      "title": "Suppliers pile pressure on government over energy bills",
-      "publishedAt": "2026-10-03T08:58:44+00:00",
-      "firstPublishedAt": "2026-10-03T08:58:44+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "fff7f5e52f1cefe09f2b894ff9392ba5af2ab399a7bfce88ca610fcc867f04ba",
-      "sourceExcerpt": "Immediate action is needed to help households struggling with bills this winter, says trade body Energy UK.",
-      "headlineKo": "에너지 업체들, 요금 부담에 정부 대응 촉구",
-      "summaryKo": "에너지 요금 문제를 두고 공급업체들이 정부 대응을 요구했다.",
-      "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/c5j9x99yep92o?at_medium=RSS&at_campaign=rss",
-      "title": "Rising energy costs add to cost of living for Northern Ireland's consumers",
-      "publishedAt": "2026-10-03T05:27:43+00:00",
-      "firstPublishedAt": "2026-10-03T05:27:43+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "a490b6bfe96c3eb715c077d3a9d7032f46990fe4df4ed0aeebc01547afb91258",
-      "sourceExcerpt": "Households across Northern Ireland face increasing pressure on the cost of living as energy price hikes have come into effect.",
-      "headlineKo": "북아일랜드, 에너지 가격 상승에 생활비 부담 확대",
-      "summaryKo": "에너지 비용 상승이 북아일랜드 소비자의 생활비를 더 끌어올리고 있다.",
-      "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/ck87zg8jnwngo?at_medium=RSS&at_campaign=rss",
@@ -1350,7 +1383,7 @@
       "firstPublishedAt": "2026-10-03T04:38:31+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1360,26 +1393,8 @@
       "headlineKo": "G7, 트럼프 압박 속 석유·디젤 수백만 배럴 방출 계획",
       "summaryKo": "트럼프의 압박 이후 G7이 석유와 디젤 수백만 배럴을 방출하기로 했다.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/ck87zg8jnwngo?at_medium=RSS&at_campaign=rss",
-      "title": "G7 to release millions of barrels of oil and diesel after Trump threat",
-      "publishedAt": "2026-10-03T04:38:31+00:00",
-      "firstPublishedAt": "2026-10-03T04:38:31+00:00",
-      "source": "BBC 국제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "important",
-      "importanceReason": "G7의 공동 에너지 공급 대책",
-      "sourceHash": "e532d54b9ea31650d41abd8d568575e871f85c5f0c7e83531a46853c11d12f7c",
-      "sourceExcerpt": "The co-ordinated release is aimed at heading off further price spikes and avoiding a ban on US diesel exports.",
-      "headlineKo": "G7, 트럼프 압박 속 석유·디젤 수백만 배럴 방출 계획",
-      "summaryKo": "트럼프의 압박 이후 G7이 석유와 디젤 수백만 배럴을 방출하기로 했다.",
-      "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
@@ -1388,13 +1403,11 @@
       "firstPublishedAt": "2026-10-02T20:45:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "translationStatus": "unavailable",
-      "summaryError": "ValueError"
+      "importanceReason": ""
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
@@ -1403,13 +1416,37 @@
       "firstPublishedAt": "2026-10-02T20:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "translationStatus": "unavailable",
-      "summaryError": "ValueError"
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/02/ai-redefining-wall-street-jobs.html",
+      "title": "How AI is redefining Wall Street jobs — and boosting demand for this new 'hottest skill' by 1,721%",
+      "publishedAt": "2026-10-02T18:49:03+00:00",
+      "firstPublishedAt": "2026-10-02T18:49:03+00:00",
+      "source": "CNBC 금융",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/02/men-labor-market-jobs-report.html",
+      "title": "Men are losing ground in the labor market. Here's why",
+      "publishedAt": "2026-10-02T17:38:59+00:00",
+      "firstPublishedAt": "2026-10-02T17:38:59+00:00",
+      "source": "CNBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
@@ -1418,13 +1455,11 @@
       "firstPublishedAt": "2026-10-02T15:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "translationStatus": "unavailable",
-      "summaryError": "ValueError"
+      "importanceReason": ""
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/cm2d6gg0642yo?at_medium=RSS&at_campaign=rss",
@@ -1433,17 +1468,77 @@
       "firstPublishedAt": "2026-10-02T14:30:48+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/02/jobs-report-september-2026.html",
+      "title": "Labor market faltered in September as jobs increased by just 29,000, unemployment rate rose to 4.2%",
+      "publishedAt": "2026-10-02T13:45:58+00:00",
+      "firstPublishedAt": "2026-10-02T13:45:58+00:00",
+      "source": "CNBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/02/fed-rate-hike-odds-decline-after-september-jobs-report.html",
+      "title": "Traders now see little chance of a Fed rate hike in October after weak jobs report",
+      "publishedAt": "2026-10-02T13:29:27+00:00",
+      "firstPublishedAt": "2026-10-02T13:29:27+00:00",
+      "source": "CNBC 금융",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "important",
+      "importanceReason": "고용지표가 연준 금리 기대에 미친 영향",
+      "sourceHash": "1d3583dc430467ff5f211a5f1884156fd2a3a25073015e3b43934ddf2d19b9c4",
+      "sourceExcerpt": "Odds tumbled after a jobs report showed a soft labor market, leading more traders to lower the the chances of a fed funds rate increase this month.",
+      "headlineKo": "부진한 고용보고서에 10월 Fed 금리 인상 가능성 크게 낮아져",
+      "summaryKo": "약한 고용지표 이후 트레이더들이 10월 연방기금금리 인상 가능성을 크게 낮췄다.",
+      "translationStatus": "ready",
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/02/ai-skills-most-in-demand-at-jpmorgan-chase-citigroup-capital-one.html",
+      "title": "'The hottest skill on Wall Street’: Demand for this AI ability jumped 1,721% as banks embrace agents",
+      "publishedAt": "2026-10-02T11:03:31+00:00",
+      "firstPublishedAt": "2026-10-02T11:03:31+00:00",
+      "source": "CNBC 금융",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/01/the-september-jobs-report-will-be-released-friday-heres-what-to-expect.html",
+      "title": "The September jobs report will be released Friday. Here's what to expect",
+      "publishedAt": "2026-10-01T18:55:02+00:00",
+      "firstPublishedAt": "2026-10-01T18:55:02+00:00",
+      "source": "CNBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "c49e724fc137f55092651968f27b69d0772f8bf1c7ff22b33f1e8e42df03ac80",
-      "sourceExcerpt": "Unemployment rose slightly as American employers paused hiring with midterm elections just a month away.",
-      "headlineKo": "미국 일자리 시장은 중간선거를 앞두고 급격한 둔화를 보이고 있습니다.",
-      "summaryKo": "미국의 고용주들이 중간선거까지 불과 한 달 남았을 때 채용이 중단되면서 실업률은 약간 증가했습니다.",
+      "sourceHash": "2f94648935b10a18eec3426ec9364aabfd40cdc8680c866d9ae6f994dad9dde1",
+      "sourceExcerpt": "Wall Street is looking for job growth of 84,000 to close out the summer.",
+      "headlineKo": "9월 미국 고용보고서 금요일 발표…고용 8.4만명 증가 예상",
+      "summaryKo": "월가는 9월 고용이 약 8만4천명 늘어날 것으로 예상하고 있다.",
       "translationStatus": "ready",
-      "translationMethod": "machine-translation"
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/cmrl6lz454lgo?at_medium=RSS&at_campaign=rss",
@@ -1452,17 +1547,11 @@
       "firstPublishedAt": "2026-10-01T18:38:22+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "b11b24900d2d0103a577c56bfc66e238c207eb87eec521a8c38e5accb599b379",
-      "sourceExcerpt": "Campaigners and Green Party leader Zack Polanski raise concerns about Rosebank's ties to an Israeli firm.",
-      "headlineKo": "로즈뱅크 오일 필드가 웨스트뱅크 제재를 위반할 수 있다고 경고했습니다.",
-      "summaryKo": "선거운동가들과 녹색당 지도자인 잭 폴란스키는 로즈뱅크와 이스라엘 회사와의 관계에 대해 우려를 표명하고 있습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation"
+      "importanceReason": ""
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20261001a.htm",
@@ -1471,7 +1560,7 @@
       "firstPublishedAt": "2026-10-01T17:30:00+00:00",
       "source": "Fed 연설",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1481,7 +1570,8 @@
       "headlineKo": "제퍼슨, 물가 상승 위험 경계…9월 금리 인상 지지",
       "summaryKo": "에너지·AI 수요의 물가 압력을 경계하고, 후속 정책은 경제 데이터와 위험을 살펴 판단할 방침.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/cv8e30enrkxyo?at_medium=RSS&at_campaign=rss",
@@ -1490,46 +1580,46 @@
       "firstPublishedAt": "2026-10-01T10:05:25+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": ""
     },
     {
-      "url": "https://www.bbc.co.uk/news/articles/crm4rygl4m3o?at_medium=RSS&at_campaign=rss",
-      "title": "Energy bills are rising by £60 a year - here's how you can bring that down",
-      "publishedAt": "2026-10-01T07:08:22+00:00",
-      "firstPublishedAt": "2026-10-01T07:08:22+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "url": "https://www.cnbc.com/2026/09/30/watch-minneapolis-fed-president-neel-kashkari.html",
+      "title": "Fed's Kashkari says inflation is 'still too high' even after softer-than-expected PCE data, labor market is 'pretty good'",
+      "publishedAt": "2026-09-30T23:44:28+00:00",
+      "firstPublishedAt": "2026-09-30T23:44:28+00:00",
+      "source": "CNBC 금융",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
+      "importance": "important",
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도"
     },
     {
-      "url": "https://www.bbc.co.uk/news/articles/cm7802ylq973o?at_medium=RSS&at_campaign=rss",
-      "title": "Greggs to shut four factories and cut 740 jobs",
-      "publishedAt": "2026-09-30T15:03:22+00:00",
-      "firstPublishedAt": "2026-09-30T15:03:22+00:00",
-      "source": "BBC 경제",
+      "url": "https://www.cnbc.com/2026/09/30/feds-preferred-gauge-showed-core-inflation-at-3point0percent-in-august-much-lighter-than-expected.html",
+      "title": "Fed’s preferred gauge showed core inflation at 3.0% in August, much lighter than expected",
+      "publishedAt": "2026-09-30T15:14:57+00:00",
+      "firstPublishedAt": "2026-09-30T15:14:57+00:00",
+      "source": "CNBC 경제",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "important",
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/30/private-sector-jobs-rose-by-90000-in-september-better-than-expected-adp-reports.html",
+      "title": "Private sector jobs rose by 90,000 in September, better than expected, ADP reports",
+      "publishedAt": "2026-09-30T14:42:04+00:00",
+      "firstPublishedAt": "2026-09-30T14:42:04+00:00",
+      "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/cwz0zvj4m1myo?at_medium=RSS&at_campaign=rss",
-      "title": "Household energy bills forecast to see biggest rise in four years",
-      "publishedAt": "2026-09-30T14:36:45+00:00",
-      "firstPublishedAt": "2026-09-30T14:36:45+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1542,7 +1632,7 @@
       "firstPublishedAt": "2026-09-30T13:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1552,7 +1642,47 @@
       "headlineKo": "연준, 은행 자본요건 변동 완화…스트레스테스트 변경 확정",
       "summaryKo": "시나리오·주요 모델 변경에 의견을 받고, 2028년부터 최근 두 해 테스트 결과를 평균해 자본 완충 요건 산정.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/29/the-feds-main-inflation-measure-will-be-released-wednesday-heres-what-to-expect.html",
+      "title": "The Fed's main inflation measure will be released Wednesday. Here's what to expect",
+      "publishedAt": "2026-09-29T20:51:43+00:00",
+      "firstPublishedAt": "2026-09-29T20:51:43+00:00",
+      "source": "CNBC 경제",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "important",
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/29/prediction-market-traders-september-jobs-report-will-beat-estimates.html",
+      "title": "Prediction market traders think the U.S. added more jobs in September than economists estimate",
+      "publishedAt": "2026-09-29T20:33:08+00:00",
+      "firstPublishedAt": "2026-09-29T20:33:08+00:00",
+      "source": "CNBC 금융",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/29/consumer-optimism-slides-sharply-as-fears-escalate-over-rising-prices-and-jobs.html",
+      "title": "Consumer optimism slides to lowest since 2014 as fears escalate over rising prices and jobs",
+      "publishedAt": "2026-09-29T16:52:00+00:00",
+      "firstPublishedAt": "2026-09-29T16:52:00+00:00",
+      "source": "CNBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/speech/barr20260929a.htm",
@@ -1561,7 +1691,7 @@
       "firstPublishedAt": "2026-09-29T16:40:00+00:00",
       "source": "Fed 연설",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1571,7 +1701,47 @@
       "headlineKo": "바, 에너지·AI 투자 물가 압력 지적…2% 복귀 추세 불확실",
       "summaryKo": "중동 분쟁에 따른 에너지 가격과 AI 투자 수요가 물가 목표 복귀를 어렵게 한다고 평가.",
       "translationStatus": "ready",
-      "translationMethod": "reviewed-summary"
+      "translationMethod": "reviewed-summary",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/29/trump-municipal-bond-portfolio.html",
+      "title": "Trump’s municipal bond portfolio reaches as much as $1 billion as policy overlaps mount",
+      "publishedAt": "2026-09-29T14:37:07+00:00",
+      "firstPublishedAt": "2026-09-29T14:37:07+00:00",
+      "source": "CNBC 금융",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/29/polymarket-lisa-mantil-institutional-growth.html",
+      "title": "Polymarket taps Goldman Sachs veteran Lisa Mantil to attract Wall Street liquidity",
+      "publishedAt": "2026-09-29T12:00:33+00:00",
+      "firstPublishedAt": "2026-09-29T12:00:33+00:00",
+      "source": "CNBC 금융",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/28/nearly-half-of-the-stocks-in-the-sp-500-are-working-against-it.html",
+      "title": "Nearly half the stocks in the S&P 500 are at cross purposes with the rest of the market",
+      "publishedAt": "2026-09-28T17:53:31+00:00",
+      "firstPublishedAt": "2026-09-28T17:53:31+00:00",
+      "source": "CNBC 금융",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/speech/cook20260928a.htm",
@@ -1580,7 +1750,59 @@
       "firstPublishedAt": "2026-09-28T17:25:00+00:00",
       "source": "Fed 연설",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/28/us-china-lower-tariffs-trump-xi-meeting.html",
+      "title": "U.S., China to lower tariffs on $60 billion of goods. Here's what qualifies",
+      "publishedAt": "2026-09-28T08:31:33+00:00",
+      "firstPublishedAt": "2026-09-28T08:31:33+00:00",
+      "source": "CNBC 금융",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/27/debt-hungry-data-center-companies-increased-risk-bond-yields-spike.html",
+      "title": "Debt-hungry AI companies face increased risk as bond yields spike",
+      "publishedAt": "2026-09-27T15:35:34+00:00",
+      "firstPublishedAt": "2026-09-27T15:35:34+00:00",
+      "source": "CNBC 금융",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/26/10-year-treasury-yield-is-at-its-highest-in-19-years-how-we-got-here.html",
+      "title": "The 10-year Treasury yield is at its highest in nearly two decades. How we got here",
+      "publishedAt": "2026-09-26T13:30:06+00:00",
+      "firstPublishedAt": "2026-09-26T13:30:06+00:00",
+      "source": "CNBC 금융",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/25/appeals-court-rules-states-can-regulate-sports-prediction-markets.html",
+      "title": "Appeals court rules that states can regulate Kalshi’s sports prediction markets, dealing another legal blow to platforms",
+      "publishedAt": "2026-09-25T23:28:42+00:00",
+      "firstPublishedAt": "2026-09-25T23:28:42+00:00",
+      "source": "CNBC 금융",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1593,7 +1815,33 @@
       "firstPublishedAt": "2026-09-25T20:30:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/23/what-happens-to-the-economy-when-treasury-yields-soar.html",
+      "title": "Here's what happens to the economy when Treasury yields soar like they are now",
+      "publishedAt": "2026-09-25T13:48:19+00:00",
+      "firstPublishedAt": "2026-09-25T13:48:19+00:00",
+      "source": "CNBC 경제",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/24/surging-treasury-yields-are-posing-a-brand-new-problem-for-kevin-warsh-and-the-fed.html",
+      "title": "Surging Treasury yields pose a brand new problem for Kevin Warsh and the Fed",
+      "publishedAt": "2026-09-25T11:08:05+00:00",
+      "firstPublishedAt": "2026-09-25T11:08:05+00:00",
+      "source": "CNBC 경제",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1606,7 +1854,7 @@
       "firstPublishedAt": "2026-09-25T08:31:56+00:00",
       "source": "BBC 경제",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1619,11 +1867,24 @@
       "firstPublishedAt": "2026-09-24T18:30:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/24/philadelphia-feds-anna-paulson-says-modest-rate-moves-likely-ahead-to-tame-inflation.html",
+      "title": "Philadelphia Fed's Anna Paulson says 'modest' rate moves likely ahead to tame inflation",
+      "publishedAt": "2026-09-24T17:12:04+00:00",
+      "firstPublishedAt": "2026-09-24T17:12:04+00:00",
+      "source": "CNBC 금융",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "important",
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도"
     },
     {
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
@@ -1632,7 +1893,20 @@
       "firstPublishedAt": "2026-09-24T15:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": ""
+    },
+    {
+      "url": "https://www.cnbc.com/2026/09/24/global-debt-bond-yields-inflation.html",
+      "title": "Global debt tops $365 trillion as economists sound alarm over 'vicious cycle'",
+      "publishedAt": "2026-09-24T08:13:01+00:00",
+      "firstPublishedAt": "2026-09-24T08:13:01+00:00",
+      "source": "CNBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1645,7 +1919,7 @@
       "firstPublishedAt": "2026-09-23T23:12:22+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1658,7 +1932,7 @@
       "firstPublishedAt": "2026-09-22T20:30:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1670,8 +1944,8 @@
       "publishedAt": "2026-09-22T14:20:00+00:00",
       "firstPublishedAt": "2026-09-22T14:20:00+00:00",
       "source": "Fed 연설",
-      "category": "경제·물가",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1683,32 +1957,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-04T10:58:36.254081+00:00",
-      "lastSuccessAt": "2026-10-04T10:58:36.254081+00:00",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false
+    },
+    {
+      "name": "CNBC 주요",
+      "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+      "status": "ready",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false
+    },
+    {
+      "name": "CNBC 금융",
+      "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
+      "status": "ready",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
+      "fromCache": false
+    },
+    {
+      "name": "CNBC 경제",
+      "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
+      "status": "ready",
+      "lastAttemptAt": "2026-10-05T16:18:05.977899+00:00",
+      "lastSuccessAt": "2026-10-05T16:18:05.977899+00:00",
       "fromCache": false
     }
   ]

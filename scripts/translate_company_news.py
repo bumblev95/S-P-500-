@@ -49,6 +49,25 @@ def valid_korean(text):
 
 def translation_input(text):
     text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-')
+    # Expand compact financial-news jargon before NLLB sees it. Literal wording
+    # prevents common false senses such as Treasury=finance ministry or yield=profit.
+    replacements = [
+        (r'\bTreasury yields\b', 'interest rates on U.S. government bonds'),
+        (r'\bFed rate hike bets\b', 'expectations for a Federal Reserve interest rate increase'),
+        (r'\bpare back\b', 'reduce'),
+        (r'\bsharp selloff\b', 'sharp market decline'),
+        (r"\bFederal Reserve's last meeting minutes\b", "minutes from the Federal Reserve's latest policy meeting"),
+        (r'\bjobs report\b', 'employment report'),
+        (r'\bsoft labor market\b', 'weak labor market'),
+        (r'\bfed funds rate\b', 'Federal Reserve policy interest rate'),
+        (r'\bcore inflation\b', 'underlying inflation'),
+        (r'\bPCE data\b', 'personal consumption expenditures inflation data'),
+        (r'\bmodest rate moves\b', 'small changes in interest rates'),
+    ]
+    for pattern, replacement in replacements:
+        text = re.sub(pattern, replacement, text, flags=re.I)
+    text = re.sub(r'\bWall Street is looking for job growth of ([0-9,]+)', r'Economists expect U.S. employers to add \1 jobs', text, flags=re.I)
+    text = re.sub(r'\bFed\b', 'Federal Reserve', text, flags=re.I)
     # Expand a headline noun phrase; "beat" otherwise becomes a physical blow.
     return re.sub(r'\bearnings beat\b(?=\s*(?:[:,.!?]|(?:and|but|puts?|fuels?)\b|$))', 'better-than-expected earnings', text, flags=re.I)
 

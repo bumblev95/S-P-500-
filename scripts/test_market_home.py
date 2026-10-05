@@ -65,7 +65,7 @@ class Feeds(unittest.TestCase):
         self.assertEqual(items[0]['lastSuccessAt'],self.old['lastSuccessAt'])
         self.assertEqual(items[0]['importance'],'important')
         self.assertEqual(items[0]['importanceReason'],'검토한 정책 발언')
-        self.assertEqual([f['status'] for f in feeds],['unavailable','ready','ready','ready'])
+        self.assertEqual([f['status'] for f in feeds],['unavailable']+['ready']*(len(h.FEEDS)-1))
         items,feeds=h.collect_news({'news':items,'feeds':feeds},NOW,{},lambda _: '<rss><channel/></rss>')
         self.assertEqual(items,[]);self.assertTrue(all(f['status']=='ready' for f in feeds))
 
@@ -98,6 +98,23 @@ class Feeds(unittest.TestCase):
         items,_=h.collect_news({},NOW,review,fetch)
         self.assertNotIn('headlineKo',items[0]);self.assertIn('_translate',items[0])
 
+    def test_recent_normal_news_precedes_older_important_news(self):
+        recent_url='https://www.cnbc.com/2026/10/03/stocks-market-test.html'
+        old_url='https://www.federalreserve.gov/newsevents/pressreleases/old.htm'
+        def fetch(url):
+            if url==h.FEEDS[0][1]:
+                return rss('Fed raises interest rates after inflation report',old_url,'Fri, 02 Oct 2026 12:00:00 GMT')
+            if url==h.FEEDS[4][1]:
+                return rss('Wall Street stocks rise after strong earnings',recent_url,'Sat, 03 Oct 2026 22:00:00 GMT')
+            if url in [f[1] for f in h.FEEDS]:
+                return '<rss><channel/></rss>'
+            return '<p>Federal Reserve policy statement on inflation and interest rates.</p>'
+        items,_=h.collect_news({},NOW,{},fetch)
+        self.assertEqual(items[0]['url'],recent_url)
+        self.assertEqual(items[0]['importance'],'normal')
+        self.assertEqual(items[1]['url'],old_url)
+        self.assertEqual(items[1]['importance'],'important')
+
     def test_speculation_is_not_promoted_to_confirmed_important_event(self):
         def fetch(url):
             if url==h.FEEDS[3][1]:return rss('Country could launch invasion as war fears grow','https://www.bbc.com/news/articles/test')
@@ -111,6 +128,20 @@ class Feeds(unittest.TestCase):
             return '<rss><channel/></rss>'
         items,_=h.collect_news({},NOW,{},fetch)
         self.assertEqual(items[0]['importance'],'normal')
+
+    def test_old_machine_translation_is_refreshed_when_translation_version_changes(self):
+        current=deepcopy(self.old)
+        current.update(source='CNBC 주요',url='https://www.cnbc.com/2026/10/03/stocks-market-test.html',
+                       title='Wall Street stocks rise after strong earnings',headlineKo='이전 번역',summaryKo='이전 요약',
+                       translationStatus='ready',translationMethod='machine-translation',sourceHash='old')
+        prior={'news':[current],'feeds':[{'name':name,'lastSuccessAt':NOW.isoformat()} for name,_ in h.FEEDS]}
+        xml=rss(current['title'],current['url'])
+        def fetch(request):
+            if request==h.FEEDS[4][1]:return xml
+            return '<rss><channel/></rss>'
+        items,_=h.collect_news(prior,NOW,{},fetch)
+        self.assertIn('_translate',items[0])
+        self.assertNotEqual(items[0].get('translationVersion'),h.HOME_TRANSLATION_VERSION)
 
     def test_bbc_review_is_bound_to_exact_title_and_source_excerpt(self):
         url='https://www.bbc.com/news/articles/test'
@@ -130,6 +161,18 @@ class Feeds(unittest.TestCase):
         self.assertEqual(h.parse_feed(rss('Celebrity wedding announced'),'BBC 국제',NOW),[])
         self.assertFalse(h.allowed('javascript:alert(1)'))
 
+    def test_cnbc_market_feed_is_allowed_and_duplicate_urls_are_ranked_once(self):
+        url='https://www.cnbc.com/2026/10/03/stocks-market-test.html'
+        xml=rss('Wall Street stocks rise after strong earnings',url)
+        def fetch(request):
+            if request in [f[1] for f in h.FEEDS if f[0].startswith('CNBC')]:return xml
+            return '<rss><channel/></rss>'
+        items,feeds=h.collect_news({},NOW,{},fetch)
+        self.assertTrue(h.allowed(url))
+        self.assertEqual(len(items),1)
+        self.assertEqual(items[0]['category'],'주식시장')
+        self.assertEqual(sum(f['name'].startswith('CNBC') for f in feeds),3)
+
 
 class PriceCache(unittest.TestCase):
     def test_failure_preserves_success_time_recalculates_week_and_then_expires(self):
@@ -146,12 +189,58 @@ class PriceCache(unittest.TestCase):
 
     def test_both_feeds_recover_to_new_results(self):
         def fetch(url):
-            if url in [f[1] for f in h.FEEDS[:2]]:return rss(url='https://www.federalreserve.gov/newsevents/speech/new.htm')
+            if url==h.FEEDS[0][1]:return rss(url='https://www.federalreserve.gov/newsevents/pressreleases/new.htm')
+            if url==h.FEEDS[1][1]:return rss(url='https://www.federalreserve.gov/newsevents/speech/new.htm')
             if url in [f[1] for f in h.FEEDS]:return '<rss><channel/></rss>'
             return '<p>The economy expanded while inflation remained above target.</p>'
         items,feeds=h.collect_news({},NOW,{},fetch)
         self.assertEqual(len(items),2);self.assertTrue(all(not a['fromCache'] for a in items))
         self.assertTrue(all(f['status']=='ready' for f in feeds))
+
+
+class RankingPublication(unittest.TestCase):
+    def setUp(self):
+        self.directory=TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.root=Path(self.directory.name)
+        (self.root/'market').mkdir()
+        self.path=self.root/'market/home.json'
+        self.cache=self.root/'market/home-cache.json'
+        self.previous={'schemaVersion':1,'generatedAt':'2026-10-03T22:00:00Z','rankings':{'buy':[],'sell':[]},
+                       'news':[{'headlineKo':'기존 뉴스'}],'recap':{'asOf':'2026-10-02'},'brief':'기존 요약'}
+        h.atomic(self.path,self.previous)
+        self.cache.write_bytes(b'{"sentinel": "preserve cache bytes"}\n')
+        self.ranks={'buy':[{'symbol':'AAPL','asOf':'2026-10-02','code':'breakout'}],
+                    'sell':[{'symbol':'APP','asOf':'2026-10-02','holdingCode':'reduce'}],
+                    'asOf':'2026-10-02','evaluatedAt':'2026-10-04T09:00:00Z'}
+
+    def run_refresh(self, ranks, now=NOW):
+        with patch.object(h,'home_rankings',return_value=ranks), patch.object(h,'get',side_effect=AssertionError('No network')), patch('sys.stdout',io.StringIO()):
+            return h.refresh_rankings(self.root,now)
+
+    def test_rankings_publish_before_news_without_changing_other_data_or_cache(self):
+        original_cache=self.cache.read_bytes()
+        result=self.run_refresh(self.ranks)
+        self.assertEqual(result['rankings'],self.ranks)
+        for key in ('schemaVersion','news','recap','brief'):self.assertEqual(result[key],self.previous[key])
+        self.assertEqual(result['generatedAt'],NOW.isoformat())
+        self.assertEqual(self.cache.read_bytes(),original_cache)
+        self.assertEqual(json.loads(self.path.read_text()),result)
+
+    def test_ranking_only_clock_changes_do_not_write(self):
+        saved=self.run_refresh(self.ranks)
+        original=self.path.read_bytes()
+        with patch.object(h,'atomic') as atomic:
+            result=self.run_refresh({**self.ranks,'evaluatedAt':'2026-10-04T10:00:00Z'},NOW+timedelta(hours=1))
+        atomic.assert_not_called()
+        self.assertEqual(result,saved)
+        self.assertEqual(self.path.read_bytes(),original)
+
+    def test_failed_rankings_preserve_saved_snapshot(self):
+        original=self.path.read_bytes()
+        with patch.object(h,'home_rankings',side_effect=RuntimeError('Invalid input')):
+            with self.assertRaises(RuntimeError):h.refresh_rankings(self.root,NOW)
+        self.assertEqual(self.path.read_bytes(),original)
 
 
 class SemanticPublication(unittest.TestCase):
@@ -224,12 +313,54 @@ class SemanticPublication(unittest.TestCase):
         _,log=self.build(later+timedelta(hours=1))
         self.assertFalse(log['changed']);self.assertEqual(before,self.files())
 
+    def test_news_only_change_keeps_quote_cache_order_despite_completion_order(self):
+        symbols=[s for s,_,_ in h.INDICES+h.SECTORS]
+        with patch.object(h,'as_completed',side_effect=lambda futures:iter(futures)):
+            first,_=self.build(self.now)
+        original=self.cache()['quotes']
+        self.assertEqual(list(original),symbols)
+        self.title='U.S. economy and inflation outlook'
+        self.headline='미국 경제·물가 전망 갱신'
+        later=self.now+timedelta(hours=1)
+        with patch.object(h,'as_completed',side_effect=lambda futures:reversed(futures)):
+            second,log=self.build(later)
+        updated=self.cache()['quotes']
+        self.assertTrue(log['changed'])
+        self.assertNotEqual(first['news'][0]['sourceHash'],second['news'][0]['sourceHash'])
+        self.assertEqual(second['news'][0]['headlineKo'],self.headline)
+        self.assertEqual(list(updated),symbols)
+        self.assertEqual(h.semantic_content(original),h.semantic_content(updated))
+        self.assertEqual(h.semantic_content(first['recap']),h.semantic_content(second['recap']))
+        for key,specs in [('indices',h.INDICES),('sectors',h.SECTORS)]:
+            self.assertEqual([q['symbol'] for q in second['recap'][key]],[s for s,_,_ in specs])
+        before=self.files()
+        with patch.object(h,'as_completed',side_effect=lambda futures:iter(futures[::2]+futures[1::2])):
+            _,log=self.build(later+timedelta(hours=1))
+        self.assertFalse(log['changed']);self.assertEqual(before,self.files())
+
+    def test_legacy_quote_key_order_is_preserved_on_no_op_until_news_changes(self):
+        first,_=self.build(self.now)
+        cache=self.cache()
+        cache['quotes']=dict(reversed(list(cache['quotes'].items())))
+        h.atomic(self.root/'market/home-cache.json',cache)
+        before=self.files()
+        saved,log=self.build(self.now+timedelta(hours=1))
+        self.assertFalse(log['changed']);self.assertEqual(before,self.files())
+        self.assertEqual(saved,first)
+        self.title='U.S. economy and inflation outlook'
+        self.headline='미국 경제·물가 전망 갱신'
+        with patch.object(h,'as_completed',side_effect=lambda futures:reversed(futures)):
+            _,log=self.build(self.now+timedelta(hours=2))
+        self.assertTrue(log['changed'])
+        self.assertEqual(list(self.cache()['quotes']),[s for s,_,_ in h.INDICES+h.SECTORS])
+        self.assertEqual(h.semantic_content(cache['quotes']),h.semantic_content(self.cache()['quotes']))
+
     def test_feed_failure_repeated_failure_and_recovery_publish_only_transitions(self):
         first,_=self.build(self.now)
         self.failed.add(h.FEEDS[0][1])
         failed,log=self.build(self.now+timedelta(hours=1))
         self.assertTrue(log['changed'])
-        self.assertEqual([f['status'] for f in failed['feeds']],['unavailable','ready','ready','ready'])
+        self.assertEqual([f['status'] for f in failed['feeds']],['unavailable']+['ready']*(len(h.FEEDS)-1))
         self.assertEqual(failed['feeds'][0]['lastSuccessAt'],first['feeds'][0]['lastSuccessAt'])
         self.assertTrue(failed['news'][0]['fromCache'])
         self.assertEqual(failed['news'][0]['sourceStatus'],'unavailable')
@@ -284,7 +415,7 @@ class SemanticPublication(unittest.TestCase):
             ('rankings','marketGeneratedAt','2026-10-04T10:15:59+00:00'),
             ('rankings','priceGeneratedAt','2026-10-04T02:27:08+00:00'),
             ('recap','asOf','2026-10-01'),('recap','weekStart','2026-10-05'),
-            ('recap','weekComplete',False),('newsPolicy','breakingMaxAgeHours',1),
+            ('recap','weekComplete',False),('newsPolicy','breakingMaxAgeHours',1),('newsPolicy','displayOrder','importance-first'),
         ]
         changes += [('recap','sectors', [{**snapshot['recap']['sectors'][0],key:value}]+snapshot['recap']['sectors'][1:])
                     for key,value in [('close',121),('day',10),('week',21),('asOf','2026-10-01'),

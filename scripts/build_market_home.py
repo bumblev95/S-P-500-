@@ -26,15 +26,19 @@ NY = ZoneInfo('America/New_York')
 # (priceGeneratedAt/marketGeneratedAt), session dates and publication dates stay
 # significant, as do all values, statuses, cache flags and error details.
 POLLING_TIMESTAMPS = {'generatedAt', 'evaluatedAt', 'lastAttemptAt', 'lastSuccessAt'}
+HOME_TRANSLATION_VERSION = 'home-news-ko-v2'
 FEEDS = [
     ('Fed 발표', 'https://www.federalreserve.gov/feeds/press_all.xml'),
     ('Fed 연설', 'https://www.federalreserve.gov/feeds/speeches.xml'),
     ('BBC 경제', 'https://feeds.bbci.co.uk/news/business/rss.xml'),
     ('BBC 국제', 'https://feeds.bbci.co.uk/news/world/rss.xml'),
+    ('CNBC 주요', 'https://www.cnbc.com/id/100003114/device/rss/rss.html'),
+    ('CNBC 금융', 'https://www.cnbc.com/id/10000664/device/rss/rss.html'),
+    ('CNBC 경제', 'https://www.cnbc.com/id/20910258/device/rss/rss.html'),
 ]
 INDICES = [('^GSPC', 'S&P 500', 'chart-no-axes-combined'), ('^IXIC', '나스닥 종합', 'chart-no-axes-combined'), ('^DJI', '다우', 'chart-no-axes-combined')]
 SECTORS = [('XLK','기술','cpu'),('XLC','커뮤니케이션','radio'),('XLY','경기소비재','shopping-bag'),('XLF','금융','landmark'),('XLI','산업재','factory'),('XLV','헬스케어','heart-pulse'),('XLP','필수소비재','shopping-basket'),('XLRE','부동산','house'),('XLU','유틸리티','zap'),('XLB','소재','flask-conical'),('XLE','에너지','fuel')]
-MACRO = re.compile(r'\b(econom\w*|inflation|jobs|employment|central bank|interest rate|federal reserve|fed|tariff\w*|sanction\w*|war|conflict|invasion|missile|strike\w*|ceasefire|oil|energy|gas|shipping|hormuz|market\w*|recession|treasury|stress test|financial stability)\b',re.I)
+MACRO = re.compile(r'\b(econom\w*|inflation|jobs|employment|central bank|interest rate|federal reserve|fed|tariff\w*|sanction\w*|war|conflict|invasion|missile|strike\w*|ceasefire|oil|energy|gas|shipping|hormuz|market\w*|stock\w*|equities|shares?|wall street|s&p(?: 500)?|nasdaq|dow|earnings?|recession|treasury|bond\w*|yield\w*|stress test|financial stability)\b',re.I)
 OPINION = re.compile(r'\b(could|might|may|fear\w*|warn\w*|consider\w*|urge\w*|opinion|analysis|what if|war of words|long shot|unlikely|prepar\w*|scenario\w*|drill\w*|why|how)\b',re.I)
 MAJOR = re.compile(r'\b((?:raises?|cuts?|holds?|hikes?) (?:the )?(?:interest |policy )?rates?|rate (?:cut|hike|decision)|inflation|consumer price|jobs report|payroll\w*|invades?|invasion|launches? (?:an? )?(?:attack|missile)|declares? war|ceasefire (?:agreed|signed|takes effect)|closes? (?:the )?strait|sanctions? (?:imposed|announced))\b',re.I)
 
@@ -151,7 +155,8 @@ def prices(prior, now, fetch=get):
         for future in as_completed(futures):
             symbol,q,rows=future.result();quotes[symbol]=q
             cache[symbol]={'rows':rows,'lastSuccessAt':q['lastSuccessAt']}
-    return quotes,cache
+    # Persist cache blocks in spec order, independent of worker completion.
+    return quotes,{symbol:cache[symbol] for symbol,_,_ in INDICES+SECTORS}
 
 
 class Text(HTMLParser):
@@ -176,14 +181,15 @@ def plain(value):
 def allowed(url):
     try:
         u=urllib.parse.urlsplit(url)
-        return u.scheme=='https' and u.hostname in {'www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk'} and not u.username and not u.password
+        return u.scheme=='https' and u.hostname in {'www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk','www.cnbc.com','cnbc.com'} and not u.username and not u.password
     except ValueError:return False
 
 
 def category(text):
     if re.search(r'\b(war|conflict|invasion|missile|ceasefire|sanction|hormuz)\b',text,re.I):return '전쟁·국제'
     if re.search(r'\b(oil|energy|gas|shipping)\b',text,re.I):return '유가·원자재'
-    if re.search(r'\b(fed|federal reserve|monetary|interest rate|stress test)\b',text,re.I):return 'Fed·금리'
+    if re.search(r'\b(fed|federal reserve|monetary|interest rate|treasury|bond|yield|stress test)\b',text,re.I):return 'Fed·금리'
+    if re.search(r'\b(stock\w*|equities|shares?|wall street|s&p(?: 500)?|nasdaq|dow|earnings?)\b',text,re.I):return '주식시장'
     return '경제·물가'
 
 
@@ -238,6 +244,11 @@ def collect_news(prior, now, reviewed, fetch=get):
             return retain_news(old_items,source,now),{'name':source,'url':url,'status':'unavailable','lastAttemptAt':now.isoformat(),'lastSuccessAt':before.get('lastSuccessAt'),'fromCache':True,'error':type(exc).__name__}
     with ThreadPoolExecutor(max_workers=4) as pool:
         for items,feed in pool.map(collect,FEEDS):articles.extend(items);feeds.append(feed)
+    # The same CNBC story can appear in several section feeds. Translate and rank it once.
+    unique={}
+    for item in articles:
+        unique.setdefault(item['url'],item)
+    articles=list(unique.values())
     # A recurring URL retains its first publication time; polling cannot restart breaking news.
     for item in articles:
         previous=old_by_url.get(item['url'],{})
@@ -247,7 +258,9 @@ def collect_news(prior, now, reviewed, fetch=get):
             title=item['title']
             item['importance']='important' if MAJOR.search(title) and not OPINION.search(title) else 'normal'
             item['importanceReason']='주요 경제지표·정책 또는 국제 사건 보도' if item['importance']=='important' else ''
-    ordered=sorted(articles,key=lambda a:(a['importance']=='important',a['publishedAt']),reverse=True)
+    # Recency drives the homepage. Importance is a badge, not a pin that can
+    # keep older stories above newer market updates.
+    ordered=sorted(articles,key=lambda a:(a['publishedAt'],a['importance']=='important'),reverse=True)
     candidates=[item for index,item in enumerate(ordered) if index<12 or item['url'] in reviewed]
     for item in candidates:
         if item['fromCache']:continue
@@ -262,13 +275,13 @@ def collect_news(prior, now, reviewed, fetch=get):
             text=plain(body) if body else item.get('_excerpt','')
             checked=(review.get('title')==item['title'] and ((review.get('sourceHash')==digest) or (review.get('evidence') and all(e.lower() in text.lower() for e in review['evidence']))))
             if checked:
-                item.update(headlineKo=review['headline'],summaryKo=review['summary'],translationStatus='ready',translationMethod='reviewed-summary',importance=review.get('importance','normal'),importanceReason=review.get('importanceReason',''))
-            elif previous.get('sourceHash')==digest and previous.get('translationStatus')=='ready':
-                for key in ['headlineKo','summaryKo','translationStatus','translationMethod']:item[key]=previous[key]
+                item.update(headlineKo=review['headline'],summaryKo=review['summary'],translationStatus='ready',translationMethod='reviewed-summary',translationVersion=HOME_TRANSLATION_VERSION,importance=review.get('importance','normal'),importanceReason=review.get('importanceReason',''))
+            elif previous.get('sourceHash')==digest and previous.get('translationStatus')=='ready' and previous.get('translationVersion')==HOME_TRANSLATION_VERSION:
+                for key in ['headlineKo','summaryKo','translationStatus','translationMethod','translationVersion']:item[key]=previous[key]
             else:item['_translate']=[item['title'],lead]
         except Exception as exc:
             if previous.get('title')==item['title'] and previous.get('translationStatus')=='ready':
-                for key in ['headlineKo','summaryKo','translationStatus','translationMethod','sourceHash','importance','importanceReason']:item[key]=previous.get(key)
+                for key in ['headlineKo','summaryKo','translationStatus','translationMethod','translationVersion','sourceHash','importance','importanceReason']:item[key]=previous.get(key)
                 item.update(fromCache=True,sourceStatus='unavailable',lastSuccessAt=previous.get('lastSuccessAt'))
             else:item['translationStatus']='unavailable'
             item['summaryError']=type(exc).__name__
@@ -288,7 +301,7 @@ def translate_news(articles, root, translate=None):
         if len(outputs)!=len(texts):raise ValueError('Translation count mismatch')
         for index,item in enumerate(tasks):
             headline,summary=outputs[index*2:index*2+2]
-            item.update(headlineKo=headline,summaryKo=summary,translationStatus='ready' if all(valid_korean(s) for s in [headline,summary]) else 'unavailable',translationMethod='machine-translation')
+            item.update(headlineKo=headline,summaryKo=summary,translationStatus='ready' if all(valid_korean(s) for s in [headline,summary]) else 'unavailable',translationMethod='machine-translation',translationVersion=HOME_TRANSLATION_VERSION)
     for item in articles:
         item.pop('_translate',None);item.pop('_excerpt',None)
     return articles
@@ -305,7 +318,7 @@ def assemble(quotes, news, feeds, rankings, now):
         brief=high['name']+' 강세 · '+low['name']+' 약세' if high['day']>0>low['day'] else ('섹터 전반 상승' if low['day']>0 else '섹터 전반 하락' if high['day']<0 else '섹터 혼조')
     else:brief='시장 마감 자료 확인 중'
     seen=set();selected=[]
-    for item in sorted(news,key=lambda a:(a.get('importance')=='important',a['publishedAt']),reverse=True):
+    for item in sorted(news,key=lambda a:(a['publishedAt'],a.get('importance')=='important'),reverse=True):
         # Identical event headlines from two sources do not fill the briefing twice.
         key=re.sub(r'\W','',item.get('headlineKo','')).lower()
         if item.get('translationStatus')!='ready' or key in seen:continue
@@ -314,7 +327,27 @@ def assemble(quotes, news, feeds, rankings, now):
     return {'schemaVersion':1,'generatedAt':now.isoformat(),'rankings':rankings,'brief':brief,
             'recap':{'asOf':asof,'weekStart':start.isoformat(),'weekEnd':end.isoformat(),'weekComplete':complete,'timezone':'America/New_York','method':'sector-etf-unadjusted-close-price-return',
                      'indices':[quotes[s] for s,_,_ in INDICES],'sectors':[quotes[s] for s,_,_ in SECTORS]},
-            'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'importanceBasis':'source-event-and-reviewed-context'}}
+            'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'displayOrder':'latest-first','importanceBasis':'source-event-and-reviewed-context'}}
+
+
+def home_rankings(root, now):
+    return json.loads(subprocess.check_output(
+        ['node',str(root/'scripts/build_home_rankings.cjs'),str(root),now.isoformat()],text=True))
+
+
+def refresh_rankings(root=ROOT, now=None):
+    """Publish the daily ranking without waiting for external news or models."""
+    now=now or datetime.now(timezone.utc)
+    path=root/'market/home.json'
+    previous=json.loads(path.read_text(encoding='utf-8'))
+    snapshot={**previous,'rankings':home_rankings(root,now),'generatedAt':now.isoformat()}
+    changed=semantic_content(previous)!=semantic_content(snapshot)
+    if changed:atomic(path,snapshot)
+    else:snapshot=previous
+    print(json.dumps({'attemptedAt':now.isoformat(),'changed':changed,'rankingsAsOf':snapshot['rankings'].get('asOf'),
+                      'buy':[a['symbol'] for a in snapshot['rankings']['buy']],
+                      'sell':[a['symbol'] for a in snapshot['rankings']['sell']]},ensure_ascii=False),flush=True)
+    return snapshot
 
 
 def build(root=ROOT, now=None, fetch=get, translate=None, translate_enabled=True):
@@ -323,7 +356,7 @@ def build(root=ROOT, now=None, fetch=get, translate=None, translate_enabled=True
     prior=json.loads(path.read_text()) if path.exists() else {}
     reviewed_path=root/'market/home-reviewed-news.json'
     reviewed=json.loads(reviewed_path.read_text()) if reviewed_path.exists() else {}
-    rankings=json.loads(subprocess.check_output(['node',str(root/'scripts/build_home_rankings.cjs'),str(root)],text=True))
+    rankings=home_rankings(root,now)
     quotes,price_cache=prices(prior,now,fetch)
     articles,feeds=collect_news(prior,now,reviewed,fetch)
     if translate_enabled:
@@ -345,5 +378,7 @@ def build(root=ROOT, now=None, fetch=get, translate=None, translate_enabled=True
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--no-translate',action='store_true')
+    parser.add_argument('--rankings-only',action='store_true')
     args=parser.parse_args()
-    build(translate_enabled=not args.no_translate)
+    if args.rankings_only:refresh_rankings()
+    else:build(translate_enabled=not args.no_translate)
