@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-10-05T15:16:22.997997+00:00",
+  "generatedAt": "2026-10-05T16:04:13.445743+00:00",
   "observations": {
     "DGS10": [
       [
@@ -9758,8 +9758,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "daily"
     },
     {
@@ -9781,8 +9781,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "daily"
     },
     {
@@ -9808,8 +9808,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "weekly"
     },
     {
@@ -9835,8 +9835,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "weekly"
     },
     {
@@ -9862,8 +9862,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9885,8 +9885,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "daily"
     },
     {
@@ -9908,8 +9908,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-10-05",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "frequency": "daily"
     },
     {
@@ -9935,8 +9935,8 @@
       "frequency": "daily",
       "fromCache": false,
       "fetchStatus": "ready",
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9954,8 +9954,8 @@
       "change": -0.018514250043726865,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "id": "EBP",
@@ -9973,8 +9973,8 @@
       "change": -0.030485030000000024,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00"
     }
   ],
   "credit": {
@@ -9997,7 +9997,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
@@ -10008,7 +10008,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
@@ -10019,7 +10019,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Bowman, Modernizing Financial Regulation: Initial Observations from eSLR",
@@ -10030,7 +10030,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Jefferson, The U.S. Economy and Monetary Policy",
@@ -10041,7 +10041,7 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Waller, The Data Version of Godzilla versus Kong: FRED Takes on AI",
@@ -10052,7 +10052,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Cook, The Dual Mandate in Rural America",
@@ -10063,7 +10063,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
@@ -10074,7 +10074,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Agencies publish resolution plan feedback letters for 15 banking organizations",
@@ -10085,7 +10085,7 @@
       "interpretation": "은행 대출 여건과 차입 의존 기업에 대한 영향을 확인하세요.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Waller, Payments in the Age of AI Agents",
@@ -10096,7 +10096,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Barr, Economic Conditions and Monetary Policy",
@@ -10107,7 +10107,7 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Bowman, Opening Remarks",
@@ -10118,7 +10118,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Cook, An Update on AI and the Economy",
@@ -10129,7 +10129,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board announces approval of application by Peoples Bancorp Inc.",
@@ -10140,7 +10140,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
@@ -10151,7 +10151,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
@@ -10162,7 +10162,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Barr, A Long-Term View on the Costs of Shelter",
@@ -10173,7 +10173,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
@@ -10184,7 +10184,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "title": "Jefferson, Discount Window Modernization and Treasury Market Functioning",
@@ -10195,25 +10195,25 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-10-05T15:16:22.997997+00:00",
+      "lastAttemptAt": "2026-10-05T16:04:13.445743+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-05T15:16:22.997997+00:00"
+      "lastSuccessAt": "2026-10-05T16:04:13.445743+00:00"
     }
   ],
   "errors": [],
