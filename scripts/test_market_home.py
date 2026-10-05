@@ -132,7 +132,7 @@ class Feeds(unittest.TestCase):
 
     def test_cnbc_market_feed_is_allowed_and_duplicate_urls_are_ranked_once(self):
         url='https://www.cnbc.com/2026/10/03/stocks-market-test.html'
-        xml=rss('Wall Street stocks rise as bond yields fall',url)
+        xml=rss('Wall Street stocks rise after strong earnings',url)
         def fetch(request):
             if request in [f[1] for f in h.FEEDS if f[0].startswith('CNBC')]:return xml
             return '<rss><channel/></rss>'
@@ -158,7 +158,8 @@ class PriceCache(unittest.TestCase):
 
     def test_both_feeds_recover_to_new_results(self):
         def fetch(url):
-            if url in [f[1] for f in h.FEEDS[:2]]:return rss(url='https://www.federalreserve.gov/newsevents/speech/new.htm')
+            if url==h.FEEDS[0][1]:return rss(url='https://www.federalreserve.gov/newsevents/pressreleases/new.htm')
+            if url==h.FEEDS[1][1]:return rss(url='https://www.federalreserve.gov/newsevents/speech/new.htm')
             if url in [f[1] for f in h.FEEDS]:return '<rss><channel/></rss>'
             return '<p>The economy expanded while inflation remained above target.</p>'
         items,feeds=h.collect_news({},NOW,{},fetch)
