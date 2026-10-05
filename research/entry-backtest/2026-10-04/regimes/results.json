@@ -1,0 +1,4722 @@
+{
+  "version": "entry-context-v1-regime-attribution-v1",
+  "researchOnly": true,
+  "start": "2017-10-02",
+  "end": "2026-10-02",
+  "input": {
+    "version": "entry-context-v1-regime-attribution-v1",
+    "originalPRHead": "e439161af57a418727ba14e03d73808821ceefe8",
+    "datasetSHA256": "0307d3266187abea5e008fbaefd71a447d78298365ff41d2f7939516a12cf92a",
+    "spyProviderSHA256": "5d449d3b0d4d7af7374f4e76f0acc638f3b45b70c3331a56d8aa160599c86f22",
+    "spyInputSHA256": "a57fc69f4020b48b8a4016acb0f6003c76cd6ff50c352bfa2c451d680e0b2fc0",
+    "rows": 2514,
+    "first": "2016-10-03",
+    "last": "2026-10-02",
+    "basis": "Yahoo quote OHLC; no AdjClose mixing",
+    "columns": [
+      "date",
+      "t",
+      "end",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "signalPrice"
+    ],
+    "extraction": "SPY rows directly from hash-verified fixed prices.json.gz; no new requests"
+  },
+  "definitions": {
+    "asOf": "previous SPY session close, including the first evaluation day",
+    "sma200": {
+      "window": 200,
+      "above": "known close >= known SMA200"
+    },
+    "trend63": {
+      "lookback": 63,
+      "up": "known close / close 63 sessions earlier - 1 > 0"
+    },
+    "volatility63": {
+      "returns": "log close-to-close",
+      "window": 63,
+      "ddof": 1,
+      "annualization": 252,
+      "lowUpperExclusive": 0.15,
+      "highLowerInclusive": 0.25
+    },
+    "cashRate": 0,
+    "rebalanceCost": 0,
+    "fractionalShares": true,
+    "capture": "ratio of geometric mean DAILY returns on positive/negative raw SPY price days",
+    "drawdown": "both chronologically stitched selected days and separate contiguous episodes",
+    "fixedMeanWeight": "ex-post control, not a point-in-time trading signal"
+  },
+  "costRisk": {
+    "risk": 0.01,
+    "maxPositions": 5,
+    "maxWeight": 0.2,
+    "fee": 0.0005,
+    "slip": 0.0005,
+    "step": 86400000,
+    "warmup": 205
+  },
+  "originalSourceHashes": {
+    "scripts/backtest_entry_rules.cjs": "1b7bd58d9d110d4ab932fc2372cfe0dc368026c84c0b4b08ea2718b7f4ce6419",
+    "scripts/collect_entry_backtest.py": "5c38eea9debdaaf6c41e0c68eeb09b8fe5a54b2c308db9eb5932f4d1cd16c192",
+    "scripts/entry_study.cjs": "0e0be94b530410fc05f5b34524e0daab0d915d89f908437ca9bc2f719de61a7a",
+    "scripts/entry-study-v1/technical-guide.cjs": "fd47378b360f360615b5031dccf671c0e3770bcf165689fa721319aee82db3e0",
+    "scripts/entry-study-v1/paper-engine.cjs": "ea7b0f73f63aad30ec5b0a8d36bcb7949915e2e8b12bd8359678d04ac4aa8dd2"
+  },
+  "baseArtifactSHA256": {
+    "results.json": "7ef6e609b92d5c12e6fbda271a25172c81e767226e2c6865ffd33b794fb13fed",
+    "sources.json": "b52826346b2a947524729f3856d692bdfe0c84aeebfccc6259c522dfb220871e",
+    "stable-curve.csv": "81f0a0eb7867b40729c79f056366527a758f219283518981243724ba193a853e",
+    "watch-curve.csv": "6d4552291cc50e92356c0320e5aeee7726ae6b44c01e8b1d505a950e944ce6f2",
+    "stable-open.json": "f6bc944346110e35254600e741e8fd5eed4c7527bff4d641e979fca39aef787e",
+    "watch-open.json": "a80b252d3cee1812b3131eeac4d25406318cbd6cb49184ed1801ba293aa9b91d"
+  },
+  "analysisSourceSHA256": "1d43471c259a67cfe8feb7b0adde9c73abfe730403487c4ab50d5ee6e7a0f954",
+  "protocolSHA256": "417e3bf375956412a84f5d93673a5edcdf5c210c23e7a9bc9eacaab9f5af6ae0",
+  "csvSHA256": {
+    "daily.csv": "3550a0de2b67b14b3fd80127c99b34537fefba501e79e28a1bfe120802a58616",
+    "metrics.csv": "b2f010be59a4c1208de2584e274ec1916e0568f6514dc1f8a6a8b8085a8eab1e"
+  },
+  "scenarios": {
+    "stable": {
+      "fullMeanWeight": 0.8257673016435327,
+      "calendarYears": 9.000057038558065,
+      "summaries": [
+        {
+          "axis": "overall",
+          "regime": "all",
+          "sessions": 2263,
+          "episodes": 1,
+          "longestEpisode": 2263,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 1245,
+          "downDays": 1014,
+          "flatDays": 4,
+          "meanExposure": 0.8257673016435332,
+          "meanLaggedExposure": 0.8254610530585637,
+          "series": {
+            "strategy": {
+              "return": 0.14450740637506834,
+              "annualizedActiveReturn": 0.015143806266280856,
+              "maxDrawdownStitched": 0.2751416468111475,
+              "maxDrawdownContinuousEpisode": 0.2751416468111475,
+              "upCapture": 53.389221506831554,
+              "downCapture": 59.01487219311837,
+              "cagr": 0.015110072997896807
+            },
+            "spy": {
+              "return": 2.0542059563728965,
+              "annualizedActiveReturn": 0.13239157950627667,
+              "maxDrawdownStitched": 0.3410474689324393,
+              "maxDrawdownContinuousEpisode": 0.3410474689324393,
+              "upCapture": 100.0,
+              "downCapture": 100.0,
+              "cagr": 0.13208034324308202
+            },
+            "spyCashFullMean": {
+              "return": 1.572799717042138,
+              "annualizedActiveReturn": 0.11096766033960015,
+              "maxDrawdownStitched": 0.2882457811167458,
+              "maxDrawdownContinuousEpisode": 0.2882457811167458,
+              "upCapture": 82.63842003990695,
+              "downCapture": 82.48867176068137,
+              "cagr": 0.11070921592666937
+            },
+            "spyCashGroupMean": {
+              "return": 1.572799717042138,
+              "annualizedActiveReturn": 0.11096766033960015,
+              "maxDrawdownStitched": 0.2882457811167458,
+              "maxDrawdownContinuousEpisode": 0.2882457811167458,
+              "upCapture": 82.63842003990695,
+              "downCapture": 82.48867176068137,
+              "cagr": 0.11070921592666937
+            },
+            "spyCashLagged": {
+              "return": 1.0119188594536057,
+              "annualizedActiveReturn": 0.08095852423749496,
+              "maxDrawdownStitched": 0.2141379570471541,
+              "maxDrawdownContinuousEpisode": 0.2141379570471541,
+              "upCapture": 73.01002080551979,
+              "downCapture": 74.57580364895307,
+              "cagr": 0.08077249082168064
+            }
+          },
+          "excessReturn": {
+            "spy": -1.909698549997828,
+            "spyCashFullMean": -1.4282923106670695,
+            "spyCashGroupMean": -1.4282923106670695,
+            "spyCashLagged": -0.8674114530785374
+          },
+          "attribution": {
+            "cashLevelLogPP": -17.152495273664325,
+            "exposureTimingLogPP": -24.590576690108378,
+            "residualLogPP": -56.411459145563626,
+            "totalExcessLogPP": -98.15453110933635
+          }
+        },
+        {
+          "axis": "sma200",
+          "regime": "above",
+          "sessions": 1825,
+          "episodes": 30,
+          "longestEpisode": 395,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 1018,
+          "downDays": 804,
+          "flatDays": 3,
+          "meanExposure": 0.8696663018508404,
+          "meanLaggedExposure": 0.8696791222333219,
+          "series": {
+            "strategy": {
+              "return": 0.11312456570941753,
+              "annualizedActiveReturn": 0.014908443007176997,
+              "maxDrawdownStitched": 0.2795656273325384,
+              "maxDrawdownContinuousEpisode": 0.2204628884105464,
+              "upCapture": 69.0739088948167,
+              "downCapture": 75.9677834598534
+            },
+            "spy": {
+              "return": 1.0148451298388725,
+              "annualizedActiveReturn": 0.10156557824180536,
+              "maxDrawdownStitched": 0.20818883150107803,
+              "maxDrawdownContinuousEpisode": 0.12067738669444772,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.8006958922115393,
+              "annualizedActiveReturn": 0.08460541082255345,
+              "maxDrawdownStitched": 0.17476569986820278,
+              "maxDrawdownContinuousEpisode": 0.10046935470610441,
+              "upCapture": 82.60315262390652,
+              "downCapture": 82.52239801410684
+            },
+            "spyCashGroupMean": {
+              "return": 0.8531228121968486,
+              "annualizedActiveReturn": 0.08891203913616967,
+              "maxDrawdownStitched": 0.18329554905843615,
+              "maxDrawdownContinuousEpisode": 0.10559281108283824,
+              "upCapture": 86.98743783676954,
+              "downCapture": 86.92379384792177
+            },
+            "spyCashLagged": {
+              "return": 0.7366039001700426,
+              "annualizedActiveReturn": 0.07919123142477089,
+              "maxDrawdownStitched": 0.2001636235795199,
+              "maxDrawdownContinuousEpisode": 0.10232940631596343,
+              "upCapture": 84.53405791951822,
+              "downCapture": 85.37067980355826
+            }
+          },
+          "excessReturn": {
+            "spy": -0.901720564129455,
+            "spyCashFullMean": -0.6875713265021217,
+            "spyCashGroupMean": -0.7399982464874311,
+            "spyCashLagged": -0.6234793344606251
+          },
+          "attribution": {
+            "cashLevelLogPP": -8.367011120289314,
+            "exposureTimingLogPP": -6.494079809382381,
+            "residualLogPP": -44.476043960005114,
+            "totalExcessLogPP": -59.337134889676804
+          }
+        },
+        {
+          "axis": "sma200",
+          "regime": "below",
+          "sessions": 438,
+          "episodes": 29,
+          "longestEpisode": 162,
+          "first": "2018-03-26",
+          "last": "2026-04-08",
+          "upDays": 227,
+          "downDays": 210,
+          "flatDays": 1,
+          "meanExposure": 0.6428548007797537,
+          "meanLaggedExposure": 0.6412190981637376,
+          "series": {
+            "strategy": {
+              "return": 0.028193466959962263,
+              "annualizedActiveReturn": 0.016125074172356525,
+              "maxDrawdownStitched": 0.1936135947013794,
+              "maxDrawdownContinuousEpisode": 0.1936135947013794,
+              "upCapture": 24.768190890129226,
+              "downCapture": 27.6929139540944
+            },
+            "spy": {
+              "return": 0.5158514722256305,
+              "annualizedActiveReturn": 0.27039694992651675,
+              "maxDrawdownStitched": 0.26287772516400654,
+              "maxDrawdownContinuousEpisode": 0.2628777251640071,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.4287807997842061,
+              "annualizedActiveReturn": 0.2278866951127663,
+              "maxDrawdownStitched": 0.2197654784145584,
+              "maxDrawdownContinuousEpisode": 0.2197654784145584,
+              "upCapture": 82.67285847542534,
+              "downCapture": 82.44784582501752
+            },
+            "spyCashGroupMean": {
+              "return": 0.3346333432369296,
+              "annualizedActiveReturn": 0.18066330426089702,
+              "maxDrawdownStitched": 0.17321271771491376,
+              "maxDrawdownContinuousEpisode": 0.17321271771491376,
+              "upCapture": 64.43998194706414,
+              "downCapture": 64.08154949690274
+            },
+            "spyCashLagged": {
+              "return": 0.15853641654070058,
+              "annualizedActiveReturn": 0.08835345032278202,
+              "maxDrawdownStitched": 0.16033657432138548,
+              "maxDrawdownContinuousEpisode": 0.1603365743213856,
+              "upCapture": 51.92828007600235,
+              "downCapture": 54.67867288421062
+            }
+          },
+          "excessReturn": {
+            "spy": -0.48765800526566827,
+            "spyCashFullMean": -0.4005873328242438,
+            "spyCashGroupMean": -0.30643987627696734,
+            "spyCashLagged": -0.13034294958073833
+          },
+          "attribution": {
+            "cashLevelLogPP": -12.732070408605296,
+            "exposureTimingLogPP": -14.149910625495716,
+            "residualLogPP": -11.935415185558526,
+            "totalExcessLogPP": -38.817396219659535
+          }
+        },
+        {
+          "axis": "trend63",
+          "regime": "up",
+          "sessions": 1698,
+          "episodes": 45,
+          "longestEpisode": 321,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 948,
+          "downDays": 746,
+          "flatDays": 4,
+          "meanExposure": 0.8730299307828323,
+          "meanLaggedExposure": 0.8736324150869076,
+          "series": {
+            "strategy": {
+              "return": 0.21562755252927437,
+              "annualizedActiveReturn": 0.029402546832683847,
+              "maxDrawdownStitched": 0.23845697300917346,
+              "maxDrawdownContinuousEpisode": 0.16135194778502604,
+              "upCapture": 71.42669524577505,
+              "downCapture": 79.04969731401822
+            },
+            "spy": {
+              "return": 1.2230905727557886,
+              "annualizedActiveReturn": 0.1258794048974076,
+              "maxDrawdownStitched": 0.22405214214364522,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.9514478565768082,
+              "annualizedActiveReturn": 0.10431213452823669,
+              "maxDrawdownStitched": 0.18845070407366127,
+              "maxDrawdownContinuousEpisode": 0.10046935470610441,
+              "upCapture": 82.6038533338693,
+              "downCapture": 82.52127631318004
+            },
+            "spyCashGroupMean": {
+              "return": 1.0224217988816018,
+              "annualizedActiveReturn": 0.11018253829189814,
+              "maxDrawdownStitched": 0.1982439905159964,
+              "maxDrawdownContinuousEpisode": 0.10598449122106612,
+              "upCapture": 87.32388094108484,
+              "downCapture": 87.26023134696511
+            },
+            "spyCashLagged": {
+              "return": 0.9208257139227056,
+              "annualizedActiveReturn": 0.10172300559269401,
+              "maxDrawdownStitched": 0.17357276518091413,
+              "maxDrawdownContinuousEpisode": 0.09563270562660409,
+              "upCapture": 84.8720426391936,
+              "downCapture": 85.47997205883537
+            }
+          },
+          "excessReturn": {
+            "spy": -1.0074630202265142,
+            "spyCashFullMean": -0.7358203040475338,
+            "spyCashGroupMean": -0.8067942463523274,
+            "spyCashLagged": -0.7051981613934313
+          },
+          "attribution": {
+            "cashLevelLogPP": -9.46026740004957,
+            "exposureTimingLogPP": -5.154055070603592,
+            "residualLogPP": -45.749470533593986,
+            "totalExcessLogPP": -60.36379300424714
+          }
+        },
+        {
+          "axis": "trend63",
+          "regime": "downFlat",
+          "sessions": 565,
+          "episodes": 44,
+          "longestEpisode": 137,
+          "first": "2018-02-09",
+          "last": "2026-04-15",
+          "upDays": 297,
+          "downDays": 268,
+          "flatDays": 0,
+          "meanExposure": 0.6837284622125069,
+          "meanLaggedExposure": 0.6806911898300185,
+          "series": {
+            "strategy": {
+              "return": -0.05850488170182646,
+              "annualizedActiveReturn": -0.02653039272438001,
+              "maxDrawdownStitched": 0.1944190789383774,
+              "maxDrawdownContinuousEpisode": 0.171920179831902,
+              "upCapture": 26.341330548507464,
+              "downCapture": 30.803004368886604
+            },
+            "spy": {
+              "return": 0.3738558355662678,
+              "annualizedActiveReturn": 0.1521902611232755,
+              "maxDrawdownStitched": 0.2628777251640071,
+              "maxDrawdownContinuousEpisode": 0.2628777251640071,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.318405566600838,
+              "annualizedActiveReturn": 0.1312119681098153,
+              "maxDrawdownStitched": 0.21976547841455873,
+              "maxDrawdownContinuousEpisode": 0.2197654784145584,
+              "upCapture": 82.67106395479085,
+              "downCapture": 82.45958273160954
+            },
+            "spyCashGroupMean": {
+              "return": 0.2692304534546086,
+              "annualizedActiveReturn": 0.11219487208362532,
+              "maxDrawdownStitched": 0.18372751738733928,
+              "maxDrawdownContinuousEpisode": 0.18372751738733917,
+              "upCapture": 68.51539164680354,
+              "downCapture": 68.19788449373894
+            },
+            "spyCashLagged": {
+              "return": 0.04742395151763658,
+              "annualizedActiveReturn": 0.020880695352570283,
+              "maxDrawdownStitched": 0.17086379686093112,
+              "maxDrawdownContinuousEpisode": 0.15955820323527647,
+              "upCapture": 55.18097437707531,
+              "downCapture": 59.2602689272258
+            }
+          },
+          "excessReturn": {
+            "spy": -0.4323607172680942,
+            "spyCashFullMean": -0.37691044830266446,
+            "spyCashGroupMean": -0.32773533515643505,
+            "spyCashLagged": -0.10592883321946303
+          },
+          "attribution": {
+            "cashLevelLogPP": -7.921049047505316,
+            "exposureTimingLogPP": -19.207700445614233,
+            "residualLogPP": -10.661988611969646,
+            "totalExcessLogPP": -37.7907381050892
+          }
+        },
+        {
+          "axis": "volatility63",
+          "regime": "low",
+          "sessions": 1265,
+          "episodes": 16,
+          "longestEpisode": 322,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 710,
+          "downDays": 553,
+          "flatDays": 2,
+          "meanExposure": 0.8871352713683571,
+          "meanLaggedExposure": 0.8874580936031201,
+          "series": {
+            "strategy": {
+              "return": -0.06893493304757706,
+              "annualizedActiveReturn": -0.014128009251217221,
+              "maxDrawdownStitched": 0.26423736948324783,
+              "maxDrawdownContinuousEpisode": 0.15438071638172435,
+              "upCapture": 70.66542014168122,
+              "downCapture": 81.78117407941909
+            },
+            "spy": {
+              "return": 0.5927100187128471,
+              "annualizedActiveReturn": 0.09715389824587845,
+              "maxDrawdownStitched": 0.12205242332437383,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.4778366522109999,
+              "annualizedActiveReturn": 0.08091413135792484,
+              "maxDrawdownStitched": 0.10123877072105314,
+              "maxDrawdownContinuousEpisode": 0.10046935470610441,
+              "upCapture": 82.60510220504169,
+              "downCapture": 82.52566374717112
+            },
+            "spyCashGroupMean": {
+              "return": 0.5177771156557742,
+              "annualizedActiveReturn": 0.08667168925403318,
+              "maxDrawdownStitched": 0.10859282493866051,
+              "maxDrawdownContinuousEpisode": 0.10762562096345485,
+              "upCapture": 88.73326010373593,
+              "downCapture": 88.67795360584326
+            },
+            "spyCashLagged": {
+              "return": 0.4714570143236813,
+              "annualizedActiveReturn": 0.0799829746762087,
+              "maxDrawdownStitched": 0.11470200208507697,
+              "maxDrawdownContinuousEpisode": 0.09563270562660409,
+              "upCapture": 86.77942722895914,
+              "downCapture": 87.34833999769883
+            }
+          },
+          "excessReturn": {
+            "spy": -0.6616449517604241,
+            "spyCashFullMean": -0.5467715852585769,
+            "spyCashGroupMean": -0.5867120487033513,
+            "spyCashLagged": -0.5403919473712584
+          },
+          "attribution": {
+            "cashLevelLogPP": -4.819013908930869,
+            "exposureTimingLogPP": -3.0993764445621466,
+            "residualLogPP": -45.76791909483873,
+            "totalExcessLogPP": -53.68630944833175
+          }
+        },
+        {
+          "axis": "volatility63",
+          "regime": "medium",
+          "sessions": 737,
+          "episodes": 22,
+          "longestEpisode": 137,
+          "first": "2018-02-12",
+          "last": "2026-06-26",
+          "upDays": 390,
+          "downDays": 346,
+          "flatDays": 1,
+          "meanExposure": 0.7963711458495146,
+          "meanLaggedExposure": 0.7971038436380857,
+          "series": {
+            "strategy": {
+              "return": 0.15711651947145808,
+              "annualizedActiveReturn": 0.051163621391311795,
+              "maxDrawdownStitched": 0.1906613075879996,
+              "maxDrawdownContinuousEpisode": 0.11584849759038207,
+              "upCapture": 50.09559732400313,
+              "downCapture": 49.5282714731124
+            },
+            "spy": {
+              "return": 0.28526407172177204,
+              "annualizedActiveReturn": 0.0896007758110026,
+              "maxDrawdownStitched": 0.2676910711661583,
+              "maxDrawdownContinuousEpisode": 0.17021180491193055,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.2408046348695838,
+              "annualizedActiveReturn": 0.07656361956347298,
+              "maxDrawdownStitched": 0.2257612393776235,
+              "maxDrawdownContinuousEpisode": 0.1421691467946744,
+              "upCapture": 82.63488720590543,
+              "downCapture": 82.50082047660705
+            },
+            "spyCashGroupMean": {
+              "return": 0.2330191330487632,
+              "annualizedActiveReturn": 0.07424913240970647,
+              "maxDrawdownStitched": 0.21849960523722112,
+              "maxDrawdownContinuousEpisode": 0.13737156458437372,
+              "upCapture": 79.70272456240491,
+              "downCapture": 79.55162202537599
+            },
+            "spyCashLagged": {
+              "return": 0.0939629693902138,
+              "annualizedActiveReturn": 0.031183698386168187,
+              "maxDrawdownStitched": 0.2112521002345742,
+              "maxDrawdownContinuousEpisode": 0.13364323012521762,
+              "upCapture": 72.11105277400614,
+              "downCapture": 75.19484348864196
+            }
+          },
+          "excessReturn": {
+            "spy": -0.12814755225031396,
+            "spyCashFullMean": -0.08368811539812573,
+            "spyCashGroupMean": -0.07590261357730513,
+            "spyCashLagged": 0.06315355008124428
+          },
+          "attribution": {
+            "cashLevelLogPP": -4.1498458981195085,
+            "exposureTimingLogPP": -11.965888693224636,
+            "residualLogPP": 5.6124296807193925,
+            "totalExcessLogPP": -10.503304910624752
+          }
+        },
+        {
+          "axis": "volatility63",
+          "regime": "high",
+          "sessions": 261,
+          "episodes": 7,
+          "longestEpisode": 89,
+          "first": "2019-01-07",
+          "last": "2025-07-11",
+          "upDays": 145,
+          "downDays": 115,
+          "flatDays": 1,
+          "meanExposure": 0.6113400415603509,
+          "meanLaggedExposure": 0.6050511183996686,
+          "series": {
+            "strategy": {
+              "return": 0.062334978163125325,
+              "annualizedActiveReturn": 0.06012216022342658,
+              "maxDrawdownStitched": 0.09723611638824337,
+              "maxDrawdownContinuousEpisode": 0.09723611638824314,
+              "upCapture": 23.89530390378985,
+              "downCapture": 26.490713692732626
+            },
+            "spy": {
+              "return": 0.4920014335233781,
+              "annualizedActiveReturn": 0.47155736832739004,
+              "maxDrawdownStitched": 0.22699540056673684,
+              "maxDrawdownContinuousEpisode": 0.22699540056673684,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.4030596620201708,
+              "annualizedActiveReturn": 0.38677035076951466,
+              "maxDrawdownStitched": 0.18908840916941794,
+              "maxDrawdownContinuousEpisode": 0.18908840916941805,
+              "upCapture": 82.6820722597331,
+              "downCapture": 82.40632201824604
+            },
+            "spyCashGroupMean": {
+              "return": 0.29461198150903567,
+              "annualizedActiveReturn": 0.28313614390838737,
+              "maxDrawdownStitched": 0.141410783076947,
+              "maxDrawdownContinuousEpisode": 0.14141078307694688,
+              "upCapture": 61.309391733134845,
+              "downCapture": 60.85568036427297
+            },
+            "spyCashLagged": {
+              "return": 0.2498568095571476,
+              "annualizedActiveReturn": 0.24028145969867043,
+              "maxDrawdownStitched": 0.09670821475677471,
+              "maxDrawdownContinuousEpisode": 0.09102352750234077,
+              "upCapture": 46.49492919836409,
+              "downCapture": 44.526999051901015
+            }
+          },
+          "excessReturn": {
+            "spy": -0.4296664553602528,
+            "spyCashFullMean": -0.34072468385704546,
+            "spyCashGroupMean": -0.23227700334591034,
+            "spyCashLagged": -0.18752183139402226
+          },
+          "attribution": {
+            "cashLevelLogPP": -14.190744051200221,
+            "exposureTimingLogPP": -3.5182029677353204,
+            "residualLogPP": -16.2559697314443,
+            "totalExcessLogPP": -33.96491675037984
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "above|up",
+          "sessions": 1642,
+          "episodes": 44,
+          "longestEpisode": 321,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 918,
+          "downDays": 721,
+          "flatDays": 3,
+          "meanExposure": 0.8773277245126823,
+          "meanLaggedExposure": 0.877534526015718,
+          "series": {
+            "strategy": {
+              "return": 0.18802100567327779,
+              "annualizedActiveReturn": 0.02679409074054292,
+              "maxDrawdownStitched": 0.2510090826973994,
+              "maxDrawdownContinuousEpisode": 0.16135194778502604,
+              "upCapture": 72.78342563694851,
+              "downCapture": 82.17234560990919
+            },
+            "spy": {
+              "return": 1.2970925634418773,
+              "annualizedActiveReturn": 0.13613662682560337,
+              "maxDrawdownStitched": 0.17272267255311002,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 1.0034569835376383,
+              "annualizedActiveReturn": 0.112537338109185,
+              "maxDrawdownStitched": 0.14418654650462648,
+              "maxDrawdownContinuousEpisode": 0.10046935470610441,
+              "upCapture": 82.60332283182845,
+              "downCapture": 82.52291094219409
+            },
+            "spyCashGroupMean": {
+              "return": 1.086957375360345,
+              "annualizedActiveReturn": 0.11953116747906797,
+              "maxDrawdownStitched": 0.1526989725568183,
+              "maxDrawdownContinuousEpisode": 0.10648476684649832,
+              "upCapture": 87.75265535548871,
+              "downCapture": 87.69247614426581
+            },
+            "spyCashLagged": {
+              "return": 0.9413428342061104,
+              "annualizedActiveReturn": 0.10717289930377022,
+              "maxDrawdownStitched": 0.11441197378602397,
+              "maxDrawdownContinuousEpisode": 0.09563270562660409,
+              "upCapture": 85.30646364690013,
+              "downCapture": 86.40662985871442
+            }
+          },
+          "excessReturn": {
+            "spy": -1.1090715577685994,
+            "spyCashFullMean": -0.8154359778643605,
+            "spyCashGroupMean": -0.8989363696870671,
+            "spyCashLagged": -0.7533218285328327
+          },
+          "attribution": {
+            "cashLevelLogPP": -9.593701642628139,
+            "exposureTimingLogPP": -7.232728779765784,
+            "residualLogPP": -49.10910138805321,
+            "totalExcessLogPP": -65.93553181044713
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "above|downFlat",
+          "sessions": 183,
+          "episodes": 53,
+          "longestEpisode": 24,
+          "first": "2018-02-09",
+          "last": "2026-04-15",
+          "upDays": 100,
+          "downDays": 83,
+          "flatDays": 0,
+          "meanExposure": 0.8009228263822914,
+          "meanLaggedExposure": 0.7991951167104023,
+          "series": {
+            "strategy": {
+              "return": -0.06304302668572324,
+              "annualizedActiveReturn": -0.08576769317662454,
+              "maxDrawdownStitched": 0.1192016204746752,
+              "maxDrawdownContinuousEpisode": 0.07075027421615077,
+              "upCapture": 41.359770454098985,
+              "downCapture": 42.84520522077144
+            },
+            "spy": {
+              "return": -0.12287159781671833,
+              "annualizedActiveReturn": -0.1651754913655933,
+              "maxDrawdownStitched": 0.16672938142038685,
+              "maxDrawdownContinuousEpisode": 0.05654848025869441,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.10120561259472124,
+              "annualizedActiveReturn": -0.13664774956936637,
+              "maxDrawdownStitched": 0.13860210132101913,
+              "maxDrawdownContinuousEpisode": 0.04681762365420661,
+              "upCapture": 82.60028712122454,
+              "downCapture": 82.52949333929865
+            },
+            "spyCashGroupMean": {
+              "return": -0.09812145134620519,
+              "annualizedActiveReturn": -0.13256554410089239,
+              "maxDrawdownStitched": 0.13455716276629204,
+              "maxDrawdownContinuousEpisode": 0.045425862653845406,
+              "upCapture": 80.1183945691496,
+              "downCapture": 80.03995230384014
+            },
+            "spyCashLagged": {
+              "return": -0.10546253367957723,
+              "annualizedActiveReturn": -0.14227355083376042,
+              "maxDrawdownStitched": 0.14542356368487852,
+              "maxDrawdownContinuousEpisode": 0.04411958765944468,
+              "upCapture": 78.75618668939268,
+              "downCapture": 79.8575109746456
+            }
+          },
+          "excessReturn": {
+            "spy": 0.05982857113099509,
+            "spyCashFullMean": 0.038162585908998,
+            "spyCashGroupMean": 0.035078424660481944,
+            "spyCashLagged": 0.04241950699385398
+          },
+          "attribution": {
+            "cashLevelLogPP": 2.7826471917179045,
+            "exposureTimingLogPP": -0.8173076989956771,
+            "residualLogPP": 4.633057428048105,
+            "totalExcessLogPP": 6.598396920770333
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "below|up",
+          "sessions": 56,
+          "episodes": 12,
+          "longestEpisode": 16,
+          "first": "2019-01-31",
+          "last": "2023-03-23",
+          "upDays": 30,
+          "downDays": 25,
+          "flatDays": 1,
+          "meanExposure": 0.7470124789183031,
+          "meanLaggedExposure": 0.7592169482100041,
+          "series": {
+            "strategy": {
+              "return": 0.02323742318036824,
+              "annualizedActiveReturn": 0.10890379322380825,
+              "maxDrawdownStitched": 0.07440622712705636,
+              "maxDrawdownContinuousEpisode": 0.051640223670776475,
+              "upCapture": 45.858768817126574,
+              "downCapture": 34.477835985487374
+            },
+            "spy": {
+              "return": -0.03221550226744324,
+              "annualizedActiveReturn": -0.13701355305008217,
+              "maxDrawdownStitched": 0.18639941334406507,
+              "maxDrawdownContinuousEpisode": 0.08942258532457725,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.025959692365839653,
+              "annualizedActiveReturn": -0.11162530099075152,
+              "maxDrawdownStitched": 0.15620705532735757,
+              "maxDrawdownContinuousEpisode": 0.07424857511017524,
+              "upCapture": 82.60416315538366,
+              "downCapture": 82.52056765533983
+            },
+            "spyCashGroupMean": {
+              "return": -0.023219175900715622,
+              "annualizedActiveReturn": -0.10032207855550285,
+              "maxDrawdownStitched": 0.14225424236118833,
+              "maxDrawdownContinuousEpisode": 0.06733403581224728,
+              "upCapture": 74.7373140371457,
+              "downCapture": 74.62761251945288
+            },
+            "spyCashLagged": {
+              "return": -0.01056851985228824,
+              "annualizedActiveReturn": -0.04668646808523904,
+              "maxDrawdownStitched": 0.12862092871373565,
+              "maxDrawdownContinuousEpisode": 0.051327982751661616,
+              "upCapture": 76.67008812469552,
+              "downCapture": 72.29748211766972
+            }
+          },
+          "excessReturn": {
+            "spy": 0.05545292544781148,
+            "spyCashFullMean": 0.0491971155462079,
+            "spyCashGroupMean": 0.04645659908108386,
+            "spyCashLagged": 0.03380594303265648
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.925285507348909,
+            "exposureTimingLogPP": 1.2868224443918517,
+            "residualLogPP": 3.3596308544592266,
+            "totalExcessLogPP": 5.571738806199987
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "below|downFlat",
+          "sessions": 382,
+          "episodes": 29,
+          "longestEpisode": 82,
+          "first": "2018-03-26",
+          "last": "2026-04-08",
+          "upDays": 197,
+          "downDays": 185,
+          "flatDays": 0,
+          "meanExposure": 0.627585612361537,
+          "meanLaggedExposure": 0.6239209840208294,
+          "series": {
+            "strategy": {
+              "return": 0.00484349347211122,
+              "annualizedActiveReturn": 0.00319255653167694,
+              "maxDrawdownStitched": 0.17192017983190233,
+              "maxDrawdownContinuousEpisode": 0.17192017983190222,
+              "upCapture": 22.799998414529863,
+              "downCapture": 26.86273950389651
+            },
+            "spy": {
+              "return": 0.5663109667257037,
+              "annualizedActiveReturn": 0.34449209877142783,
+              "maxDrawdownStitched": 0.2628777251640071,
+              "maxDrawdownContinuousEpisode": 0.2628777251640071,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.466860035037525,
+              "annualizedActiveReturn": 0.28755045791877193,
+              "maxDrawdownStitched": 0.2197654784145584,
+              "maxDrawdownContinuousEpisode": 0.2197654784145584,
+              "upCapture": 82.6771177992642,
+              "downCapture": 82.43906653286541
+            },
+            "spyCashGroupMean": {
+              "return": 0.35261553069944196,
+              "annualizedActiveReturn": 0.22048902194451203,
+              "maxDrawdownStitched": 0.16926842057838443,
+              "maxDrawdownContinuousEpisode": 0.16926842057838432,
+              "upCapture": 62.92293124725609,
+              "downCapture": 62.53702478344637
+            },
+            "spyCashLagged": {
+              "return": 0.17091121496128586,
+              "annualizedActiveReturn": 0.10969669223167658,
+              "maxDrawdownStitched": 0.13215463623848245,
+              "maxDrawdownContinuousEpisode": 0.13215463623848134,
+              "upCapture": 49.615596681426425,
+              "downCapture": 52.52179283594135
+            }
+          },
+          "excessReturn": {
+            "spy": -0.5614674732535925,
+            "spyCashFullMean": -0.4620165415654138,
+            "spyCashGroupMean": -0.34777203722733074,
+            "spyCashLagged": -0.16606772148917465
+          },
+          "attribution": {
+            "cashLevelLogPP": -14.668300355343838,
+            "exposureTimingLogPP": -14.425788630497935,
+            "residualLogPP": -15.295046040017752,
+            "totalExcessLogPP": -44.389135025859524
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|up|low",
+          "sessions": 1160,
+          "episodes": 29,
+          "longestEpisode": 200,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 651,
+          "downDays": 507,
+          "flatDays": 2,
+          "meanExposure": 0.9001218786278901,
+          "meanLaggedExposure": 0.9010841141711723,
+          "series": {
+            "strategy": {
+              "return": -0.07608454656183307,
+              "annualizedActiveReturn": -0.01704440619944357,
+              "maxDrawdownStitched": 0.2753275431981157,
+              "maxDrawdownContinuousEpisode": 0.15438071638172435,
+              "upCapture": 75.2991784180704,
+              "downCapture": 86.54354206522343
+            },
+            "spy": {
+              "return": 0.44416654650047444,
+              "annualizedActiveReturn": 0.08311726399272899,
+              "maxDrawdownStitched": 0.13352584142809532,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.36157743949738247,
+              "annualizedActiveReturn": 0.06934918877536267,
+              "maxDrawdownStitched": 0.1103029904425501,
+              "maxDrawdownContinuousEpisode": 0.10046935470610441,
+              "upCapture": 82.60235673340208,
+              "downCapture": 82.5267814123685
+            },
+            "spyCashGroupMean": {
+              "return": 0.3966012689892149,
+              "annualizedActiveReturn": 0.0752655585569721,
+              "maxDrawdownStitched": 0.12022075696646939,
+              "maxDrawdownContinuousEpisode": 0.10913462394848239,
+              "upCapture": 90.02819045456285,
+              "downCapture": 89.98093859158664
+            },
+            "spyCashLagged": {
+              "return": 0.36371795834866416,
+              "annualizedActiveReturn": 0.06971417103826376,
+              "maxDrawdownStitched": 0.11357617800886055,
+              "maxDrawdownContinuousEpisode": 0.09563270562660409,
+              "upCapture": 88.68574013342875,
+              "downCapture": 89.25150390516897
+            }
+          },
+          "excessReturn": {
+            "spy": -0.5202510930623075,
+            "spyCashFullMean": -0.4376619860592155,
+            "spyCashGroupMean": -0.47268581555104794,
+            "spyCashLagged": -0.4398025049104972
+          },
+          "attribution": {
+            "cashLevelLogPP": -3.349075067461044,
+            "exposureTimingLogPP": -2.3826857420835843,
+            "residualLogPP": -38.93494747710172,
+            "totalExcessLogPP": -44.66670828664635
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|up|medium",
+          "sessions": 422,
+          "episodes": 32,
+          "longestEpisode": 76,
+          "first": "2018-02-12",
+          "last": "2026-06-26",
+          "upDays": 232,
+          "downDays": 189,
+          "flatDays": 1,
+          "meanExposure": 0.8301908918717397,
+          "meanLaggedExposure": 0.8281045652159519,
+          "series": {
+            "strategy": {
+              "return": 0.24962410129220544,
+              "annualizedActiveReturn": 0.14233223883858806,
+              "maxDrawdownStitched": 0.11897939367922705,
+              "maxDrawdownContinuousEpisode": 0.11464364924120851,
+              "upCapture": 70.95026206032998,
+              "downCapture": 76.21995491247972
+            },
+            "spy": {
+              "return": 0.5009492963056623,
+              "annualizedActiveReturn": 0.27443619764682814,
+              "maxDrawdownStitched": 0.09801508627934152,
+              "maxDrawdownContinuousEpisode": 0.09801508627934186,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.40167373498499215,
+              "annualizedActiveReturn": 0.2234075484513237,
+              "maxDrawdownStitched": 0.08138725738532981,
+              "maxDrawdownContinuousEpisode": 0.0813872573853297,
+              "upCapture": 82.60350677870896,
+              "downCapture": 82.52693820152929
+            },
+            "spyCashGroupMean": {
+              "return": 0.4041281708253845,
+              "annualizedActiveReturn": 0.22468637285348705,
+              "maxDrawdownStitched": 0.08181176786668065,
+              "maxDrawdownContinuousEpisode": 0.08181176786668087,
+              "upCapture": 83.04532471743526,
+              "downCapture": 82.97029814677852
+            },
+            "spyCashLagged": {
+              "return": 0.37984906379638705,
+              "annualizedActiveReturn": 0.2119963853528289,
+              "maxDrawdownStitched": 0.08743729037132097,
+              "maxDrawdownContinuousEpisode": 0.08743729037132109,
+              "upCapture": 79.94911176152605,
+              "downCapture": 80.30058453019817
+            }
+          },
+          "excessReturn": {
+            "spy": -0.25132519501345685,
+            "spyCashFullMean": -0.1520496336927867,
+            "spyCashGroupMean": -0.15450406953317905,
+            "spyCashLagged": -0.1302249625041816
+          },
+          "attribution": {
+            "cashLevelLogPP": -6.6681180939207385,
+            "exposureTimingLogPP": -1.7442472071887039,
+            "residualLogPP": -9.913133200378663,
+            "totalExcessLogPP": -18.325498501488106
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|up|high",
+          "sessions": 60,
+          "episodes": 8,
+          "longestEpisode": 27,
+          "first": "2020-05-29",
+          "last": "2025-07-11",
+          "upDays": 35,
+          "downDays": 25,
+          "flatDays": 0,
+          "meanExposure": 0.7681698011932947,
+          "meanLaggedExposure": 0.7698998793019534,
+          "series": {
+            "strategy": {
+              "return": 0.028993178254107483,
+              "annualizedActiveReturn": 0.12754136019870402,
+              "maxDrawdownStitched": 0.037957957767673633,
+              "maxDrawdownContinuousEpisode": 0.037957957767673633,
+              "upCapture": 52.35454808033397,
+              "downCapture": 53.382778199446875
+            },
+            "spy": {
+              "return": 0.05972991401927328,
+              "annualizedActiveReturn": 0.27590933173262727,
+              "maxDrawdownStitched": 0.08261386209779853,
+              "maxDrawdownContinuousEpisode": 0.06989488243273445,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.04976173889122609,
+              "annualizedActiveReturn": 0.22625589218528466,
+              "maxDrawdownStitched": 0.06834852779950717,
+              "maxDrawdownContinuousEpisode": 0.057830394813415786,
+              "upCapture": 82.59935020841577,
+              "downCapture": 82.45598391895247
+            },
+            "spyCashGroupMean": {
+              "return": 0.0464225657423261,
+              "annualizedActiveReturn": 0.20995663455757085,
+              "maxDrawdownStitched": 0.06362022073268958,
+              "maxDrawdownContinuousEpisode": 0.053831632524671824,
+              "upCapture": 76.84499787677815,
+              "downCapture": 76.66780474651436
+            },
+            "spyCashLagged": {
+              "return": 0.031682571970082354,
+              "annualizedActiveReturn": 0.13997045416225307,
+              "maxDrawdownStitched": 0.06847906916533975,
+              "maxDrawdownContinuousEpisode": 0.0543906549599007,
+              "upCapture": 73.94555355576517,
+              "downCapture": 79.26135585314103
+            }
+          },
+          "excessReturn": {
+            "spy": -0.030736735765165796,
+            "spyCashFullMean": -0.02076856063711861,
+            "spyCashGroupMean": -0.01742938748821862,
+            "spyCashLagged": -0.0026893937159748714
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.2636810953403077,
+            "exposureTimingLogPP": -1.418623216399543,
+            "residualLogPP": -0.2610207105728287,
+            "totalExcessLogPP": -2.9433250223126795
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|downFlat|low",
+          "sessions": 65,
+          "episodes": 19,
+          "longestEpisode": 18,
+          "first": "2018-02-09",
+          "last": "2026-03-19",
+          "upDays": 36,
+          "downDays": 29,
+          "flatDays": 0,
+          "meanExposure": 0.7315763981623343,
+          "meanLaggedExposure": 0.7329939049259395,
+          "series": {
+            "strategy": {
+              "return": -0.010182236513186485,
+              "annualizedActiveReturn": -0.03890123118593892,
+              "maxDrawdownStitched": 0.06230879325494931,
+              "maxDrawdownContinuousEpisode": 0.055866445724487734,
+              "upCapture": 53.889400994720575,
+              "downCapture": 52.32674500393835
+            },
+            "spy": {
+              "return": -0.028145799580798683,
+              "annualizedActiveReturn": -0.10477854768064832,
+              "maxDrawdownStitched": 0.07775458445227756,
+              "maxDrawdownContinuousEpisode": 0.05654848025869441,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.02274784743955514,
+              "annualizedActiveReturn": -0.08534672157807209,
+              "maxDrawdownStitched": 0.06448476123834423,
+              "maxDrawdownContinuousEpisode": 0.04681762365420661,
+              "upCapture": 82.60418408961951,
+              "downCapture": 82.52720176394905
+            },
+            "spyCashGroupMean": {
+              "return": -0.019914854638186996,
+              "annualizedActiveReturn": -0.07502402802798167,
+              "maxDrawdownStitched": 0.05726224424641302,
+              "maxDrawdownContinuousEpisode": 0.041535607157486054,
+              "upCapture": 73.19514208302482,
+              "downCapture": 73.09012695377781
+            },
+            "spyCashLagged": {
+              "return": -0.018088306304747805,
+              "annualizedActiveReturn": -0.06832288243363309,
+              "maxDrawdownStitched": 0.054597911322932124,
+              "maxDrawdownContinuousEpisode": 0.04411958765944468,
+              "upCapture": 74.0280323309213,
+              "downCapture": 73.20009567893872
+            }
+          },
+          "excessReturn": {
+            "spy": 0.017963563067612195,
+            "spyCashFullMean": 0.012565610926368655,
+            "spyCashGroupMean": 0.00973261812500051,
+            "spyCashLagged": 0.00790606979156132
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.8433657272108868,
+            "exposureTimingLogPP": 0.186192844429188,
+            "residualLogPP": 0.8019469541229156,
+            "totalExcessLogPP": 1.8315055257629904
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|downFlat|medium",
+          "sessions": 102,
+          "episodes": 29,
+          "longestEpisode": 24,
+          "first": "2018-03-23",
+          "last": "2026-04-15",
+          "upDays": 54,
+          "downDays": 48,
+          "flatDays": 0,
+          "meanExposure": 0.8495699265126635,
+          "meanLaggedExposure": 0.8496312466429754,
+          "series": {
+            "strategy": {
+              "return": -0.0734763978481686,
+              "annualizedActiveReturn": -0.17183661276093087,
+              "maxDrawdownStitched": 0.09581450806351577,
+              "maxDrawdownContinuousEpisode": 0.07075027421615077,
+              "upCapture": 29.261302150375112,
+              "downCapture": 37.17823990825615
+            },
+            "spy": {
+              "return": -0.11659897868627077,
+              "annualizedActiveReturn": -0.26382962967432233,
+              "maxDrawdownStitched": 0.16825077432882263,
+              "maxDrawdownContinuousEpisode": 0.03733010615653476,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.09647910545710023,
+              "annualizedActiveReturn": -0.22171002537586076,
+              "maxDrawdownStitched": 0.14039146829925608,
+              "maxDrawdownContinuousEpisode": 0.030876950357227817,
+              "upCapture": 82.59540753109368,
+              "downCapture": 82.53109753417301
+            },
+            "spyCashGroupMean": {
+              "return": -0.09923381925430819,
+              "annualizedActiveReturn": -0.22755935177262188,
+              "maxDrawdownStitched": 0.14423359047771667,
+              "maxDrawdownContinuousEpisode": 0.03175981021967922,
+              "upCapture": 84.97358009151871,
+              "downCapture": 84.91644455480755
+            },
+            "spyCashLagged": {
+              "return": -0.10240511552451678,
+              "annualizedActiveReturn": -0.23426074541772254,
+              "maxDrawdownStitched": 0.14758976914014543,
+              "maxDrawdownContinuousEpisode": 0.037357069016292765,
+              "upCapture": 82.41518362937018,
+              "downCapture": 83.66134797256811
+            }
+          },
+          "excessReturn": {
+            "spy": 0.043122580838102165,
+            "spyCashFullMean": 0.023002707608931625,
+            "spyCashGroupMean": 0.025757421406139583,
+            "spyCashLagged": 0.02892871767634818
+          },
+          "attribution": {
+            "cashLevelLogPP": 1.946645782476003,
+            "exposureTimingLogPP": -0.35268774650600854,
+            "residualLogPP": 3.172068429228822,
+            "totalExcessLogPP": 4.7660264651988165
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|downFlat|high",
+          "sessions": 16,
+          "episodes": 5,
+          "longestEpisode": 12,
+          "first": "2020-05-28",
+          "last": "2025-06-02",
+          "upDays": 10,
+          "downDays": 6,
+          "flatDays": 0,
+          "meanExposure": 0.772517427694744,
+          "meanLaggedExposure": 0.746607211264628,
+          "series": {
+            "strategy": {
+              "return": 0.021663592471442682,
+              "annualizedActiveReturn": 0.4015212859944747,
+              "maxDrawdownStitched": 0.011643540801973384,
+              "maxDrawdownContinuousEpisode": 0.009735594854235474,
+              "upCapture": 66.46525796657625,
+              "downCapture": 47.46002445895886
+            },
+            "spy": {
+              "return": 0.021654755836703943,
+              "annualizedActiveReturn": 0.40133037473618843,
+              "maxDrawdownStitched": 0.02646043688388955,
+              "maxDrawdownContinuousEpisode": 0.02646043688388977,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.017924378920643646,
+              "annualizedActiveReturn": 0.32287671462868445,
+              "maxDrawdownStitched": 0.021876548505892934,
+              "maxDrawdownContinuousEpisode": 0.0218765485058926,
+              "upCapture": 82.61337965480041,
+              "downCapture": 82.54653638908589
+            },
+            "spyCashGroupMean": {
+              "return": 0.01678062145653789,
+              "annualizedActiveReturn": 0.2996588045609911,
+              "maxDrawdownStitched": 0.020473378934485753,
+              "maxDrawdownContinuousEpisode": 0.020473378934485753,
+              "upCapture": 77.29653626038753,
+              "downCapture": 77.21488455349468
+            },
+            "spyCashLagged": {
+              "return": 0.014952538465911875,
+              "annualizedActiveReturn": 0.26334018952556815,
+              "maxDrawdownStitched": 0.021462861709128478,
+              "maxDrawdownContinuousEpisode": 0.021462861709128367,
+              "upCapture": 75.37656070685588,
+              "downCapture": 78.99927580823973
+            }
+          },
+          "excessReturn": {
+            "spy": 8.836634738738913e-06,
+            "spyCashFullMean": 0.0037392135507990365,
+            "spyCashGroupMean": 0.0048829710149047925,
+            "spyCashLagged": 0.006711054005530808
+          },
+          "attribution": {
+            "cashLevelLogPP": -0.47822400687034666,
+            "exposureTimingLogPP": -0.17995310801749553,
+            "residualLogPP": 0.6590420446963676,
+            "totalExcessLogPP": 0.0008649298085253859
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|up|low",
+          "sessions": 0,
+          "episodes": 0,
+          "longestEpisode": 0,
+          "first": null,
+          "last": null,
+          "upDays": 0,
+          "downDays": 0,
+          "flatDays": 0,
+          "meanExposure": null,
+          "meanLaggedExposure": null,
+          "series": {
+            "strategy": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spy": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spyCashFullMean": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spyCashGroupMean": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spyCashLagged": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            }
+          },
+          "excessReturn": {
+            "spy": null,
+            "spyCashFullMean": null,
+            "spyCashGroupMean": null,
+            "spyCashLagged": null
+          },
+          "attribution": null
+        },
+        {
+          "axis": "joint",
+          "regime": "below|up|medium",
+          "sessions": 37,
+          "episodes": 9,
+          "longestEpisode": 9,
+          "first": "2019-01-31",
+          "last": "2023-03-23",
+          "upDays": 22,
+          "downDays": 15,
+          "flatDays": 0,
+          "meanExposure": 0.7014980729023375,
+          "meanLaggedExposure": 0.7098765686627531,
+          "series": {
+            "strategy": {
+              "return": 0.009319049990831557,
+              "annualizedActiveReturn": 0.0652146942009485,
+              "maxDrawdownStitched": 0.06581525331735527,
+              "maxDrawdownContinuousEpisode": 0.051640223670776475,
+              "upCapture": 48.50805471171387,
+              "downCapture": 39.33112540115069
+            },
+            "spy": {
+              "return": -0.022034656468518623,
+              "annualizedActiveReturn": -0.1407986521492205,
+              "maxDrawdownStitched": 0.13515904809672952,
+              "maxDrawdownContinuousEpisode": 0.08942258532457725,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.017706685995629676,
+              "annualizedActiveReturn": -0.11456598986298032,
+              "maxDrawdownStitched": 0.11266387553750656,
+              "maxDrawdownContinuousEpisode": 0.07424857511017524,
+              "upCapture": 82.60836377473753,
+              "downCapture": 82.51232834596308
+            },
+            "spyCashGroupMean": {
+              "return": -0.014744681818749194,
+              "annualizedActiveReturn": -0.09622148274737598,
+              "maxDrawdownStitched": 0.0963521170954853,
+              "maxDrawdownContinuousEpisode": 0.06332206444249355,
+              "upCapture": 70.19591498580291,
+              "downCapture": 70.05637194332928
+            },
+            "spyCashLagged": {
+              "return": 0.007393528264333248,
+              "annualizedActiveReturn": 0.05145054344350881,
+              "maxDrawdownStitched": 0.08203821354842444,
+              "maxDrawdownContinuousEpisode": 0.051327982751661505,
+              "upCapture": 74.83000154082724,
+              "downCapture": 63.76458280240651
+            }
+          },
+          "excessReturn": {
+            "spy": 0.03135370645935018,
+            "spyCashFullMean": 0.027025735986461234,
+            "spyCashGroupMean": 0.02406373180958075,
+            "spyCashLagged": 0.001925521726498309
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.742658051426258,
+            "exposureTimingLogPP": 2.2220795234975212,
+            "residualLogPP": 0.1909565430759123,
+            "totalExcessLogPP": 3.155694117999692
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|up|high",
+          "sessions": 19,
+          "episodes": 7,
+          "longestEpisode": 8,
+          "first": "2020-06-12",
+          "last": "2023-01-03",
+          "upDays": 8,
+          "downDays": 10,
+          "flatDays": 1,
+          "meanExposure": 0.8356457958967626,
+          "meanLaggedExposure": 0.855300845223072,
+          "series": {
+            "strategy": {
+              "return": 0.013789864750559416,
+              "annualizedActiveReturn": 0.19919148198225656,
+              "maxDrawdownStitched": 0.020874243852244567,
+              "maxDrawdownContinuousEpisode": 0.020874243852244567,
+              "upCapture": 40.45095351056731,
+              "downCapture": 24.54169830878695
+            },
+            "spy": {
+              "return": -0.01041023167770044,
+              "annualizedActiveReturn": -0.12959465070137946,
+              "maxDrawdownStitched": 0.06280559399814778,
+              "maxDrawdownContinuousEpisode": 0.04652091486987353,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.008401773943228998,
+              "annualizedActiveReturn": -0.10587063879534854,
+              "maxDrawdownStitched": 0.05202900799135568,
+              "maxDrawdownContinuousEpisode": 0.03850974523292816,
+              "upCapture": 82.5914957190723,
+              "downCapture": 82.54350781720802
+            },
+            "spyCashGroupMean": {
+              "return": -0.008513467554010373,
+              "annualizedActiveReturn": -0.10720551182633248,
+              "maxDrawdownStitched": 0.05264189212867332,
+              "maxDrawdownContinuousEpisode": 0.03896501618504744,
+              "upCapture": 83.5786731215224,
+              "downCapture": 83.53286177781341
+            },
+            "spyCashLagged": {
+              "return": -0.017830219881964905,
+              "annualizedActiveReturn": -0.21228482884513572,
+              "maxDrawdownStitched": 0.05566346670961275,
+              "maxDrawdownContinuousEpisode": 0.04236892419713634,
+              "upCapture": 80.42233039389546,
+              "downCapture": 89.77539091600053
+            }
+          },
+          "excessReturn": {
+            "spy": 0.024200096428259855,
+            "spyCashFullMean": 0.022191638693788415,
+            "spyCashGroupMean": 0.022303332304569788,
+            "spyCashLagged": 0.03162008463252432
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.19148830386176482,
+            "exposureTimingLogPP": -0.9441179270447834,
+            "residualLogPP": 3.168674311383314,
+            "totalExcessLogPP": 2.4160446882002957
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|downFlat|low",
+          "sessions": 40,
+          "episodes": 6,
+          "longestEpisode": 14,
+          "first": "2018-10-12",
+          "last": "2026-04-08",
+          "upDays": 23,
+          "downDays": 17,
+          "flatDays": 0,
+          "meanExposure": 0.7633068298016916,
+          "meanLaggedExposure": 0.7433078037300207,
+          "series": {
+            "strategy": {
+              "return": 0.018104970636689643,
+              "annualizedActiveReturn": 0.11967792001637252,
+              "maxDrawdownStitched": 0.049774597710812496,
+              "maxDrawdownContinuousEpisode": 0.049774597710812496,
+              "upCapture": 29.235002848466625,
+              "downCapture": 41.79207670824689
+            },
+            "spy": {
+              "return": 0.1347973562693522,
+              "annualizedActiveReturn": 1.2181217824502903,
+              "maxDrawdownStitched": 0.04536906230764359,
+              "maxDrawdownContinuousEpisode": 0.04536906230764348,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.11065058805691333,
+              "annualizedActiveReturn": 0.9370371079035075,
+              "maxDrawdownStitched": 0.03750002219330184,
+              "maxDrawdownContinuousEpisode": 0.03750002219330162,
+              "upCapture": 82.61011122426909,
+              "downCapture": 82.52604358433639
+            },
+            "spyCashGroupMean": {
+              "return": 0.10206072187923633,
+              "annualizedActiveReturn": 0.8445685605743373,
+              "maxDrawdownStitched": 0.03467525731564858,
+              "maxDrawdownContinuousEpisode": 0.03467525731564869,
+              "upCapture": 76.3726385748204,
+              "downCapture": 76.26709606194713
+            },
+            "spyCashLagged": {
+              "return": 0.09888080637868153,
+              "annualizedActiveReturn": 0.8112929776884685,
+              "maxDrawdownStitched": 0.04007886010423123,
+              "maxDrawdownContinuousEpisode": 0.04007886010423112,
+              "upCapture": 75.12455351550672,
+              "downCapture": 75.8690453674154
+            }
+          },
+          "excessReturn": {
+            "spy": -0.11669238563266254,
+            "spyCashFullMean": -0.09254561742022369,
+            "spyCashGroupMean": -0.08395575124254669,
+            "spyCashLagged": -0.08077583574199189
+          },
+          "attribution": {
+            "cashLevelLogPP": -2.9272283524726426,
+            "exposureTimingLogPP": -0.28895976311582305,
+            "residualLogPP": -7.634918571859921,
+            "totalExcessLogPP": -10.851106687448386
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|downFlat|medium",
+          "sessions": 176,
+          "episodes": 23,
+          "longestEpisode": 31,
+          "first": "2018-03-26",
+          "last": "2025-04-09",
+          "upDays": 82,
+          "downDays": 94,
+          "flatDays": 0,
+          "meanExposure": 0.7043944143155679,
+          "meanLaggedExposure": 0.7106681025115461,
+          "series": {
+            "strategy": {
+              "return": -0.009823206200026885,
+              "annualizedActiveReturn": -0.014035158698184343,
+              "maxDrawdownStitched": 0.12294569839786507,
+              "maxDrawdownContinuousEpisode": 0.10762486359835821,
+              "upCapture": 29.919881086350102,
+              "downCapture": 30.801768705616016
+            },
+            "spy": {
+              "return": -0.008837222439756208,
+              "annualizedActiveReturn": -0.012629112264691527,
+              "maxDrawdownStitched": 0.2052635308566496,
+              "maxDrawdownContinuousEpisode": 0.13287697932325382,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.0025822716755176684,
+              "annualizedActiveReturn": -0.003695281124349176,
+              "maxDrawdownStitched": 0.17034046629915167,
+              "maxDrawdownContinuousEpisode": 0.11085848603133219,
+              "upCapture": 82.66921617171961,
+              "downCapture": 82.48177555186676
+            },
+            "spyCashGroupMean": {
+              "return": 0.0006157969987117465,
+              "annualizedActiveReturn": 0.0008818265540926023,
+              "maxDrawdownStitched": 0.14575079250078782,
+              "maxDrawdownContinuousEpisode": 0.0952439957019221,
+              "upCapture": 70.57397886668939,
+              "downCapture": 70.30259258677245
+            },
+            "spyCashLagged": {
+              "return": -0.12321822716782754,
+              "annualizedActiveReturn": -0.17161728240757892,
+              "maxDrawdownStitched": 0.1865513647632696,
+              "maxDrawdownContinuousEpisode": 0.10933018915104797,
+              "upCapture": 58.10433615755526,
+              "downCapture": 68.72064451783085
+            }
+          },
+          "excessReturn": {
+            "spy": -0.0009859837602706773,
+            "spyCashFullMean": -0.0072409345245092165,
+            "spyCashGroupMean": -0.010439003198738632,
+            "spyCashLagged": 0.11339502096780066
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.9492109751197378,
+            "exposureTimingLogPP": -13.211275876248216,
+            "residualLogPP": 12.162537908793322,
+            "totalExcessLogPP": -0.09952699233515427
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|downFlat|high",
+          "sessions": 166,
+          "episodes": 8,
+          "longestEpisode": 62,
+          "first": "2019-01-07",
+          "last": "2025-05-12",
+          "upDays": 92,
+          "downDays": 74,
+          "flatDays": 0,
+          "meanExposure": 0.5134458663283104,
+          "meanLaggedExposure": 0.5031802271368909,
+          "series": {
+            "strategy": {
+              "return": -0.003234212321133817,
+              "annualizedActiveReturn": -0.0049056526671630305,
+              "maxDrawdownStitched": 0.09723611638824325,
+              "maxDrawdownContinuousEpisode": 0.09723611638824314,
+              "upCapture": 15.983764273443276,
+              "downCapture": 20.920610147158932
+            },
+            "spy": {
+              "return": 0.3925624786315252,
+              "annualizedActiveReturn": 0.6531836239941172,
+              "maxDrawdownStitched": 0.22699540056673684,
+              "maxDrawdownContinuousEpisode": 0.22699540056673684,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.3241407230180426,
+              "annualizedActiveReturn": 0.5314571237627572,
+              "maxDrawdownStitched": 0.18908840916941794,
+              "maxDrawdownContinuousEpisode": 0.18908840916941805,
+              "upCapture": 82.69382444743013,
+              "downCapture": 82.38967986744956
+            },
+            "spyCashGroupMean": {
+              "return": 0.20045131893020943,
+              "annualizedActiveReturn": 0.31962570738849566,
+              "maxDrawdownStitched": 0.11928822850333543,
+              "maxDrawdownContinuousEpisode": 0.11928822850333554,
+              "upCapture": 51.55042141775866,
+              "downCapture": 51.02526984665706
+            },
+            "spyCashLagged": {
+              "return": 0.21529543070530716,
+              "annualizedActiveReturn": 0.3444764290432665,
+              "maxDrawdownStitched": 0.09102352750234077,
+              "maxDrawdownContinuousEpisode": 0.09102352750234077,
+              "upCapture": 38.221453347445596,
+              "downCapture": 32.977815758861595
+            }
+          },
+          "excessReturn": {
+            "spy": -0.395796690952659,
+            "spyCashFullMean": -0.3273749353391764,
+            "spyCashGroupMean": -0.20368553125134325,
+            "spyCashLagged": -0.21852964302644098
+          },
+          "attribution": {
+            "cashLevelLogPP": -14.844797457585173,
+            "exposureTimingLogPP": 1.228961488460345,
+            "residualLogPP": -19.822665376951154,
+            "totalExcessLogPP": -33.43850134607598
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2017",
+          "sessions": 63,
+          "episodes": 1,
+          "longestEpisode": 63,
+          "first": "2017-10-02",
+          "last": "2017-12-29",
+          "upDays": 38,
+          "downDays": 25,
+          "flatDays": 0,
+          "meanExposure": 0.9403176938883036,
+          "meanLaggedExposure": 0.92460475080972,
+          "series": {
+            "strategy": {
+              "return": 0.06357075017154892,
+              "annualizedActiveReturn": 0.2795743926776405,
+              "maxDrawdownStitched": 0.07632641327924428,
+              "maxDrawdownContinuousEpisode": 0.07632641327924428,
+              "upCapture": 162.94002160882616,
+              "downCapture": 223.60131443597223
+            },
+            "spy": {
+              "return": 0.06005534834305682,
+              "annualizedActiveReturn": 0.2627406637018165,
+              "maxDrawdownStitched": 0.010304438505269076,
+              "maxDrawdownContinuousEpisode": 0.010304438505269076,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.04939635006534333,
+              "annualizedActiveReturn": 0.2127134585151545,
+              "maxDrawdownStitched": 0.008513542894719617,
+              "maxDrawdownContinuousEpisode": 0.008513542894719617,
+              "upCapture": 82.59298236769762,
+              "downCapture": 82.56853784209407
+            },
+            "spyCashGroupMean": {
+              "return": 0.05639481413110512,
+              "annualizedActiveReturn": 0.24538904831694228,
+              "maxDrawdownStitched": 0.009691191088119333,
+              "maxDrawdownContinuousEpisode": 0.009691191088119333,
+              "upCapture": 94.03810499847476,
+              "downCapture": 94.02857296032231
+            },
+            "spyCashLagged": {
+              "return": 0.05046671962123692,
+              "annualizedActiveReturn": 0.21766883656013486,
+              "maxDrawdownStitched": 0.010050573408247998,
+              "maxDrawdownContinuousEpisode": 0.010050573408247998,
+              "upCapture": 90.5025788058714,
+              "downCapture": 97.04134914670183
+            }
+          },
+          "excessReturn": {
+            "spy": 0.0035154018284921026,
+            "spyCashFullMean": 0.014174400106205597,
+            "spyCashGroupMean": 0.007175936040443802,
+            "spyCashLagged": 0.013104030550312
+          },
+          "attribution": {
+            "cashLevelLogPP": -0.3459129751211251,
+            "exposureTimingLogPP": -0.5627432139348632,
+            "residualLogPP": 1.2397318941445543,
+            "totalExcessLogPP": 0.3310757050885661
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2018",
+          "sessions": 251,
+          "episodes": 1,
+          "longestEpisode": 251,
+          "first": "2018-01-02",
+          "last": "2018-12-31",
+          "upDays": 132,
+          "downDays": 117,
+          "flatDays": 2,
+          "meanExposure": 0.8723180388969793,
+          "meanLaggedExposure": 0.876261925008337,
+          "series": {
+            "strategy": {
+              "return": -0.09795854118742736,
+              "annualizedActiveReturn": -0.09832896622774286,
+              "maxDrawdownStitched": 0.1777468551414274,
+              "maxDrawdownContinuousEpisode": 0.1777468551414274,
+              "upCapture": 53.83052383137051,
+              "downCapture": 60.41339249721882
+            },
+            "spy": {
+              "return": -0.0634789331952502,
+              "annualizedActiveReturn": -0.06372360284910614,
+              "maxDrawdownStitched": 0.20178483869435293,
+              "maxDrawdownContinuousEpisode": 0.20178483869435293,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.05071515231531123,
+              "annualizedActiveReturn": -0.05091197186976768,
+              "maxDrawdownStitched": 0.1691041818823361,
+              "maxDrawdownContinuousEpisode": 0.1691041818823361,
+              "upCapture": 82.62194787850576,
+              "downCapture": 82.50755712263273
+            },
+            "spyCashGroupMean": {
+              "return": -0.054059495238415654,
+              "annualizedActiveReturn": -0.05426891912118679,
+              "maxDrawdownStitched": 0.17793505733453874,
+              "maxDrawdownContinuousEpisode": 0.17793505733453874,
+              "upCapture": 87.26677928759615,
+              "downCapture": 87.1782092559885
+            },
+            "spyCashLagged": {
+              "return": -0.10571865392737136,
+              "annualizedActiveReturn": -0.10611666250661592,
+              "maxDrawdownStitched": 0.1656708137073719,
+              "maxDrawdownContinuousEpisode": 0.1656708137073719,
+              "upCapture": 79.93408888271505,
+              "downCapture": 86.14080775238807
+            }
+          },
+          "excessReturn": {
+            "spy": -0.034479607992177155,
+            "spyCashFullMean": -0.047243388872116134,
+            "spyCashGroupMean": -0.04389904594901171,
+            "spyCashLagged": 0.0077601127399439945
+          },
+          "attribution": {
+            "cashLevelLogPP": 1.0007658817135126,
+            "exposureTimingLogPP": -5.615924525802189,
+            "residualLogPP": 0.8640051769612425,
+            "totalExcessLogPP": -3.751153467127434
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2019",
+          "sessions": 252,
+          "episodes": 1,
+          "longestEpisode": 252,
+          "first": "2019-01-02",
+          "last": "2019-12-31",
+          "upDays": 149,
+          "downDays": 103,
+          "flatDays": 0,
+          "meanExposure": 0.8534138003817793,
+          "meanLaggedExposure": 0.8497074092644165,
+          "series": {
+            "strategy": {
+              "return": 0.03886468677230613,
+              "annualizedActiveReturn": 0.03886468677230613,
+              "maxDrawdownStitched": 0.13175840947477824,
+              "maxDrawdownContinuousEpisode": 0.13175840947477824,
+              "upCapture": 53.30905299076248,
+              "downCapture": 69.86469707823902
+            },
+            "spy": {
+              "return": 0.28785206349907816,
+              "annualizedActiveReturn": 0.28785206349907816,
+              "maxDrawdownStitched": 0.06618369396275503,
+              "maxDrawdownContinuousEpisode": 0.06618369396275503,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.23373942819249444,
+              "annualizedActiveReturn": 0.23373942819249444,
+              "maxDrawdownStitched": 0.05484991558443264,
+              "maxDrawdownContinuousEpisode": 0.05484991558443264,
+              "upCapture": 82.6068769355097,
+              "downCapture": 82.52414113830797
+            },
+            "spyCashGroupMean": {
+              "return": 0.24221181268422382,
+              "annualizedActiveReturn": 0.24221181268422382,
+              "maxDrawdownStitched": 0.05665388046071629,
+              "maxDrawdownContinuousEpisode": 0.05665388046071629,
+              "upCapture": 85.36758426399558,
+              "downCapture": 85.29563590204764
+            },
+            "spyCashLagged": {
+              "return": 0.18558952854488098,
+              "annualizedActiveReturn": 0.18558952854488098,
+              "maxDrawdownStitched": 0.0616067906481198,
+              "maxDrawdownContinuousEpisode": 0.0616067906481198,
+              "upCapture": 79.51790659202904,
+              "downCapture": 84.86123955811071
+            }
+          },
+          "excessReturn": {
+            "spy": -0.24898737672677201,
+            "spyCashFullMean": -0.1948747414201883,
+            "spyCashGroupMean": -0.20334712591191767,
+            "spyCashLagged": -0.14672484177257483
+          },
+          "attribution": {
+            "cashLevelLogPP": -3.6082252969332873,
+            "exposureTimingLogPP": -4.6653367262731695,
+            "residualLogPP": -13.21116737836771,
+            "totalExcessLogPP": -21.484729401574164
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2020",
+          "sessions": 253,
+          "episodes": 1,
+          "longestEpisode": 253,
+          "first": "2020-01-02",
+          "last": "2020-12-31",
+          "upDays": 146,
+          "downDays": 107,
+          "flatDays": 0,
+          "meanExposure": 0.6264082772936839,
+          "meanLaggedExposure": 0.626908904649608,
+          "series": {
+            "strategy": {
+              "return": -0.03436496169371667,
+              "annualizedActiveReturn": -0.0342314836794803,
+              "maxDrawdownStitched": 0.17373149421878586,
+              "maxDrawdownContinuousEpisode": 0.17373149421878586,
+              "upCapture": 31.592510525128837,
+              "downCapture": 37.00422314708819
+            },
+            "spy": {
+              "return": 0.16162313396748895,
+              "annualizedActiveReturn": 0.1609354625739785,
+              "maxDrawdownStitched": 0.3410474689324394,
+              "maxDrawdownContinuousEpisode": 0.3410474689324394,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.14105646283006282,
+              "annualizedActiveReturn": 0.14046148915544163,
+              "maxDrawdownStitched": 0.2882457811167457,
+              "maxDrawdownContinuousEpisode": 0.2882457811167457,
+              "upCapture": 82.68927802363811,
+              "downCapture": 82.39407502284793
+            },
+            "spyCashGroupMean": {
+              "return": 0.11317517003884409,
+              "annualizedActiveReturn": 0.11270352814494028,
+              "maxDrawdownStitched": 0.22442672566065613,
+              "maxDrawdownContinuousEpisode": 0.22442672566065613,
+              "upCapture": 62.825330572771406,
+              "downCapture": 62.34679918194437
+            },
+            "spyCashLagged": {
+              "return": 0.06809067485204237,
+              "annualizedActiveReturn": 0.06781261638457395,
+              "maxDrawdownStitched": 0.13096234915996063,
+              "maxDrawdownContinuousEpisode": 0.13096234915996063,
+              "upCapture": 42.34931913591949,
+              "downCapture": 42.54509434886912
+            }
+          },
+          "excessReturn": {
+            "spy": -0.19598809566120562,
+            "spyCashFullMean": -0.17542142452377948,
+            "spyCashGroupMean": -0.14754013173256075,
+            "spyCashLagged": -0.10245563654575904
+          },
+          "attribution": {
+            "cashLevelLogPP": -4.26018351064454,
+            "exposureTimingLogPP": -4.134380690832989,
+            "residualLogPP": -10.08419617739957,
+            "totalExcessLogPP": -18.478760378877098
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2021",
+          "sessions": 252,
+          "episodes": 1,
+          "longestEpisode": 252,
+          "first": "2021-01-04",
+          "last": "2021-12-31",
+          "upDays": 146,
+          "downDays": 106,
+          "flatDays": 0,
+          "meanExposure": 0.873829521727336,
+          "meanLaggedExposure": 0.8733608298089609,
+          "series": {
+            "strategy": {
+              "return": 0.07258036122774969,
+              "annualizedActiveReturn": 0.07258036122774969,
+              "maxDrawdownStitched": 0.14930504153721813,
+              "maxDrawdownContinuousEpisode": 0.14930504153721813,
+              "upCapture": 65.05404985906006,
+              "downCapture": 77.84790935312027
+            },
+            "spy": {
+              "return": 0.2703540848726257,
+              "annualizedActiveReturn": 0.2703540848726257,
+              "maxDrawdownStitched": 0.05417151230325967,
+              "maxDrawdownContinuousEpisode": 0.05417151230325967,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.2200000731150445,
+              "annualizedActiveReturn": 0.2200000731150445,
+              "maxDrawdownStitched": 0.04482605863922806,
+              "maxDrawdownContinuousEpisode": 0.04482605863922806,
+              "upCapture": 82.60526091344231,
+              "downCapture": 82.53802836000058
+            },
+            "spyCashGroupMean": {
+              "return": 0.2337524035918093,
+              "annualizedActiveReturn": 0.2337524035918093,
+              "maxDrawdownStitched": 0.047408008297323945,
+              "maxDrawdownContinuousEpisode": 0.047408008297323945,
+              "upCapture": 87.40480544351088,
+              "downCapture": 87.35327854577379
+            },
+            "spyCashLagged": {
+              "return": 0.2259358755834657,
+              "annualizedActiveReturn": 0.2259358755834657,
+              "maxDrawdownStitched": 0.04522016134635054,
+              "maxDrawdownContinuousEpisode": 0.04522016134635054,
+              "upCapture": 85.22211338922232,
+              "downCapture": 85.34924242441636
+            }
+          },
+          "excessReturn": {
+            "spy": -0.197773723644876,
+            "spyCashFullMean": -0.1474197118872948,
+            "spyCashGroupMean": -0.1611720423640596,
+            "spyCashLagged": -0.153355514355716
+          },
+          "attribution": {
+            "cashLevelLogPP": -2.9235408633669606,
+            "exposureTimingLogPP": -0.6355727583100129,
+            "residualLogPP": -13.36372344839154,
+            "totalExcessLogPP": -16.922837070068514
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2022",
+          "sessions": 251,
+          "episodes": 1,
+          "longestEpisode": 251,
+          "first": "2022-01-03",
+          "last": "2022-12-30",
+          "upDays": 108,
+          "downDays": 142,
+          "flatDays": 1,
+          "meanExposure": 0.7307865738360692,
+          "meanLaggedExposure": 0.730621367852973,
+          "series": {
+            "strategy": {
+              "return": -0.02886860732365275,
+              "annualizedActiveReturn": -0.02898193871957358,
+              "maxDrawdownStitched": 0.19361359470137984,
+              "maxDrawdownContinuousEpisode": 0.19361359470137984,
+              "upCapture": 27.10736377372216,
+              "downCapture": 25.579285222906766
+            },
+            "spy": {
+              "return": -0.1948164065268404,
+              "annualizedActiveReturn": -0.1955112108615282,
+              "maxDrawdownStitched": 0.25360573583037027,
+              "maxDrawdownContinuousEpisode": 0.25360573583037027,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.160296552517868,
+              "annualizedActiveReturn": -0.16088081784471137,
+              "maxDrawdownStitched": 0.2119830461055292,
+              "maxDrawdownContinuousEpisode": 0.2119830461055292,
+              "upCapture": 82.62221025475965,
+              "downCapture": 82.5176611213015
+            },
+            "spyCashGroupMean": {
+              "return": -0.1415049703030432,
+              "annualizedActiveReturn": -0.142026661743301,
+              "maxDrawdownStitched": 0.18880157505213802,
+              "maxDrawdownContinuousEpisode": 0.18880157505213802,
+              "upCapture": 73.14096080567043,
+              "downCapture": 72.99803596978097
+            },
+            "spyCashLagged": {
+              "return": -0.15925795729210263,
+              "annualizedActiveReturn": -0.15983880775629822,
+              "maxDrawdownStitched": 0.21413795704715344,
+              "maxDrawdownContinuousEpisode": 0.21413795704715344,
+              "upCapture": 70.0457218576834,
+              "downCapture": 71.62047433354925
+            }
+          },
+          "excessReturn": {
+            "spy": 0.16594779920318764,
+            "spyCashFullMean": 0.13142794519421525,
+            "spyCashGroupMean": 0.11263636297939046,
+            "spyCashLagged": 0.13038934996844986
+          },
+          "attribution": {
+            "cashLevelLogPP": 6.411057295897263,
+            "exposureTimingLogPP": -2.089600474136505,
+            "residualLogPP": 14.417688994300654,
+            "totalExcessLogPP": 18.739145816061413
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2023",
+          "sessions": 250,
+          "episodes": 1,
+          "longestEpisode": 250,
+          "first": "2023-01-03",
+          "last": "2023-12-29",
+          "upDays": 140,
+          "downDays": 109,
+          "flatDays": 1,
+          "meanExposure": 0.8609941463362157,
+          "meanLaggedExposure": 0.8613360011766586,
+          "series": {
+            "strategy": {
+              "return": 0.08573760350719692,
+              "annualizedActiveReturn": 0.08645233716607179,
+              "maxDrawdownStitched": 0.12547625175177213,
+              "maxDrawdownContinuousEpisode": 0.12547625175177213,
+              "upCapture": 73.9752698919005,
+              "downCapture": 83.9776217881695
+            },
+            "spy": {
+              "return": 0.24286799325793076,
+              "annualizedActiveReturn": 0.24503168529484504,
+              "maxDrawdownStitched": 0.1029074793896857,
+              "maxDrawdownContinuousEpisode": 0.1029074793896857,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.19816046546165283,
+              "annualizedActiveReturn": 0.19989461807127498,
+              "maxDrawdownStitched": 0.08551305199520198,
+              "maxDrawdownContinuousEpisode": 0.08551305199520198,
+              "upCapture": 82.60629705517209,
+              "downCapture": 82.54812366421811
+            },
+            "spyCashGroupMean": {
+              "return": 0.20711914739992077,
+              "annualizedActiveReturn": 0.20893830931240903,
+              "maxDrawdownStitched": 0.08904808881397219,
+              "maxDrawdownContinuousEpisode": 0.08904808881397219,
+              "upCapture": 86.12400180487984,
+              "downCapture": 86.07561064270561
+            },
+            "spyCashLagged": {
+              "return": 0.1782324970671586,
+              "annualizedActiveReturn": 0.17977949826655484,
+              "maxDrawdownStitched": 0.09493421631169019,
+              "maxDrawdownContinuousEpisode": 0.09493421631169019,
+              "upCapture": 83.63517282045379,
+              "downCapture": 86.2490145701079
+            }
+          },
+          "excessReturn": {
+            "spy": -0.15713038975073385,
+            "spyCashFullMean": -0.11242286195445592,
+            "spyCashGroupMean": -0.12138154389272385,
+            "spyCashLagged": -0.09249489355996168
+          },
+          "attribution": {
+            "cashLevelLogPP": -2.918495586093528,
+            "exposureTimingLogPP": -2.4221219227036044,
+            "residualLogPP": -8.175585676580594,
+            "totalExcessLogPP": -13.516203185377726
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2024",
+          "sessions": 252,
+          "episodes": 1,
+          "longestEpisode": 252,
+          "first": "2024-01-02",
+          "last": "2024-12-31",
+          "upDays": 148,
+          "downDays": 104,
+          "flatDays": 0,
+          "meanExposure": 0.9214830897259936,
+          "meanLaggedExposure": 0.9220293043964589,
+          "series": {
+            "strategy": {
+              "return": 0.10890258726423929,
+              "annualizedActiveReturn": 0.10890258726423929,
+              "maxDrawdownStitched": 0.06606366748129411,
+              "maxDrawdownContinuousEpisode": 0.06606366748129411,
+              "upCapture": 71.75240123995219,
+              "downCapture": 79.22451490772634
+            },
+            "spy": {
+              "return": 0.23304794786605398,
+              "annualizedActiveReturn": 0.23304794786605398,
+              "maxDrawdownStitched": 0.08405619392423247,
+              "maxDrawdownContinuousEpisode": 0.08405619392423247,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.19022252909778992,
+              "annualizedActiveReturn": 0.19022252909778992,
+              "maxDrawdownStitched": 0.06974837836927605,
+              "maxDrawdownContinuousEpisode": 0.06974837836927605,
+              "upCapture": 82.6053267050254,
+              "downCapture": 82.533603199156
+            },
+            "spyCashGroupMean": {
+              "return": 0.2136345018411901,
+              "annualizedActiveReturn": 0.2136345018411901,
+              "maxDrawdownStitched": 0.07762605878964768,
+              "maxDrawdownContinuousEpisode": 0.07762605878964768,
+              "upCapture": 92.1626765318999,
+              "downCapture": 92.12659337169669
+            },
+            "spyCashLagged": {
+              "return": 0.2136306742534542,
+              "annualizedActiveReturn": 0.2136306742534542,
+              "maxDrawdownStitched": 0.07466390250470256,
+              "maxDrawdownContinuousEpisode": 0.07466390250470256,
+              "upCapture": 91.12889896333915,
+              "downCapture": 90.76123919617258
+            }
+          },
+          "excessReturn": {
+            "spy": -0.12414536060181469,
+            "spyCashFullMean": -0.08131994183355062,
+            "spyCashGroupMean": -0.1047319145769508,
+            "spyCashLagged": -0.1047280869892149
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.5869532601043486,
+            "exposureTimingLogPP": -0.00031538274215814344,
+            "residualLogPP": -9.024555800069436,
+            "totalExcessLogPP": -10.611824442915943
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2025",
+          "sessions": 250,
+          "episodes": 1,
+          "longestEpisode": 250,
+          "first": "2025-01-02",
+          "last": "2025-12-31",
+          "upDays": 142,
+          "downDays": 108,
+          "flatDays": 0,
+          "meanExposure": 0.832947165959436,
+          "meanLaggedExposure": 0.8323206670635052,
+          "series": {
+            "strategy": {
+              "return": -0.06750164194246161,
+              "annualizedActiveReturn": -0.06802285895027887,
+              "maxDrawdownStitched": 0.18217327376547454,
+              "maxDrawdownContinuousEpisode": 0.18217327376547454,
+              "upCapture": 46.588074741946166,
+              "downCapture": 63.18339446347142
+            },
+            "spy": {
+              "return": 0.16352710043963176,
+              "annualizedActiveReturn": 0.16493774011018084,
+              "maxDrawdownStitched": 0.18998904129504934,
+              "maxDrawdownContinuousEpisode": 0.18998904129504934,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.13623334135649506,
+              "annualizedActiveReturn": 0.1373948806671154,
+              "maxDrawdownStitched": 0.15903259082864052,
+              "maxDrawdownContinuousEpisode": 0.15903259082864052,
+              "upCapture": 82.666389853938,
+              "downCapture": 82.48979677423084
+            },
+            "spyCashGroupMean": {
+              "return": 0.137370271823502,
+              "annualizedActiveReturn": 0.13854208271792337,
+              "maxDrawdownStitched": 0.16032566451115304,
+              "maxDrawdownContinuousEpisode": 0.16032566451115304,
+              "upCapture": 83.38139857686701,
+              "downCapture": 83.21062448356919
+            },
+            "spyCashLagged": {
+              "return": 0.056520244432568416,
+              "annualizedActiveReturn": 0.056985052594201634,
+              "maxDrawdownStitched": 0.17671834544202047,
+              "maxDrawdownContinuousEpisode": 0.17671834544202047,
+              "upCapture": 75.34997466521881,
+              "downCapture": 82.39056260207816
+            }
+          },
+          "excessReturn": {
+            "spy": -0.23102874238209337,
+            "spyCashFullMean": -0.20373498329895667,
+            "spyCashGroupMean": -0.20487191376596361,
+            "spyCashLagged": -0.12402188637503003
+          },
+          "attribution": {
+            "cashLevelLogPP": -2.273717706823686,
+            "exposureTimingLogPP": -7.373809890882751,
+            "residualLogPP": -12.486860794366844,
+            "totalExcessLogPP": -22.13438839207328
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2026",
+          "sessions": 189,
+          "episodes": 1,
+          "longestEpisode": 189,
+          "first": "2026-01-02",
+          "last": "2026-10-02",
+          "upDays": 96,
+          "downDays": 93,
+          "flatDays": 0,
+          "meanExposure": 0.8341082174428314,
+          "meanLaggedExposure": 0.835205589267396,
+          "series": {
+            "strategy": {
+              "return": 0.016903021635108477,
+              "annualizedActiveReturn": 0.022600616942756797,
+              "maxDrawdownStitched": 0.12931976291935932,
+              "maxDrawdownContinuousEpisode": 0.12931976291935932,
+              "upCapture": 90.2558361919398,
+              "downCapture": 107.33964564469251
+            },
+            "spy": {
+              "return": 0.12750848532487147,
+              "annualizedActiveReturn": 0.17352701572311588,
+              "maxDrawdownStitched": 0.09133132097249108,
+              "maxDrawdownContinuousEpisode": 0.09133132097249108,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.10520496653669721,
+              "annualizedActiveReturn": 0.14267774875339695,
+              "maxDrawdownStitched": 0.0758170313901324,
+              "maxDrawdownContinuousEpisode": 0.0758170313901324,
+              "upCapture": 82.60626131959421,
+              "downCapture": 82.5410633943689
+            },
+            "spyCashGroupMean": {
+              "return": 0.10627244898526414,
+              "annualizedActiveReturn": 0.1441495538877538,
+              "maxDrawdownStitched": 0.07656357591366614,
+              "maxDrawdownContinuousEpisode": 0.07656357591366614,
+              "upCapture": 83.43922033038591,
+              "downCapture": 83.37651629919553
+            },
+            "spyCashLagged": {
+              "return": 0.08613955244489138,
+              "annualizedActiveReturn": 0.1164711505532185,
+              "maxDrawdownStitched": 0.07016959490816432,
+              "maxDrawdownContinuousEpisode": 0.07016959490816432,
+              "upCapture": 81.77808952952637,
+              "downCapture": 84.76982715445178
+            }
+          },
+          "excessReturn": {
+            "spy": -0.11060546368976298,
+            "spyCashFullMean": -0.08830194490158874,
+            "spyCashGroupMean": -0.08936942735015566,
+            "spyCashLagged": -0.0692365308097829
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.9014108151263323,
+            "exposureTimingLogPP": -1.83664954155143,
+            "residualLogPP": -6.58679593579439,
+            "totalExcessLogPP": -10.324856292472154
+          }
+        }
+      ]
+    },
+    "watch": {
+      "fullMeanWeight": 0.8439368177686304,
+      "calendarYears": 9.000057038558065,
+      "summaries": [
+        {
+          "axis": "overall",
+          "regime": "all",
+          "sessions": 2263,
+          "episodes": 1,
+          "longestEpisode": 2263,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 1245,
+          "downDays": 1014,
+          "flatDays": 4,
+          "meanExposure": 0.8439368177686283,
+          "meanLaggedExposure": 0.8436847666346671,
+          "series": {
+            "strategy": {
+              "return": 0.043021024373833705,
+              "annualizedActiveReturn": 0.004701506302095798,
+              "maxDrawdownStitched": 0.2727505356643519,
+              "maxDrawdownContinuousEpisode": 0.2727505356643519,
+              "upCapture": 41.81791938985397,
+              "downCapture": 46.87278926076575,
+              "cagr": 0.004691087355905312
+            },
+            "spy": {
+              "return": 2.0542059563728965,
+              "annualizedActiveReturn": 0.13239157950627667,
+              "maxDrawdownStitched": 0.3410474689324393,
+              "maxDrawdownContinuousEpisode": 0.3410474689324393,
+              "upCapture": 100.0,
+              "downCapture": 100.0,
+              "cagr": 0.13208034324308202
+            },
+            "spyCashFullMean": {
+              "return": 1.620426203967067,
+              "annualizedActiveReturn": 0.11323916960931289,
+              "maxDrawdownStitched": 0.2938810828427044,
+              "maxDrawdownContinuousEpisode": 0.2938810828427044,
+              "upCapture": 84.45012425348891,
+              "downCapture": 84.31302042496367,
+              "cagr": 0.11297517072473343
+            },
+            "spyCashGroupMean": {
+              "return": 1.620426203967067,
+              "annualizedActiveReturn": 0.11323916960931289,
+              "maxDrawdownStitched": 0.2938810828427044,
+              "maxDrawdownContinuousEpisode": 0.2938810828427044,
+              "upCapture": 84.45012425348891,
+              "downCapture": 84.31302042496367,
+              "cagr": 0.11297517072473343
+            },
+            "spyCashLagged": {
+              "return": 1.0333150576873358,
+              "annualizedActiveReturn": 0.08223263698064237,
+              "maxDrawdownStitched": 0.21668606706804083,
+              "maxDrawdownContinuousEpisode": 0.21668606706804083,
+              "upCapture": 73.36640115142204,
+              "downCapture": 74.8510904035263,
+              "cagr": 0.08204356617123042
+            }
+          },
+          "excessReturn": {
+            "spy": -2.011184931999063,
+            "spyCashFullMean": -1.5774051795932333,
+            "spyCashGroupMean": -1.5774051795932333,
+            "spyCashLagged": -0.9902940333135021
+          },
+          "attribution": {
+            "cashLevelLogPP": -15.318266494561827,
+            "exposureTimingLogPP": -25.366948336487518,
+            "residualLogPP": -66.75461610355117,
+            "totalExcessLogPP": -107.43983093460052
+          }
+        },
+        {
+          "axis": "sma200",
+          "regime": "above",
+          "sessions": 1825,
+          "episodes": 30,
+          "longestEpisode": 395,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 1018,
+          "downDays": 804,
+          "flatDays": 3,
+          "meanExposure": 0.9103451193071066,
+          "meanLaggedExposure": 0.9099262827409479,
+          "series": {
+            "strategy": {
+              "return": 0.07125802985460081,
+              "annualizedActiveReturn": 0.009550019495582918,
+              "maxDrawdownStitched": 0.2289746299432731,
+              "maxDrawdownContinuousEpisode": 0.20688699084806428,
+              "upCapture": 56.99045991888807,
+              "downCapture": 62.91507318648932
+            },
+            "spy": {
+              "return": 1.0148451298388725,
+              "annualizedActiveReturn": 0.10156557824180536,
+              "maxDrawdownStitched": 0.20818883150107803,
+              "maxDrawdownContinuousEpisode": 0.12067738669444772,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.8222702803867808,
+              "annualizedActiveReturn": 0.08639056584316773,
+              "maxDrawdownStitched": 0.17830509794981597,
+              "maxDrawdownContinuousEpisode": 0.10259253743187025,
+              "upCapture": 84.41786560279544,
+              "downCapture": 84.34392893637576
+            },
+            "spyCashGroupMean": {
+              "return": 0.902623044379655,
+              "annualizedActiveReturn": 0.09288292418769795,
+              "maxDrawdownStitched": 0.19113405573970732,
+              "maxDrawdownContinuousEpisode": 0.11032120877524076,
+              "upCapture": 91.04948925574269,
+              "downCapture": 91.00364507596652
+            },
+            "spyCashLagged": {
+              "return": 0.7729241819433822,
+              "annualizedActiveReturn": 0.08228012434742736,
+              "maxDrawdownStitched": 0.18639030152024427,
+              "maxDrawdownContinuousEpisode": 0.10572216275708624,
+              "upCapture": 88.28270007397253,
+              "downCapture": 89.20432875957191
+            }
+          },
+          "excessReturn": {
+            "spy": -0.9435870999842717,
+            "spyCashFullMean": -0.75101225053218,
+            "spyCashGroupMean": -0.8313650145250542,
+            "spyCashLagged": -0.7016661520887814
+          },
+          "attribution": {
+            "cashLevelLogPP": -5.730885004075059,
+            "exposureTimingLogPP": -7.060322016692011,
+            "residualLogPP": -50.37965769144242,
+            "totalExcessLogPP": -63.170864712209486
+          }
+        },
+        {
+          "axis": "sma200",
+          "regime": "below",
+          "sessions": 438,
+          "episodes": 29,
+          "longestEpisode": 162,
+          "first": "2018-03-26",
+          "last": "2026-04-08",
+          "upDays": 227,
+          "downDays": 210,
+          "flatDays": 1,
+          "meanExposure": 0.5672355613583017,
+          "meanLaggedExposure": 0.567678449525164,
+          "series": {
+            "strategy": {
+              "return": -0.026358734024705177,
+              "annualizedActiveReturn": -0.015251254634673922,
+              "maxDrawdownStitched": 0.1607954552870401,
+              "maxDrawdownContinuousEpisode": 0.16079545528704065,
+              "upCapture": 14.156349836870646,
+              "downCapture": 17.21482667660947
+            },
+            "spy": {
+              "return": 0.5158514722256305,
+              "annualizedActiveReturn": 0.27039694992651675,
+              "maxDrawdownStitched": 0.26287772516400654,
+              "maxDrawdownContinuousEpisode": 0.2628777251640071,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.4380008455226937,
+              "annualizedActiveReturn": 0.23243928516353307,
+              "maxDrawdownStitched": 0.22431830817457643,
+              "maxDrawdownContinuousEpisode": 0.22431830817457676,
+              "upCapture": 84.48161792321885,
+              "downCapture": 84.2755972888229
+            },
+            "spyCashGroupMean": {
+              "return": 0.2952004461356044,
+              "annualizedActiveReturn": 0.1604655120036985,
+              "maxDrawdownStitched": 0.15359318410242617,
+              "maxDrawdownContinuousEpisode": 0.15359318410242606,
+              "upCapture": 56.88924358279151,
+              "downCapture": 56.50626990730827
+            },
+            "spyCashLagged": {
+              "return": 0.14687084670396192,
+              "annualizedActiveReturn": 0.08203479537908251,
+              "maxDrawdownStitched": 0.16679700151859933,
+              "maxDrawdownContinuousEpisode": 0.16679700151859944,
+              "upCapture": 46.10569107680649,
+              "downCapture": 48.37107387226302
+            }
+          },
+          "excessReturn": {
+            "spy": -0.5422102062503358,
+            "spyCashFullMean": -0.46435957954739887,
+            "spyCashGroupMean": -0.3215591801603096,
+            "spyCashLagged": -0.1732295807286671
+          },
+          "attribution": {
+            "cashLevelLogPP": -15.731184112023367,
+            "exposureTimingLogPP": -12.162823698258912,
+            "residualLogPP": -16.37495841210877,
+            "totalExcessLogPP": -44.26896622239105
+          }
+        },
+        {
+          "axis": "trend63",
+          "regime": "up",
+          "sessions": 1698,
+          "episodes": 45,
+          "longestEpisode": 321,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 948,
+          "downDays": 746,
+          "flatDays": 4,
+          "meanExposure": 0.9163111228194704,
+          "meanLaggedExposure": 0.917060766876103,
+          "series": {
+            "strategy": {
+              "return": 0.112440596753747,
+              "annualizedActiveReturn": 0.015939718027716435,
+              "maxDrawdownStitched": 0.280848686704682,
+              "maxDrawdownContinuousEpisode": 0.14756361388447414,
+              "upCapture": 58.604594121226114,
+              "downCapture": 65.75076256082573
+            },
+            "spy": {
+              "return": 1.2230905727557886,
+              "annualizedActiveReturn": 0.1258794048974076,
+              "maxDrawdownStitched": 0.22405214214364522,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.9784979874976574,
+              "annualizedActiveReturn": 0.1065706240553828,
+              "maxDrawdownStitched": 0.1922276992502201,
+              "maxDrawdownContinuousEpisode": 0.10259253743187013,
+              "upCapture": 84.41850685302383,
+              "downCapture": 84.34290081383968
+            },
+            "spyCashGroupMean": {
+              "return": 1.089172210694287,
+              "annualizedActiveReturn": 0.11554563986771163,
+              "maxDrawdownStitched": 0.20712303456651304,
+              "maxDrawdownContinuousEpisode": 0.11101312876268288,
+              "upCapture": 91.64555672252318,
+              "downCapture": 91.60150596172663
+            },
+            "spyCashLagged": {
+              "return": 0.9039014312704624,
+              "annualizedActiveReturn": 0.10027692419473248,
+              "maxDrawdownStitched": 0.18512463077757624,
+              "maxDrawdownContinuousEpisode": 0.10536462077851672,
+              "upCapture": 88.74841980032801,
+              "downCapture": 90.15904060646514
+            }
+          },
+          "excessReturn": {
+            "spy": -1.1106499760020416,
+            "spyCashFullMean": -0.8660573907439104,
+            "spyCashGroupMean": -0.97673161394054,
+            "spyCashLagged": -0.7914608345167155
+          },
+          "attribution": {
+            "cashLevelLogPP": -6.213046155038304,
+            "exposureTimingLogPP": -9.286275034319624,
+            "residualLogPP": -53.73488282821496,
+            "totalExcessLogPP": -69.23420401757289
+          }
+        },
+        {
+          "axis": "trend63",
+          "regime": "downFlat",
+          "sessions": 565,
+          "episodes": 44,
+          "longestEpisode": 137,
+          "first": "2018-02-09",
+          "last": "2026-04-15",
+          "upDays": 297,
+          "downDays": 268,
+          "flatDays": 0,
+          "meanExposure": 0.6264296142706991,
+          "meanLaggedExposure": 0.6231671588294313,
+          "series": {
+            "strategy": {
+              "return": -0.06240294770119776,
+              "annualizedActiveReturn": -0.02833011067921827,
+              "maxDrawdownStitched": 0.1789902104840484,
+              "maxDrawdownContinuousEpisode": 0.12723726859136608,
+              "upCapture": 16.659653399417998,
+              "downCapture": 20.27568545229966
+            },
+            "spy": {
+              "return": 0.3738558355662678,
+              "annualizedActiveReturn": 0.1521902611232755,
+              "maxDrawdownStitched": 0.2628777251640071,
+              "maxDrawdownContinuousEpisode": 0.2628777251640071,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.3244522969069583,
+              "annualizedActiveReturn": 0.1335230582724307,
+              "maxDrawdownStitched": 0.22431830817457643,
+              "maxDrawdownContinuousEpisode": 0.22431830817457676,
+              "upCapture": 84.4799784429221,
+              "downCapture": 84.28635461475301
+            },
+            "spyCashGroupMean": {
+              "return": 0.24851272956876244,
+              "annualizedActiveReturn": 0.10406075520021162,
+              "maxDrawdownStitched": 0.16896944738894104,
+              "maxDrawdownContinuousEpisode": 0.16896944738894093,
+              "upCapture": 62.79755828932947,
+              "downCapture": 62.454098803326815
+            },
+            "spyCashLagged": {
+              "return": 0.06797286051227784,
+              "annualizedActiveReturn": 0.029765557792163874,
+              "maxDrawdownStitched": 0.1436883388310658,
+              "maxDrawdownContinuousEpisode": 0.1436883388310659,
+              "upCapture": 50.26432327392579,
+              "downCapture": 53.32991357253031
+            }
+          },
+          "excessReturn": {
+            "spy": -0.43625878326746553,
+            "spyCashFullMean": -0.38685524460815607,
+            "spyCashGroupMean": -0.3109156772699602,
+            "spyCashLagged": -0.1303758082134756
+          },
+          "attribution": {
+            "cashLevelLogPP": -9.566823855089055,
+            "exposureTimingLogPP": -15.619069786602365,
+            "residualLogPP": -13.01973327533622,
+            "totalExcessLogPP": -38.205626917027644
+          }
+        },
+        {
+          "axis": "volatility63",
+          "regime": "low",
+          "sessions": 1265,
+          "episodes": 16,
+          "longestEpisode": 322,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 710,
+          "downDays": 553,
+          "flatDays": 2,
+          "meanExposure": 0.9067483840126681,
+          "meanLaggedExposure": 0.907661112285935,
+          "series": {
+            "strategy": {
+              "return": 0.06541068181091868,
+              "annualizedActiveReturn": 0.012701974491692922,
+              "maxDrawdownStitched": 0.17317707253050318,
+              "maxDrawdownContinuousEpisode": 0.13019096400426655,
+              "upCapture": 56.69692078470757,
+              "downCapture": 62.073690760095204
+            },
+            "spy": {
+              "return": 0.5927100187128471,
+              "annualizedActiveReturn": 0.09715389824587845,
+              "maxDrawdownStitched": 0.12205242332437383,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.4896020562486918,
+              "annualizedActiveReturn": 0.08262297228400245,
+              "maxDrawdownStitched": 0.10341871390634827,
+              "maxDrawdownContinuousEpisode": 0.10259253743186991,
+              "upCapture": 84.41964968293118,
+              "downCapture": 84.34692054772233
+            },
+            "spyCashGroupMean": {
+              "return": 0.530662556875554,
+              "annualizedActiveReturn": 0.08850327976657918,
+              "maxDrawdownStitched": 0.1109379031997687,
+              "maxDrawdownContinuousEpisode": 0.1099038780073135,
+              "upCapture": 90.69149954294271,
+              "downCapture": 90.64478733391927
+            },
+            "spyCashLagged": {
+              "return": 0.5173603398071489,
+              "annualizedActiveReturn": 0.0866122394172548,
+              "maxDrawdownStitched": 0.11190680942896625,
+              "maxDrawdownContinuousEpisode": 0.10536462077851683,
+              "upCapture": 88.52238656524555,
+              "downCapture": 88.44828056250013
+            }
+          },
+          "excessReturn": {
+            "spy": -0.5272993369019284,
+            "spyCashFullMean": -0.4241913744377731,
+            "spyCashGroupMean": -0.4652518750646353,
+            "spyCashLagged": -0.4519496579962302
+          },
+          "attribution": {
+            "cashLevelLogPP": -3.9736294273783113,
+            "exposureTimingLogPP": -0.8728478737290601,
+            "residualLogPP": -35.36118650859639,
+            "totalExcessLogPP": -40.20766380970377
+          }
+        },
+        {
+          "axis": "volatility63",
+          "regime": "medium",
+          "sessions": 737,
+          "episodes": 22,
+          "longestEpisode": 137,
+          "first": "2018-02-12",
+          "last": "2026-06-26",
+          "upDays": 390,
+          "downDays": 346,
+          "flatDays": 1,
+          "meanExposure": 0.842824767147821,
+          "meanLaggedExposure": 0.8424987038768643,
+          "series": {
+            "strategy": {
+              "return": 0.04501757148051248,
+              "annualizedActiveReturn": 0.015170216156874156,
+              "maxDrawdownStitched": 0.19137450103435227,
+              "maxDrawdownContinuousEpisode": 0.19137450103435172,
+              "upCapture": 41.799753677399224,
+              "downCapture": 43.761035990491365
+            },
+            "spy": {
+              "return": 0.28526407172177204,
+              "annualizedActiveReturn": 0.0896007758110026,
+              "maxDrawdownStitched": 0.2676910711661583,
+              "maxDrawdownContinuousEpisode": 0.17021180491193055,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.24557756473283568,
+              "annualizedActiveReturn": 0.07797780231722212,
+              "maxDrawdownStitched": 0.23022230318754067,
+              "maxDrawdownContinuousEpisode": 0.14512489540496465,
+              "upCapture": 84.44688997197765,
+              "downCapture": 84.32415878716427
+            },
+            "spyCashGroupMean": {
+              "return": 0.24528631438189613,
+              "annualizedActiveReturn": 0.07789160932299236,
+              "maxDrawdownStitched": 0.22994986475749524,
+              "maxDrawdownContinuousEpisode": 0.1449442016485345,
+              "upCapture": 84.33599530114286,
+              "downCapture": 84.21255264439321
+            },
+            "spyCashLagged": {
+              "return": 0.15143292679238765,
+              "annualizedActiveReturn": 0.049395335554442865,
+              "maxDrawdownStitched": 0.20140793364101406,
+              "maxDrawdownContinuousEpisode": 0.12811593988266434,
+              "upCapture": 75.41205378909332,
+              "downCapture": 77.11649278233583
+            }
+          },
+          "excessReturn": {
+            "spy": -0.24024650024125954,
+            "spyCashFullMean": -0.2005599932523232,
+            "spyCashGroupMean": -0.20026874290138363,
+            "spyCashLagged": -0.10641535531187517
+          },
+          "attribution": {
+            "cashLevelLogPP": -3.1598725651315887,
+            "exposureTimingLogPP": -7.835828483828161,
+            "residualLogPP": -9.697348994080917,
+            "totalExcessLogPP": -20.693050043040667
+          }
+        },
+        {
+          "axis": "volatility63",
+          "regime": "high",
+          "sessions": 261,
+          "episodes": 7,
+          "longestEpisode": 89,
+          "first": "2019-01-07",
+          "last": "2025-07-11",
+          "upDays": 145,
+          "downDays": 115,
+          "flatDays": 1,
+          "meanExposure": 0.5426454384920939,
+          "meanLaggedExposure": 0.5369569927022787,
+          "series": {
+            "strategy": {
+              "return": -0.0631880477911851,
+              "annualizedActiveReturn": -0.06107711259779606,
+              "maxDrawdownStitched": 0.11836879644279785,
+              "maxDrawdownContinuousEpisode": 0.09670764056236913,
+              "upCapture": 11.608229265257334,
+              "downCapture": 18.73194396860308
+            },
+            "spy": {
+              "return": 0.4920014335233781,
+              "annualizedActiveReturn": 0.47155736832739004,
+              "maxDrawdownStitched": 0.22699540056673684,
+              "maxDrawdownContinuousEpisode": 0.22699540056673684,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.41231279410672805,
+              "annualizedActiveReturn": 0.39559968447288446,
+              "maxDrawdownStitched": 0.19307723380046193,
+              "maxDrawdownContinuousEpisode": 0.19307723380046216,
+              "upCapture": 84.49004869370675,
+              "downCapture": 84.23753787767063
+            },
+            "spyCashGroupMean": {
+              "return": 0.26026699421539934,
+              "annualizedActiveReturn": 0.2502542402963421,
+              "maxDrawdownStitched": 0.12590940621516067,
+              "maxDrawdownContinuousEpisode": 0.125909406215161,
+              "upCapture": 54.448221822496244,
+              "downCapture": 53.974844561373956
+            },
+            "spyCashLagged": {
+              "return": 0.16379718888802866,
+              "annualizedActiveReturn": 0.15772569600045308,
+              "maxDrawdownStitched": 0.0992241829280961,
+              "maxDrawdownContinuousEpisode": 0.08454199446756316,
+              "upCapture": 38.99857267743428,
+              "downCapture": 39.64199440480389
+            }
+          },
+          "excessReturn": {
+            "spy": -0.5551894813145632,
+            "spyCashFullMean": -0.47550084189791314,
+            "spyCashGroupMean": -0.3234550420065844,
+            "spyCashLagged": -0.22698523667921378
+          },
+          "attribution": {
+            "cashLevelLogPP": -16.87948639009929,
+            "exposureTimingLogPP": -7.963550090882937,
+            "residualLogPP": -21.696080600873874,
+            "totalExcessLogPP": -46.539117081856105
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "above|up",
+          "sessions": 1642,
+          "episodes": 44,
+          "longestEpisode": 321,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 918,
+          "downDays": 721,
+          "flatDays": 3,
+          "meanExposure": 0.920839018625335,
+          "meanLaggedExposure": 0.9212524529731763,
+          "series": {
+            "strategy": {
+              "return": 0.16087066654386833,
+              "annualizedActiveReturn": 0.023157435451735556,
+              "maxDrawdownStitched": 0.23216639651179394,
+              "maxDrawdownContinuousEpisode": 0.1475636138844748,
+              "upCapture": 60.019594455988866,
+              "downCapture": 67.44909247205196
+            },
+            "spy": {
+              "return": 1.2970925634418773,
+              "annualizedActiveReturn": 0.13613662682560337,
+              "maxDrawdownStitched": 0.17272267255311002,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 1.0325635639421975,
+              "annualizedActiveReturn": 0.1150027988684904,
+              "maxDrawdownStitched": 0.14719277721017499,
+              "maxDrawdownContinuousEpisode": 0.10259253743187013,
+              "upCapture": 84.41802137439592,
+              "downCapture": 84.34439802446558
+            },
+            "spyCashGroupMean": {
+              "return": 1.1596175452352568,
+              "annualizedActiveReturn": 0.12542685721024305,
+              "maxDrawdownStitched": 0.15983814785020556,
+              "maxDrawdownContinuousEpisode": 0.1115379963685853,
+              "upCapture": 92.09736341747707,
+              "downCapture": 92.05658720131204
+            },
+            "spyCashLagged": {
+              "return": 0.9410141383396411,
+              "annualizedActiveReturn": 0.10714412757443818,
+              "maxDrawdownStitched": 0.1653542869090222,
+              "maxDrawdownContinuousEpisode": 0.10536462077851672,
+              "upCapture": 89.23396897948084,
+              "downCapture": 91.03988125660359
+            }
+          },
+          "excessReturn": {
+            "spy": -1.136221896898009,
+            "spyCashFullMean": -0.8716928973983291,
+            "spyCashGroupMean": -0.9987468786913885,
+            "spyCashLagged": -0.7801434717957727
+          },
+          "attribution": {
+            "cashLevelLogPP": -6.171307680417792,
+            "exposureTimingLogPP": -10.672055541797432,
+            "residualLogPP": -51.404029002481344,
+            "totalExcessLogPP": -68.24739222469657
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "above|downFlat",
+          "sessions": 183,
+          "episodes": 53,
+          "longestEpisode": 24,
+          "first": "2018-02-09",
+          "last": "2026-04-15",
+          "upDays": 100,
+          "downDays": 83,
+          "flatDays": 0,
+          "meanExposure": 0.8161867440036583,
+          "meanLaggedExposure": 0.8083002088539587,
+          "series": {
+            "strategy": {
+              "return": -0.07719433290192548,
+              "annualizedActiveReturn": -0.10472779297369815,
+              "maxDrawdownStitched": 0.13103677871914,
+              "maxDrawdownContinuousEpisode": 0.07551147045705187,
+              "upCapture": 34.357812919596235,
+              "downCapture": 38.71721932396939
+            },
+            "spy": {
+              "return": -0.12287159781671833,
+              "annualizedActiveReturn": -0.1651754913655933,
+              "maxDrawdownStitched": 0.16672938142038685,
+              "maxDrawdownContinuousEpisode": 0.05654848025869441,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.10346209451258126,
+              "annualizedActiveReturn": -0.1396310931571737,
+              "maxDrawdownStitched": 0.1415549583307174,
+              "maxDrawdownContinuousEpisode": 0.04783479699959059,
+              "upCapture": 84.4152429691275,
+              "downCapture": 84.35042890485686
+            },
+            "spyCashGroupMean": {
+              "return": -0.10001611467193813,
+              "annualizedActiveReturn": -0.13507395107301953,
+              "maxDrawdownStitched": 0.1370432817844628,
+              "maxDrawdownContinuousEpisode": 0.0462810551794155,
+              "upCapture": 81.64324042260837,
+              "downCapture": 81.56942498240524
+            },
+            "spyCashLagged": {
+              "return": -0.08659903762475644,
+              "annualizedActiveReturn": -0.11726793516928426,
+              "maxDrawdownStitched": 0.13233412365844888,
+              "maxDrawdownContinuousEpisode": 0.042385018159351695,
+              "upCapture": 81.16753004398119,
+              "downCapture": 79.42638202373841
+            }
+          },
+          "excessReturn": {
+            "spy": 0.04567726491479285,
+            "spyCashFullMean": 0.026267761610655777,
+            "spyCashGroupMean": 0.02282178177001265,
+            "spyCashLagged": 0.009404704722830962
+          },
+          "attribution": {
+            "cashLevelLogPP": 2.572346561849094,
+            "exposureTimingLogPP": 1.4798096395990668,
+            "residualLogPP": 1.0243713110389283,
+            "totalExcessLogPP": 5.076527512487089
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "below|up",
+          "sessions": 56,
+          "episodes": 12,
+          "longestEpisode": 16,
+          "first": "2019-01-31",
+          "last": "2023-03-23",
+          "upDays": 30,
+          "downDays": 25,
+          "flatDays": 1,
+          "meanExposure": 0.7835467493689391,
+          "meanLaggedExposure": 0.7941545423869222,
+          "series": {
+            "strategy": {
+              "return": -0.04171874713167385,
+              "annualizedActiveReturn": -0.174497364716366,
+              "maxDrawdownStitched": 0.1111732659989687,
+              "maxDrawdownContinuousEpisode": 0.05904812380028657,
+              "upCapture": 31.950383124545016,
+              "downCapture": 41.54206486915331
+            },
+            "spy": {
+              "return": -0.03221550226744324,
+              "annualizedActiveReturn": -0.13701355305008217,
+              "maxDrawdownStitched": 0.18639941334406507,
+              "maxDrawdownContinuousEpisode": 0.08942258532457725,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.02659969774311937,
+              "annualizedActiveReturn": -0.11424901199969376,
+              "maxDrawdownStitched": 0.15939890181492844,
+              "maxDrawdownContinuousEpisode": 0.07583889085540274,
+              "upCapture": 84.41878948105827,
+              "downCapture": 84.34224729746356
+            },
+            "spyCashGroupMean": {
+              "return": -0.024483705796815965,
+              "annualizedActiveReturn": -0.1055514271384785,
+              "maxDrawdownStitched": 0.14875083136565848,
+              "maxDrawdownContinuousEpisode": 0.0705460099152212,
+              "upCapture": 78.38702850839775,
+              "downCapture": 78.28853569326655
+            },
+            "spyCashLagged": {
+              "return": -0.019120266223781882,
+              "annualizedActiveReturn": -0.08320776352023602,
+              "maxDrawdownStitched": 0.14500403791193817,
+              "maxDrawdownContinuousEpisode": 0.053384692836500824,
+              "upCapture": 79.5832468361532,
+              "downCapture": 77.6280734335969
+            }
+          },
+          "excessReturn": {
+            "spy": -0.009503244864230612,
+            "spyCashFullMean": -0.015119049388554483,
+            "spyCashGroupMean": -0.017235041334857888,
+            "spyCashLagged": -0.02259848090789197
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.7957427178745955,
+            "exposureTimingLogPP": 0.5482993149827028,
+            "residualLogPP": -2.3308538257336213,
+            "totalExcessLogPP": -0.9868117928763229
+          }
+        },
+        {
+          "axis": "sma200Trend63",
+          "regime": "below|downFlat",
+          "sessions": 382,
+          "episodes": 29,
+          "longestEpisode": 82,
+          "first": "2018-03-26",
+          "last": "2026-04-08",
+          "upDays": 197,
+          "downDays": 185,
+          "flatDays": 0,
+          "meanExposure": 0.5355250207075276,
+          "meanLaggedExposure": 0.534477765754854,
+          "series": {
+            "strategy": {
+              "return": 0.016028710841408098,
+              "annualizedActiveReturn": 0.010545279288413084,
+              "maxDrawdownStitched": 0.131087239263053,
+              "maxDrawdownContinuousEpisode": 0.12723726859136608,
+              "upCapture": 12.497095681082621,
+              "downCapture": 14.233659404022786
+            },
+            "spy": {
+              "return": 0.5663109667257037,
+              "annualizedActiveReturn": 0.34449209877142783,
+              "maxDrawdownStitched": 0.2628777251640071,
+              "maxDrawdownContinuousEpisode": 0.2628777251640071,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.47729648551434783,
+              "annualizedActiveReturn": 0.29358634561261204,
+              "maxDrawdownStitched": 0.22431830817457643,
+              "maxDrawdownContinuousEpisode": 0.22431830817457676,
+              "upCapture": 84.48551317518614,
+              "downCapture": 84.2675511552307
+            },
+            "spyCashGroupMean": {
+              "return": 0.2995753667064986,
+              "annualizedActiveReturn": 0.18870262441897606,
+              "maxDrawdownStitched": 0.14530241047237114,
+              "maxDrawdownContinuousEpisode": 0.14530241047237158,
+              "upCapture": 53.72808222309177,
+              "downCapture": 53.31774751630738
+            },
+            "spyCashLagged": {
+              "return": 0.16922677389684318,
+              "annualizedActiveReturn": 0.10864332528288533,
+              "maxDrawdownStitched": 0.11788247511683969,
+              "maxDrawdownContinuousEpisode": 0.11788247511683958,
+              "upCapture": 42.98037904326078,
+              "downCapture": 44.78603295547361
+            }
+          },
+          "excessReturn": {
+            "spy": -0.5502822558842956,
+            "spyCashFullMean": -0.4612677746729397,
+            "spyCashGroupMean": -0.2835466558650905,
+            "spyCashLagged": -0.1531980630554351
+          },
+          "attribution": {
+            "cashLevelLogPP": -18.668558164064073,
+            "exposureTimingLogPP": -10.569491679075501,
+            "residualLogPP": -14.04410458637515,
+            "totalExcessLogPP": -43.282154429514726
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|up|low",
+          "sessions": 1160,
+          "episodes": 29,
+          "longestEpisode": 200,
+          "first": "2017-10-02",
+          "last": "2026-10-02",
+          "upDays": 651,
+          "downDays": 507,
+          "flatDays": 2,
+          "meanExposure": 0.9270401340157,
+          "meanLaggedExposure": 0.9286095838232964,
+          "series": {
+            "strategy": {
+              "return": 0.034606668018338727,
+              "annualizedActiveReturn": 0.007418218925864318,
+              "maxDrawdownStitched": 0.2373296149761338,
+              "maxDrawdownContinuousEpisode": 0.13019096400426655,
+              "upCapture": 60.28960020771134,
+              "downCapture": 65.98611844737017
+            },
+            "spy": {
+              "return": 0.44416654650047444,
+              "annualizedActiveReturn": 0.08311726399272899,
+              "maxDrawdownStitched": 0.13352584142809532,
+              "maxDrawdownContinuousEpisode": 0.1206773866944475,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.3701042354660806,
+              "annualizedActiveReturn": 0.07080044406735131,
+              "maxDrawdownStitched": 0.11272741182616952,
+              "maxDrawdownContinuousEpisode": 0.10259253743186991,
+              "upCapture": 84.41713723761679,
+              "downCapture": 84.34794376156228
+            },
+            "spyCashGroupMean": {
+              "return": 0.40936371547606554,
+              "annualizedActiveReturn": 0.07739258141794435,
+              "maxDrawdownStitched": 0.12380870713618497,
+              "maxDrawdownContinuousEpisode": 0.1122564507392918,
+              "upCapture": 92.71604984825223,
+              "downCapture": 92.68049307915926
+            },
+            "spyCashLagged": {
+              "return": 0.4005282529557419,
+              "annualizedActiveReturn": 0.07592165484750535,
+              "maxDrawdownStitched": 0.10916902832740949,
+              "maxDrawdownContinuousEpisode": 0.10536462077851683,
+              "upCapture": 91.59083951029154,
+              "downCapture": 91.63013521749839
+            }
+          },
+          "excessReturn": {
+            "spy": -0.4095598784821357,
+            "spyCashFullMean": -0.3354975674477419,
+            "spyCashGroupMean": -0.3747570474577268,
+            "spyCashLagged": -0.3659215849374032
+          },
+          "attribution": {
+            "cashLevelLogPP": -2.439403381223715,
+            "exposureTimingLogPP": -0.628884792688944,
+            "residualLogPP": -30.28281654052699,
+            "totalExcessLogPP": -33.35110471443965
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|up|medium",
+          "sessions": 422,
+          "episodes": 32,
+          "longestEpisode": 76,
+          "first": "2018-02-12",
+          "last": "2026-06-26",
+          "upDays": 232,
+          "downDays": 189,
+          "flatDays": 1,
+          "meanExposure": 0.9132924435299681,
+          "meanLaggedExposure": 0.9118785887915993,
+          "series": {
+            "strategy": {
+              "return": 0.09360628601167316,
+              "annualizedActiveReturn": 0.05488737218155005,
+              "maxDrawdownStitched": 0.19554988066917933,
+              "maxDrawdownContinuousEpisode": 0.14756361388447437,
+              "upCapture": 62.055151227751594,
+              "downCapture": 75.4406411471321
+            },
+            "spy": {
+              "return": 0.5009492963056623,
+              "annualizedActiveReturn": 0.27443619764682814,
+              "maxDrawdownStitched": 0.09801508627934152,
+              "maxDrawdownContinuousEpisode": 0.09801508627934186,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.41177687579218736,
+              "annualizedActiveReturn": 0.2286657817955185,
+              "maxDrawdownStitched": 0.08313011723538288,
+              "maxDrawdownContinuousEpisode": 0.0831301172353831,
+              "upCapture": 84.4181897375066,
+              "downCapture": 84.34808833472862
+            },
+            "spyCashGroupMean": {
+              "return": 0.4508735375086072,
+              "annualizedActiveReturn": 0.24887256636030639,
+              "maxDrawdownStitched": 0.08976389408035435,
+              "maxDrawdownContinuousEpisode": 0.08976389408035412,
+              "upCapture": 91.34397055285318,
+              "downCapture": 91.30180222960847
+            },
+            "spyCashLagged": {
+              "return": 0.3787702022559691,
+              "annualizedActiveReturn": 0.2114304172477256,
+              "maxDrawdownStitched": 0.10391841065141638,
+              "maxDrawdownContinuousEpisode": 0.10391841065141671,
+              "upCapture": 86.40228383315531,
+              "downCapture": 89.00042211021372
+            }
+          },
+          "excessReturn": {
+            "spy": -0.40734301029398917,
+            "spyCashFullMean": -0.3181705897805142,
+            "spyCashGroupMean": -0.35726725149693406,
+            "spyCashLagged": -0.28516391624429593
+          },
+          "attribution": {
+            "cashLevelLogPP": -3.393195743817218,
+            "exposureTimingLogPP": -5.097387063324915,
+            "residualLogPP": -23.171118965636595,
+            "totalExcessLogPP": -31.661701772778727
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|up|high",
+          "sessions": 60,
+          "episodes": 8,
+          "longestEpisode": 27,
+          "first": "2020-05-29",
+          "last": "2025-07-11",
+          "upDays": 35,
+          "downDays": 25,
+          "flatDays": 0,
+          "meanExposure": 0.8540283659156948,
+          "meanLaggedExposure": 0.8449441012812743,
+          "series": {
+            "strategy": {
+              "return": 0.026000485748571205,
+              "annualizedActiveReturn": 0.11383222561228962,
+              "maxDrawdownStitched": 0.03642862954349335,
+              "maxDrawdownContinuousEpisode": 0.03642862954349335,
+              "upCapture": 45.41017414313606,
+              "downCapture": 45.94716437058982
+            },
+            "spy": {
+              "return": 0.05972991401927328,
+              "annualizedActiveReturn": 0.27590933173262727,
+              "maxDrawdownStitched": 0.08261386209779853,
+              "maxDrawdownContinuousEpisode": 0.06989488243273445,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.05081064366900723,
+              "annualizedActiveReturn": 0.23141019558510129,
+              "maxDrawdownStitched": 0.06983882650863182,
+              "maxDrawdownContinuousEpisode": 0.059090747225472806,
+              "upCapture": 84.4143842350258,
+              "downCapture": 84.28308187921
+            },
+            "spyCashGroupMean": {
+              "return": 0.05139228525655699,
+              "annualizedActiveReturn": 0.23427547930578213,
+              "maxDrawdownStitched": 0.07066628878882553,
+              "maxDrawdownContinuousEpisode": 0.05979053627036235,
+              "upCapture": 85.42242953899807,
+              "downCapture": 85.29811685942036
+            },
+            "spyCashLagged": {
+              "return": 0.005182538283175516,
+              "annualizedActiveReturn": 0.02194783829975483,
+              "maxDrawdownStitched": 0.09098846853704501,
+              "maxDrawdownContinuousEpisode": 0.06701785873473276,
+              "upCapture": 76.2784241612986,
+              "downCapture": 93.564458451876
+            }
+          },
+          "excessReturn": {
+            "spy": -0.03372942827070208,
+            "spyCashFullMean": -0.024810157920436022,
+            "spyCashGroupMean": -0.02539179950798578,
+            "spyCashLagged": 0.02081794746539569
+          },
+          "attribution": {
+            "cashLevelLogPP": -0.7898805777363155,
+            "exposureTimingLogPP": -4.494611663424121,
+            "residualLogPP": 2.049906503682241,
+            "totalExcessLogPP": -3.2345857374781954
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|downFlat|low",
+          "sessions": 65,
+          "episodes": 19,
+          "longestEpisode": 18,
+          "first": "2018-02-09",
+          "last": "2026-03-19",
+          "upDays": 36,
+          "downDays": 29,
+          "flatDays": 0,
+          "meanExposure": 0.7116430902941003,
+          "meanLaggedExposure": 0.7072699389150607,
+          "series": {
+            "strategy": {
+              "return": -0.012007185425546083,
+              "annualizedActiveReturn": -0.04575293643390822,
+              "maxDrawdownStitched": 0.08090140343911334,
+              "maxDrawdownContinuousEpisode": 0.061869551943757095,
+              "upCapture": 44.08827266723215,
+              "downCapture": 44.118811776632704
+            },
+            "spy": {
+              "return": -0.028145799580798683,
+              "annualizedActiveReturn": -0.10477854768064832,
+              "maxDrawdownStitched": 0.07775458445227756,
+              "maxDrawdownContinuousEpisode": 0.05654848025869441,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.02330124111588381,
+              "annualizedActiveReturn": -0.08735312128650535,
+              "maxDrawdownStitched": 0.06587405168768123,
+              "maxDrawdownContinuousEpisode": 0.04783479699959059,
+              "upCapture": 84.41880978682124,
+              "downCapture": 84.34833090190924
+            },
+            "spyCashGroupMean": {
+              "return": -0.019323041702304714,
+              "annualizedActiveReturn": -0.0728567457071316,
+              "maxDrawdownStitched": 0.05572937681038903,
+              "maxDrawdownContinuousEpisode": 0.0404158621121502,
+              "upCapture": 71.20350541145125,
+              "downCapture": 71.09377800297642
+            },
+            "spyCashLagged": {
+              "return": -0.006187416006608716,
+              "annualizedActiveReturn": -0.023775458229157553,
+              "maxDrawdownStitched": 0.04605874139716781,
+              "maxDrawdownContinuousEpisode": 0.042385018159351695,
+              "upCapture": 74.85782035237915,
+              "downCapture": 69.81553065619414
+            }
+          },
+          "excessReturn": {
+            "spy": 0.016138614155252598,
+            "spyCashFullMean": 0.011294055690337727,
+            "spyCashGroupMean": 0.007315856276758631,
+            "spyCashLagged": -0.005819769418937367
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.9037313322732405,
+            "exposureTimingLogPP": 1.330553462556013,
+            "residualLogPP": -0.5873216565447776,
+            "totalExcessLogPP": 1.6469631382844754
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|downFlat|medium",
+          "sessions": 102,
+          "episodes": 29,
+          "longestEpisode": 24,
+          "first": "2018-03-23",
+          "last": "2026-04-15",
+          "upDays": 54,
+          "downDays": 48,
+          "flatDays": 0,
+          "meanExposure": 0.9008711265798359,
+          "meanLaggedExposure": 0.9009132575724288,
+          "series": {
+            "strategy": {
+              "return": -0.044918354363959044,
+              "annualizedActiveReturn": -0.10733544257746594,
+              "maxDrawdownStitched": 0.07703507208580918,
+              "maxDrawdownContinuousEpisode": 0.07551147045705187,
+              "upCapture": 28.51231007962688,
+              "downCapture": 30.732897547119176
+            },
+            "spy": {
+              "return": -0.11659897868627077,
+              "annualizedActiveReturn": -0.26382962967432233,
+              "maxDrawdownStitched": 0.16825077432882263,
+              "maxDrawdownContinuousEpisode": 0.03733010615653476,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.09858205813459575,
+              "annualizedActiveReturn": -0.2261777817891576,
+              "maxDrawdownStitched": 0.14332535120073486,
+              "maxDrawdownContinuousEpisode": 0.03155090962218565,
+              "upCapture": 84.41077703022778,
+              "downCapture": 84.35189759432986
+            },
+            "spyCashGroupMean": {
+              "return": -0.10516461146815634,
+              "annualizedActiveReturn": -0.24006368833677888,
+              "maxDrawdownStitched": 0.15247550279282196,
+              "maxDrawdownContinuousEpisode": 0.03366125099400252,
+              "upCapture": 90.09869856900349,
+              "downCapture": 90.05875829644752
+            },
+            "spyCashLagged": {
+              "return": -0.08252078596705724,
+              "annualizedActiveReturn": -0.19166628097237065,
+              "maxDrawdownStitched": 0.13428833106593108,
+              "maxDrawdownContinuousEpisode": 0.03203470867011815,
+              "upCapture": 89.32202792193176,
+              "downCapture": 84.66460727305322
+            }
+          },
+          "excessReturn": {
+            "spy": 0.07168062432231173,
+            "spyCashFullMean": 0.05366370377063671,
+            "spyCashGroupMean": 0.060246257104197294,
+            "spyCashLagged": 0.037602431603098195
+          },
+          "attribution": {
+            "cashLevelLogPP": 1.2860522652034385,
+            "exposureTimingLogPP": 2.499014673637,
+            "residualLogPP": 4.016690497190653,
+            "totalExcessLogPP": 7.8017574360310915
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "above|downFlat|high",
+          "sessions": 16,
+          "episodes": 5,
+          "longestEpisode": 12,
+          "first": "2020-05-28",
+          "last": "2025-06-02",
+          "upDays": 10,
+          "downDays": 6,
+          "flatDays": 0,
+          "meanExposure": 0.7010323982756047,
+          "meanLaggedExposure": 0.6283274949004848,
+          "series": {
+            "strategy": {
+              "return": -0.022051538512116994,
+              "annualizedActiveReturn": -0.2961558704071605,
+              "maxDrawdownStitched": 0.030471563030058824,
+              "maxDrawdownContinuousEpisode": 0.02814307471005517,
+              "upCapture": 30.086308222484032,
+              "downCapture": 106.830796388869
+            },
+            "spy": {
+              "return": 0.021654755836703943,
+              "annualizedActiveReturn": 0.40133037473618843,
+              "maxDrawdownStitched": 0.02646043688388955,
+              "maxDrawdownContinuousEpisode": 0.02646043688388977,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.018314252576794674,
+              "annualizedActiveReturn": 0.33087939501374947,
+              "maxDrawdownStitched": 0.02235508960715027,
+              "maxDrawdownContinuousEpisode": 0.02235508960715049,
+              "upCapture": 84.42722433848971,
+              "downCapture": 84.36603614276366
+            },
+            "spyCashGroupMean": {
+              "return": 0.015242516550800316,
+              "annualizedActiveReturn": 0.2690370507713411,
+              "maxDrawdownStitched": 0.018588067002584197,
+              "maxDrawdownContinuousEpisode": 0.018588067002584308,
+              "upCapture": 70.15670785777802,
+              "downCapture": 70.05931582889326
+            },
+            "spyCashLagged": {
+              "return": 0.0017532021600008168,
+              "annualizedActiveReturn": 0.02797285058405619,
+              "maxDrawdownStitched": 0.024790008964781562,
+              "maxDrawdownContinuousEpisode": 0.02479000896478145,
+              "upCapture": 54.83635591996334,
+              "downCapture": 81.66133003146591
+            }
+          },
+          "excessReturn": {
+            "spy": -0.04370629434882094,
+            "spyCashFullMean": -0.04036579108891167,
+            "spyCashGroupMean": -0.03729405506291731,
+            "spyCashLagged": -0.02380474067211781
+          },
+          "attribution": {
+            "cashLevelLogPP": -0.6296105900956698,
+            "exposureTimingLogPP": -1.3375849421258614,
+            "residualLogPP": -2.404997529606947,
+            "totalExcessLogPP": -4.372193061828479
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|up|low",
+          "sessions": 0,
+          "episodes": 0,
+          "longestEpisode": 0,
+          "first": null,
+          "last": null,
+          "upDays": 0,
+          "downDays": 0,
+          "flatDays": 0,
+          "meanExposure": null,
+          "meanLaggedExposure": null,
+          "series": {
+            "strategy": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spy": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spyCashFullMean": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spyCashGroupMean": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            },
+            "spyCashLagged": {
+              "return": null,
+              "annualizedActiveReturn": null,
+              "maxDrawdownStitched": null,
+              "maxDrawdownContinuousEpisode": null,
+              "upCapture": null,
+              "downCapture": null
+            }
+          },
+          "excessReturn": {
+            "spy": null,
+            "spyCashFullMean": null,
+            "spyCashGroupMean": null,
+            "spyCashLagged": null
+          },
+          "attribution": null
+        },
+        {
+          "axis": "joint",
+          "regime": "below|up|medium",
+          "sessions": 37,
+          "episodes": 9,
+          "longestEpisode": 9,
+          "first": "2019-01-31",
+          "last": "2023-03-23",
+          "upDays": 22,
+          "downDays": 15,
+          "flatDays": 0,
+          "meanExposure": 0.7464633872760448,
+          "meanLaggedExposure": 0.7578375651982493,
+          "series": {
+            "strategy": {
+              "return": -0.0444228865519395,
+              "annualizedActiveReturn": -0.2661730012710046,
+              "maxDrawdownStitched": 0.08988794986824244,
+              "maxDrawdownContinuousEpisode": 0.05904812380028657,
+              "upCapture": 28.629152240231903,
+              "downCapture": 47.24999531110245
+            },
+            "spy": {
+              "return": -0.022034656468518623,
+              "annualizedActiveReturn": -0.1407986521492205,
+              "maxDrawdownStitched": 0.13515904809672952,
+              "maxDrawdownContinuousEpisode": 0.08942258532457725,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.01814849475371075,
+              "annualizedActiveReturn": -0.11727481308311254,
+              "maxDrawdownStitched": 0.11503011092417992,
+              "maxDrawdownContinuousEpisode": 0.07583889085540274,
+              "upCapture": 84.42263377769594,
+              "downCapture": 84.33469937279607
+            },
+            "spyCashGroupMean": {
+              "return": -0.01580439995766425,
+              "annualizedActiveReturn": -0.1028215060189056,
+              "maxDrawdownStitched": 0.10228018292277297,
+              "maxDrawdownContinuousEpisode": 0.06728570428113434,
+              "upCapture": 74.68798900008858,
+              "downCapture": 74.5617946976613
+            },
+            "spyCashLagged": {
+              "return": -0.0033303045569323788,
+              "annualizedActiveReturn": -0.02246377350110558,
+              "maxDrawdownStitched": 0.09514881450808987,
+              "maxDrawdownContinuousEpisode": 0.053384692836500824,
+              "upCapture": 78.4936298396869,
+              "downCapture": 72.04765572680716
+            }
+          },
+          "excessReturn": {
+            "spy": -0.02238823008342088,
+            "spyCashFullMean": -0.02627439179822875,
+            "spyCashGroupMean": -0.028618486594275253,
+            "spyCashLagged": -0.04109258199500712
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.6350424483785234,
+            "exposureTimingLogPP": 1.2594758789242355,
+            "residualLogPP": -4.2103951382019735,
+            "totalExcessLogPP": -2.3158768108992147
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|up|high",
+          "sessions": 19,
+          "episodes": 7,
+          "longestEpisode": 8,
+          "first": "2020-06-12",
+          "last": "2023-01-03",
+          "upDays": 8,
+          "downDays": 10,
+          "flatDays": 1,
+          "meanExposure": 0.8557617176551019,
+          "meanLaggedExposure": 0.8648770769122327,
+          "series": {
+            "strategy": {
+              "return": 0.0028298495037288604,
+              "annualizedActiveReturn": 0.03819095767784596,
+              "maxDrawdownStitched": 0.027539195394355898,
+              "maxDrawdownContinuousEpisode": 0.026589396374088525,
+              "upCapture": 38.71841619455125,
+              "downCapture": 29.850371450695494
+            },
+            "spy": {
+              "return": -0.01041023167770044,
+              "annualizedActiveReturn": -0.12959465070137946,
+              "maxDrawdownStitched": 0.06280559399814778,
+              "maxDrawdownContinuousEpisode": 0.04652091486987353,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.008607414608269819,
+              "annualizedActiveReturn": -0.10832686517334217,
+              "maxDrawdownStitched": 0.0531561113229001,
+              "maxDrawdownContinuousEpisode": 0.03934702670162693,
+              "upCapture": 84.40719593164222,
+              "downCapture": 84.36326182112788
+            },
+            "spyCashGroupMean": {
+              "return": -0.008741724466963887,
+              "annualizedActiveReturn": -0.10992772800262463,
+              "maxDrawdownStitched": 0.05388923022653569,
+              "maxDrawdownContinuousEpisode": 0.03989170589915314,
+              "upCapture": 85.58883536840095,
+              "downCapture": 85.54765829513981
+            },
+            "spyCashLagged": {
+              "return": -0.015842722758646843,
+              "annualizedActiveReturn": -0.19087899309874912,
+              "maxDrawdownStitched": 0.060031874377991734,
+              "maxDrawdownContinuousEpisode": 0.04365919545218466,
+              "upCapture": 81.80347074215287,
+              "downCapture": 89.06852827890816
+            }
+          },
+          "excessReturn": {
+            "spy": 0.0132400811814293,
+            "spyCashFullMean": 0.01143726411199868,
+            "spyCashGroupMean": 0.011571573970692747,
+            "spyCashLagged": 0.018672572262375703
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.16846396779558842,
+            "exposureTimingLogPP": -0.7189402622410492,
+            "residualLogPP": 1.8795413124683524,
+            "totalExcessLogPP": 1.3290650180228918
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|downFlat|low",
+          "sessions": 40,
+          "episodes": 6,
+          "longestEpisode": 14,
+          "first": "2018-10-12",
+          "last": "2026-04-08",
+          "upDays": 23,
+          "downDays": 17,
+          "flatDays": 0,
+          "meanExposure": 0.635333736217418,
+          "meanLaggedExposure": 0.6257910944301263,
+          "series": {
+            "strategy": {
+              "return": 0.042288599554424565,
+              "annualizedActiveReturn": 0.29814833723107187,
+              "maxDrawdownStitched": 0.029895916293725455,
+              "maxDrawdownContinuousEpisode": 0.029895916293725455,
+              "upCapture": 24.20093863941722,
+              "downCapture": 17.52719846406894
+            },
+            "spy": {
+              "return": 0.1347973562693522,
+              "annualizedActiveReturn": 1.2181217824502903,
+              "maxDrawdownStitched": 0.04536906230764359,
+              "maxDrawdownContinuousEpisode": 0.04536906230764348,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.11315596635142054,
+              "annualizedActiveReturn": 0.9647301782055095,
+              "maxDrawdownStitched": 0.03832136150259735,
+              "maxDrawdownContinuousEpisode": 0.03832136150259757,
+              "upCapture": 84.42423163283415,
+              "downCapture": 84.34726883180409
+            },
+            "spyCashGroupMean": {
+              "return": 0.08457200490719338,
+              "annualizedActiveReturn": 0.6677381296136344,
+              "maxDrawdownStitched": 0.028881528686045543,
+              "maxDrawdownContinuousEpisode": 0.028881528686045654,
+              "upCapture": 63.587275973916434,
+              "downCapture": 63.45199390238283
+            },
+            "spyCashLagged": {
+              "return": 0.09016532062777288,
+              "annualizedActiveReturn": 0.7226691799461591,
+              "maxDrawdownStitched": 0.04794963066279734,
+              "maxDrawdownContinuousEpisode": 0.04794963066279756,
+              "upCapture": 63.406383999314485,
+              "downCapture": 59.826035152486256
+            }
+          },
+          "excessReturn": {
+            "spy": -0.09250875671492761,
+            "spyCashFullMean": -0.07086736679699598,
+            "spyCashGroupMean": -0.04228340535276882,
+            "spyCashLagged": -0.04787672107334832
+          },
+          "attribution": {
+            "cashLevelLogPP": -4.526865061411571,
+            "exposureTimingLogPP": 0.5143911393876031,
+            "residualLogPP": -4.491048311524623,
+            "totalExcessLogPP": -8.50352223354859
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|downFlat|medium",
+          "sessions": 176,
+          "episodes": 23,
+          "longestEpisode": 31,
+          "first": "2018-03-26",
+          "last": "2025-04-09",
+          "upDays": 82,
+          "downDays": 94,
+          "flatDays": 0,
+          "meanExposure": 0.6604797839655716,
+          "meanLaggedExposure": 0.6600888528549492,
+          "series": {
+            "strategy": {
+              "return": 0.04702332415316065,
+              "annualizedActiveReturn": 0.06800644609698991,
+              "maxDrawdownStitched": 0.09444806968309893,
+              "maxDrawdownContinuousEpisode": 0.07016995286332395,
+              "upCapture": 21.787461205901717,
+              "downCapture": 18.10743428143311
+            },
+            "spy": {
+              "return": -0.008837222439756208,
+              "annualizedActiveReturn": -0.012629112264691527,
+              "maxDrawdownStitched": 0.2052635308566496,
+              "maxDrawdownContinuousEpisode": 0.13287697932325382,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.0031433629083075574,
+              "annualizedActiveReturn": -0.004497667789141473,
+              "maxDrawdownStitched": 0.17400380518263991,
+              "maxDrawdownContinuousEpisode": 0.11317636384281204,
+              "upCapture": 84.47828127074088,
+              "downCapture": 84.30670322277784
+            },
+            "spyCashGroupMean": {
+              "return": 0.0015359741809286755,
+              "annualizedActiveReturn": 0.0021999648813083323,
+              "maxDrawdownStitched": 0.13680573721288902,
+              "maxDrawdownContinuousEpisode": 0.08953794737155918,
+              "upCapture": 66.19313963417545,
+              "downCapture": 65.90082033582765
+            },
+            "spyCashLagged": {
+              "return": -0.08672983891659919,
+              "annualizedActiveReturn": -0.12181641292378526,
+              "maxDrawdownStitched": 0.19059956016655366,
+              "maxDrawdownContinuousEpisode": 0.11788247511683958,
+              "upCapture": 56.08126573319164,
+              "downCapture": 63.40248767406431
+            }
+          },
+          "excessReturn": {
+            "spy": 0.05586054659291686,
+            "spyCashFullMean": 0.05016668706146821,
+            "spyCashGroupMean": 0.04548734997223197,
+            "spyCashLagged": 0.13375316306975985
+          },
+          "attribution": {
+            "cashLevelLogPP": 1.041129805675072,
+            "exposureTimingLogPP": -9.225833313635883,
+            "residualLogPP": 13.667474612566997,
+            "totalExcessLogPP": 5.482771104606184
+          }
+        },
+        {
+          "axis": "joint",
+          "regime": "below|downFlat|high",
+          "sessions": 166,
+          "episodes": 8,
+          "longestEpisode": 62,
+          "first": "2019-01-07",
+          "last": "2025-05-12",
+          "upDays": 92,
+          "downDays": 74,
+          "flatDays": 0,
+          "meanExposure": 0.37899256917854346,
+          "meanLaggedExposure": 0.3792965339679404,
+          "series": {
+            "strategy": {
+              "return": -0.0689743706415519,
+              "annualizedActiveReturn": -0.10281599911374739,
+              "maxDrawdownStitched": 0.1224407073186563,
+              "maxDrawdownContinuousEpisode": 0.09670764056236913,
+              "upCapture": 3.004973500891543,
+              "downCapture": 9.861678823780986
+            },
+            "spy": {
+              "return": 0.3925624786315252,
+              "annualizedActiveReturn": 0.6531836239941172,
+              "maxDrawdownStitched": 0.22699540056673684,
+              "maxDrawdownContinuousEpisode": 0.22699540056673684,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.3313092253772402,
+              "annualizedActiveReturn": 0.5440608703128562,
+              "maxDrawdownStitched": 0.19307723380046193,
+              "maxDrawdownContinuousEpisode": 0.19307723380046216,
+              "upCapture": 84.50079697724092,
+              "downCapture": 84.22227922763525
+            },
+            "spyCashGroupMean": {
+              "return": 0.14732206740465345,
+              "annualizedActiveReturn": 0.23198854862975518,
+              "maxDrawdownStitched": 0.08856072491753764,
+              "maxDrawdownContinuousEpisode": 0.0885607249175373,
+              "upCapture": 38.094221145941965,
+              "downCapture": 37.60057149464464
+            },
+            "spyCashLagged": {
+              "return": 0.17437587426805945,
+              "annualizedActiveReturn": 0.27635726762024865,
+              "maxDrawdownStitched": 0.07650728880296209,
+              "maxDrawdownContinuousEpisode": 0.07650728880296243,
+              "upCapture": 28.875206788240348,
+              "downCapture": 23.840568293700983
+            }
+          },
+          "excessReturn": {
+            "spy": -0.46153684927307714,
+            "spyCashFullMean": -0.40028359601879215,
+            "spyCashGroupMean": -0.21629643804620535,
+            "spyCashLagged": -0.24335024490961135
+          },
+          "attribution": {
+            "cashLevelLogPP": -19.37149699266918,
+            "exposureTimingLogPP": 2.3306245795143816,
+            "residualLogPP": -23.22053088741752,
+            "totalExcessLogPP": -40.26140330057232
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2017",
+          "sessions": 63,
+          "episodes": 1,
+          "longestEpisode": 63,
+          "first": "2017-10-02",
+          "last": "2017-12-29",
+          "upDays": 38,
+          "downDays": 25,
+          "flatDays": 0,
+          "meanExposure": 0.9519208631644194,
+          "meanLaggedExposure": 0.9360784799495366,
+          "series": {
+            "strategy": {
+              "return": 0.03566380498252876,
+              "annualizedActiveReturn": 0.1504697237632812,
+              "maxDrawdownStitched": 0.023884029631285775,
+              "maxDrawdownContinuousEpisode": 0.023884029631285775,
+              "upCapture": 112.92092528792972,
+              "downCapture": 169.28750981419253
+            },
+            "spy": {
+              "return": 0.06005534834305682,
+              "annualizedActiveReturn": 0.2627406637018165,
+              "maxDrawdownStitched": 0.010304438505269076,
+              "maxDrawdownContinuousEpisode": 0.010304438505269076,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.05050402312855513,
+              "annualizedActiveReturn": 0.21784181010467704,
+              "maxDrawdownStitched": 0.00870039108988574,
+              "maxDrawdownContinuousEpisode": 0.00870039108988574,
+              "upCapture": 84.40855806443123,
+              "downCapture": 84.38618197282224
+            },
+            "spyCashGroupMean": {
+              "return": 0.05710571417987033,
+              "annualizedActiveReturn": 0.24874476803387255,
+              "maxDrawdownStitched": 0.00981043327185771,
+              "maxDrawdownContinuousEpisode": 0.00981043327185771,
+              "upCapture": 95.1972528555959,
+              "downCapture": 95.18947947285288
+            },
+            "spyCashLagged": {
+              "return": 0.05060757540813636,
+              "annualizedActiveReturn": 0.21832207078271293,
+              "maxDrawdownStitched": 0.010184067741459746,
+              "maxDrawdownContinuousEpisode": 0.010184067741459746,
+              "upCapture": 91.1757218842865,
+              "downCapture": 98.18593285067199
+            }
+          },
+          "excessReturn": {
+            "spy": -0.02439154336052806,
+            "spyCashFullMean": -0.014840218146026367,
+            "spyCashGroupMean": -0.02144190919734157,
+            "spyCashLagged": -0.0149437704256076
+          },
+          "attribution": {
+            "cashLevelLogPP": -0.27864068764802896,
+            "exposureTimingLogPP": -0.6166075236468983,
+            "residualLogPP": -1.432606145925905,
+            "totalExcessLogPP": -2.327854357220832
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2018",
+          "sessions": 251,
+          "episodes": 1,
+          "longestEpisode": 251,
+          "first": "2018-01-02",
+          "last": "2018-12-31",
+          "upDays": 132,
+          "downDays": 117,
+          "flatDays": 2,
+          "meanExposure": 0.8939263641671024,
+          "meanLaggedExposure": 0.8979027392369734,
+          "series": {
+            "strategy": {
+              "return": -0.07194823661172234,
+              "annualizedActiveReturn": -0.0722242734561181,
+              "maxDrawdownStitched": 0.13438766930875312,
+              "maxDrawdownContinuousEpisode": 0.13438766930875312,
+              "upCapture": 49.4840790657912,
+              "downCapture": 52.67613276647551
+            },
+            "spy": {
+              "return": -0.0634789331952502,
+              "annualizedActiveReturn": -0.06372360284910614,
+              "maxDrawdownStitched": 0.20178483869435293,
+              "maxDrawdownContinuousEpisode": 0.20178483869435293,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.0520147176836835,
+              "annualizedActiveReturn": -0.052216440712093144,
+              "maxDrawdownStitched": 0.17255968744291927,
+              "maxDrawdownContinuousEpisode": 0.17255968744291927,
+              "upCapture": 84.4350617203879,
+              "downCapture": 84.33033810182513
+            },
+            "spyCashGroupMean": {
+              "return": -0.05562835977963159,
+              "annualizedActiveReturn": -0.055843680194882256,
+              "maxDrawdownStitched": 0.1820095295702292,
+              "maxDrawdownContinuousEpisode": 0.1820095295702292,
+              "upCapture": 89.4224009574334,
+              "downCapture": 89.34699103819617
+            },
+            "spyCashLagged": {
+              "return": -0.09575827417717643,
+              "annualizedActiveReturn": -0.09612082963651225,
+              "maxDrawdownStitched": 0.15643738769853088,
+              "maxDrawdownContinuousEpisode": 0.15643738769853088,
+              "upCapture": 80.84911185559982,
+              "downCapture": 85.85288802105664
+            }
+          },
+          "excessReturn": {
+            "spy": -0.008469303416472132,
+            "spyCashFullMean": -0.019933518928038838,
+            "spyCashGroupMean": -0.016319876832090748,
+            "spyCashLagged": 0.023810037565454092
+          },
+          "attribution": {
+            "cashLevelLogPP": 0.8347758460888678,
+            "exposureTimingLogPP": -4.342305487536118,
+            "residualLogPP": 2.5990790273818662,
+            "totalExcessLogPP": -0.9084506140653842
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2019",
+          "sessions": 252,
+          "episodes": 1,
+          "longestEpisode": 252,
+          "first": "2019-01-02",
+          "last": "2019-12-31",
+          "upDays": 149,
+          "downDays": 103,
+          "flatDays": 0,
+          "meanExposure": 0.8906499745178492,
+          "meanLaggedExposure": 0.8868163617869381,
+          "series": {
+            "strategy": {
+              "return": 0.1935821863795313,
+              "annualizedActiveReturn": 0.1935821863795313,
+              "maxDrawdownStitched": 0.09296852857104676,
+              "maxDrawdownContinuousEpisode": 0.09296852857104676,
+              "upCapture": 50.84390795475914,
+              "downCapture": 42.82258651167818
+            },
+            "spy": {
+              "return": 0.28785206349907816,
+              "annualizedActiveReturn": 0.28785206349907816,
+              "maxDrawdownStitched": 0.06618369396275503,
+              "maxDrawdownContinuousEpisode": 0.06618369396275503,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.2393027265748951,
+              "annualizedActiveReturn": 0.2393027265748951,
+              "maxDrawdownStitched": 0.05603573339543255,
+              "maxDrawdownContinuousEpisode": 0.05603573339543255,
+              "upCapture": 84.42127326994053,
+              "downCapture": 84.34552769479592
+            },
+            "spyCashGroupMean": {
+              "return": 0.25369077084239444,
+              "annualizedActiveReturn": 0.25369077084239444,
+              "maxDrawdownStitched": 0.05908026230584107,
+              "maxDrawdownContinuousEpisode": 0.05908026230584107,
+              "upCapture": 89.08538960155526,
+              "downCapture": 89.02936510897223
+            },
+            "spyCashLagged": {
+              "return": 0.20016623084393814,
+              "annualizedActiveReturn": 0.20016623084393814,
+              "maxDrawdownStitched": 0.059035649248674216,
+              "maxDrawdownContinuousEpisode": 0.059035649248674216,
+              "upCapture": 82.33400019907816,
+              "downCapture": 86.80261163081859
+            }
+          },
+          "excessReturn": {
+            "spy": -0.09426987711954685,
+            "spyCashFullMean": -0.045720540195363785,
+            "spyCashGroupMean": -0.06010858446286313,
+            "spyCashLagged": -0.00658404446440683
+          },
+          "attribution": {
+            "cashLevelLogPP": -2.688394597695079,
+            "exposureTimingLogPP": -4.363174467337089,
+            "residualLogPP": -0.550104682732927,
+            "totalExcessLogPP": -7.601673747765095
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2020",
+          "sessions": 253,
+          "episodes": 1,
+          "longestEpisode": 253,
+          "first": "2020-01-02",
+          "last": "2020-12-31",
+          "upDays": 146,
+          "downDays": 107,
+          "flatDays": 0,
+          "meanExposure": 0.6407185405623366,
+          "meanLaggedExposure": 0.6407989447267888,
+          "series": {
+            "strategy": {
+              "return": -0.12013072787170728,
+              "annualizedActiveReturn": -0.11968552684345309,
+              "maxDrawdownStitched": 0.1657773255861097,
+              "maxDrawdownContinuousEpisode": 0.1657773255861097,
+              "upCapture": 22.41382161697462,
+              "downCapture": 32.69256700981483
+            },
+            "spy": {
+              "return": 0.16162313396748895,
+              "annualizedActiveReturn": 0.1609354625739785,
+              "maxDrawdownStitched": 0.3410474689324394,
+              "maxDrawdownContinuousEpisode": 0.3410474689324394,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.14337177103245274,
+              "annualizedActiveReturn": 0.14276643422088686,
+              "maxDrawdownStitched": 0.29388108284270464,
+              "maxDrawdownContinuousEpisode": 0.29388108284270464,
+              "upCapture": 84.49663802414365,
+              "downCapture": 84.22631469830762
+            },
+            "spyCashGroupMean": {
+              "return": 0.11532322232916233,
+              "annualizedActiveReturn": 0.11484217544700054,
+              "maxDrawdownStitched": 0.22912952227209904,
+              "maxDrawdownContinuousEpisode": 0.22912952227209904,
+              "upCapture": 64.25324058461553,
+              "downCapture": 63.78241449189213
+            },
+            "spyCashLagged": {
+              "return": 0.029853025176767183,
+              "annualizedActiveReturn": 0.02973329198903274,
+              "maxDrawdownStitched": 0.1514382706114863,
+              "maxDrawdownContinuousEpisode": 0.1514382706114863,
+              "upCapture": 39.92956476554112,
+              "downCapture": 42.153728900255054
+            }
+          },
+          "excessReturn": {
+            "spy": -0.28175386183919626,
+            "spyCashFullMean": -0.26350249890416,
+            "spyCashGroupMean": -0.23545395020086962,
+            "spyCashLagged": -0.14998375304847447
+          },
+          "attribution": {
+            "cashLevelLogPP": -4.067403209529596,
+            "exposureTimingLogPP": -7.972815034375835,
+            "residualLogPP": -15.739803500149788,
+            "totalExcessLogPP": -27.780021744055215
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2021",
+          "sessions": 252,
+          "episodes": 1,
+          "longestEpisode": 252,
+          "first": "2021-01-04",
+          "last": "2021-12-31",
+          "upDays": 146,
+          "downDays": 106,
+          "flatDays": 0,
+          "meanExposure": 0.9164745929855546,
+          "meanLaggedExposure": 0.9163306236029799,
+          "series": {
+            "strategy": {
+              "return": 0.0899825144141533,
+              "annualizedActiveReturn": 0.0899825144141533,
+              "maxDrawdownStitched": 0.11245669207952858,
+              "maxDrawdownContinuousEpisode": 0.11245669207952858,
+              "upCapture": 62.06480137072749,
+              "downCapture": 71.4389584054523
+            },
+            "spy": {
+              "return": 0.2703540848726257,
+              "annualizedActiveReturn": 0.2703540848726257,
+              "maxDrawdownStitched": 0.05417151230325967,
+              "maxDrawdownContinuousEpisode": 0.05417151230325967,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.2251866855963361,
+              "annualizedActiveReturn": 0.2251866855963361,
+              "maxDrawdownStitched": 0.045802499841796185,
+              "maxDrawdownContinuousEpisode": 0.045802499841796185,
+              "upCapture": 84.41979514699015,
+              "downCapture": 84.35824568359229
+            },
+            "spyCashGroupMean": {
+              "return": 0.24604260585750787,
+              "annualizedActiveReturn": 0.24604260585750787,
+              "maxDrawdownStitched": 0.04969639702732165,
+              "maxDrawdownContinuousEpisode": 0.04969639702732165,
+              "upCapture": 91.66262627920891,
+              "downCapture": 91.62684633814904
+            },
+            "spyCashLagged": {
+              "return": 0.2161528207678024,
+              "annualizedActiveReturn": 0.2161528207678024,
+              "maxDrawdownStitched": 0.05184819270404728,
+              "maxDrawdownContinuousEpisode": 0.05184819270404728,
+              "upCapture": 88.66818219542495,
+              "downCapture": 91.17133170660483
+            }
+          },
+          "excessReturn": {
+            "spy": -0.1803715704584724,
+            "spyCashFullMean": -0.1352041711821828,
+            "spyCashGroupMean": -0.1560600914433546,
+            "spyCashLagged": -0.12617030635364912
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.9323054709568799,
+            "exposureTimingLogPP": -2.428016326674634,
+            "residualLogPP": -10.953079633055586,
+            "totalExcessLogPP": -15.313401430687101
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2022",
+          "sessions": 251,
+          "episodes": 1,
+          "longestEpisode": 251,
+          "first": "2022-01-03",
+          "last": "2022-12-30",
+          "upDays": 108,
+          "downDays": 142,
+          "flatDays": 1,
+          "meanExposure": 0.6860025366398144,
+          "meanLaggedExposure": 0.6867881665139094,
+          "series": {
+            "strategy": {
+              "return": -0.044365571579491156,
+              "annualizedActiveReturn": -0.044538330996743515,
+              "maxDrawdownStitched": 0.16079545528704098,
+              "maxDrawdownContinuousEpisode": 0.16079545528704098,
+              "upCapture": 20.5862486336559,
+              "downCapture": 20.66023262864759
+            },
+            "spy": {
+              "return": -0.1948164065268404,
+              "annualizedActiveReturn": -0.1955112108615282,
+              "maxDrawdownStitched": 0.25360573583037027,
+              "maxDrawdownContinuousEpisode": 0.25360573583037027,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": -0.16389470654804664,
+              "annualizedActiveReturn": -0.16449076272290064,
+              "maxDrawdownStitched": 0.21637860356458904,
+              "maxDrawdownContinuousEpisode": 0.21637860356458904,
+              "upCapture": 84.43530094637335,
+              "downCapture": 84.33958914669182
+            },
+            "spyCashGroupMean": {
+              "return": -0.13265884637502734,
+              "annualizedActiveReturn": -0.13315050976416046,
+              "maxDrawdownStitched": 0.17775438248360864,
+              "maxDrawdownContinuousEpisode": 0.17775438248360864,
+              "upCapture": 68.66852685129568,
+              "downCapture": 68.51206065689335
+            },
+            "spyCashLagged": {
+              "return": -0.18255976743991,
+              "annualizedActiveReturn": -0.18321598816059267,
+              "maxDrawdownStitched": 0.21668606706803972,
+              "maxDrawdownContinuousEpisode": 0.21668606706803972,
+              "upCapture": 64.40341173540311,
+              "downCapture": 68.49001211841568
+            }
+          },
+          "excessReturn": {
+            "spy": 0.15045083494734923,
+            "spyCashFullMean": 0.11952913496855548,
+            "spyCashGroupMean": 0.08829327479553618,
+            "spyCashLagged": 0.13819419586041887
+          },
+          "attribution": {
+            "cashLevelLogPP": 7.43620689997159,
+            "exposureTimingLogPP": -5.925459676086839,
+            "residualLogPP": 15.619765278882594,
+            "totalExcessLogPP": 17.130512502767345
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2023",
+          "sessions": 250,
+          "episodes": 1,
+          "longestEpisode": 250,
+          "first": "2023-01-03",
+          "last": "2023-12-29",
+          "upDays": 140,
+          "downDays": 109,
+          "flatDays": 1,
+          "meanExposure": 0.8524775165771581,
+          "meanLaggedExposure": 0.8517754372101695,
+          "series": {
+            "strategy": {
+              "return": -0.05719440237733179,
+              "annualizedActiveReturn": -0.057638511318540565,
+              "maxDrawdownStitched": 0.1629925713435062,
+              "maxDrawdownContinuousEpisode": 0.1629925713435062,
+              "upCapture": 55.48905873642662,
+              "downCapture": 79.8134300992874
+            },
+            "spy": {
+              "return": 0.24286799325793076,
+              "annualizedActiveReturn": 0.24503168529484504,
+              "maxDrawdownStitched": 0.1029074793896857,
+              "maxDrawdownContinuousEpisode": 0.1029074793896857,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.20277612477836582,
+              "annualizedActiveReturn": 0.2045540082665154,
+              "maxDrawdownStitched": 0.08733752623031887,
+              "maxDrawdownContinuousEpisode": 0.08733752623031887,
+              "upCapture": 84.42074346723206,
+              "downCapture": 84.36749032850001
+            },
+            "spyCashGroupMean": {
+              "return": 0.2049495028938757,
+              "annualizedActiveReturn": 0.2067480275348778,
+              "maxDrawdownStitched": 0.0881942846022219,
+              "maxDrawdownContinuousEpisode": 0.0881942846022219,
+              "upCapture": 85.27358918812665,
+              "downCapture": 85.22274106411068
+            },
+            "spyCashLagged": {
+              "return": 0.17010500749164847,
+              "annualizedActiveReturn": 0.17157645899886464,
+              "maxDrawdownStitched": 0.08827882794878072,
+              "maxDrawdownContinuousEpisode": 0.08827882794878072,
+              "upCapture": 81.83576101115378,
+              "downCapture": 84.88267970090469
+            }
+          },
+          "excessReturn": {
+            "spy": -0.30006239563526255,
+            "spyCashFullMean": -0.25997052715569763,
+            "spyCashGroupMean": -0.2621439052712075,
+            "spyCashLagged": -0.22729940986898026
+          },
+          "attribution": {
+            "cashLevelLogPP": -3.098394702225926,
+            "exposureTimingLogPP": -2.9344164977150893,
+            "residualLogPP": -21.598866548066418,
+            "totalExcessLogPP": -27.631677748007434
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2024",
+          "sessions": 252,
+          "episodes": 1,
+          "longestEpisode": 252,
+          "first": "2024-01-02",
+          "last": "2024-12-31",
+          "upDays": 148,
+          "downDays": 104,
+          "flatDays": 0,
+          "meanExposure": 0.9468099226617922,
+          "meanLaggedExposure": 0.9466570059556592,
+          "series": {
+            "strategy": {
+              "return": 0.16687572291754754,
+              "annualizedActiveReturn": 0.16687572291754754,
+              "maxDrawdownStitched": 0.08375746216928714,
+              "maxDrawdownContinuousEpisode": 0.08375746216928714,
+              "upCapture": 78.99822143697367,
+              "downCapture": 80.85540979219105
+            },
+            "spy": {
+              "return": 0.23304794786605398,
+              "annualizedActiveReturn": 0.23304794786605398,
+              "maxDrawdownStitched": 0.08405619392423247,
+              "maxDrawdownContinuousEpisode": 0.08405619392423247,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.19464525420165488,
+              "annualizedActiveReturn": 0.19464525420165488,
+              "maxDrawdownStitched": 0.07124708107006983,
+              "maxDrawdownContinuousEpisode": 0.07124708107006983,
+              "upCapture": 84.41985527427893,
+              "downCapture": 84.35419259771419
+            },
+            "spyCashGroupMean": {
+              "return": 0.21987614353258927,
+              "annualizedActiveReturn": 0.21987614353258927,
+              "maxDrawdownStitched": 0.07970335046856258,
+              "maxDrawdownContinuousEpisode": 0.07970335046856258,
+              "upCapture": 94.69099046506722,
+              "downCapture": 94.66587187565587
+            },
+            "spyCashLagged": {
+              "return": 0.20716774926840342,
+              "annualizedActiveReturn": 0.20716774926840342,
+              "maxDrawdownStitched": 0.08076671904112209,
+              "maxDrawdownContinuousEpisode": 0.08076671904112209,
+              "upCapture": 93.12576500927696,
+              "downCapture": 94.23250384021688
+            }
+          },
+          "excessReturn": {
+            "spy": -0.06617222494850644,
+            "spyCashFullMean": -0.027769531284107335,
+            "spyCashGroupMean": -0.05300042061504173,
+            "spyCashLagged": -0.04029202635085588
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.073977868742576,
+            "exposureTimingLogPP": -1.047241910000582,
+            "residualLogPP": -3.394705795024497,
+            "totalExcessLogPP": -5.515925573767655
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2025",
+          "sessions": 250,
+          "episodes": 1,
+          "longestEpisode": 250,
+          "first": "2025-01-02",
+          "last": "2025-12-31",
+          "upDays": 142,
+          "downDays": 108,
+          "flatDays": 0,
+          "meanExposure": 0.891989393494067,
+          "meanLaggedExposure": 0.8920461079580809,
+          "series": {
+            "strategy": {
+              "return": -0.06934535570993597,
+              "annualizedActiveReturn": -0.06988026894617165,
+              "maxDrawdownStitched": 0.19246505925931845,
+              "maxDrawdownContinuousEpisode": 0.19246505925931845,
+              "upCapture": 35.46553682092844,
+              "downCapture": 50.3235319039009
+            },
+            "spy": {
+              "return": 0.16352710043963176,
+              "annualizedActiveReturn": 0.16493774011018084,
+              "maxDrawdownStitched": 0.18998904129504934,
+              "maxDrawdownContinuousEpisode": 0.18998904129504934,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.13910852041005767,
+              "annualizedActiveReturn": 0.14029605322153302,
+              "maxDrawdownStitched": 0.16230195762051058,
+              "maxDrawdownContinuousEpisode": 0.16230195762051058,
+              "upCapture": 84.47568575037606,
+              "downCapture": 84.31406143600414
+            },
+            "spyCashGroupMean": {
+              "return": 0.14668078052520447,
+              "annualizedActiveReturn": 0.14793705145763433,
+              "maxDrawdownStitched": 0.17090206230189553,
+              "maxDrawdownContinuousEpisode": 0.17090206230189553,
+              "upCapture": 89.25878524398262,
+              "downCapture": 89.14062068502149
+            },
+            "spyCashLagged": {
+              "return": 0.09157394599320981,
+              "annualizedActiveReturn": 0.09233936950761104,
+              "maxDrawdownStitched": 0.17010648910793924,
+              "maxDrawdownContinuousEpisode": 0.17010648910793924,
+              "upCapture": 83.06113166950453,
+              "downCapture": 87.62093104157475
+            }
+          },
+          "excessReturn": {
+            "spy": -0.23287245614956772,
+            "spyCashFullMean": -0.20845387611999364,
+            "spyCashGroupMean": -0.21602613623514044,
+            "spyCashLagged": -0.16091930170314578
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.4584504419801525,
+            "exposureTimingLogPP": -4.925084939513434,
+            "residualLogPP": -15.948766372173239,
+            "totalExcessLogPP": -22.332301753666826
+          }
+        },
+        {
+          "axis": "year",
+          "regime": "2026",
+          "sessions": 189,
+          "episodes": 1,
+          "longestEpisode": 189,
+          "first": "2026-01-02",
+          "last": "2026-10-02",
+          "upDays": 96,
+          "downDays": 93,
+          "flatDays": 0,
+          "meanExposure": 0.8523060334751555,
+          "meanLaggedExposure": 0.8544980962271621,
+          "series": {
+            "strategy": {
+              "return": -0.03108660480361407,
+              "annualizedActiveReturn": -0.0412325528953419,
+              "maxDrawdownStitched": 0.13998218811891638,
+              "maxDrawdownContinuousEpisode": 0.13998218811891638,
+              "upCapture": 19.20156577492062,
+              "downCapture": 29.51083117963873
+            },
+            "spy": {
+              "return": 0.12750848532487147,
+              "annualizedActiveReturn": 0.17352701572311588,
+              "maxDrawdownStitched": 0.09133132097249108,
+              "maxDrawdownContinuousEpisode": 0.09133132097249108,
+              "upCapture": 100.0,
+              "downCapture": 100.0
+            },
+            "spyCashFullMean": {
+              "return": 0.10753037308531502,
+              "annualizedActiveReturn": 0.14588454058576894,
+              "maxDrawdownStitched": 0.07744277850096248,
+              "maxDrawdownContinuousEpisode": 0.07744277850096248,
+              "upCapture": 84.42070943477424,
+              "downCapture": 84.36102505776553
+            },
+            "spyCashGroupMean": {
+              "return": 0.10860155302087461,
+              "annualizedActiveReturn": 0.14736247910079447,
+              "maxDrawdownStitched": 0.07819101143470386,
+              "maxDrawdownContinuousEpisode": 0.07819101143470386,
+              "upCapture": 85.25643264287889,
+              "downCapture": 85.19938858970588
+            },
+            "spyCashLagged": {
+              "return": 0.12972611902039471,
+              "annualizedActiveReturn": 0.17660555076131668,
+              "maxDrawdownStitched": 0.045060503833742716,
+              "maxDrawdownContinuousEpisode": 0.045060503833742716,
+              "upCapture": 83.75289864816715,
+              "downCapture": 79.85449855652293
+            }
+          },
+          "excessReturn": {
+            "spy": -0.15859509012848555,
+            "spyCashFullMean": -0.1386169778889291,
+            "spyCashGroupMean": -0.13968815782448868,
+            "spyCashLagged": -0.1608127238240088
+          },
+          "attribution": {
+            "cashLevelLogPP": -1.6910959266030674,
+            "exposureTimingLogPP": 1.8875871911580189,
+            "residualLogPP": -15.355527732687282,
+            "totalExcessLogPP": -15.159036468132332
+          }
+        }
+      ]
+    }
+  }
+}

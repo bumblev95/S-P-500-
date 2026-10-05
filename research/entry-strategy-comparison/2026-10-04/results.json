@@ -1,0 +1,2809 @@
+{
+  "version": "entry-strategy-comparison-v1",
+  "start": "2017-10-02",
+  "end": "2026-10-02",
+  "symbols": 505,
+  "methods": {
+    "channel55": {
+      "id": "channel55",
+      "name": "55일 채널 돌파",
+      "stress": false,
+      "cost": {
+        "risk": 0.01,
+        "maxPositions": 5,
+        "maxWeight": 0.2,
+        "fee": 0.0005,
+        "slip": 0.0005,
+        "step": 86400000,
+        "warmup": 205
+      },
+      "full": {
+        "initial": 10000,
+        "markEquity": 29514.48186440888,
+        "liquidationEquivalentEquity": 29491.43196874736,
+        "liquidationEquivalentReturn": 1.9491431968747364,
+        "cagr": 0.12768576474933102,
+        "maxDrawdown": 0.23958320918787257,
+        "meanExposure": 0.723309496848743,
+        "entries": 419,
+        "closedTrades": 414,
+        "openPositions": 5,
+        "winRate": 0.3333333333333333,
+        "profitFactor": 1.6867795001248747,
+        "fees": 1120.4263861981299,
+        "slippage": 1120.426061116694,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "동일 업종 2종목 한도": 89,
+          "포지션 한도": 36400,
+          "신호 가격에서 0.5 ATR 이상 이탈": 170,
+          "가상 자본 또는 최소 수량 부족": 2
+        },
+        "concentration": {
+          "basis": "symbol P&L after fees, including terminal hypothetical liquidation; descriptive post-result audit",
+          "totalNetProfit": 19491.43196874736,
+          "topSymbols": [
+            {
+              "symbol": "WDC",
+              "net": 10836.913428317917
+            },
+            {
+              "symbol": "VST",
+              "net": 3417.6837389311136
+            },
+            {
+              "symbol": "APP",
+              "net": 2641.490493117892
+            },
+            {
+              "symbol": "AXON",
+              "net": 2098.005335553078
+            },
+            {
+              "symbol": "APH",
+              "net": 1588.5415815856709
+            }
+          ],
+          "topSymbolShareOfNetProfit": 0.5559834416318856,
+          "topSymbolShareOfPositiveSymbolPnL": 0.2714202504176996
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 491,
+        "zeroShare": 0.21696862571807335,
+        "meanCandidates": 16.933716305788774,
+        "signals": 38321,
+        "top3Signals": 5122
+      },
+      "top3": {
+        "20": {
+          "observations": 5080,
+          "signalDates": 1754,
+          "excluded": {
+            "immature": 42
+          },
+          "meanNet": 0.011052493861330037,
+          "meanBenchmark": 0.00556312311552528,
+          "meanExcess": 0.005489370745804727,
+          "dateBalancedMeanExcess": 0.00499696242024496,
+          "winRate": 0.5425196850393701
+        },
+        "63": {
+          "observations": 4954,
+          "signalDates": 1711,
+          "excluded": {
+            "immature": 168
+          },
+          "meanNet": 0.04492999393365004,
+          "meanBenchmark": 0.025503000636236572,
+          "meanExcess": 0.019426993297413465,
+          "dateBalancedMeanExcess": 0.018498228055835036,
+          "winRate": 0.5821558336697618
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 12828.606062056295,
+          "markReturn": 0.2828606062056296,
+          "cagr": 0.04864820904462941,
+          "maxDrawdown": 0.1875629818440201,
+          "meanExposure": 0.6516205080397804,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "closedTrades": 228,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 390,
+            "zeroShare": 0.2950075642965204,
+            "meanCandidates": 17.087745839636913,
+            "signals": 22590,
+            "top3Signals": 2706
+          },
+          "top3": {
+            "20": {
+              "observations": 2703,
+              "signalDates": 931,
+              "excluded": {
+                "crossesPeriodEnd": 3
+              },
+              "meanNet": 0.009657416380451226,
+              "meanBenchmark": 0.0027683279647076225,
+              "meanExcess": 0.006889088415743595,
+              "dateBalancedMeanExcess": 0.0063986099935739,
+              "winRate": 0.5575286718460969
+            },
+            "63": {
+              "observations": 2697,
+              "signalDates": 929,
+              "excluded": {
+                "crossesPeriodEnd": 9
+              },
+              "meanNet": 0.03762086261094245,
+              "meanBenchmark": 0.014894562458141018,
+              "meanExcess": 0.022726300152801412,
+              "dateBalancedMeanExcess": 0.02191496456146641,
+              "winRate": 0.5899147200593252
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 12828.606062056295,
+          "endingEquity": 29514.48186440888,
+          "markReturn": 1.3006772303738519,
+          "cagr": 0.2483464650265912,
+          "maxDrawdown": 0.19774175320055942,
+          "meanExposure": 0.8240245268226506,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "closedTrades": 186,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 101,
+            "zeroShare": 0.1073326248671626,
+            "meanCandidates": 16.717321997874603,
+            "signals": 15731,
+            "top3Signals": 2416
+          },
+          "top3": {
+            "20": {
+              "observations": 2374,
+              "signalDates": 822,
+              "excluded": {
+                "immature": 42
+              },
+              "meanNet": 0.012666780256706948,
+              "meanBenchmark": 0.008827002714903276,
+              "meanExcess": 0.0038397775418037117,
+              "dateBalancedMeanExcess": 0.0033550417788263645,
+              "winRate": 0.5256950294860994
+            },
+            "63": {
+              "observations": 2248,
+              "signalDates": 779,
+              "excluded": {
+                "immature": 168
+              },
+              "meanNet": 0.05386192739145496,
+              "meanBenchmark": 0.03836669640757491,
+              "meanExcess": 0.015495230983879981,
+              "dateBalancedMeanExcess": 0.014445521757071355,
+              "winRate": 0.5738434163701067
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "start": "2017-10-02",
+          "end": "2017-12-29",
+          "sessions": 63,
+          "startEquity": 10000,
+          "endingEquity": 9917.917354173595,
+          "markReturn": -0.008208264582640568,
+          "cagr": -0.03351403537010744,
+          "maxDrawdown": 0.08655251683426868,
+          "meanExposure": 0.9427961554384847,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000
+        },
+        "2018": {
+          "start": "2018-01-02",
+          "end": "2018-12-31",
+          "sessions": 251,
+          "startEquity": 9917.917354173595,
+          "endingEquity": 10490.610946812863,
+          "markReturn": 0.0577433318093008,
+          "cagr": 0.057460225974761636,
+          "maxDrawdown": 0.0973283244985973,
+          "meanExposure": 0.7267682653843757,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1514581200000
+        },
+        "2019": {
+          "start": "2019-01-02",
+          "end": "2019-12-31",
+          "sessions": 252,
+          "startEquity": 10490.610946812863,
+          "endingEquity": 11168.938944744652,
+          "markReturn": 0.06466048558762627,
+          "cagr": 0.06470617651321509,
+          "maxDrawdown": 0.11317034177343832,
+          "meanExposure": 0.8269933220154877,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1546290000000
+        },
+        "2020": {
+          "start": "2020-01-02",
+          "end": "2020-12-31",
+          "sessions": 253,
+          "startEquity": 11168.938944744652,
+          "endingEquity": 11103.928679544522,
+          "markReturn": -0.005820630368000956,
+          "cagr": -0.005808737556015187,
+          "maxDrawdown": 0.1875629818440201,
+          "meanExposure": 0.6012297641337979,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1577826000000
+        },
+        "2021": {
+          "start": "2021-01-04",
+          "end": "2021-12-31",
+          "sessions": 252,
+          "startEquity": 11103.928679544522,
+          "endingEquity": 13760.23787147287,
+          "markReturn": 0.2392224651822339,
+          "cagr": 0.23940452894083752,
+          "maxDrawdown": 0.1332430124358397,
+          "meanExposure": 0.8936474963381217,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1609448400000
+        },
+        "2022": {
+          "start": "2022-01-03",
+          "end": "2022-12-30",
+          "sessions": 251,
+          "startEquity": 13760.23787147287,
+          "endingEquity": 12828.606062056295,
+          "markReturn": -0.06770462968143842,
+          "cagr": -0.06792905019458972,
+          "maxDrawdown": 0.08720558398602463,
+          "meanExposure": 0.13511833734473236,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1640984400000
+        },
+        "2023": {
+          "start": "2023-01-03",
+          "end": "2023-12-29",
+          "sessions": 250,
+          "startEquity": 12828.606062056295,
+          "endingEquity": 14113.659811154508,
+          "markReturn": 0.1001709572249685,
+          "cagr": 0.10053169101668447,
+          "maxDrawdown": 0.12917116388705863,
+          "meanExposure": 0.8249425797622335,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000
+        },
+        "2024": {
+          "start": "2024-01-02",
+          "end": "2024-12-31",
+          "sessions": 252,
+          "startEquity": 14113.659811154508,
+          "endingEquity": 21624.56353729174,
+          "markReturn": 0.5321726488122596,
+          "cagr": 0.5272950110376238,
+          "maxDrawdown": 0.1968520929712534,
+          "meanExposure": 0.9239478285316638,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1703883600000
+        },
+        "2025": {
+          "start": "2025-01-02",
+          "end": "2025-12-31",
+          "sessions": 250,
+          "startEquity": 21624.56353729174,
+          "endingEquity": 27576.732028776707,
+          "markReturn": 0.27525034117892844,
+          "cagr": 0.2754627339070439,
+          "maxDrawdown": 0.10520091284157751,
+          "meanExposure": 0.747833191028209,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1735678800000
+        },
+        "2026": {
+          "start": "2026-01-02",
+          "end": "2026-10-02",
+          "sessions": 189,
+          "startEquity": 27576.732028776707,
+          "endingEquity": 29514.48186440888,
+          "markReturn": 0.07026756591789418,
+          "cagr": 0.09440270602680378,
+          "maxDrawdown": 0.19774175320055942,
+          "meanExposure": 0.7903612923414046,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1767214800000
+        }
+      },
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 4,
+        "top3": [
+          "NTAP",
+          "KEYS",
+          "ADI"
+        ],
+        "priceRegime": "above200"
+      }
+    },
+    "channel55_stress": {
+      "id": "channel55_stress",
+      "name": "55일 채널 돌파",
+      "stress": true,
+      "cost": {
+        "risk": 0.01,
+        "maxPositions": 5,
+        "maxWeight": 0.2,
+        "fee": 0.001,
+        "slip": 0.001,
+        "step": 86400000,
+        "warmup": 205
+      },
+      "full": {
+        "initial": 10000,
+        "markEquity": 24433.84709612045,
+        "liquidationEquivalentEquity": 24397.440928976623,
+        "liquidationEquivalentReturn": 1.4397440928976621,
+        "cagr": 0.1041751783037752,
+        "maxDrawdown": 0.26049805781506297,
+        "meanExposure": 0.711844945079079,
+        "entries": 419,
+        "closedTrades": 414,
+        "openPositions": 5,
+        "winRate": 0.3115942028985507,
+        "profitFactor": 1.54432116918958,
+        "fees": 1988.0327881148748,
+        "slippage": 1988.0329858379719,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "동일 업종 2종목 한도": 89,
+          "포지션 한도": 36400,
+          "신호 가격에서 0.5 ATR 이상 이탈": 170,
+          "가상 자본 또는 최소 수량 부족": 2
+        },
+        "concentration": {
+          "basis": "symbol P&L after fees, including terminal hypothetical liquidation; descriptive post-result audit",
+          "totalNetProfit": 14397.440928976623,
+          "topSymbols": [
+            {
+              "symbol": "WDC",
+              "net": 8896.662902300783
+            },
+            {
+              "symbol": "VST",
+              "net": 2882.317672856502
+            },
+            {
+              "symbol": "APP",
+              "net": 2182.3001483145117
+            },
+            {
+              "symbol": "AXON",
+              "net": 1878.7101363895267
+            },
+            {
+              "symbol": "APH",
+              "net": 1317.3698487242889
+            }
+          ],
+          "topSymbolShareOfNetProfit": 0.6179336276626184,
+          "topSymbolShareOfPositiveSymbolPnL": 0.26483569215561215
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 491,
+        "zeroShare": 0.21696862571807335,
+        "meanCandidates": 16.933716305788774,
+        "signals": 38321,
+        "top3Signals": 5122
+      },
+      "top3": {
+        "20": {
+          "observations": 5080,
+          "signalDates": 1754,
+          "excluded": {
+            "immature": 42
+          },
+          "meanNet": 0.011052493861330037,
+          "meanBenchmark": 0.00556312311552528,
+          "meanExcess": 0.005489370745804727,
+          "dateBalancedMeanExcess": 0.00499696242024496,
+          "winRate": 0.5425196850393701
+        },
+        "63": {
+          "observations": 4954,
+          "signalDates": 1711,
+          "excluded": {
+            "immature": 168
+          },
+          "meanNet": 0.04492999393365004,
+          "meanBenchmark": 0.025503000636236572,
+          "meanExcess": 0.019426993297413465,
+          "dateBalancedMeanExcess": 0.018498228055835036,
+          "winRate": 0.5821558336697618
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 11651.508792203174,
+          "markReturn": 0.16515087922031735,
+          "cagr": 0.029577578111791514,
+          "maxDrawdown": 0.19767546788575763,
+          "meanExposure": 0.642967587173876,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "closedTrades": 228,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 390,
+            "zeroShare": 0.2950075642965204,
+            "meanCandidates": 17.087745839636913,
+            "signals": 22590,
+            "top3Signals": 2706
+          },
+          "top3": {
+            "20": {
+              "observations": 2703,
+              "signalDates": 931,
+              "excluded": {
+                "crossesPeriodEnd": 3
+              },
+              "meanNet": 0.009657416380451226,
+              "meanBenchmark": 0.0027683279647076225,
+              "meanExcess": 0.006889088415743595,
+              "dateBalancedMeanExcess": 0.0063986099935739,
+              "winRate": 0.5575286718460969
+            },
+            "63": {
+              "observations": 2697,
+              "signalDates": 929,
+              "excluded": {
+                "crossesPeriodEnd": 9
+              },
+              "meanNet": 0.03762086261094245,
+              "meanBenchmark": 0.014894562458141018,
+              "meanExcess": 0.022726300152801412,
+              "dateBalancedMeanExcess": 0.02191496456146641,
+              "winRate": 0.5899147200593252
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 11651.508792203174,
+          "endingEquity": 24433.84709612045,
+          "markReturn": 1.097054341363139,
+          "cagr": 0.2179252387320243,
+          "maxDrawdown": 0.20749122849903945,
+          "meanExposure": 0.8086099473646025,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "closedTrades": 186,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 101,
+            "zeroShare": 0.1073326248671626,
+            "meanCandidates": 16.717321997874603,
+            "signals": 15731,
+            "top3Signals": 2416
+          },
+          "top3": {
+            "20": {
+              "observations": 2374,
+              "signalDates": 822,
+              "excluded": {
+                "immature": 42
+              },
+              "meanNet": 0.012666780256706948,
+              "meanBenchmark": 0.008827002714903276,
+              "meanExcess": 0.0038397775418037117,
+              "dateBalancedMeanExcess": 0.0033550417788263645,
+              "winRate": 0.5256950294860994
+            },
+            "63": {
+              "observations": 2248,
+              "signalDates": 779,
+              "excluded": {
+                "immature": 168
+              },
+              "meanNet": 0.05386192739145496,
+              "meanBenchmark": 0.03836669640757491,
+              "meanExcess": 0.015495230983879981,
+              "dateBalancedMeanExcess": 0.014445521757071355,
+              "winRate": 0.5738434163701067
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "start": "2017-10-02",
+          "end": "2017-12-29",
+          "sessions": 63,
+          "startEquity": 10000,
+          "endingEquity": 9898.149624713082,
+          "markReturn": -0.01018503752869182,
+          "cagr": -0.04145626586097484,
+          "maxDrawdown": 0.08626759349531443,
+          "meanExposure": 0.9404664487229051,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000
+        },
+        "2018": {
+          "start": "2018-01-02",
+          "end": "2018-12-31",
+          "sessions": 251,
+          "startEquity": 9898.149624713082,
+          "endingEquity": 10241.246137087952,
+          "markReturn": 0.0346626920569324,
+          "cagr": 0.034494588317596664,
+          "maxDrawdown": 0.10540871295621257,
+          "meanExposure": 0.7216042919410895,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1514581200000
+        },
+        "2019": {
+          "start": "2019-01-02",
+          "end": "2019-12-31",
+          "sessions": 252,
+          "startEquity": 10241.246137087952,
+          "endingEquity": 10743.215441422464,
+          "markReturn": 0.04901447515421653,
+          "cagr": 0.04904885690001137,
+          "maxDrawdown": 0.11439263629348151,
+          "meanExposure": 0.8200640392337581,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1546290000000
+        },
+        "2020": {
+          "start": "2020-01-02",
+          "end": "2020-12-31",
+          "sessions": 253,
+          "startEquity": 10743.215441422464,
+          "endingEquity": 10428.888274907895,
+          "markReturn": -0.029258201906909753,
+          "cagr": -0.02919913055193868,
+          "maxDrawdown": 0.19767546788575763,
+          "meanExposure": 0.5910945456767969,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1577826000000
+        },
+        "2021": {
+          "start": "2021-01-04",
+          "end": "2021-12-31",
+          "sessions": 252,
+          "startEquity": 10428.888274907895,
+          "endingEquity": 12656.140354741834,
+          "markReturn": 0.2135656285812122,
+          "cagr": 0.21372653047540657,
+          "maxDrawdown": 0.14026379629023555,
+          "meanExposure": 0.8732144280595888,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1609448400000
+        },
+        "2022": {
+          "start": "2022-01-03",
+          "end": "2022-12-30",
+          "sessions": 251,
+          "startEquity": 12656.140354741834,
+          "endingEquity": 11651.508792203174,
+          "markReturn": -0.07937898398560805,
+          "cagr": -0.07964042225517265,
+          "maxDrawdown": 0.09383839404034666,
+          "meanExposure": 0.1329800513265151,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1640984400000
+        },
+        "2023": {
+          "start": "2023-01-03",
+          "end": "2023-12-29",
+          "sessions": 250,
+          "startEquity": 11651.508792203174,
+          "endingEquity": 12501.8914167668,
+          "markReturn": 0.07298476443949276,
+          "cagr": 0.07324436184943095,
+          "maxDrawdown": 0.1323275707240057,
+          "meanExposure": 0.8101833667795302,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000
+        },
+        "2024": {
+          "start": "2024-01-02",
+          "end": "2024-12-31",
+          "sessions": 252,
+          "startEquity": 12501.8914167668,
+          "endingEquity": 18615.351389800653,
+          "markReturn": 0.4890028051943276,
+          "cagr": 0.4845796318385882,
+          "maxDrawdown": 0.19831934374603677,
+          "meanExposure": 0.9067943882210915,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1703883600000
+        },
+        "2025": {
+          "start": "2025-01-02",
+          "end": "2025-12-31",
+          "sessions": 250,
+          "startEquity": 18615.351389800653,
+          "endingEquity": 23259.52144312568,
+          "markReturn": 0.2494806547605417,
+          "cagr": 0.24967128184391063,
+          "maxDrawdown": 0.10303657689305956,
+          "meanExposure": 0.7354785307052981,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1735678800000
+        },
+        "2026": {
+          "start": "2026-01-02",
+          "end": "2026-10-02",
+          "sessions": 189,
+          "startEquity": 23259.52144312568,
+          "endingEquity": 24433.84709612045,
+          "markReturn": 0.0504879541853962,
+          "cagr": 0.06761715744009389,
+          "maxDrawdown": 0.20749122849903945,
+          "meanExposure": 0.7723507950643842,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1767214800000
+        }
+      },
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 4,
+        "top3": [
+          "NTAP",
+          "KEYS",
+          "ADI"
+        ],
+        "priceRegime": "above200"
+      }
+    },
+    "pullback20": {
+      "id": "pullback20",
+      "name": "20일선 눌림 반등",
+      "stress": false,
+      "cost": {
+        "risk": 0.01,
+        "maxPositions": 5,
+        "maxWeight": 0.2,
+        "fee": 0.0005,
+        "slip": 0.0005,
+        "step": 86400000,
+        "warmup": 205
+      },
+      "full": {
+        "initial": 10000,
+        "markEquity": 9302.678009649437,
+        "liquidationEquivalentEquity": 9295.193931323049,
+        "liquidationEquivalentReturn": -0.07048060686769508,
+        "cagr": -0.008087909295779405,
+        "maxDrawdown": 0.4855149993330524,
+        "meanExposure": 0.693957495252177,
+        "entries": 841,
+        "closedTrades": 836,
+        "openPositions": 5,
+        "winRate": 0.3492822966507177,
+        "profitFactor": 0.980616208389124,
+        "fees": 1963.585730870006,
+        "slippage": 1963.5846668444328,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "포지션 한도": 63247,
+          "동일 업종 2종목 한도": 153,
+          "신호 가격에서 0.5 ATR 이상 이탈": 310,
+          "가상 자본 또는 최소 수량 부족": 5,
+          "비용 반영 손익비 또는 가격 조건 미충족": 3
+        },
+        "concentration": {
+          "basis": "symbol P&L after fees, including terminal hypothetical liquidation; descriptive post-result audit",
+          "totalNetProfit": -704.8060686769513,
+          "topSymbols": [
+            {
+              "symbol": "P",
+              "net": 890.2875379639654
+            },
+            {
+              "symbol": "DXCM",
+              "net": 783.4204045736053
+            },
+            {
+              "symbol": "FICO",
+              "net": 701.4307152559298
+            },
+            {
+              "symbol": "TKO",
+              "net": 627.8772167431448
+            },
+            {
+              "symbol": "CMG",
+              "net": 624.4082845351115
+            }
+          ],
+          "topSymbolShareOfNetProfit": null,
+          "topSymbolShareOfPositiveSymbolPnL": 0.031202575565806624
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 448,
+        "zeroShare": 0.19796730004418914,
+        "meanCandidates": 29.23066725585506,
+        "signals": 66149,
+        "top3Signals": 5410
+      },
+      "top3": {
+        "20": {
+          "observations": 5350,
+          "signalDates": 1795,
+          "excluded": {
+            "immature": 60
+          },
+          "meanNet": 0.008809928280840446,
+          "meanBenchmark": 0.006340698709859449,
+          "meanExcess": 0.002469229570980966,
+          "dateBalancedMeanExcess": 0.0024298505713967015,
+          "winRate": 0.554018691588785
+        },
+        "63": {
+          "observations": 5221,
+          "signalDates": 1752,
+          "excluded": {
+            "immature": 189
+          },
+          "meanNet": 0.03190108875279413,
+          "meanBenchmark": 0.026574060159800107,
+          "meanExcess": 0.005327028592994037,
+          "dateBalancedMeanExcess": 0.005402182073809199,
+          "winRate": 0.5736448956138671
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 16619.631273517465,
+          "markReturn": 0.6619631273517466,
+          "cagr": 0.101723180473412,
+          "maxDrawdown": 0.13521900421778354,
+          "meanExposure": 0.631137832785943,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "closedTrades": 441,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 365,
+            "zeroShare": 0.2760968229954614,
+            "meanCandidates": 29.07942511346445,
+            "signals": 38443,
+            "top3Signals": 2855
+          },
+          "top3": {
+            "20": {
+              "observations": 2852,
+              "signalDates": 956,
+              "excluded": {
+                "crossesPeriodEnd": 3
+              },
+              "meanNet": 0.013580306313562388,
+              "meanBenchmark": 0.0042587564512304955,
+              "meanExcess": 0.009321549862331873,
+              "dateBalancedMeanExcess": 0.009176899215462176,
+              "winRate": 0.5834502103786816
+            },
+            "63": {
+              "observations": 2846,
+              "signalDates": 954,
+              "excluded": {
+                "crossesPeriodEnd": 9
+              },
+              "meanNet": 0.03218243675969875,
+              "meanBenchmark": 0.01698972211406217,
+              "meanExcess": 0.015192714645636516,
+              "dateBalancedMeanExcess": 0.015073665124982588,
+              "winRate": 0.5927617709065355
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 16619.631273517465,
+          "endingEquity": 9302.678009649437,
+          "markReturn": -0.4402596630123329,
+          "cagr": -0.14314435592002717,
+          "maxDrawdown": 0.45184928514840095,
+          "meanExposure": 0.782212111384335,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "closedTrades": 395,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 83,
+            "zeroShare": 0.08820403825717323,
+            "meanCandidates": 29.443145589798085,
+            "signals": 27706,
+            "top3Signals": 2555
+          },
+          "top3": {
+            "20": {
+              "observations": 2495,
+              "signalDates": 838,
+              "excluded": {
+                "immature": 60
+              },
+              "meanNet": 0.003406800326475707,
+              "meanBenchmark": 0.008799276234771666,
+              "meanExcess": -0.005392475908295988,
+              "dateBalancedMeanExcess": -0.0052960011979118265,
+              "winRate": 0.5206412825651303
+            },
+            "63": {
+              "observations": 2366,
+              "signalDates": 795,
+              "excluded": {
+                "immature": 189
+              },
+              "meanNet": 0.031620372440607475,
+              "meanBenchmark": 0.03823648447997213,
+              "meanExcess": -0.00661611203936471,
+              "dateBalancedMeanExcess": -0.006278671738128409,
+              "winRate": 0.5507185122569738
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "start": "2017-10-02",
+          "end": "2017-12-29",
+          "sessions": 63,
+          "startEquity": 10000,
+          "endingEquity": 11252.197223458174,
+          "markReturn": 0.12521972234581735,
+          "cagr": 0.6289641572318498,
+          "maxDrawdown": 0.0256408916941272,
+          "meanExposure": 0.9103970065403393,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000
+        },
+        "2018": {
+          "start": "2018-01-02",
+          "end": "2018-12-31",
+          "sessions": 251,
+          "startEquity": 11252.197223458174,
+          "endingEquity": 12030.278707938047,
+          "markReturn": 0.06914929315829599,
+          "cagr": 0.06880847025011505,
+          "maxDrawdown": 0.10726653669688946,
+          "meanExposure": 0.6916985344841985,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1514581200000
+        },
+        "2019": {
+          "start": "2019-01-02",
+          "end": "2019-12-31",
+          "sessions": 252,
+          "startEquity": 12030.278707938047,
+          "endingEquity": 12916.450543426507,
+          "markReturn": 0.0736617876445147,
+          "cagr": 0.07371405641794548,
+          "maxDrawdown": 0.08577069726949926,
+          "meanExposure": 0.8080717393020578,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1546290000000
+        },
+        "2020": {
+          "start": "2020-01-02",
+          "end": "2020-12-31",
+          "sessions": 253,
+          "startEquity": 12916.450543426507,
+          "endingEquity": 14066.041431763602,
+          "markReturn": 0.08900207409706296,
+          "cagr": 0.08881182387118369,
+          "maxDrawdown": 0.1049462037100447,
+          "meanExposure": 0.5893846469425169,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1577826000000
+        },
+        "2021": {
+          "start": "2021-01-04",
+          "end": "2021-12-31",
+          "sessions": 252,
+          "startEquity": 14066.041431763602,
+          "endingEquity": 17861.99879592149,
+          "markReturn": 0.2698667839542932,
+          "cagr": 0.27007459987061755,
+          "maxDrawdown": 0.07837488369028878,
+          "meanExposure": 0.857685021622695,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1609448400000
+        },
+        "2022": {
+          "start": "2022-01-03",
+          "end": "2022-12-30",
+          "sessions": 251,
+          "startEquity": 17861.99879592149,
+          "endingEquity": 16619.631273517465,
+          "markReturn": -0.06955366734699919,
+          "cagr": -0.06978398463077762,
+          "maxDrawdown": 0.084386695524716,
+          "meanExposure": 0.13748148185636727,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1640984400000
+        },
+        "2023": {
+          "start": "2023-01-03",
+          "end": "2023-12-29",
+          "sessions": 250,
+          "startEquity": 16619.631273517465,
+          "endingEquity": 13228.15008367013,
+          "markReturn": -0.20406476738455004,
+          "cagr": -0.2046883630733165,
+          "maxDrawdown": 0.279236692475606,
+          "meanExposure": 0.7783006438923921,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000
+        },
+        "2024": {
+          "start": "2024-01-02",
+          "end": "2024-12-31",
+          "sessions": 252,
+          "startEquity": 13228.15008367013,
+          "endingEquity": 12661.287683915734,
+          "markReturn": -0.04285273421974367,
+          "cagr": -0.042539413471145426,
+          "maxDrawdown": 0.12275951714178823,
+          "meanExposure": 0.881837891790389,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1703883600000
+        },
+        "2025": {
+          "start": "2025-01-02",
+          "end": "2025-12-31",
+          "sessions": 250,
+          "startEquity": 12661.287683915734,
+          "endingEquity": 11288.59065647567,
+          "markReturn": -0.10841685788277844,
+          "cagr": -0.10848693392101516,
+          "maxDrawdown": 0.1905349333506292,
+          "meanExposure": 0.714389100540553,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1735678800000
+        },
+        "2026": {
+          "start": "2026-01-02",
+          "end": "2026-10-02",
+          "sessions": 189,
+          "startEquity": 11288.59065647567,
+          "endingEquity": 9302.678009649437,
+          "markReturn": -0.17592210642229456,
+          "cagr": -0.2266543213369081,
+          "maxDrawdown": 0.22334925163524988,
+          "meanExposure": 0.7442646136150536,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1767214800000
+        }
+      },
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 15,
+        "top3": [
+          "MPC",
+          "PSX",
+          "XOM"
+        ],
+        "priceRegime": "above200"
+      }
+    },
+    "pullback20_stress": {
+      "id": "pullback20_stress",
+      "name": "20일선 눌림 반등",
+      "stress": true,
+      "cost": {
+        "risk": 0.01,
+        "maxPositions": 5,
+        "maxWeight": 0.2,
+        "fee": 0.001,
+        "slip": 0.001,
+        "step": 86400000,
+        "warmup": 205
+      },
+      "full": {
+        "initial": 10000,
+        "markEquity": 6675.745941188143,
+        "liquidationEquivalentEquity": 6666.2350592375205,
+        "liquidationEquivalentReturn": -0.3333764940762479,
+        "cagr": -0.044058525363920964,
+        "maxDrawdown": 0.5236524082019716,
+        "meanExposure": 0.6819651629091796,
+        "entries": 838,
+        "closedTrades": 833,
+        "openPositions": 5,
+        "winRate": 0.33733493397358943,
+        "profitFactor": 0.9083942190075713,
+        "fees": 3143.8896936554825,
+        "slippage": 3143.887899358955,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "포지션 한도": 63153,
+          "동일 업종 2종목 한도": 165,
+          "신호 가격에서 0.5 ATR 이상 이탈": 302,
+          "비용 반영 손익비 또는 가격 조건 미충족": 64,
+          "가상 자본 또는 최소 수량 부족": 8
+        },
+        "concentration": {
+          "basis": "symbol P&L after fees, including terminal hypothetical liquidation; descriptive post-result audit",
+          "totalNetProfit": -3333.7649407624795,
+          "topSymbols": [
+            {
+              "symbol": "TKO",
+              "net": 549.4525573916593
+            },
+            {
+              "symbol": "VRT",
+              "net": 537.6142558372737
+            },
+            {
+              "symbol": "P",
+              "net": 528.8335015436595
+            },
+            {
+              "symbol": "NRG",
+              "net": 520.4908089833885
+            },
+            {
+              "symbol": "DXCM",
+              "net": 452.74336941860236
+            }
+          ],
+          "topSymbolShareOfNetProfit": null,
+          "topSymbolShareOfPositiveSymbolPnL": 0.027235953356782167
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 448,
+        "zeroShare": 0.19796730004418914,
+        "meanCandidates": 29.23066725585506,
+        "signals": 66149,
+        "top3Signals": 5410
+      },
+      "top3": {
+        "20": {
+          "observations": 5350,
+          "signalDates": 1795,
+          "excluded": {
+            "immature": 60
+          },
+          "meanNet": 0.008809928280840446,
+          "meanBenchmark": 0.006340698709859449,
+          "meanExcess": 0.002469229570980966,
+          "dateBalancedMeanExcess": 0.0024298505713967015,
+          "winRate": 0.554018691588785
+        },
+        "63": {
+          "observations": 5221,
+          "signalDates": 1752,
+          "excluded": {
+            "immature": 189
+          },
+          "meanNet": 0.03190108875279413,
+          "meanBenchmark": 0.026574060159800107,
+          "meanExcess": 0.005327028592994037,
+          "dateBalancedMeanExcess": 0.005402182073809199,
+          "winRate": 0.5736448956138671
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 12709.996291282829,
+          "markReturn": 0.2709996291282828,
+          "cagr": 0.046792318878708494,
+          "maxDrawdown": 0.23606239668959084,
+          "meanExposure": 0.6196991318307654,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "closedTrades": 448,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 365,
+            "zeroShare": 0.2760968229954614,
+            "meanCandidates": 29.07942511346445,
+            "signals": 38443,
+            "top3Signals": 2855
+          },
+          "top3": {
+            "20": {
+              "observations": 2852,
+              "signalDates": 956,
+              "excluded": {
+                "crossesPeriodEnd": 3
+              },
+              "meanNet": 0.013580306313562388,
+              "meanBenchmark": 0.0042587564512304955,
+              "meanExcess": 0.009321549862331873,
+              "dateBalancedMeanExcess": 0.009176899215462176,
+              "winRate": 0.5834502103786816
+            },
+            "63": {
+              "observations": 2846,
+              "signalDates": 954,
+              "excluded": {
+                "crossesPeriodEnd": 9
+              },
+              "meanNet": 0.03218243675969875,
+              "meanBenchmark": 0.01698972211406217,
+              "meanExcess": 0.015192714645636516,
+              "dateBalancedMeanExcess": 0.015073665124982588,
+              "winRate": 0.5927617709065355
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 12709.996291282829,
+          "endingEquity": 6675.745941188143,
+          "markReturn": -0.4747641314603126,
+          "cagr": -0.1575361705217202,
+          "maxDrawdown": 0.4842319944025809,
+          "meanExposure": 0.7694419887175378,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "closedTrades": 385,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 83,
+            "zeroShare": 0.08820403825717323,
+            "meanCandidates": 29.443145589798085,
+            "signals": 27706,
+            "top3Signals": 2555
+          },
+          "top3": {
+            "20": {
+              "observations": 2495,
+              "signalDates": 838,
+              "excluded": {
+                "immature": 60
+              },
+              "meanNet": 0.003406800326475707,
+              "meanBenchmark": 0.008799276234771666,
+              "meanExcess": -0.005392475908295988,
+              "dateBalancedMeanExcess": -0.0052960011979118265,
+              "winRate": 0.5206412825651303
+            },
+            "63": {
+              "observations": 2366,
+              "signalDates": 795,
+              "excluded": {
+                "immature": 189
+              },
+              "meanNet": 0.031620372440607475,
+              "meanBenchmark": 0.03823648447997213,
+              "meanExcess": -0.00661611203936471,
+              "dateBalancedMeanExcess": -0.006278671738128409,
+              "winRate": 0.5507185122569738
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "start": "2017-10-02",
+          "end": "2017-12-29",
+          "sessions": 63,
+          "startEquity": 10000,
+          "endingEquity": 10734.305810462003,
+          "markReturn": 0.07343058104620037,
+          "cagr": 0.3405328326021646,
+          "maxDrawdown": 0.02614218828936632,
+          "meanExposure": 0.8922674146325918,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000
+        },
+        "2018": {
+          "start": "2018-01-02",
+          "end": "2018-12-31",
+          "sessions": 251,
+          "startEquity": 10734.305810462003,
+          "endingEquity": 11532.843427106534,
+          "markReturn": 0.07439117449646826,
+          "cagr": 0.07402363234207665,
+          "maxDrawdown": 0.11242025478585138,
+          "meanExposure": 0.6869321797574269,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1514581200000
+        },
+        "2019": {
+          "start": "2019-01-02",
+          "end": "2019-12-31",
+          "sessions": 252,
+          "startEquity": 11532.843427106534,
+          "endingEquity": 11428.819006098262,
+          "markReturn": -0.009019841608512325,
+          "cagr": -0.009025991616810503,
+          "maxDrawdown": 0.14367033781319738,
+          "meanExposure": 0.8026696331107007,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1546290000000
+        },
+        "2020": {
+          "start": "2020-01-02",
+          "end": "2020-12-31",
+          "sessions": 253,
+          "startEquity": 11428.819006098262,
+          "endingEquity": 11346.860431278124,
+          "markReturn": -0.007171219946383367,
+          "cagr": -0.007156577532954511,
+          "maxDrawdown": 0.14620921705550582,
+          "meanExposure": 0.5738083653952337,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1577826000000
+        },
+        "2021": {
+          "start": "2021-01-04",
+          "end": "2021-12-31",
+          "sessions": 252,
+          "startEquity": 11346.860431278124,
+          "endingEquity": 13860.870778614126,
+          "markReturn": 0.2215599956095362,
+          "cagr": 0.2217274517757717,
+          "maxDrawdown": 0.07300209575284933,
+          "meanExposure": 0.8312596404335911,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1609448400000
+        },
+        "2022": {
+          "start": "2022-01-03",
+          "end": "2022-12-30",
+          "sessions": 251,
+          "startEquity": 13860.870778614126,
+          "endingEquity": 12709.996291282829,
+          "markReturn": -0.08303046076347353,
+          "cagr": -0.08330337295758572,
+          "maxDrawdown": 0.09653727473485452,
+          "meanExposure": 0.13420611418784523,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1640984400000
+        },
+        "2023": {
+          "start": "2023-01-03",
+          "end": "2023-12-29",
+          "sessions": 250,
+          "startEquity": 12709.996291282829,
+          "endingEquity": 10283.476189498795,
+          "markReturn": -0.19091430447137636,
+          "cagr": -0.19150270703392258,
+          "maxDrawdown": 0.2281476515648162,
+          "meanExposure": 0.7659547182031516,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000
+        },
+        "2024": {
+          "start": "2024-01-02",
+          "end": "2024-12-31",
+          "sessions": 252,
+          "startEquity": 10283.476189498795,
+          "endingEquity": 9133.883291531956,
+          "markReturn": -0.11179030094325226,
+          "cagr": -0.11100310135005664,
+          "maxDrawdown": 0.15980187521729528,
+          "meanExposure": 0.8944823508446338,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1703883600000
+        },
+        "2025": {
+          "start": "2025-01-02",
+          "end": "2025-12-31",
+          "sessions": 250,
+          "startEquity": 9133.883291531956,
+          "endingEquity": 8559.635710856552,
+          "markReturn": -0.06287003702004723,
+          "cagr": -0.06291171482330626,
+          "maxDrawdown": 0.15113787505973997,
+          "meanExposure": 0.697815962607786,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1735678800000
+        },
+        "2026": {
+          "start": "2026-01-02",
+          "end": "2026-10-02",
+          "sessions": 189,
+          "startEquity": 8559.635710856552,
+          "endingEquity": 6675.745941188143,
+          "markReturn": -0.22008994696806905,
+          "cagr": -0.28122367488060973,
+          "maxDrawdown": 0.26868764367778253,
+          "meanExposure": 0.702077718347194,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1767214800000
+        }
+      },
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 15,
+        "top3": [
+          "MPC",
+          "PSX",
+          "XOM"
+        ],
+        "priceRegime": "above200"
+      }
+    },
+    "rsi2": {
+      "id": "rsi2",
+      "name": "RSI(2) 평균회귀",
+      "stress": false,
+      "cost": {
+        "risk": 0.01,
+        "maxPositions": 5,
+        "maxWeight": 0.2,
+        "fee": 0.0005,
+        "slip": 0.0005,
+        "step": 86400000,
+        "warmup": 205
+      },
+      "full": {
+        "initial": 10000,
+        "markEquity": 8677.76654102077,
+        "liquidationEquivalentEquity": 8669.839013535337,
+        "liquidationEquivalentReturn": -0.13301609864646635,
+        "cagr": -0.01573423257975659,
+        "maxDrawdown": 0.38746433563726346,
+        "meanExposure": 0.6373441737190777,
+        "entries": 2770,
+        "closedTrades": 2765,
+        "openPositions": 5,
+        "winRate": 0.5757685352622062,
+        "profitFactor": 0.9775589875994957,
+        "fees": 5500.422466190642,
+        "slippage": 5500.422903465549,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "포지션 한도": 41226,
+          "동일 업종 2종목 한도": 595,
+          "신호 가격에서 0.5 ATR 이상 이탈": 644,
+          "가상 자본 또는 최소 수량 부족": 17
+        },
+        "concentration": {
+          "basis": "symbol P&L after fees, including terminal hypothetical liquidation; descriptive post-result audit",
+          "totalNetProfit": -1330.1609864646634,
+          "topSymbols": [
+            {
+              "symbol": "FERG",
+              "net": 682.7637677987211
+            },
+            {
+              "symbol": "SW",
+              "net": 513.6100940769005
+            },
+            {
+              "symbol": "GEN",
+              "net": 454.80799786861525
+            },
+            {
+              "symbol": "AMZN",
+              "net": 409.9996694846797
+            },
+            {
+              "symbol": "BKR",
+              "net": 387.3583934649524
+            }
+          ],
+          "topSymbolShareOfNetProfit": null,
+          "topSymbolShareOfPositiveSymbolPnL": 0.028926508394212513
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 487,
+        "zeroShare": 0.21520106053910737,
+        "meanCandidates": 21.072470172337606,
+        "signals": 47687,
+        "top3Signals": 5143
+      },
+      "top3": {
+        "20": {
+          "observations": 5083,
+          "signalDates": 1756,
+          "excluded": {
+            "immature": 60
+          },
+          "meanNet": 0.004210545736969334,
+          "meanBenchmark": 0.006443053481403491,
+          "meanExcess": -0.002232507744434154,
+          "dateBalancedMeanExcess": -0.0019948252953003987,
+          "winRate": 0.5246901436159748
+        },
+        "63": {
+          "observations": 4954,
+          "signalDates": 1713,
+          "excluded": {
+            "immature": 189
+          },
+          "meanNet": 0.019851484690284724,
+          "meanBenchmark": 0.02640364252359855,
+          "meanExcess": -0.006552157833313757,
+          "dateBalancedMeanExcess": -0.0060942167388393425,
+          "winRate": 0.5433992733144933
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 11201.856671954283,
+          "markReturn": 0.12018566719542823,
+          "cagr": 0.02187930227116408,
+          "maxDrawdown": 0.20737795014676996,
+          "meanExposure": 0.5746339245989254,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "closedTrades": 1463,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 386,
+            "zeroShare": 0.291981845688351,
+            "meanCandidates": 19.245083207261725,
+            "signals": 25442,
+            "top3Signals": 2682
+          },
+          "top3": {
+            "20": {
+              "observations": 2679,
+              "signalDates": 935,
+              "excluded": {
+                "crossesPeriodEnd": 3
+              },
+              "meanNet": 0.00514380562260255,
+              "meanBenchmark": 0.004664254435763147,
+              "meanExcess": 0.0004795511868394029,
+              "dateBalancedMeanExcess": 0.0005219794194219704,
+              "winRate": 0.5453527435610303
+            },
+            "63": {
+              "observations": 2676,
+              "signalDates": 933,
+              "excluded": {
+                "crossesPeriodEnd": 6
+              },
+              "meanNet": 0.018028393907138854,
+              "meanBenchmark": 0.016375178900436143,
+              "meanExcess": 0.001653215006702685,
+              "dateBalancedMeanExcess": 0.001857537674925594,
+              "winRate": 0.5500747384155455
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 11201.856671954283,
+          "endingEquity": 8677.76654102077,
+          "markReturn": -0.2253278367016598,
+          "cagr": -0.0657128092364696,
+          "maxDrawdown": 0.38746433563726346,
+          "meanExposure": 0.7254450763087096,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "closedTrades": 1302,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 101,
+            "zeroShare": 0.1073326248671626,
+            "meanCandidates": 23.639744952178532,
+            "signals": 22245,
+            "top3Signals": 2461
+          },
+          "top3": {
+            "20": {
+              "observations": 2401,
+              "signalDates": 820,
+              "excluded": {
+                "immature": 60
+              },
+              "meanNet": 0.003267171039249107,
+              "meanBenchmark": 0.008509759566631055,
+              "meanExcess": -0.005242588527381945,
+              "dateBalancedMeanExcess": -0.004848696132871386,
+              "winRate": 0.5022907122032486
+            },
+            "63": {
+              "observations": 2272,
+              "signalDates": 777,
+              "excluded": {
+                "immature": 189
+              },
+              "meanNet": 0.022145866434156454,
+              "meanBenchmark": 0.03830894353955076,
+              "meanExcess": -0.016163077105394216,
+              "dateBalancedMeanExcess": -0.015429179018826393,
+              "winRate": 0.5356514084507042
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "start": "2017-10-02",
+          "end": "2017-12-29",
+          "sessions": 63,
+          "startEquity": 10000,
+          "endingEquity": 11087.539444100286,
+          "markReturn": 0.10875394441002872,
+          "cagr": 0.5326146227841912,
+          "maxDrawdown": 0.02377199552467324,
+          "meanExposure": 0.9196820824113392,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000
+        },
+        "2018": {
+          "start": "2018-01-02",
+          "end": "2018-12-31",
+          "sessions": 251,
+          "startEquity": 11087.539444100286,
+          "endingEquity": 9732.734838096932,
+          "markReturn": -0.12219163799451005,
+          "cagr": -0.12164595431051395,
+          "maxDrawdown": 0.1752107568267296,
+          "meanExposure": 0.6505686086562545,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1514581200000
+        },
+        "2019": {
+          "start": "2019-01-02",
+          "end": "2019-12-31",
+          "sessions": 252,
+          "startEquity": 9732.734838096932,
+          "endingEquity": 10108.383572374089,
+          "markReturn": 0.03859642130665586,
+          "cagr": 0.038623361286995284,
+          "maxDrawdown": 0.10842774464511107,
+          "meanExposure": 0.7312300071088086,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1546290000000
+        },
+        "2020": {
+          "start": "2020-01-02",
+          "end": "2020-12-31",
+          "sessions": 253,
+          "startEquity": 10108.383572374089,
+          "endingEquity": 11890.987086067731,
+          "markReturn": 0.1763490177168825,
+          "cagr": 0.17595757175661264,
+          "maxDrawdown": 0.11037005315249326,
+          "meanExposure": 0.5248937033584189,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1577826000000
+        },
+        "2021": {
+          "start": "2021-01-04",
+          "end": "2021-12-31",
+          "sessions": 252,
+          "startEquity": 11890.987086067731,
+          "endingEquity": 13014.187693951068,
+          "markReturn": 0.09445814714569423,
+          "cagr": 0.09452581028753526,
+          "maxDrawdown": 0.10033119269929136,
+          "meanExposure": 0.7835353566917207,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1609448400000
+        },
+        "2022": {
+          "start": "2022-01-03",
+          "end": "2022-12-30",
+          "sessions": 251,
+          "startEquity": 13014.187693951068,
+          "endingEquity": 11201.856671954283,
+          "markReturn": -0.1392580977481328,
+          "cagr": -0.13970124379473448,
+          "maxDrawdown": 0.1392580977481328,
+          "meanExposure": 0.09527640528977183,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1640984400000
+        },
+        "2023": {
+          "start": "2023-01-03",
+          "end": "2023-12-29",
+          "sessions": 250,
+          "startEquity": 11201.856671954283,
+          "endingEquity": 12310.001639531962,
+          "markReturn": 0.09892511572229856,
+          "cagr": 0.0992811637442248,
+          "maxDrawdown": 0.1148946626576064,
+          "meanExposure": 0.686194217667902,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000
+        },
+        "2024": {
+          "start": "2024-01-02",
+          "end": "2024-12-31",
+          "sessions": 252,
+          "startEquity": 12310.001639531962,
+          "endingEquity": 12031.14051564465,
+          "markReturn": -0.02265321582019819,
+          "cagr": -0.022485850002464614,
+          "maxDrawdown": 0.12246467938724193,
+          "meanExposure": 0.8399497058648172,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1703883600000
+        },
+        "2025": {
+          "start": "2025-01-02",
+          "end": "2025-12-31",
+          "sessions": 250,
+          "startEquity": 12031.14051564465,
+          "endingEquity": 10430.35760067424,
+          "markReturn": -0.13305329722388648,
+          "cagr": -0.1331380743957803,
+          "maxDrawdown": 0.17955766648653548,
+          "meanExposure": 0.6623393177591169,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1735678800000
+        },
+        "2026": {
+          "start": "2026-01-02",
+          "end": "2026-10-02",
+          "sessions": 189,
+          "startEquity": 10430.35760067424,
+          "endingEquity": 8677.76654102077,
+          "markReturn": -0.16802789767631543,
+          "cagr": -0.21679791870846177,
+          "maxDrawdown": 0.2081743719930239,
+          "meanExposure": 0.7081645876815201,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1767214800000
+        }
+      },
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 22,
+        "top3": [
+          "DXCM",
+          "IFF",
+          "JNJ"
+        ],
+        "priceRegime": "above200"
+      }
+    },
+    "rsi2_stress": {
+      "id": "rsi2_stress",
+      "name": "RSI(2) 평균회귀",
+      "stress": true,
+      "cost": {
+        "risk": 0.01,
+        "maxPositions": 5,
+        "maxWeight": 0.2,
+        "fee": 0.001,
+        "slip": 0.001,
+        "step": 86400000,
+        "warmup": 205
+      },
+      "full": {
+        "initial": 10000,
+        "markEquity": 3273.4607395147787,
+        "liquidationEquivalentEquity": 3268.1037194555233,
+        "liquidationEquivalentReturn": -0.6731896280544476,
+        "cagr": -0.11685256450540249,
+        "maxDrawdown": 0.7126356733331805,
+        "meanExposure": 0.6151545893157911,
+        "entries": 2775,
+        "closedTrades": 2770,
+        "openPositions": 5,
+        "winRate": 0.5422382671480145,
+        "profitFactor": 0.8265771180808622,
+        "fees": 6807.721439879321,
+        "slippage": 6807.725648936861,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "포지션 한도": 41182,
+          "동일 업종 2종목 한도": 597,
+          "신호 가격에서 0.5 ATR 이상 이탈": 652,
+          "가상 자본 또는 최소 수량 부족": 53
+        },
+        "concentration": {
+          "basis": "symbol P&L after fees, including terminal hypothetical liquidation; descriptive post-result audit",
+          "totalNetProfit": -6731.896280544477,
+          "topSymbols": [
+            {
+              "symbol": "FERG",
+              "net": 413.4074027636753
+            },
+            {
+              "symbol": "SW",
+              "net": 339.290755495742
+            },
+            {
+              "symbol": "AMZN",
+              "net": 279.1298712349941
+            },
+            {
+              "symbol": "GEN",
+              "net": 197.11199655978626
+            },
+            {
+              "symbol": "BKR",
+              "net": 189.3913946431967
+            }
+          ],
+          "topSymbolShareOfNetProfit": null,
+          "topSymbolShareOfPositiveSymbolPnL": 0.034834696501231846
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 487,
+        "zeroShare": 0.21520106053910737,
+        "meanCandidates": 21.072470172337606,
+        "signals": 47687,
+        "top3Signals": 5143
+      },
+      "top3": {
+        "20": {
+          "observations": 5083,
+          "signalDates": 1756,
+          "excluded": {
+            "immature": 60
+          },
+          "meanNet": 0.004210545736969334,
+          "meanBenchmark": 0.006443053481403491,
+          "meanExcess": -0.002232507744434154,
+          "dateBalancedMeanExcess": -0.0019948252953003987,
+          "winRate": 0.5246901436159748
+        },
+        "63": {
+          "observations": 4954,
+          "signalDates": 1713,
+          "excluded": {
+            "immature": 189
+          },
+          "meanNet": 0.019851484690284724,
+          "meanBenchmark": 0.02640364252359855,
+          "meanExcess": -0.006552157833313757,
+          "dateBalancedMeanExcess": -0.0060942167388393425,
+          "winRate": 0.5433992733144933
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 6758.791186286751,
+          "markReturn": -0.3241208813713249,
+          "cagr": -0.07198278589082463,
+          "maxDrawdown": 0.3983436272298253,
+          "meanExposure": 0.5633171606844168,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "closedTrades": 1463,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 386,
+            "zeroShare": 0.291981845688351,
+            "meanCandidates": 19.245083207261725,
+            "signals": 25442,
+            "top3Signals": 2682
+          },
+          "top3": {
+            "20": {
+              "observations": 2679,
+              "signalDates": 935,
+              "excluded": {
+                "crossesPeriodEnd": 3
+              },
+              "meanNet": 0.00514380562260255,
+              "meanBenchmark": 0.004664254435763147,
+              "meanExcess": 0.0004795511868394029,
+              "dateBalancedMeanExcess": 0.0005219794194219704,
+              "winRate": 0.5453527435610303
+            },
+            "63": {
+              "observations": 2676,
+              "signalDates": 933,
+              "excluded": {
+                "crossesPeriodEnd": 6
+              },
+              "meanNet": 0.018028393907138854,
+              "meanBenchmark": 0.016375178900436143,
+              "meanExcess": 0.001653215006702685,
+              "dateBalancedMeanExcess": 0.001857537674925594,
+              "winRate": 0.5500747384155455
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 6758.791186286751,
+          "endingEquity": 3273.4607395147787,
+          "markReturn": -0.5156736390737346,
+          "cagr": -0.17552820609599096,
+          "maxDrawdown": 0.5436132190952478,
+          "meanExposure": 0.687980392345203,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "closedTrades": 1307,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 101,
+            "zeroShare": 0.1073326248671626,
+            "meanCandidates": 23.639744952178532,
+            "signals": 22245,
+            "top3Signals": 2461
+          },
+          "top3": {
+            "20": {
+              "observations": 2401,
+              "signalDates": 820,
+              "excluded": {
+                "immature": 60
+              },
+              "meanNet": 0.003267171039249107,
+              "meanBenchmark": 0.008509759566631055,
+              "meanExcess": -0.005242588527381945,
+              "dateBalancedMeanExcess": -0.004848696132871386,
+              "winRate": 0.5022907122032486
+            },
+            "63": {
+              "observations": 2272,
+              "signalDates": 777,
+              "excluded": {
+                "immature": 189
+              },
+              "meanNet": 0.022145866434156454,
+              "meanBenchmark": 0.03830894353955076,
+              "meanExcess": -0.016163077105394216,
+              "dateBalancedMeanExcess": -0.015429179018826393,
+              "winRate": 0.5356514084507042
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "start": "2017-10-02",
+          "end": "2017-12-29",
+          "sessions": 63,
+          "startEquity": 10000,
+          "endingEquity": 10689.706397329275,
+          "markReturn": 0.0689706397329275,
+          "cagr": 0.31764679518228167,
+          "maxDrawdown": 0.028302254940003158,
+          "meanExposure": 0.9135538068011025,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000
+        },
+        "2018": {
+          "start": "2018-01-02",
+          "end": "2018-12-31",
+          "sessions": 251,
+          "startEquity": 10689.706397329275,
+          "endingEquity": 8403.950603510866,
+          "markReturn": -0.21382774314451558,
+          "cagr": -0.2129253470992427,
+          "maxDrawdown": 0.2529129664631169,
+          "meanExposure": 0.6443472677195122,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1514581200000
+        },
+        "2019": {
+          "start": "2019-01-02",
+          "end": "2019-12-31",
+          "sessions": 252,
+          "startEquity": 8403.950603510866,
+          "endingEquity": 7694.02287252889,
+          "markReturn": -0.08447547641289022,
+          "cagr": -0.08453081890499403,
+          "maxDrawdown": 0.1808246656249024,
+          "meanExposure": 0.7248101960408215,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1546290000000
+        },
+        "2020": {
+          "start": "2020-01-02",
+          "end": "2020-12-31",
+          "sessions": 253,
+          "startEquity": 7694.02287252889,
+          "endingEquity": 8270.798659826947,
+          "markReturn": 0.07496413733801144,
+          "cagr": 0.07480491500091246,
+          "maxDrawdown": 0.1089284503397161,
+          "meanExposure": 0.5077053133002246,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1577826000000
+        },
+        "2021": {
+          "start": "2021-01-04",
+          "end": "2021-12-31",
+          "sessions": 252,
+          "startEquity": 8270.798659826947,
+          "endingEquity": 7938.078288610517,
+          "markReturn": -0.040228324361530454,
+          "cagr": -0.04025531582533559,
+          "maxDrawdown": 0.13704141171382234,
+          "meanExposure": 0.7583590138009181,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1609448400000
+        },
+        "2022": {
+          "start": "2022-01-03",
+          "end": "2022-12-30",
+          "sessions": 251,
+          "startEquity": 7938.078288610517,
+          "endingEquity": 6758.791186286751,
+          "markReturn": -0.14856078000840534,
+          "cagr": -0.14903089246002632,
+          "maxDrawdown": 0.14856078000840534,
+          "meanExposure": 0.09247867431736011,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1640984400000
+        },
+        "2023": {
+          "start": "2023-01-03",
+          "end": "2023-12-29",
+          "sessions": 250,
+          "startEquity": 6758.791186286751,
+          "endingEquity": 6605.104030571974,
+          "markReturn": -0.02273885247802898,
+          "cagr": -0.02281604154020178,
+          "maxDrawdown": 0.13969792416170101,
+          "meanExposure": 0.6569642917680273,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000
+        },
+        "2024": {
+          "start": "2024-01-02",
+          "end": "2024-12-31",
+          "sessions": 252,
+          "startEquity": 6605.104030571974,
+          "endingEquity": 5684.3810683583115,
+          "markReturn": -0.13939567915237394,
+          "cagr": -0.13842969090295165,
+          "maxDrawdown": 0.14873659887602975,
+          "meanExposure": 0.8075837873853402,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1703883600000
+        },
+        "2025": {
+          "start": "2025-01-02",
+          "end": "2025-12-31",
+          "sessions": 250,
+          "startEquity": 5684.3810683583115,
+          "endingEquity": 4313.431199734741,
+          "markReturn": -0.24117838901667965,
+          "cagr": -0.24132181798336394,
+          "maxDrawdown": 0.2678372754674053,
+          "meanExposure": 0.621885978760678,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1735678800000
+        },
+        "2026": {
+          "start": "2026-01-02",
+          "end": "2026-10-02",
+          "sessions": 189,
+          "startEquity": 4313.431199734741,
+          "endingEquity": 3273.4607395147787,
+          "markReturn": -0.2411005095627622,
+          "cagr": -0.3068315315134307,
+          "maxDrawdown": 0.25781922087729015,
+          "meanExposure": 0.6569622600188081,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1767214800000
+        }
+      },
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 22,
+        "top3": [
+          "DXCM",
+          "IFF",
+          "JNJ"
+        ],
+        "priceRegime": "above200"
+      }
+    }
+  },
+  "selection": {
+    "rule": "highest early marked CAGR among the three normal-cost alternatives; ties by id",
+    "selected": "pullback20",
+    "earlyCAGR": 0.101723180473412,
+    "recentCAGR": -0.14314435592002717,
+    "automaticPromotion": false
+  },
+  "controls": {
+    "current_stable": {
+      "id": "current_stable",
+      "name": "현재 규칙 stable 가정",
+      "full": {
+        "initial": 10000,
+        "markEquity": 11453.00947936404,
+        "markReturn": 0.14530094793640402,
+        "liquidationEquivalentEquity": 11445.074063750653,
+        "liquidationEquivalentReturn": 0.14450740637506532,
+        "cagr": 0.015110072997896573,
+        "maxDrawdown": 0.27514164681114694,
+        "meanExposure": 0.8257673016435327,
+        "sessionsInvested": 2206,
+        "closedTrades": 425,
+        "entries": 429,
+        "winRate": 0.28705882352941176,
+        "profitFactor": 1.0608726080548403,
+        "fees": 796.4878737428968,
+        "slippage": 796.4866508888193,
+        "openPositions": 4,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "동일 업종 2종목 한도": 122,
+          "포지션 한도": 22072,
+          "신호 가격에서 0.5 ATR 이상 이탈": 109,
+          "가상 자본 또는 최소 수량 부족": 5,
+          "비용 반영 손익비 또는 가격 조건 미충족": 1
+        },
+        "annual": {
+          "2017": {
+            "sessions": 63,
+            "return": 0.063570750171549,
+            "benchmarkReturn": 0.060055348343057036,
+            "maxDrawdown": 0.07632641327924428,
+            "meanExposure": 0.9403176938883036,
+            "closedTrades": 5
+          },
+          "2018": {
+            "sessions": 251,
+            "return": -0.0979585411874272,
+            "benchmarkReturn": -0.06347893319524989,
+            "maxDrawdown": 0.17774685514142652,
+            "meanExposure": 0.8723180388969788,
+            "closedTrades": 56
+          },
+          "2019": {
+            "sessions": 252,
+            "return": 0.03886468677230548,
+            "benchmarkReturn": 0.28785206349908,
+            "maxDrawdown": 0.13175840947477857,
+            "meanExposure": 0.8534138003817789,
+            "closedTrades": 39
+          },
+          "2020": {
+            "sessions": 253,
+            "return": -0.03436496169371617,
+            "benchmarkReturn": 0.16162313396749006,
+            "maxDrawdown": 0.17373149421878542,
+            "meanExposure": 0.6264082772936842,
+            "closedTrades": 40
+          },
+          "2021": {
+            "sessions": 252,
+            "return": 0.07258036122774914,
+            "benchmarkReturn": 0.2703540848726258,
+            "maxDrawdown": 0.14930504153721835,
+            "meanExposure": 0.8738295217273356,
+            "closedTrades": 46
+          },
+          "2022": {
+            "sessions": 251,
+            "return": -0.028868607323653483,
+            "benchmarkReturn": -0.19481640652683985,
+            "maxDrawdown": 0.19361359470137907,
+            "meanExposure": 0.7307865738360693,
+            "closedTrades": 51
+          },
+          "2023": {
+            "sessions": 250,
+            "return": 0.08573760350719639,
+            "benchmarkReturn": 0.24286799325793185,
+            "maxDrawdown": 0.12547625175177224,
+            "meanExposure": 0.8609941463362153,
+            "closedTrades": 47
+          },
+          "2024": {
+            "sessions": 252,
+            "return": 0.10890258726423951,
+            "benchmarkReturn": 0.2330479478660552,
+            "maxDrawdown": 0.06606366748129477,
+            "meanExposure": 0.9214830897259936,
+            "closedTrades": 48
+          },
+          "2025": {
+            "sessions": 250,
+            "return": -0.06750164194246244,
+            "benchmarkReturn": 0.1635271004396326,
+            "maxDrawdown": 0.18217327376547532,
+            "meanExposure": 0.8329471659594359,
+            "closedTrades": 55
+          },
+          "2026": {
+            "sessions": 189,
+            "return": 0.017608088991617477,
+            "benchmarkReturn": 0.12863684000566744,
+            "maxDrawdown": 0.12931976291935965,
+            "meanExposure": 0.8341082174428313,
+            "closedTrades": 38
+          }
+        },
+        "benchmark": {
+          "symbol": "SPY",
+          "basis": "price-only, dividends excluded",
+          "markReturn": 2.057262454511815,
+          "netReturn": 2.054205956372917,
+          "cagr": 0.13208034324308282,
+          "maxDrawdown": 0.34104746893243953
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 207,
+        "zeroShare": 0.09147149801148917,
+        "meanCandidates": 10.394608926204153,
+        "signals": 23523,
+        "top3Signals": 5766
+      },
+      "top3": {
+        "20": {
+          "observations": 5728,
+          "signalDates": 2039,
+          "excluded": {
+            "immature": 38
+          },
+          "meanNet": 0.0016528790058865526,
+          "meanBenchmark": 0.00551609474864064,
+          "meanExcess": -0.0038632157427540845,
+          "dateBalancedMeanExcess": -0.004509293984203561,
+          "winRate": 0.5254888268156425
+        },
+        "63": {
+          "observations": 5604,
+          "signalDates": 1996,
+          "excluded": {
+            "immature": 162
+          },
+          "meanNet": 0.02296045202847812,
+          "meanBenchmark": 0.02525617289370185,
+          "meanExcess": -0.002295720865223784,
+          "dateBalancedMeanExcess": -0.002688805868345552,
+          "winRate": 0.5535331905781584
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 10024.730766439932,
+          "markReturn": 0.0024730766439933216,
+          "cagr": 0.0004711443375506885,
+          "maxDrawdown": 0.27514164681114694,
+          "meanExposure": 0.7983100482887718,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 167,
+            "zeroShare": 0.12632375189107414,
+            "meanCandidates": 10.959152798789713,
+            "signals": 14488,
+            "top3Signals": 3232
+          },
+          "top3": {
+            "20": {
+              "observations": 3196,
+              "signalDates": 1140,
+              "excluded": {
+                "crossesPeriodEnd": 36
+              },
+              "meanNet": -0.0014967936180681949,
+              "meanBenchmark": 0.0012453555522443124,
+              "meanExcess": -0.0027421491703125056,
+              "dateBalancedMeanExcess": -0.002985827256237438,
+              "winRate": 0.5237797246558198
+            },
+            "63": {
+              "observations": 3106,
+              "signalDates": 1105,
+              "excluded": {
+                "crossesPeriodEnd": 126
+              },
+              "meanNet": 0.015225775265898625,
+              "meanBenchmark": 0.011689306545652091,
+              "meanExcess": 0.0035364687202464494,
+              "dateBalancedMeanExcess": 0.00333425425996673,
+              "winRate": 0.5354153251770766
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 10024.730766439932,
+          "endingEquity": 11453.00947936404,
+          "markReturn": 0.14247551841547668,
+          "cagr": 0.036096742284271066,
+          "maxDrawdown": 0.18217327376547532,
+          "meanExposure": 0.8643416788326872,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 40,
+            "zeroShare": 0.04250797024442083,
+            "meanCandidates": 9.601487778958555,
+            "signals": 9035,
+            "top3Signals": 2534
+          },
+          "top3": {
+            "20": {
+              "observations": 2496,
+              "signalDates": 884,
+              "excluded": {
+                "immature": 38
+              },
+              "meanNet": 0.0059720485962655966,
+              "meanBenchmark": 0.010926866261420873,
+              "meanExcess": -0.004954817665155291,
+              "dateBalancedMeanExcess": -0.006009052386875973,
+              "winRate": 0.530448717948718
+            },
+            "63": {
+              "observations": 2372,
+              "signalDates": 841,
+              "excluded": {
+                "immature": 162
+              },
+              "meanNet": 0.03502761101709772,
+              "meanBenchmark": 0.04270085402243622,
+              "meanExcess": -0.007673243005338644,
+              "dateBalancedMeanExcess": -0.007899353981711106,
+              "winRate": 0.581787521079258
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "sessions": 63,
+          "return": 0.063570750171549,
+          "benchmarkReturn": 0.060055348343057036,
+          "maxDrawdown": 0.07632641327924428,
+          "meanExposure": 0.9403176938883036,
+          "closedTrades": 5
+        },
+        "2018": {
+          "sessions": 251,
+          "return": -0.0979585411874272,
+          "benchmarkReturn": -0.06347893319524989,
+          "maxDrawdown": 0.17774685514142652,
+          "meanExposure": 0.8723180388969788,
+          "closedTrades": 56
+        },
+        "2019": {
+          "sessions": 252,
+          "return": 0.03886468677230548,
+          "benchmarkReturn": 0.28785206349908,
+          "maxDrawdown": 0.13175840947477857,
+          "meanExposure": 0.8534138003817789,
+          "closedTrades": 39
+        },
+        "2020": {
+          "sessions": 253,
+          "return": -0.03436496169371617,
+          "benchmarkReturn": 0.16162313396749006,
+          "maxDrawdown": 0.17373149421878542,
+          "meanExposure": 0.6264082772936842,
+          "closedTrades": 40
+        },
+        "2021": {
+          "sessions": 252,
+          "return": 0.07258036122774914,
+          "benchmarkReturn": 0.2703540848726258,
+          "maxDrawdown": 0.14930504153721835,
+          "meanExposure": 0.8738295217273356,
+          "closedTrades": 46
+        },
+        "2022": {
+          "sessions": 251,
+          "return": -0.028868607323653483,
+          "benchmarkReturn": -0.19481640652683985,
+          "maxDrawdown": 0.19361359470137907,
+          "meanExposure": 0.7307865738360693,
+          "closedTrades": 51
+        },
+        "2023": {
+          "sessions": 250,
+          "return": 0.08573760350719639,
+          "benchmarkReturn": 0.24286799325793185,
+          "maxDrawdown": 0.12547625175177224,
+          "meanExposure": 0.8609941463362153,
+          "closedTrades": 47
+        },
+        "2024": {
+          "sessions": 252,
+          "return": 0.10890258726423951,
+          "benchmarkReturn": 0.2330479478660552,
+          "maxDrawdown": 0.06606366748129477,
+          "meanExposure": 0.9214830897259936,
+          "closedTrades": 48
+        },
+        "2025": {
+          "sessions": 250,
+          "return": -0.06750164194246244,
+          "benchmarkReturn": 0.1635271004396326,
+          "maxDrawdown": 0.18217327376547532,
+          "meanExposure": 0.8329471659594359,
+          "closedTrades": 55
+        },
+        "2026": {
+          "sessions": 189,
+          "return": 0.017608088991617477,
+          "benchmarkReturn": 0.12863684000566744,
+          "maxDrawdown": 0.12931976291935965,
+          "meanExposure": 0.8341082174428313,
+          "closedTrades": 38
+        }
+      },
+      "assumption": "fixed synthetic stable credit, not historical observed macro",
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 0,
+        "top3": []
+      }
+    },
+    "current_watch": {
+      "id": "current_watch",
+      "name": "현재 규칙 watch 가정",
+      "full": {
+        "initial": 10000,
+        "markEquity": 10436.161455606012,
+        "markReturn": 0.04361614556060123,
+        "liquidationEquivalentEquity": 10430.210243738298,
+        "liquidationEquivalentReturn": 0.04302102437382982,
+        "cagr": 0.004691087355904955,
+        "maxDrawdown": 0.2727505356643505,
+        "meanExposure": 0.8439368177686304,
+        "sessionsInvested": 2153,
+        "closedTrades": 380,
+        "entries": 383,
+        "winRate": 0.29210526315789476,
+        "profitFactor": 1.014698668284575,
+        "fees": 744.5564185440495,
+        "slippage": 744.5554116872783,
+        "openPositions": 3,
+        "missingHeldSessions": 0,
+        "rejections": {
+          "포지션 한도": 15852,
+          "동일 업종 2종목 한도": 86,
+          "신호 가격에서 0.5 ATR 이상 이탈": 62,
+          "가상 자본 또는 최소 수량 부족": 5
+        },
+        "annual": {
+          "2017": {
+            "sessions": 63,
+            "return": 0.03566380498252908,
+            "benchmarkReturn": 0.060055348343057036,
+            "maxDrawdown": 0.023884029631285886,
+            "meanExposure": 0.9519208631644195,
+            "closedTrades": 6
+          },
+          "2018": {
+            "sessions": 251,
+            "return": -0.07194823661172178,
+            "benchmarkReturn": -0.06347893319524989,
+            "maxDrawdown": 0.13438766930875312,
+            "meanExposure": 0.8939263641671026,
+            "closedTrades": 51
+          },
+          "2019": {
+            "sessions": 252,
+            "return": 0.1935821863795304,
+            "benchmarkReturn": 0.28785206349908,
+            "maxDrawdown": 0.09296852857104687,
+            "meanExposure": 0.8906499745178493,
+            "closedTrades": 29
+          },
+          "2020": {
+            "sessions": 253,
+            "return": -0.12013072787170698,
+            "benchmarkReturn": 0.16162313396749006,
+            "maxDrawdown": 0.1657773255861097,
+            "meanExposure": 0.6407185405623366,
+            "closedTrades": 38
+          },
+          "2021": {
+            "sessions": 252,
+            "return": 0.08998251441415328,
+            "benchmarkReturn": 0.2703540848726258,
+            "maxDrawdown": 0.11245669207952891,
+            "meanExposure": 0.9164745929855551,
+            "closedTrades": 42
+          },
+          "2022": {
+            "sessions": 251,
+            "return": -0.04436557157949228,
+            "benchmarkReturn": -0.19481640652683985,
+            "maxDrawdown": 0.16079545528704087,
+            "meanExposure": 0.6860025366398141,
+            "closedTrades": 42
+          },
+          "2023": {
+            "sessions": 250,
+            "return": -0.05719440237733353,
+            "benchmarkReturn": 0.24286799325793185,
+            "maxDrawdown": 0.16299257134350753,
+            "meanExposure": 0.8524775165771583,
+            "closedTrades": 48
+          },
+          "2024": {
+            "sessions": 252,
+            "return": 0.1668757229175477,
+            "benchmarkReturn": 0.2330479478660552,
+            "maxDrawdown": 0.08375746216928681,
+            "meanExposure": 0.9468099226617922,
+            "closedTrades": 39
+          },
+          "2025": {
+            "sessions": 250,
+            "return": -0.06934535570993627,
+            "benchmarkReturn": 0.1635271004396326,
+            "maxDrawdown": 0.19246505925931956,
+            "meanExposure": 0.8919893934940669,
+            "closedTrades": 50
+          },
+          "2026": {
+            "sessions": 189,
+            "return": -0.030533767539405288,
+            "benchmarkReturn": 0.12863684000566744,
+            "maxDrawdown": 0.13998218811891705,
+            "meanExposure": 0.8523060334751554,
+            "closedTrades": 35
+          }
+        },
+        "benchmark": {
+          "symbol": "SPY",
+          "basis": "price-only, dividends excluded",
+          "markReturn": 2.057262454511815,
+          "netReturn": 2.054205956372917,
+          "cagr": 0.13208034324308282,
+          "maxDrawdown": 0.34104746893243953
+        }
+      },
+      "frequency": {
+        "sessions": 2263,
+        "zeroDays": 428,
+        "zeroShare": 0.18912947414935927,
+        "meanCandidates": 7.557666813963765,
+        "signals": 17103,
+        "top3Signals": 4879
+      },
+      "top3": {
+        "20": {
+          "observations": 4863,
+          "signalDates": 1826,
+          "excluded": {
+            "immature": 16
+          },
+          "meanNet": 0.0001802352857232431,
+          "meanBenchmark": 0.003703880298919543,
+          "meanExcess": -0.0035236450131963066,
+          "dateBalancedMeanExcess": -0.004280086630559181,
+          "winRate": 0.5247789430392762
+        },
+        "63": {
+          "observations": 4786,
+          "signalDates": 1793,
+          "excluded": {
+            "immature": 93
+          },
+          "meanNet": 0.014100487583467712,
+          "meanBenchmark": 0.02157339901475752,
+          "meanExcess": -0.007472911431289907,
+          "dateBalancedMeanExcess": -0.008481824947219928,
+          "winRate": 0.5532804011700794
+        }
+      },
+      "periods": {
+        "early": {
+          "start": "2017-10-02",
+          "end": "2022-12-30",
+          "sessions": 1322,
+          "startEquity": 10000,
+          "endingEquity": 10514.116793041347,
+          "markReturn": 0.051411679304134594,
+          "cagr": 0.00960634505538338,
+          "maxDrawdown": 0.2429870960185435,
+          "meanExposure": 0.8124284041263425,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1506951000000,
+          "frequency": {
+            "sessions": 1322,
+            "zeroDays": 292,
+            "zeroShare": 0.22087745839636913,
+            "meanCandidates": 8.09984871406959,
+            "signals": 10708,
+            "top3Signals": 2750
+          },
+          "top3": {
+            "20": {
+              "observations": 2721,
+              "signalDates": 1017,
+              "excluded": {
+                "crossesPeriodEnd": 29
+              },
+              "meanNet": -0.0018662412026004993,
+              "meanBenchmark": -0.000539447860926867,
+              "meanExcess": -0.0013267933416736338,
+              "dateBalancedMeanExcess": -0.0020433404969370473,
+              "winRate": 0.5292171995589857
+            },
+            "63": {
+              "observations": 2670,
+              "signalDates": 990,
+              "excluded": {
+                "crossesPeriodEnd": 80
+              },
+              "meanNet": 0.00590108527066685,
+              "meanBenchmark": 0.0068149462688214864,
+              "meanExcess": -0.0009138609981546762,
+              "dateBalancedMeanExcess": -0.0024521189632932825,
+              "winRate": 0.5363295880149813
+            }
+          }
+        },
+        "recent": {
+          "start": "2023-01-03",
+          "end": "2026-10-02",
+          "sessions": 941,
+          "startEquity": 10514.116793041347,
+          "endingEquity": 10436.161455606012,
+          "markReturn": -0.007414349580644575,
+          "cagr": -0.001979279894059882,
+          "maxDrawdown": 0.19246505925931956,
+          "meanExposure": 0.8882026231194292,
+          "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+          "previousEquityAt": 1672434000000,
+          "frequency": {
+            "sessions": 941,
+            "zeroDays": 136,
+            "zeroShare": 0.14452709883103082,
+            "meanCandidates": 6.79596174282678,
+            "signals": 6395,
+            "top3Signals": 2129
+          },
+          "top3": {
+            "20": {
+              "observations": 2113,
+              "signalDates": 796,
+              "excluded": {
+                "immature": 16
+              },
+              "meanNet": 0.0033296769497543096,
+              "meanBenchmark": 0.009145541514227988,
+              "meanExcess": -0.005815864564473693,
+              "dateBalancedMeanExcess": -0.006451774502428719,
+              "winRate": 0.5234264079507809
+            },
+            "63": {
+              "observations": 2036,
+              "signalDates": 763,
+              "excluded": {
+                "immature": 93
+              },
+              "meanNet": 0.026426466954549234,
+              "meanBenchmark": 0.041009280274133954,
+              "meanExcess": -0.014582813319584815,
+              "dateBalancedMeanExcess": -0.014072812639979336,
+              "winRate": 0.5795677799607073
+            }
+          }
+        }
+      },
+      "annual": {
+        "2017": {
+          "sessions": 63,
+          "return": 0.03566380498252908,
+          "benchmarkReturn": 0.060055348343057036,
+          "maxDrawdown": 0.023884029631285886,
+          "meanExposure": 0.9519208631644195,
+          "closedTrades": 6
+        },
+        "2018": {
+          "sessions": 251,
+          "return": -0.07194823661172178,
+          "benchmarkReturn": -0.06347893319524989,
+          "maxDrawdown": 0.13438766930875312,
+          "meanExposure": 0.8939263641671026,
+          "closedTrades": 51
+        },
+        "2019": {
+          "sessions": 252,
+          "return": 0.1935821863795304,
+          "benchmarkReturn": 0.28785206349908,
+          "maxDrawdown": 0.09296852857104687,
+          "meanExposure": 0.8906499745178493,
+          "closedTrades": 29
+        },
+        "2020": {
+          "sessions": 253,
+          "return": -0.12013072787170698,
+          "benchmarkReturn": 0.16162313396749006,
+          "maxDrawdown": 0.1657773255861097,
+          "meanExposure": 0.6407185405623366,
+          "closedTrades": 38
+        },
+        "2021": {
+          "sessions": 252,
+          "return": 0.08998251441415328,
+          "benchmarkReturn": 0.2703540848726258,
+          "maxDrawdown": 0.11245669207952891,
+          "meanExposure": 0.9164745929855551,
+          "closedTrades": 42
+        },
+        "2022": {
+          "sessions": 251,
+          "return": -0.04436557157949228,
+          "benchmarkReturn": -0.19481640652683985,
+          "maxDrawdown": 0.16079545528704087,
+          "meanExposure": 0.6860025366398141,
+          "closedTrades": 42
+        },
+        "2023": {
+          "sessions": 250,
+          "return": -0.05719440237733353,
+          "benchmarkReturn": 0.24286799325793185,
+          "maxDrawdown": 0.16299257134350753,
+          "meanExposure": 0.8524775165771583,
+          "closedTrades": 48
+        },
+        "2024": {
+          "sessions": 252,
+          "return": 0.1668757229175477,
+          "benchmarkReturn": 0.2330479478660552,
+          "maxDrawdown": 0.08375746216928681,
+          "meanExposure": 0.9468099226617922,
+          "closedTrades": 39
+        },
+        "2025": {
+          "sessions": 250,
+          "return": -0.06934535570993627,
+          "benchmarkReturn": 0.1635271004396326,
+          "maxDrawdown": 0.19246505925931956,
+          "meanExposure": 0.8919893934940669,
+          "closedTrades": 50
+        },
+        "2026": {
+          "sessions": 189,
+          "return": -0.030533767539405288,
+          "benchmarkReturn": 0.12863684000566744,
+          "maxDrawdown": 0.13998218811891705,
+          "meanExposure": 0.8523060334751554,
+          "closedTrades": 35
+        }
+      },
+      "assumption": "fixed synthetic watch credit, not historical observed macro",
+      "latest": {
+        "date": "2026-10-02",
+        "candidates": 0,
+        "top3": []
+      }
+    }
+  },
+  "benchmark": {
+    "id": "SPY",
+    "name": "SPY 가격 보유",
+    "basis": "price-only, no dividends, fractional shares, same dates and normal costs",
+    "full": {
+      "initial": 10000,
+      "markEquity": 30572.62454511815,
+      "liquidationEquivalentEquity": 30542.05956372917,
+      "liquidationEquivalentReturn": 2.054205956372917,
+      "cagr": 0.13208034324308282,
+      "maxDrawdown": 0.34104746893243953,
+      "meanExposure": 1
+    },
+    "periods": {
+      "early": {
+        "start": "2017-10-02",
+        "end": "2022-12-30",
+        "sessions": 1322,
+        "startEquity": 10000,
+        "endingEquity": 15191.373055375325,
+        "markReturn": 0.5191373055375326,
+        "cagr": 0.08300520658243693,
+        "maxDrawdown": 0.34104746893243953,
+        "meanExposure": 1,
+        "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+        "previousEquityAt": 1506951000000
+      },
+      "recent": {
+        "start": "2023-01-03",
+        "end": "2026-10-02",
+        "sessions": 941,
+        "startEquity": 15191.373055375325,
+        "endingEquity": 30572.62454511815,
+        "markReturn": 1.012499096274929,
+        "cagr": 0.20465343153567805,
+        "maxDrawdown": 0.189989041295049,
+        "meanExposure": 1,
+        "basis": "continuous account, marked equity, positions carried; no extra boundary liquidation",
+        "previousEquityAt": 1672434000000
+      }
+    }
+  },
+  "input": {
+    "path": "research/history/entry-backtest-2026-10-04/prices.json.gz",
+    "sha256": "0307d3266187abea5e008fbaefd71a447d78298365ff41d2f7939516a12cf92a",
+    "cutoff": "2026-10-02",
+    "basis": "Yahoo quote OHLC; no AdjClose mixing",
+    "universeSHA256": "28056fd2d0823b6925eba02f11f5031cae4645d721c27269475c9826267b6325",
+    "homeUniverseSHA256": "39d1201cc14014a98329070eedbe307a1b5c271f054c3af83faf16250dc30536"
+  },
+  "periodDefinition": {
+    "early": {
+      "start": "2017-10-02",
+      "end": "2022-12-30"
+    },
+    "recent": {
+      "start": "2023-01-03",
+      "end": "2026-10-02"
+    }
+  },
+  "sourceHashes": {
+    "scripts/entry_strategy_comparison.cjs": "3cdeb5c9a022266f8d767ef7ea7950d13baf58124c002787248b28901afae423",
+    "scripts/test_entry_strategy_comparison.cjs": "c47e39a767ae26749f1b640461e1979eb77f6807b922f546bbdb666a26073c1f",
+    "scripts/render_entry_strategy_comparison.py": "caec7847b669c3058f5e95d75d53838c5a14f0d94a5ca2334f019b1a6219b618",
+    "research/entry-strategy-comparison/2026-10-04/PROTOCOL.md": "5c93849dc69a91c74c574715ce4eaece4e370a7366417366334bf36253259506",
+    "scripts/backtest_entry_rules.cjs": "1b7bd58d9d110d4ab932fc2372cfe0dc368026c84c0b4b08ea2718b7f4ce6419",
+    "scripts/entry_study.cjs": "0e0be94b530410fc05f5b34524e0daab0d915d89f908437ca9bc2f719de61a7a",
+    "scripts/entry-study-v1/technical-guide.cjs": "fd47378b360f360615b5031dccf671c0e3770bcf165689fa721319aee82db3e0",
+    "scripts/entry-study-v1/paper-engine.cjs": "ea7b0f73f63aad30ec5b0a8d36bcb7949915e2e8b12bd8359678d04ac4aa8dd2",
+    "scripts/entry-study-v1/simulation-signals.cjs": "5e83a337eb707b7bc626475c1adfb47946c736e50e596164f2bb6b3bc3024de0",
+    "scripts/entry-study-v1/perp-engine.cjs": "ee65bc6db95930b7059d4b25b071c23727187a24edda913acc64d85947632618",
+    "research/entry-backtest/2026-10-04/results.json": "7ef6e609b92d5c12e6fbda271a25172c81e767226e2c6865ffd33b794fb13fed",
+    "research/entry-backtest/2026-10-04/stable-curve.csv": "81f0a0eb7867b40729c79f056366527a758f219283518981243724ba193a853e",
+    "research/entry-backtest/2026-10-04/stable-daily.csv": "8111fe31674e75583344cd5e6f4d5b392b99acb88681dcbc20f893b8511c1955",
+    "research/entry-backtest/2026-10-04/stable-trades.csv": "4a47d05c38f2f934d80ac07f70ff76413c598cd7d5dd56c4292bd65f0fe8b555",
+    "research/entry-backtest/2026-10-04/stable-open.json": "f6bc944346110e35254600e741e8fd5eed4c7527bff4d641e979fca39aef787e",
+    "research/entry-backtest/2026-10-04/watch-curve.csv": "6d4552291cc50e92356c0320e5aeee7726ae6b44c01e8b1d505a950e944ce6f2",
+    "research/entry-backtest/2026-10-04/watch-daily.csv": "cac832768d2c9a32f6bbdceb93b6acee1b04a689493b2305e3957aa087b6ea4a",
+    "research/entry-backtest/2026-10-04/watch-trades.csv": "58f0a8d3b790d39aee58b8f44e3648e3533caab0083dbbed38c2bac7076c38d5",
+    "research/entry-backtest/2026-10-04/watch-open.json": "a80b252d3cee1812b3131eeac4d25406318cbd6cb49184ed1801ba293aa9b91d"
+  }
+}
