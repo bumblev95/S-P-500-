@@ -15,7 +15,7 @@
   const freshTime=(d,now,days)=>finite(Date.parse(d))&&now>=Date.parse(d)&&now-Date.parse(d)<=days*DAY;
   const pct=x=>finite(x)?(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(2)+'%':'자료 없음';
   const short=d=>validDate(d)?d.slice(5).replace('-','.'):'확인 중';
-  function safeUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&['www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk'].includes(u.hostname)&&!u.username&&!u.password;}catch(_){return false;}}
+  function safeUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&['www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk','www.cnbc.com','cnbc.com'].includes(u.hostname)&&!u.username&&!u.password;}catch(_){return false;}}
   const icon=name=>'<i data-lucide="'+(['cpu','radio','shopping-bag','landmark','factory','heart-pulse','shopping-basket','house','zap','flask-conical','fuel','clock-3','trending-up','trending-down','minus','arrow-down-left','arrow-up-right'].includes(name)?name:'minus')+'" aria-hidden="true"></i>';
   function breaking(item,now){return item.importance==='important'&&!item.fromCache&&item.sourceStatus==='ready'&&freshTime(item.firstPublishedAt||item.publishedAt,now,2/24);}
   function eligibleNews(items,now){return (items||[]).filter(a=>a.translationStatus==='ready'&&a.headlineKo&&safeUrl(a.url)&&freshTime(a.publishedAt,now,14)).slice(0,5);}
@@ -55,6 +55,19 @@
     const lane=value=>'<span class="hp-bar-lane" aria-hidden="true">'+(finite(value)?'<span class="hp-sector-bar '+(value>=0?'hp-rise':'hp-fall')+'" style="width:'+(Math.abs(value)/limit*50)+'%"></span>':'')+'</span>';
     return '<div class="hp-sector-chart" role="group" aria-label="11개 섹터 ETF 등락률. 초록 오른쪽은 상승, 빨강 왼쪽은 하락. 하루와 주간 동일 눈금."><div class="hp-chart-head"><span>섹터 ETF</span><span>하루<small>'+short(recap.asOf)+' 마감</small></span><span>이번 주<small>'+short(week.start)+'–'+short(week.end)+'</small></span></div>'+rows.map(q=>'<button type="button" class="hp-sector-row'+(q.status!=='ready'?' hp-unavailable':'')+'" data-sector="'+esc(q.symbol)+'" aria-pressed="'+String(q.symbol===selected)+'" aria-label="'+esc(q.name+' · 하루 '+pct(q.day)+' · 이번 주 '+pct(q.week)+(q.fromCache?' · 이전 수집 자료':''))+'"><span class="hp-sector-label">'+icon(q.fromCache?'clock-3':q.icon)+'<span>'+esc(q.name==='커뮤니케이션'?'통신':q.name)+'</span></span>'+lane(q.day)+lane(q.week)+'</button>').join('')+'<div class="hp-chart-axis" aria-hidden="true"><span>등락률 (%)</span><span class="hp-direction"><span>←</span><span>0</span><span>→</span></span><span class="hp-direction"><span>←</span><span>0</span><span>→</span></span></div><div class="hp-chart-legend"><span class="hp-legend-fall">'+icon('arrow-down-left')+'하락</span><span class="hp-legend-rise">'+icon('arrow-up-right')+'상승</span><span>길수록 큰 움직임</span></div><div class="hp-sector-detail" data-sector-detail aria-live="polite">하루 · 주간 같은 눈금 / 섹터별 상세</div></div>';
   }
+  function newsStateHtml(state,now){
+    const feeds=Array.isArray(state.feeds)?state.feeds:[];
+    const failed=feeds.filter(f=>f.status!=='ready');
+    const families=[...new Set(feeds.map(f=>String(f.name||'').split(/\s+/)[0]).filter(Boolean))];
+    const successes=feeds.map(f=>Date.parse(f.lastSuccessAt)).filter(finite);
+    const latestSuccess=successes.length?Math.max(...successes):null;
+    const newsTimes=eligibleNews(state.news,now).map(q=>Date.parse(q.publishedAt)).filter(finite);
+    const latestNews=newsTimes.length?Math.max(...newsTimes):null;
+    const checked=latestSuccess?new Intl.DateTimeFormat('ko-KR',{timeZone:'America/New_York',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(latestSuccess))+' ET':'확인 중';
+    const quiet=latestSuccess&&(!latestNews||latestSuccess-latestNews>=3600000);
+    const sourceText=(families.length?families.join(' · '):'시장')+' 뉴스';
+    return '<div class="hp-news-state">'+(failed.length?'<span class="hp-cache">'+esc(failed.map(f=>f.name).join(' · '))+' 갱신 지연</span>':'<span class="hp-ready-dot" aria-hidden="true"></span><span>'+esc(sourceText)+'</span>')+'<span>매시간 자동 확인</span><span>최근 정상 수집 '+esc(checked)+'</span>'+(quiet?'<span>새 주요 뉴스 없음</span>':'')+'</div>';
+  }
   function newsHtml(state,now){
     const items=eligibleNews(state.news,now);
     const stories=items.map(q=>{
@@ -62,10 +75,9 @@
       const dateText=new Intl.DateTimeFormat('ko-KR',{timeZone:'America/New_York',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(q.publishedAt));
       return '<article class="hp-story"><div class="hp-story-meta">'+mark+'<span>'+esc(q.category)+' · '+esc(q.source)+'</span><time datetime="'+esc(q.publishedAt)+'">'+esc(dateText)+' ET</time>'+(q.fromCache||q.sourceStatus!=='ready'?'<span class="hp-cache">이전 수집</span>':'')+'</div><h3><a href="'+esc(q.url)+'" target="_blank" rel="noopener noreferrer">'+esc(q.headlineKo)+'</a></h3><p>'+esc(q.summaryKo)+'</p></article>';
     }).join('');
-    const failed=(state.feeds||[]).filter(f=>f.status!=='ready');
-    return (stories||'<p class="hp-empty">확인된 한국어 시장 뉴스가 아직 없습니다.</p>')+'<div class="hp-news-state">'+(failed.length?'<span class="hp-cache">'+esc(failed.map(f=>f.name).join(' · '))+' 갱신 지연</span>':'<span class="hp-ready-dot" aria-hidden="true"></span><span>Fed · BBC 뉴스</span>')+'</div>';
+    return (stories||'<p class="hp-empty">확인된 한국어 시장 뉴스가 아직 없습니다.</p>')+newsStateHtml(state,now);
   }
-  const api={nyDate,weekBounds,freshDate,breaking,eligibleNews,rankingHtml,buyHtml,rankingSignal,rankingNote,quoteValues,chartRows,scale,chartHtml,newsHtml,rankRows};
+  const api={nyDate,weekBounds,freshDate,breaking,eligibleNews,rankingHtml,buyHtml,rankingSignal,rankingNote,quoteValues,chartRows,scale,chartHtml,newsHtml,newsStateHtml,rankRows};
   if(typeof module!=='undefined')module.exports=api;else root.MarketHome=api;
   if(typeof document==='undefined')return;
   const host=document.getElementById('market-home');if(!host)return;

@@ -65,7 +65,7 @@ class Feeds(unittest.TestCase):
         self.assertEqual(items[0]['lastSuccessAt'],self.old['lastSuccessAt'])
         self.assertEqual(items[0]['importance'],'important')
         self.assertEqual(items[0]['importanceReason'],'검토한 정책 발언')
-        self.assertEqual([f['status'] for f in feeds],['unavailable','ready','ready','ready'])
+        self.assertEqual([f['status'] for f in feeds],['unavailable']+['ready']*(len(h.FEEDS)-1))
         items,feeds=h.collect_news({'news':items,'feeds':feeds},NOW,{},lambda _: '<rss><channel/></rss>')
         self.assertEqual(items,[]);self.assertTrue(all(f['status']=='ready' for f in feeds))
 
@@ -130,6 +130,18 @@ class Feeds(unittest.TestCase):
         self.assertEqual(h.parse_feed(rss('Celebrity wedding announced'),'BBC 국제',NOW),[])
         self.assertFalse(h.allowed('javascript:alert(1)'))
 
+    def test_cnbc_market_feed_is_allowed_and_duplicate_urls_are_ranked_once(self):
+        url='https://www.cnbc.com/2026/10/03/stocks-market-test.html'
+        xml=rss('Wall Street stocks rise after strong earnings',url)
+        def fetch(request):
+            if request in [f[1] for f in h.FEEDS if f[0].startswith('CNBC')]:return xml
+            return '<rss><channel/></rss>'
+        items,feeds=h.collect_news({},NOW,{},fetch)
+        self.assertTrue(h.allowed(url))
+        self.assertEqual(len(items),1)
+        self.assertEqual(items[0]['category'],'주식시장')
+        self.assertEqual(sum(f['name'].startswith('CNBC') for f in feeds),3)
+
 
 class PriceCache(unittest.TestCase):
     def test_failure_preserves_success_time_recalculates_week_and_then_expires(self):
@@ -146,7 +158,8 @@ class PriceCache(unittest.TestCase):
 
     def test_both_feeds_recover_to_new_results(self):
         def fetch(url):
-            if url in [f[1] for f in h.FEEDS[:2]]:return rss(url='https://www.federalreserve.gov/newsevents/speech/new.htm')
+            if url==h.FEEDS[0][1]:return rss(url='https://www.federalreserve.gov/newsevents/pressreleases/new.htm')
+            if url==h.FEEDS[1][1]:return rss(url='https://www.federalreserve.gov/newsevents/speech/new.htm')
             if url in [f[1] for f in h.FEEDS]:return '<rss><channel/></rss>'
             return '<p>The economy expanded while inflation remained above target.</p>'
         items,feeds=h.collect_news({},NOW,{},fetch)
@@ -316,7 +329,7 @@ class SemanticPublication(unittest.TestCase):
         self.failed.add(h.FEEDS[0][1])
         failed,log=self.build(self.now+timedelta(hours=1))
         self.assertTrue(log['changed'])
-        self.assertEqual([f['status'] for f in failed['feeds']],['unavailable','ready','ready','ready'])
+        self.assertEqual([f['status'] for f in failed['feeds']],['unavailable']+['ready']*(len(h.FEEDS)-1))
         self.assertEqual(failed['feeds'][0]['lastSuccessAt'],first['feeds'][0]['lastSuccessAt'])
         self.assertTrue(failed['news'][0]['fromCache'])
         self.assertEqual(failed['news'][0]['sourceStatus'],'unavailable')

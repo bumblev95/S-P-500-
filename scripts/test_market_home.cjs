@@ -114,6 +114,16 @@ assert(!H.breaking({...item,firstPublishedAt:'2026-10-02T22:00:00Z'},now));
 assert(!H.breaking(item,now+2*3600000));
 assert.equal(H.eligibleNews([{...item,url:'javascript:alert(1)'}],now).length,0);
 assert.equal(H.eligibleNews([{...item,publishedAt:'2026-09-01T22:00:00Z'}],now).length,0);
+assert.equal(H.eligibleNews([{...item,url:'https://www.cnbc.com/2026/10/03/stocks-market-test.html'}],now).length,1);
+const newsState=H.newsStateHtml({news:[item],feeds:[
+  {name:'Fed 발표',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'},
+  {name:'BBC 경제',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'},
+  {name:'CNBC 금융',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'}
+]},now);
+assert(newsState.includes('Fed · BBC · CNBC 뉴스'));
+assert(newsState.includes('매시간 자동 확인'));
+assert(newsState.includes('최근 정상 수집'));
+assert(newsState.includes('새 주요 뉴스 없음'));
 assert.equal(H.rankRows([{symbol:'A',asOf:'2026-09-20'}],now).length,0);
 const recap={asOf:'2026-10-02',weekStart:'2026-09-28',sectors:[{symbol:'XLK',name:'기술',icon:'cpu',asOf:'2026-10-02',status:'ready',day:1.3,week:2.8},{symbol:'XLE',name:'에너지',icon:'fuel',asOf:'2026-10-02',status:'ready',day:-1.1,week:-2.2}]};
 assert.equal(H.scale(H.chartRows(recap,now)),3.2);
