@@ -258,7 +258,9 @@ def collect_news(prior, now, reviewed, fetch=get):
             title=item['title']
             item['importance']='important' if MAJOR.search(title) and not OPINION.search(title) else 'normal'
             item['importanceReason']='주요 경제지표·정책 또는 국제 사건 보도' if item['importance']=='important' else ''
-    ordered=sorted(articles,key=lambda a:(a['importance']=='important',a['publishedAt']),reverse=True)
+    # Recency drives the homepage. Importance is a badge, not a pin that can
+    # keep older stories above newer market updates.
+    ordered=sorted(articles,key=lambda a:(a['publishedAt'],a['importance']=='important'),reverse=True)
     candidates=[item for index,item in enumerate(ordered) if index<12 or item['url'] in reviewed]
     for item in candidates:
         if item['fromCache']:continue
@@ -316,7 +318,7 @@ def assemble(quotes, news, feeds, rankings, now):
         brief=high['name']+' 강세 · '+low['name']+' 약세' if high['day']>0>low['day'] else ('섹터 전반 상승' if low['day']>0 else '섹터 전반 하락' if high['day']<0 else '섹터 혼조')
     else:brief='시장 마감 자료 확인 중'
     seen=set();selected=[]
-    for item in sorted(news,key=lambda a:(a.get('importance')=='important',a['publishedAt']),reverse=True):
+    for item in sorted(news,key=lambda a:(a['publishedAt'],a.get('importance')=='important'),reverse=True):
         # Identical event headlines from two sources do not fill the briefing twice.
         key=re.sub(r'\W','',item.get('headlineKo','')).lower()
         if item.get('translationStatus')!='ready' or key in seen:continue
@@ -325,7 +327,7 @@ def assemble(quotes, news, feeds, rankings, now):
     return {'schemaVersion':1,'generatedAt':now.isoformat(),'rankings':rankings,'brief':brief,
             'recap':{'asOf':asof,'weekStart':start.isoformat(),'weekEnd':end.isoformat(),'weekComplete':complete,'timezone':'America/New_York','method':'sector-etf-unadjusted-close-price-return',
                      'indices':[quotes[s] for s,_,_ in INDICES],'sectors':[quotes[s] for s,_,_ in SECTORS]},
-            'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'importanceBasis':'source-event-and-reviewed-context'}}
+            'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'displayOrder':'latest-first','importanceBasis':'source-event-and-reviewed-context'}}
 
 
 def home_rankings(root, now):
