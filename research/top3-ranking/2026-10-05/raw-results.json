@@ -1,0 +1,3439 @@
+{
+  "version": "daily-top3-ranking-research-v1",
+  "generatedAt": "2026-10-05T15:39:11.717Z",
+  "period": {
+    "start": "2017-10-02",
+    "end": "2026-10-02",
+    "sessions": 2263
+  },
+  "datasetSHA256": "0307d3266187abea5e008fbaefd71a447d78298365ff41d2f7939516a12cf92a",
+  "methods": [
+    "baseline",
+    "tie_price_risk",
+    "price_risk",
+    "volume",
+    "sector",
+    "combined"
+  ],
+  "audits": 48,
+  "universe": 505,
+  "sourceHashes": {
+    "assets/technical-guide.js": "fd47378b360f360615b5031dccf671c0e3770bcf165689fa721319aee82db3e0",
+    "assets/stock-assessment.js": "e258fdf94994af8c0853759d078b9bc19fcc3e2ffbf37afa0f3170b818a54eeb",
+    "scripts/build_home_rankings.cjs": "156aff7ece17a399c0f2088126ded83ddc0aeb2032160c326948747ba22463ae",
+    "scripts/entry_study.cjs": "0e0be94b530410fc05f5b34524e0daab0d915d89f908437ca9bc2f719de61a7a",
+    "scripts/entry-study-v1/paper-engine.cjs": "ea7b0f73f63aad30ec5b0a8d36bcb7949915e2e8b12bd8359678d04ac4aa8dd2",
+    "scripts/backtest_top3_rankings.cjs": "0011084154939b4b42cd319c0d4204585056327fe01a8a1a38dccdc136c9ba01",
+    "scripts/top3_cached_rule.cjs": "2585eb8a5639b3b81889d517792d226537a7fce769e36ec23413499f5120c2e2",
+    "research/top3-ranking/2026-10-05/PROTOCOL.md": "091d43d700fa585a40430b5f5e99f953bc5df7768da5c60d9a953dbe45b84747"
+  },
+  "scenarios": {
+    "stable": {
+      "baseline": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 207,
+          "meanActualBuy": 2.547945205479452
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.0055409136040564305,
+              "medianNet": 0.006074546986089224,
+              "p10Net": -0.08808978477448925,
+              "meanExcess": -0.0030321383482241077,
+              "dateBalancedNet": 0.005540913604056454,
+              "dateBalancedExcess": -0.0030321383482241077,
+              "dateBalancedAvoidance": -0.00754645590288871,
+              "downsidePrecision": 0.4485064645563984,
+              "meanAdverse": -0.060542887008914734,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.03339159566971909,
+              "medianNet": 0.021835162898490745,
+              "p10Net": -0.1390123924394124,
+              "meanExcess": 0.0018888796568196481,
+              "dateBalancedNet": 0.033391595669719165,
+              "dateBalancedExcess": 0.0018888796568196278,
+              "dateBalancedAvoidance": -0.035424995613287394,
+              "downsidePrecision": 0.42015151515151616,
+              "meanAdverse": -0.10357654190442422,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6727,
+              "signalDates": 2243,
+              "meanNet": 0.011454615793499011,
+              "medianNet": 0.008970321130146397,
+              "p10Net": -0.11973076893507936,
+              "meanExcess": 0.0028849262522683077,
+              "dateBalancedNet": 0.011452231483749277,
+              "dateBalancedExcess": 0.0028791795314687236,
+              "dateBalancedAvoidance": -0.013463686578290716,
+              "downsidePrecision": 0.4490266012780503,
+              "meanAdverse": -0.07600826403261685,
+              "excluded": {
+                "missingSession": 2,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6598,
+              "signalDates": 2200,
+              "meanNet": 0.051430558026917525,
+              "medianNet": 0.03147312042616768,
+              "p10Net": -0.17548276565690563,
+              "meanExcess": 0.019930829335709235,
+              "dateBalancedNet": 0.051408569419434176,
+              "dateBalancedExcess": 0.019905853406534696,
+              "dateBalancedAvoidance": -0.05345999084099582,
+              "downsidePrecision": 0.41325757575757704,
+              "meanAdverse": -0.12750779863678308,
+              "excluded": {
+                "missingSession": 2,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 16472.921745535274,
+            "cagr": 0.05702552194956412,
+            "maxDrawdown": 0.27159763596137865,
+            "meanExposure": 0.828078502751028,
+            "entries": 409,
+            "closedTrades": 406,
+            "winRate": 0.3078817733990148,
+            "profitFactor": 1.2163562117479119,
+            "fees": 996.4794913020547,
+            "slippage": 996.47956572077,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 2164.4756472435456
+            },
+            "topIssuerProfitShare": 0.3343892808122549,
+            "rejections": {
+              "가상 자본 또는 최소 수량 부족": 4,
+              "포지션 한도": 4802,
+              "동일 업종 2종목 한도": 88,
+              "신호 가격에서 0.5 ATR 이상 이탈": 70,
+              "비용 반영 손익비 또는 가격 조건 미충족": 2
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10405.942022647,
+                "maxDrawdown": 0.07972853277745551,
+                "sessions": 63,
+                "return": 0.0405942022646999
+              },
+              "2018": {
+                "start": 10405.942022647,
+                "end": 12082.204583173356,
+                "maxDrawdown": 0.14884872129796634,
+                "sessions": 251,
+                "return": 0.16108705553790492
+              },
+              "2019": {
+                "start": 12082.204583173356,
+                "end": 12510.776083404558,
+                "maxDrawdown": 0.16882503261275494,
+                "sessions": 252,
+                "return": 0.03547129973515473
+              },
+              "2020": {
+                "start": 12510.776083404558,
+                "end": 12502.98721248246,
+                "maxDrawdown": 0.1700871152659419,
+                "sessions": 253,
+                "return": -0.0006225729619148135
+              },
+              "2021": {
+                "start": 12502.98721248246,
+                "end": 14376.593261732076,
+                "maxDrawdown": 0.1088550573204623,
+                "sessions": 252,
+                "return": 0.14985267259804003
+              },
+              "2022": {
+                "start": 14376.593261732076,
+                "end": 12832.88900183329,
+                "maxDrawdown": 0.20564872908204512,
+                "sessions": 251,
+                "return": -0.10737622131995983
+              },
+              "2023": {
+                "start": 12832.88900183329,
+                "end": 14357.547801029563,
+                "maxDrawdown": 0.12467272034397003,
+                "sessions": 250,
+                "return": 0.11880869529678484
+              },
+              "2024": {
+                "start": 14357.547801029563,
+                "end": 16830.669628673055,
+                "maxDrawdown": 0.07396189079126902,
+                "sessions": 252,
+                "return": 0.1722523833398728
+              },
+              "2025": {
+                "start": 16830.669628673055,
+                "end": 15985.62610059254,
+                "maxDrawdown": 0.16901075971909896,
+                "sessions": 250,
+                "return": -0.050208550623611625
+              },
+              "2026": {
+                "start": 15985.62610059254,
+                "end": 16481.096081262094,
+                "maxDrawdown": 0.12855002196187093,
+                "sessions": 189,
+                "return": 0.03099471847719415
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 14305.135478092057,
+            "cagr": 0.04058312001077646,
+            "maxDrawdown": 0.2781717435013965,
+            "meanExposure": 0.8256628665254814,
+            "entries": 406,
+            "closedTrades": 403,
+            "winRate": 0.3076923076923077,
+            "profitFactor": 1.151719288194143,
+            "fees": 1839.2333612649368,
+            "slippage": 1839.234329200563,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "TKO",
+              "net": 2049.601591522141
+            },
+            "topIssuerProfitShare": 0.4760829483653044,
+            "rejections": {
+              "가상 자본 또는 최소 수량 부족": 5,
+              "포지션 한도": 4828,
+              "동일 업종 2종목 한도": 74,
+              "신호 가격에서 0.5 ATR 이상 이탈": 70,
+              "비용 반영 손익비 또는 가격 조건 미충족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10349.779289583865,
+                "maxDrawdown": 0.07916511905261203,
+                "sessions": 63,
+                "return": 0.03497792895838647
+              },
+              "2018": {
+                "start": 10349.779289583865,
+                "end": 11870.693172994002,
+                "maxDrawdown": 0.15437631865629575,
+                "sessions": 251,
+                "return": 0.14695133498554913
+              },
+              "2019": {
+                "start": 11870.693172994002,
+                "end": 12131.314378023091,
+                "maxDrawdown": 0.17513992831774028,
+                "sessions": 252,
+                "return": 0.021955011491831433
+              },
+              "2020": {
+                "start": 12131.314378023091,
+                "end": 11969.695109332952,
+                "maxDrawdown": 0.16970832786749845,
+                "sessions": 253,
+                "return": -0.013322486224817243
+              },
+              "2021": {
+                "start": 11969.695109332952,
+                "end": 13555.318891910616,
+                "maxDrawdown": 0.10936850306333523,
+                "sessions": 252,
+                "return": 0.13246985558899738
+              },
+              "2022": {
+                "start": 13555.318891910616,
+                "end": 11967.991408385877,
+                "maxDrawdown": 0.2124659856354265,
+                "sessions": 251,
+                "return": -0.11709997353673518
+              },
+              "2023": {
+                "start": 11967.991408385877,
+                "end": 13181.759290878541,
+                "maxDrawdown": 0.12950029434504862,
+                "sessions": 250,
+                "return": 0.10141784373626694
+              },
+              "2024": {
+                "start": 13181.759290878541,
+                "end": 15401.718925954745,
+                "maxDrawdown": 0.0644622177278229,
+                "sessions": 252,
+                "return": 0.16841148333002587
+              },
+              "2025": {
+                "start": 15401.718925954745,
+                "end": 15194.499066173688,
+                "maxDrawdown": 0.11429714878083908,
+                "sessions": 250,
+                "return": -0.013454333297295284
+              },
+              "2026": {
+                "start": 15194.499066173688,
+                "end": 14319.187888069475,
+                "maxDrawdown": 0.16853998724323993,
+                "sessions": 189,
+                "return": -0.05760710993446627
+              }
+            }
+          }
+        ]
+      },
+      "tie_price_risk": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 207,
+          "meanActualBuy": 2.547945205479452
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.006594043110861377,
+              "medianNet": 0.0065186577055820205,
+              "p10Net": -0.08593937482798421,
+              "meanExcess": -0.001979008841419164,
+              "dateBalancedNet": 0.006594043110861378,
+              "dateBalancedExcess": -0.0019790088414191635,
+              "dateBalancedAvoidance": -0.008600638802482833,
+              "downsidePrecision": 0.4453856442264825,
+              "meanAdverse": -0.058727753133460056,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.03384065590180706,
+              "medianNet": 0.02296626867561935,
+              "p10Net": -0.13560473889975944,
+              "meanExcess": 0.002337939888907636,
+              "dateBalancedNet": 0.03384065590180709,
+              "dateBalancedExcess": 0.0023379398889076405,
+              "dateBalancedAvoidance": -0.035874505017872545,
+              "downsidePrecision": 0.4151515151515162,
+              "meanAdverse": -0.10075458646519721,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6726,
+              "signalDates": 2243,
+              "meanNet": 0.012131143941497674,
+              "medianNet": 0.008325094787654752,
+              "p10Net": -0.11897146313348939,
+              "meanExcess": 0.0035589676471828643,
+              "dateBalancedNet": 0.012135180262791945,
+              "dateBalancedExcess": 0.0035621283105113873,
+              "dateBalancedAvoidance": -0.014147318476849606,
+              "downsidePrecision": 0.4543765789864759,
+              "meanAdverse": -0.0768957818532985,
+              "excluded": {
+                "missingSession": 3,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6597,
+              "signalDates": 2200,
+              "meanNet": 0.05228985795120255,
+              "medianNet": 0.033582929598068745,
+              "p10Net": -0.18003758940981598,
+              "meanExcess": 0.020786836639925636,
+              "dateBalancedNet": 0.052250785771048976,
+              "dateBalancedExcess": 0.02074806975814955,
+              "dateBalancedAvoidance": -0.05430304961951635,
+              "downsidePrecision": 0.40810606060606225,
+              "meanAdverse": -0.1284709263971821,
+              "excluded": {
+                "missingSession": 3,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 21631.579519836872,
+            "cagr": 0.08951142774045895,
+            "maxDrawdown": 0.21628390222423133,
+            "meanExposure": 0.8399432864384123,
+            "entries": 388,
+            "closedTrades": 384,
+            "winRate": 0.328125,
+            "profitFactor": 1.4005727570420683,
+            "fees": 1097.4603365978928,
+            "slippage": 1097.4599020793212,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 2513.5846226054077
+            },
+            "topIssuerProfitShare": 0.21610002479187448,
+            "rejections": {
+              "포지션 한도": 4857,
+              "신호 가격에서 0.5 ATR 이상 이탈": 74,
+              "동일 업종 2종목 한도": 74,
+              "비용 반영 손익비 또는 가격 조건 미충족": 2,
+              "가상 자본 또는 최소 수량 부족": 1
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10130.39214213683,
+                "maxDrawdown": 0.1015659505835872,
+                "sessions": 63,
+                "return": 0.013039214213683037
+              },
+              "2018": {
+                "start": 10130.39214213683,
+                "end": 11845.374845547107,
+                "maxDrawdown": 0.144917710657677,
+                "sessions": 251,
+                "return": 0.16929085067466398
+              },
+              "2019": {
+                "start": 11845.374845547107,
+                "end": 13755.917681561918,
+                "maxDrawdown": 0.09193361799191169,
+                "sessions": 252,
+                "return": 0.16129019646288523
+              },
+              "2020": {
+                "start": 13755.917681561918,
+                "end": 13907.262331063435,
+                "maxDrawdown": 0.15101695026253503,
+                "sessions": 253,
+                "return": 0.01100214853018322
+              },
+              "2021": {
+                "start": 13907.262331063435,
+                "end": 16621.46931586362,
+                "maxDrawdown": 0.09085739358445322,
+                "sessions": 252,
+                "return": 0.19516472186892564
+              },
+              "2022": {
+                "start": 16621.46931586362,
+                "end": 14652.512616652271,
+                "maxDrawdown": 0.21030314415707763,
+                "sessions": 251,
+                "return": -0.11845864296318043
+              },
+              "2023": {
+                "start": 14652.512616652271,
+                "end": 16672.32954990452,
+                "maxDrawdown": 0.12457363818003908,
+                "sessions": 250,
+                "return": 0.13784782078650237
+              },
+              "2024": {
+                "start": 16672.32954990452,
+                "end": 20677.127850306722,
+                "maxDrawdown": 0.09114517939831512,
+                "sessions": 252,
+                "return": 0.24020628241631292
+              },
+              "2025": {
+                "start": 20677.127850306722,
+                "end": 20722.25616115845,
+                "maxDrawdown": 0.160069003951547,
+                "sessions": 250,
+                "return": 0.0021825231810934653
+              },
+              "2026": {
+                "start": 20722.25616115845,
+                "end": 21647.155774610208,
+                "maxDrawdown": 0.11719957386115398,
+                "sessions": 189,
+                "return": 0.044633152213675364
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 18664.723946208353,
+            "cagr": 0.07179892482704586,
+            "maxDrawdown": 0.23457937144598995,
+            "meanExposure": 0.8293321079284404,
+            "entries": 388,
+            "closedTrades": 384,
+            "winRate": 0.3255208333333333,
+            "profitFactor": 1.3138949348229219,
+            "fees": 1993.2580604478171,
+            "slippage": 1993.2578643011018,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 2261.4678975248717
+            },
+            "topIssuerProfitShare": 0.26099710868624737,
+            "rejections": {
+              "포지션 한도": 4857,
+              "신호 가격에서 0.5 ATR 이상 이탈": 74,
+              "동일 업종 2종목 한도": 74,
+              "비용 반영 손익비 또는 가격 조건 미충족": 2,
+              "가상 자본 또는 최소 수량 부족": 1
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10080.851900606587,
+                "maxDrawdown": 0.10153514446256295,
+                "sessions": 63,
+                "return": 0.008085190060658665
+              },
+              "2018": {
+                "start": 10080.851900606587,
+                "end": 11588.033646532898,
+                "maxDrawdown": 0.14917236483152685,
+                "sessions": 251,
+                "return": 0.14950936297711315
+              },
+              "2019": {
+                "start": 11588.033646532898,
+                "end": 13207.005545286418,
+                "maxDrawdown": 0.09259545604359198,
+                "sessions": 252,
+                "return": 0.13971066603158433
+              },
+              "2020": {
+                "start": 13207.005545286418,
+                "end": 13168.300220620527,
+                "maxDrawdown": 0.15144571397929352,
+                "sessions": 253,
+                "return": -0.0029306661932693157
+              },
+              "2021": {
+                "start": 13168.300220620527,
+                "end": 15591.282434760353,
+                "maxDrawdown": 0.09543470829226308,
+                "sessions": 252,
+                "return": 0.18400113709023924
+              },
+              "2022": {
+                "start": 15591.282434760353,
+                "end": 13464.83705305104,
+                "maxDrawdown": 0.2176921214020674,
+                "sessions": 251,
+                "return": -0.1363868168386494
+              },
+              "2023": {
+                "start": 13464.83705305104,
+                "end": 15021.03794625976,
+                "maxDrawdown": 0.12948323709070764,
+                "sessions": 250,
+                "return": 0.1155751745882505
+              },
+              "2024": {
+                "start": 15021.03794625976,
+                "end": 18492.178322812266,
+                "maxDrawdown": 0.09283156949109928,
+                "sessions": 252,
+                "return": 0.2310852544924713
+              },
+              "2025": {
+                "start": 18492.178322812266,
+                "end": 18222.88021654881,
+                "maxDrawdown": 0.1686708965300594,
+                "sessions": 250,
+                "return": -0.014562811452626279
+              },
+              "2026": {
+                "start": 18222.88021654881,
+                "end": 18690.457312773568,
+                "maxDrawdown": 0.11329931587919295,
+                "sessions": 189,
+                "return": 0.025658792170522915
+              }
+            }
+          }
+        ]
+      },
+      "price_risk": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 207,
+          "meanActualBuy": 2.547945205479452
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.0029328930045973774,
+              "medianNet": 0.005747528153653425,
+              "p10Net": -0.07157960557454683,
+              "meanExcess": -0.005640158947683182,
+              "dateBalancedNet": 0.002932893004597391,
+              "dateBalancedExcess": -0.005640158947683181,
+              "dateBalancedAvoidance": -0.004935826630825036,
+              "downsidePrecision": 0.4397384455342546,
+              "meanAdverse": -0.04894340268178833,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.02062924975033583,
+              "medianNet": 0.020000248170794155,
+              "p10Net": -0.11318166670893018,
+              "meanExcess": -0.0108734662625636,
+              "dateBalancedNet": 0.020629249750335886,
+              "dateBalancedExcess": -0.010873466262563554,
+              "dateBalancedAvoidance": -0.022649884157398454,
+              "downsidePrecision": 0.4057575757575761,
+              "meanAdverse": -0.08305492872528002,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.008685231525297618,
+              "medianNet": 0.005024652219622783,
+              "p10Net": -0.10208471348237139,
+              "meanExcess": 0.00010969305939422213,
+              "dateBalancedNet": 0.008673166526405537,
+              "dateBalancedExcess": 0.00010011457412495705,
+              "dateBalancedAvoidance": -0.010681841861223378,
+              "downsidePrecision": 0.46351612423837096,
+              "meanAdverse": -0.07025056907522682,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.03944406692886256,
+              "medianNet": 0.026664140050018048,
+              "p10Net": -0.1614460474996098,
+              "meanExcess": 0.007938058841116102,
+              "dateBalancedNet": 0.03942730344604099,
+              "dateBalancedExcess": 0.007924587433141518,
+              "dateBalancedAvoidance": -0.041466740606312794,
+              "downsidePrecision": 0.41909090909090985,
+              "meanAdverse": -0.11781054858343395,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 11526.96433845227,
+            "cagr": 0.01591453314567559,
+            "maxDrawdown": 0.2746695316252322,
+            "meanExposure": 0.8539828899218848,
+            "entries": 432,
+            "closedTrades": 428,
+            "winRate": 0.308411214953271,
+            "profitFactor": 1.0663445285795217,
+            "fees": 932.8535631773337,
+            "slippage": 932.8526136589439,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1989.9211595626145
+            },
+            "topIssuerProfitShare": 1.3031877100545766,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 71,
+              "포지션 한도": 4759,
+              "동일 업종 2종목 한도": 78,
+              "가상 자본 또는 최소 수량 부족": 2,
+              "비용 반영 손익비 또는 가격 조건 미충족": 2
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10226.756515734089,
+                "maxDrawdown": 0.01669228610002116,
+                "sessions": 63,
+                "return": 0.022675651573408784
+              },
+              "2018": {
+                "start": 10226.756515734089,
+                "end": 9611.257814588895,
+                "maxDrawdown": 0.12938353728733742,
+                "sessions": 251,
+                "return": -0.06018513300851891
+              },
+              "2019": {
+                "start": 9611.257814588895,
+                "end": 10612.0230883566,
+                "maxDrawdown": 0.08691869376828565,
+                "sessions": 252,
+                "return": 0.1041242772874793
+              },
+              "2020": {
+                "start": 10612.0230883566,
+                "end": 10519.565936091592,
+                "maxDrawdown": 0.1041194396001014,
+                "sessions": 253,
+                "return": -0.008712490681107798
+              },
+              "2021": {
+                "start": 10519.565936091592,
+                "end": 12796.028676927996,
+                "maxDrawdown": 0.0887785981947018,
+                "sessions": 252,
+                "return": 0.21640272561304874
+              },
+              "2022": {
+                "start": 12796.028676927996,
+                "end": 11471.327060113594,
+                "maxDrawdown": 0.1701000702146961,
+                "sessions": 251,
+                "return": -0.10352443326443295
+              },
+              "2023": {
+                "start": 11471.327060113594,
+                "end": 13077.044328159262,
+                "maxDrawdown": 0.12122730388710967,
+                "sessions": 250,
+                "return": 0.13997659203954105
+              },
+              "2024": {
+                "start": 13077.044328159262,
+                "end": 14046.641900775547,
+                "maxDrawdown": 0.08024812139478577,
+                "sessions": 252,
+                "return": 0.07414500924558443
+              },
+              "2025": {
+                "start": 14046.641900775547,
+                "end": 12050.627782244326,
+                "maxDrawdown": 0.2746695316252322,
+                "sessions": 250,
+                "return": -0.1420990249933698
+              },
+              "2026": {
+                "start": 12050.627782244326,
+                "end": 11534.160478786649,
+                "maxDrawdown": 0.10678364384136019,
+                "sessions": 189,
+                "return": -0.04285812430607572
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 9905.365176311809,
+            "cagr": -0.001055940478301487,
+            "maxDrawdown": 0.28902918177913506,
+            "meanExposure": 0.8469425550154762,
+            "entries": 432,
+            "closedTrades": 428,
+            "winRate": 0.3060747663551402,
+            "profitFactor": 0.9949342717420117,
+            "fees": 1703.4990754010382,
+            "slippage": 1703.4960750957223,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1774.3825042118226
+            },
+            "topIssuerProfitShare": null,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 71,
+              "포지션 한도": 4758,
+              "동일 업종 2종목 한도": 77,
+              "비용 반영 손익비 또는 가격 조건 미충족": 4,
+              "가상 자본 또는 최소 수량 부족": 2
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10189.090790465425,
+                "maxDrawdown": 0.017934024423265194,
+                "sessions": 63,
+                "return": 0.018909079046542487
+              },
+              "2018": {
+                "start": 10189.090790465425,
+                "end": 9455.321880585632,
+                "maxDrawdown": 0.1328569022436179,
+                "sessions": 251,
+                "return": -0.07201515080878729
+              },
+              "2019": {
+                "start": 9455.321880585632,
+                "end": 10290.52623816978,
+                "maxDrawdown": 0.0903605775754589,
+                "sessions": 252,
+                "return": 0.08833166846483054
+              },
+              "2020": {
+                "start": 10290.52623816978,
+                "end": 10127.370259921621,
+                "maxDrawdown": 0.10625486996565492,
+                "sessions": 253,
+                "return": -0.015854969364246685
+              },
+              "2021": {
+                "start": 10127.370259921621,
+                "end": 12024.608508339752,
+                "maxDrawdown": 0.09386609363316833,
+                "sessions": 252,
+                "return": 0.18733769969153014
+              },
+              "2022": {
+                "start": 12024.608508339752,
+                "end": 10584.875872221684,
+                "maxDrawdown": 0.17905460337310897,
+                "sessions": 251,
+                "return": -0.11973218380619466
+              },
+              "2023": {
+                "start": 10584.875872221684,
+                "end": 11784.917938607276,
+                "maxDrawdown": 0.12442085834764127,
+                "sessions": 250,
+                "return": 0.11337327719967982
+              },
+              "2024": {
+                "start": 11784.917938607276,
+                "end": 12523.085777243317,
+                "maxDrawdown": 0.08382031579850102,
+                "sessions": 252,
+                "return": 0.06263665495860704
+              },
+              "2025": {
+                "start": 12523.085777243317,
+                "end": 10463.750973972408,
+                "maxDrawdown": 0.28902918177913506,
+                "sessions": 250,
+                "return": -0.16444308055551993
+              },
+              "2026": {
+                "start": 10463.750973972408,
+                "end": 9918.009470691904,
+                "maxDrawdown": 0.11854000953990629,
+                "sessions": 189,
+                "return": -0.05215543686370061
+              }
+            }
+          }
+        ]
+      },
+      "volume": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 207,
+          "meanActualBuy": 2.547945205479452
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.003480755597296374,
+              "medianNet": 0.006429035271088734,
+              "p10Net": -0.07879741367744215,
+              "meanExcess": -0.00509229635498417,
+              "dateBalancedNet": 0.0034807555972963954,
+              "dateBalancedExcess": -0.005092296354984175,
+              "dateBalancedAvoidance": -0.005484237223082378,
+              "downsidePrecision": 0.4397384455342548,
+              "meanAdverse": -0.05361455087907105,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.023469563991339773,
+              "medianNet": 0.019845941626495223,
+              "p10Net": -0.12381934079627988,
+              "meanExcess": -0.008033152021559761,
+              "dateBalancedNet": 0.023469563991339697,
+              "dateBalancedExcess": -0.008033152021559757,
+              "dateBalancedAvoidance": -0.025493039422721873,
+              "downsidePrecision": 0.4118181818181821,
+              "meanAdverse": -0.09116602080990478,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.008903544385275554,
+              "medianNet": 0.005088683280924489,
+              "p10Net": -0.10262339653187741,
+              "meanExcess": 0.0003280059193721569,
+              "dateBalancedNet": 0.008891446942801933,
+              "dateBalancedExcess": 0.00031839499052140324,
+              "dateBalancedAvoidance": -0.010900340612606309,
+              "downsidePrecision": 0.46529945014118074,
+              "meanAdverse": -0.07042366857424229,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.04070668820536454,
+              "medianNet": 0.028789907127078518,
+              "p10Net": -0.16096847280743581,
+              "meanExcess": 0.009200680117617991,
+              "dateBalancedNet": 0.04068973341628883,
+              "dateBalancedExcess": 0.009187017403389416,
+              "dateBalancedAvoidance": -0.042730433322138356,
+              "downsidePrecision": 0.41318181818181837,
+              "meanAdverse": -0.11748065185655791,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 9912.281490711153,
+            "cagr": -0.0009784647964716786,
+            "maxDrawdown": 0.2698682267257646,
+            "meanExposure": 0.8455775728181535,
+            "entries": 435,
+            "closedTrades": 431,
+            "winRate": 0.2853828306264501,
+            "profitFactor": 0.9538318861693128,
+            "fees": 819.3972595855028,
+            "slippage": 819.3958920906493,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1745.544876809311
+            },
+            "topIssuerProfitShare": null,
+            "rejections": {
+              "동일 업종 2종목 한도": 71,
+              "가상 자본 또는 최소 수량 부족": 2,
+              "포지션 한도": 4862,
+              "신호 가격에서 0.5 ATR 이상 이탈": 85,
+              "비용 반영 손익비 또는 가격 조건 미충족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9871.774150835708,
+                "maxDrawdown": 0.0340970545522471,
+                "sessions": 63,
+                "return": -0.01282258491642918
+              },
+              "2018": {
+                "start": 9871.774150835708,
+                "end": 9242.279089100723,
+                "maxDrawdown": 0.12875534737396654,
+                "sessions": 251,
+                "return": -0.06376716607538024
+              },
+              "2019": {
+                "start": 9242.279089100723,
+                "end": 10123.48671225923,
+                "maxDrawdown": 0.08805328901515586,
+                "sessions": 252,
+                "return": 0.0953452730287816
+              },
+              "2020": {
+                "start": 10123.48671225923,
+                "end": 9642.845991839406,
+                "maxDrawdown": 0.17222966321867839,
+                "sessions": 253,
+                "return": -0.04747778449077067
+              },
+              "2021": {
+                "start": 9642.845991839406,
+                "end": 11432.116691834408,
+                "maxDrawdown": 0.0977212873597566,
+                "sessions": 252,
+                "return": 0.1855542130932335
+              },
+              "2022": {
+                "start": 11432.116691834408,
+                "end": 10016.622724312172,
+                "maxDrawdown": 0.18793421769096108,
+                "sessions": 251,
+                "return": -0.1238173127233102
+              },
+              "2023": {
+                "start": 10016.622724312172,
+                "end": 11526.693916121254,
+                "maxDrawdown": 0.09663635664381975,
+                "sessions": 250,
+                "return": 0.1507565207726016
+              },
+              "2024": {
+                "start": 11526.693916121254,
+                "end": 12189.582546972406,
+                "maxDrawdown": 0.07069490599496564,
+                "sessions": 252,
+                "return": 0.0575089991696609
+              },
+              "2025": {
+                "start": 12189.582546972406,
+                "end": 11152.756125195396,
+                "maxDrawdown": 0.1903607419250969,
+                "sessions": 250,
+                "return": -0.08505840276167065
+              },
+              "2026": {
+                "start": 11152.756125195396,
+                "end": 9919.307813708238,
+                "maxDrawdown": 0.15680922282734033,
+                "sessions": 189,
+                "return": -0.11059582919603639
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 8724.52995482831,
+            "cagr": -0.0150462823879296,
+            "maxDrawdown": 0.2820036709728636,
+            "meanExposure": 0.8361571601873776,
+            "entries": 435,
+            "closedTrades": 431,
+            "winRate": 0.28306264501160094,
+            "profitFactor": 0.9007538808894184,
+            "fees": 1510.0235754578607,
+            "slippage": 1510.0192996394617,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1600.4234351714479
+            },
+            "topIssuerProfitShare": null,
+            "rejections": {
+              "동일 업종 2종목 한도": 71,
+              "가상 자본 또는 최소 수량 부족": 2,
+              "포지션 한도": 4862,
+              "신호 가격에서 0.5 ATR 이상 이탈": 85,
+              "비용 반영 손익비 또는 가격 조건 미충족": 4
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9838.052230656165,
+                "maxDrawdown": 0.035715891139828426,
+                "sessions": 63,
+                "return": -0.016194776934383426
+              },
+              "2018": {
+                "start": 9838.052230656165,
+                "end": 9081.766246041665,
+                "maxDrawdown": 0.13457940459676765,
+                "sessions": 251,
+                "return": -0.07687354843043548
+              },
+              "2019": {
+                "start": 9081.766246041665,
+                "end": 9832.898749175158,
+                "maxDrawdown": 0.09292924027422655,
+                "sessions": 252,
+                "return": 0.08270775560435473
+              },
+              "2020": {
+                "start": 9832.898749175158,
+                "end": 9207.157121249738,
+                "maxDrawdown": 0.17737583570209825,
+                "sessions": 253,
+                "return": -0.06363755428458062
+              },
+              "2021": {
+                "start": 9207.157121249738,
+                "end": 10742.210478874043,
+                "maxDrawdown": 0.09837118328003991,
+                "sessions": 252,
+                "return": 0.16672392329239893
+              },
+              "2022": {
+                "start": 10742.210478874043,
+                "end": 9344.613852635728,
+                "maxDrawdown": 0.19187274567574752,
+                "sessions": 251,
+                "return": -0.13010326217186596
+              },
+              "2023": {
+                "start": 9344.613852635728,
+                "end": 10552.925444690592,
+                "maxDrawdown": 0.10203344444790463,
+                "sessions": 250,
+                "return": 0.12930567395399106
+              },
+              "2024": {
+                "start": 10552.925444690592,
+                "end": 11047.728837732247,
+                "maxDrawdown": 0.07567598169086442,
+                "sessions": 252,
+                "return": 0.046887793876209116
+              },
+              "2025": {
+                "start": 11047.728837732247,
+                "end": 9901.724725599304,
+                "maxDrawdown": 0.20031644363940349,
+                "sessions": 250,
+                "return": -0.10373209996057275
+              },
+              "2026": {
+                "start": 9901.724725599304,
+                "end": 8736.588822402711,
+                "maxDrawdown": 0.15382596477777788,
+                "sessions": 189,
+                "return": -0.11766999542860679
+              }
+            }
+          }
+        ]
+      },
+      "sector": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 207,
+          "meanActualBuy": 2.547945205479452
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.0031874988759150514,
+              "medianNet": 0.005105367275170636,
+              "p10Net": -0.07807157777912141,
+              "meanExcess": -0.005385553076365515,
+              "dateBalancedNet": 0.003187498875915063,
+              "dateBalancedExcess": -0.005385553076365504,
+              "dateBalancedAvoidance": -0.0051906871716655,
+              "downsidePrecision": 0.45162728488631304,
+              "meanAdverse": -0.05193945639169375,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.023342562550399088,
+              "medianNet": 0.02005379337234292,
+              "p10Net": -0.12033803940467108,
+              "meanExcess": -0.008160153462500392,
+              "dateBalancedNet": 0.02334256255039911,
+              "dateBalancedExcess": -0.008160153462500382,
+              "dateBalancedAvoidance": -0.025365910948590024,
+              "downsidePrecision": 0.4101515151515159,
+              "meanAdverse": -0.08772268359838538,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.008589982567206127,
+              "medianNet": 0.005857727465086837,
+              "p10Net": -0.10084804164305437,
+              "meanExcess": 0.000014444101302712091,
+              "dateBalancedNet": 0.008577931723308561,
+              "dateBalancedExcess": 0.000004879771027986039,
+              "dateBalancedAvoidance": -0.010586511799514586,
+              "downsidePrecision": 0.45876058849754703,
+              "meanAdverse": -0.06880751985563772,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.03911374424996476,
+              "medianNet": 0.02847795068506387,
+              "p10Net": -0.1604590178163838,
+              "meanExcess": 0.007607736162218425,
+              "dateBalancedNet": 0.03909703081603401,
+              "dateBalancedExcess": 0.007594314803134581,
+              "dateBalancedAvoidance": -0.04113613762110758,
+              "downsidePrecision": 0.41136363636363776,
+              "meanAdverse": -0.11544113057176607,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 10036.248812227976,
+            "cagr": 0.00040211463120853885,
+            "maxDrawdown": 0.284630147114449,
+            "meanExposure": 0.853639402352806,
+            "entries": 451,
+            "closedTrades": 448,
+            "winRate": 0.296875,
+            "profitFactor": 1.0053927912427612,
+            "fees": 916.3271002870483,
+            "slippage": 916.326384671273,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1675.7230817369389
+            },
+            "topIssuerProfitShare": 46.22835835828226,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 81,
+              "포지션 한도": 4745,
+              "동일 업종 2종목 한도": 122,
+              "가상 자본 또는 최소 수량 부족": 3,
+              "비용 반영 손익비 또는 가격 조건 미충족": 1
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10281.894294384905,
+                "maxDrawdown": 0.02128163709670383,
+                "sessions": 63,
+                "return": 0.028189429438490565
+              },
+              "2018": {
+                "start": 10281.894294384905,
+                "end": 10047.45156975828,
+                "maxDrawdown": 0.12009605579914595,
+                "sessions": 251,
+                "return": -0.022801510880602893
+              },
+              "2019": {
+                "start": 10047.45156975828,
+                "end": 10944.55486946363,
+                "maxDrawdown": 0.07585035980895471,
+                "sessions": 252,
+                "return": 0.08928665079665898
+              },
+              "2020": {
+                "start": 10944.55486946363,
+                "end": 11857.551106682251,
+                "maxDrawdown": 0.11351814681267502,
+                "sessions": 253,
+                "return": 0.08342013431409323
+              },
+              "2021": {
+                "start": 11857.551106682251,
+                "end": 12546.645245137262,
+                "maxDrawdown": 0.09507881066474022,
+                "sessions": 252,
+                "return": 0.05811437220512383
+              },
+              "2022": {
+                "start": 12546.645245137262,
+                "end": 10658.93861482635,
+                "maxDrawdown": 0.21001716491244604,
+                "sessions": 251,
+                "return": -0.1504550892632066
+              },
+              "2023": {
+                "start": 10658.93861482635,
+                "end": 10894.516836294682,
+                "maxDrawdown": 0.14397324356876573,
+                "sessions": 250,
+                "return": 0.02210147088572678
+              },
+              "2024": {
+                "start": 10894.516836294682,
+                "end": 12490.151476173996,
+                "maxDrawdown": 0.09083035392310435,
+                "sessions": 252,
+                "return": 0.14646217577667286
+              },
+              "2025": {
+                "start": 12490.151476173996,
+                "end": 11144.95831730541,
+                "maxDrawdown": 0.20597748111667546,
+                "sessions": 250,
+                "return": -0.10770030783330797
+              },
+              "2026": {
+                "start": 11144.95831730541,
+                "end": 10040.983728117548,
+                "maxDrawdown": 0.16048377697444494,
+                "sessions": 189,
+                "return": -0.099055963939646
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 9067.789992379265,
+            "cagr": -0.010813981652883942,
+            "maxDrawdown": 0.27957644088017586,
+            "meanExposure": 0.8449673574209443,
+            "entries": 446,
+            "closedTrades": 443,
+            "winRate": 0.2866817155756208,
+            "profitFactor": 0.9612312591555446,
+            "fees": 1673.6450282811297,
+            "slippage": 1673.6432865754764,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1530.839807555298
+            },
+            "topIssuerProfitShare": null,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 81,
+              "포지션 한도": 4769,
+              "동일 업종 2종목 한도": 111,
+              "비용 반영 손익비 또는 가격 조건 미충족": 5,
+              "가상 자본 또는 최소 수량 부족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10241.741647083789,
+                "maxDrawdown": 0.02085300007374913,
+                "sessions": 63,
+                "return": 0.024174164708378854
+              },
+              "2018": {
+                "start": 10241.741647083789,
+                "end": 9839.381636571165,
+                "maxDrawdown": 0.12430297387481648,
+                "sessions": 251,
+                "return": -0.03928628785780697
+              },
+              "2019": {
+                "start": 9839.381636571165,
+                "end": 10550.59812788058,
+                "maxDrawdown": 0.08055981274878332,
+                "sessions": 252,
+                "return": 0.07228264108243909
+              },
+              "2020": {
+                "start": 10550.59812788058,
+                "end": 11289.538007238523,
+                "maxDrawdown": 0.11423797716491335,
+                "sessions": 253,
+                "return": 0.07003772396611829
+              },
+              "2021": {
+                "start": 11289.538007238523,
+                "end": 11787.507528727432,
+                "maxDrawdown": 0.11347491218702332,
+                "sessions": 252,
+                "return": 0.04410893706807362
+              },
+              "2022": {
+                "start": 11787.507528727432,
+                "end": 9847.650365767475,
+                "maxDrawdown": 0.22084816811191532,
+                "sessions": 251,
+                "return": -0.16456890129082125
+              },
+              "2023": {
+                "start": 9847.650365767475,
+                "end": 9914.696117225873,
+                "maxDrawdown": 0.150706358409593,
+                "sessions": 250,
+                "return": 0.006808299337216717
+              },
+              "2024": {
+                "start": 9914.696117225873,
+                "end": 11262.944060701633,
+                "maxDrawdown": 0.09291212612509792,
+                "sessions": 252,
+                "return": 0.13598479746981895
+              },
+              "2025": {
+                "start": 11262.944060701633,
+                "end": 9985.128881873456,
+                "maxDrawdown": 0.21052423227431083,
+                "sessions": 250,
+                "return": -0.11345303429914888
+              },
+              "2026": {
+                "start": 9985.128881873456,
+                "end": 9076.116047117974,
+                "maxDrawdown": 0.22908808154158022,
+                "sessions": 189,
+                "return": -0.09103666517571563
+              }
+            }
+          }
+        ]
+      },
+      "combined": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 207,
+          "meanActualBuy": 2.547945205479452
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.003358134160066833,
+              "medianNet": 0.005390456913991093,
+              "p10Net": -0.08218460121298221,
+              "meanExcess": -0.005214917792213721,
+              "dateBalancedNet": 0.0033581341600668413,
+              "dateBalancedExcess": -0.005214917792213725,
+              "dateBalancedAvoidance": -0.005361493133760247,
+              "downsidePrecision": 0.44598008619408575,
+              "meanAdverse": -0.054987316231162486,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.023813946986406126,
+              "medianNet": 0.018227992804056736,
+              "p10Net": -0.12914870010022714,
+              "meanExcess": -0.007688769026493376,
+              "dateBalancedNet": 0.02381394698640606,
+              "dateBalancedExcess": -0.007688769026493362,
+              "dateBalancedAvoidance": -0.02583776688687914,
+              "downsidePrecision": 0.4210606060606062,
+              "meanAdverse": -0.09355437045714642,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.00913773267984404,
+              "medianNet": 0.00568890345245443,
+              "p10Net": -0.09996919728045404,
+              "meanExcess": 0.0005621942139406314,
+              "dateBalancedNet": 0.009125600434532784,
+              "dateBalancedExcess": 0.000552548482252237,
+              "dateBalancedAvoidance": -0.011134728316367245,
+              "downsidePrecision": 0.46084113538415866,
+              "meanAdverse": -0.06847457748188664,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.03988919549111245,
+              "medianNet": 0.0312346013116922,
+              "p10Net": -0.159744151751629,
+              "meanExcess": 0.008383187403366053,
+              "dateBalancedNet": 0.0398723645645694,
+              "dateBalancedExcess": 0.008369648551669936,
+              "dateBalancedAvoidance": -0.041912246897224906,
+              "downsidePrecision": 0.40469696969697105,
+              "meanAdverse": -0.11492888821721166,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 11432.007053330211,
+            "cagr": 0.01498123440241228,
+            "maxDrawdown": 0.30601914956263276,
+            "meanExposure": 0.8483724310794294,
+            "entries": 436,
+            "closedTrades": 432,
+            "winRate": 0.30324074074074076,
+            "profitFactor": 1.0343050334693176,
+            "fees": 918.6299012095093,
+            "slippage": 918.6289942714371,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1780.4557743454973
+            },
+            "topIssuerProfitShare": 1.2433289139218617,
+            "rejections": {
+              "동일 업종 2종목 한도": 131,
+              "포지션 한도": 4830,
+              "신호 가격에서 0.5 ATR 이상 이탈": 87,
+              "가상 자본 또는 최소 수량 부족": 4,
+              "비용 반영 손익비 또는 가격 조건 미충족": 1
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10563.032810714794,
+                "maxDrawdown": 0.09934933325389861,
+                "sessions": 63,
+                "return": 0.056303281071479416
+              },
+              "2018": {
+                "start": 10563.032810714794,
+                "end": 9945.359205254157,
+                "maxDrawdown": 0.14144447968668405,
+                "sessions": 251,
+                "return": -0.05847502478966926
+              },
+              "2019": {
+                "start": 9945.359205254157,
+                "end": 11303.189121402214,
+                "maxDrawdown": 0.07815426946990278,
+                "sessions": 252,
+                "return": 0.13652899690447695
+              },
+              "2020": {
+                "start": 11303.189121402214,
+                "end": 12272.939449140045,
+                "maxDrawdown": 0.11289386713626337,
+                "sessions": 253,
+                "return": 0.08579439990981319
+              },
+              "2021": {
+                "start": 12272.939449140045,
+                "end": 12932.511361674015,
+                "maxDrawdown": 0.10223019730298533,
+                "sessions": 252,
+                "return": 0.053741967461607976
+              },
+              "2022": {
+                "start": 12932.511361674015,
+                "end": 11391.487013678796,
+                "maxDrawdown": 0.21697584147196125,
+                "sessions": 251,
+                "return": -0.1191589402010581
+              },
+              "2023": {
+                "start": 11391.487013678796,
+                "end": 11730.554454442268,
+                "maxDrawdown": 0.1038909777894208,
+                "sessions": 250,
+                "return": 0.029764985059134386
+              },
+              "2024": {
+                "start": 11730.554454442268,
+                "end": 13362.867080449727,
+                "maxDrawdown": 0.07557918058965996,
+                "sessions": 252,
+                "return": 0.13915050924036376
+              },
+              "2025": {
+                "start": 13362.867080449727,
+                "end": 12399.953613329275,
+                "maxDrawdown": 0.20090072112476998,
+                "sessions": 250,
+                "return": -0.07205889734016913
+              },
+              "2026": {
+                "start": 12399.953613329275,
+                "end": 11438.909247363636,
+                "maxDrawdown": 0.2137792621550817,
+                "sessions": 189,
+                "return": -0.07750386783161589
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 9891.438121944748,
+            "cagr": -0.0012120955990102544,
+            "maxDrawdown": 0.32064980870849646,
+            "meanExposure": 0.8361599831232688,
+            "entries": 437,
+            "closedTrades": 433,
+            "winRate": 0.2979214780600462,
+            "profitFactor": 0.9746009538632959,
+            "fees": 1694.9959591789604,
+            "slippage": 1694.9931472411267,
+            "openPositions": 4,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1600.4234351714479
+            },
+            "topIssuerProfitShare": null,
+            "rejections": {
+              "동일 업종 2종목 한도": 131,
+              "포지션 한도": 4829,
+              "신호 가격에서 0.5 ATR 이상 이탈": 87,
+              "가상 자본 또는 최소 수량 부족": 5,
+              "비용 반영 손익비 또는 가격 조건 미충족": 2
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10493.194537721161,
+                "maxDrawdown": 0.10010457852052246,
+                "sessions": 63,
+                "return": 0.04931945377211622
+              },
+              "2018": {
+                "start": 10493.194537721161,
+                "end": 9712.985193812201,
+                "maxDrawdown": 0.14713789083087514,
+                "sessions": 251,
+                "return": -0.07435384344626861
+              },
+              "2019": {
+                "start": 9712.985193812201,
+                "end": 10931.569167983183,
+                "maxDrawdown": 0.08236815522743923,
+                "sessions": 252,
+                "return": 0.12545926405275476
+              },
+              "2020": {
+                "start": 10931.569167983183,
+                "end": 11740.9072461492,
+                "maxDrawdown": 0.11398366144479,
+                "sessions": 253,
+                "return": 0.07403677054310176
+              },
+              "2021": {
+                "start": 11740.9072461492,
+                "end": 12225.123125879603,
+                "maxDrawdown": 0.10437685190111645,
+                "sessions": 252,
+                "return": 0.04124177711132315
+              },
+              "2022": {
+                "start": 12225.123125879603,
+                "end": 10589.349893364808,
+                "maxDrawdown": 0.22407027226608656,
+                "sessions": 251,
+                "return": -0.1338042337628481
+              },
+              "2023": {
+                "start": 10589.349893364808,
+                "end": 10664.642107225332,
+                "maxDrawdown": 0.11515945920118276,
+                "sessions": 250,
+                "return": 0.007110182836408407
+              },
+              "2024": {
+                "start": 10664.642107225332,
+                "end": 12035.87076090132,
+                "maxDrawdown": 0.0772273682015957,
+                "sessions": 252,
+                "return": 0.12857709052861477
+              },
+              "2025": {
+                "start": 12035.87076090132,
+                "end": 10924.34833699584,
+                "maxDrawdown": 0.21062494591735714,
+                "sessions": 250,
+                "return": -0.09235081083757357
+              },
+              "2026": {
+                "start": 10924.34833699584,
+                "end": 9903.64315638939,
+                "maxDrawdown": 0.220108277854151,
+                "sessions": 189,
+                "return": -0.09343396504025614
+              }
+            }
+          }
+        ]
+      }
+    },
+    "watch": {
+      "baseline": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 428,
+          "meanActualBuy": 2.1559876270437472
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.006240772431397475,
+              "medianNet": 0.006210292814047058,
+              "p10Net": -0.0824519086861011,
+              "meanExcess": -0.002332279520883084,
+              "dateBalancedNet": 0.006240772431397464,
+              "dateBalancedExcess": -0.0023322795208830824,
+              "dateBalancedAvoidance": -0.008247014764021787,
+              "downsidePrecision": 0.44850646455639837,
+              "meanAdverse": -0.057110996937042253,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.03189442725838207,
+              "medianNet": 0.022341238465526603,
+              "p10Net": -0.13017320382905134,
+              "meanExcess": 0.000391711245482737,
+              "dateBalancedNet": 0.03189442725838223,
+              "dateBalancedExcess": 0.0003917112454827162,
+              "dateBalancedAvoidance": -0.033926329659247106,
+              "downsidePrecision": 0.416212121212122,
+              "meanAdverse": -0.09758192954296993,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6727,
+              "signalDates": 2243,
+              "meanNet": 0.011454615793499011,
+              "medianNet": 0.008970321130146397,
+              "p10Net": -0.11973076893507936,
+              "meanExcess": 0.0028849262522683077,
+              "dateBalancedNet": 0.011452231483749277,
+              "dateBalancedExcess": 0.0028791795314687236,
+              "dateBalancedAvoidance": -0.013463686578290716,
+              "downsidePrecision": 0.4490266012780503,
+              "meanAdverse": -0.07600826403261685,
+              "excluded": {
+                "missingSession": 2,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6598,
+              "signalDates": 2200,
+              "meanNet": 0.051430558026917525,
+              "medianNet": 0.03147312042616768,
+              "p10Net": -0.17548276565690563,
+              "meanExcess": 0.019930829335709235,
+              "dateBalancedNet": 0.051408569419434176,
+              "dateBalancedExcess": 0.019905853406534696,
+              "dateBalancedAvoidance": -0.05345999084099582,
+              "downsidePrecision": 0.41325757575757704,
+              "meanAdverse": -0.12750779863678308,
+              "excluded": {
+                "missingSession": 2,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 12281.7873662505,
+            "cagr": 0.02309954101799394,
+            "maxDrawdown": 0.22952996959255867,
+            "meanExposure": 0.841210227505994,
+            "entries": 380,
+            "closedTrades": 377,
+            "winRate": 0.29973474801061006,
+            "profitFactor": 1.1052445630971173,
+            "fees": 749.8985119403,
+            "slippage": 749.8977841056064,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1536.0794915921938
+            },
+            "topIssuerProfitShare": 0.673191338646214,
+            "rejections": {
+              "포지션 한도": 3981,
+              "동일 업종 2종목 한도": 72,
+              "신호 가격에서 0.5 ATR 이상 이탈": 49,
+              "가상 자본 또는 최소 수량 부족": 6
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9823.362943221418,
+                "maxDrawdown": 0.06372738935087074,
+                "sessions": 63,
+                "return": -0.017663705677858133
+              },
+              "2018": {
+                "start": 9823.362943221418,
+                "end": 8939.17015935108,
+                "maxDrawdown": 0.14473684282611332,
+                "sessions": 251,
+                "return": -0.09000917394388575
+              },
+              "2019": {
+                "start": 8939.17015935108,
+                "end": 10822.30731213071,
+                "maxDrawdown": 0.08704726508702643,
+                "sessions": 252,
+                "return": 0.21066129396918543
+              },
+              "2020": {
+                "start": 10822.30731213071,
+                "end": 9596.265213357488,
+                "maxDrawdown": 0.16354439644929142,
+                "sessions": 253,
+                "return": -0.1132884202427843
+              },
+              "2021": {
+                "start": 9596.265213357488,
+                "end": 11000.064371538076,
+                "maxDrawdown": 0.11272173523065498,
+                "sessions": 252,
+                "return": 0.14628599011900723
+              },
+              "2022": {
+                "start": 11000.064371538076,
+                "end": 10502.857396364627,
+                "maxDrawdown": 0.16180568829101583,
+                "sessions": 251,
+                "return": -0.04520036959601237
+              },
+              "2023": {
+                "start": 10502.857396364627,
+                "end": 10237.012458787649,
+                "maxDrawdown": 0.14157687742284597,
+                "sessions": 250,
+                "return": -0.025311677341158134
+              },
+              "2024": {
+                "start": 10237.012458787649,
+                "end": 13105.626011705153,
+                "maxDrawdown": 0.07977789453861273,
+                "sessions": 252,
+                "return": 0.2802197969833504
+              },
+              "2025": {
+                "start": 13105.626011705153,
+                "end": 12607.921142261048,
+                "maxDrawdown": 0.15024731389268708,
+                "sessions": 250,
+                "return": -0.037976428520055894
+              },
+              "2026": {
+                "start": 12607.921142261048,
+                "end": 12288.485311401639,
+                "maxDrawdown": 0.14722559959357107,
+                "sessions": 189,
+                "return": -0.025336122208813427
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 10322.89123581095,
+            "cagr": 0.0035371950424221144,
+            "maxDrawdown": 0.24983900699622275,
+            "meanExposure": 0.8349074415648851,
+            "entries": 380,
+            "closedTrades": 377,
+            "winRate": 0.2917771883289125,
+            "profitFactor": 1.0113674842080287,
+            "fees": 1370.110982215286,
+            "slippage": 1370.1082311215002,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1356.8807385149232
+            },
+            "topIssuerProfitShare": 4.202284199839244,
+            "rejections": {
+              "포지션 한도": 3981,
+              "동일 업종 2종목 한도": 72,
+              "신호 가격에서 0.5 ATR 이상 이탈": 49,
+              "가상 자본 또는 최소 수량 부족": 6
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9761.481563817006,
+                "maxDrawdown": 0.06543911264296698,
+                "sessions": 63,
+                "return": -0.023851843618299395
+              },
+              "2018": {
+                "start": 9761.481563817006,
+                "end": 8691.358241986058,
+                "maxDrawdown": 0.16275935270988418,
+                "sessions": 251,
+                "return": -0.10962714162136888
+              },
+              "2019": {
+                "start": 8691.358241986058,
+                "end": 10328.985051519228,
+                "maxDrawdown": 0.08901752104061056,
+                "sessions": 252,
+                "return": 0.1884201253633928
+              },
+              "2020": {
+                "start": 10328.985051519228,
+                "end": 9049.341478139686,
+                "maxDrawdown": 0.1669687378395246,
+                "sessions": 253,
+                "return": -0.12388860735076068
+              },
+              "2021": {
+                "start": 9049.341478139686,
+                "end": 10197.157642566923,
+                "maxDrawdown": 0.11412760152560653,
+                "sessions": 252,
+                "return": 0.1268397448808838
+              },
+              "2022": {
+                "start": 10197.157642566923,
+                "end": 9597.577420628766,
+                "maxDrawdown": 0.16910926775441326,
+                "sessions": 251,
+                "return": -0.05879875970881088
+              },
+              "2023": {
+                "start": 9597.577420628766,
+                "end": 9143.519753149305,
+                "maxDrawdown": 0.1509890425910112,
+                "sessions": 250,
+                "return": -0.04730961237192233
+              },
+              "2024": {
+                "start": 9143.519753149305,
+                "end": 11454.87042765224,
+                "maxDrawdown": 0.08141280711882493,
+                "sessions": 252,
+                "return": 0.25278565988845125
+              },
+              "2025": {
+                "start": 11454.87042765224,
+                "end": 10744.951744907601,
+                "maxDrawdown": 0.16995716619589296,
+                "sessions": 250,
+                "return": -0.06197526957885824
+              },
+              "2026": {
+                "start": 10744.951744907601,
+                "end": 10334.537110034156,
+                "maxDrawdown": 0.1481942120134353,
+                "sessions": 189,
+                "return": -0.03819604262699028
+              }
+            }
+          }
+        ]
+      },
+      "tie_price_risk": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 428,
+          "meanActualBuy": 2.1559876270437472
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.007560460298712737,
+              "medianNet": 0.0068918250639322665,
+              "p10Net": -0.07985631795829273,
+              "meanExcess": -0.0010125916535678177,
+              "dateBalancedNet": 0.007560460298712726,
+              "dateBalancedExcess": -0.001012591653567813,
+              "dateBalancedAvoidance": -0.009568022649126352,
+              "downsidePrecision": 0.44375092881557454,
+              "meanAdverse": -0.055907957283993864,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.034068297226229546,
+              "medianNet": 0.023164414091407348,
+              "p10Net": -0.1274421845851376,
+              "meanExcess": 0.002571848281670735,
+              "dateBalancedNet": 0.03407432540417169,
+              "dateBalancedExcess": 0.0025716093912722397,
+              "dateBalancedAvoidance": -0.036108408248156934,
+              "downsidePrecision": 0.4090909090909102,
+              "meanAdverse": -0.09595709228982223,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6726,
+              "signalDates": 2243,
+              "meanNet": 0.012131143941497674,
+              "medianNet": 0.008325094787654752,
+              "p10Net": -0.11897146313348939,
+              "meanExcess": 0.0035589676471828643,
+              "dateBalancedNet": 0.012135180262791945,
+              "dateBalancedExcess": 0.0035621283105113873,
+              "dateBalancedAvoidance": -0.014147318476849606,
+              "downsidePrecision": 0.4543765789864759,
+              "meanAdverse": -0.0768957818532985,
+              "excluded": {
+                "missingSession": 3,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6597,
+              "signalDates": 2200,
+              "meanNet": 0.05228985795120255,
+              "medianNet": 0.033582929598068745,
+              "p10Net": -0.18003758940981598,
+              "meanExcess": 0.020786836639925636,
+              "dateBalancedNet": 0.052250785771048976,
+              "dateBalancedExcess": 0.02074806975814955,
+              "dateBalancedAvoidance": -0.05430304961951635,
+              "downsidePrecision": 0.40810606060606225,
+              "meanAdverse": -0.1284709263971821,
+              "excluded": {
+                "missingSession": 3,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 14162.027142825933,
+            "cagr": 0.03942128795627653,
+            "maxDrawdown": 0.2047166242058277,
+            "meanExposure": 0.8479873860198768,
+            "entries": 368,
+            "closedTrades": 365,
+            "winRate": 0.3041095890410959,
+            "profitFactor": 1.1768437017139355,
+            "fees": 849.851720779876,
+            "slippage": 849.851214522958,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1850.2775694178697
+            },
+            "topIssuerProfitShare": 0.44456162968739515,
+            "rejections": {
+              "포지션 한도": 3988,
+              "신호 가격에서 0.5 ATR 이상 이탈": 51,
+              "동일 업종 2종목 한도": 69,
+              "가상 자본 또는 최소 수량 부족": 7
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9913.103033003235,
+                "maxDrawdown": 0.03926905745158016,
+                "sessions": 63,
+                "return": -0.008689696699676452
+              },
+              "2018": {
+                "start": 9913.103033003235,
+                "end": 9565.23838895077,
+                "maxDrawdown": 0.12818202170093107,
+                "sessions": 251,
+                "return": -0.03509139801072747
+              },
+              "2019": {
+                "start": 9565.23838895077,
+                "end": 11671.927507278537,
+                "maxDrawdown": 0.08824667342391013,
+                "sessions": 252,
+                "return": 0.22024428797940865
+              },
+              "2020": {
+                "start": 11671.927507278537,
+                "end": 10579.985287984742,
+                "maxDrawdown": 0.15874792915603408,
+                "sessions": 253,
+                "return": -0.09355286165141674
+              },
+              "2021": {
+                "start": 10579.985287984742,
+                "end": 13249.138618301564,
+                "maxDrawdown": 0.08967955099539981,
+                "sessions": 252,
+                "return": 0.25228327428281694
+              },
+              "2022": {
+                "start": 13249.138618301564,
+                "end": 12697.110384191526,
+                "maxDrawdown": 0.16438282431823503,
+                "sessions": 251,
+                "return": -0.04166521688794911
+              },
+              "2023": {
+                "start": 12697.110384191526,
+                "end": 12269.043939228262,
+                "maxDrawdown": 0.14215485433028885,
+                "sessions": 250,
+                "return": -0.033713690124032136
+              },
+              "2024": {
+                "start": 12269.043939228262,
+                "end": 15284.379823294821,
+                "maxDrawdown": 0.09820267930812054,
+                "sessions": 252,
+                "return": 0.24576779568174145
+              },
+              "2025": {
+                "start": 15284.379823294821,
+                "end": 15048.336459599815,
+                "maxDrawdown": 0.16364561938531785,
+                "sessions": 250,
+                "return": -0.015443437445545105
+              },
+              "2026": {
+                "start": 15048.336459599815,
+                "end": 14169.91981921835,
+                "maxDrawdown": 0.12194340750792931,
+                "sessions": 189,
+                "return": -0.05837300639441079
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 12484.832538875758,
+            "cagr": 0.024965207290557068,
+            "maxDrawdown": 0.22477511689417673,
+            "meanExposure": 0.8438352350520757,
+            "entries": 368,
+            "closedTrades": 365,
+            "winRate": 0.29863013698630136,
+            "profitFactor": 1.106683479200598,
+            "fees": 1574.754429705856,
+            "slippage": 1574.7533778186012,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "NRG",
+              "net": 1704.7988765956727
+            },
+            "topIssuerProfitShare": 0.686081999460211,
+            "rejections": {
+              "포지션 한도": 3988,
+              "신호 가격에서 0.5 ATR 이상 이탈": 51,
+              "동일 업종 2종목 한도": 69,
+              "가상 자본 또는 최소 수량 부족": 7
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9860.001804880934,
+                "maxDrawdown": 0.03968952533109871,
+                "sessions": 63,
+                "return": -0.013999819511906542
+              },
+              "2018": {
+                "start": 9860.001804880934,
+                "end": 9347.156076824576,
+                "maxDrawdown": 0.13453541893252274,
+                "sessions": 251,
+                "return": -0.052012741803200035
+              },
+              "2019": {
+                "start": 9347.156076824576,
+                "end": 11314.74177433123,
+                "maxDrawdown": 0.09145085115439933,
+                "sessions": 252,
+                "return": 0.21050099959121304
+              },
+              "2020": {
+                "start": 11314.74177433123,
+                "end": 10138.491432984347,
+                "maxDrawdown": 0.16181100304781304,
+                "sessions": 253,
+                "return": -0.10395732972142069
+              },
+              "2021": {
+                "start": 10138.491432984347,
+                "end": 12539.675063316872,
+                "maxDrawdown": 0.08944301268179722,
+                "sessions": 252,
+                "return": 0.23683835472016734
+              },
+              "2022": {
+                "start": 12539.675063316872,
+                "end": 11772.230854004772,
+                "maxDrawdown": 0.17092908845561183,
+                "sessions": 251,
+                "return": -0.06120128356093968
+              },
+              "2023": {
+                "start": 11772.230854004772,
+                "end": 11148.294524007651,
+                "maxDrawdown": 0.14744264423779563,
+                "sessions": 250,
+                "return": -0.0530006876126512
+              },
+              "2024": {
+                "start": 11148.294524007651,
+                "end": 13820.864266230677,
+                "maxDrawdown": 0.10096230461710665,
+                "sessions": 252,
+                "return": 0.23972902191162015
+              },
+              "2025": {
+                "start": 13820.864266230677,
+                "end": 13345.397784751185,
+                "maxDrawdown": 0.1755483975828943,
+                "sessions": 250,
+                "return": -0.034402080240468536
+              },
+              "2026": {
+                "start": 13345.397784751185,
+                "end": 12498.225079368007,
+                "maxDrawdown": 0.11863000141411506,
+                "sessions": 189,
+                "return": -0.06348051358582818
+              }
+            }
+          }
+        ]
+      },
+      "price_risk": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 428,
+          "meanActualBuy": 2.1559876270437472
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.002565017023239909,
+              "medianNet": 0.00563680162312874,
+              "p10Net": -0.0682552196449564,
+              "meanExcess": -0.006008034929040641,
+              "dateBalancedNet": 0.0025650170232399197,
+              "dateBalancedExcess": -0.006008034929040634,
+              "dateBalancedAvoidance": -0.004567582681517206,
+              "downsidePrecision": 0.44033288750185773,
+              "meanAdverse": -0.047153050405205024,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.017407028581519032,
+              "medianNet": 0.018439191673048194,
+              "p10Net": -0.10927597085345486,
+              "meanExcess": -0.014095687431380418,
+              "dateBalancedNet": 0.017407028581519043,
+              "dateBalancedExcess": -0.014095687431380403,
+              "dateBalancedAvoidance": -0.019424439961857512,
+              "downsidePrecision": 0.4092424242424246,
+              "meanAdverse": -0.08044089247773577,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.008685231525297618,
+              "medianNet": 0.005024652219622783,
+              "p10Net": -0.10208471348237139,
+              "meanExcess": 0.00010969305939422213,
+              "dateBalancedNet": 0.008673166526405537,
+              "dateBalancedExcess": 0.00010011457412495705,
+              "dateBalancedAvoidance": -0.010681841861223378,
+              "downsidePrecision": 0.46351612423837096,
+              "meanAdverse": -0.07025056907522682,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.03944406692886256,
+              "medianNet": 0.026664140050018048,
+              "p10Net": -0.1614460474996098,
+              "meanExcess": 0.007938058841116102,
+              "dateBalancedNet": 0.03942730344604099,
+              "dateBalancedExcess": 0.007924587433141518,
+              "dateBalancedAvoidance": -0.041466740606312794,
+              "downsidePrecision": 0.41909090909090985,
+              "meanAdverse": -0.11781054858343395,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 13665.574856540154,
+            "cagr": 0.03530824286172152,
+            "maxDrawdown": 0.2987800545689331,
+            "meanExposure": 0.8495941128543879,
+            "entries": 375,
+            "closedTrades": 373,
+            "winRate": 0.32439678284182305,
+            "profitFactor": 1.153397448281724,
+            "fees": 1014.261922276114,
+            "slippage": 1014.2620252422472,
+            "openPositions": 2,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "AAPL",
+              "net": 841.6432258169596
+            },
+            "topIssuerProfitShare": 0.22960743096414787,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 45,
+              "포지션 한도": 3948,
+              "동일 업종 2종목 한도": 66,
+              "가상 자본 또는 최소 수량 부족": 2
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10226.756515734089,
+                "maxDrawdown": 0.01669228610002116,
+                "sessions": 63,
+                "return": 0.022675651573408784
+              },
+              "2018": {
+                "start": 10226.756515734089,
+                "end": 10226.404402474014,
+                "maxDrawdown": 0.10021270551506911,
+                "sessions": 251,
+                "return": -0.00003443058994634374
+              },
+              "2019": {
+                "start": 10226.404402474014,
+                "end": 12745.70765083621,
+                "maxDrawdown": 0.09021006397715114,
+                "sessions": 252,
+                "return": 0.24635278923183557
+              },
+              "2020": {
+                "start": 12745.70765083621,
+                "end": 13401.16528308315,
+                "maxDrawdown": 0.13732887924429837,
+                "sessions": 253,
+                "return": 0.05142575447381592
+              },
+              "2021": {
+                "start": 13401.16528308315,
+                "end": 15833.864837175077,
+                "maxDrawdown": 0.08885738565217127,
+                "sessions": 252,
+                "return": 0.1815289568260774
+              },
+              "2022": {
+                "start": 15833.864837175077,
+                "end": 15469.911571233977,
+                "maxDrawdown": 0.1802346841004766,
+                "sessions": 251,
+                "return": -0.022985750458511145
+              },
+              "2023": {
+                "start": 15469.911571233977,
+                "end": 15341.041240563078,
+                "maxDrawdown": 0.10329253830999985,
+                "sessions": 250,
+                "return": -0.008330385734753087
+              },
+              "2024": {
+                "start": 15341.041240563078,
+                "end": 17358.41107638174,
+                "maxDrawdown": 0.06228867751015843,
+                "sessions": 252,
+                "return": 0.13150149355472407
+              },
+              "2025": {
+                "start": 17358.41107638174,
+                "end": 15505.43744609084,
+                "maxDrawdown": 0.22467359427494604,
+                "sessions": 250,
+                "return": -0.1067478827490207
+              },
+              "2026": {
+                "start": 15505.43744609084,
+                "end": 13670.861054679679,
+                "maxDrawdown": 0.15478616191938743,
+                "sessions": 189,
+                "return": -0.11831826079010022
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 12007.574236834573,
+            "cagr": 0.020535951169717848,
+            "maxDrawdown": 0.313253031232253,
+            "meanExposure": 0.8407454807155708,
+            "entries": 375,
+            "closedTrades": 373,
+            "winRate": 0.3163538873994638,
+            "profitFactor": 1.0850779608949312,
+            "fees": 1867.4459476500715,
+            "slippage": 1867.4473995315846,
+            "openPositions": 2,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "SBAC",
+              "net": 818.8319021036685
+            },
+            "topIssuerProfitShare": 0.4078712941618316,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 45,
+              "포지션 한도": 3948,
+              "동일 업종 2종목 한도": 66,
+              "가상 자본 또는 최소 수량 부족": 2
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10189.090790465425,
+                "maxDrawdown": 0.017934024423265194,
+                "sessions": 63,
+                "return": 0.018909079046542487
+              },
+              "2018": {
+                "start": 10189.090790465425,
+                "end": 10049.534367057327,
+                "maxDrawdown": 0.10577005267613437,
+                "sessions": 251,
+                "return": -0.013696651279100358
+              },
+              "2019": {
+                "start": 10049.534367057327,
+                "end": 12404.665463504018,
+                "maxDrawdown": 0.09363050864082667,
+                "sessions": 252,
+                "return": 0.23435226055516356
+              },
+              "2020": {
+                "start": 12404.665463504018,
+                "end": 12866.16584403779,
+                "maxDrawdown": 0.14153628830550902,
+                "sessions": 253,
+                "return": 0.037203774812917034
+              },
+              "2021": {
+                "start": 12866.16584403779,
+                "end": 14994.5438598346,
+                "maxDrawdown": 0.0909182765518064,
+                "sessions": 252,
+                "return": 0.16542441948881814
+              },
+              "2022": {
+                "start": 14994.5438598346,
+                "end": 14372.01073768282,
+                "maxDrawdown": 0.18761044956608286,
+                "sessions": 251,
+                "return": -0.04151730976087509
+              },
+              "2023": {
+                "start": 14372.01073768282,
+                "end": 13958.308255261654,
+                "maxDrawdown": 0.1075218784467229,
+                "sessions": 250,
+                "return": -0.028785288987883573
+              },
+              "2024": {
+                "start": 13958.308255261654,
+                "end": 15630.482540242945,
+                "maxDrawdown": 0.06356269158877614,
+                "sessions": 252,
+                "return": 0.11979777594831065
+              },
+              "2025": {
+                "start": 15630.482540242945,
+                "end": 13804.454975455103,
+                "maxDrawdown": 0.2301451689415257,
+                "sessions": 250,
+                "return": -0.11682477236940503
+              },
+              "2026": {
+                "start": 13804.454975455103,
+                "end": 12016.168297700937,
+                "maxDrawdown": 0.16293366895429906,
+                "sessions": 189,
+                "return": -0.12954417113416028
+              }
+            }
+          }
+        ]
+      },
+      "volume": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 428,
+          "meanActualBuy": 2.1559876270437472
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.003695842879524094,
+              "medianNet": 0.006300506577153975,
+              "p10Net": -0.07375063668338863,
+              "meanExcess": -0.004877209072756453,
+              "dateBalancedNet": 0.0036958428795241115,
+              "dateBalancedExcess": -0.004877209072756463,
+              "dateBalancedAvoidance": -0.005699539646364132,
+              "downsidePrecision": 0.4373606776638438,
+              "meanAdverse": -0.051283607698982735,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.021899009693707398,
+              "medianNet": 0.019211625960497858,
+              "p10Net": -0.1188176981198906,
+              "meanExcess": -0.009603706319192027,
+              "dateBalancedNet": 0.021899009693707436,
+              "dateBalancedExcess": -0.009603706319192027,
+              "dateBalancedAvoidance": -0.023920914178153382,
+              "downsidePrecision": 0.4103030303030307,
+              "meanAdverse": -0.08705171030713686,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.008903544385275554,
+              "medianNet": 0.005088683280924489,
+              "p10Net": -0.10262339653187741,
+              "meanExcess": 0.0003280059193721569,
+              "dateBalancedNet": 0.008891446942801933,
+              "dateBalancedExcess": 0.00031839499052140324,
+              "dateBalancedAvoidance": -0.010900340612606309,
+              "downsidePrecision": 0.46529945014118074,
+              "meanAdverse": -0.07042366857424229,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.04070668820536454,
+              "medianNet": 0.028789907127078518,
+              "p10Net": -0.16096847280743581,
+              "meanExcess": 0.009200680117617991,
+              "dateBalancedNet": 0.04068973341628883,
+              "dateBalancedExcess": 0.009187017403389416,
+              "dateBalancedAvoidance": -0.042730433322138356,
+              "downsidePrecision": 0.41318181818181837,
+              "meanAdverse": -0.11748065185655791,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 12848.187537566988,
+            "cagr": 0.02823756045235548,
+            "maxDrawdown": 0.2042268129157252,
+            "meanExposure": 0.851983932972506,
+            "entries": 385,
+            "closedTrades": 384,
+            "winRate": 0.3203125,
+            "profitFactor": 1.1318347105350979,
+            "fees": 921.5949386786186,
+            "slippage": 921.5956209140252,
+            "openPositions": 1,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "IRM",
+              "net": 949.4422930894666
+            },
+            "topIssuerProfitShare": 0.3333496409792279,
+            "rejections": {
+              "동일 업종 2종목 한도": 70,
+              "가상 자본 또는 최소 수량 부족": 4,
+              "포지션 한도": 4034,
+              "신호 가격에서 0.5 ATR 이상 이탈": 59
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9871.774150835708,
+                "maxDrawdown": 0.0340970545522471,
+                "sessions": 63,
+                "return": -0.01282258491642918
+              },
+              "2018": {
+                "start": 9871.774150835708,
+                "end": 9914.026374845496,
+                "maxDrawdown": 0.09959200594955409,
+                "sessions": 251,
+                "return": 0.0042801044031393065
+              },
+              "2019": {
+                "start": 9914.026374845496,
+                "end": 12111.744849804907,
+                "maxDrawdown": 0.09251098942413383,
+                "sessions": 252,
+                "return": 0.22167769096677037
+              },
+              "2020": {
+                "start": 12111.744849804907,
+                "end": 11263.179257562113,
+                "maxDrawdown": 0.16469259805637015,
+                "sessions": 253,
+                "return": -0.07006138279543284
+              },
+              "2021": {
+                "start": 11263.179257562113,
+                "end": 13830.130687357638,
+                "maxDrawdown": 0.10107487180916608,
+                "sessions": 252,
+                "return": 0.2279064703753224
+              },
+              "2022": {
+                "start": 13830.130687357638,
+                "end": 13884.64850095205,
+                "maxDrawdown": 0.16775920407429912,
+                "sessions": 251,
+                "return": 0.003941959394805128
+              },
+              "2023": {
+                "start": 13884.64850095205,
+                "end": 13880.44733647323,
+                "maxDrawdown": 0.124380619361103,
+                "sessions": 250,
+                "return": -0.00030257622139528983
+              },
+              "2024": {
+                "start": 13880.44733647323,
+                "end": 15064.933981388389,
+                "maxDrawdown": 0.06372657301855322,
+                "sessions": 252,
+                "return": 0.08533490428674595
+              },
+              "2025": {
+                "start": 15064.933981388389,
+                "end": 13264.635093100145,
+                "maxDrawdown": 0.20392608085075725,
+                "sessions": 250,
+                "return": -0.11950260721436812
+              },
+              "2026": {
+                "start": 13264.635093100145,
+                "end": 12850.151446430376,
+                "maxDrawdown": 0.09252810331774775,
+                "sessions": 189,
+                "return": -0.031247270939655958
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 11254.041290581663,
+            "cagr": 0.013213362612816137,
+            "maxDrawdown": 0.22884784516118906,
+            "meanExposure": 0.8456839459253205,
+            "entries": 385,
+            "closedTrades": 384,
+            "winRate": 0.3151041666666667,
+            "profitFactor": 1.0603589252653085,
+            "fees": 1706.2160232344602,
+            "slippage": 1706.2187292372791,
+            "openPositions": 1,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "IRM",
+              "net": 880.4927690582587
+            },
+            "topIssuerProfitShare": 0.7021242248330268,
+            "rejections": {
+              "동일 업종 2종목 한도": 70,
+              "가상 자본 또는 최소 수량 부족": 4,
+              "포지션 한도": 4034,
+              "신호 가격에서 0.5 ATR 이상 이탈": 59
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 9838.052230656165,
+                "maxDrawdown": 0.035715891139828426,
+                "sessions": 63,
+                "return": -0.016194776934383426
+              },
+              "2018": {
+                "start": 9838.052230656165,
+                "end": 9719.321262812335,
+                "maxDrawdown": 0.10645618958282677,
+                "sessions": 251,
+                "return": -0.01206854416505898
+              },
+              "2019": {
+                "start": 9719.321262812335,
+                "end": 11721.749869405357,
+                "maxDrawdown": 0.09607269691394027,
+                "sessions": 252,
+                "return": 0.2060255600619596
+              },
+              "2020": {
+                "start": 11721.749869405357,
+                "end": 10774.005242666366,
+                "maxDrawdown": 0.16531961831504505,
+                "sessions": 253,
+                "return": -0.08085351055073065
+              },
+              "2021": {
+                "start": 10774.005242666366,
+                "end": 13174.838222272549,
+                "maxDrawdown": 0.09904850080703309,
+                "sessions": 252,
+                "return": 0.22283569810218706
+              },
+              "2022": {
+                "start": 13174.838222272549,
+                "end": 13001.90395016086,
+                "maxDrawdown": 0.17272419401328754,
+                "sessions": 251,
+                "return": -0.013126102134547346
+              },
+              "2023": {
+                "start": 13001.90395016086,
+                "end": 12724.976132195476,
+                "maxDrawdown": 0.12904391166793294,
+                "sessions": 250,
+                "return": -0.021299020437845817
+              },
+              "2024": {
+                "start": 12724.976132195476,
+                "end": 13642.009891572974,
+                "maxDrawdown": 0.0643869114352913,
+                "sessions": 252,
+                "return": 0.07206565653646368
+              },
+              "2025": {
+                "start": 13642.009891572974,
+                "end": 11809.212671925521,
+                "maxDrawdown": 0.216886158070419,
+                "sessions": 250,
+                "return": -0.13434950085907937
+              },
+              "2026": {
+                "start": 11809.212671925521,
+                "end": 11257.968126108457,
+                "maxDrawdown": 0.09968007475628438,
+                "sessions": 189,
+                "return": -0.046679195398653284
+              }
+            }
+          }
+        ]
+      },
+      "sector": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 428,
+          "meanActualBuy": 2.1559876270437472
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.0029555098783668153,
+              "medianNet": 0.004803321082325285,
+              "p10Net": -0.07366179565791972,
+              "meanExcess": -0.005617542073913744,
+              "dateBalancedNet": 0.002955509878366821,
+              "dateBalancedExcess": -0.005617542073913735,
+              "dateBalancedAvoidance": -0.004958466127122458,
+              "downsidePrecision": 0.45251894783771734,
+              "meanAdverse": -0.049376023768550124,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.019423436806470316,
+              "medianNet": 0.018431650314783332,
+              "p10Net": -0.11527726964050608,
+              "meanExcess": -0.012079279206429193,
+              "dateBalancedNet": 0.019423436806470296,
+              "dateBalancedExcess": -0.012079279206429143,
+              "dateBalancedAvoidance": -0.021442865099135785,
+              "downsidePrecision": 0.4124242424242431,
+              "meanAdverse": -0.08362196675100417,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.008589982567206127,
+              "medianNet": 0.005857727465086837,
+              "p10Net": -0.10084804164305437,
+              "meanExcess": 0.000014444101302712091,
+              "dateBalancedNet": 0.008577931723308561,
+              "dateBalancedExcess": 0.000004879771027986039,
+              "dateBalancedAvoidance": -0.010586511799514586,
+              "downsidePrecision": 0.45876058849754703,
+              "meanAdverse": -0.06880751985563772,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.03911374424996476,
+              "medianNet": 0.02847795068506387,
+              "p10Net": -0.1604590178163838,
+              "meanExcess": 0.007607736162218425,
+              "dateBalancedNet": 0.03909703081603401,
+              "dateBalancedExcess": 0.007594314803134581,
+              "dateBalancedAvoidance": -0.04113613762110758,
+              "downsidePrecision": 0.41136363636363776,
+              "meanAdverse": -0.11544113057176607,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 16659.097630965498,
+            "cagr": 0.058346274578767066,
+            "maxDrawdown": 0.25376788614619494,
+            "meanExposure": 0.8442527306368478,
+            "entries": 388,
+            "closedTrades": 385,
+            "winRate": 0.3064935064935065,
+            "profitFactor": 1.267317077665064,
+            "fees": 1005.0232987794165,
+            "slippage": 1005.0229061321011,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "VST",
+              "net": 2977.9929007592277
+            },
+            "topIssuerProfitShare": 0.44720667360563243,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 57,
+              "포지션 한도": 3943,
+              "동일 업종 2종목 한도": 106,
+              "가상 자본 또는 최소 수량 부족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10281.894294384905,
+                "maxDrawdown": 0.02128163709670383,
+                "sessions": 63,
+                "return": 0.028189429438490565
+              },
+              "2018": {
+                "start": 10281.894294384905,
+                "end": 10646.38143110265,
+                "maxDrawdown": 0.09022367958507538,
+                "sessions": 251,
+                "return": 0.03544941489203968
+              },
+              "2019": {
+                "start": 10646.38143110265,
+                "end": 12177.508303750255,
+                "maxDrawdown": 0.09755157969589323,
+                "sessions": 252,
+                "return": 0.143816646299608
+              },
+              "2020": {
+                "start": 12177.508303750255,
+                "end": 12692.747088769842,
+                "maxDrawdown": 0.12722871712524841,
+                "sessions": 253,
+                "return": 0.042310690509725246
+              },
+              "2021": {
+                "start": 12692.747088769842,
+                "end": 14090.80092800084,
+                "maxDrawdown": 0.09863017595600332,
+                "sessions": 252,
+                "return": 0.11014588327123875
+              },
+              "2022": {
+                "start": 14090.80092800084,
+                "end": 13237.264477513034,
+                "maxDrawdown": 0.1817011770184067,
+                "sessions": 251,
+                "return": -0.06057401952160735
+              },
+              "2023": {
+                "start": 13237.264477513034,
+                "end": 12278.848822271097,
+                "maxDrawdown": 0.1453598573875171,
+                "sessions": 250,
+                "return": -0.07240284855455281
+              },
+              "2024": {
+                "start": 12278.848822271097,
+                "end": 17388.413118299704,
+                "maxDrawdown": 0.10266771706290778,
+                "sessions": 252,
+                "return": 0.4161273072082292
+              },
+              "2025": {
+                "start": 17388.413118299704,
+                "end": 17167.15367084482,
+                "maxDrawdown": 0.1752301079147791,
+                "sessions": 250,
+                "return": -0.012724533627627599
+              },
+              "2026": {
+                "start": 17167.15367084482,
+                "end": 16669.3450485425,
+                "maxDrawdown": 0.12448110792842693,
+                "sessions": 189,
+                "return": -0.028997737880552377
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 13462.596941856174,
+            "cagr": 0.03358823765007024,
+            "maxDrawdown": 0.2773784212898054,
+            "meanExposure": 0.8362421921353796,
+            "entries": 388,
+            "closedTrades": 385,
+            "winRate": 0.2961038961038961,
+            "profitFactor": 1.146725592623119,
+            "fees": 1792.2637031934792,
+            "slippage": 1792.2627917677687,
+            "openPositions": 3,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "VST",
+              "net": 2539.458412530525
+            },
+            "topIssuerProfitShare": 0.73339705867389,
+            "rejections": {
+              "신호 가격에서 0.5 ATR 이상 이탈": 57,
+              "포지션 한도": 3943,
+              "동일 업종 2종목 한도": 106,
+              "가상 자본 또는 최소 수량 부족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10241.741647083789,
+                "maxDrawdown": 0.02085300007374913,
+                "sessions": 63,
+                "return": 0.024174164708378854
+              },
+              "2018": {
+                "start": 10241.741647083789,
+                "end": 10424.776228013743,
+                "maxDrawdown": 0.09596068166262939,
+                "sessions": 251,
+                "return": 0.017871431172262753
+              },
+              "2019": {
+                "start": 10424.776228013743,
+                "end": 11681.445167955373,
+                "maxDrawdown": 0.10315265743286106,
+                "sessions": 252,
+                "return": 0.12054637072829189
+              },
+              "2020": {
+                "start": 11681.445167955373,
+                "end": 11999.843758472252,
+                "maxDrawdown": 0.13153378124729354,
+                "sessions": 253,
+                "return": 0.027256780812558334
+              },
+              "2021": {
+                "start": 11999.843758472252,
+                "end": 12963.755533993553,
+                "maxDrawdown": 0.10404365757025069,
+                "sessions": 252,
+                "return": 0.08032702716156193
+              },
+              "2022": {
+                "start": 12963.755533993553,
+                "end": 11913.927718067109,
+                "maxDrawdown": 0.18819446894424985,
+                "sessions": 251,
+                "return": -0.08098176590676875
+              },
+              "2023": {
+                "start": 11913.927718067109,
+                "end": 10792.462522200898,
+                "maxDrawdown": 0.1595899814395597,
+                "sessions": 250,
+                "return": -0.09413060263623585
+              },
+              "2024": {
+                "start": 10792.462522200898,
+                "end": 14521.69868229251,
+                "maxDrawdown": 0.11128556670691114,
+                "sessions": 252,
+                "return": 0.3455408024276476
+              },
+              "2025": {
+                "start": 14521.69868229251,
+                "end": 14104.10671168938,
+                "maxDrawdown": 0.1873126200925278,
+                "sessions": 250,
+                "return": -0.028756413401714087
+              },
+              "2026": {
+                "start": 14104.10671168938,
+                "end": 13478.537947468662,
+                "maxDrawdown": 0.13329647644155385,
+                "sessions": 189,
+                "return": -0.04435366074635916
+              }
+            }
+          }
+        ]
+      },
+      "combined": {
+        "frequency": {
+          "sessions": 2263,
+          "selectedBuy": 6789,
+          "selectedSell": 6789,
+          "zeroActualBuyDays": 428,
+          "meanActualBuy": 2.1559876270437472
+        },
+        "outcomes": {
+          "buy": {
+            "20": {
+              "observations": 6729,
+              "signalDates": 2243,
+              "meanNet": 0.0035713342134761957,
+              "medianNet": 0.00542765547378754,
+              "p10Net": -0.07807195340493679,
+              "meanExcess": -0.005001717738804344,
+              "dateBalancedNet": 0.0035713342134762174,
+              "dateBalancedExcess": -0.005001717738804346,
+              "dateBalancedAvoidance": -0.005574906440523032,
+              "downsidePrecision": 0.4446425917669787,
+              "meanAdverse": -0.05282980584370378,
+              "excluded": {
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6600,
+              "signalDates": 2200,
+              "meanNet": 0.021512475130704915,
+              "medianNet": 0.017679108416501665,
+              "p10Net": -0.12364822999305262,
+              "meanExcess": -0.00999024088219452,
+              "dateBalancedNet": 0.021512475130704898,
+              "dateBalancedExcess": -0.009990240882194548,
+              "dateBalancedAvoidance": -0.023533992983954213,
+              "downsidePrecision": 0.4198484848484861,
+              "meanAdverse": -0.08998753994800505,
+              "excluded": {
+                "immature": 189
+              }
+            }
+          },
+          "sell": {
+            "20": {
+              "observations": 6728,
+              "signalDates": 2243,
+              "meanNet": 0.00913773267984404,
+              "medianNet": 0.00568890345245443,
+              "p10Net": -0.09996919728045404,
+              "meanExcess": 0.0005621942139406314,
+              "dateBalancedNet": 0.009125600434532784,
+              "dateBalancedExcess": 0.000552548482252237,
+              "dateBalancedAvoidance": -0.011134728316367245,
+              "downsidePrecision": 0.46084113538415866,
+              "meanAdverse": -0.06847457748188664,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 60
+              }
+            },
+            "63": {
+              "observations": 6599,
+              "signalDates": 2200,
+              "meanNet": 0.03988919549111245,
+              "medianNet": 0.0312346013116922,
+              "p10Net": -0.159744151751629,
+              "meanExcess": 0.008383187403366053,
+              "dateBalancedNet": 0.0398723645645694,
+              "dateBalancedExcess": 0.008369648551669936,
+              "dateBalancedAvoidance": -0.041912246897224906,
+              "downsidePrecision": 0.40469696969697105,
+              "meanAdverse": -0.11492888821721166,
+              "excluded": {
+                "missingSession": 1,
+                "immature": 189
+              }
+            }
+          }
+        },
+        "accounts": [
+          {
+            "cost": 1,
+            "initial": 10000,
+            "liquidationEquity": 11065.640375515584,
+            "cagr": 0.01131454301795487,
+            "maxDrawdown": 0.3006183018517037,
+            "meanExposure": 0.8466269142689232,
+            "entries": 392,
+            "closedTrades": 390,
+            "winRate": 0.3128205128205128,
+            "profitFactor": 1.0487883023137543,
+            "fees": 911.3386108183316,
+            "slippage": 911.3383260801344,
+            "openPositions": 2,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "SBAC",
+              "net": 823.5107910013813
+            },
+            "topIssuerProfitShare": 0.7727848999742953,
+            "rejections": {
+              "동일 업종 2종목 한도": 107,
+              "신호 가격에서 0.5 ATR 이상 이탈": 64,
+              "포지션 한도": 3987,
+              "가상 자본 또는 최소 수량 부족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10101.059364424544,
+                "maxDrawdown": 0.05586100736612676,
+                "sessions": 63,
+                "return": 0.010105936442454277
+              },
+              "2018": {
+                "start": 10101.059364424544,
+                "end": 10065.57185159618,
+                "maxDrawdown": 0.10890905625159275,
+                "sessions": 251,
+                "return": -0.0035132466356300185
+              },
+              "2019": {
+                "start": 10065.57185159618,
+                "end": 11688.995691940467,
+                "maxDrawdown": 0.07457275595512092,
+                "sessions": 252,
+                "return": 0.16128480967396275
+              },
+              "2020": {
+                "start": 11688.995691940467,
+                "end": 12026.33018986912,
+                "maxDrawdown": 0.15259922159982786,
+                "sessions": 253,
+                "return": 0.02885915153183305
+              },
+              "2021": {
+                "start": 12026.33018986912,
+                "end": 14708.970950091207,
+                "maxDrawdown": 0.07382831094323539,
+                "sessions": 252,
+                "return": 0.22306395366409615
+              },
+              "2022": {
+                "start": 14708.970950091207,
+                "end": 13634.153976224941,
+                "maxDrawdown": 0.17553811659602325,
+                "sessions": 251,
+                "return": -0.07307220726135166
+              },
+              "2023": {
+                "start": 13634.153976224941,
+                "end": 12627.145726606117,
+                "maxDrawdown": 0.15736038764453042,
+                "sessions": 250,
+                "return": -0.07385923991872412
+              },
+              "2024": {
+                "start": 12627.145726606117,
+                "end": 13606.321168461505,
+                "maxDrawdown": 0.07553654162510348,
+                "sessions": 252,
+                "return": 0.0775452713586895
+              },
+              "2025": {
+                "start": 13606.321168461505,
+                "end": 11477.418144169122,
+                "maxDrawdown": 0.24960952021778515,
+                "sessions": 250,
+                "return": -0.15646426377374
+              },
+              "2026": {
+                "start": 11477.418144169122,
+                "end": 11069.67066767838,
+                "maxDrawdown": 0.11399411767504286,
+                "sessions": 189,
+                "return": -0.03552606268840086
+              }
+            }
+          },
+          {
+            "cost": 2,
+            "initial": 10000,
+            "liquidationEquity": 9616.79479986129,
+            "cagr": -0.004332124391806413,
+            "maxDrawdown": 0.3464143140546223,
+            "meanExposure": 0.8426757347729306,
+            "entries": 392,
+            "closedTrades": 390,
+            "winRate": 0.3,
+            "profitFactor": 0.9825137537489486,
+            "fees": 1680.5976411625804,
+            "slippage": 1680.5972494017997,
+            "openPositions": 2,
+            "missingHeldSessions": 0,
+            "topIssuer": {
+              "symbol": "SBAC",
+              "net": 818.8319021036685
+            },
+            "topIssuerProfitShare": null,
+            "rejections": {
+              "동일 업종 2종목 한도": 107,
+              "신호 가격에서 0.5 ATR 이상 이탈": 64,
+              "포지션 한도": 3987,
+              "가상 자본 또는 최소 수량 부족": 3
+            },
+            "annual": {
+              "2017": {
+                "start": 10000,
+                "end": 10042.990103095186,
+                "maxDrawdown": 0.05817654879901435,
+                "sessions": 63,
+                "return": 0.004299010309518625
+              },
+              "2018": {
+                "start": 10042.990103095186,
+                "end": 9846.062777112467,
+                "maxDrawdown": 0.11498159203075042,
+                "sessions": 251,
+                "return": -0.0196084357309112
+              },
+              "2019": {
+                "start": 9846.062777112467,
+                "end": 11302.359426813231,
+                "maxDrawdown": 0.08025406887287223,
+                "sessions": 252,
+                "return": 0.14790649650192944
+              },
+              "2020": {
+                "start": 11302.359426813231,
+                "end": 11485.061621832145,
+                "maxDrawdown": 0.15785599041661957,
+                "sessions": 253,
+                "return": 0.01616496061746875
+              },
+              "2021": {
+                "start": 11485.061621832145,
+                "end": 13823.609137466347,
+                "maxDrawdown": 0.07606746107811557,
+                "sessions": 252,
+                "return": 0.20361645349719493
+              },
+              "2022": {
+                "start": 13823.609137466347,
+                "end": 12617.616452585891,
+                "maxDrawdown": 0.17828941439191792,
+                "sessions": 251,
+                "return": -0.08724152085665049
+              },
+              "2023": {
+                "start": 12617.616452585891,
+                "end": 11459.571507469876,
+                "maxDrawdown": 0.1693329562161956,
+                "sessions": 250,
+                "return": -0.09178000848794876
+              },
+              "2024": {
+                "start": 11459.571507469876,
+                "end": 12206.13234936213,
+                "maxDrawdown": 0.07714338078650884,
+                "sessions": 252,
+                "return": 0.06514736099910978
+              },
+              "2025": {
+                "start": 12206.13234936213,
+                "end": 10057.560787188551,
+                "maxDrawdown": 0.26292550563891925,
+                "sessions": 250,
+                "return": -0.17602394441396163
+              },
+              "2026": {
+                "start": 10057.560787188551,
+                "end": 9623.54442336129,
+                "maxDrawdown": 0.11829647697829426,
+                "sessions": 189,
+                "return": -0.043153242919507506
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "outputHashes": {
+    "picks.csv.gz": {
+      "sha256": "ded7de1de3d6275d8ce3036085df3ac377e8a66093b73d189277a721e3f52d43",
+      "bytes": 2477863
+    },
+    "outcomes.csv.gz": {
+      "sha256": "bb145f253342db05c85c530e8d64aab9fb4337719019f7f9aac6798fb7ecfda5",
+      "bytes": 5373034
+    },
+    "curves.csv.gz": {
+      "sha256": "8a2e39a2c47f742d2255d65e84e2ae9cd5ac61c893756adc617791bd2ecc05c4",
+      "bytes": 1562537
+    },
+    "trades.csv.gz": {
+      "sha256": "2706664fcd37d213ea26cff3d7ecd8873d11d8d0bcf0babe818c42507555ff61",
+      "bytes": 598901
+    }
+  }
+}
