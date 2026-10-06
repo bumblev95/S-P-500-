@@ -34,7 +34,9 @@ on:
       - 'simulation.html'
       - '.github/workflows/update-simulation.yml'
   schedule:
-    - cron: '7,22,37,52 * * * *'
+    # Leave more time for collection, publication and downstream Shadow tests
+    # before the next quarter-hour; Shadow still checks the actual candle age.
+    - cron: '2,17,32,47 * * * *'
 permissions:
   contents: write
   pages: write

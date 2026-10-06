@@ -73,8 +73,9 @@ try{
   const y=fs.readFileSync(path.join(ROOT,'.github/workflows/shadow-self-improvement.yml'),'utf8');
   const body=y.match(/node - <<'JS'\n([\s\S]*?)\n\s*JS/)[1].split('\n').map(l=>l.replace(/^          /,'')).join('\n');
   const check=rows=>vm.runInNewContext(body,{require:()=>({execFileSync:()=>rows.join('\n')})});
-  assert.doesNotThrow(()=>check(['A\t'+candidate,'M\t'+D.OUTPUT]));
-  for(const name of ['M\t'+candidate,'D\t'+observation,'D\t'+D.OUTPUT,'M\tsimulation/momentum-boost/model.json','M\tsimulation/momentum-boost/boost-one/state.json','M\tassets/simulation-page.js'])assert.throws(()=>check([name]),/Only NEW/);
+  const input='simulation/self-improvement/inputs/'+'a'.repeat(64)+'.json';
+  assert.doesNotThrow(()=>check(['A\t'+candidate,'A\t'+input,'M\t'+D.OUTPUT]));
+  for(const name of ['M\t'+candidate,'D\t'+observation,'D\t'+D.OUTPUT,'M\t'+input,'D\t'+input,'M\tsimulation/market.json','M\tsimulation/momentum-boost/model.json','M\tsimulation/momentum-boost/boost-one/state.json','M\tassets/simulation-page.js'])assert.throws(()=>check([name]),/Only NEW/);
  });
 }finally{fs.rmSync(temp,{recursive:true,force:true});}
 

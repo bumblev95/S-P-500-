@@ -91,6 +91,67 @@ append**; the next successful public collector update can retry without changing
 the shadow account or backdating the observation. Post-execution quality checks
 and every promotion gate remain unchanged.
 
+### Quarter-hour collection handoff
+
+The 2026-10-06 run `37494231925` sampled Shadow at 16:16:00 UTC after the
+public snapshot was collected at 16:14:55.710200 UTC. BTC, ETH and SOL's last
+completed candles ended at 15:59:59.999 UTC: **960,335 ms old**, exceeding the
+unchanged **900,000 ms** limit. That original input remains blocked.
+
+`scripts/shadow_collect.cjs` now handles input acquisition before calling the
+unchanged frozen engine. A retry is allowed only when the original snapshot was
+collected during the final two minutes before the current quarter-hour, passed
+the original quality gate at collection, and is evaluated during the first two
+minutes after that boundary. Its only errors must be stale execution prices,
+and every stale candle must be precisely the preceding quarter's candle. A
+28-minute-old input, an earlier collection, a newly stamped stale snapshot,
+missing/gapped/revised prices, collector errors or future timestamps cannot
+authorize recollection.
+
+For this narrow case, collect public BTC/ETH/SOL candles and historical funding
+into a private output; stock inputs and all first-observed candles/funding must
+remain identical. Reject appended candles/funding not completed before the new
+collection cutoff. The collector may retry up to three times, waiting 10 seconds
+between unchanged stale responses, within a total two-minute budget. Errors or
+exhaustion fail closed before advancing an account. This is a collection retry
+budget, not an extension of price validity: the refreshed input must pass the
+same 900,000 ms gate at the actual Shadow recording time. Nothing is backdated,
+and refreshed prices never renew the original model decision's separate expiry.
+
+The exact successful refresh bytes are retained append-only at
+`simulation/self-improvement/inputs/<marketSha256>.json`, matching the existing
+observation's `inputs.marketSha256`. Shadow consumes that private snapshot, then
+restores the operating `simulation/market.json` byte for byte. The observation's
+`sourceRevision` continues to identify the checked-out source decision/code
+revision; its market hash identifies the separately acquired input. Publication
+allows only new input files, new version artifacts and disposable status. Editing
+or deleting any previous input/version artifact, or publishing an operating
+market/account change from Shadow, remains forbidden.
+
+This acquisition wrapper is outside `RUNTIME`; it does not change execution,
+policy, candidate descriptors or frozen hashes. The currently compatible
+`shadow-threshold-v1-1790996520188-ac0b896d93c8` continues as the same account;
+older incompatible versions remain paused without migration or registration.
+
+The upstream schedule moves from minutes 7/22/37/52 to **2/17/32/47**, leaving
+more time before the next boundary. Public collection also samples its crypto
+cutoff after the potentially slow daily stock requests. The successful
+`workflow_run` dependency remains; neither timing change is treated as proof of
+freshness. Delayed runs still use the strict gate and narrowly bounded retry.
+
+Reproduce without network access or changing any real account:
+
+```sh
+node scripts/test_shadow_collect.cjs
+python -m unittest discover -s scripts -p test_simulation_data.py
+node scripts/shadow_improvement.cjs audit
+node scripts/verify_entry_study.cjs --base HEAD
+```
+
+The new regression fixes the exact 960,335 ms case, verifies fresh retry timing
+and archived source bytes, preserves every existing account/evidence file and
+tests unchanged stale responses, timeout/exhaustion, revisions and future input.
+
 The first run of `shadow-threshold-v1-1790993347120-2506918ac511` at
 2026-10-03 02:13:11 UTC used the 01:51:19 collector snapshot, whose latest
 execution candles ended at 01:44:59 UTC (28.19 minutes old). Its feature ending
@@ -127,8 +188,8 @@ shadow run's actual recording time. A passing model score cannot bypass breakout
 The independent `Shadow paper self-improvement` workflow runs **after a successful
 public-paper update**. It updates already registered shadow versions and stages
 only additions under this directory's `versions/`, plus the disposable website
-status projection described below. No existing workflow, operating account
-publisher or UI default is modified. New candidate registration requires
+status projection and any newly acquired input snapshot described above. The
+operating account publisher and UI default remain separate. New candidate registration requires
 the workflow's explicit `register` action; no automatic retraining occurs.
 
 ## Read-only website status
