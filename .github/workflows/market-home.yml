@@ -16,6 +16,7 @@ on:
       - 'scripts/test_company_news_translation.py'
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
+      - 'scripts/fixtures/market-headline-terms.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -34,6 +35,7 @@ on:
       - 'scripts/test_company_news_translation.py'
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
+      - 'scripts/fixtures/market-headline-terms.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -96,6 +98,33 @@ jobs:
         run: |
           pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
           pip install -r scripts/requirements-news-translation.txt
+      - name: Verify retained headline meanings with the live translator
+        if: github.event_name == 'pull_request'
+        env:
+          OMP_NUM_THREADS: '2'
+          HF_HUB_DISABLE_XET: '1'
+        run: |
+          python - <<'PY'
+          from copy import deepcopy
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from build_market_home import ROOT, translate_news, usable_translation, valid_korean_headline
+          from translate_company_news import engine, verify_engine
+          fixture = json.loads(Path('scripts/fixtures/market-headline-terms.json').read_text())
+          original = fixture['news']
+          articles = deepcopy(original)
+          translate = engine(ROOT/'research/source-cache/home-news-ko/model')
+          verify_engine(translate)
+          translate_news(articles, ROOT, translate)
+          assert all(usable_translation(item) for item in articles)
+          for before, after in zip(original, articles):
+              changed = {'headlineKo', 'translationStatus', 'headlineFallbackVersion'}
+              assert {k:v for k,v in before.items() if k not in changed} == {k:v for k,v in after.items() if k not in changed}
+              if valid_korean_headline(before['headlineKo'], before['title']):
+                  assert before == after, 'Healthy translation was changed'
+          print('HEADLINE_MEANING_PREVIEW='+json.dumps(articles, ensure_ascii=False))
+          PY
       - name: Collect closed prices, source news and Korean summaries
         env:
           OMP_NUM_THREADS: '2'
