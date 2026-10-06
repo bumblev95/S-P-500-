@@ -1,0 +1,5 @@
+# Collector versions match requirements-ml.txt; training is installed downstream.
+numpy==2.2.6
+pandas==2.3.3
+yfinance==0.2.66
+exchange_calendars==4.13.2

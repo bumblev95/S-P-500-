@@ -228,6 +228,8 @@ def main(argv=None) -> int:
     parser.add_argument("--public-prices-only", action="store_true",
                         help="Use only the repository's existing public price CSV. "
                              "Never read watchlist configuration or Google Sheets.")
+    parser.add_argument("--receipt", type=Path,
+                        help="Write the requested symbols and this download's timestamp for the publication gate.")
     args = parser.parse_args(argv)
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     if args.public_prices_only:
@@ -369,10 +371,12 @@ def main(argv=None) -> int:
         raise RuntimeError("No prices were downloaded. Yahoo/yfinance may be temporarily unavailable.")
 
     out = pd.DataFrame(rows)
+    minimum_symbol_count = len(symbols)
     # Keep a last-known row when an individual download fails. Its original
     # observation date remains intact so the forecast UI can mark it stale.
     if OUT_PATH.exists():
         previous = pd.read_csv(OUT_PATH)
+        minimum_symbol_count = previous["symbol"].dropna().nunique()
         keep = previous[previous["symbol"].isin(symbols) &
                         ~previous["symbol"].isin(out["symbol"])]
         out = pd.concat([out, keep], ignore_index=True)
@@ -380,6 +384,10 @@ def main(argv=None) -> int:
     temp = OUT_PATH.with_suffix(".csv.tmp")
     out.to_csv(temp, index=False)
     temp.replace(OUT_PATH)
+    if args.receipt:
+        atomic_json(args.receipt, {"schemaVersion": 1, "symbols": sorted(symbols),
+                                   "minimumSymbolCount": int(minimum_symbol_count),
+                                   "updatedAt": updated_at})
     print(f"Wrote {len(out)} prices to {OUT_PATH}")
     return 0
 

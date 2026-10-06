@@ -8,6 +8,10 @@ on:
       - 'scripts/update_eod_prices.py'
       - 'scripts/requirements-ml.txt'
       - 'scripts/build_stability_research.py'
+      - 'scripts/build_forecasts.py'
+      - 'scripts/eod_publication.py'
+      - 'scripts/requirements-eod.txt'
+      - '.github/workflows/update-eod-prices.yml'
   workflow_dispatch:
     inputs:
       public_prices_only:
@@ -32,58 +36,50 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install public price dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r scripts/requirements-ml.txt
+          pip install -r scripts/requirements-eod.txt
 
       - name: Download EOD prices
         env:
           FORECAST_PUBLIC_PRICES_ONLY: ${{ github.event_name == 'push' && 'true' || github.event.inputs.public_prices_only || 'false' }}
         run: |
           if [ "$FORECAST_PUBLIC_PRICES_ONLY" = "true" ]; then
-            python scripts/update_eod_prices.py --public-prices-only
+            python scripts/update_eod_prices.py --public-prices-only --receipt "$RUNNER_TEMP/eod-request.json"
           else
-            python scripts/update_eod_prices.py
+            python scripts/update_eod_prices.py --receipt "$RUNNER_TEMP/eod-request.json"
           fi
 
       - name: Build forecasts and preserve issue records
         run: python scripts/build_forecasts.py
 
-      - name: Train and validate learned forecasts
-        run: python scripts/build_learned_forecasts.py
-
-      - name: Audit realized targets and chronological separation
-        run: python scripts/audit_learned_results.py
-
-      - name: Evaluate relative price error and stability candidates
-        run: python scripts/build_stability_research.py
-
-      - name: Compare forecasts without using future outcomes for selection
-        run: python scripts/build_forecast_comparison.py
-
-      - name: Evaluate forecast correction and regime blending
-        run: python scripts/build_adaptive_research.py
-
-      - name: Score first-issued forecasts against realized prices
-        run: python scripts/score_live_forecasts.py
-
-      - name: Commit updated price file
+      - name: Validate and atomically publish complete prices and forecasts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices/latest_prices.csv forecasts ml
-          git diff --cached --quiet || git commit -m "Update S&P 500 EOD prices"
-          git pull --rebase origin main
-          git push
+          python scripts/eod_publication.py publish --receipt "$RUNNER_TEMP/eod-request.json" --bundle "$RUNNER_TEMP/eod-release"
+
+      - name: Transfer the exact published inputs to follow-up research
+        uses: actions/upload-artifact@v4
+        with:
+          name: eod-research-inputs
+          path: ${{ runner.temp }}/eod-release/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
 
       - name: Refresh the published dashboard
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
