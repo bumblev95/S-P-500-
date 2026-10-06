@@ -244,6 +244,8 @@ class HeadlineTranslation(unittest.TestCase):
         self.assertEqual(snapshot['news'][1]['summaryKo'],self.SUMMARY)
         for key in ['sourceHash','importance','importanceReason','title','publishedAt','firstPublishedAt']:
             self.assertEqual(snapshot['news'][1][key],self.cramer[key])
+        again,_=h.collect_news({'news':news},self.now,{},self.fetch)
+        self.assertTrue(all('_translate' not in a for a in again),'A completed failed quality retry is reusable')
 
     def test_retry_exception_or_count_mismatch_cannot_discard_first_summary(self):
         for failed in [TimeoutError(),[],[self.GOOD,self.GOOD]]:
@@ -254,6 +256,8 @@ class HeadlineTranslation(unittest.TestCase):
                 self.assertEqual(len(calls),2);self.assertEqual(item['headlineKo'],self.TITLE)
                 self.assertEqual(item['summaryKo'],self.SUMMARY)
                 self.assertEqual(item['translationStatus'],'headline-fallback')
+                again,_=h.collect_news({'news':[item]},self.now,{},self.fetch)
+                self.assertEqual(again[1]['_translate'],[self.TITLE,None],'Availability failures must remain retryable')
 
     def test_mixed_batch_retries_only_bad_headline_without_shifting_summaries(self):
         good=deepcopy(self.prior['news'][0]);good['_translate']=[good['title'],good['sourceExcerpt']]
@@ -281,7 +285,7 @@ class HeadlineTranslation(unittest.TestCase):
 
     def test_source_fallback_cache_is_reused_but_changed_source_retranslates_both_fields(self):
         cached=deepcopy(self.prior)
-        cached['news'][1].update(headlineKo=self.TITLE,translationStatus='headline-fallback')
+        cached['news'][1].update(headlineKo=self.TITLE,translationStatus='headline-fallback',headlineFallbackVersion=h.HEADLINE_QUALITY_VERSION)
         items,_=h.collect_news(cached,self.now,{},self.fetch)
         self.assertTrue(all('_translate' not in a for a in items))
         cached['news'][1]['sourceHash']='different-source'
@@ -321,6 +325,26 @@ class HeadlineTranslation(unittest.TestCase):
             self.assertEqual(snapshot['news'][1]['headlineKo'],self.TITLE)
             self.assertEqual(snapshot['news'][1]['summaryKo'],self.SUMMARY)
             self.assertEqual(snapshot['news'][1]['translationStatus'],'headline-fallback')
+            saved=json.loads((root/'market/home-cache.json').read_text())
+            again,_=h.collect_news(saved,self.now,{},self.fetch)
+            self.assertEqual(again[1]['_translate'],[self.TITLE,None])
+
+    def test_disabled_translation_saves_safe_title_and_retries_only_that_title_on_recovery(self):
+        with TemporaryDirectory() as folder:
+            root=Path(folder);h.atomic(root/'market/home-cache.json',self.prior)
+            with patch.object(h,'home_rankings',return_value={'buy':[],'sell':[]}), \
+                    patch.object(h,'prices',return_value=(self.quotes(),{})),patch('sys.stdout',io.StringIO()):
+                fallback=h.build(root,self.now,self.fetch,translate_enabled=False)
+                self.assertEqual(fallback['news'][1]['headlineKo'],self.TITLE)
+                self.assertEqual(fallback['news'][1]['summaryKo'],self.SUMMARY)
+                self.assertEqual(fallback['news'][1]['translationStatus'],'headline-fallback')
+                translate,calls=self.translator([[self.GOOD]])
+                recovered=h.build(root,self.now,self.fetch,translate)
+            self.assertEqual(calls,[[self.TITLE]])
+            self.assertEqual(recovered['news'][1]['translationStatus'],'ready')
+            self.assertEqual(recovered['news'][1]['headlineKo'],self.GOOD)
+            self.assertEqual(recovered['news'][1]['summaryKo'],self.SUMMARY)
+            self.assertNotIn('headlineFallbackVersion',recovered['news'][1])
 
 
 class PriceCache(unittest.TestCase):
