@@ -10,6 +10,7 @@ on:
       - 'scripts/build_stability_research.py'
       - 'scripts/build_forecasts.py'
       - 'scripts/eod_publication.py'
+      - 'scripts/eod_close_fallback.py'
       - 'scripts/requirements-eod.txt'
       - '.github/workflows/update-eod-prices.yml'
   workflow_dispatch:
