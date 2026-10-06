@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-06T21:50:49.701485+00:00",
+  "generatedAt": "2026-10-06T21:51:29.332056+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-05",
     "eligibleCount": 505,
-    "evaluatedAt": "2026-10-06T21:50:49.701Z",
+    "evaluatedAt": "2026-10-06T21:51:29.332Z",
     "priceGeneratedAt": "2026-10-06T03:12:22+00:00",
     "marketGeneratedAt": "2026-10-06T21:40:26.127875+00:00",
     "basis": "technical-relative-ranking",
@@ -97,8 +97,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -112,8 +112,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "^DJI",
@@ -127,8 +127,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       }
     ],
     "sectors": [
@@ -144,8 +144,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,23 +159,23 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLY",
         "name": "경기소비재",
         "icon": "shopping-bag",
         "asOf": "2026-10-06",
-        "close": 111.75,
-        "day": 1.204493618103264,
+        "close": 111.72000122070312,
+        "day": 1.1773257320370378,
         "dayBaseDate": "2026-10-05",
-        "week": 1.553979525850191,
+        "week": 1.5267178218813626,
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,8 +189,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,8 +204,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,23 +219,23 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLP",
         "name": "필수소비재",
         "icon": "shopping-basket",
         "asOf": "2026-10-06",
-        "close": 81.7699966430664,
-        "day": 0.900784451248926,
+        "close": 81.80000305175781,
+        "day": 0.9378111150599056,
         "dayBaseDate": "2026-10-05",
-        "week": 1.5397962033600887,
+        "week": 1.5770573596325832,
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,12 +294,50 @@
         "weekBaseDate": "2026-10-02",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-        "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00"
+        "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+        "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00"
       }
     ]
   },
   "news": [
+    {
+      "url": "https://www.bbc.co.uk/news/videos/cwm26078pkepo?at_medium=RSS&at_campaign=rss",
+      "title": "Watch: Riot police clash with school protesters and use tear gas in France",
+      "publishedAt": "2026-10-06T21:22:22+00:00",
+      "firstPublishedAt": "2026-10-06T21:22:22+00:00",
+      "source": "BBC 국제",
+      "category": "유가·원자재",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "cb825b6c0a149b1d71354176c15baf1dbd80914d7c468ef3b481ee987554c726",
+      "headlineKo": "프랑스에서 폭동 경찰과 학교 시위대가 충돌하고 눈물을 흘리는 가스 사용",
+      "summaryKo": "프랑스 전역에서 수십만 명의 사람들이 고등학교 학생들의 시위파 가운데 거리로 나섰다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/06/chart-a-look-at-the-sp-500s-remarkable-and-defiant-trip-a-new-record.html",
+      "title": "Chart: A look at the S&P 500's remarkable and defiant trip to a new record",
+      "publishedAt": "2026-10-06T20:50:54+00:00",
+      "firstPublishedAt": "2026-10-06T20:50:54+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "183c7a480729ae328c23cbc2dce2d7edf72bb8c7ea6ef19a0078d217b97ee395",
+      "headlineKo": "차트: S&P 500의 놀라운 그리고 도전적인 새로운 기록으로의 여행",
+      "summaryKo": "S&P 500는 화요일에 기술적인 이득, 석유 가격 완화 및 미국 정부 채권 금리가 수개월간의 시장 충격을 극복하는 데 도움이 되면서 일간 기록으로 돌아왔다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
     {
       "url": "https://www.cnbc.com/2026/10/06/dividend-stocks-bond-yields-retirement-income.html",
       "title": "Boomers' dividend stocks take beating from bond yields, with retirement income on the line",
@@ -307,7 +345,7 @@
       "firstPublishedAt": "2026-10-06T20:06:42+00:00",
       "source": "CNBC 주요",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -326,7 +364,7 @@
       "firstPublishedAt": "2026-10-06T16:15:07+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -345,7 +383,7 @@
       "firstPublishedAt": "2026-10-06T13:40:49+00:00",
       "source": "CNBC 주요",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -356,44 +394,6 @@
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/investingclub/2026/10/06/a-new-analyst-call-on-home-depot-reflects-our-feeling-on-what-to-do-with-the-stock.html",
-      "title": "A new analyst call on Home Depot reflects our feeling on what to do with the stock",
-      "publishedAt": "2026-10-06T20:00:53+00:00",
-      "firstPublishedAt": "2026-10-06T20:00:53+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "445644d06da791c62b85971aaee515b8a529b227bf6542914b11f97c29aadf74",
-      "headlineKo": "Home Depot에 대한 새로운 분석가 방문은 주식에 대해 우리의 감정을 반영합니다",
-      "summaryKo": "우리는 홈 디포에서 작은 포지션을 보유하고 있습니다. 요금이 떨어질 때 대비할 수 있을 것입니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/06/prediction-market-combo-contract-volume.html",
-      "title": "How event contract bundles are boosting volume on prediction markets",
-      "publishedAt": "2026-10-06T18:46:16+00:00",
-      "firstPublishedAt": "2026-10-06T18:46:16+00:00",
-      "source": "CNBC 주요",
-      "category": "경제·물가",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "d312837a0dfd66aea47878541a3845f9ee20d2aba912e7525b400a75d8e509a7",
-      "headlineKo": "이벤트 계약 묶음들이 예측 시장에서 볼륨을 증가시키는 방법",
-      "summaryKo": "콤보 계약은 거래의 작지만 일관된 비중을 차지하고 있음에도 불구하고 부피 성장을 촉진시키고 있습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
     }
   ],
   "feeds": [
@@ -401,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-06T20:22:58.084210+00:00",
-      "lastSuccessAt": "2026-10-06T20:22:58.084210+00:00",
+      "lastAttemptAt": "2026-10-06T21:51:29.332056+00:00",
+      "lastSuccessAt": "2026-10-06T21:51:29.332056+00:00",
       "fromCache": false
     }
   ],
