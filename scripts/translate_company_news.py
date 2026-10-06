@@ -36,7 +36,7 @@ HEADLINE_TERMS = (
      'written records of the Federal Reserve monetary policy meeting',
      (r'의사\s*록|회의\s*록|회의(?:의|에\s*(?:대한|관한)|에서)?\s*(?:서면\s*)?(?:기록|내용|논의)',
       r'FOMC|연준|연방\s*준비|미국\s*중앙\s*은행'),
-     r'(?:FOMC|연준|연방\s*준비\s*제도)\s*(?:의\s*)?(?:분기|분간)', None, None),
+     r'(?:FOMC|연준|연방\s*준비\s*제도)\s*(?:의\s*)?(?:분기|분간)|기록적(?:인|으로)?\s*기록', None, None),
     (r'\b(?:quant|quantitative)\s+((?:hedge\s+)?funds?)\b',
      r'investment \1 using mathematical and statistical trading strategies',
      (r'퀀트|계량|정량|양적|수학|통계', r'펀드|기금|자금|투자'),

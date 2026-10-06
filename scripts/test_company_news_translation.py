@@ -163,6 +163,12 @@ class TranslationTests(unittest.TestCase):
         self.assertFalse(m.valid_korean_headline(wrong,source))
         self.assertIn('against prevailing market sentiment',m.translation_input(source))
 
+    def test_observed_live_fomc_translation_rejects_record_high_sense_of_minutes(self):
+        source='Treasury yields are broadly flat as investors anticipate FOMC minutes'
+        wrong='미국 정부 채권 금리율은 투자자들이 연방준비은행의 통화정책 회의에 대한 기록적인 기록을 예상하기 때문에 대체로 일정합니다.'
+        self.assertTrue(m.valid_korean_headline(wrong))
+        self.assertFalse(m.valid_korean_headline(wrong,source))
+
     def test_headline_gate_allows_nominal_headlines_and_complete_questions(self):
         for text in ['미국 주식 신고가', '인도 주식 시장이 성장하면서도 침체하는 5가지 이유',
                      '금리 상승에도 주가 강세', '주가가 오르는 이유는?', '왜 주가가 오르나?',

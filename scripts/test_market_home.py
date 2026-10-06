@@ -432,6 +432,21 @@ class HeadlineMeaning(unittest.TestCase):
         again,_=h.collect_news({'news':items},self.now,{},self.fetch)
         self.assertTrue(all('_translate' not in a for a in again))
 
+    def test_post_normalization_semantic_errors_retry_and_fallback_without_changing_metadata(self):
+        items,_=h.collect_news(self.prior,self.now,{},self.fetch)
+        fomc='미국 정부 채권 금리율은 투자자들이 연방준비은행의 통화정책 회의에 대한 기록적인 기록을 예상하기 때문에 대체로 일정합니다.'
+        quant="수학 및 통계적 거래 전략을 이용한 투자펀드가 '초기, 역동적이고 올바른'로 시장을 이길 수 있는 방법"
+        translate,calls=self.translator([[fomc,quant,self.GOOD[self.bad[2]['sourceHash']]],[fomc,quant]])
+        h.translate_news(items,Path('/unused'),translate)
+        self.assertEqual(len(calls),2)
+        self.assertEqual(len(calls[1]),2)
+        for before,after in zip(self.prior['news'],items):
+            self.assert_preserved(before,after)
+            if before['sourceHash'] in [a['sourceHash'] for a in self.bad[:2]]:
+                self.assertEqual(after['headlineKo'],before['title'])
+                self.assertEqual(after['translationStatus'],'headline-fallback')
+        self.assert_display_order(items)
+
     def test_fresh_mixed_batch_has_no_summary_or_retry_index_shift(self):
         items=deepcopy(self.prior['news']);outputs=[]
         for item in items:
