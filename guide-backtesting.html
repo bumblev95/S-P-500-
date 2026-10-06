@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>백테스트 결과에서 확인할 것 · S&amp;P 500</title>
+  <meta name="description" content="S&amp;P 500 연구 결과의 수익률·최대낙폭·하락 포착과 MAPE를 구분하고, 비용과 생존편향을 확인하는 방법.">
+  <link rel="canonical" href="https://bumblev95.github.io/S-P-500-/guide-backtesting.html">
+  <link rel="stylesheet" href="assets/site-shell.css?v=2">
+  <link rel="stylesheet" href="assets/site-info.css?v=1">
+</head>
+<body class="site-theme site-reading-page">
+  <main class="site-frame">
+    <header class="site-header">
+      <div class="site-brand"><span class="site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="site-eyebrow">S&amp;P 500 · GUIDE</div><strong>시장을 읽는 기준</strong></div></div>
+      <nav class="site-nav" aria-label="주요 페이지"><a href="./">메인</a><a href="stocks.html">주식</a><a href="crypto.html">코인 현물</a><a href="futures.html">선물</a><a href="simulation.html">모의운용</a></nav>
+    </header>
+    <article class="site-prose">
+      <p class="site-eyebrow">SITE GUIDE</p>
+      <h1>백테스트 결과에서 확인할 것</h1>
+      <p class="site-lead">좋은 과거 수익률 하나만으로 규칙의 성능을 판단하기 어렵습니다. 비교 대상·비용·검증 기간·데이터의 한계를 함께 확인하세요.</p>
+      <p class="site-meta">사이트 해설 · 운영 <a href="about.html">Jack Lee</a> · 작성·수정 <time datetime="2026-10-05">2026년 10월 5일</time></p>
+      <section><h2>과거 재현과 발행 후 기록의 차이</h2><p>백테스트는 정해진 가격 자료에 과거 규칙을 적용한 재현 실험입니다. 발행 후 모의운용은 판단을 먼저 저장하고 이후 실제로 들어오는 가격으로 결과를 확인합니다. 실제 돈을 거래하지 않는 모의 계좌도 체결가·비용 가정의 영향을 받습니다.</p><p>우리 검증 자료실에는 서로 다른 규칙과 연구 후보가 있습니다. 화면의 진입 규칙을 바꾸었다고 과거 모의 계좌가 자동으로 새 규칙의 실적이 되는 것은 아닙니다. 비교할 때 규칙 이름과 버전, 시작일을 확인하세요.</p></section><section><h2>수익률과 위험을 함께 읽습니다</h2><div class="site-table-scroll"><table><thead><tr><th scope="col">항목</th><th scope="col">확인할 질문</th></tr></thead><tbody><tr><td>연환산 수익률(CAGR)</td><td>같은 시작·종료일에 비교했는가? 배당과 비용 포함 여부가 같은가?</td></tr><tr><td>최대낙폭</td><td>계좌가 이전 최고점에서 얼마나 내려갔는가? 그 손실을 감당할 수 있는가?</td></tr><tr><td>투자 노출</td><td>시장에 실제로 투자된 비중은 어느 정도였는가? 현금이 많은 전략과 주식 100% 보유를 구분했는가?</td></tr><tr><td>기여 집중도</td><td>수익 대부분이 한 종목이나 한 해에서 발생하지 않았는가?</td></tr><tr><td>거래 수와 비용</td><td>표본이 충분한가? 수수료·슬리피지를 늘렸을 때 결과가 유지되는가?</td></tr></tbody></table></div></section><section><h2>방향 적중률만 높을 때의 함정</h2><p>가상의 평가 사례 100개 중 90개가 상승하고 10개가 하락했다고 가정해봅시다. 모든 사례를 상승이라고 예측한 모델은 방향 적중률 90%지만 하락 포착률은 0%입니다. 전체 방향 점수가 높아도 하락 구분 능력은 없을 수 있습니다.</p><p>하락 포착률은 실제 하락 사례 중 하락이라고 예측한 비율입니다. 반대로 모든 사례를 하락이라고 하면 하락 포착은 높아져도 상승 기회를 놓칠 수 있습니다. 항상 상승 기준선과 같은 표본에서 비교하고, 예측한 하락 중 실제 하락의 비율도 함께 확인해야 합니다.</p></section><section><h2>예측 오차는 투자 수익률이 아닙니다</h2><p>가령 실제 미래 가격이 $120인데 예측 가격이 $132라면 그 사례의 절대 백분율 오차는 |132 − 120| ÷ 120 = 10%입니다. MAPE는 이런 오차를 사례별로 평균한 값입니다. MAPE 10%는 투자 손실 10%나 수익 10%라는 뜻이 아닙니다.</p><p>수익률 예측 오차를 %p로 계산하는 MAE는 가격 MAPE와 단위가 다릅니다. 가격을 그대로 유지하는 기준선보다 잘했는지, 같은 날짜와 종목의 독립 표본을 비교했는지 확인하세요.</p></section><section><h2>우리 과거 연구의 한계</h2><p>현재 구성 종목을 과거에도 동일하게 사용하면 당시 지수에서 빠진 기업이나 사라진 기업을 놓칠 수 있습니다. 현재 종목 목록을 사용하는 연구에는 생존편향이 있습니다. 역사적 신용지표의 당시 공개본을 복원하지 않은 고정 시장 상태 실험도 실제 당시 운용을 그대로 재현한 것이 아닙니다.</p><p>판단할 때 오늘 이후의 고점·종가·재무정보를 사용하면 미래 정보가 새어 들어갑니다. 신호를 관측한 시각 이후의 체결을 적용하고, 후보를 많이 시도했는지와 시간 순서에 따른 독립 검증 결과를 확인해야 합니다.</p><p>가격 수정·배당·지수 편입 이력·자료 누락 처리도 결과에 영향을 줍니다. 그래서 한 결과가 좋아 보여도 운영 승격이나 수익성 보장으로 표시하지 않습니다.</p></section><section><h2>보고서를 여는 순서</h2><ol><li>대상 종목·가격 자료의 기준본·평가 기간을 확인합니다.</li><li>같은 표본의 비교 전략과 비용 가정을 확인합니다.</li><li>전체 수익률 다음에 낙폭·연도별 결과·노출·기여 집중도를 봅니다.</li><li>연구 결과와 발행 후 기록을 구분하고, 기준 미통과 여부를 확인합니다.</li></ol><p><a href="research.html">검증 자료실</a> · <a href="model-validation.html">모델 검증</a> · <a href="simulation.html">모의운용</a></p></section>
+    </article>
+  </main>
+  <footer class="site-info-footer" aria-label="사이트 정보">
+  <nav aria-label="사이트 안내"><a href="learn.html">이용 가이드</a><a href="methodology.html">분석 기준·자료 출처</a><a href="about.html">사이트 소개</a><a href="contact.html">문의·오류 제보</a><a href="privacy.html">개인정보·광고 안내</a><a href="terms.html">이용 안내</a></nav>
+  <p>운영 Jack Lee · 공개 시장 자료를 해석하는 독립 교육·정보 사이트</p>
+  <p>점수와 TOP3는 검토를 돕는 규칙 기반 지표입니다. 수익이나 미래 가격을 보장하지 않습니다.</p>
+</footer>
+</body>
+</html>

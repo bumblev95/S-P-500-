@@ -34,6 +34,8 @@
 </style>
 <link rel="stylesheet" href="assets/company-search.css?v=1"><link rel="stylesheet" href="assets/site-shell.css?v=2"><link rel="stylesheet" href="assets/status-indicators.css?v=1">
 <link rel="stylesheet" href="assets/company-events.css?v=3">
+<link rel="stylesheet" href="assets/site-info.css?v=1">
+<link rel="canonical" href="https://bumblev95.github.io/S-P-500-/stocks.html">
 </head>
 <body class="site-theme">
   <main class="shell site-frame">
@@ -97,6 +99,12 @@
     document.querySelectorAll('[data-h]').forEach(button=>button.addEventListener('click',()=>{horizon=Number(button.dataset.h);document.querySelectorAll('[data-h]').forEach(x=>x.classList.toggle('active',x===button));render()}));load();
   })();
   </script>
+<footer class="site-info-footer" aria-label="사이트 정보">
+  <nav aria-label="사이트 안내"><a href="learn.html">이용 가이드</a><a href="methodology.html">분석 기준·자료 출처</a><a href="about.html">사이트 소개</a><a href="contact.html">문의·오류 제보</a><a href="privacy.html">개인정보·광고 안내</a><a href="terms.html">이용 안내</a></nav>
+  <p>운영 Jack Lee · 공개 시장 자료를 해석하는 독립 교육·정보 사이트</p>
+  <p>점수와 TOP3는 검토를 돕는 규칙 기반 지표입니다. 수익이나 미래 가격을 보장하지 않습니다.</p>
+</footer>
 </body>
 </html>
+
 

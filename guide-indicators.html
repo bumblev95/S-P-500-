@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>점수는 높은데 왜 대기일까요? · S&amp;P 500</title>
+  <meta name="description" content="단기 추세 점수와 55거래일 돌파·눌림목 반등을 구분하고, 손익비와 위험 폭을 계산 예시로 이해하는 사이트 지표 해설.">
+  <link rel="canonical" href="https://bumblev95.github.io/S-P-500-/guide-indicators.html">
+  <link rel="stylesheet" href="assets/site-shell.css?v=2">
+  <link rel="stylesheet" href="assets/site-info.css?v=1">
+</head>
+<body class="site-theme site-reading-page">
+  <main class="site-frame">
+    <header class="site-header">
+      <div class="site-brand"><span class="site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="site-eyebrow">S&amp;P 500 · GUIDE</div><strong>시장을 읽는 기준</strong></div></div>
+      <nav class="site-nav" aria-label="주요 페이지"><a href="./">메인</a><a href="stocks.html">주식</a><a href="crypto.html">코인 현물</a><a href="futures.html">선물</a><a href="simulation.html">모의운용</a></nav>
+    </header>
+    <article class="site-prose">
+      <p class="site-eyebrow">SITE GUIDE</p>
+      <h1>점수는 높은데 왜 대기일까요?</h1>
+      <p class="site-lead">점수는 가격 흐름을 요약합니다. 진입 판단은 현재 가격·시장 상태·위험 폭을 추가로 확인합니다.</p>
+      <p class="site-meta">사이트 해설 · 운영 <a href="about.html">Jack Lee</a> · 작성·수정 <time datetime="2026-10-05">2026년 10월 5일</time></p>
+      <section><h2>단기 추세 점수는 상승 확률이 아닙니다</h2><p>현재 종가가 20·50·200일 평균 위인지, 50일선이 200일선 위인지, 최근 1·3개월 수익률과 RSI·MACD가 어떤 방향인지 합쳐 0–100점으로 표시합니다. 80점은 상승 확률 80%나 예상 수익률 80%라는 뜻이 아닙니다.</p><p>AI 목표가나 기업가치 가정을 이 점수에 더하지 않습니다. 예측 기간을 6개월에서 1년으로 바꾸어도 같은 기준일의 추세 점수는 유지됩니다. 가격 이력의 날짜와 최신 종가가 맞지 않거나 유효 이력이 부족하면 점수 산출을 보류합니다.</p></section><section><h2>두 가지 진입 구간을 구분합니다</h2><div class="site-table-scroll"><table><thead><tr><th scope="col">방식</th><th scope="col">현재 규칙이 확인하는 조건</th><th scope="col">주의할 점</th></tr></thead><tbody><tr><td>55거래일 돌파</td><td>직전 55거래일 고점보다 현재 종가가 높고, 상승 추세·이격·손절 위험 조건을 충족하는지</td><td>오늘 고점을 비교 기준에 넣지 않습니다. 실제 고가 자료가 부족한 과거 구간은 55일 종가 돌파로 구분합니다.</td></tr><tr><td>눌림목 반등</td><td>상승 추세에서 이전 자료로 계산한 20일·50일 평균 부근에 접근하고, 반등 종가와 손익비·위험 조건을 충족하는지</td><td>가격이 평균 근처라는 이유만으로 반등이 확인되지는 않습니다. 관심 구간·관측 고점·손절 기준을 함께 확인합니다.</td></tr></tbody></table></div><p>돌파 거래량은 별도 보강 정보입니다. 현재 규칙에서는 거래량 보강이 부족하다는 이유만으로 가격 조건을 충족한 돌파를 무조건 막지는 않습니다.</p></section><section><h2>예시: 손절 위험과 손익비</h2><p>가상의 관심 구간 상단이 $100, 손절 기준이 $94, 이전 관측 고점이 $110이라면 다음처럼 계산합니다.</p><div class="site-table-scroll"><table><thead><tr><th scope="col">항목</th><th scope="col">계산</th><th scope="col">결과</th></tr></thead><tbody><tr><td>손절까지의 가격 폭</td><td>(100 − 94) ÷ 100</td><td>6%</td></tr><tr><td>관측 고점까지의 손익비</td><td>(110 − 100) ÷ (100 − 94)</td><td>약 1.67배</td></tr></tbody></table></div><p>현재 기본 눌림 규칙은 손익비 1.5배 이상·위험 폭 8% 이내를 확인하고, 시장이 주의 상태이면 2배 이상·5% 이내로 좁힙니다. 위 예시는 다른 조건이 모두 같을 때 기본 수치 기준을 충족하지만 주의 상태의 수치 기준은 충족하지 않습니다.</p><p>손절 기준은 그 가격에 실제로 팔 수 있다는 보장이 아닙니다. 급락이나 가격 공백으로 체결가가 달라질 수 있습니다. 계좌 전체 손실률도 보유 비중에 따라 달라집니다.</p><p class="site-callout">이 숫자들은 사이트의 설계 가설입니다. 최적값이나 검증된 수익 공식이라는 뜻은 아닙니다.</p></section><section><h2>9가지 신규 진입 상태</h2><div class="site-table-scroll"><table><thead><tr><th scope="col">상태</th><th scope="col">읽는 방법</th></tr></thead><tbody><tr><td>진입 검토</td><td>돌파 또는 눌림 반등과 위험 조건 충족</td></tr><tr><td>눌림목 대기</td><td>상승 추세의 관심 가격 구간·반등 확인 대기</td></tr><tr><td>돌파 대기</td><td>이전 고점을 넘는 종가 확인 대기</td></tr><tr><td>위험 조절 대기</td><td>손절까지의 폭 또는 눌림 손익비가 기준에 부족</td></tr><tr><td>추격 주의</td><td>돌파선·20일 평균 대비 이격이 큼</td></tr><tr><td>지지 회복 대기</td><td>이전 지지 이탈 또는 관심 구간 아래</td></tr><tr><td>진입 보류</td><td>시장 경고 또는 중기 하락 추세</td></tr><tr><td>관망</td><td>추세 조건이 혼재하거나 아직 부족</td></tr><tr><td>판단 보류</td><td>가격·변동폭·시장 자료 부족 또는 갱신 필요</td></tr></tbody></table></div></section><section><h2>보유 대응과 AI 전망은 별도로 봅니다</h2><p>‘추세 유지·이탈 주의·축소 검토’는 이미 보유 중일 때의 가격 흐름을 설명합니다. 신규 진입을 기다리는 종목도 보유 추세는 유지될 수 있습니다.</p><p>AI 검증이 미통과여도 관측 가격 규칙의 진입 판단을 자동으로 바꾸지는 않습니다. AI 참고 화면에서 성능 기준과 자료 기준일을 따로 확인하세요. <a href="methodology.html">정확한 계산 기준</a> · <a href="guide-backtesting.html">규칙을 검증하는 방법</a></p></section>
+    </article>
+  </main>
+  <footer class="site-info-footer" aria-label="사이트 정보">
+  <nav aria-label="사이트 안내"><a href="learn.html">이용 가이드</a><a href="methodology.html">분석 기준·자료 출처</a><a href="about.html">사이트 소개</a><a href="contact.html">문의·오류 제보</a><a href="privacy.html">개인정보·광고 안내</a><a href="terms.html">이용 안내</a></nav>
+  <p>운영 Jack Lee · 공개 시장 자료를 해석하는 독립 교육·정보 사이트</p>
+  <p>점수와 TOP3는 검토를 돕는 규칙 기반 지표입니다. 수익이나 미래 가격을 보장하지 않습니다.</p>
+</footer>
+</body>
+</html>

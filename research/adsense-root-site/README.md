@@ -21,6 +21,8 @@
 
 루트 페이지는 기존 프로젝트의 공개 자산에 의존합니다. 시장 자료와 CSS·JavaScript는 원래 프로젝트에서 갱신됩니다. 메인 `index.html`의 구조나 네비게이션이 바뀌면 이 사본과 루트 저장소의 `index.html`도 함께 갱신해야 합니다. 루트 HTML은 기존 메인 HTML의 `<head>` 바로 뒤에 `<base href="https://bumblev95.github.io/S-P-500-/">`를 추가한 것입니다.
 
+2026-10-05 승인 준비 보완에서는 최신 메인 구조로 사본과 실제 루트 페이지를 맞추고, JavaScript 없이 읽는 이용 가이드·분석 기준·운영 안내 링크를 추가합니다. 루트 저장소에는 `robots.txt`, `sitemap.xml`과 이미 제공된 실제 게시자 ID를 이용한 Google 표준 `ads.txt`도 배치합니다. 이는 Google의 사이트 승인이나 광고 활성화를 뜻하지 않습니다. 사본과 메인 HTML의 일치는 `node scripts/check_site_information.cjs`가 검증합니다. 자세한 내용은 [점검 기록](../ADSENSE-READINESS.md)을 참고하세요.
+
 광고 계정 연결이나 Google의 사이트 승인은 GitHub Pages의 상업 이용을 허가하는 절차가 아닙니다. 실제 광고를 켜기 전에는 [호스팅·광고 연결 안내](../AD-MONETIZATION.md)를 확인해야 합니다.
 
 참고: [GitHub 사용자 사이트 만들기](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site), [AdSense 사이트 소유권 확인](https://support.google.com/adsense/answer/7584263)
