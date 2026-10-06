@@ -28,18 +28,38 @@ jobs:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
+      - name: Check whether the source run published a new EOD checkpoint
+        id: checkpoint
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EOD_SOURCE_RUN_ID: ${{ github.event.workflow_run.id || inputs.source_run_id }}
+        run: |
+          [[ "$EOD_SOURCE_RUN_ID" =~ ^[0-9]+$ ]]
+          available=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$EOD_SOURCE_RUN_ID/artifacts" --jq 'any(.artifacts[]; .name == "eod-research-inputs" and .expired == false)')
+          echo "available=$available" >> "$GITHUB_OUTPUT"
+          if [ "$available" != "true" ]; then
+            if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+              echo "The requested EOD source run has no available input checkpoint."
+              exit 1
+            fi
+            echo "No new EOD publication; skip duplicate or non-session research."
+          fi
       - uses: actions/checkout@v4
+        if: steps.checkpoint.outputs.available == 'true'
         with:
           ref: main
           fetch-depth: 0
       - uses: actions/setup-python@v5
+        if: steps.checkpoint.outputs.available == 'true'
         with:
           python-version: '3.11'
       - name: Install original research and publication dependencies
+        if: steps.checkpoint.outputs.available == 'true'
         run: |
           pip install -r scripts/requirements-ml.txt
           pip install -r scripts/requirements-eod.txt
       - name: Download the successful EOD run's exact input checkpoint
+        if: steps.checkpoint.outputs.available == 'true'
         uses: actions/download-artifact@v4
         with:
           name: eod-research-inputs
@@ -47,21 +67,28 @@ jobs:
           run-id: ${{ github.event.workflow_run.id || inputs.source_run_id }}
           github-token: ${{ github.token }}
       - name: Restore and verify published commit and full downloaded histories
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/eod_publication.py restore --bundle "$RUNNER_TEMP/eod-release"
       - name: Train and validate learned forecasts
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/build_learned_forecasts.py
       - name: Audit realized targets and chronological separation
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/audit_learned_results.py
       - name: Evaluate relative price error and stability candidates
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/build_stability_research.py
       - name: Compare forecasts without using future outcomes for selection
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/build_forecast_comparison.py
       - name: Evaluate forecast correction and regime blending
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/build_adaptive_research.py
       - name: Score first-issued forecasts against realized prices
+        if: steps.checkpoint.outputs.available == 'true'
         run: python scripts/score_live_forecasts.py
       - name: Preserve research outputs even if a newer public EOD supersedes them
-        if: always()
+        if: always() && steps.checkpoint.outputs.available == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: eod-research-results
@@ -70,6 +97,7 @@ jobs:
             ${{ runner.temp }}/eod-release/publication.json
           retention-days: 14
       - name: Publish only research outputs for the still-current public snapshot
+        if: steps.checkpoint.outputs.available == 'true'
         id: publish
         run: |
           git config user.name 'github-actions[bot]'
