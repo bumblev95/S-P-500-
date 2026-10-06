@@ -1,0 +1,41 @@
+.site-info-footer{box-sizing:border-box;width:min(1480px,100%);margin:24px auto 0;padding:20px 22px 28px;border-top:1px solid #263c50;color:#91a5bb;font:13px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.site-info-footer nav{display:flex;gap:8px 20px;flex-wrap:wrap;margin:0 0 10px;padding:0;border:0}
+.site-info-footer a,.site-learning-links a{color:#7dddf5;text-underline-offset:4px;overflow-wrap:anywhere}
+.site-info-footer nav a{display:inline-flex;align-items:center;min-height:44px}
+.site-info-footer p{margin:5px 0}
+.site-info-footer a:focus-visible,.site-learning-links a:focus-visible,.site-prose a:focus-visible{outline:2px solid #6ee7b7;outline-offset:4px}
+.site-learning-links{margin-top:20px;padding:16px 18px;border:1px solid #263c50;border-radius:14px;background:#0b1728;color:#a6bacb;font-size:13px;line-height:1.7}
+.site-learning-links h2{margin:0 0 8px;font-size:14px;color:#edf4fb}
+.site-learning-links nav{display:flex;gap:8px 20px;flex-wrap:wrap}
+.site-learning-links nav a{display:inline-flex;align-items:center;min-height:44px}
+.site-home-purpose{font-size:12px;color:#91a5bb;line-height:1.7;margin:0 0 12px!important}
+.site-reading-page *{box-sizing:border-box}
+.site-reading-page a{color:#7dddf5;text-underline-offset:4px}
+.site-prose{width:min(900px,100%);margin:32px auto 0;line-height:1.85;overflow-wrap:anywhere}
+.site-prose h1{font-size:clamp(25px,4vw,38px);line-height:1.35;letter-spacing:-.03em;margin:8px 0 14px}
+.site-prose h2{font-size:21px;line-height:1.5;margin:0 0 12px}
+.site-prose h3{font-size:17px;line-height:1.55;margin:0 0 8px}
+.site-prose p{margin:10px 0;color:#c3d0de}
+.site-prose .site-lead{font-size:18px;color:#e0ebf6}
+.site-prose .site-meta,.site-prose .site-meta a{font-size:13px;color:#91a5bb}
+.site-prose section{margin:26px 0;padding:23px;border:1px solid #263c50;border-radius:18px;background:#0b1524}
+.site-prose ul,.site-prose ol{padding-left:24px;color:#c3d0de}
+.site-prose li{margin:9px 0}
+.site-prose .site-callout{border-left:3px solid #6ee7b7;padding:12px 16px;background:#10272b;border-radius:0 12px 12px 0;margin:18px 0;color:#e0f0ef}
+.site-table-scroll{overflow-x:auto;max-width:100%;border:1px solid #263c50;border-radius:10px}
+.site-prose table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.7}
+.site-prose th,.site-prose td{text-align:left;vertical-align:top;padding:13px 12px;border-bottom:1px solid #263c50;min-width:100px}
+.site-prose th{background:#132337;color:#edf4fb}
+.site-prose td{color:#c3d0de}
+.site-prose tr:last-child td{border-bottom:0}
+.site-prose caption{padding:12px;text-align:left;color:#91a5bb;font-size:13px}
+.site-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:22px 0}
+.site-guide-grid a{display:block;padding:22px;border:1px solid #263c50;border-radius:16px;background:#0b1524;text-decoration:none}
+.site-guide-grid a:hover{border-color:#55a89b;background:#102233}
+.site-guide-grid strong{display:block;color:#eef7ff;font-size:18px;line-height:1.55}
+.site-guide-grid span{display:block;margin-top:9px;color:#a6bacb;font-size:14px;line-height:1.8}
+.site-prose code{font-size:.9em;color:#c1ebdf}
+@media(max-width:640px){.site-prose{margin-top:22px}.site-prose section{padding:18px 15px}.site-guide-grid{grid-template-columns:1fr}.site-prose .site-lead{font-size:16px}.site-info-footer{padding:18px 13px 26px}.site-prose table{font-size:13px}.site-prose th,.site-prose td{padding:11px 9px}}
+
+#market-home .hp-source-note{padding:10px 18px;border-top:1px solid #21344a;color:#91a5bb;font-size:11px;line-height:1.7}#market-home .hp-source-note a,#market-home .site-home-purpose a{color:#7dddf5}#market-home .site-learning-links h2{margin-bottom:6px}
+.site-prose button{padding:9px 13px;border:1px solid #416477;border-radius:8px;background:#102337;color:#edf4fb;cursor:pointer;font:inherit;min-height:44px}
