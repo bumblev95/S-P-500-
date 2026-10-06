@@ -1,44 +1,44 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-06T02:07:02.792190+00:00",
+  "generatedAt": "2026-10-06T02:24:16.093471+00:00",
   "rankings": {
     "buy": [
       {
-        "symbol": "ILMN",
-        "name": "일루미나",
-        "asOf": "2026-10-02",
+        "symbol": "MPC",
+        "name": "마라톤 페트롤리엄",
+        "asOf": "2026-10-05",
         "score": 100,
-        "code": "breakout",
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "직전 55거래일 고점 돌파 확인 대기"
-      },
-      {
-        "symbol": "RVTY",
-        "name": "레비티",
-        "asOf": "2026-10-02",
-        "score": 100,
-        "code": "pullback",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "상승 추세지만 눌림목 반등 조건 대기"
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
       },
       {
         "symbol": "FTNT",
         "name": "포티넷",
-        "asOf": "2026-10-02",
+        "asOf": "2026-10-05",
         "score": 99,
-        "code": "breakout",
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "직전 55거래일 고점 돌파 확인 대기"
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
+      },
+      {
+        "symbol": "CRL",
+        "name": "찰스 리버 래버러토리스",
+        "asOf": "2026-10-05",
+        "score": 97,
+        "code": "buy",
+        "holdingCode": "hold",
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
       }
     ],
     "sell": [
       {
         "symbol": "AON",
         "name": "에이온",
-        "asOf": "2026-10-02",
+        "asOf": "2026-10-05",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -46,9 +46,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "APP",
-        "name": "앱러빈",
-        "asOf": "2026-10-02",
+        "symbol": "CHTR",
+        "name": "차터 커뮤니케이션즈",
+        "asOf": "2026-10-05",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -56,9 +56,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "CCI",
-        "name": "크라운 캐슬",
-        "asOf": "2026-10-02",
+        "symbol": "CMG",
+        "name": "치폴레 멕시칸 그릴",
+        "asOf": "2026-10-05",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -66,10 +66,10 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-02",
+    "asOf": "2026-10-05",
     "eligibleCount": 505,
-    "evaluatedAt": "2026-10-06T02:07:02.792Z",
-    "priceGeneratedAt": "2026-10-04T01:27:08+00:00",
+    "evaluatedAt": "2026-10-06T02:24:16.093Z",
+    "priceGeneratedAt": "2026-10-06T02:23:29+00:00",
     "marketGeneratedAt": "2026-10-06T01:48:49.264907+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
