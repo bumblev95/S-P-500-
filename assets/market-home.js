@@ -18,7 +18,7 @@
   function safeUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&['www.federalreserve.gov','www.bbc.com','www.bbc.co.uk','bbc.com','bbc.co.uk','www.cnbc.com','cnbc.com'].includes(u.hostname)&&!u.username&&!u.password;}catch(_){return false;}}
   const icon=name=>'<i data-lucide="'+(['cpu','radio','shopping-bag','landmark','factory','heart-pulse','shopping-basket','house','zap','flask-conical','fuel','clock-3','trending-up','trending-down','minus','arrow-down-left','arrow-up-right'].includes(name)?name:'minus')+'" aria-hidden="true"></i>';
   function breaking(item,now){return item.importance==='important'&&!item.fromCache&&item.sourceStatus==='ready'&&freshTime(item.firstPublishedAt||item.publishedAt,now,2/24);}
-  function eligibleNews(items,now){return (items||[]).filter(a=>a.translationStatus==='ready'&&a.headlineKo&&safeUrl(a.url)&&freshTime(a.publishedAt,now,14)).slice(0,5);}
+  function eligibleNews(items,now){return (items||[]).filter(a=>(a.translationStatus==='ready'||a.translationStatus==='headline-fallback'&&a.headlineKo===a.title&&a.summaryKo)&&a.headlineKo&&safeUrl(a.url)&&freshTime(a.publishedAt,now,14)).slice(0,5);}
   function rankRows(rows,now){
     const seen=new Set();
     return (Array.isArray(rows)?rows:[]).filter(q=>{

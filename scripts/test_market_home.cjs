@@ -115,6 +115,16 @@ assert(!H.breaking(item,now+2*3600000));
 assert.equal(H.eligibleNews([{...item,url:'javascript:alert(1)'}],now).length,0);
 assert.equal(H.eligibleNews([{...item,publishedAt:'2026-09-01T22:00:00Z'}],now).length,0);
 assert.equal(H.eligibleNews([{...item,url:'https://www.cnbc.com/2026/10/03/stocks-market-test.html'}],now).length,1);
+const cramerTitle='Stocks are hitting records despite surging yields. Cramer explains why';
+const headlineFallback={...item,title:cramerTitle,headlineKo:cramerTitle,translationStatus:'headline-fallback',summaryKo:'채권 금리 상승에도 기술주가 주가를 끌어올렸습니다.'};
+assert.equal(H.eligibleNews([headlineFallback],now).length,1,'Source title with a valid Korean summary remains visible');
+assert.equal(H.eligibleNews([{...headlineFallback,headlineKo:'크레이머 (Cramer) 는 왜'}],now).length,0,'Fallback cannot display a broken Korean fragment');
+assert.equal(H.eligibleNews([{...headlineFallback,summaryKo:''}],now).length,0);
+assert.equal(H.eligibleNews([{...headlineFallback,translationStatus:'unavailable'}],now).length,0);
+const fallbackHtml=H.newsHtml({news:[headlineFallback],feeds:[]},now);
+assert(fallbackHtml.includes(cramerTitle)&&fallbackHtml.includes(headlineFallback.summaryKo));
+const escapedFallback={...headlineFallback,title:'Stocks rise <img onerror=alert(1)>',headlineKo:'Stocks rise <img onerror=alert(1)>'};
+assert(H.newsHtml({news:[escapedFallback],feeds:[]},now).includes('&lt;img'));
 const newsState=H.newsStateHtml({news:[item],feeds:[
   {name:'Fed 발표',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'},
   {name:'BBC 경제',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'},

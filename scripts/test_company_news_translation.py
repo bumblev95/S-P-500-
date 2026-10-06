@@ -82,5 +82,31 @@ class TranslationTests(unittest.TestCase):
         self.assertIn('employment report',jobs)
         self.assertIn('Federal Reserve policy interest rate',m.translation_input('fed funds rate'))
 
+    def test_headline_gate_rejects_cramer_and_other_obvious_fragments(self):
+        for text in ['크레이머 (Cramer) 는 왜', '크레이머는 왜?', '크레이머는 “왜?”', '주가가 올랐지만',
+                     '금리가 상승하면서', '미국 경제 전망 그리고', '연준의 금리 결정에 대해',
+                     '주가 신고가…', '주가 신고가 (금리 상승', '주가 신고가 <unk>', 'English only']:
+            with self.subTest(text=text):self.assertFalse(m.valid_korean_headline(text))
+        # The general summary check retains its existing contract.
+        self.assertTrue(m.valid_korean('크레이머 (Cramer) 는 왜'))
+
+    def test_headline_gate_allows_nominal_headlines_and_complete_questions(self):
+        for text in ['미국 주식 신고가', '인도 주식 시장이 성장하면서도 침체하는 5가지 이유',
+                     '금리 상승에도 주가 강세', '주가가 오르는 이유는?', '왜 주가가 오르나?',
+                     '연준, 기준금리 0.25%p 인하', '미국 주식 (S&P 500) 신고가',
+                     '주가 급등…금리도 상승']:
+            with self.subTest(text=text):self.assertTrue(m.valid_korean_headline(text))
+
+    def test_simpler_headline_uses_complete_source_lead_not_trailing_teaser(self):
+        title='Stocks are hitting records despite surging yields. Cramer explains why'
+        self.assertEqual(m.simpler_headline_input(title),'Stock prices are at record highs despite surging yields.')
+        self.assertEqual(m.simpler_headline_input(title,'Surging Treasury yields pressure the stock market.'),
+                         'Stock prices are at record highs despite sharply rising bond interest rates.')
+        crops='Crop stocks grow despite surging yields.'
+        self.assertEqual(m.simpler_headline_input(crops,'A bumper wheat crop increased grain supplies.'),crops)
+        self.assertEqual(m.simpler_headline_input('U.S. stocks rise. Cramer explains why'),'US stocks rise.')
+        self.assertEqual(m.simpler_headline_input('Treasury yields rise: Fed holds rates'),
+                         'interest rates on U.S. government bonds rise, Federal Reserve holds rates')
+
 
 if __name__ == '__main__': unittest.main()
