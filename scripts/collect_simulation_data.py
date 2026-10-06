@@ -44,8 +44,9 @@ def merge(old,new):
         if previous is None:out[r['t']]=r
     return sorted(out.values(),key=lambda r:r['t']),revisions
 
-def collect(root=ROOT,now=None):
-    now=now or datetime.now(timezone.utc);ms=int(now.timestamp()*1000);path=root/'simulation/market.json'
+def collect(root=ROOT,now=None,crypto_only=False,output=None):
+    live=now is None
+    now=now or datetime.now(timezone.utc);path=root/'simulation/market.json'
     old=json.loads(path.read_text()) if path.exists() else {};data=dict(schemaVersion=1,generatedAt=now.isoformat(),stocks={},crypto={},errors=[])
     def stock(symbol):
         prior=old.get('stocks',{}).get(symbol,{})
@@ -64,10 +65,17 @@ def collect(root=ROOT,now=None):
             if len(rows)<220:raise ValueError('Fewer than 220 complete sessions')
             return symbol,dict(rows=rows,sector=STOCKS[symbol],checkedDate=now.date().isoformat(),fetchedAt=now.isoformat(),revisions=sorted(set(prior.get('revisions',[])+revisions)),source='Yahoo daily OHLC; dividends excluded'),None
         except Exception as e:return symbol,dict(prior,errors=[str(e)]) if prior else prior,symbol+': '+str(e)
-    with ThreadPoolExecutor(max_workers=3) as pool:
-        for s,value,error in pool.map(stock,STOCKS):
-            if value:data['stocks'][s]=value
-            if error:data['errors'].append(error)
+    if crypto_only:
+        data['stocks']=old.get('stocks',{})
+    else:
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            for s,value,error in pool.map(stock,STOCKS):
+                if value:data['stocks'][s]=value
+                if error:data['errors'].append(error)
+    # Daily stock requests can cross a quarter-hour. Sample the crypto cutoff
+    # immediately before collecting those candles, never extend it into the future.
+    if live:now=datetime.now(timezone.utc)
+    ms=int(now.timestamp()*1000);data['generatedAt']=now.isoformat()
     for symbol in COINS:
         prior=old.get('crypto',{}).get(symbol,{});item=dict(prior);item['source']='Hyperliquid perpetual OHLC';item['frames']=dict(prior.get('frames',{}));errors=[]
         for interval,step,count in [('15m',900000,4800),('1h',3600000,1300)]:
@@ -100,7 +108,13 @@ def collect(root=ROOT,now=None):
         except Exception as e:errors.append(symbol+' funding: '+str(e))
         item['fetchedAt']=now.isoformat();item['errors']=errors;data['crypto'][symbol]=item;data['errors']+=errors
         print('Simulation data',symbol,{k:len(v) for k,v in item['frames'].items()},len(item.get('funding',[])),flush=True)
-    atomic_json(path,data);print('Simulation stocks',len(data['stocks']),'errors',len(data['errors']),flush=True)
+    atomic_json(Path(output) if output is not None else path,data);print('Simulation stocks',len(data['stocks']),'errors',len(data['errors']),flush=True)
     return data
 
-if __name__=='__main__':collect()
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--crypto-only',action='store_true',help='Preserve stock inputs and refresh only public candles/funding')
+    parser.add_argument('--output',type=Path,help='Write a separate snapshot without changing simulation/market.json')
+    args=parser.parse_args()
+    collect(crypto_only=args.crypto_only,output=args.output)

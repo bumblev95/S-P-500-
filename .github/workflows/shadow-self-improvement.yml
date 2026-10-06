@@ -4,6 +4,9 @@ on:
     paths:
       - 'scripts/shadow_*.cjs'
       - 'scripts/test_shadow_improvement.cjs'
+      - 'scripts/test_shadow_collect.cjs'
+      - 'scripts/collect_simulation_data.py'
+      - 'scripts/test_simulation_data.py'
       - 'scripts/build_shadow_status.cjs'
       - 'scripts/test_shadow_status.cjs'
       - 'assets/shadow-status.*'
@@ -12,17 +15,22 @@ on:
       - 'scripts/momentum_boost.cjs'
       - 'simulation/self-improvement/**'
       - '.github/workflows/shadow-self-improvement.yml'
+      - '.github/workflows/update-simulation.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/shadow_*.cjs'
       - 'scripts/test_shadow_improvement.cjs'
+      - 'scripts/test_shadow_collect.cjs'
+      - 'scripts/collect_simulation_data.py'
+      - 'scripts/test_simulation_data.py'
       - 'scripts/build_shadow_status.cjs'
       - 'scripts/test_shadow_status.cjs'
       - 'assets/shadow-status.*'
       - 'simulation.html'
       - 'simulation/self-improvement/README.md'
       - '.github/workflows/shadow-self-improvement.yml'
+      - '.github/workflows/update-simulation.yml'
   workflow_run:
     workflows: ['Update public paper accounts']
     types: [completed]
@@ -53,10 +61,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Synthetic tests and real evidence regression
         run: |
           node scripts/test_shadow_improvement.cjs
           node scripts/test_shadow_status.cjs
+          node scripts/test_shadow_collect.cjs
+          python -m unittest discover -s scripts -p test_simulation_data.py
   append-shadow:
     needs: test
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
@@ -76,6 +89,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Register an explicitly requested new version or update shadow accounts
         id: collector
         continue-on-error: true
@@ -93,9 +109,9 @@ jobs:
           console.log(JSON.stringify(S.assess({version:candidate.version})));
           REGISTER
           elif [ -n "$SHADOW_VERSION" ]; then
-            node scripts/shadow_improvement.cjs update --version "$SHADOW_VERSION"
+            node scripts/shadow_collect.cjs --version "$SHADOW_VERSION"
           else
-            node scripts/shadow_improvement.cjs update
+            node scripts/shadow_collect.cjs
           fi
       - name: Build read-only website status even if a version is blocked
         run: node scripts/build_shadow_status.cjs
@@ -104,13 +120,13 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add simulation/self-improvement/versions simulation/self-improvement/status.json
+          git add simulation/self-improvement
           # Fail closed if a previously stored artifact would be edited/deleted,
           # or any operating account/model/default path would enter this commit.
           node - <<'JS'
           const cp=require('node:child_process');
           const rows=cp.execFileSync('git',['diff','--cached','--name-status'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
-          if(rows.some(row=>!/^A\tsimulation\/self-improvement\/versions\/shadow-threshold-v1-\d+-[a-f0-9]{12}\/(candidate\.json|(?:observations|assessments)\/\d+-[a-f0-9]{12}\.json)$/.test(row)&&!(/^[AM]\tsimulation\/self-improvement\/status\.json$/.test(row))))throw Error('Only NEW shadow artifacts and display-only status can be published');
+          if(rows.some(row=>!/^A\tsimulation\/self-improvement\/versions\/shadow-threshold-v1-\d+-[a-f0-9]{12}\/(candidate\.json|(?:observations|assessments)\/\d+-[a-f0-9]{12}\.json)$/.test(row)&&!/^A\tsimulation\/self-improvement\/inputs\/[a-f0-9]{64}\.json$/.test(row)&&!(/^[AM]\tsimulation\/self-improvement\/status\.json$/.test(row))))throw Error('Only NEW shadow artifacts and display-only status can be published');
           JS
           if ! git diff --cached --quiet; then
             git commit -m 'Append shadow-only paper self-improvement evidence'
