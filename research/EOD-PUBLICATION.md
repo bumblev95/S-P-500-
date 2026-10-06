@@ -24,7 +24,33 @@ published chart must agree with its CSV date, timestamp and six-decimal close.
 The gate also rejects a provider snapshot whose dates are uniformly outdated.
 All partial/failing cases leave the previous public Git commit intact. The
 generated files remain local to the failed runner; no per-file public writes,
-fallback padding, ranking changes or automatic threshold changes are used.
+invented padding, ranking changes or automatic threshold changes are used.
+
+When Yahoo supplies the required completed US equity daily bar but its Close
+is null, the collector may recover that **one bar** from Nasdaq's public
+historical endpoint. This is not a last-quote or after-hours substitution.
+The response must identify the same symbol and date; its preceding three daily
+closes must match Yahoo at cent precision, with the nearest anchor on the
+previous XNYS session. Its current Open/High/Low must also match the supplied
+Yahoo values at cent precision. The bar must have finite positive, consistent
+OHLC and volume. Cent comparison reflects displayed provider precision and
+does not alter any forecast, ranking, signal or research threshold.
+
+The Nasdaq daily OHLCV replaces the incomplete bar together; older Yahoo
+history remains intact. No missing history or missing latest-date bar is
+synthesized. USD, equity and New York timezone identity are required. Only
+one secondary request is made for an eligible missing bar; errors or mismatches
+leave the original history untouched and the all-symbol publication gate still
+blocks the run. Authentication/throttling responses stop further collection;
+there are no alternate-host or credential workarounds.
+
+The collector stores the original secondary response, SHA-256, URL, retrieval
+timestamp and original Yahoo OHLC in the history's `eodRecovery` and a
+base64-encoded `eodProvenance` final CSV column. Normal Yahoo rows leave that
+column empty. The publication gate rechecks the evidence and its exact OHLCV
+against the CSV, full history and public forecast chart before the single
+commit. `source` identifies the recovered row in CSV and forecasts. The exact
+history/evidence is also transferred to research in the existing input artifact.
 
 The fast workflow retains its name so the existing homepage `workflow_run`
 callback starts as soon as it completes. This is required because a push with
@@ -53,7 +79,7 @@ To retry research without a duplicate EOD download, dispatch the research
 workflow with the successful fast run's `source_run_id` while its input artifact
 is retained. Missing, incomplete or changed artifacts fail verification.
 
-Validation: `python -m unittest discover -s scripts -p test_eod_publication.py`.
+Validation: `python -m unittest discover -s scripts -p 'test_eod_*.py'`.
 These tests use synthetic prices and local bare Git repositories to verify
 505-row atomic publication, failed-collector retained rows, missing/duplicate/
 stale/mismatched values, holidays/early closes/DST, unchanged first-issued

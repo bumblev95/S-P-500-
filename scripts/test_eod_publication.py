@@ -228,6 +228,79 @@ class PublicationTests(unittest.TestCase):
             build_forecasts.build(self.root, "2026-10-05T23:41:00+00:00")
         self.reject_without_remote_change()
 
+    def prepare_recovered_collection(self):
+        import pandas as pd
+        import update_eod_prices as collector
+        from test_eod_close_fallback import AS_OF, FixedClock, recovered_fixture, sample_frame
+
+        self.write_snapshot(self.root, "2026-10-02", "2026-10-04T01:26:05+00:00")
+        fixed, evidence = recovered_fixture("AAPL")
+        good = sample_frame()
+        good.loc[good.index[-1], "Close"] = 95.4
+        frames = {s: fixed if s == "AAPL" else good for s in self.symbols}
+        data = pd.concat(frames, axis=1)
+        data.attrs["eodRecoveries"] = {"AAPL": evidence}
+        receipt_path = self.base / "recovered-request.json"
+        with patch.object(collector, "OUT_PATH", self.root / "prices/latest_prices.csv"), \
+             patch.object(collector, "download_public_chart", return_value=data), \
+             patch.object(collector, "datetime", FixedClock), \
+             patch.object(collector, "read_symbols", side_effect=AssertionError("Must not read Sheets")), \
+             contextlib.redirect_stdout(io.StringIO()):
+            collector.main(["--public-prices-only", "--receipt", str(receipt_path)])
+            build_forecasts.build(self.root, "2026-10-06T02:00:00Z")
+        self.receipt = json.loads(receipt_path.read_text())
+        self.assertEqual({row["date"] for row in self.prices()}, {AS_OF})
+        return evidence
+
+    def test_recovered_bar_requires_evidence_and_publishes_with_all_other_symbols(self):
+        from eod_close_fallback import SOURCE, decode_evidence
+
+        evidence = self.prepare_recovered_collection()
+        manifest = self.publish()
+        self.assertEqual(manifest["symbolCount"], len(self.symbols))
+        rows = list(csv.DictReader(io.StringIO(self.remote_file("prices/latest_prices.csv"))))
+        recovered = next(row for row in rows if row["symbol"] == "AAPL")
+        self.assertEqual(recovered["source"], SOURCE)
+        self.assertEqual(decode_evidence(recovered["eodProvenance"]), evidence)
+        self.assertEqual(float(recovered["close"]), 95.4)
+        self.assertEqual(float(recovered["volume"]), 1305)
+        changed = publication.git(self.remote, "diff", "--name-only", self.original, "main").splitlines()
+        self.assertTrue(all(path.startswith(("prices/", "forecasts/")) for path in changed))
+
+    def test_missing_tampered_or_mismatched_secondary_evidence_blocks_entire_publication(self):
+        from eod_close_fallback import encode_evidence
+
+        evidence = self.prepare_recovered_collection()
+        original_rows = self.prices()
+        path = self.root / "prices/history/AAPL.json"
+        original_history = json.loads(path.read_bytes())
+        for fault in ("missing", "hash", "ohlcv", "source"):
+            rows = [dict(row) for row in original_rows]
+            history = json.loads(json.dumps(original_history))
+            row = next(row for row in rows if row["symbol"] == "AAPL")
+            if fault == "missing":
+                row["eodProvenance"] = ""
+                history.pop("eodRecovery")
+            elif fault == "hash":
+                bad = {**evidence, "responseSha256": "0" * 64}
+                row["eodProvenance"] = encode_evidence(bad)
+                history["eodRecovery"] = bad
+            elif fault == "ohlcv":
+                row["volume"] = "1300"
+            else:
+                row["source"] = "Yahoo only"
+            self.write_prices(rows)
+            build_forecasts.atomic_json(path, history)
+            with self.subTest(fault=fault):
+                self.reject_without_remote_change()
+
+    def test_successful_secondary_recovery_cannot_hide_another_stale_symbol(self):
+        self.prepare_recovered_collection()
+        rows = self.prices()
+        next(row for row in rows if row["symbol"] == "MSFT")["date"] = "2026-10-02"
+        self.write_prices(rows)
+        self.reject_without_remote_change()
+
     def test_unrelated_main_update_is_preserved_during_public_rebase(self):
         other = self.other_checkout()
         (other / "market/home.json").write_text('{"recap":"Monday"}')

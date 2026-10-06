@@ -118,6 +118,20 @@ def validate(root, receipt):
         for endpoint in (history[-1], chart[-1]):
             if endpoint.get("date") != as_of or not same_close(endpoint.get("close"), row["close"]):
                 raise ValueError(f"{symbol}: history/chart does not end at the published close")
+        if row.get("eodProvenance") or record.get("eodRecovery"):
+            from eod_close_fallback import SOURCE, decode_evidence, verify_evidence
+
+            evidence = decode_evidence(row.get("eodProvenance") or "")
+            if (not evidence or evidence != record.get("eodRecovery")
+                    or row.get("source") != SOURCE or forecast.get("source") != SOURCE):
+                raise ValueError(f"{symbol}: missing or inconsistent secondary EOD provenance")
+            verify_evidence(evidence, symbol, as_of, receipt["updatedAt"], history)
+            for key in ("open", "high", "low", "volume"):
+                if (round(float(row.get(key, -1)), 6) != round(float(history[-1].get(key, -2)), 6)
+                        or round(float(chart[-1].get(key, -3)), 6) != round(float(history[-1].get(key, -2)), 6)):
+                    raise ValueError(f"{symbol}: secondary OHLCV and public snapshot disagree")
+        elif row.get("source") == "Yahoo EOD history + Nasdaq historical EOD bar":
+            raise ValueError(f"{symbol}: secondary EOD provenance is required")
         histories[path.relative_to(root).as_posix()] = sha256(raw)
     return {"schemaVersion": 1, "asOf": as_of, "symbolCount": len(symbols),
             "receipt": receipt, "publicFiles": public_hashes(root), "historyFiles": histories}

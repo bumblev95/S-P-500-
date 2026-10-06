@@ -18,6 +18,8 @@ from typing import Iterable
 import pandas as pd
 import yfinance as yf
 from build_forecasts import atomic_json
+from eod_close_fallback import SOURCE as RECOVERY_SOURCE, encode_evidence, recover
+from eod_publication import latest_closed_session
 
 CONSTITUENTS_URL = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
 CUSTOM_PATH = Path("custom_tickers.csv")
@@ -34,6 +36,7 @@ def download_public_chart(symbols):
     """
     stopped = threading.Event()
     now = datetime.now(timezone.utc)
+    as_of = latest_closed_session(now.isoformat())
     def one(symbol):
         if stopped.is_set(): return symbol, None
         url = 'https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?range=10y&interval=1d'
@@ -52,6 +55,20 @@ def download_public_chart(symbols):
             regular_end = result['meta'].get('currentTradingPeriod',{}).get('regular',{}).get('end')
             if regular_end and now.timestamp()<regular_end+900:
                 frame=frame[[x.date()<now.astimezone(zone).date() for x in frame.index]]
+            # Recover only an existing completed bar with a missing Close.
+            # Failure leaves Yahoo history untouched; the all-symbol gate rejects it.
+            try:
+                evidence = None
+                if not stopped.is_set():
+                    frame, evidence = recover(symbol, result['meta'], frame, as_of)
+                if evidence:
+                    frame.attrs['eodRecovery'] = evidence
+                    print(f'EOD recovered {symbol} {as_of}: Nasdaq historical bar', flush=True)
+            except urllib.error.HTTPError as exc:
+                if exc.code in (401,403,429): stopped.set()
+                print(f'EOD recovery unavailable {symbol}: HTTP {exc.code}', flush=True)
+            except Exception as exc:
+                print(f'EOD recovery rejected {symbol}: {type(exc).__name__}: {exc}', flush=True)
             return symbol, frame
         except urllib.error.HTTPError as exc:
             if exc.code in (401,403,429): stopped.set()
@@ -65,7 +82,11 @@ def download_public_chart(symbols):
             if frame is not None and not frame.empty: frames[symbol]=frame
             if (i+1)%50==0: print(f'History: checked {i+1}/{len(symbols)}; available {len(frames)}',flush=True)
     if stopped.is_set(): print('Provider requested a stop; no retries or alternate hosts used.',flush=True)
-    return pd.concat(frames,axis=1) if frames else pd.DataFrame()
+    if not frames:
+        return pd.DataFrame()
+    data = pd.concat(frames,axis=1)
+    data.attrs['eodRecoveries'] = {s: f.attrs['eodRecovery'] for s,f in frames.items() if 'eodRecovery' in f.attrs}
+    return data
 
 
 def to_yahoo_symbol(symbol: str) -> str:
@@ -254,6 +275,7 @@ def main(argv=None) -> int:
     )
 
     updated_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    recoveries = data.attrs.get("eodRecoveries", {})
     rows = []
     for ysym in yahoo_symbols:
         one = get_symbol_frame(data, ysym)
@@ -319,6 +341,7 @@ def main(argv=None) -> int:
             pass
 
         original_symbol = symbol_map.get(ysym, to_display_symbol(ysym))
+        evidence = recoveries.get(ysym)
         history = []
         for day, daily in one.iterrows():
             daily_close = daily.get("Close")
@@ -337,6 +360,7 @@ def main(argv=None) -> int:
             atomic_json(OUT_PATH.parent / "history" / (original_symbol + ".json"),
                         {"symbol": original_symbol, "updatedAt": updated_at,
                          "basis": "Yahoo Close; split-adjusted, dividends excluded",
+                         **({"eodRecovery": evidence} if evidence else {}),
                          "prices": history})
         rows.append({
             "symbol": original_symbol,
@@ -363,8 +387,9 @@ def main(argv=None) -> int:
             "return3m": calc_return(valid, 63),
             "return4m": calc_return(valid, 84),
             "return6m": calc_return(valid, 126),
-            "source": "Yahoo EOD via GitHub Actions/yfinance",
+            "source": RECOVERY_SOURCE if evidence else "Yahoo EOD via GitHub Actions/yfinance",
             "updatedAt": updated_at,
+            "eodProvenance": encode_evidence(evidence) if evidence else "",
         })
 
     if not rows:
