@@ -47,6 +47,42 @@ def valid_korean(text):
     return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text and not text.startswith('한국어 요약 번역을 완료하지')
 
 
+def valid_korean_headline(text):
+    """Reject obvious unfinished headlines, while allowing normal noun phrases.
+
+    This conservative surface check is not a general grammar/meaning validator.
+    Keep the broader summary validator separate: a bad title must not discard a
+    complete Korean lead, including an already cached/reviewed summary.
+    """
+    if not valid_korean(text): return False
+    text = unicodedata.normalize('NFKC', text).strip()
+    if re.search(r'(?:\.{3}|…)\s*[\"\'”’!?]*$', text): return False
+    closing = {')': '(', ']': '[', '}': '{'}
+    opened = []
+    for char in text:
+        if char in closing.values(): opened.append(char)
+        elif char in closing:
+            if not opened or opened.pop() != closing[char]: return False
+    if opened: return False
+    tail = text.rstrip(' \t\r\n.,!?\"\'”’)]}:;')
+    if re.search(r'(?:^|[\s\"\'“‘])(?:왜|어떻게|언제|어디서|어디로|무엇을|누가|얼마나|'
+                 r'그리고|하지만|그러나|만약|때문에|대해|관해|위해|따라|동안|'
+                 r'은|는|이|가|을|를|의|에|에게|에서|으로|로|와|과)$', tail):
+        return False
+    return not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
+
+
+def simpler_headline_input(title):
+    """Retry a complete lead clause without a trailing teaser/attribution.
+
+    Only simplify the translation input; exact source text and its hash remain
+    unchanged. The sentence splitter protects U.S./company abbreviations.
+    """
+    text = translation_input(title)
+    lead = next(complete_sentences(text), text)
+    return re.sub(r'\s*(?: - |[:;])\s*', ', ', lead).strip()
+
+
 def translation_input(text):
     text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-')
     # Expand compact financial-news jargon before NLLB sees it. Literal wording

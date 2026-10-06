@@ -12,6 +12,8 @@ on:
       - 'forecasts/latest.json'
       - 'market/latest.json'
       - 'scripts/build_market_home.py'
+      - 'scripts/translate_company_news.py'
+      - 'scripts/test_company_news_translation.py'
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
       - 'scripts/check_market_home_browser.cjs'
@@ -28,6 +30,8 @@ on:
       - 'forecasts/latest.json'
       - 'market/latest.json'
       - 'scripts/build_market_home.py'
+      - 'scripts/translate_company_news.py'
+      - 'scripts/test_company_news_translation.py'
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
       - 'scripts/check_market_home_browser.cjs'
@@ -64,6 +68,7 @@ jobs:
       - name: Validate daily TOP 3, semantic no-ops, periods and cache recovery
         run: |
           python -m unittest discover -s scripts -p test_market_home.py
+          python -m unittest discover -s scripts -p test_company_news_translation.py
           node scripts/test_market_home.cjs
           node --check assets/market-home.js
       - name: Refresh daily TOP 3 before news translation

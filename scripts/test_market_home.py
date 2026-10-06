@@ -12,8 +12,8 @@ import build_market_home as h
 NOW=datetime(2026,10,3,23,tzinfo=timezone.utc)
 
 
-def rss(title='U.S. economy outlook', url='https://www.federalreserve.gov/newsevents/speech/test.htm', published='Fri, 02 Oct 2026 16:00:00 GMT'):
-    return '<rss><channel><item><title>'+title+'</title><link>'+url+'</link><pubDate>'+published+'</pubDate><description>The economy grew while inflation remained above target.</description></item></channel></rss>'
+def rss(title='U.S. economy outlook', url='https://www.federalreserve.gov/newsevents/speech/test.htm', published='Fri, 02 Oct 2026 16:00:00 GMT', description='The economy grew while inflation remained above target.'):
+    return '<rss><channel><item><title>'+title+'</title><link>'+url+'</link><pubDate>'+published+'</pubDate><description>'+description+'</description></item></channel></rss>'
 
 
 class Periods(unittest.TestCase):
@@ -172,6 +172,155 @@ class Feeds(unittest.TestCase):
         self.assertEqual(len(items),1)
         self.assertEqual(items[0]['category'],'주식시장')
         self.assertEqual(sum(f['name'].startswith('CNBC') for f in feeds),3)
+
+
+class HeadlineTranslation(unittest.TestCase):
+    TITLE='Stocks are hitting records despite surging yields. Cramer explains why'
+    EXCERPT='CNBC’s Jim Cramer said Nvidia, Microsoft and Meta are helping push stocks to records even as surging Treasury yields pressure much of the broader market.'
+    BROKEN='크레이머 (Cramer) 는 왜'
+    SUMMARY='CNBC의 짐 크레이머 (Jim Cramer) 는 Nvidia, 마이크로소프트 및 메타가 주식을 기록으로 끌어올리는 데 도움을 주고 있다고 말했습니다. 미국 정부 채권 금리 상승은 더 넓은 시장에 압력을 가하고 있습니다.'
+    GOOD='금리 급등에도 주가 신고가'
+    RETRY='Stocks are hitting records despite surging yields.'
+
+    def setUp(self):
+        self.now=datetime(2026,10,6,0,51,tzinfo=timezone.utc)
+        self.url='https://www.cnbc.com/2026/10/05/cramer-ai-stocks-treasury-yields.html'
+        cramer=rss(self.TITLE,self.url,'Mon, 05 Oct 2026 22:18:13 GMT',self.EXCERPT)
+        good=rss('Wall Street stocks rise after strong earnings',
+                 'https://www.cnbc.com/2026/10/05/stocks-market-test.html','Mon, 05 Oct 2026 23:00:00 GMT')
+        self.xml=good.replace('</channel></rss>',cramer.split('<channel>')[1])
+        items,_=h.collect_news({},self.now,{},self.fetch)
+        for item in items:
+            item.pop('_translate',None);item.pop('_excerpt',None)
+            item.update(headlineKo=self.BROKEN if item['url']==self.url else '미국 주식 실적 호조에 상승',
+                        summaryKo=self.SUMMARY if item['url']==self.url else '실적 호조로 미국 주가가 올랐습니다.',
+                        translationStatus='ready',translationMethod='machine-translation',translationVersion='home-news-ko-v2')
+        self.prior={'news':items}
+        self.cramer=deepcopy(items[1])
+        self.assertEqual(self.cramer['sourceHash'],'3ecf4d13dbcb6db6393ad01c811b7df2df36d1e6ac6dd4d53b40f3353782e605')
+
+    def fetch(self,url):
+        return self.xml if url==h.FEEDS[4][1] else '<rss><channel/></rss>'
+
+    def fresh(self):
+        item=deepcopy(self.cramer)
+        for key in h.TRANSLATION_FIELDS:item.pop(key,None)
+        item['_translate']=[self.TITLE,self.EXCERPT]
+        return item
+
+    def translator(self,batches):
+        calls=[]
+        def translate(texts):
+            calls.append(texts)
+            output=batches[len(calls)-1]
+            if isinstance(output,Exception):raise output
+            return output
+        return translate,calls
+
+    def quotes(self):
+        return {s:{'symbol':s,'name':name,'status':'unavailable'} for s,name,_ in h.INDICES+h.SECTORS}
+
+    def test_cramer_retries_once_with_simpler_input_and_keeps_first_summary(self):
+        item=self.fresh();before=deepcopy(item)
+        translate,calls=self.translator([[self.BROKEN,self.SUMMARY],[self.GOOD]])
+        h.translate_news([item],Path('/unused'),translate)
+        self.assertEqual(calls,[[self.TITLE,self.EXCERPT],[self.RETRY]])
+        self.assertEqual(item['headlineKo'],self.GOOD);self.assertEqual(item['summaryKo'],self.SUMMARY)
+        self.assertEqual(item['translationStatus'],'ready')
+        for key in before:
+            if key!='_translate':self.assertEqual(item[key],before[key])
+
+    def test_failed_retry_uses_source_title_and_preserves_valid_summary_and_display_order(self):
+        item=self.fresh()
+        translate,calls=self.translator([[self.BROKEN,self.SUMMARY],['크레이머는 왜?']])
+        h.translate_news([item],Path('/unused'),translate)
+        self.assertEqual(calls,[[self.TITLE,self.EXCERPT],[self.RETRY]])
+        self.assertEqual(item['headlineKo'],self.TITLE);self.assertEqual(item['summaryKo'],self.SUMMARY)
+        self.assertEqual(item['translationStatus'],'headline-fallback')
+        self.assertNotIn('_translate',item)
+        news=[deepcopy(self.prior['news'][0]),item]
+        snapshot=h.assemble(self.quotes(),news,[],{'buy':[],'sell':[]},self.now)
+        self.assertEqual([a['url'] for a in snapshot['news']],[a['url'] for a in news])
+        self.assertEqual(snapshot['news'][1]['summaryKo'],self.SUMMARY)
+        for key in ['sourceHash','importance','importanceReason','title','publishedAt','firstPublishedAt']:
+            self.assertEqual(snapshot['news'][1][key],self.cramer[key])
+
+    def test_retry_exception_or_count_mismatch_cannot_discard_first_summary(self):
+        for failed in [TimeoutError(),[],[self.GOOD,self.GOOD]]:
+            with self.subTest(failed=failed),patch('sys.stdout',io.StringIO()):
+                item=self.fresh()
+                translate,calls=self.translator([[self.BROKEN,self.SUMMARY],failed])
+                h.translate_news([item],Path('/unused'),translate)
+                self.assertEqual(len(calls),2);self.assertEqual(item['headlineKo'],self.TITLE)
+                self.assertEqual(item['summaryKo'],self.SUMMARY)
+                self.assertEqual(item['translationStatus'],'headline-fallback')
+
+    def test_mixed_batch_retries_only_bad_headline_without_shifting_summaries(self):
+        good=deepcopy(self.prior['news'][0]);good['_translate']=[good['title'],good['sourceExcerpt']]
+        item=self.fresh();summary='실적 호조로 미국 주가가 상승했습니다.'
+        translate,calls=self.translator([['미국 주식 실적 호조에 상승',summary,self.BROKEN,self.SUMMARY],[self.GOOD]])
+        h.translate_news([good,item],Path('/unused'),translate)
+        self.assertEqual(calls,[[good['title'],good['sourceExcerpt'],self.TITLE,self.EXCERPT],[self.RETRY]])
+        self.assertEqual(good['summaryKo'],summary);self.assertEqual(item['summaryKo'],self.SUMMARY)
+        self.assertEqual(good['translationStatus'],'ready');self.assertEqual(item['translationStatus'],'ready')
+
+    def test_only_failed_current_v2_cache_retranslates_headline_and_not_healthy_summary(self):
+        items,_=h.collect_news(self.prior,self.now,{},self.fetch)
+        self.assertNotIn('_translate',items[0]);self.assertEqual(items[1]['_translate'],[self.TITLE,None])
+        translate,calls=self.translator([[self.BROKEN],[self.GOOD]])
+        h.translate_news(items,Path('/unused'),translate)
+        self.assertEqual(calls,[[self.TITLE],[self.RETRY]])
+        self.assertEqual(items[0],self.prior['news'][0])
+        self.assertEqual(items[1]['summaryKo'],self.SUMMARY)
+        self.assertEqual(h.HOME_TRANSLATION_VERSION,'home-news-ko-v2')
+        for before,after in zip(self.prior['news'],items):
+            for key in ['url','title','sourceHash','importance','importanceReason','publishedAt','firstPublishedAt']:
+                self.assertEqual(before[key],after[key])
+        again,_=h.collect_news({'news':items},self.now,{},self.fetch)
+        self.assertTrue(all('_translate' not in a for a in again))
+
+    def test_source_fallback_cache_is_reused_but_changed_source_retranslates_both_fields(self):
+        cached=deepcopy(self.prior)
+        cached['news'][1].update(headlineKo=self.TITLE,translationStatus='headline-fallback')
+        items,_=h.collect_news(cached,self.now,{},self.fetch)
+        self.assertTrue(all('_translate' not in a for a in items))
+        cached['news'][1]['sourceHash']='different-source'
+        changed,_=h.collect_news(cached,self.now,{},self.fetch)
+        self.assertEqual(changed[1]['_translate'],[self.TITLE,self.EXCERPT])
+        self.assertNotIn('summaryKo',changed[1])
+
+    def test_healthy_headline_has_no_retry_and_bad_summary_cannot_be_displayed(self):
+        for summary,status in [(self.SUMMARY,'ready'),('English only','unavailable')]:
+            with self.subTest(summary=summary):
+                item=self.fresh()
+                translate,calls=self.translator([[self.GOOD,summary]])
+                h.translate_news([item],Path('/unused'),translate)
+                self.assertEqual(calls,[[self.TITLE,self.EXCERPT]])
+                self.assertEqual(item['translationStatus'],status)
+                self.assertEqual(h.usable_translation(item),status=='ready')
+
+    def test_failed_feed_cache_is_gated_even_when_translation_is_disabled(self):
+        def fetch(url):
+            if url==h.FEEDS[4][1]:raise TimeoutError()
+            return '<rss><channel/></rss>'
+        items,_=h.collect_news(self.prior,self.now,{},fetch)
+        self.assertEqual(items[1]['headlineKo'],self.TITLE)
+        self.assertEqual(items[1]['translationStatus'],'headline-fallback')
+        self.assertEqual(items[1]['summaryKo'],self.SUMMARY)
+        self.assertEqual(items[1]['sourceHash'],self.cramer['sourceHash'])
+        self.assertTrue(items[1]['fromCache']);self.assertEqual(items[1]['sourceStatus'],'unavailable')
+
+    def test_initial_engine_failure_keeps_good_cached_summary_with_source_title(self):
+        with TemporaryDirectory() as folder:
+            root=Path(folder);h.atomic(root/'market/home-cache.json',self.prior)
+            translate,calls=self.translator([TimeoutError()])
+            with patch.object(h,'home_rankings',return_value={'buy':[],'sell':[]}), \
+                    patch.object(h,'prices',return_value=(self.quotes(),{})),patch('sys.stdout',io.StringIO()):
+                snapshot=h.build(root,self.now,self.fetch,translate)
+            self.assertEqual(calls,[[self.TITLE]])
+            self.assertEqual(snapshot['news'][1]['headlineKo'],self.TITLE)
+            self.assertEqual(snapshot['news'][1]['summaryKo'],self.SUMMARY)
+            self.assertEqual(snapshot['news'][1]['translationStatus'],'headline-fallback')
 
 
 class PriceCache(unittest.TestCase):
