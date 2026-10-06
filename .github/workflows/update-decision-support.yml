@@ -13,7 +13,7 @@ on:
       - 'assets/decision-support*'
       - '.github/workflows/update-decision-support.yml'
   workflow_run:
-    workflows: ['Update S&P 500 EOD prices', 'Update crypto market guide', 'Update environment model research', 'Update official earnings and retrain stock research', 'Update S&P 500 fundamentals']
+    workflows: ['Update S&P 500 EOD forecast research', 'Update crypto market guide', 'Update environment model research', 'Update official earnings and retrain stock research', 'Update S&P 500 fundamentals']
     types: [completed]
     branches: [main]
   schedule:

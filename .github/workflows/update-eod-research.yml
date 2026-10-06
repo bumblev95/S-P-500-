@@ -1,0 +1,82 @@
+name: Update S&P 500 EOD forecast research
+
+on:
+  workflow_run:
+    workflows: ['Update S&P 500 EOD prices']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: 'Successful public EOD run ID whose exact input artifact should be researched again'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+  pages: write
+
+# The decision workflow also writes ml/adaptive. Serialize those writers while
+# keeping the fast market-data publisher independent of research duration.
+concurrency:
+  group: decision-support
+  cancel-in-progress: false
+
+jobs:
+  research:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original research and publication dependencies
+        run: |
+          pip install -r scripts/requirements-ml.txt
+          pip install -r scripts/requirements-eod.txt
+      - name: Download the successful EOD run's exact input checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: eod-research-inputs
+          path: ${{ runner.temp }}/eod-release/
+          run-id: ${{ github.event.workflow_run.id || inputs.source_run_id }}
+          github-token: ${{ github.token }}
+      - name: Restore and verify published commit and full downloaded histories
+        run: python scripts/eod_publication.py restore --bundle "$RUNNER_TEMP/eod-release"
+      - name: Train and validate learned forecasts
+        run: python scripts/build_learned_forecasts.py
+      - name: Audit realized targets and chronological separation
+        run: python scripts/audit_learned_results.py
+      - name: Evaluate relative price error and stability candidates
+        run: python scripts/build_stability_research.py
+      - name: Compare forecasts without using future outcomes for selection
+        run: python scripts/build_forecast_comparison.py
+      - name: Evaluate forecast correction and regime blending
+        run: python scripts/build_adaptive_research.py
+      - name: Score first-issued forecasts against realized prices
+        run: python scripts/score_live_forecasts.py
+      - name: Preserve research outputs even if a newer public EOD supersedes them
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eod-research-results
+          path: |
+            ml/
+            ${{ runner.temp }}/eod-release/publication.json
+          retention-days: 14
+      - name: Publish only research outputs for the still-current public snapshot
+        id: publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python scripts/eod_publication.py publish-research --bundle "$RUNNER_TEMP/eod-release"
+      - name: Refresh research dashboard
+        if: steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

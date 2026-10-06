@@ -1,0 +1,48 @@
+name: Validate atomic EOD publication
+on:
+  push:
+    paths:
+      - 'scripts/update_eod_prices.py'
+      - 'scripts/build_forecasts.py'
+      - 'scripts/eod_publication.py'
+      - 'scripts/test_eod_publication.py'
+      - 'scripts/requirements-eod.txt'
+      - 'scripts/requirements-ml.txt'
+      - '.github/workflows/*eod*.yml'
+      - '.github/workflows/market-home.yml'
+      - '.github/workflows/update-decision-support.yml'
+  pull_request:
+    paths:
+      - 'scripts/update_eod_prices.py'
+      - 'scripts/build_forecasts.py'
+      - 'scripts/eod_publication.py'
+      - 'scripts/test_eod_publication.py'
+      - 'scripts/requirements-eod.txt'
+      - 'scripts/requirements-ml.txt'
+      - '.github/workflows/*eod*.yml'
+      - '.github/workflows/market-home.yml'
+      - '.github/workflows/update-decision-support.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install collection, calendar and workflow validation dependencies
+        run: |
+          pip install -r scripts/requirements-eod.txt
+          pip install PyYAML==6.0.2
+      - name: Reject partial snapshots and verify atomic public/research commits
+        run: python -m unittest discover -s scripts -p test_eod_publication.py
+      - name: Verify unchanged forecast and daily TOP3 rules
+        run: |
+          python -m unittest discover -s tests -p test_forecasts.py
+          node scripts/test_market_home.cjs
+          node scripts/test_entry_indicator.cjs
