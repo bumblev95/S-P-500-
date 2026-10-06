@@ -90,6 +90,63 @@ class TranslationTests(unittest.TestCase):
         # The general summary check retains its existing contract.
         self.assertTrue(m.valid_korean('크레이머 (Cramer) 는 왜'))
 
+    def test_news_terms_use_literal_meanings_and_preserve_singular_and_hedge_funds(self):
+        expected={
+            'FOMC minutes': 'written records of the Federal Reserve monetary policy meeting',
+            "FOMC's meeting minutes": 'written records of the Federal Reserve monetary policy meeting',
+            'minutes from the FOMC meeting': 'written records of the Federal Reserve monetary policy meeting',
+            "Federal Reserve’s last meeting minutes": 'written records of the Federal Reserve monetary policy meeting',
+            'QUANT FUNDS': 'investment FUNDS using mathematical and statistical trading strategies',
+            'quantitative hedge fund': 'investment hedge fund using mathematical and statistical trading strategies',
+            'offshore workers': 'workers at sea', 'offshore worker': 'worker at sea',
+        }
+        for source,normalized in expected.items():
+            with self.subTest(source=source):
+                self.assertEqual(m.translation_input(source),normalized)
+                self.assertEqual(m.translation_input(normalized),normalized, 'Retry/engine normalization must be idempotent')
+
+    def test_meaning_gate_accepts_financial_and_news_synonyms(self):
+        synonyms={
+            'FOMC minutes': ['연준 의사록 공개를 앞두고 국채 금리 보합', '연준 회의 기록을 기다리는 투자자들',
+                             '연방준비제도 정책회의의 서면 기록 공개', 'FOMC 회의록 공개 예고',
+                             '연준 회의에 대한 서면 기록 발표'],
+            'quant funds': ['퀀트 펀드, 시장보다 높은 수익률', '계량 투자펀드의 시장 초과 수익',
+                            '통계 기반 투자 기금의 성과', '정량적 투자 전략의 성과', '양적 헤지펀드의 성과'],
+            'offshore workers': ['해상 노동자 48시간 파업', '해양 시설 근로자의 임금 갈등', '바다에서 근무하는 직원들 파업'],
+        }
+        for source,headlines in synonyms.items():
+            for headline in headlines:
+                with self.subTest(source=source,headline=headline):
+                    self.assertTrue(m.valid_korean_headline(headline,source))
+
+    def test_meaning_gate_rejects_wrong_or_missing_known_source_senses(self):
+        cases=[('FOMC minutes','투자자들이 FOMC 분기를 예상하며 국채 금리는 보합'),
+               ('FOMC minutes','국채 금리는 보합'),
+               ('FOMC minutes','회사 회의록 공개에 국채 금리는 보합'),
+               ('FOMC minutes','FOMC 분기 전망과 회의록 공개'),
+               ('quant funds','양자 자금은 시장을 이기는 방법'),
+               ('quant funds','통계를 사용하는 양자 펀드의 성과'),
+               ('quant funds','투자펀드의 성과'),
+               ('offshore workers','오프셔널 노동자 48시간 파업'),
+               ('offshore workers','해외 근로자의 파업')]
+        for source,headline in cases:
+            with self.subTest(source=source,headline=headline):
+                self.assertTrue(m.valid_korean_headline(headline),'These are complete but semantically unsafe')
+                self.assertFalse(m.valid_korean_headline(headline,source))
+                self.assertTrue(m.valid_korean(headline),'Summary validation is unchanged')
+
+    def test_ambiguous_words_and_excerpt_only_terms_do_not_trigger_headline_rules(self):
+        cases=[('Cook rice for 20 minutes','쌀을 20분 동안 익히기'),
+               ('Quantum computing funds receive new investment','양자 컴퓨팅 자금에 신규 투자'),
+               ('Offshore funds face tax scrutiny','역외 펀드 세금 조사'),
+               ('Offshore wind farms grow','해상 풍력 발전 확대'),
+               ('Workers at an overseas office go on strike','해외 근로자 파업'),
+               ('Markets are flat','시장 보합')]
+        for source,headline in cases:
+            with self.subTest(source=source):
+                self.assertEqual(m.translation_input(source),source)
+                self.assertTrue(m.valid_korean_headline(headline,source))
+
     def test_headline_gate_allows_nominal_headlines_and_complete_questions(self):
         for text in ['미국 주식 신고가', '인도 주식 시장이 성장하면서도 침체하는 5가지 이유',
                      '금리 상승에도 주가 강세', '주가가 오르는 이유는?', '왜 주가가 오르나?',

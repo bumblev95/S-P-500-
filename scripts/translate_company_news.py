@@ -19,6 +19,27 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'facebook/nllb-200-distilled-600M'
 VERSION = 'company-news-ko-v5'
 
+# Match whole source phrases, not standalone ambiguous words (minutes, quant,
+# offshore). Literal English inputs help NLLB keep the news/financial sense.
+# Korean alternatives include normal nominal headlines and common synonyms.
+HEADLINE_TERMS = (
+    (r"\b(?:(?:FOMC|Federal Open Market Committee|Federal Reserve)(?:'s)?\s+"
+     r"(?:(?:last|latest)\s+)?(?:meeting\s+)?minutes|minutes\s+(?:of|from)\s+"
+     r"(?:the\s+)?(?:FOMC|Federal Open Market Committee|Federal Reserve)"
+     r"(?:'s)?(?:\s+(?:(?:last|latest)\s+)?(?:policy\s+)?meeting)?)\b",
+     'written records of the Federal Reserve monetary policy meeting',
+     (r'의사\s*록|회의\s*록|회의(?:의|에\s*(?:대한|관한)|에서)?\s*(?:서면\s*)?(?:기록|내용|논의)',
+      r'FOMC|연준|연방\s*준비|미국\s*중앙\s*은행'),
+     r'(?:FOMC|연준|연방\s*준비\s*제도)\s*(?:의\s*)?(?:분기|분간)'),
+    (r'\b(?:quant|quantitative)\s+((?:hedge\s+)?funds?)\b',
+     r'investment \1 using mathematical and statistical trading strategies',
+     (r'퀀트|계량|정량|양적|수학|통계', r'펀드|기금|자금|투자'),
+     r'양자\s*(?:펀드|자금|기금|투자)'),
+    (r'\boffshore\s+(workers?)\b', r'\1 at sea',
+     (r'해상|해양|바다|연안', r'노동자|근로자|작업자|직원|인력|종사자|근무자'),
+     r'오프셔널'),
+)
+
 
 def source_hash(article):
     return hashlib.sha256((article['title']+'\n'+article.get('summary', '')).encode()).hexdigest()
@@ -47,10 +68,24 @@ def valid_korean(text):
     return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text and not text.startswith('한국어 요약 번역을 완료하지')
 
 
-def valid_korean_headline(text):
+def valid_headline_terms(text, source_title):
+    """Check only known source-bound senses; this is not general fact checking.
+
+    Use the exact source title, never the excerpt: a title need not repeat every
+    term in its lead summary. Unrelated quantum/offshore/time news stay valid.
+    """
+    source = unicodedata.normalize('NFKC', source_title).replace('’', "'").replace('‘', "'")
+    return all(not re.search(pattern, source, re.I) or
+               (all(re.search(required, text, re.I) for required in expected)
+                and not re.search(wrong, text, re.I))
+               for pattern, _, expected, wrong in HEADLINE_TERMS)
+
+
+def valid_korean_headline(text, source_title=''):
     """Reject obvious unfinished headlines, while allowing normal noun phrases.
 
-    This conservative surface check is not a general grammar/meaning validator.
+    Known news terms also retain their source-title meaning. This conservative
+    check is not a general grammar/meaning validator.
     Keep the broader summary validator separate: a bad title must not discard a
     complete Korean lead, including an already cached/reviewed summary.
     """
@@ -69,7 +104,8 @@ def valid_korean_headline(text):
                  r'그리고|하지만|그러나|만약|때문에|대해|관해|위해|따라|동안|'
                  r'은|는|이|가|을|를|의|에|에게|에서|으로|로|와|과)$', tail):
         return False
-    return not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
+    return (not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
+            and valid_headline_terms(text, source_title))
 
 
 def simpler_headline_input(title, source_excerpt=''):
@@ -90,6 +126,8 @@ def simpler_headline_input(title, source_excerpt=''):
 
 def translation_input(text):
     text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-')
+    for pattern, replacement, _, _ in HEADLINE_TERMS:
+        text = re.sub(pattern, replacement, text, flags=re.I)
     # Expand compact financial-news jargon before NLLB sees it. Literal wording
     # prevents common false senses such as Treasury=finance ministry or yield=profit.
     replacements = [
@@ -97,7 +135,6 @@ def translation_input(text):
         (r'\bFed rate hike bets\b', 'expectations for a Federal Reserve interest rate increase'),
         (r'\bpare back\b', 'reduce'),
         (r'\bsharp selloff\b', 'sharp market decline'),
-        (r"\bFederal Reserve's last meeting minutes\b", "minutes from the Federal Reserve's latest policy meeting"),
         (r'\bjobs report\b', 'employment report'),
         (r'\bsoft labor market\b', 'weak labor market'),
         (r'\bfed funds rate\b', 'Federal Reserve policy interest rate'),
