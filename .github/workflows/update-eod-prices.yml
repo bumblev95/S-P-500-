@@ -11,6 +11,7 @@ on:
       - 'scripts/build_forecasts.py'
       - 'scripts/eod_publication.py'
       - 'scripts/eod_close_fallback.py'
+      - 'scripts/eod_close_schedule.py'
       - 'scripts/requirements-eod.txt'
       - '.github/workflows/update-eod-prices.yml'
   workflow_dispatch:
@@ -20,8 +21,14 @@ on:
         type: boolean
         default: false
   schedule:
-    # Runs after the U.S. market close on weekdays. Adjust if you want a different refresh time.
-    - cron: "30 23 * * 1-5"
+    # Start at regular/early exchange close; XNYS calendar skips the unused slot
+    # and holidays. The collector keeps its 15-minute completion buffer.
+    - cron: "0 13,16 * * 1-5"
+      timezone: "America/New_York"
+    # Bounded recovery if the first run is delayed, dropped or lacks a close.
+    # An already-complete session skips collection and downstream research.
+    - cron: "35 13,16 * * 1-5"
+      timezone: "America/New_York"
 
 permissions:
   contents: write
@@ -34,6 +41,7 @@ concurrency:
 jobs:
   update-eod-prices:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -51,26 +59,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r scripts/requirements-eod.txt
 
-      - name: Download EOD prices
+      - name: Collect and validate the first complete settled EOD snapshot
+        id: collect
         env:
           FORECAST_PUBLIC_PRICES_ONLY: ${{ github.event_name == 'push' && 'true' || github.event.inputs.public_prices_only || 'false' }}
         run: |
           if [ "$FORECAST_PUBLIC_PRICES_ONLY" = "true" ]; then
-            python scripts/update_eod_prices.py --public-prices-only --receipt "$RUNNER_TEMP/eod-request.json"
+            python scripts/eod_close_schedule.py --public-prices-only --receipt "$RUNNER_TEMP/eod-request.json"
           else
-            python scripts/update_eod_prices.py --receipt "$RUNNER_TEMP/eod-request.json"
+            python scripts/eod_close_schedule.py --receipt "$RUNNER_TEMP/eod-request.json"
           fi
 
-      - name: Build forecasts and preserve issue records
-        run: python scripts/build_forecasts.py
-
       - name: Validate and atomically publish complete prices and forecasts
+        if: steps.collect.outputs.ready == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python scripts/eod_publication.py publish --receipt "$RUNNER_TEMP/eod-request.json" --bundle "$RUNNER_TEMP/eod-release"
 
       - name: Transfer the exact published inputs to follow-up research
+        if: steps.collect.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: eod-research-inputs
@@ -80,6 +88,7 @@ jobs:
           retention-days: 14
 
       - name: Refresh the published dashboard
+        if: steps.collect.outputs.ready == 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}

@@ -398,10 +398,13 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn(public["name"], decision["on"]["workflow_run"]["workflows"])
         self.assertNotEqual(public["concurrency"]["group"], research["concurrency"]["group"])
         self.assertEqual(decision["concurrency"]["group"], research["concurrency"]["group"])
-        self.assertEqual(public["on"]["schedule"], [{"cron": "30 23 * * 1-5"}])
+        self.assertEqual(public["on"]["schedule"], [
+            {"cron": "0 13,16 * * 1-5", "timezone": "America/New_York"},
+            {"cron": "35 13,16 * * 1-5", "timezone": "America/New_York"},
+        ])
         public_steps = public["jobs"]["update-eod-prices"]["steps"]
         runs = [s["run"] for s in public_steps if "run" in s]
-        self.assertLess(next(i for i, r in enumerate(runs) if "build_forecasts.py" in r),
+        self.assertLess(next(i for i, r in enumerate(runs) if "eod_close_schedule.py" in r),
                         next(i for i, r in enumerate(runs) if "eod_publication.py publish " in r))
         expected = ["build_learned_forecasts.py", "audit_learned_results.py", "build_stability_research.py",
                     "build_forecast_comparison.py", "build_adaptive_research.py", "score_live_forecasts.py"]
@@ -410,6 +413,16 @@ class WorkflowTests(unittest.TestCase):
                           if r.startswith("python scripts/") and r.endswith(".py")], expected)
         for script in expected:
             self.assertNotIn(script, "\n".join(runs))
+        for step in public_steps:
+            if step.get("uses", "").startswith("actions/upload-artifact") or "eod_publication.py publish " in step.get("run", ""):
+                self.assertEqual(step["if"], "steps.collect.outputs.ready == 'true'")
+        for step in research["jobs"]["research"]["steps"]:
+            if step.get("id") == "checkpoint":
+                continue
+            if step.get("name") == "Refresh research dashboard":
+                self.assertIn("steps.publish.outputs.published", step["if"])
+            else:
+                self.assertIn("steps.checkpoint.outputs.available == 'true'", step["if"])
         self.assertNotIn("update_eod_prices.py", "\n".join(commands))
         self.assertNotIn("build_forecasts.py", "\n".join(commands))
         self.assertIn("conclusion == 'success'", research["jobs"]["research"]["if"])
