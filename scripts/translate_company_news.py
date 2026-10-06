@@ -19,9 +19,15 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'facebook/nllb-200-distilled-600M'
 VERSION = 'company-news-ko-v5'
 
+MARINE_WORK_CONTEXT = r'\b(?:Wood Group|North Sea|oil|gas|rigs?|marine|drilling|offshore wind|at sea)\b'
+OUTSOURCING_CONTEXT = r'\b(?:outsourc\w*|software|call\s*cent(?:er|re)s?|overseas|IT services)\b'
+INVESTMENT_CONTEXT = r'\b(?:markets?|stocks?|invest\w*|funds?|trading|hedge|portfolio)\b'
+
 # Match whole source phrases, not standalone ambiguous words (minutes, quant,
 # offshore). Literal English inputs help NLLB keep the news/financial sense.
 # Korean alternatives include normal nominal headlines and common synonyms.
+# Each rule holds a source phrase, literal input, Korean requirements, a known
+# wrong sense, and optional positive/excluded contexts for ambiguous phrases.
 HEADLINE_TERMS = (
     (r"\b(?:(?:FOMC|Federal Open Market Committee|Federal Reserve)(?:'s)?\s+"
      r"(?:(?:last|latest)\s+)?(?:meeting\s+)?minutes|minutes\s+(?:of|from)\s+"
@@ -30,14 +36,17 @@ HEADLINE_TERMS = (
      'written records of the Federal Reserve monetary policy meeting',
      (r'의사\s*록|회의\s*록|회의(?:의|에\s*(?:대한|관한)|에서)?\s*(?:서면\s*)?(?:기록|내용|논의)',
       r'FOMC|연준|연방\s*준비|미국\s*중앙\s*은행'),
-     r'(?:FOMC|연준|연방\s*준비\s*제도)\s*(?:의\s*)?(?:분기|분간)'),
+     r'(?:FOMC|연준|연방\s*준비\s*제도)\s*(?:의\s*)?(?:분기|분간)', None, None),
     (r'\b(?:quant|quantitative)\s+((?:hedge\s+)?funds?)\b',
      r'investment \1 using mathematical and statistical trading strategies',
      (r'퀀트|계량|정량|양적|수학|통계', r'펀드|기금|자금|투자'),
-     r'양자\s*(?:펀드|자금|기금|투자)'),
+     r'양자\s*(?:펀드|자금|기금|투자)', None, None),
     (r'\boffshore\s+(workers?)\b', r'\1 at sea',
      (r'해상|해양|바다|연안', r'노동자|근로자|작업자|직원|인력|종사자|근무자'),
-     r'오프셔널'),
+     r'오프셔널', MARINE_WORK_CONTEXT, OUTSOURCING_CONTEXT),
+    (r'\bcontrarian\b', 'against prevailing market sentiment',
+     (r'역발상|역추세|반대|반하|반해|맞서|거스르|거슬러|역행|(?:주류|시장|통념).{0,20}다른',),
+     r'역동적', INVESTMENT_CONTEXT, None),
 )
 
 
@@ -68,6 +77,11 @@ def valid_korean(text):
     return isinstance(text, str) and 3 <= len(text) <= 600 and len(re.findall(r'[가-힣]', text)) >= 3 and '<unk>' not in text and not text.startswith('한국어 요약 번역을 완료하지')
 
 
+def term_context_matches(source, context, excluded):
+    return ((context is None or re.search(context, source, re.I))
+            and (excluded is None or not re.search(excluded, source, re.I)))
+
+
 def valid_headline_terms(text, source_title):
     """Check only known source-bound senses; this is not general fact checking.
 
@@ -75,10 +89,14 @@ def valid_headline_terms(text, source_title):
     term in its lead summary. Unrelated quantum/offshore/time news stay valid.
     """
     source = unicodedata.normalize('NFKC', source_title).replace('’', "'").replace('‘', "'")
-    return all(not re.search(pattern, source, re.I) or
-               (all(re.search(required, text, re.I) for required in expected)
-                and not re.search(wrong, text, re.I))
-               for pattern, _, expected, wrong in HEADLINE_TERMS)
+    for pattern, _, expected, wrong, context, excluded in HEADLINE_TERMS:
+        if not re.search(pattern, source, re.I): continue
+        if re.search(wrong, text, re.I): return False
+        # With no marine evidence, offshore can also mean overseas outsourcing.
+        # Do not demand a sea-based sense from an ambiguous source title.
+        if not term_context_matches(source, context, excluded): continue
+        if not all(re.search(required, text, re.I) for required in expected): return False
+    return True
 
 
 def valid_korean_headline(text, source_title=''):
@@ -126,8 +144,9 @@ def simpler_headline_input(title, source_excerpt=''):
 
 def translation_input(text):
     text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-')
-    for pattern, replacement, _, _ in HEADLINE_TERMS:
-        text = re.sub(pattern, replacement, text, flags=re.I)
+    for pattern, replacement, _, _, context, excluded in HEADLINE_TERMS:
+        if term_context_matches(text, context, excluded):
+            text = re.sub(pattern, replacement, text, flags=re.I)
     # Expand compact financial-news jargon before NLLB sees it. Literal wording
     # prevents common false senses such as Treasury=finance ministry or yield=profit.
     replacements = [

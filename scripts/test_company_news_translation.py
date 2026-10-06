@@ -98,7 +98,9 @@ class TranslationTests(unittest.TestCase):
             "Federal Reserve’s last meeting minutes": 'written records of the Federal Reserve monetary policy meeting',
             'QUANT FUNDS': 'investment FUNDS using mathematical and statistical trading strategies',
             'quantitative hedge fund': 'investment hedge fund using mathematical and statistical trading strategies',
-            'offshore workers': 'workers at sea', 'offshore worker': 'worker at sea',
+            'North Sea offshore workers': 'North Sea workers at sea',
+            'Wood Group offshore worker': 'Wood Group worker at sea',
+            'contrarian investment funds': 'against prevailing market sentiment investment funds',
         }
         for source,normalized in expected.items():
             with self.subTest(source=source):
@@ -112,7 +114,9 @@ class TranslationTests(unittest.TestCase):
                              '연준 회의에 대한 서면 기록 발표'],
             'quant funds': ['퀀트 펀드, 시장보다 높은 수익률', '계량 투자펀드의 시장 초과 수익',
                             '통계 기반 투자 기금의 성과', '정량적 투자 전략의 성과', '양적 헤지펀드의 성과'],
-            'offshore workers': ['해상 노동자 48시간 파업', '해양 시설 근로자의 임금 갈등', '바다에서 근무하는 직원들 파업'],
+            'Wood Group offshore workers': ['해상 노동자 48시간 파업', '해양 시설 근로자의 임금 갈등', '바다에서 근무하는 직원들 파업'],
+            'contrarian funds': ['역발상 투자펀드의 성과', '주류에 반대하는 펀드의 전략', '시장 흐름을 거스르는 투자',
+                                '시장 정서에 반하는 투자 전략'],
         }
         for source,headlines in synonyms.items():
             for headline in headlines:
@@ -127,8 +131,10 @@ class TranslationTests(unittest.TestCase):
                ('quant funds','양자 자금은 시장을 이기는 방법'),
                ('quant funds','통계를 사용하는 양자 펀드의 성과'),
                ('quant funds','투자펀드의 성과'),
-               ('offshore workers','오프셔널 노동자 48시간 파업'),
-               ('offshore workers','해외 근로자의 파업')]
+               ('Wood Group offshore workers','오프셔널 노동자 48시간 파업'),
+               ('Wood Group offshore workers','해외 근로자의 파업'),
+               ('contrarian funds','역동적 투자펀드의 성과'),
+               ('contrarian funds','시장에 반대하는 역동적 투자펀드')]
         for source,headline in cases:
             with self.subTest(source=source,headline=headline):
                 self.assertTrue(m.valid_korean_headline(headline),'These are complete but semantically unsafe')
@@ -140,12 +146,22 @@ class TranslationTests(unittest.TestCase):
                ('Quantum computing funds receive new investment','양자 컴퓨팅 자금에 신규 투자'),
                ('Offshore funds face tax scrutiny','역외 펀드 세금 조사'),
                ('Offshore wind farms grow','해상 풍력 발전 확대'),
+               ('Offshore workers at a software outsourcing company','소프트웨어 회사의 해외 외주 노동자'),
+               ('Wood Group offshore workers provide outsourced software services','우드 그룹 해외 외주 노동자의 소프트웨어 서비스'),
+               ('Offshore workers','해외 노동자'),
+               ('Contrarian artists challenge tradition','통념에 반대하는 예술가'),
                ('Workers at an overseas office go on strike','해외 근로자 파업'),
                ('Markets are flat','시장 보합')]
         for source,headline in cases:
             with self.subTest(source=source):
                 self.assertEqual(m.translation_input(source),source)
                 self.assertTrue(m.valid_korean_headline(headline,source))
+
+    def test_observed_live_quant_translation_still_rejects_wrong_contrarian_meaning(self):
+        source="How quant funds beat the market by being 'early, contrarian and right'"
+        wrong="수학 및 통계적 거래 전략을 이용한 투자펀드가 '초기, 역동적이고 올바른'로 시장을 이길 수 있는 방법"
+        self.assertFalse(m.valid_korean_headline(wrong,source))
+        self.assertIn('against prevailing market sentiment',m.translation_input(source))
 
     def test_headline_gate_allows_nominal_headlines_and_complete_questions(self):
         for text in ['미국 주식 신고가', '인도 주식 시장이 성장하면서도 침체하는 5가지 이유',
