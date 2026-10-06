@@ -72,7 +72,7 @@ def valid_korean_headline(text):
     return not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
 
 
-def simpler_headline_input(title):
+def simpler_headline_input(title, source_excerpt=''):
     """Retry a complete lead clause without a trailing teaser/attribution.
 
     Only simplify the translation input; exact source text and its hash remain
@@ -80,6 +80,11 @@ def simpler_headline_input(title):
     """
     text = translation_input(title)
     lead = next(complete_sentences(text), text)
+    lead = re.sub(r'\bStocks are hitting records\b', 'Stock prices are at record highs', lead, flags=re.I)
+    # A retained source lead can disambiguate bare "yields" without inventing
+    # bond context for agricultural yields or changing the source/hash itself.
+    if re.search(r'\b(?:Treasur(?:y|ies)|bond yields?|government bonds?)\b', title+' '+source_excerpt, re.I):
+        lead = re.sub(r'\b(?:surging|soaring) yields\b', 'sharply rising bond interest rates', lead, flags=re.I)
     return re.sub(r'\s*(?: - |[:;])\s*', ', ', lead).strip()
 
 

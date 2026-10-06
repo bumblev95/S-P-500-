@@ -99,7 +99,11 @@ class TranslationTests(unittest.TestCase):
 
     def test_simpler_headline_uses_complete_source_lead_not_trailing_teaser(self):
         title='Stocks are hitting records despite surging yields. Cramer explains why'
-        self.assertEqual(m.simpler_headline_input(title),'Stocks are hitting records despite surging yields.')
+        self.assertEqual(m.simpler_headline_input(title),'Stock prices are at record highs despite surging yields.')
+        self.assertEqual(m.simpler_headline_input(title,'Surging Treasury yields pressure the stock market.'),
+                         'Stock prices are at record highs despite sharply rising bond interest rates.')
+        crops='Crop stocks grow despite surging yields.'
+        self.assertEqual(m.simpler_headline_input(crops,'A bumper wheat crop increased grain supplies.'),crops)
         self.assertEqual(m.simpler_headline_input('U.S. stocks rise. Cramer explains why'),'US stocks rise.')
         self.assertEqual(m.simpler_headline_input('Treasury yields rise: Fed holds rates'),
                          'interest rates on U.S. government bonds rise, Federal Reserve holds rates')

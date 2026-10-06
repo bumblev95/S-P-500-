@@ -180,7 +180,7 @@ class HeadlineTranslation(unittest.TestCase):
     BROKEN='크레이머 (Cramer) 는 왜'
     SUMMARY='CNBC의 짐 크레이머 (Jim Cramer) 는 Nvidia, 마이크로소프트 및 메타가 주식을 기록으로 끌어올리는 데 도움을 주고 있다고 말했습니다. 미국 정부 채권 금리 상승은 더 넓은 시장에 압력을 가하고 있습니다.'
     GOOD='금리 급등에도 주가 신고가'
-    RETRY='Stocks are hitting records despite surging yields.'
+    RETRY='Stock prices are at record highs despite sharply rising bond interest rates.'
 
     def setUp(self):
         self.now=datetime(2026,10,6,0,51,tzinfo=timezone.utc)

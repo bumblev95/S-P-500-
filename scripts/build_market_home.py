@@ -353,7 +353,7 @@ def translate_news(articles, root, translate=None):
         retry_complete=False
         if retry:
             try:
-                retried=translate([simpler_headline_input(tasks[index]['title']) for index in retry])
+                retried=translate([simpler_headline_input(tasks[index]['title'],tasks[index].get('sourceExcerpt') or '') for index in retry])
                 if len(retried)!=len(retry):raise ValueError('Headline retry count mismatch')
                 retry_complete=True
                 for index,headline in zip(retry,retried):values[index][0]=headline
