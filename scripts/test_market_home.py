@@ -1,11 +1,16 @@
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
+import errno
+from http.client import IncompleteRead
 import io
 import json
 from pathlib import Path
+import socket
+import ssl
 from tempfile import TemporaryDirectory
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, call, patch
+from urllib.error import HTTPError, URLError
 from xml.sax.saxutils import escape
 
 import build_market_home as h
@@ -50,9 +55,113 @@ class Periods(unittest.TestCase):
 
 class Feeds(unittest.TestCase):
     def setUp(self):
+        self.sleep=self.enterContext(patch.object(h,'sleep'))
         self.old=h.parse_feed(rss(),'Fed 발표',NOW-timedelta(hours=1))[0]
         self.old.update(headlineKo='이전 경제 전망',summaryKo='확인한 발표 요약',translationStatus='ready',translationMethod='reviewed-summary',importance='important',importanceReason='검토한 정책 발언')
         self.prior={'news':[self.old], 'feeds':[{'name':'Fed 발표','lastSuccessAt':self.old['lastSuccessAt']}]}
+
+    def test_each_official_feed_recovers_in_same_run_after_one_http_failure(self):
+        for source,feed_url in h.FEEDS:
+            with self.subTest(source=source):
+                old=deepcopy(self.old);old['source']=source
+                prior={'news':[old],'feeds':[{'name':source,'lastSuccessAt':old['lastSuccessAt']}]}
+                def healthy(url):
+                    if url==feed_url:return rss('U.S. economy outlook updated',published='Sat, 03 Oct 2026 22:30:00 GMT')
+                    if url in [f[1] for f in h.FEEDS]:return '<rss><channel/></rss>'
+                    return '<p>The economy expanded while inflation remained above target.</p>'
+                expected=h.collect_news(prior,NOW,{},healthy)
+                attempts=[]
+                def fetch(url):
+                    if url==feed_url:
+                        attempts.append(url)
+                        if len(attempts)==1:raise HTTPError(url,503,'Unavailable',{},None)
+                    return healthy(url)
+                self.sleep.reset_mock()
+                items,feeds=h.collect_news(prior,NOW,{},fetch)
+                self.assertEqual((items,feeds),expected)
+                self.assertEqual(len(attempts),2);self.sleep.assert_called_once_with(0.5)
+                self.assertEqual(items[0]['title'],'U.S. economy outlook updated')
+                self.assertEqual(items[0]['firstPublishedAt'],old['firstPublishedAt'])
+                self.assertFalse(items[0]['fromCache'])
+                recovered=next(f for f in feeds if f['name']==source)
+                self.assertEqual(recovered['status'],'ready');self.assertFalse(recovered['fromCache'])
+                self.assertEqual(recovered['lastSuccessAt'],NOW.isoformat());self.assertNotIn('error',recovered)
+                self.assertEqual(prior['news'],[old])
+
+    def test_retry_exhaustion_preserves_cache_and_last_success(self):
+        for kind in ('http','timeout'):
+            with self.subTest(kind=kind):
+                attempts=[]
+                def fetch(url):
+                    if url==h.FEEDS[0][1]:
+                        attempts.append(url)
+                        if kind=='http':raise HTTPError(url,503,'Unavailable',{},None)
+                        raise URLError(TimeoutError('timed out'))
+                    return '<rss><channel/></rss>'
+                self.sleep.reset_mock()
+                items,feeds=h.collect_news(self.prior,NOW,{},fetch)
+                self.assertEqual(len(attempts),3)
+                self.assertEqual(self.sleep.call_args_list,[call(0.5),call(1.0)])
+                self.assertEqual(items,[{**self.old,'fromCache':True,'sourceStatus':'unavailable'}])
+                self.assertEqual(feeds[0],{'name':h.FEEDS[0][0],'url':h.FEEDS[0][1],
+                    'status':'unavailable','lastAttemptAt':NOW.isoformat(),
+                    'lastSuccessAt':self.old['lastSuccessAt'],'fromCache':True,
+                    'error':'HTTPError' if kind=='http' else 'URLError'})
+                self.assertTrue(all(f['status']=='ready' and not f['fromCache'] for f in feeds[1:]))
+                self.assertEqual(self.prior['news'],[self.old])
+
+    def test_only_transient_http_and_network_errors_are_retried(self):
+        url=h.FEEDS[0][1]
+        errors=[HTTPError(url,code,'Transient',{},None) for code in [408,429,500,502,503,504]]
+        errors += [TimeoutError(),ConnectionResetError(),ConnectionRefusedError(),
+                   URLError(TimeoutError()),URLError(ConnectionResetError()),
+                   socket.gaierror(socket.EAI_AGAIN,'Temporary DNS failure'),
+                   URLError(socket.gaierror(socket.EAI_AGAIN,'Temporary DNS failure')),
+                   OSError(errno.ENETUNREACH,'Network unreachable'),IncompleteRead(b'partial',100)]
+        for error in errors:
+            with self.subTest(error=repr(error)):
+                self.sleep.reset_mock();fetch=Mock(side_effect=[error,'latest response'])
+                self.assertEqual(h.fetch_feed(url,fetch),'latest response')
+                self.assertEqual(fetch.call_args_list,[call(url),call(url)])
+                self.sleep.assert_called_once_with(0.5)
+
+    def test_permanent_http_tls_dns_and_validation_failures_do_not_retry(self):
+        url=h.FEEDS[0][1]
+        errors=[HTTPError(url,code,'Permanent',{},None) for code in [400,401,403,404,410,501,505]]
+        errors += [URLError(ssl.SSLCertVerificationError('Invalid certificate')),
+                   URLError(socket.gaierror(socket.EAI_NONAME,'Unknown host')),
+                   URLError('unknown url type'),ValueError('Response too large'),RuntimeError('Invalid data')]
+        for error in errors:
+            with self.subTest(error=repr(error)):
+                self.sleep.reset_mock();fetch=Mock(side_effect=error)
+                with self.assertRaises(type(error)) as caught:h.fetch_feed(url,fetch)
+                self.assertIs(caught.exception,error);fetch.assert_called_once_with(url)
+                self.sleep.assert_not_called()
+
+    def test_permanent_error_after_transient_error_stops_retry_and_uses_cache(self):
+        url=h.FEEDS[0][1]
+        fetch=Mock(side_effect=[HTTPError(url,503,'Unavailable',{},None),HTTPError(url,403,'Forbidden',{},None)])
+        with patch.object(h,'FEEDS',[h.FEEDS[0]]):
+            items,feeds=h.collect_news(self.prior,NOW,{},fetch)
+        self.assertEqual(fetch.call_count,2);self.sleep.assert_called_once_with(0.5)
+        self.assertTrue(items[0]['fromCache']);self.assertEqual(feeds[0]['error'],'HTTPError')
+
+    def test_malformed_xml_falls_back_without_transport_retry(self):
+        fetch=Mock(return_value='<rss><channel>')
+        with patch.object(h,'FEEDS',[h.FEEDS[0]]):
+            items,feeds=h.collect_news(self.prior,NOW,{},fetch)
+        fetch.assert_called_once_with(h.FEEDS[0][1]);self.sleep.assert_not_called()
+        self.assertTrue(items[0]['fromCache']);self.assertEqual(feeds[0]['error'],'ParseError')
+
+    def test_default_fetch_recovers_from_timeout_while_reading_response(self):
+        response=Mock()
+        response.__enter__=Mock(return_value=response);response.__exit__=Mock(return_value=False)
+        response.read=Mock(side_effect=[TimeoutError(),b'<rss><channel/></rss>'])
+        with patch.object(h,'FEEDS',[h.FEEDS[0]]), patch.object(h.urllib.request,'urlopen',return_value=response) as opened:
+            items,feeds=h.collect_news(self.prior,NOW,{})
+        self.assertEqual(items,[]);self.assertEqual(feeds[0]['status'],'ready')
+        self.assertFalse(feeds[0]['fromCache']);self.assertEqual(opened.call_count,2)
+        self.assertEqual(response.__exit__.call_count,2);self.sleep.assert_called_once_with(0.5)
 
     def test_only_failed_feed_keeps_its_cache_and_recovery_replaces_it(self):
         def fetch(url):
