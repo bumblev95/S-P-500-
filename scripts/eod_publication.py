@@ -87,6 +87,9 @@ def public_hashes(root):
 def validate(root, receipt):
     symbols = receipt_symbols(receipt)
     as_of = latest_closed_session(receipt["updatedAt"])
+    from eod_symbol_mapping import assert_trading_session, transition, verify_universe_changes
+
+    verify_universe_changes(receipt, as_of)
     with (root / PUBLIC_PATHS[0]).open(encoding="utf-8", newline="") as stream:
         rows = list(csv.DictReader(stream))
     by_symbol = {r["symbol"]: r for r in rows}
@@ -101,6 +104,7 @@ def validate(root, receipt):
     histories = {}
     for symbol in sorted(symbols):
         row, forecast = by_symbol[symbol], stocks[symbol]
+        assert_trading_session(symbol, as_of)
         if row["date"] != as_of or row["updatedAt"] != receipt["updatedAt"]:
             raise ValueError(f"{symbol}: stale, unfinished or retained price row; expected {as_of}")
         positive(row["close"])
@@ -122,6 +126,14 @@ def validate(root, receipt):
             from eod_close_fallback import SOURCE, decode_evidence, verify_evidence
 
             evidence = decode_evidence(row.get("eodProvenance") or "")
+            from eod_symbol_mapping import PROVIDER, SOURCE as MAPPED_SOURCE, verify_evidence as verify_mapping
+
+            if transition(symbol, as_of) and evidence.get('provider') != PROVIDER:
+                raise ValueError(f"{symbol}: verified symbol-transition provenance is required")
+            if evidence.get('provider') == PROVIDER:
+                SOURCE, verify_evidence = MAPPED_SOURCE, verify_mapping
+                if row.get('yahooSymbol') != evidence.get('yahooSymbol'):
+                    raise ValueError(f"{symbol}: mapped provider symbol and evidence disagree")
             if (not evidence or evidence != record.get("eodRecovery")
                     or row.get("source") != SOURCE or forecast.get("source") != SOURCE):
                 raise ValueError(f"{symbol}: missing or inconsistent secondary EOD provenance")
@@ -130,7 +142,8 @@ def validate(root, receipt):
                 if (round(float(row.get(key, -1)), 6) != round(float(history[-1].get(key, -2)), 6)
                         or round(float(chart[-1].get(key, -3)), 6) != round(float(history[-1].get(key, -2)), 6)):
                     raise ValueError(f"{symbol}: secondary OHLCV and public snapshot disagree")
-        elif row.get("source") == "Yahoo EOD history + Nasdaq historical EOD bar":
+        elif (row.get("source") in ("Yahoo EOD history + Nasdaq historical EOD bar", "Yahoo EOD via verified symbol transition")
+              or transition(symbol, as_of)):
             raise ValueError(f"{symbol}: secondary EOD provenance is required")
         histories[path.relative_to(root).as_posix()] = sha256(raw)
     return {"schemaVersion": 1, "asOf": as_of, "symbolCount": len(symbols),
