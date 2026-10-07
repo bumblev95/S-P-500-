@@ -528,8 +528,8 @@ class HeadlineMeaning(unittest.TestCase):
 class HeadlineFirst(unittest.TestCase):
     """Exact retained BBC regression between two healthy production headlines."""
     GOOD='포트 후드 총격범 총살형 집행 예정, 미군에서 2차 세계대전 이후 처음'
-    RETRY=('Fort Hood shooter to be executed by firing squad. '
-           'This is the first such event for US military since World War Two.')
+    RETRY=('Fort Hood shooter will be executed by firing squad. '
+           'This will be the first such event for US military since World War Two.')
 
     def setUp(self):
         fixture=json.loads((Path(__file__).parent/'fixtures/market-headline-first.json').read_text())

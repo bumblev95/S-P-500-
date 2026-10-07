@@ -148,7 +148,11 @@ def simpler_headline_input(title, source_excerpt=''):
         lead = re.sub(r'\b(?:surging|soaring) yields\b', 'sharply rising bond interest rates', lead, flags=re.I)
     lead = re.sub(r'\s*(?: - |[:;])\s*', ', ', lead).strip()
     if first:
-        return lead.rstrip(' .')+'. This is the first such event for '+first.group(1).rstrip(' .')+'.'
+        # Make a planned execution explicit rather than a headline infinitive.
+        planned = re.search(r'^(.+?) to be executed by firing squad\b', lead, re.I)
+        if planned: lead = re.sub(r'\bto be executed\b', 'will be executed', lead, count=1, flags=re.I)
+        copula = 'will be' if planned else 'is'
+        return lead.rstrip(' .')+'. This '+copula+' the first such event for '+first.group(1).rstrip(' .')+'.'
     return lead
 
 
