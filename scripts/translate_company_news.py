@@ -118,6 +118,9 @@ def valid_korean_headline(text, source_title=''):
             if not opened or opened.pop() != closing[char]: return False
     if opened: return False
     tail = text.rstrip(' \t\r\n.,!?\"\'”’)]}:;')
+    # These adverbs need a following predicate. Bare 처음/최초 and 첫 + noun
+    # remain valid nominal headlines; do not reject them as sentence fragments.
+    if re.search(r'(?:처음으로|최초로)$', tail): return False
     if re.search(r'(?:^|[\s\"\'“‘])(?:왜|어떻게|언제|어디서|어디로|무엇을|누가|얼마나|'
                  r'그리고|하지만|그러나|만약|때문에|대해|관해|위해|따라|동안|'
                  r'은|는|이|가|을|를|의|에|에게|에서|으로|로|와|과)$', tail):
@@ -133,13 +136,20 @@ def simpler_headline_input(title, source_excerpt=''):
     unchanged. The sentence splitter protects U.S./company abbreviations.
     """
     text = translation_input(title)
+    # Preserve an event's trailing milestone clause before taking a lead sentence.
+    # Flattening "- a first for ..." to a comma can leave a dangling Korean adverb.
+    first = re.search(r'\s*(?: - |[:;])\s*a first for\s+(.+)$', text, re.I)
+    if first: text = text[:first.start()].strip()
     lead = next(complete_sentences(text), text)
     lead = re.sub(r'\bStocks are hitting records\b', 'Stock prices are at record highs', lead, flags=re.I)
     # A retained source lead can disambiguate bare "yields" without inventing
     # bond context for agricultural yields or changing the source/hash itself.
     if re.search(r'\b(?:Treasur(?:y|ies)|bond yields?|government bonds?)\b', title+' '+source_excerpt, re.I):
         lead = re.sub(r'\b(?:surging|soaring) yields\b', 'sharply rising bond interest rates', lead, flags=re.I)
-    return re.sub(r'\s*(?: - |[:;])\s*', ', ', lead).strip()
+    lead = re.sub(r'\s*(?: - |[:;])\s*', ', ', lead).strip()
+    if first:
+        return lead.rstrip(' .')+'. This is the first such event for '+first.group(1).rstrip(' .')+'.'
+    return lead
 
 
 def translation_input(text):

@@ -357,6 +357,8 @@ class HeadlineMeaning(unittest.TestCase):
             '퀀트 펀드가 선제적이고 역발상적인 투자로 시장을 이긴 방법',
         'cd5b6abdfb88c01254b3de9f3a3238b6b8b36f6cff09389efd08a65bc7d38f3d':
             '우드 그룹 해상 노동자, 임금 갈등으로 48시간 파업',
+        '15ec28bf103c462504f1a5aa239bf5894f22807c69c980d90d7a17e58de4c8df':
+            '포트 후드 총격범 총살형 집행 예정, 미군에서 2차 세계대전 이후 처음',
     }
 
     def setUp(self):
@@ -364,10 +366,11 @@ class HeadlineMeaning(unittest.TestCase):
         self.now=h.stamp(fixture['observedAt'])
         self.prior={'news':fixture['news']}
         self.bad=[a for a in self.prior['news'] if a['sourceHash'] in self.GOOD]
-        self.assertEqual(len(self.bad),3)
+        self.assertEqual(len(self.bad),4)
         for item in self.bad:
             self.assertEqual(h.sha256((item['title']+'\n'+item['sourceExcerpt']).encode()).hexdigest(),item['sourceHash'])
-            self.assertTrue(h.valid_korean_headline(item['headlineKo']))
+            if not item['title'].startswith('Fort Hood'):
+                self.assertTrue(h.valid_korean_headline(item['headlineKo']))
             self.assertFalse(h.valid_korean_headline(item['headlineKo'],item['title']))
 
     def fetch(self,url):
@@ -398,7 +401,7 @@ class HeadlineMeaning(unittest.TestCase):
         self.assertEqual([a['url'] for a in public],[a['url'] for a in self.prior['news']])
         self.assertEqual([a['summaryKo'] for a in public],[a['summaryKo'] for a in self.prior['news']])
 
-    def test_actual_v2_cache_retranslates_only_three_bad_titles_and_preserves_rest(self):
+    def test_actual_v2_cache_retranslates_only_bad_titles_and_preserves_rest(self):
         items,_=h.collect_news(self.prior,self.now,{},self.fetch)
         queued=[a for a in items if a.get('_translate')]
         self.assertEqual([a['_translate'] for a in queued],[[a['title'],None] for a in self.bad])
@@ -436,7 +439,7 @@ class HeadlineMeaning(unittest.TestCase):
         items,_=h.collect_news(self.prior,self.now,{},self.fetch)
         fomc='미국 정부 채권 금리율은 투자자들이 연방준비은행의 통화정책 회의에 대한 기록적인 기록을 예상하기 때문에 대체로 일정합니다.'
         quant="수학 및 통계적 거래 전략을 이용한 투자펀드가 '초기, 역동적이고 올바른'로 시장을 이길 수 있는 방법"
-        translate,calls=self.translator([[fomc,quant,self.GOOD[self.bad[2]['sourceHash']]],[fomc,quant]])
+        translate,calls=self.translator([[fomc,quant,*[self.GOOD[a['sourceHash']] for a in self.bad[2:]]],[fomc,quant]])
         h.translate_news(items,Path('/unused'),translate)
         self.assertEqual(len(calls),2)
         self.assertEqual(len(calls[1]),2)
@@ -456,12 +459,12 @@ class HeadlineMeaning(unittest.TestCase):
         translate,calls=self.translator([outputs,[self.GOOD[a['sourceHash']] for a in self.bad]])
         h.translate_news(items,Path('/unused'),translate)
         self.assertEqual(calls[0],[text for a in self.prior['news'] for text in [a['title'],a['sourceExcerpt']]])
-        self.assertEqual(len(calls[1]),3)
+        self.assertEqual(len(calls[1]),4)
         for before,after in zip(self.prior['news'],items):self.assert_preserved(before,after)
         self.assert_display_order(items)
 
     def test_semantic_retry_failure_keeps_summary_and_remains_retryable(self):
-        for failed in [TimeoutError(),[],['해상 노동자 파업']*4]:
+        for failed in [TimeoutError(),[],['해상 노동자 파업']*5]:
             with self.subTest(failed=failed),patch('sys.stdout',io.StringIO()):
                 items,_=h.collect_news(self.prior,self.now,{},self.fetch)
                 translate,_=self.translator([[a['headlineKo'] for a in self.bad],failed])
@@ -520,6 +523,91 @@ class HeadlineMeaning(unittest.TestCase):
         h.translate_news([item],Path('/unused'),translate)
         self.assertEqual(calls,[])
         self.assertEqual(item,before)
+
+
+class HeadlineFirst(unittest.TestCase):
+    """Exact retained BBC regression between two healthy production headlines."""
+    GOOD='포트 후드 총격범 총살형 집행 예정, 미군에서 2차 세계대전 이후 처음'
+    RETRY=('Fort Hood shooter to be executed by firing squad. '
+           'This is the first such event for US military since World War Two.')
+
+    def setUp(self):
+        fixture=json.loads((Path(__file__).parent/'fixtures/market-headline-first.json').read_text())
+        self.now=h.stamp(fixture['observedAt'])
+        self.prior={'news':fixture['news']}
+        self.bbc=self.prior['news'][1]
+        self.assertEqual(self.bbc['headlineKo'],'포트 후드 총기 사격단은 2차 세계대전 이후 처음으로')
+        self.assertEqual(h.sha256((self.bbc['title']+'\n'+self.bbc['sourceExcerpt']).encode()).hexdigest(),
+                         self.bbc['sourceHash'])
+
+    def fetch(self,url):
+        source=next(source for source,feed in h.FEEDS if feed==url)
+        rows=[a for a in self.prior['news'] if a['source']==source]
+        return '<rss><channel>'+''.join(
+            rss(escape(a['title']),escape(a['url']),h.stamp(a['publishedAt']).strftime('%a, %d %b %Y %H:%M:%S GMT'),
+                escape(a['sourceExcerpt'])).split('<channel>')[1].split('</channel>')[0] for a in rows)+'</channel></rss>'
+
+    def assert_preserved_and_ordered(self,items):
+        changed={'headlineKo','translationStatus','headlineFallbackVersion'}
+        for before,after in zip(self.prior['news'],items):
+            self.assertEqual({k:v for k,v in before.items() if k not in changed},
+                             {k:v for k,v in after.items() if k not in changed})
+        quotes={s:{'symbol':s,'name':name,'status':'unavailable'} for s,name,_ in h.INDICES+h.SECTORS}
+        public=h.assemble(quotes,items,[],{'buy':[],'sell':[]},self.now)['news']
+        self.assertEqual([a['url'] for a in public],[a['url'] for a in self.prior['news']])
+        self.assertEqual([a['summaryKo'] for a in public],[a['summaryKo'] for a in self.prior['news']])
+
+    def test_current_cache_retries_only_bbc_title_and_checks_retry_before_ready(self):
+        for retried in [self.GOOD,self.bbc['headlineKo'],'미군, 2차 세계대전 이후 최초로.']:
+            with self.subTest(retried=retried):
+                items,_=h.collect_news(self.prior,self.now,{},self.fetch)
+                self.assertEqual([a['_translate'] for a in items if a.get('_translate')],[[self.bbc['title'],None]])
+                calls=[]
+                def translate(texts):
+                    calls.append(texts)
+                    return [self.bbc['headlineKo']] if len(calls)==1 else [retried]
+                h.translate_news(items,Path('/unused'),translate)
+                self.assertEqual(calls,[[self.bbc['title']],[self.RETRY]])
+                safe=retried==self.GOOD
+                self.assertEqual(items[1]['headlineKo'],self.GOOD if safe else self.bbc['title'])
+                self.assertEqual(items[1]['translationStatus'],'ready' if safe else 'headline-fallback')
+                self.assert_preserved_and_ordered(items)
+                again,_=h.collect_news({'news':items},self.now,{},self.fetch)
+                self.assertTrue(all('_translate' not in a for a in again))
+        self.assertEqual(h.HOME_TRANSLATION_VERSION,'home-news-ko-v2')
+
+    def test_fresh_mixed_batch_retains_summaries_and_retries_the_correct_title(self):
+        items=deepcopy(self.prior['news'])
+        for item in items:
+            for key in h.TRANSLATION_FIELDS:item.pop(key,None)
+            item['_translate']=[item['title'],item['sourceExcerpt']]
+        calls=[]
+        def translate(texts):
+            calls.append(texts)
+            return ([text for a in self.prior['news'] for text in [a['headlineKo'],a['summaryKo']]]
+                    if len(calls)==1 else [self.GOOD])
+        h.translate_news(items,Path('/unused'),translate)
+        self.assertEqual(calls,[[text for a in self.prior['news'] for text in [a['title'],a['sourceExcerpt']]],[self.RETRY]])
+        self.assertEqual(items[1]['headlineKo'],self.GOOD)
+        self.assert_preserved_and_ordered(items)
+
+    def test_failed_feed_and_disabled_translator_still_use_source_fallback(self):
+        def fail(_):raise TimeoutError()
+        items,_=h.collect_news(self.prior,self.now,{},fail)
+        self.assertEqual(items[1]['headlineKo'],self.bbc['title'])
+        self.assertEqual(items[1]['translationStatus'],'headline-fallback')
+        self.assertEqual(items[1]['_translate'],[self.bbc['title'],None])
+        with TemporaryDirectory() as folder,patch('sys.stdout',io.StringIO()):
+            root=Path(folder);h.atomic(root/'market/home-cache.json',self.prior)
+            quotes={s:{'symbol':s,'name':name,'status':'unavailable'} for s,name,_ in h.INDICES+h.SECTORS}
+            with patch.object(h,'home_rankings',return_value={'buy':[],'sell':[]}),patch.object(h,'prices',return_value=(quotes,{})):
+                public=h.build(root,self.now,self.fetch,translate_enabled=False)['news']
+        self.assertEqual(public[1]['headlineKo'],self.bbc['title'])
+        self.assertEqual(public[1]['translationStatus'],'headline-fallback')
+        self.assertEqual([a['summaryKo'] for a in public],[a['summaryKo'] for a in self.prior['news']])
+        for before,after in zip(self.prior['news'],public):
+            for key in ['url','title','sourceHash','importance','importanceReason','publishedAt','firstPublishedAt']:
+                self.assertEqual(before[key],after[key])
 
 
 class PriceCache(unittest.TestCase):
