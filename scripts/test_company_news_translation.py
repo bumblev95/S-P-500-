@@ -176,6 +176,33 @@ class TranslationTests(unittest.TestCase):
                      '주가 급등…금리도 상승']:
             with self.subTest(text=text):self.assertTrue(m.valid_korean_headline(text))
 
+    def test_first_time_adverb_needs_a_predicate_but_nominal_headlines_remain_valid(self):
+        for text in ['포트 후드 총기 사격단은 2차 세계대전 이후 처음으로',
+                     '미군, 2차 세계대전 이후 최초로.', '미군 사형 집행, “처음으로!”']:
+            with self.subTest(text=text):
+                self.assertFalse(m.valid_korean_headline(text))
+                self.assertTrue(m.valid_korean(text), 'Summary validation is unchanged')
+        for text in ['미군, 2차 세계대전 이후 첫 총살형 집행 예정',
+                     '포트 후드 총격범 총살형, 미군에서는 전쟁 이후 처음',
+                     '미군 사상 최초', '처음으로 공개된 연준 의사록',
+                     '미군이 전쟁 이후 처음으로 총살형을 집행한다',
+                     '이번 총살형은 전쟁 이후 처음이다']:
+            with self.subTest(text=text):self.assertTrue(m.valid_korean_headline(text))
+
+    def test_simpler_headline_expands_trailing_first_for_without_losing_either_clause(self):
+        lead='Fort Hood shooter to be executed by firing squad'
+        tail='a first for US military since World War Two'
+        expected=('Fort Hood gunman will be executed by firing squad. '
+                  'This will be the first such event for US military since World War Two.')
+        for separator in [' - ', ' — ', ' – ', ': ', '; ']:
+            with self.subTest(separator=separator):
+                self.assertEqual(m.simpler_headline_input(lead+separator+tail),expected)
+        self.assertEqual(m.simpler_headline_input(lead+'. - '+tail),expected)
+        self.assertEqual(m.simpler_headline_input('U.S. firm wins a contract - a first for the company'),
+                         'U.S. firm wins a contract. This is the first such event for the company.')
+        self.assertEqual(m.simpler_headline_input('Stocks rise - investors await earnings'),
+                         'Stocks rise, investors await earnings')
+
     def test_simpler_headline_uses_complete_source_lead_not_trailing_teaser(self):
         title='Stocks are hitting records despite surging yields. Cramer explains why'
         self.assertEqual(m.simpler_headline_input(title),'Stock prices are at record highs despite surging yields.')
