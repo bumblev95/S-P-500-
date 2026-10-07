@@ -8,13 +8,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
 from datetime import date, datetime, time, timedelta, timezone
 from email.utils import parsedate_to_datetime
+import errno
 from hashlib import sha256
 from html.parser import HTMLParser
+from http.client import IncompleteRead
 import json
 import math
 from pathlib import Path
 import re
+import socket
 import subprocess
+from time import sleep
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -32,6 +37,8 @@ POLLING_TIMESTAMPS = {'generatedAt', 'evaluatedAt', 'lastAttemptAt', 'lastSucces
 HOME_TRANSLATION_VERSION = 'home-news-ko-v2'
 HEADLINE_QUALITY_VERSION = 'home-headline-quality-v2'
 TRANSLATION_FIELDS = ('headlineKo', 'summaryKo', 'translationStatus', 'translationMethod', 'translationVersion', 'headlineFallbackVersion')
+FEED_RETRY_DELAYS = (0.5, 1.0)  # At most three requests, with 1.5s total backoff.
+FEED_RETRY_HTTP_STATUSES = {408, 429, 500, 502, 503, 504}
 FEEDS = [
     ('Fed 발표', 'https://www.federalreserve.gov/feeds/press_all.xml'),
     ('Fed 연설', 'https://www.federalreserve.gov/feeds/speeches.xml'),
@@ -98,6 +105,30 @@ def get(url):
         data = response.read(3*1024*1024+1)
         if len(data)>3*1024*1024: raise ValueError('Response too large')
         return data.decode('utf-8',errors='replace')
+
+
+def retryable_feed_error(error):
+    # HTTPError is also a URLError: classify its status before unwrapping reason.
+    if isinstance(error, urllib.error.HTTPError):
+        return error.code in FEED_RETRY_HTTP_STATUSES
+    if isinstance(error, urllib.error.URLError):
+        error = error.reason
+    return (isinstance(error, (TimeoutError, ConnectionError, IncompleteRead))
+            or isinstance(error, socket.gaierror) and error.errno == socket.EAI_AGAIN
+            or isinstance(error, OSError) and error.errno in {errno.ENETDOWN, errno.ENETUNREACH, errno.EHOSTUNREACH})
+
+
+def fetch_feed(url, fetch):
+    """Retry transient transport failures only; parsing and cache policy stay outside."""
+    for attempt in range(len(FEED_RETRY_DELAYS) + 1):
+        try:
+            return fetch(url)
+        except (OSError, IncompleteRead) as exc:
+            if not retryable_feed_error(exc) or attempt == len(FEED_RETRY_DELAYS):
+                raise
+            if isinstance(exc, urllib.error.HTTPError):
+                exc.close()
+            sleep(FEED_RETRY_DELAYS[attempt])
 
 
 def week_bounds(now):
@@ -280,7 +311,7 @@ def collect_news(prior, now, reviewed, fetch=get):
     def collect(spec):
         source,url=spec;before=old_feeds.get(source,{})
         try:
-            items=parse_feed(fetch(url),source,now)
+            items=parse_feed(fetch_feed(url,fetch),source,now)
             return items,{'name':source,'url':url,'status':'ready','lastAttemptAt':now.isoformat(),'lastSuccessAt':now.isoformat(),'fromCache':False}
         except Exception as exc:
             return retain_news(old_items,source,now),{'name':source,'url':url,'status':'unavailable','lastAttemptAt':now.isoformat(),'lastSuccessAt':before.get('lastSuccessAt'),'fromCache':True,'error':type(exc).__name__}
