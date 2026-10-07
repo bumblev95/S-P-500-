@@ -1,9 +1,9 @@
 # EOD publication and follow-up research
 
-The weekday `30 23 * * 1-5` schedule and the price/forecast/ranking calculations
-are unchanged. GitHub may delay scheduled starts; this change removes research
-from the publication dependency, rather than guaranteeing an exact wall-clock
-update time.
+PR #47 starts collection at regular/early XNYS closes (16:00/13:00 New York)
+with a 35-minute backup slot, holiday checks and the existing 15-minute settled
+bar buffer. GitHub may delay scheduled starts. Forecast/ranking calculations
+are unchanged; research is independent of the public publication dependency.
 
 `Update S&P 500 EOD prices` downloads prices and runs `build_forecasts.py`, then
 publishes **one commit** containing only `prices/latest_prices.csv`,
@@ -51,6 +51,15 @@ column empty. The publication gate rechecks the evidence and its exact OHLCV
 against the CSV, full history and public forecast chart before the single
 commit. `source` identifies the recovered row in CSV and forecasts. The exact
 history/evidence is also transferred to research in the existing input artifact.
+
+Dated, explicitly reviewed symbol transitions have a separate identity-checked
+Yahoo route. The PSKY-to-SKYD October 6 transition checks three prior published
+anchors and corroborates the supplied new-symbol bar with Nasdaq. It records
+the actual provider symbol and revalidated provenance without changing the
+requested row count. A documented end of exchange trading is never treated as
+a rename: WBD sessions after October 5 are blocked. See
+[the incident and verification notes](EOD-PSKY-2026-10-06.md) for source evidence,
+regression fixtures and the unresolved constituent-universe requirement.
 
 The fast workflow retains its name so the existing homepage `workflow_run`
 callback starts as soon as it completes. This is required because a push with

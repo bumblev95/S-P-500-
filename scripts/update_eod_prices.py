@@ -20,6 +20,7 @@ import yfinance as yf
 from build_forecasts import atomic_json
 from eod_close_fallback import SOURCE as RECOVERY_SOURCE, encode_evidence, recover
 from eod_publication import latest_closed_session
+import eod_symbol_mapping as symbol_mapping
 
 CONSTITUENTS_URL = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
 CUSTOM_PATH = Path("custom_tickers.csv")
@@ -39,11 +40,16 @@ def download_public_chart(symbols):
     as_of = latest_closed_session(now.isoformat())
     def one(symbol):
         if stopped.is_set(): return symbol, None
-        url = 'https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?range=10y&interval=1d'
         try:
+            symbol_mapping.assert_trading_session(symbol, as_of)
+            mapping = symbol_mapping.transition(symbol, as_of)
+            provider_symbol = mapping['yahooSymbol'] if mapping else symbol
+            url = symbol_mapping.chart_url(provider_symbol)
             req = urllib.request.Request(url, headers={'User-Agent':'PublicStockDashboard/1.0'})
             with urllib.request.urlopen(req, timeout=30) as response:
                 result = json.load(response)['chart']['result'][0]
+            if result['meta'].get('symbol') != provider_symbol:
+                raise ValueError('Yahoo symbol identity mismatch')
             quotes = result['indicators']['quote'][0]
             zone = ZoneInfo(result['meta'].get('exchangeTimezoneName','America/New_York'))
             stamps = result.get('timestamp', [])
@@ -55,26 +61,33 @@ def download_public_chart(symbols):
             regular_end = result['meta'].get('currentTradingPeriod',{}).get('regular',{}).get('end')
             if regular_end and now.timestamp()<regular_end+900:
                 frame=frame[[x.date()<now.astimezone(zone).date() for x in frame.index]]
-            # Recover only an existing completed bar with a missing Close.
-            # Failure leaves Yahoo history untouched; the all-symbol gate rejects it.
+            # Dated aliases require verified identity and a complete Yahoo bar.
+            # Other missing Close bars retain the existing one-bar recovery rule.
             try:
                 evidence = None
-                if not stopped.is_set():
+                if mapping and not stopped.is_set():
+                    anchors = symbol_mapping.published_anchors(OUT_PATH.parent.parent / 'forecasts/latest.json', symbol, as_of)
+                    evidence = symbol_mapping.attest(symbol, result['meta'], frame, as_of, anchors)
+                elif not stopped.is_set():
                     frame, evidence = recover(symbol, result['meta'], frame, as_of)
                 if evidence:
                     frame.attrs['eodRecovery'] = evidence
-                    print(f'EOD recovered {symbol} {as_of}: Nasdaq historical bar', flush=True)
+                    print(f'EOD recovered {symbol} {as_of}: {evidence["provider"]}', flush=True)
             except urllib.error.HTTPError as exc:
                 if exc.code in (401,403,429): stopped.set()
                 print(f'EOD recovery unavailable {symbol}: HTTP {exc.code}', flush=True)
             except Exception as exc:
                 print(f'EOD recovery rejected {symbol}: {type(exc).__name__}: {exc}', flush=True)
+            # A mapped price is not usable until its identity and secondary bar
+            # have been attested. Never fall back to the retired ticker's quote.
+            if mapping and not evidence:
+                return symbol, None
             return symbol, frame
         except urllib.error.HTTPError as exc:
             if exc.code in (401,403,429): stopped.set()
             print(f'Chart unavailable {symbol}: HTTP {exc.code}',flush=True)
         except Exception as exc:
-            print(f'Chart unavailable {symbol}: {type(exc).__name__}',flush=True)
+            print(f'Chart unavailable {symbol}: {type(exc).__name__}: {exc}',flush=True)
         return symbol, None
     frames={}
     with ThreadPoolExecutor(max_workers=3) as pool:
@@ -342,6 +355,7 @@ def main(argv=None) -> int:
 
         original_symbol = symbol_map.get(ysym, to_display_symbol(ysym))
         evidence = recoveries.get(ysym)
+        mapped = bool(evidence and evidence.get('provider') == symbol_mapping.PROVIDER)
         history = []
         for day, daily in one.iterrows():
             daily_close = daily.get("Close")
@@ -356,6 +370,8 @@ def main(argv=None) -> int:
             # Never mix dividend-adjusted Adj Close with these OHLC fields.
             bar.update(ohlc_fields(daily, float(daily_close)))
             history.append(bar)
+        if mapped:
+            evidence['historySha256'] = symbol_mapping.history_hash(history)
         if re.fullmatch(r"[A-Z0-9^][A-Z0-9.^=-]{0,19}", original_symbol):
             atomic_json(OUT_PATH.parent / "history" / (original_symbol + ".json"),
                         {"symbol": original_symbol, "updatedAt": updated_at,
@@ -364,7 +380,7 @@ def main(argv=None) -> int:
                          "prices": history})
         rows.append({
             "symbol": original_symbol,
-            "yahooSymbol": ysym,
+            "yahooSymbol": evidence['yahooSymbol'] if mapped else ysym,
             "date": last_date.date().isoformat() if hasattr(last_date, "date") else str(last_date)[:10],
             "close": round(close, 6),
             # Match Close's CSV precision; full provider precision stays in history.
@@ -387,7 +403,7 @@ def main(argv=None) -> int:
             "return3m": calc_return(valid, 63),
             "return4m": calc_return(valid, 84),
             "return6m": calc_return(valid, 126),
-            "source": RECOVERY_SOURCE if evidence else "Yahoo EOD via GitHub Actions/yfinance",
+            "source": symbol_mapping.SOURCE if mapped else RECOVERY_SOURCE if evidence else "Yahoo EOD via GitHub Actions/yfinance",
             "updatedAt": updated_at,
             "eodProvenance": encode_evidence(evidence) if evidence else "",
         })
