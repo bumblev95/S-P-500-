@@ -11,6 +11,9 @@ on:
       - 'scripts/build_forecasts.py'
       - 'tests/test_forecasts.py'
       - 'scripts/update_eod_prices.py'
+      - 'scripts/eod_symbol_mapping.py'
+      - 'scripts/eod_publication.py'
+      - 'scripts/requirements-eod.txt'
       - 'tests/test_eod_pipeline.py'
       - '.github/workflows/validate-advanced.yml'
   pull_request:
@@ -24,6 +27,9 @@ on:
       - 'scripts/build_forecasts.py'
       - 'tests/test_forecasts.py'
       - 'scripts/update_eod_prices.py'
+      - 'scripts/eod_symbol_mapping.py'
+      - 'scripts/eod_publication.py'
+      - 'scripts/requirements-eod.txt'
       - 'tests/test_eod_pipeline.py'
       - '.github/workflows/validate-advanced.yml'
 permissions:
@@ -44,6 +50,5 @@ jobs:
       - run: node --check assets/advanced-page.js
       - run: node scripts/test_advanced.cjs
       - run: python -m unittest discover -s tests -p test_forecasts.py
-      - run: pip install pandas==2.3.3 yfinance==0.2.66
+      - run: pip install -r scripts/requirements-eod.txt
       - run: python -m unittest discover -s tests -p test_eod_pipeline.py
-
