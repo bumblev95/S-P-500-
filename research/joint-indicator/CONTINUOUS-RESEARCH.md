@@ -71,3 +71,15 @@ python scripts/research_joint_indicator.py --source research/environment.json --
 - [로지스틱 분류](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html)
 - [트리 분류](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html)
 - [확률 예측의 Brier 오차](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.brier_score_loss.html)
+
+## 시장·업종 상대 강도와 결합 1차 기록 (2026-10-06 Regina)
+
+- `relative-v1/PROTOCOL.json`을 실행 전에 고정하고 최신 main `d60e6cbc777be57868b4e23b9a4561030b27434d`의 source를 별도 압축 보존했다. 기존 연구 기록을 덮어쓰지 않았다. 과거 origin 집합은 그대로지만 조정가격·모델 전망이 달라 동일 표본 기준값을 다시 계산했다.
+- 가설 A: 새 원시 가격으로 시장/업종/종목 강약 입력 분리, 절대 추세 대조군과 비교. 가설 B: 상대 강도 전문가+가격 패턴의50:50·이전 확정 OOS 비중·시장 약세 시 전환. 네 후보 모두 미통과다.
+- 1년50:50은 수익률 MAE26.70→26.27%p로 조금 개선했지만 가격 MAPE22.47→23.40%, 하락 포착1.86→0%로 악화했다. 상대 강도 단독은 상승 포착100%·하락0%로 항상 상승과 같았다.
+- 6개월 단독은 수익률 MAE18.17→18.55%p·가격 MAPE16.98→17.93%로 악화했고 잘못된 하락 경고율0.11→2.47%로 증가했다.
+- 가격 패턴/상대 강도 로그 오차 상관6개월0.982·1년0.968. 새 입력만으로 보완성을 확보하지 못했다. 날짜 동일 가중 및 기존 pooledAllRows를 분리 보존했다.
+- 508개 원시 가격 조회 성공. 같은4,417/3,860개 평가행 중 결측 대체13/17개를 제외하지 않았다. 후보는 확률을 출력하지 않으므로 확률 성적은 해당 없음이다. 현재 구성·업종 분류·조정가격 편향은 남는다.
+- 재현 코드: `scripts/collect_relative_inputs.py`, `scripts/research_relative_blends.py`, `scripts/test_relative_blends.py`. 결과·원시 입력 벡터·모델/코드 해시·fold 경계·행별 예측·검증을 `relative-v1/`에 보존했다.
+- 새 발행·새 미래 관측0개. source 최신 전망asOf2026-10-05를 실행일 발행 기록으로 소급 넣지 않았다. UI/서비스/실전·모의운용·승격 정책/자동 병합 변경 없음.
+- 다음 가설은 미래 시장 수익률과 종목 초과수익률을 별도 목표로 분리하되, 시점별 구성·업종 및 상장폐지 자료부터 보강한다. 이번 input 분리 실험을 그 목표 분리 실험으로 잘못 표현하지 않는다. 종료 수익률과 기간 중 낙폭도 별도 목표로 평가한다.
