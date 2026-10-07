@@ -192,7 +192,7 @@ class TranslationTests(unittest.TestCase):
     def test_simpler_headline_expands_trailing_first_for_without_losing_either_clause(self):
         lead='Fort Hood shooter to be executed by firing squad'
         tail='a first for US military since World War Two'
-        expected=('Fort Hood shooter will be executed by firing squad. '
+        expected=('Fort Hood gunman will be executed by firing squad. '
                   'This will be the first such event for US military since World War Two.')
         for separator in [' - ', ' — ', ' – ', ': ', '; ']:
             with self.subTest(separator=separator):
