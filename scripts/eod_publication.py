@@ -87,6 +87,9 @@ def public_hashes(root):
 def validate(root, receipt):
     symbols = receipt_symbols(receipt)
     as_of = latest_closed_session(receipt["updatedAt"])
+    from eod_symbol_mapping import assert_trading_session, transition, verify_universe_changes
+
+    verify_universe_changes(receipt, as_of)
     with (root / PUBLIC_PATHS[0]).open(encoding="utf-8", newline="") as stream:
         rows = list(csv.DictReader(stream))
     by_symbol = {r["symbol"]: r for r in rows}
@@ -99,8 +102,6 @@ def validate(root, receipt):
     if timestamp(forecasts["generatedAt"]) < timestamp(receipt["updatedAt"]):
         raise ValueError("Forecasts predate this EOD download")
     histories = {}
-    from eod_symbol_mapping import assert_trading_session, transition
-
     for symbol in sorted(symbols):
         row, forecast = by_symbol[symbol], stocks[symbol]
         assert_trading_session(symbol, as_of)

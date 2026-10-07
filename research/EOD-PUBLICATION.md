@@ -57,9 +57,14 @@ Yahoo route. The PSKY-to-SKYD October 6 transition checks three prior published
 anchors and corroborates the supplied new-symbol bar with Nasdaq. It records
 the actual provider symbol and revalidated provenance without changing the
 requested row count. A documented end of exchange trading is never treated as
-a rename: WBD sessions after October 5 are blocked. See
+a rename: WBD sessions after October 5 are blocked. The approved official
+WBD-to-TWLO constituent replacement applies from October 6 in both public-only
+and upstream collection modes, preserving the count and collecting TWLO's own
+history. Its dated source is recorded and checked in the receipt. Missing TWLO
+bars still block the exact requested-symbol gate; a WBD/TWLO input collision
+fails instead of shrinking the request. Historical WBD archives remain intact. See
 [the incident and verification notes](EOD-PSKY-2026-10-06.md) for source evidence,
-regression fixtures and the unresolved constituent-universe requirement.
+regression fixtures and verification results.
 
 The fast workflow retains its name so the existing homepage `workflow_run`
 callback starts as soon as it completes. This is required because a push with

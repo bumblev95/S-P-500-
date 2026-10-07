@@ -29,6 +29,41 @@ TRANSITIONS = {
 LAST_TRADING_SESSIONS = {
     "WBD": ("2026-10-05", "https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-710"),
 }
+# Constituent replacement changes the requested universe, not security identity.
+# The added stock is downloaded independently; old forecasts remain historical.
+CONSTITUENT_REPLACEMENTS = [
+    {
+        "removedSymbol": "WBD", "addedSymbol": "TWLO", "effectiveDate": "2026-10-06",
+        "sourceUrl": "https://press.spglobal.com/2026-10-01-Vylor-Added-to-the-S-P-500-Twilio-Set-to-Join-S-P-500-Others-to-Join-S-P-MidCap-400-and-S-P-SmallCap-600",
+    },
+]
+
+
+def replace_constituents(symbols, as_of):
+    requested, changes = list(symbols), []
+    for record in CONSTITUENT_REPLACEMENTS:
+        old, new = record["removedSymbol"], record["addedSymbol"]
+        if as_of < record["effectiveDate"] or old not in requested:
+            continue
+        if new in requested:
+            raise ValueError(f"{old}/{new}: constituent replacement would reduce the requested count")
+        requested[requested.index(old)] = new
+        changes.append(dict(record))
+    return requested, changes
+
+
+def verify_universe_changes(receipt, as_of):
+    changes = receipt.get("universeChanges", [])
+    if not isinstance(changes, list):
+        raise ValueError("Invalid dated constituent replacement receipt")
+    removed = set()
+    for record in changes:
+        if (record not in CONSTITUENT_REPLACEMENTS or as_of < record["effectiveDate"]
+                or record["removedSymbol"] in removed
+                or record["removedSymbol"] in receipt["symbols"]
+                or record["addedSymbol"] not in receipt["symbols"]):
+            raise ValueError("Invalid dated constituent replacement receipt")
+        removed.add(record["removedSymbol"])
 
 
 def transition(symbol, as_of):

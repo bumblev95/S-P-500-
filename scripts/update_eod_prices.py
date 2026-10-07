@@ -271,6 +271,11 @@ def main(argv=None) -> int:
     else:
         symbols = read_symbols()
     symbols = list(dict.fromkeys(symbols + ["SPY", "SOXX"]))
+    as_of = latest_closed_session(datetime.now(timezone.utc).isoformat())
+    symbols, universe_changes = symbol_mapping.replace_constituents(symbols, as_of)
+    for change in universe_changes:
+        print(f'Dated constituent replacement: {change["removedSymbol"]} -> '
+              f'{change["addedSymbol"]}, effective {change["effectiveDate"]}', flush=True)
     yahoo_symbols = [to_yahoo_symbol(s) for s in symbols]
     symbol_map = dict(zip(yahoo_symbols, symbols))
 
@@ -428,6 +433,7 @@ def main(argv=None) -> int:
     if args.receipt:
         atomic_json(args.receipt, {"schemaVersion": 1, "symbols": sorted(symbols),
                                    "minimumSymbolCount": int(minimum_symbol_count),
+                                   "universeChanges": universe_changes,
                                    "updatedAt": updated_at})
     print(f"Wrote {len(out)} prices to {OUT_PATH}")
     return 0
