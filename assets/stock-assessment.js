@@ -234,11 +234,37 @@
       ].map(([k,v])=>'<div><dt>'+esc(k)+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl></section>';
     }).join('')+'</div>';
   }
-  function holdingPanel(a){
+  function holdingDetails(a){
+    const p=a.plan,h=p.holding,ready=h.code!=='unavailable'&&finite(a.price)&&a.price>0;
+    const level=ready&&finite(h.level)&&h.level>0?h.level:null;
+    const high=ready&&finite(p.breakoutLevel)&&p.breakoutLevel>0?p.breakoutLevel:null;
+    const broken=level!==null&&a.price<level;
+    const distance=level!==null?(a.price-level)/a.price*100:null;
+    const basis=p.levelBasis==='일별 고가·저가'?'저가':'종가';
+    const next={hold:'내 손절·목표 기준을 지키면서 추세를 확인하세요.',
+      protect:'추세가 약해졌습니다. 보유 비중과 처음 정한 손절 기준을 확인하세요.',
+      reduce:'추세 훼손이 확인됐습니다. 내 계획에 따라 일부 또는 전량 매도를 검토하세요.',
+      unavailable:'최신 가격 자료를 확인한 뒤 보유 대응을 판단하세요.'}[h.code]||h.reason;
+    return `<div class="sa-exit-guide" data-sell-guide>
+      <p class="sa-exit-next">${esc(next)}</p>
+      <div class="sa-exit-grid">
+        <div class="sa-exit-card sa-exit-down"><span>하락할 때 · 추세 확인선</span><strong data-exit-level>${level!==null?money(level):'자료 확인'}</strong><small>${level!==null?'직전 20거래일 '+basis+' 저점 · '+(broken?'종가가 이미 이탈':distance===0?'종가가 확인선에 도달':'현재 종가보다 '+distance.toFixed(1)+'% 아래'):'유효한 확인선을 계산하지 못했습니다.'}</small></div>
+        <div class="sa-exit-card sa-exit-profit"><span>수익 중일 때 · 일부 매도 검토</span><strong data-profit-reference>${high===null?'자료 확인':a.price<=high?money(high):'고점 돌파 · 추세 확인'}</strong><small>${high===null?'가격 자료 확인 후 목표를 점검하세요.':a.price<=high?'직전 55거래일 '+(basis==='저가'?'고가':'종가')+' 고점 · 저항 참고값':'돌파 후 고정 목표 없이 추세 이탈을 확인하는 방식'}</small></div>
+      </div>
+      <p class="sa-exit-note">종가 ${esc(a.asOf||'확인 필요')} · 매입가·수익 여부 미반영. 위 가격은 개인 손절·익절가가 아닙니다.</p>
+      <details class="sa-exit-rules"><summary>손절·이익 실현·남은 주식 관리</summary><ol>
+        <li><b>손절:</b> 처음 정한 손실 한도나 매수 이유가 깨졌다면 계획에 따라 매도를 검토합니다. 위 추세 확인선까지 기다려야 한다는 뜻은 아닙니다.</li>
+        <li><b>이익 실현:</b> 수익 중이고 미리 정한 목표에 도달했다면 일부 매도를 검토합니다. 관측 고점은 목표 수익이나 도달을 보장하지 않습니다.</li>
+        <li><b>남은 주식:</b> 추세를 따라 보유하되, 수익 보호 기준을 정합니다. 손실을 피하려고 정해 둔 기준을 계속 낮추지 않습니다.</li>
+      </ol><p>위쪽 ‘손절 기준’은 지금 새로 매수할 때의 분석값입니다. 기존 보유자의 최초 계획과 구분하세요. 이 화면은 실시간 감시나 자동 매도를 하지 않습니다.</p></details>
+      <a class="sa-exit-link" href="guide-sell.html">언제 팔까요? 쉬운 예시와 매도 주문 방법 →</a>
+    </div>`;
+  }
+  function holdingPanel(a,{holdingGuide=false}={}){
     const h=a.plan.holding;
-    return '<section class="sa-holding" data-holding-state="'+h.code+'" aria-label="보유 중 대응"><div class="sa-check-title"><h3>이미 보유 중이라면</h3>'+(h.code==='unavailable'?visuals.badge('판단 보류','muted'):'')+'</div>'+visuals.steps([
+    return '<section class="sa-holding"'+(holdingGuide?' id="holding-guide"':'')+' data-holding-state="'+h.code+'" aria-label="보유 중 대응"><div class="sa-check-title"><h3>'+(holdingGuide?'보유 중 · 매도 기준':'이미 보유 중이라면')+'</h3>'+(h.code==='unavailable'?visuals.badge('판단 보류','muted'):'')+'</div>'+visuals.steps([
       {key:'hold',label:'추세 유지',tone:'good'},{key:'protect',label:'이탈 주의',tone:'warn'},{key:'reduce',label:'축소 검토',tone:'bad'}
-    ],h.code,'보유 중 대응')+(finite(h.level)?'<small>추세 이탈 기준 <b>'+money(h.level)+'</b> · 매수가 별도 확인</small>':'')+'</section>';
+    ],h.code,'보유 중 대응')+(holdingGuide?holdingDetails(a):finite(h.level)?'<small>추세 이탈 기준 <b>'+money(h.level)+'</b> · 매수가 별도 확인</small>':'')+'</section>';
   }
   // Display categories, not a numeric buy probability. All nine real states
   // stay visible; native disclosures explain a state without changing it.
@@ -271,14 +297,14 @@
     if(p.code==='unavailable')return a.score===null?'가격 자료 확인 필요':p.market==='unknown'?'시장 자료 확인 필요':'가격·변동폭 자료 확인 필요';
     return {watch:'상승·하락 신호가 섞임',pullback:'관심 가격까지 눌림 대기',breakout:'이전 고점 돌파 전',overextended:'가격이 많이 올라 추격 주의',confirm:'지지 가격 회복 전'}[p.code]||a.reason;
   }
-  function panel(a){
+  function panel(a,options={}){
     const p=a.plan,reference=aiReference(a);
     return '<section class="stockAssessment" data-decision-basis="technical-rules" aria-label="'+esc(a.symbol)+' 공통 평가">'+
       '<div class="sa-heading"><small>'+esc(a.symbol)+' · 매수 전 확인</small>'+
       '<span class="sa-date">종가 '+esc(a.asOf||'확인 필요')+'</span></div>'+
       entryVisual(a)+'<p class="sa-reason sa-short-reason">'+esc(shortReason(a))+'</p>'+
       '<div class="sa-context"><div><small>추세 점수</small>'+visuals.badge(a.trend.replace(' 흐름','').replaceAll(' ','')+(finite(a.score)?'·'+a.score:''),a.color)+'</div><div><small>진입 전략</small>'+visuals.badge(p.code==='unavailable'?'자료 확인':p.strategy==='breakout'?'고점 돌파':'눌림목 반등',p.code==='buy'?'good':p.code==='unavailable'?'muted':'info')+'</div></div>'+
-      '<dl class="sa-price-strip">'+[['기준 가격',money(a.price)],['관심 가격',finite(p.buyLow)&&finite(p.buyHigh)?money(p.buyLow)+'–'+money(p.buyHigh):'—'],['손절 기준',money(p.stop)]].map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl>'+holdingPanel(a)+
+      '<dl class="sa-price-strip">'+[['기준 가격',money(a.price)],['관심 가격',finite(p.buyLow)&&finite(p.buyHigh)?money(p.buyLow)+'–'+money(p.buyHigh):'—'],['손절 기준',money(p.stop)]].map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl>'+holdingPanel(a,options)+
       '<details class="sa-condition-details"><summary>가격·판단 근거 자세히</summary><p class="sa-full-reason">'+esc(entryExplanation(a))+'</p><p class="sa-next"><b>다음 확인 조건</b><span>'+esc(p.next)+'</span></p>'+setupPanels(a)+'<div class="sa-entry-layout"><div class="sa-conditions"><ul class="sa-checks">'+entryChecks(a).map(c=>'<li data-entry-check="'+c.key+'"><div class="sa-check-title"><span>'+esc(c.label)+'</span>'+visuals.badge(c.state,c.tone)+'</div><p>'+esc(c.detail)+'</p></li>').join('')+'</ul></div></div><p class="sa-note">'+esc(p.holding.reason)+' 매수가·보유 비중·개인 손절 기준은 별도 확인하세요.</p><p class="sa-note">변동폭: '+esc(p.range.label)+'</p></details>'+
       '<details class="sa-ai-status" data-ai-reference="'+(a.ai.eligible?'eligible':'unavailable')+'" aria-label="AI 연구 참고 상태"><summary class="sa-check-title"><h3>'+esc(reference.label.replace(' · 별도 상태',''))+'</h3>'+visuals.badge(reference.state,reference.tone)+'</summary><p>'+esc(reference.detail)+'</p><p class="sa-note">위 진입 조건은 기술·가격 자료로 판단합니다. AI 연구는 추가 참고 정보로 확인하세요.</p></details>'+
       '<details class="sa-trend-details"><summary>추세 점수 · '+esc(format(a.score))+'</summary><p class="sa-note">최근 가격의 상승·하락 흐름을 평가한 점수입니다. 95점은 상승 확률 95%나 매수 추천 95점이라는 뜻이 아닙니다. 신규 매수는 위 진입 조건을 함께 확인하세요.</p><div class="sa-score" data-trend-symbol="'+esc(a.symbol)+'" data-trend-score="'+(a.score??'')+'">'+visuals.trendGauge(a.score,a.trend)+'</div></details>'+

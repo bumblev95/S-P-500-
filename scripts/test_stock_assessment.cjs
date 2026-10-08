@@ -38,6 +38,30 @@ assert(html.indexOf('sa-reason')<html.indexOf('sa-entry-layout'));
 assert(html.includes('class="sa-trend-details"><summary>'));
 assert(!html.includes('class="sa-trend-details" open'));
 assert.equal(JSON.stringify(wait),before,'Presentation must not mutate an assessment');
+// Existing holders see the holding reference, never today's new-entry stop.
+const held=structuredClone(pass);held.price=100;held.plan.stop=94;
+held.plan.holding={code:'hold',label:'추세 유지',tone:'good',reason:'가격 추세 유지',level:90};
+held.plan.breakoutLevel=120;held.plan.levelBasis='종가';
+const heldBefore=JSON.stringify(held),heldHtml=A.holdingPanel(held,{holdingGuide:true});
+assert(heldHtml.includes('data-exit-level>$90.00</strong>'));
+assert(!heldHtml.includes('$94.00'),'New-entry stop must not become the holding reference');
+assert(heldHtml.includes('10.0% 아래')&&heldHtml.includes('data-profit-reference>$120.00'));
+assert(heldHtml.includes('직전 20거래일 종가 저점'));
+assert(heldHtml.includes('매입가·수익 여부 미반영'));
+assert.equal(JSON.stringify(held),heldBefore,'Holding explanation must not modify the plan');
+assert(!A.panel(held).includes('data-sell-guide'),'Other stock views keep their existing compact panel');
+assert(A.panel(held,{holdingGuide:true}).includes('data-sell-guide'));
+const lower={...held,price:89};
+assert(A.holdingPanel(lower,{holdingGuide:true}).includes('종가가 이미 이탈'));
+assert(!A.holdingPanel({...held,price:120},{holdingGuide:true}).includes('고점 돌파 · 추세 확인'),
+  'Touching the previous high is not a breakout');
+assert(A.holdingPanel({...held,price:121},{holdingGuide:true}).includes('고점 돌파 · 추세 확인'));
+const unavailableHeld={...held,plan:{...held.plan,holding:{...held.plan.holding,code:'unavailable'}}};
+const unavailableHeldHtml=A.holdingPanel(unavailableHeld,{holdingGuide:true});
+assert(unavailableHeldHtml.includes('data-exit-level>자료 확인'));
+assert(unavailableHeldHtml.includes('data-profit-reference>자료 확인'));
+assert(!/\$90|\$120|NaN|undefined|Infinity/.test(unavailableHeldHtml),'Stale references must not look actionable');
+assert(A.holdingPanel({...held,asOf:'<unsafe>'},{holdingGuide:true}).includes('&lt;unsafe&gt;'));
 assert.equal((html.match(/data-state-option=/g)||[]).length,9,
   'The full set of entry judgments is shown in the beginner panel');
 assert(html.includes('data-state-option="buy"><summary aria-current="true"'));

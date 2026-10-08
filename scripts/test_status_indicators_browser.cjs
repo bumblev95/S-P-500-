@@ -84,6 +84,10 @@ async function fits(page, selector) {
           assert.equal(await assessment.locator('.sa-state-current').getAttribute('data-state-option'),expected.plan.code);
           assert.equal(await assessment.locator('[data-entry-state]').textContent(),expected.decision);
           assert.equal(await assessment.locator('[data-holding-state]').getAttribute('data-holding-state'),expected.plan.holding.code);
+          if(file==='stocks.html'){
+            await fits(page, '.sa-exit-grid, .sa-exit-card, .sa-exit-note, .sa-exit-link');
+            await page.locator('#holding-guide').screenshot({path:path.join(output,`holding-guide-${width}.png`)});
+          }
           assert.equal(await assessment.locator('.sa-holding .vi-steps > span:visible').count(),3);
           const holdingActive=assessment.locator('.sa-holding .vi-steps .vi-active');
           assert.equal(await holdingActive.count(),expected.plan.holding.code==='unavailable'?0:1);
@@ -181,9 +185,17 @@ async function fits(page, selector) {
           await page.locator('.company-events .ce-event').first().waitFor();
           assert.equal(await page.locator('.ce-news-card').count(), news.issuers[news.symbols.XOM].articles.length);
           const primary=page.locator('.ce-primary-news .ce-news-card');
-          assert(await primary.count()>0);
-          assert((await primary.locator('.ce-news-reason').allTextContents()).every(t=>t.includes('왜 ')));
-          assert((await primary.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
+          if(await primary.count()){
+            assert((await primary.locator('.ce-news-reason').allTextContents()).every(t=>t.includes('왜 ')));
+            assert((await primary.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
+          }else{
+            // A live snapshot can contain only reference/unclassified news.
+            // Keep that fallback readable instead of requiring a business change.
+            assert((await page.locator('.company-events > .ce-empty').textContent()).includes('아직 없습니다'));
+            const reference=page.locator('.ce-reference-news .ce-news-card');
+            assert(await reference.count()>0);
+            assert((await reference.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
+          }
           // The reported turnaround stays favorable on the actual page; shared
           // warnings cannot hide issuer-specific price risks after a switch.
           await page.getByRole('button', {name:'6개월',exact:true}).click();

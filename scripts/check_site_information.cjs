@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const primary = ['index.html','stocks.html','crypto.html','futures.html','simulation.html','advanced.html','research.html','model-validation.html','signal-lab.html','leverage-lab.html','exit-experiment.html','momentum-experiment.html','selector-experiment.html'];
-const articles = ['learn.html','guide-top3.html','guide-indicators.html','guide-backtesting.html','guide-news.html','methodology.html','about.html','contact.html','terms.html','privacy.html'];
+const articles = ['learn.html','guide-top3.html','guide-indicators.html','guide-sell.html','guide-backtesting.html','guide-news.html','methodology.html','about.html','contact.html','terms.html','privacy.html'];
 const links = ['learn.html','methodology.html','about.html','contact.html','privacy.html','terms.html'];
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 for (const file of [...primary, ...articles]) {
@@ -83,6 +83,8 @@ if (process.argv.includes('--browser')) {
       await page.goto(base + 'learn.html');
       await page.setViewportSize({width:375,height:900});
       await page.screenshot({path:path.join(root,'site-information-preview/guide-mobile.png'),fullPage:true});
+      await page.goto(base + 'guide-sell.html');
+      await page.screenshot({path:path.join(root,'site-information-preview/selling-guide-mobile.png'),fullPage:true});
       console.log('Browser information: guides readable with JavaScript disabled, root-to-guide navigation, 320–1280px layout and zero external tracking passed.');
     } finally {if (browser) await browser.close();}
   })().catch(error => {console.error(error); process.exitCode = 1;});
