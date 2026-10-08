@@ -84,6 +84,10 @@ async function fits(page, selector) {
           assert.equal(await assessment.locator('.sa-state-current').getAttribute('data-state-option'),expected.plan.code);
           assert.equal(await assessment.locator('[data-entry-state]').textContent(),expected.decision);
           assert.equal(await assessment.locator('[data-holding-state]').getAttribute('data-holding-state'),expected.plan.holding.code);
+          if(file==='stocks.html'){
+            await fits(page, '.sa-exit-grid, .sa-exit-card, .sa-exit-note, .sa-exit-link');
+            await page.locator('#holding-guide').screenshot({path:path.join(output,`holding-guide-${width}.png`)});
+          }
           assert.equal(await assessment.locator('.sa-holding .vi-steps > span:visible').count(),3);
           const holdingActive=assessment.locator('.sa-holding .vi-steps .vi-active');
           assert.equal(await holdingActive.count(),expected.plan.holding.code==='unavailable'?0:1);

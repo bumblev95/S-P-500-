@@ -83,6 +83,8 @@ if (process.argv.includes('--browser')) {
       await page.goto(base + 'learn.html');
       await page.setViewportSize({width:375,height:900});
       await page.screenshot({path:path.join(root,'site-information-preview/guide-mobile.png'),fullPage:true});
+      await page.goto(base + 'guide-sell.html');
+      await page.screenshot({path:path.join(root,'site-information-preview/selling-guide-mobile.png'),fullPage:true});
       console.log('Browser information: guides readable with JavaScript disabled, root-to-guide navigation, 320–1280px layout and zero external tracking passed.');
     } finally {if (browser) await browser.close();}
   })().catch(error => {console.error(error); process.exitCode = 1;});
