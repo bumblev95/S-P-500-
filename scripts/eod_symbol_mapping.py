@@ -5,6 +5,8 @@ import hashlib
 import json
 import math
 import urllib.request
+import urllib.parse
+from datetime import date
 from datetime import datetime, timezone
 
 import pandas as pd
@@ -104,13 +106,18 @@ def check_context(meta, history, anchors, mapping, as_of):
     days = [item["date"] for item in history]
     if not days or days != sorted(set(days)) or days[-1] != as_of:
         raise ValueError("Mapped Yahoo history must end at the completed session without duplicates")
-    previous = latest_closed_session(as_of + "T12:00:00Z")
-    prior = [item for item in history if item["date"] < as_of][-3:]
-    if (len(anchors) != 3 or len(prior) != 3 or anchors[-1]["date"] != previous
-            or [item["date"] for item in anchors] != [item["date"] for item in prior]):
+    anchor_days = [item["date"] for item in anchors]
+    if len(anchors) != 3 or anchor_days != sorted(set(anchor_days)) or anchor_days[-1] >= as_of:
         raise ValueError("Three current published anchors are required for a symbol transition")
-    for original, current in zip(anchors, prior):
-        if cents(original["close"]) != cents(current["close"]):
+    import exchange_calendars as xcals
+    calendar = xcals.get_calendar("XNYS", start=anchor_days[0], end=as_of)
+    sessions = calendar.sessions_in_range(anchor_days[0], as_of).strftime("%Y-%m-%d").tolist()
+    # Keep all three original anchors, then prove every intervening session.
+    if sessions[:3] != anchor_days or [day for day in days if day >= anchor_days[0]] != sessions:
+        raise ValueError("Mapped Yahoo history has a missing or non-trading bridge session")
+    indexed = {item["date"]: item for item in history}
+    for original in anchors:
+        if cents(original["close"]) != cents(indexed[original["date"]]["close"]):
             raise ValueError("Mapped Yahoo history and published price bases disagree")
     bar = history[-1]
     values = {key: float(bar[key]) for key in ("open", "high", "low", "close", "volume")}
@@ -121,7 +128,7 @@ def check_context(meta, history, anchors, mapping, as_of):
         raise ValueError("Mapped Yahoo completed OHLCV is missing or inconsistent")
 
 
-def check_secondary(payload, mapping, history, as_of):
+def check_secondary(payload, mapping, history, as_of, anchors=None):
     data = payload.get("data") or {}
     if (payload.get("status", {}).get("rCode") != 200
             or data.get("symbol") != nasdaq_symbol(mapping["nasdaqSymbol"])):
@@ -134,12 +141,27 @@ def check_secondary(payload, mapping, history, as_of):
         rows[day] = item
     if as_of not in rows:
         raise ValueError("Mapped Nasdaq has no completed bar for the required session")
-    for key in ("open", "high", "low", "close"):
-        if cents(price(rows[as_of].get(key))) != cents(history[-1][key]):
-            raise ValueError("Mapped Nasdaq and Yahoo completed OHLC disagree")
-    volume = rows[as_of].get("volume", "")
-    if not isinstance(volume, str) or not volume.replace(",", "").isdigit() or int(volume.replace(",", "")) <= 0:
-        raise ValueError("Mapped Nasdaq completed volume is missing")
+    # With a publication gap, independently corroborate the anchor overlap and
+    # every bridge bar. A normal consecutive publication retains its old path.
+    previous = latest_closed_session(as_of + "T12:00:00Z")
+    required = ([bar for bar in history if bar["date"] >= anchors[0]["date"]]
+                if anchors and anchors[-1]["date"] != previous else [history[-1]])
+    for bar in required:
+        day = bar["date"]
+        if day not in rows:
+            raise ValueError("Mapped Nasdaq has a missing bridge session")
+        values = {key: float(bar[key]) for key in ("open", "high", "low", "close", "volume")}
+        if (any(not math.isfinite(v) or v <= 0 for v in values.values())
+                or not values["low"] <= min(values["open"], values["close"])
+                <= max(values["open"], values["close"]) <= values["high"]
+                or values["volume"] != int(values["volume"])):
+            raise ValueError("Mapped Yahoo bridge OHLCV is invalid")
+        for key in ("open", "high", "low", "close"):
+            if cents(price(rows[day].get(key))) != cents(bar[key]):
+                raise ValueError("Mapped Nasdaq and Yahoo completed OHLC disagree")
+        volume = rows[day].get("volume", "")
+        if not isinstance(volume, str) or not volume.replace(",", "").isdigit() or int(volume.replace(",", "")) <= 0:
+            raise ValueError("Mapped Nasdaq completed volume is missing")
 
 
 def frame_history(frame):
@@ -148,18 +170,31 @@ def frame_history(frame):
             for day, row in frame.iterrows() if pd.notna(row.get("Close"))]
 
 
+def secondary_url(mapping, as_of, anchors):
+    previous = latest_closed_session(as_of + "T12:00:00Z")
+    if anchors and anchors[-1]["date"] != previous:
+        start = anchors[0]["date"]
+        span = (date.fromisoformat(as_of) - date.fromisoformat(start)).days
+        if span < 0 or span > 365:
+            raise ValueError("Symbol-transition bridge exceeds the reviewed one-year recovery window")
+        query = urllib.parse.urlencode({"assetclass": "stocks", "fromdate": start,
+                                       "todate": as_of, "limit": span + 1})
+        return f"https://api.nasdaq.com/api/quote/{nasdaq_symbol(mapping['nasdaqSymbol'])}/historical?{query}"
+    return source_url(mapping["nasdaqSymbol"], as_of)
+
+
 def attest(symbol, meta, frame, as_of, anchors):
     mapping = transition(symbol, as_of)
     if mapping is None:
         raise ValueError("No reviewed symbol transition for this session")
     history = frame_history(frame)
     check_context(meta, history, anchors, mapping, as_of)
-    url = source_url(mapping["nasdaqSymbol"], as_of)
+    url = secondary_url(mapping, as_of, anchors)
     request = urllib.request.Request(url, headers={"User-Agent": "PublicStockDashboard/1.0",
                                                   "Accept": "application/json"})
     with urllib.request.urlopen(request, timeout=20) as response:
         payload = json.load(response)
-    check_secondary(payload, mapping, history, as_of)
+    check_secondary(payload, mapping, history, as_of, anchors)
     return {"provider": PROVIDER, "symbol": symbol, "date": as_of,
             "transition": mapping, "yahooSymbol": mapping["yahooSymbol"],
             "sourceUrl": chart_url(mapping["yahooSymbol"]), "yahooMeta": meta,
@@ -174,11 +209,11 @@ def verify_evidence(evidence, symbol, as_of, collected, history):
             or evidence.get("transition") != mapping or evidence.get("date") != as_of
             or evidence.get("yahooSymbol") != mapping["yahooSymbol"]
             or evidence.get("sourceUrl") != chart_url(mapping["yahooSymbol"])
-            or evidence.get("nasdaqSourceUrl") != source_url(mapping["nasdaqSymbol"], as_of)
+            or evidence.get("nasdaqSourceUrl") != secondary_url(mapping, as_of, evidence.get("anchors", []))
             or timestamp(evidence["retrievedAt"]) > timestamp(collected)
             or latest_closed_session(evidence["retrievedAt"]) != as_of
             or hashlib.sha256(canonical(evidence["response"])).hexdigest() != evidence.get("responseSha256")
             or history_hash(history) != evidence.get("historySha256")):
         raise ValueError("Invalid or stale verified symbol-transition evidence")
     check_context(evidence["yahooMeta"], history, evidence["anchors"], mapping, as_of)
-    check_secondary(evidence["response"], mapping, history, as_of)
+    check_secondary(evidence["response"], mapping, history, as_of, evidence["anchors"])
