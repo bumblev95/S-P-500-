@@ -69,6 +69,54 @@ class MappingTests(unittest.TestCase):
                                   frame if frame is not None else chart_frame(), AS_OF,
                                   anchors if anchors is not None else FIXTURE['publishedAnchors'])
 
+    def test_captured_oct8_failure_keeps_gate_until_secondary_session_arrives(self):
+        captured = json.loads((Path(__file__).parent / 'fixtures/eod-psky-2026-10-08.json').read_text())
+        self.assertEqual(captured['failedRun'], 37852970850)
+        result = captured['yahoo']['chart']['result'][0]
+        frame = pd.DataFrame({key.title(): value for key, value in result['indicators']['quote'][0].items()},
+                             index=pd.to_datetime(result['timestamp'], unit='s'))
+        history = mapping.frame_history(frame)
+        anchors = captured['publishedAnchors']
+        record = mapping.transition('PSKY', captured['asOf'])
+        mapping.check_context(result['meta'], history, anchors, record, captured['asOf'])
+        with self.assertRaisesRegex(ValueError, 'no completed bar'):
+            mapping.check_secondary(captured['nasdaq'], record, history, captured['asOf'], anchors)
+        # October 7 is now independently available; no made-up missing close.
+        mapping.check_secondary(captured['nasdaq'], record, history[:-1], '2026-10-07')
+
+    def test_oct8_and_multiple_missing_publication_days_require_full_bridge(self):
+        # Synthetic prices exercise control flow; these are not observed quotes.
+        for target in ('2026-10-08', '2026-10-09', '2026-10-12'):
+            history = mapping.frame_history(chart_frame())
+            anchors = [{'date': row['date'], 'close': row['close']} for row in history[-3:]]
+            import exchange_calendars as xcals
+            cal = xcals.get_calendar('XNYS', start='2026-10-01', end='2026-10-13')
+            for day in cal.sessions_in_range('2026-10-07', target).strftime('%Y-%m-%d'):
+                history.append({**history[-1], 'date': day})
+            meta = response('yahoo-SKYD')['chart']['result'][0]['meta']
+            payload = response('nasdaq-SKYD')
+            payload['data']['tradesTable']['rows'] = [
+                {'date': datetime.strptime(row['date'], '%Y-%m-%d').strftime('%m/%d/%Y'),
+                 **{key: '$' + str(row[key]) for key in ('open', 'high', 'low', 'close')},
+                 'volume': str(int(row['volume']))} for row in history[-(len(history)-next(
+                     i for i, row in enumerate(history) if row['date'] == anchors[0]['date'])):]]
+            with self.subTest(target=target):
+                mapping.check_context(meta, history, anchors, mapping.transition('PSKY', target), target)
+                mapping.check_secondary(payload, mapping.transition('PSKY', target), history, target, anchors)
+                for fault in ('missing', 'mismatch', 'duplicate', 'volume'):
+                    bad = copy.deepcopy(payload)
+                    rows = bad['data']['tradesTable']['rows']
+                    if fault == 'missing': del rows[-2]
+                    elif fault == 'mismatch': rows[-2]['close'] = '$123.45'
+                    elif fault == 'duplicate': rows.append(copy.deepcopy(rows[-2]))
+                    else: rows[-2]['volume'] = '0'
+                    with self.subTest(fault=fault), self.assertRaises(ValueError):
+                        mapping.check_secondary(bad, mapping.transition('PSKY', target), history, target, anchors)
+                bad_history = [row for row in history if row['date'] != '2026-10-07']
+                with self.assertRaisesRegex(ValueError, 'bridge session'):
+                    mapping.check_context(meta, bad_history, anchors, mapping.transition('PSKY', target), target)
+
+
     def test_actual_failed_psky_nasdaq_response_has_no_old_symbol(self):
         self.assertEqual(FIXTURE['failedRun']['id'], 37541493288)
         payload = response('nasdaq-PSKY')
