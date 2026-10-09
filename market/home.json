@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-09T21:11:13.035834+00:00",
+  "generatedAt": "2026-10-09T21:27:49.150932+00:00",
   "rankings": {
     "buy": [
       {
         "symbol": "FFIV",
         "name": "F5",
-        "asOf": "2026-10-06",
+        "asOf": "2026-10-09",
         "score": 100,
         "code": "buy",
         "holdingCode": "hold",
@@ -14,20 +14,20 @@
         "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
       },
       {
-        "symbol": "ANET",
-        "name": "아리스타 네트웍스",
-        "asOf": "2026-10-06",
-        "score": 99,
+        "symbol": "FTNT",
+        "name": "포티넷",
+        "asOf": "2026-10-09",
+        "score": 100,
         "code": "buy",
         "holdingCode": "hold",
         "selection": "signal",
         "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
       },
       {
-        "symbol": "APH",
-        "name": "암페놀",
-        "asOf": "2026-10-06",
-        "score": 98,
+        "symbol": "ABBV",
+        "name": "애브비",
+        "asOf": "2026-10-09",
+        "score": 99,
         "code": "buy",
         "holdingCode": "hold",
         "selection": "signal",
@@ -36,9 +36,19 @@
     ],
     "sell": [
       {
+        "symbol": "ALB",
+        "name": "앨버말",
+        "asOf": "2026-10-09",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
+      },
+      {
         "symbol": "CHTR",
         "name": "차터 커뮤니케이션즈",
-        "asOf": "2026-10-06",
+        "asOf": "2026-10-09",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -46,19 +56,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "CTVA",
-        "name": "코르테바",
-        "asOf": "2026-10-06",
-        "score": 0,
-        "code": "avoid",
-        "holdingCode": "reduce",
-        "selection": "signal",
-        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
-      },
-      {
-        "symbol": "EFX",
-        "name": "에퀴팩스",
-        "asOf": "2026-10-06",
+        "symbol": "CMCSA",
+        "name": "컴캐스트",
+        "asOf": "2026-10-09",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -66,10 +66,10 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-06",
-    "eligibleCount": 505,
-    "evaluatedAt": "2026-10-09T21:11:13.035Z",
-    "priceGeneratedAt": "2026-10-07T03:43:48+00:00",
+    "asOf": "2026-10-09",
+    "eligibleCount": 504,
+    "evaluatedAt": "2026-10-09T21:27:49.150Z",
+    "priceGeneratedAt": "2026-10-09T21:26:40+00:00",
     "marketGeneratedAt": "2026-10-09T20:59:43.698031+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
