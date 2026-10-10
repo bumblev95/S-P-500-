@@ -1,0 +1,61 @@
+{
+  "version": "drawdown-separation-v1",
+  "registeredAt": "2026-10-10T02:03:04.392475Z",
+  "sourceMainCommit": "0df7743a1eadcc3b08242242174a2d8b4f12d1d4",
+  "parentResearchCommit": "7599d340c020dfa8e49122b1563610418296716a",
+  "source": "../relative-v1/sources/environment.json.gz",
+  "featureSource": "../relative-v1/sources/raw-features.json.gz",
+  "universeSource": "../relative-v1/sources/universe.json",
+  "sourceHashes": {
+    "environmentRawSha256": "03e37d34b4b9beeb1c93ce6a626c43be1faaf36fa54932c02be617bf42696c90",
+    "featureRawSha256": "263aef9184abc0a9abf7ae3f97a4237c33ed9cc2910dfec6dd72e8a8aaa8afe8",
+    "universeFileSha256": "510ca1de004c9fc256a47e7c0e8c39033bf8d323655fa39022ca9e5ab6808eb8"
+  },
+  "horizons": [126, 252],
+  "hypotheses": {
+    "A": "A terminal price-ratio down label and a within-horizon maximum-drawdown event measure different risks; at least 10% of severe-drawdown rows recover to a non-down terminal label.",
+    "B": "A separate, fixed trailing-risk warning can improve severe within-horizon drawdown recall and precision over the existing terminal price-forecast warning without changing the endpoint numeric forecast."
+  },
+  "evaluation": "The unchanged last half of frozen origin dates: 9 dates for 126 trading days and 8 dates for 252 trading days. Retain missing-path rows in coverage denominators. Equal total metric weight per origin date; pooled row metrics reported separately.",
+  "futurePath": "Yahoo revised adjusted daily closes from the first observation on or after origin through targetDate, anchored by the last close strictly before origin. No observation after targetDate may be read. Payload hashes and normalized paths are frozen before scoring.",
+  "targets": {
+    "endpointDown": "Frozen endpoint ratio y < 0.98",
+    "severeMaximumDrawdown": "Minimum close/runningPeak-1 from the origin anchor through targetDate <= -0.20",
+    "recoveredTerminal": "Severe maximum drawdown and frozen endpoint ratio y >= 0.98"
+  },
+  "warnings": {
+    "terminalForecast": "Existing priceOnly numeric endpoint forecast < 0.98; reference only",
+    "trailingDrawdown": "Pre-origin 63-session drawdown feature <= -0.20",
+    "trendBreak": "Pre-origin distance from 200-session mean < 0 and trailing 63-session log return < 0",
+    "roleUnion": "terminalForecast OR trendBreak; diagnostic system keeps priceOnly endpoint forecast unchanged"
+  },
+  "featureIndices": {
+    "return63": 0,
+    "distance200": 4,
+    "drawdown63": 5
+  },
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "minimumPathCoverage": 0.95,
+    "minimumRecoveredShareOfSevere": 0.10,
+    "minimumSevereRecallLift": 0.05,
+    "minimumSeverePrecisionLiftOverPrevalence": 0.05,
+    "maximumFalseWarningRateIncreaseVsTerminal": 0.10,
+    "endpointForecastMustBeBitwiseUnchanged": true,
+    "prospectiveEvidenceRequired": true,
+    "pointInTimeCohortRequired": true
+  },
+  "probability": "Binary diagnostic warnings are not calibrated probabilities. Brier score and log loss are not applicable and will not be borrowed from a classifier.",
+  "missing": "Any missing/invalid future path remains in total rows and coverage. Risk metrics use path-covered rows only and disclose both covered and total counts. No imputation from endpoint y.",
+  "pointInTimeStatus": "Quarantined diagnostic only: historical point-in-time membership readiness is 0/34 origins, current-member survivorship and revised-price bias remain, and merger/delist lifecycle evidence is incomplete.",
+  "noTraining": true,
+  "noPostResultTuning": true,
+  "noTradeClaims": true,
+  "noUIOrLiveChanges": true,
+  "selection": "none",
+  "prospective": "No historical replay may be recorded as an issued forecast. Promotion is impossible until genuine prospective evidence and point-in-time cohort readiness exist.",
+  "references": [
+    "https://arxiv.org/abs/2103.09906",
+    "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3588564"
+  ]
+}
