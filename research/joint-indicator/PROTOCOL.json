@@ -1,0 +1,38 @@
+{
+  "version": "joint-distribution-v1",
+  "registeredAt": "2026-10-04T03:58:55.095615+00:00",
+  "sourceCommit": "c67f12f1242c85bb570561ed5fed9d635c8afd8e",
+  "source": "research/environment.json",
+  "horizons": [
+    126,
+    252
+  ],
+  "candidates": [
+    "joint_logistic",
+    "joint_balanced_logistic",
+    "joint_tree"
+  ],
+  "classBoundaries": [
+    0.98,
+    1.02
+  ],
+  "minimumFitDates": 3,
+  "calibrationDates": 2,
+  "evaluationSplit": "last half of source origin dates, fixed before execution",
+  "candidateSelection": "no selection or automatic promotion; compare all three declared candidates",
+  "directionRule": "argmax of calibrated class scores, no holdout threshold search",
+  "pointForecast": "median of the same three-class empirical mixture distribution",
+  "range": "10th and 90th quantiles of that mixture, diagnostic only",
+  "classShapes": "previously realized outcomes only, equal total weight per date within class",
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "priceErrorImprovement": 0.02,
+    "minimumDateWinRate": 0.6,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "requireDirectionImprovementCI": true,
+    "prospectiveEvidenceRequired": true
+  },
+  "warning": "Fixed design hypotheses, not established optimum thresholds. This historical evaluation has already been inspected; it is not new prospective evidence. No UI, service forecasts, ranking or trading rules may be changed by this experiment."
+}
