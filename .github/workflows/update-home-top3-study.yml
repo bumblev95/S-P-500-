@@ -1,0 +1,47 @@
+name: Observe prospective homepage TOP 3 research
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Update and validate market home']
+    types: [completed]
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/home_top3_study.py'
+      - 'scripts/requirements-home-top3-study.txt'
+      - '.github/workflows/update-home-top3-study.yml'
+  schedule:
+    - cron: '45 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: homepage-top3-prospective-research
+  cancel-in-progress: false
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r scripts/requirements-home-top3-study.txt
+      - run: python -m unittest discover -s scripts -p test_home_top3_study.py
+      - name: Observe committed snapshot at actual research capture time
+        run: |
+          python scripts/home_top3_study.py update
+          python scripts/home_top3_study.py verify --base HEAD
+      - name: Publish only prospective research evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add simulation/home-top3
+          if ! git diff --cached --quiet; then
+            git commit -m 'Observe daily TOP 3 prospective research evidence'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
