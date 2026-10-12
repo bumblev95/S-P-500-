@@ -1,0 +1,91 @@
+{
+  "mainCommit": "9e07f96df6b43689bb75dcc005329964db33e882",
+  "runHead": "06386c1f1fff501b136ece306346c5e37b2a7236",
+  "pr25Head": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+  "files": [
+    {
+      "file": "sources/validation-126.json.gz",
+      "repositoryPath": "ml/validation/126.json",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "11797e56fafedf2b1e0cfe09ae5a0dd8ad9c63e3e6777d0b2c7c274b54a23d1a",
+      "rawSha256": "3d41c33ee8d3f68d5883410ed6a404d0f317854479f9325e96f9a2607fd1401b"
+    },
+    {
+      "file": "sources/adaptive-126.json.gz",
+      "repositoryPath": "ml/adaptive/126.json",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "cb013bd8841320bdc9a61285903b2ad1eb179bbc4b48f6bae9354b40e4132bf4",
+      "rawSha256": "5a087dab4319a1a14d54d37fb7fec0f23f103494b07f0f694e401451b99ac94a"
+    },
+    {
+      "file": "sources/adaptive-summary.json.gz",
+      "repositoryPath": "ml/adaptive-summary.json",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "7ac59fcfbd82c82a1a56ce9e22f9080b1e77db3d83f2cf458991e3be625878e3",
+      "rawSha256": "8562462d6b8d0449ad0463306bd549096807a859e3e6531bd579785d66c9da00"
+    },
+    {
+      "file": "sources/status.json.gz",
+      "repositoryPath": "simulation/self-improvement/status.json",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "747a16180dd8eedcd7f7a3ed8b0051ed02594732404146b26396ccf23bc8c79b",
+      "rawSha256": "d471c132fb16edf6f56053a22a9ba8e7d2a638613db181cf4ebe6f3fcd06ac77"
+    },
+    {
+      "file": "sources/spy-input.csv.gz",
+      "repositoryPath": "research/entry-backtest/2026-10-04/regimes/spy-input.csv",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "aad88170c4bb6ea2bd222c0e38ab25ecca2f1bff843c0f742a623ad391d6deaa",
+      "rawSha256": "a57fc69f4020b48b8a4016acb0f6003c76cd6ff50c352bfa2c451d680e0b2fc0"
+    },
+    {
+      "file": "reuse/research_joint_indicator.py",
+      "repositoryPath": "scripts/research_joint_indicator.py",
+      "commit": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+      "sha256": "75f5ebaa9c6a61b2aea14475102de2f5720022b32c7fcaa4376054d6ec88df19",
+      "rawSha256": "75f5ebaa9c6a61b2aea14475102de2f5720022b32c7fcaa4376054d6ec88df19"
+    },
+    {
+      "file": "sources/pr25-pit-audit.json.gz",
+      "repositoryPath": "research/joint-indicator/pit-inputs-v1/coverage-audit.json",
+      "commit": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+      "sha256": "40e17f89a415c70086a31325731824a592c75caac80027ce29663b0b7cc437f2",
+      "rawSha256": "ed856bc5ab1ee37a2e31868812c42179f5b66397e378eba5676c085ddb5a507d"
+    },
+    {
+      "file": "sources/pr25-lifecycle-audit.json.gz",
+      "repositoryPath": "research/joint-indicator/merger-lifecycle-v1/coverage-audit.json",
+      "commit": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+      "sha256": "e72b9663682e7676651b22563e80ba687f590a7c537bb49a67e1a9d3794cf5dd",
+      "rawSha256": "a6d11be7ec037f7a47f53dcb6f068d1dbb1f32fd09cbc5232fe721a1214f4443"
+    },
+    {
+      "file": "sources/pr25-blends-protocol.json.gz",
+      "repositoryPath": "research/joint-indicator/blends/PROTOCOL.json",
+      "commit": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+      "sha256": "c62aeedfe19cda0b64f9c99c71671a3f73d9b6faef57acab9dd5a15c478180db",
+      "rawSha256": "69a717847de8391182e625c3f293cb13d4afa79893f84c12452571762175a285"
+    },
+    {
+      "file": "sources/pr25-drawdown-findings.md.gz",
+      "repositoryPath": "research/joint-indicator/drawdown-separation-v1/FINDINGS.md",
+      "commit": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+      "sha256": "bf5463b6b8db4de82e15f1ede3ad6de0eacfb2db1fe9e4af3f18c746267d29c8",
+      "rawSha256": "f9af4cb3b619e37eb8c11e2af64cce1dbfea08e8fd15546a3ec15fd6459464ce"
+    },
+    {
+      "file": "reuse/build_adaptive_research.py",
+      "repositoryPath": "scripts/build_adaptive_research.py",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "90653b59b1a0ba5d1815541a7402787ae244eb9cf4c4cd84c95d869c3f766775",
+      "rawSha256": "90653b59b1a0ba5d1815541a7402787ae244eb9cf4c4cd84c95d869c3f766775"
+    },
+    {
+      "file": "reuse/build_forecasts.py",
+      "repositoryPath": "scripts/build_forecasts.py",
+      "commit": "9e07f96df6b43689bb75dcc005329964db33e882",
+      "sha256": "2a96e49815c9eb0aec79822af0794bc416ecd4ef938bf598367a38c554e86a8a",
+      "rawSha256": "2a96e49815c9eb0aec79822af0794bc416ecd4ef938bf598367a38c554e86a8a"
+    }
+  ]
+}
