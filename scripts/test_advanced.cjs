@@ -106,7 +106,9 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
   node('analysisHorizon').events.change({target:{value:'252'}});
   const year=A.evaluate(snapshot.stocks.NVDA,market,ml,252,clock);
   assert.match(node('inspector').innerHTML,new RegExp('data-trend-score="'+year.score+'"'));
-  assert(node('inspector').innerHTML.includes(year.modelStatus));
+  // The panel uses aiReference() labels, which may differ from modelStatus
+  // when daily prices and learned forecasts have different anchor dates.
+  assert(node('inspector').innerHTML.includes(A.panel(year)), 'Inspector must render the complete canonical 252-day assessment');
   node('export').events.click();assert.equal(Number(E.csv(exported)[0].assessmentHorizon),252);
   if(JSON.parse(fs.readFileSync('forecasts/latest.json')).stocks.NVDA.history.length<253)
     assert(node('content').innerHTML.includes('공통 이력이 짧습니다'));
