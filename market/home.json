@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-13T21:19:51.086416+00:00",
+  "generatedAt": "2026-10-13T21:43:54.539599+00:00",
   "rankings": {
     "buy": [
       {
-        "symbol": "ABBV",
-        "name": "애브비",
-        "asOf": "2026-10-12",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      },
-      {
-        "symbol": "FTNT",
-        "name": "포티넷",
-        "asOf": "2026-10-12",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      },
-      {
         "symbol": "MPC",
         "name": "마라톤 페트롤리엄",
-        "asOf": "2026-10-12",
+        "asOf": "2026-10-13",
+        "score": 100,
+        "code": "unavailable",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "시장 위험 데이터 확인 필요"
+      },
+      {
+        "symbol": "MTD",
+        "name": "메틀러 톨레도",
+        "asOf": "2026-10-13",
+        "score": 100,
+        "code": "unavailable",
+        "holdingCode": "hold",
+        "selection": "relative",
+        "reason": "시장 위험 데이터 확인 필요"
+      },
+      {
+        "symbol": "NTAP",
+        "name": "넷앱",
+        "asOf": "2026-10-13",
         "score": 100,
         "code": "unavailable",
         "holdingCode": "hold",
@@ -38,7 +38,7 @@
       {
         "symbol": "ALB",
         "name": "앨버말",
-        "asOf": "2026-10-12",
+        "asOf": "2026-10-13",
         "score": 0,
         "code": "unavailable",
         "holdingCode": "reduce",
@@ -46,9 +46,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "CHTR",
-        "name": "차터 커뮤니케이션즈",
-        "asOf": "2026-10-12",
+        "symbol": "ARE",
+        "name": "알렉산드리아 리얼에스테이트",
+        "asOf": "2026-10-13",
         "score": 0,
         "code": "unavailable",
         "holdingCode": "reduce",
@@ -58,7 +58,7 @@
       {
         "symbol": "CMCSA",
         "name": "컴캐스트",
-        "asOf": "2026-10-12",
+        "asOf": "2026-10-13",
         "score": 0,
         "code": "unavailable",
         "holdingCode": "reduce",
@@ -66,10 +66,10 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-12",
+    "asOf": "2026-10-13",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-13T21:19:51.086Z",
-    "priceGeneratedAt": "2026-10-12T23:25:53+00:00",
+    "evaluatedAt": "2026-10-13T21:43:54.539Z",
+    "priceGeneratedAt": "2026-10-13T21:42:42+00:00",
     "marketGeneratedAt": "2026-10-13T11:11:56.571358+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
