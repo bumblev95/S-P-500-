@@ -1,0 +1,51 @@
+name: Validate regimeBlend research boundary
+on:
+  pull_request:
+    paths:
+      - 'research/regimeblend-audit-v1/**'
+      - 'scripts/build_adaptive_research.py'
+      - 'scripts/build_decision_support.py'
+      - 'scripts/test_regimeblend*'
+      - 'assets/decision-support.js'
+      - '.github/workflows/validate-regimeblend-audit.yml'
+  push:
+    branches: [codex/regimeblend-audit-v1]
+    paths:
+      - 'research/regimeblend-audit-v1/**'
+      - 'scripts/build_adaptive_research.py'
+      - 'scripts/build_decision_support.py'
+      - 'scripts/test_regimeblend*'
+      - 'assets/decision-support.js'
+      - '.github/workflows/validate-regimeblend-audit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r research/regimeblend-audit-v1/requirements.txt
+      - name: Joint selection, chronology and operating boundaries
+        run: |
+          python -m unittest discover -s scripts -p test_adaptive_research.py
+          python -m unittest discover -s scripts -p test_decision_support.py
+          python -m unittest discover -s scripts -p test_regimeblend_guards.py
+          node scripts/test_decision_support.cjs
+          node scripts/test_regimeblend_ui.cjs
+      - name: Frozen cohorts, unchanged forecasts and evidence classification
+        run: python -m unittest discover -s research/regimeblend-audit-v1 -p test_audit.py
+      - name: Two deterministic offline replays; no production writers
+        run: |
+          python research/regimeblend-audit-v1/run.py --output research/regimeblend-audit-v1/replay-ci-a
+          python research/regimeblend-audit-v1/run.py --output research/regimeblend-audit-v1/replay-ci-b
+          python research/regimeblend-audit-v1/verify.py --output research/regimeblend-audit-v1/replay-ci-a --compare research/regimeblend-audit-v1/replay-ci-b
+          git diff --exit-code

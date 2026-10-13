@@ -1,0 +1,104 @@
+(function(root){
+'use strict';
+const N=Number.isFinite,esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const V=typeof module!=='undefined'?require('./market-visuals.js'):root.MarketVisuals;
+const pct=x=>N(x)?(100*x).toFixed(1)+'%':'자료 부족',money=x=>N(x)?'$'+x.toLocaleString('en-US',{maximumFractionDigits:2}):'자료 부족';
+const fresh=(s,days,now=Date.now())=>{const age=(now-Date.parse(s))/86400000;return N(age)&&age>=0&&age<=days};
+// Observation dates describe a calendar day, matching the collector's date arithmetic.
+const freshDay=(s,days,now=Date.now())=>{const age=Math.floor(now/86400000)-Date.parse(s)/86400000;return N(age)&&age>=0&&age<=days};
+let bundle=null,market=null,stocks={},coins={},adaptive=null,loading=null;
+function confidence(m={},options={}){
+ const dates=m.dates||0,n=m.n||0,grade=dates>=20?'평가 시점 20개 이상':dates>=6?'평가 시점 제한적':'평가 시점 부족';
+ const dateSteps=V.steps([{key:'low',label:'6개 미만',tone:'info'},{key:'limited',label:'6–19개',tone:'info'},{key:'many',label:'20개 이상',tone:'info'}],dates>=20?'many':dates>=6?'limited':'low','평가 시점 수 · 성능 통과와 별개');
+ const price=N(m.mape),error=price?m.mape:m.mae,baseline=price?(m.noChangeMape??m.baselineMape):m.noChangeMae,tail=m.p90Error??m.p90??options.tail;
+ return '<section class="ds-confidence"><div class="ds-heading"><b>평가 자료 · '+grade+'</b><span>'+dates+'개 시점 · '+n+'개 평가</span></div>'+dateSteps+'<div class="ds-metrics"><div>과거 방향 적중률<strong>'+pct(m.directionAccuracy)+'</strong></div><div>'+ (price?'평균 가격 오차':'평균 수익률 오차')+'<strong>'+ (N(error)?(100*error).toFixed(1)+(price?'%':'%p'):'자료 부족')+'</strong></div><div>큰 오차 · 90백분위<strong>'+(N(tail)?(100*tail).toFixed(1)+(price?'%':'%p'):'자료 부족')+'</strong></div></div><p>'+ (N(error)&&N(baseline)?'가격 불변 기준 대비 '+(error<baseline?'오차가 작았음':'개선 확인 안 됨')+' · 같은 표본의 기준 오차 '+(100*baseline).toFixed(1)+(price?'%':'%p'):'같은 표본의 가격 불변 기준 비교 자료 부족')+'</p><details><summary>이 숫자는 어떻게 읽나요?</summary><p>과거 적중률은 이번 예측이 맞을 확률이 아닙니다. 평가 자료의 표시는 시점 수 기준(6개 미만 부족, 6–19개 제한적, 20개 이상)이며 성능 기준 통과와 별개입니다. 같은 날 여러 종목은 독립 시험이 아닙니다. 큰 오차는 최대 손실이 아닙니다. '+esc(options.direction||'상승·중립(±2%)·하락 방향을 비교합니다.')+'</p></details></section>';
+}
+function risk(m,universe={},coin=null,now=Date.now()){
+ const items=[], add=(label,value,asOf,severity,source,detail='')=>items.push({label,value,asOf,severity,source,detail});
+ const current=fresh(m?.generatedAt,4,now);
+ for(const q of m?.indicators||[]){
+  const hasValue=N(q.value)&&N(Date.parse(q.asOf)),inRange=freshDay(q.asOf,q.maxAgeDays||7,now);
+  const ok=current&&q.status==='ready'&&hasValue&&inRange;
+  const delayed=q.fetchStatus==='unavailable'||q.status==='unavailable';
+  const state=!hasValue?'값 미확보':!inRange?'발표 간격 초과 · 판단 제외':!current?'수집 시각 오래됨 · 판단 제외':delayed?'수집 지연 · 마지막 확보값'+(ok?' 사용':' · 판단 제외'):'최신 수집값';
+  const frequency={daily:'일별',weekly:'주별',monthly:'월별',quarterly:'분기별'}[q.frequency]||'';
+  let severity=q.severity,detail=[state,frequency,N(q.change)?'전기 대비 '+q.change.toFixed(2)+' '+q.unit:'',q.lastSuccessAt?'마지막 수집 성공 '+q.lastSuccessAt.slice(0,10):''].filter(Boolean).join(' · ');
+  if(q.id==='DGS10')severity=N(q.change)?Math.abs(q.change)>=.75?2:Math.abs(q.change)>=.35?1:0:null;
+  if(q.id==='DTWEXBGS'){const change=q.previous>0?q.value/q.previous-1:null; severity=N(change)?change>=.05?2:change>=.02?1:0:null;}
+  add(q.label,hasValue?q.value.toFixed(2)+' '+q.unit:'값 미확보',q.asOf,ok?severity:null,q.url,detail);
+ }
+ for(const [id,label] of [['GZ_SPREAD','회사채 GZ 신용스프레드'],['EBP','초과 채권 프리미엄 EBP'],['DGS10','미국 10년 국채 금리'],['DTWEXBGS','광의 달러 지수']])if(!(m?.indicators||[]).some(q=>q.id===id))add(label,'자료 부족',null,null,'');
+ const valid=Object.values(universe).filter(e=>positive(e.price)&&fresh(e.asOf,5,now)&&e.inputs?.ma200>0),dateCounts=valid.reduce((a,e)=>(a[e.asOf]=(a[e.asOf]||0)+1,a),{}),latest=Object.keys(dateCounts).sort((a,b)=>dateCounts[a]-dateCounts[b]||a.localeCompare(b)).at(-1),same=valid.filter(e=>e.asOf===latest);
+ if(same.length>=30&&same.length>=valid.length*.5){const breadth=same.filter(e=>e.price>e.inputs.ma200).length/same.length;add('시장 상승 참여도',pct(breadth),latest,breadth<.3?2:breadth<.45?1:0,'','수집 '+same.length+'종목의 200일선 상회 비율');}
+ const spy=universe.SPY,history=spy?.history||[];
+ if(fresh(spy?.asOf,5,now)&&history.length>=21){const prices=history.slice(-63).map(r=>r.close).filter(positive),draw=spy.price/Math.max(...prices)-1,rets=prices.slice(1).map((p,i)=>Math.log(p/prices[i])).slice(-20),mean=rets.reduce((a,b)=>a+b,0)/rets.length,vol=Math.sqrt(rets.reduce((s,x)=>s+(x-mean)**2,0)/(rets.length-1)*252);add('SPY 20일 실현 변동성',pct(vol),spy.asOf,vol>.4?2:vol>.25?1:0,'','VIX가 아닌 실제 종가 변동성');add('SPY 최근 63거래일 고점 대비',pct(draw),spy.asOf,draw<-.2?2:draw<-.1?1:0,'');}
+ if(coin){const p=coin.perp||{},ok=fresh(p.at,2/24,now);add('미결제약정 규모',ok&&N(p.openInterestUSD)?money(p.openInterestUSD):'자료 부족',p.at,null,'','규모 자체는 방향 신호가 아닙니다.');add('코인 시간당 펀딩비',ok&&N(p.fundingHourly)?(100*p.fundingHourly).toFixed(4)+'%':'자료 부족',p.at,ok&&N(p.fundingHourly)?Math.abs(p.fundingHourly)>.0003?2:Math.abs(p.fundingHourly)>.0001?1:0:null,'https://hyperliquid.gitbook.io/hyperliquid-docs/trading/funding','양수: 롱 지급 · 음수: 숏 지급');add('미결제약정 24시간 변화',ok?pct(coin.oiChange24h):'자료 부족',p.at,ok&&N(coin.oiChange24h)?coin.oiChange24h>.2?2:coin.oiChange24h>.1?1:0:null,'','OI 증가만으로 청산 방향을 알 수 없습니다.');add('청산 쏠림','자료 미연결',null,null,'','확인된 청산 데이터 없이 펀딩·OI로 추정하지 않습니다.');}
+ const ready=items.filter(r=>N(r.severity)),warnings=ready.filter(r=>r.severity>0).sort((a,b)=>b.severity-a.severity),bond=items.some(r=>r.label.includes('GZ')&&N(r.severity));
+ const family=label=>/GZ|프리미엄/.test(label)?'credit':/금융여건|금융 스트레스/.test(label)?'conditions':/SPY|참여/.test(label)?'equity':/펀딩|미결제/.test(label)?'derivatives':/금리|달러/.test(label)?'rates':label;const families=new Map();warnings.forEach(r=>families.set(family(r.label),Math.max(families.get(family(r.label))||0,r.severity)));
+ const status=warnings.some(r=>r.severity>=3)||[...families.values()].filter(v=>v>=2).length>=2?'risk':warnings.length?'watch':ready.length>=5&&bond?'stable':'unknown';
+ return {items,status,reasons:warnings.slice(0,2).map(r=>r.label),coverage:ready.length,total:items.length};
+}
+function positive(x){return N(x)&&x>0}
+function riskRow(q){
+ const labels=['원활','주의','경계','경보'],tones=['good','warn','warn','bad'];
+ const valid=Number.isInteger(q.severity)&&q.severity>=0&&q.severity<=3;
+ const status=valid?labels[q.severity]:/판단 제외/.test(q.detail)?'판단 제외':/자료 부족|미확보|미연결/.test(q.value)?'자료 부족':'참고';
+ return '<tr><td>'+esc(q.label)+'</td><td>'+esc(q.value)+'<small>'+esc(q.asOf||'기준일 없음')+'</small></td><td>'+V.badge(status,valid?tones[q.severity]:'muted')+'<details class="risk-source"><summary>기준·출처</summary><p>'+esc(q.detail)+'</p>'+(safeUrl(q.source)?'<a href="'+esc(q.source)+'" target="_blank" rel="noopener noreferrer">원자료</a>':'')+'</details></td></tr>';
+}
+function riskPanel(coin){
+ const r=risk(market,stocks,coin),labels={risk:'위험 상승',watch:'주의',stable:'관측 범위 내 안정',unknown:'자료 부족 · 판단 제한'};
+ const delayed=(market?.indicators||[]).filter(q=>q.fetchStatus==='unavailable'||q.status==='unavailable').length;
+ const collection='<p class="ds-collection">수집 확인 '+esc(market?.generatedAt?.replace('T',' ').slice(0,19)||'확인 필요')+' UTC'+(delayed?' · 마지막 확보값 포함':'')+'</p>';
+ const overview='<div class="ds-risk-overview">'+V.riskGauge(r.status)+'<div class="ds-risk-summary"><p class="ds-risk-reason">'+esc(r.reasons.length?r.reasons.join(' · '):labels[r.status])+'</p>'+V.table([['판단에 사용',r.coverage+' / '+r.total+'개'],['참고·미사용',r.total-r.coverage+'개'],['수집 지연',delayed+'개']],'수집 범위')+'</div></div>';
+ return '<section class="ds-risk"><div class="ds-heading"><small>EARLY WARNING · 시장 위험 상태</small></div>'+overview+collection+'<details><summary>위험 근거 · 뉴스·일정 펼치기</summary><div class="ds-table ds-risk-table"><table><thead><tr><th>지표</th><th>값 · 관측일</th><th>상태</th></tr></thead><tbody>'+r.items.map(riskRow).join('')+'</tbody></table></div><p>일별·주별·월별·분기별 지표는 발표 간격이 다릅니다. 기준일은 관측 대상 날짜이며 수집 시각과 다릅니다. 마지막 확보값도 표시하지만, 지표별 허용 기간을 넘으면 위험 판단에서 제외합니다. SOFR·IORB 자체는 참고값이며 같은 날짜의 두 금리 차이를 위험 판단에 사용합니다.</p><p>겹치는 신용·금융여건·주식 지표는 묶어서 종합 판단합니다. GZ는 회사채 스프레드, EBP는 그 일부인 초과 프리미엄입니다. 둘 다 Fed 월별 연구 자료이며 매일의 HY OAS가 아닙니다. 금리 급변은 4주 ±0.35/0.75%p, 달러 상승은 4주 2/5%, 나머지 경고도 운영 규칙이며 위기 확률이 아닙니다.</p>'+newsPanel()+'<p>선택 회사의 뉴스·실적·공시는 종목 상세에서 확인하세요. 주요 경제 일정: <a href="https://www.bls.gov/schedule/news_release/" target="_blank" rel="noopener noreferrer">BLS 공식 일정</a> · <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer">FOMC 일정</a>. 일정 자동 수집은 미연결입니다.</p></details></section>';
+}
+function safeUrl(url){if(!url)return false;try{const u=new URL(url);return u.protocol==='https:'&&['www.federalreserve.gov','fred.stlouisfed.org','hyperliquid.gitbook.io'].includes(u.hostname)}catch(_){return false}}
+function newsPanel(){const news=(market?.news||[]).filter(n=>safeUrl(n.url)&&fresh(n.publishedAt,14));return '<h3>확인된 공식 발표</h3>'+(news.length?news.slice(0,3).map(n=>'<p><a href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer">'+esc(n.title)+'</a><small>'+esc(n.source)+' · 발행 '+esc(n.publishedAt)+'</small></p>').join(''):'<p>최근 발표 수집 자료가 없습니다.</p>')+'<p>Fed 공식 발표 범위입니다. 뉴스 제목을 가격 변화의 원인으로 단정하지 않습니다.</p>'}
+function changePanel(asset,symbol,h){const c=bundle?.changes?.[asset]?.[symbol]?.[h];return '<section class="ds-change"><h3>전망이 바뀐 이유</h3><p>'+esc(c?.text||'이전 공개 기록과 비교할 자료를 준비 중입니다.')+'</p>'+(c?.status==='ready'?'<p>'+esc(c.previousAsOf)+' '+pct(c.previousReturn)+' → '+esc(c.currentAsOf)+' '+pct(c.currentReturn)+' · 변화 '+(c.delta*100).toFixed(1)+'%p</p>'+(c.facts||[]).map(f=>'<p>'+esc(f.label)+': '+pct(f.previous)+' → '+pct(f.current)+'</p>').join('')+'<small>'+esc(c.note)+'</small>':'')+'</section>'}
+function scorePanel(asset,symbol,h){const g=bundle?.groups?.[asset]?.[h],own=g?.symbols?.[symbol]||{};return '<section class="ds-score"><h3>배포한 예측의 실제 성적표</h3><p>'+esc(symbol)+' · '+h+(asset==='stocks'?'거래일':'일')+' · 기본 모델 '+esc(g?.champion||'자료 부족')+'</p><div class="ds-table"><table><thead><tr><th>모델</th><th>완료 / 대기</th><th>평균 가격 오차</th><th>큰 오차</th><th>방향 적중률</th></tr></thead><tbody>'+Object.entries(own).map(([m,v])=>'<tr><td>'+esc(m)+'</td><td>'+v.n+' / '+v.pending+'</td><td>'+pct(v.mape)+'</td><td>'+pct(v.p90Error)+'</td><td>'+pct(v.directionAccuracy)+'</td></tr>').join('')+'</tbody></table></div>'+(!Object.keys(own).length?'<p>이 종목의 공개 예측 기록을 기다리고 있습니다.</p>':'')+'<p>평가가 끝나지 않은 예측은 적중률 계산에서 제외합니다. 연구·검증 미통과 예측도 구분 없이 연구 성적을 추적하며, 매매 수익률과 다릅니다.</p><details><summary>전체 종목 성적과 모델 자동 승격</summary><div class="ds-table"><table><thead><tr><th>모델</th><th>완료 / 대기</th><th>평균 가격 오차</th><th>가격 불변</th></tr></thead><tbody>'+Object.entries(g?.models||{}).map(([m,v])=>'<tr><td>'+esc(m)+'</td><td>'+v.n+' / '+v.pending+'</td><td>'+pct(v.mape)+'</td><td>'+pct(v.baselineMape)+'</td></tr>').join('')+'</tbody></table></div><p>'+esc(bundle?.promotionPolicy||'실제 평가 자료 확인 후 승격')+'</p>'+(g?.gates||[]).map(x=>'<p>'+esc(x.challenger)+': '+x.dates+'개 비중첩 시점 · '+x.pairs+'쌍 · '+esc(x.reason)+'</p>').join('')+'<p>서로 다른 표본의 모델 평균을 직접 비교해 승격하지 않습니다. 위 표는 모델별 집계이며 승격은 공통 표본만 사용합니다. 승격하더라도 개별 거래 조건을 자동 통과하지 않습니다. '+esc(bundle?.note||'')+'</p></details></section>'}
+function calculate(o){
+ const {budget,risk:lossLimit,entry,stop,target,fee=0,slippage=0,leverage=1,funding=0,hours=0,side='long',futures=false,liquidation=null}=o;
+ if(![budget,lossLimit,entry,stop,target].every(positive)||![fee,slippage,hours].every(x=>N(x)&&x>=0)||fee>.1||slippage>.1||!N(funding)||Math.abs(funding)>.1||!N(leverage)||leverage<1||leverage>100||!['long','short'].includes(side))return {error:'금액·가격·비용을 올바르게 입력하세요.'};
+ const sign=side==='short'?-1:1,lev=futures?leverage:1;
+ if((!futures&&side!=='long')||sign*(entry-stop)<=0||sign*(target-entry)<=0)return {error:side==='long'?'롱: 손절 < 진입 < 목표 가격이어야 합니다.':'숏: 목표 < 진입 < 손절 가격이어야 합니다.'};
+ const fundingUnit=futures?sign*funding*hours*entry:0,stopCost=(entry+stop)*(fee+slippage),targetCost=(entry+target)*(fee+slippage);
+ // Do not increase position size by assuming uncertain future funding receipts.
+ const conservativeFunding=Math.max(0,fundingUnit),lossUnit=sign*(entry-stop)+stopCost+conservativeFunding;
+ const cashUnit=entry/lev+entry*(fee+slippage)+conservativeFunding;
+ let qty=Math.min(budget/cashUnit,lossLimit/lossUnit);qty=futures||o.fractional?Math.floor(qty*1e6)/1e6:Math.floor(qty);
+ if(!positive(qty))return {error:'이 조건으로 살 수 있는 수량이 없습니다. 금액 또는 소수점 거래 조건을 확인하세요.'};
+ const loss=qty*lossUnit,profit=qty*(sign*(target-entry)-targetCost-fundingUnit),margin=qty*entry/lev;
+ const liqValid=futures&&positive(liquidation)&&sign*(entry-liquidation)>0;
+ const clearance=liqValid?sign*(stop-liquidation)/entry:null;
+ return {qty,notional:qty*entry,margin,loss,profit,rr:profit/loss,funding:qty*fundingUnit,entryCost:qty*entry*(fee+slippage),stopCost:qty*stopCost,clearance,liqBeforeStop:liqValid&&clearance<=0,liquidation:liqValid?liquidation:null};
+}
+function adaptivePanel(sym,h,data=adaptive){
+ const b=data?.horizons?.[h];if(!b)return '';
+ const c=b.comparison||{},names={original:'기존 AI',noChange:'가격 불변',trend:'기존 추세',biasCorrected:'편향 보정',regimeBlend:'장세별 혼합'},m=c.evaluation||{},selected=m[c.chosen],original=m.original;
+ const error=x=>N(x)?(100*x).toFixed(2)+'%p':'자료 부족';
+ let result='1년 등 긴 기간은 보정 모델을 평가할 완료 시점이 부족합니다.';
+ if(selected&&original){const improvement=c.improvementVsOriginal;result='후반 '+selected.dates+'개 시점에서 '+names[c.chosen]+'의 평균 오차는 기존 AI보다 '+(N(improvement)?(100*Math.abs(improvement)).toFixed(1)+'% '+(improvement>0?'작았습니다.':'컸습니다.'):'비교 자료가 부족합니다.');}
+ const labels={enoughDates:'후반 검증 시점 4개 이상',average:'기존 AI·단순 기준 모두보다 평균 오차 2% 개선',tail:'큰 오차 악화 없음',consistency:'시점별 우위 60% 이상',direction:'기존 AI·항상 상승 기준 이상의 방향 적중률'};
+ const failures=Object.entries(c.checks||{}).filter(([,v])=>!v).map(([k])=>labels[k]);
+ const old=b.sourceDiagnostics?.original,diagnosis=old?'기존 모델의 전체 과거 오차 편향: '+error(old.bias)+' · '+(old.bias<0?'실제보다 낮게 예측한 경향':old.bias>0?'실제보다 높게 예측한 경향':'뚜렷한 평균 편향 없음')+'. 기간·장세에 따라 달라질 수 있습니다.':'';
+ const table=values=>'<div class="ds-table"><table><thead><tr><th>방법</th><th>평균 오차 ↓</th><th>큰 오차 ↓</th><th>방향 적중률</th></tr></thead><tbody>'+Object.entries(values).map(([k,v])=>'<tr><th scope="row">'+esc(names[k]||k)+(k===c.chosen?' · 사전 선택':'')+'</th><td>'+error(v.mae)+'</td><td>'+error(v.p90)+'</td><td>'+pct(v.directionAccuracy)+'</td></tr>').join('')+'</tbody></table></div>';
+ const regimes={above200HighVol:'200일선 위 · 고변동',above200LowVol:'200일선 위 · 낮은 변동',below200HighVol:'200일선 아래 · 고변동',below200LowVol:'200일선 아래 · 낮은 변동'};
+ return '<section class="ds-score ds-adaptive" aria-label="모델 개선 실험"><div class="ds-heading"><h3>모델 개선 실험</h3><span>'+(c.passed?'과거 비교 기준 통과 · 실제 성적 검증 대기':'기본 예측 유지 · 새 모델 검증 중')+'</span></div><p>'+esc(result)+'</p><p>'+esc(failures.length?'남은 조건: '+failures.join(' · '):c.reason||'기본 모델 변경은 별도의 실제 발표 성적표에서 결정합니다.')+'</p><details><summary>무엇을 바꿨고 얼마나 나아졌나요?</summary><p>완료된 과거 예측의 오차로 편향을 보정하고, 200일선·변동성별 성적에 따라 AI·가격 불변·추세 예측을 섞었습니다. 새 대형 AI를 실행한 것은 아닙니다.</p><p>'+esc(diagnosis)+'</p>'+(selected?'<p>전체 종목의 같은 후반 표본 비교 · 날짜별 동일 가중치. 수익률 오차(%p)이며 이 종목만의 성적이나 매매 수익률이 아닙니다.</p>'+table(m)+'<p>모델 선택 결과 확인일 '+esc(c.selectionTargetThrough)+'까지 → 후반 평가 시작 '+esc(c.evaluationStart)+'. 후반 성적을 보고 다른 후보로 바꾸지 않습니다.</p>':'<p>원래 검증 '+b.sourceDates+'개 시점 → 이전 결과로 보정한 외부표본 '+b.correctionDates+'개 시점. 같은 날의 종목 수를 늘려도 검증 시점 수는 늘지 않습니다.</p>')+'<details><summary>장세별 진단 · 전체 보정 검증 구간</summary>'+Object.entries(b.regimes||{}).map(([g,v])=>'<p>'+esc(regimes[g]||g)+' · '+(v.original?.dates||0)+'개 시점</p>'+table(v)).join('')+'<p>당시 종목의 200일선과 연환산 변동성 40%로 구분합니다. 후반 평가 표와 구간이 다르며 추가 검증 횟수로 세지 않습니다.</p></details><p>이미 살펴본 과거 자료를 이용한 탐색 연구입니다. 결과가 더 좋아 보여도 실제 발표 후 성적이 확인되기 전에는 기본 예측으로 승격하지 않습니다. 참고 범위는 새 모델 자신의 이전 완료 오차로 보정하며, 자료가 부족하면 생성하지 않습니다.</p><p><a href="ml/adaptive-summary.json">실험 결과 데이터</a> · 생성 '+esc(data.generatedAt)+'</p></details></section>';
+}
+function extras(asset,sym,h,validation,tail){return confidence(validation,{tail,direction:asset==='crypto'?'과거 코인 백테스트는 상승/비상승을 비교합니다. 실제 성적표는 ±2% 중립 기준을 별도로 사용합니다.':undefined})+'<details class="site-disclosure"><summary>공개 예측 성적·변경 이력</summary>'+scorePanel(asset,sym,h)+changePanel(asset,sym,h)+(asset==='stocks'?adaptivePanel(sym,h):'')+'</details>'}
+function mountStock({e,plan,h,ai}){
+ const host=document.getElementById('decisionEvidence');if(host)host.innerHTML=extras('stocks',e.symbol,h,ai.record?.validation||{},!ai.record?.model&&bundle?.stockValidationGeneratedAt===ai.generatedAt?bundle?.stockTailErrors?.[e.symbol]?.[h]:null);
+ root.CompanyEvents?.mount(document.getElementById('companyEvents'),e.symbol);
+ const riskHost=document.getElementById('sharedRisk');if(riskHost)riskHost.innerHTML=riskPanel();
+
+}
+function mountCrypto(e,h){const host=document.getElementById('decisionEvidence');if(host)host.innerHTML=extras('crypto',e.symbol,h,e.spotModel?.predictions?.[h]?.validation||{});const riskHost=document.getElementById('sharedRisk');if(riskHost)riskHost.innerHTML=riskPanel(e)}
+function mountPerp(symbol,snapshot,analysis){const r=document.getElementById('sharedRisk');if(r)r.innerHTML=riskPanel({...coins[symbol],oiChange24h:fresh(coins[symbol]?.perp?.at,2/24)?coins[symbol]?.oiChange24h:null,perp:{openInterestUSD:snapshot.quote?.oiUSD,at:snapshot.quoteAt?new Date(snapshot.quoteAt).toISOString():null,fundingHourly:snapshot.quote?.funding}})}
+async function load(){if(loading)return loading;loading=(async()=>{const urls=['decision/latest.json','market/latest.json','forecasts/latest.json','crypto/latest.json','ml/adaptive-summary.json'];const rs=await Promise.allSettled(urls.map(async url=>{const r=await fetch(url,{cache:'no-store'});return r.ok?await r.json():null}));const values=rs.map(r=>r.status==='fulfilled'?r.value:null);[bundle,market]=values;stocks=values[2]?.stocks||{};coins=values[3]?.coins||{};adaptive=values[4];})();return loading}
+// Only a prospectively promoted model can replace a current chart result. All
+// period records retain their own model name, as-of date and validation metric.
+function promoted(asset,symbol,h,asOf,anchor){const r=bundle?.current?.[asset]?.[symbol]?.[h];return fresh(bundle?.generatedAt,4)&&r?.promoted&&r.asOf===asOf&&positive(anchor)&&Math.abs(r.anchor/anchor-1)<1e-6&&positive(r.low)&&positive(r.high)&&r.low<=r.base&&r.base<=r.high?r:null}
+function applyStocks(data){if(!data)return data;for(const [sym,e] of Object.entries(data.stocks||{}))for(const h of Object.keys(e.predictions||{})){const r=promoted('stocks',sym,h,e.asOf,e.price);if(!r)continue;const f={horizon:Number(h),anchor:r.anchor,base:r.base,bear:r.low,bull:r.high,logReturn:Math.log(r.base/r.anchor),lowLogReturn:Math.log(r.low/r.anchor),highLogReturn:Math.log(r.high/r.anchor),return:r.base/r.anchor-1,learned:true,direction:r.base/r.anchor>1.02?'up':r.base/r.anchor<.98?'down':'neutral'};e.predictions[h]={forecast:f,status:'withheld',model:r.model,validation:r.validation,reasons:['실제 성적 기준 기본 연구 모델 승격 · 개별 거래 검증은 별도 확인']};}return data}
+function applyCoin(e){for(const h of Object.keys(e.spotModel?.predictions||{})){const r=promoted('crypto',e.symbol,h,e.spotModel.asOf,e.spotModel.anchor);if(r)e.spotModel.predictions[h]={status:'withheld',model:r.model,validation:r.validation,forecast:{base:r.base,logReturn:Math.log(r.base/r.anchor),lowLogReturn:Math.log(r.low/r.anchor),highLogReturn:Math.log(r.high/r.anchor)},reasons:['실제 성적 기준 기본 연구 모델 승격 · 개별 거래 검증은 별도 확인']};}return e}
+const api={load,confidence,risk,calculate,extras,mountStock,mountCrypto,mountPerp,applyStocks,applyCoin,changePanel,scorePanel,adaptivePanel};if(typeof module!=='undefined')module.exports=api;else root.DecisionSupport=api;
+})(typeof window!=='undefined'?window:globalThis);

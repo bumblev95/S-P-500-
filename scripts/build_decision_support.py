@@ -19,6 +19,10 @@ def read(root, path, default=None):
 
 def finite(x): return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
 def positive(x): return finite(x) and x > 0
+def quarantined_adapter(model):
+    # This namespace has no complete PIT/identity/vintage/lifecycle evidence.
+    # Neither a retrospective `passed` flag nor good future price scores releases it.
+    return isinstance(model, str) and model.startswith('completed-error-adapter-v1:')
 def timestamp(x):
     try:
         parsed=datetime.fromisoformat(x.replace('Z', '+00:00'))
@@ -129,14 +133,20 @@ def paired_gate(rows, incumbent, challenger):
         chosen.append(d); through=max(a['targetDate'] for a,b in pairs if a['asOf']==d)
     pairs=[(a,b) for a,b in pairs if a['asOf'] in chosen]
     result=dict(challenger=challenger,dates=len(chosen),pairs=len(pairs),passed=False)
-    if not pairs: return dict(result,reason='같은 조건의 실제 평가 결과 대기')
+    if not pairs:
+        return dict(result,reason='PIT 검증 미완료 연구 어댑터: 승격 차단' if quarantined_adapter(challenger) else '같은 조건의 실제 평가 결과 대기',
+                    **(dict(researchOnly=True,productionEligible=False) if quarantined_adapter(challenger) else {}))
     av=[statistics.mean(a['mape'] for a,b in pairs if a['asOf']==d) for d in chosen]
     bv=[statistics.mean(b['mape'] for a,b in pairs if a['asOf']==d) for d in chosen]
     nv=[statistics.mean(a['baselineMape'] for a,b in pairs if a['asOf']==d) for d in chosen]
     a=statistics.mean(av); b=statistics.mean(bv); baseline=statistics.mean(nv)
     win=statistics.mean(y<x for x,y in zip(av,bv)); tail=quantile([q['mape'] for _,q in pairs],.9); oldtail=quantile([q['mape'] for q,_ in pairs],.9)
     passed=len(chosen)>=12 and len(pairs)>=30 and b<.95*min(a,baseline) and win>=.6 and tail<=oldtail and statistics.mean(bv[-3:])<statistics.mean(av[-3:])
-    return dict(result,passed=passed,incumbentMape=a,challengerMape=b,baselineMape=baseline,winRate=win,reason='승격 기준 통과' if passed else '12개 비중첩 시점·30개 쌍·오차 5% 개선·시점 우위 60%·큰 오차/최근 성적 기준 미충족',evaluatedThrough=max(q['targetDate'] for pair in pairs for q in pair))
+    report = dict(result,passed=passed,incumbentMape=a,challengerMape=b,baselineMape=baseline,winRate=win,reason='승격 기준 통과' if passed else '12개 비중첩 시점·30개 쌍·오차 5% 개선·시점 우위 60%·큰 오차/최근 성적 기준 미충족',evaluatedThrough=max(q['targetDate'] for pair in pairs for q in pair))
+    if quarantined_adapter(challenger):
+        report.update(priceScreenPassed=passed,passed=False,researchOnly=True,productionEligible=False,
+                      reason='PIT·영구 종목 ID·가격 빈티지·상장폐지/합병 검증 미완료 연구 어댑터: 승격 차단')
+    return report
 
 def change(current, previous):
     if not previous: return dict(status='waiting',text='첫 기록을 저장했습니다. 다음 기준일의 전망부터 변화 이유를 비교합니다.')
@@ -149,6 +159,9 @@ def change(current, previous):
     return dict(status='ready',previousAsOf=previous['asOf'],currentAsOf=current['asOf'],previousReturn=old,currentReturn=new,delta=delta,previousTarget=previous['base'],currentTarget=current['base'],facts=facts[:2],text='지난 기준일보다 예상 수익률이 '+('높아졌습니다.' if delta>.001 else '낮아졌습니다.' if delta<-.001 else '비슷합니다.'),note='같은 모델·기간의 서로 다른 목표일을 비교합니다. 지표 변화는 동시 관측 근거이며 모델 기여도나 인과관계로 확인된 것은 아닙니다.')
 
 def build(root=ROOT, now=None):
+    registry=read(root,'decision/registry.json',{'champions':{},'events':[]})
+    if any(quarantined_adapter(model) for model in registry['champions'].values()):
+        raise ValueError('Quarantined research adapter cannot be a champion; explicit evidence review required')
     now=now or datetime.now(timezone.utc); folder=root/'decision/ledger'; folder.mkdir(parents=True,exist_ok=True)
     new,defaults=capture(root,now); ledger=[]
     for p in sorted(folder.glob('*.json')): ledger.extend(json.loads(p.read_text())['records'])
@@ -181,7 +194,7 @@ def build(root=ROOT, now=None):
         if result['status']=='scored' and not stored: previous_scores[rid]={k:v for k,v in result.items() if k not in r}
         scored.append(result)
     atomic_json(root/'decision/outcomes.json',dict(records=previous_scores))
-    registry=read(root,'decision/registry.json',{'champions':{},'events':[]}); groups={}; changes={}; current={}
+    groups={}; changes={}; current={}
     for asset in ('stocks','crypto'):
         groups[asset]={}; changes[asset]={}; current[asset]={}
         horizons=sorted({r['horizon'] for r in scored if r['assetClass']==asset})
@@ -191,7 +204,7 @@ def build(root=ROOT, now=None):
             gates=[paired_gate(rs,champion,m) for m in models if m!=champion]
             for gate in gates:
                 available=any(r['assetClass']==asset and r['horizon']==h and r['model']==gate['challenger'] and positive(r.get('low')) and positive(r.get('high')) and r['low']<=r['base']<=r['high'] for r in new)
-                if not available: gate.update(passed=False,reason='최신 예측과 자체 참고 범위 확인 대기')
+                if not available and not gate.get('researchOnly'): gate.update(passed=False,reason='최신 예측과 자체 참고 범위 확인 대기')
             passed=sorted([g for g in gates if g['passed']],key=lambda g:g['challengerMape'])
             if passed:
                 winner=passed[0]; registry['champions'][regkey]=winner['challenger']; registry['events'].append(dict(at=now.isoformat(),assetClass=asset,horizon=h,previous=champion,model=winner['challenger'],evidence=winner)); champion=winner['challenger']
