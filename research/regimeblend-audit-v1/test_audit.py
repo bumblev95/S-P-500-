@@ -126,7 +126,7 @@ class AuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'isolated experiment'):audit.run(audit.HERE)
 
     def test_all_preserved_baseline_files_and_output_hashes(self):
-        self.assertEqual(verify.verify_preserved(),1495)
+        self.assertEqual(verify.verify_preserved(),1493)
         self.assertEqual(len(verify.verify_output()),3)
 
 

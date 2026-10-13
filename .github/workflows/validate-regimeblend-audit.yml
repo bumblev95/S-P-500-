@@ -6,6 +6,8 @@ on:
       - 'scripts/build_adaptive_research.py'
       - 'scripts/build_decision_support.py'
       - 'scripts/test_regimeblend*'
+      - 'scripts/test_technical_guide.cjs'
+      - 'scripts/test_status_indicators_browser.cjs'
       - 'assets/decision-support.js'
       - '.github/workflows/validate-regimeblend-audit.yml'
   push:
@@ -15,6 +17,8 @@ on:
       - 'scripts/build_adaptive_research.py'
       - 'scripts/build_decision_support.py'
       - 'scripts/test_regimeblend*'
+      - 'scripts/test_technical_guide.cjs'
+      - 'scripts/test_status_indicators_browser.cjs'
       - 'assets/decision-support.js'
       - '.github/workflows/validate-regimeblend-audit.yml'
 permissions:
@@ -41,6 +45,7 @@ jobs:
           python -m unittest discover -s scripts -p test_regimeblend_guards.py
           node scripts/test_decision_support.cjs
           node scripts/test_regimeblend_ui.cjs
+          node scripts/test_technical_guide.cjs
       - name: Frozen cohorts, unchanged forecasts and evidence classification
         run: python -m unittest discover -s research/regimeblend-audit-v1 -p test_audit.py
       - name: Two deterministic offline replays; no production writers

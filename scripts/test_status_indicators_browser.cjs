@@ -236,10 +236,17 @@ async function fits(page, selector) {
         static now() {return now;}
       };
     }, clock);
-    let creditFixture;
+    let creditFixture, expiredFunding=false;
+    // Coverage fixtures need explicit fresh observations. Live snapshot dates
+    // cannot determine the expected synthetic stability badge.
+    const coverageDay=new Date(clock).toISOString().slice(0,10);
+    const coverageMarket={...market,generatedAt:new Date(clock).toISOString(),
+      indicators:['NFCI','STLFSI4','DRTSCILM','FUNDING'].map(id=>({id,status:'ready',asOf:coverageDay,maxAgeDays:5}))};
     await coveragePage.route('**/market/latest.json*', route =>
-      route.fulfill({json:{...market,credit:creditFixture}}));
-    for (const [credit,text,missing,badge] of [
+      route.fulfill({json:{...coverageMarket,credit:creditFixture,
+        indicators:coverageMarket.indicators.map(q=>q.id==='FUNDING'&&expiredFunding?
+          {...q,asOf:new Date(clock-6*86400000).toISOString().slice(0,10)}:q)}}));
+    for (const [credit,text,missing,badge,expired=false] of [
       [{status:'stable',coverage:3,expected:4,complete:false,missingFamilies:['회사채 GZ/EBP']},
         '3 / 4개 신용 묶음','회사채 GZ/EBP','관측 범위 내 안정'],
       [{status:'stable',coverage:4,expected:4,complete:true,missingFamilies:[]},
@@ -248,9 +255,11 @@ async function fits(page, selector) {
         missingFamilies:['금융여건','단기자금조달','은행대출','회사채 GZ/EBP']},
         '0 / 4개 신용 묶음','은행대출','자료 확인 필요'],
       [{status:'stable',coverage:3,expected:3},'신용 묶음 범위 확인 필요',null,'관측 범위 내 안정'],
-      [{status:'unknown',expected:4},'신용 묶음 범위 확인 필요',null,'자료 확인 필요']
+      [{status:'unknown',expected:4},'신용 묶음 범위 확인 필요',null,'자료 확인 필요'],
+      [{status:'stable',coverage:4,expected:4,complete:true,missingFamilies:[]},
+        '4 / 4개 신용 묶음',null,'자료 확인 필요',true]
     ]) {
-      creditFixture=credit;
+      creditFixture=credit;expiredFunding=expired;
       await ready(coveragePage, base+'advanced.html', '.stockAssessment');
       await coveragePage.locator('details.site-disclosure > summary').click();
       const info=await coveragePage.locator('#sourceStatus').innerText();

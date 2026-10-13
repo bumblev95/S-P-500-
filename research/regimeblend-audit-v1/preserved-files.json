@@ -2234,10 +2234,6 @@
       "sha256": "ee93eb19fef9e600a3efdea207759564408149d7bb04827cb76cb9fcb1f59c6b"
     },
     {
-      "path": "scripts/test_status_indicators_browser.cjs",
-      "sha256": "9b85c7932d27aaee4638dd3b8d904aa89709d293995c421a322da71284ca613a"
-    },
-    {
       "path": "scripts/test_stock_assessment.cjs",
       "sha256": "b6694222d024b8d795be2fe700ff8d8c31a1a4e82267ae7830a7a5496e807420"
     },
@@ -2256,10 +2252,6 @@
     {
       "path": "scripts/test_stock_ranking_experiment.py",
       "sha256": "953c4c90028bd354ca13244fbe6917078c0c985f9d24cb51185aa052c9d2e35a"
-    },
-    {
-      "path": "scripts/test_technical_guide.cjs",
-      "sha256": "d34fbd9552db74eeff77a83131b2dc1c551178374550390b817b3359bba611d6"
     },
     {
       "path": "scripts/test_top3_rankings.cjs",

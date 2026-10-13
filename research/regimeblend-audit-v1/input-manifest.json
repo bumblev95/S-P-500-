@@ -199,6 +199,22 @@
       "rawSha256": "fe97dba7eaca447fc60afb415445445a589ef744f545c4642245a6647ee7c39c",
       "repositoryPath": "assets/decision-support.js",
       "sha256": "fe97dba7eaca447fc60afb415445445a589ef744f545c4642245a6647ee7c39c"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/baseline-test-technical-guide.cjs.gz",
+      "projection": false,
+      "rawSha256": "d34fbd9552db74eeff77a83131b2dc1c551178374550390b817b3359bba611d6",
+      "repositoryPath": "scripts/test_technical_guide.cjs",
+      "sha256": "0b9a31c3b4802bcbfc89c2163e7055455bf0adefdab0a961df061c57692afeca"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "reuse/test_status_indicators_browser.cjs",
+      "projection": false,
+      "rawSha256": "9b85c7932d27aaee4638dd3b8d904aa89709d293995c421a322da71284ca613a",
+      "repositoryPath": "scripts/test_status_indicators_browser.cjs",
+      "sha256": "9b85c7932d27aaee4638dd3b8d904aa89709d293995c421a322da71284ca613a"
     }
   ],
   "mainCommit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
