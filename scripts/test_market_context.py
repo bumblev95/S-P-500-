@@ -248,7 +248,7 @@ class Tests(unittest.TestCase):
             self.assertIn(str(code),meta['fetchError'])
 
     def test_failure_retains_values_dates_aligned_funding_then_recovers(self):
-        now=datetime(2026,9,14,20,tzinfo=timezone.utc)
+        now=datetime(2026,9,13,20,tzinfo=timezone.utc)
         def success(url):
             if 'fredgraph' in url:
                 key=url.split('id=')[1].split('&')[0]
@@ -272,7 +272,7 @@ class Tests(unittest.TestCase):
             self.assertEqual(b['NFCI']['status'],'ready')
             self.assertEqual(b['NFCI']['value'],0)
             self.assertEqual(b['GZ_SPREAD']['status'],'stale')
-            self.assertEqual(a['GZ_SPREAD']['status'],'ready') # 75 calendar days
+            self.assertEqual(a['GZ_SPREAD']['status'],'ready') # within 75 elapsed days
             self.assertEqual(b['FUNDING']['severity'],a['FUNDING']['severity'])
             repeated=build(root,datetime(2026,9,16,20,tzinfo=timezone.utc),fail)
             for q in repeated['indicators']:

@@ -17,6 +17,9 @@
     return {rows,rsi,macd,z,relativeVolume:e.inputs?.avgVolume3m>0&&finite(e.inputs?.volume)?e.inputs.volume/e.inputs.avgVolume3m:null};
   }
   function marketState(m,now=Date.now()){
+    // credit.status aggregates available families; it is not entry permission.
+    // Recheck elapsed UTC ages (also for legacy/cache snapshots). A fresh risk
+    // warning survives missing inputs, but stable/watch must fail closed.
     if(!m||!fresh(m.generatedAt,3,now))return 'unknown';
     const ids=['NFCI','STLFSI4','DRTSCILM','FUNDING'];
     const valid=ids.every(id=>{const q=(m.indicators||[]).find(x=>x.id===id);return q?.status==='ready'&&fresh(q.asOf,q.maxAgeDays|| (id==='DRTSCILM'?150:id==='FUNDING'?5:16),now);});

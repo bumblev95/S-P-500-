@@ -1,0 +1,55 @@
+name: Validate crypto publication checks
+on:
+  push:
+    paths:
+      - 'scripts/*crypto*'
+      - 'scripts/test_perp.cjs'
+      - 'scripts/test_decision_support.cjs'
+      - 'assets/crypto*'
+      - 'assets/spot-forecast.js'
+      - 'assets/perp*'
+      - 'assets/decision-support.js'
+      - 'assets/market-visuals.js'
+      - 'crypto.html'
+      - 'futures.html'
+      - '.github/workflows/*crypto.yml'
+  pull_request:
+    paths:
+      - 'scripts/*crypto*'
+      - 'scripts/test_perp.cjs'
+      - 'scripts/test_decision_support.cjs'
+      - 'assets/crypto*'
+      - 'assets/spot-forecast.js'
+      - 'assets/perp*'
+      - 'assets/decision-support.js'
+      - 'assets/market-visuals.js'
+      - 'crypto.html'
+      - 'futures.html'
+      - '.github/workflows/*crypto.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install spot learning dependencies
+        run: pip install -r scripts/requirements-crypto-ml.txt
+      - name: Validate crypto learning separation and rules
+        run: |
+          python -m unittest discover -s scripts -p test_crypto_learned.py
+          python -m unittest discover -s scripts -p test_crypto.py
+      - name: Run the publication page and shared safety checks
+        run: bash scripts/check_crypto.sh
+      - name: Prove stock independence and fail-closed crypto checks
+        run: python -m unittest discover -s scripts -p test_crypto_validation_boundary.py

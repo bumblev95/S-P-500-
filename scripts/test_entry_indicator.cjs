@@ -64,10 +64,12 @@ assert.notEqual(A.evaluate(caution,cautiousMarket,null,126,now).plan.code,'buy')
 
 // Market and data failures block entry. Market failure does not manufacture
 // a sell instruction for someone holding a stock whose price trend is intact.
-for(const m of [null,{...market,credit:{status:'risk'}}]){
+const staleFunding={...market,indicators:market.indicators.map(q=>q.id==='FUNDING'?{...q,asOf:'2026-09-27'}:q)};
+for(const m of [null,{...market,credit:{status:'risk'}},staleFunding]){
   const q=A.evaluate(breakEntry,m,null,126,now);assert.notEqual(q.plan.code,'buy');
   assert.equal(q.plan.holding.code,'hold');
   assert(q.plan.setups.every(s=>s.state!=='ready'));
+  if(m===staleFunding){assert.equal(q.plan.market,'unknown');assert.equal(q.plan.code,'unavailable');}
 }
 for(const e of [{...breakEntry,fresh:false},{...breakEntry,price:99},
   {...breakEntry,history:breakEntry.history.slice(-30)}]){

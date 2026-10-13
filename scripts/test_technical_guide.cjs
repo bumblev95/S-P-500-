@@ -2,7 +2,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const guide=require('../assets/technical-guide.js'),data=JSON.parse(fs.readFileSync('forecasts/latest.json')),market=JSON.parse(fs.readFileSync('market/latest.json'));
 const learned=JSON.parse(fs.readFileSync('ml/latest.json'));
 const now=Date.parse(market.generatedAt);
-assert.equal(guide.marketState(market,now),market.credit.status);
+// Live snapshots may have a stable credit aggregate but an expired mandatory
+// input. Exact state expectations live in test_market_state.cjs's fixed cases.
+require('./test_market_state.cjs');
 assert.equal(guide.marketState(market,now+10*86400000),'unknown');
 assert.equal(guide.marketState(null,now),'unknown');
 let count=0;
