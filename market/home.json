@@ -1,37 +1,37 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-13T21:43:54.539599+00:00",
+  "generatedAt": "2026-10-13T21:48:09.753414+00:00",
   "rankings": {
     "buy": [
-      {
-        "symbol": "MPC",
-        "name": "마라톤 페트롤리엄",
-        "asOf": "2026-10-13",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      },
       {
         "symbol": "MTD",
         "name": "메틀러 톨레도",
         "asOf": "2026-10-13",
         "score": 100,
-        "code": "unavailable",
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
       },
       {
-        "symbol": "NTAP",
-        "name": "넷앱",
+        "symbol": "PSX",
+        "name": "필립스 66",
         "asOf": "2026-10-13",
         "score": 100,
-        "code": "unavailable",
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
+      },
+      {
+        "symbol": "VEEV",
+        "name": "비바 시스템즈",
+        "asOf": "2026-10-13",
+        "score": 100,
+        "code": "buy",
+        "holdingCode": "hold",
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
       }
     ],
     "sell": [
@@ -40,7 +40,7 @@
         "name": "앨버말",
         "asOf": "2026-10-13",
         "score": 0,
-        "code": "unavailable",
+        "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
@@ -50,7 +50,7 @@
         "name": "알렉산드리아 리얼에스테이트",
         "asOf": "2026-10-13",
         "score": 0,
-        "code": "unavailable",
+        "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
@@ -60,7 +60,7 @@
         "name": "컴캐스트",
         "asOf": "2026-10-13",
         "score": 0,
-        "code": "unavailable",
+        "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
@@ -68,9 +68,9 @@
     ],
     "asOf": "2026-10-13",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-13T21:43:54.539Z",
+    "evaluatedAt": "2026-10-13T21:48:09.753Z",
     "priceGeneratedAt": "2026-10-13T21:42:42+00:00",
-    "marketGeneratedAt": "2026-10-13T11:11:56.571358+00:00",
+    "marketGeneratedAt": "2026-10-13T21:46:20.644301+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
     "priceMaxAgeDays": 5,
