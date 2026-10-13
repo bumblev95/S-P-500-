@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-13T21:59:55.232420+00:00",
+  "generatedAt": "2026-10-13T23:44:08.863142+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-13",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-13T21:59:55.232Z",
+    "evaluatedAt": "2026-10-13T23:44:08.863Z",
     "priceGeneratedAt": "2026-10-13T21:42:42+00:00",
     "marketGeneratedAt": "2026-10-13T21:57:43.028369+00:00",
     "basis": "technical-relative-ranking",
@@ -97,8 +97,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -112,23 +112,23 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "^DJI",
         "name": "다우",
         "icon": "chart-no-axes-combined",
-        "asOf": "2026-10-13",
-        "close": 51670.1015625,
-        "day": -0.34801794008184617,
-        "dayBaseDate": "2026-10-12",
-        "week": 0.029333769520967223,
+        "asOf": "2026-10-12",
+        "close": 51850.55078125,
+        "day": 0.3786695475619606,
+        "dayBaseDate": "2026-10-09",
+        "week": 0.3786695475619606,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       }
     ],
     "sectors": [
@@ -144,8 +144,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,8 +159,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLY",
@@ -174,8 +174,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,8 +189,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,8 +204,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,8 +219,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,12 +294,50 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+        "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00"
       }
     ]
   },
   "news": [
+    {
+      "url": "https://www.cnbc.com/2026/10/13/jim-cramer-accelevation-stock.html",
+      "title": "Here's where Jim Cramer stands on this newly public AI infrastructure stock",
+      "publishedAt": "2026-10-13T22:47:07+00:00",
+      "firstPublishedAt": "2026-10-13T22:47:07+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "ba0fd170ae4fd6c85bc64be2787f522e550af35fa9a28d71fb536d904e8a02fa",
+      "headlineKo": "여기 짐 크레이머가 새로운 공중 인공지능 인프라 주식에서 서 있습니다.",
+      "summaryKo": "CNBC의 짐 크레이머 (Jim Cramer) 는 투자자들이 새로 공개된 인공지능 인프라 기업인 Accelevation Holdings를 구매하는 것을 중단해야 한다고 말했습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/ck20r9qpw505o?at_medium=RSS&at_campaign=rss",
+      "title": "Russian strikes hit key power plant in Kyiv, Zelensky says",
+      "publishedAt": "2026-10-13T22:14:33+00:00",
+      "firstPublishedAt": "2026-10-13T22:14:33+00:00",
+      "source": "BBC 국제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "8b05f189ba89cb33aa40080b0f01c3657d9fb4a4427d430f5f9bed22c875fc37",
+      "headlineKo": "러시아의 공격은 키예프의 핵심 발전소를 타격을 주었다고 Zelensky는 말한다",
+      "summaryKo": "우크라이나 대통령은 탄도미사일 공격은 \"우리 파트너로부터 조기 경고가 없었다\"고 말했습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
     {
       "url": "https://www.cnbc.com/2026/10/13/six-flags-shares-plunge-after-hours-deadly-roller-coaster-incident-goliath-georgia.html",
       "title": "Six Flags shares decline following deadly roller coaster incident",
@@ -307,7 +345,7 @@
       "firstPublishedAt": "2026-10-13T02:29:14+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -326,7 +364,7 @@
       "firstPublishedAt": "2026-10-13T20:52:22+00:00",
       "source": "CNBC 주요",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -345,7 +383,7 @@
       "firstPublishedAt": "2026-10-13T12:41:56+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -356,45 +394,6 @@
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/investingclub/2026/10/13/were-upgrading-our-rating-on-wells-fargo-as-the-stocks-pullback-offers-a-nice-entry-point.html",
-      "title": "We're upgrading our rating on Wells Fargo as the stock's pullback offers a nice entry point",
-      "publishedAt": "2026-10-13T19:51:06+00:00",
-      "firstPublishedAt": "2026-10-13T19:51:06+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "1e467c0ced35af5c07023580ebc62bedc98171ad1cf90b3eef554ece0228240e",
-      "headlineKo": "We're upgrading our rating on Wells Fargo as the stock's pullback offers a nice entry point",
-      "summaryKo": "웰스 파르고의 3분기 성과는 완벽하지는 않았지만, 찰리 샤프 CEO의 전환은 앞으로 더 많은 열매를 맺어야 합니다.",
-      "translationStatus": "headline-fallback",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2",
-      "headlineFallbackVersion": "home-headline-quality-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/13/john-williams-fed-rate-hikes-2027.html",
-      "title": "Williams says Fed may not have to hike rates in 2027, at odds with traders",
-      "publishedAt": "2026-10-13T19:46:12+00:00",
-      "firstPublishedAt": "2026-10-13T19:46:12+00:00",
-      "source": "CNBC 주요",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "682a15ece46bf276df154390cf3ab78f42edc5735de6aa8be4abcfe766a97349",
-      "headlineKo": "윌리엄스는 연방준비은행이 2027년에 금리를 올릴 필요가 없을 것이라고 말했습니다.",
-      "summaryKo": "뉴욕 연방준비제도 회장 존 윌리엄스는 2026년에 또 한 번의 금리 상승을 보고 있지만, 인플레이션 압력이 완화됨에 따라 2027년에는 추가적으로 증가하지 않을 것입니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
     }
   ],
   "feeds": [
@@ -402,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-13T23:44:08.863142+00:00",
+      "lastSuccessAt": "2026-10-13T23:44:08.863142+00:00",
       "fromCache": false
     }
   ],
