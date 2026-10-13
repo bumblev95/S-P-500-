@@ -1,4 +1,4 @@
-// Korean display names and search aliases for the 2026-10-03 fundamentals snapshot and the two existing ETF tickers.
+// Korean display names and search aliases, including retained historical tickers.
 // These are editorial display labels, not legal company names or a data universe.
 // Only tickers present in the caller's current data are searchable; unknown tickers
 // keep their supplied English name. Share classes remain distinct.
@@ -384,7 +384,11 @@ const names={
   "PPL": ["PPL", "PPL Corporation", "피피엘"],
   "PRU": ["프루덴셜 파이낸셜", "Prudential Financial, Inc.", "프루덴셜"],
   "PSA": ["퍼블릭 스토리지", "Public Storage"],
-  "PSKY": ["파라마운트 스카이댄스", "Paramount Skydance Corporation", "파라마운트"],
+  // Same Class B security: Nasdaq/PSKY -> NYSE/SKYD effective 2026-10-06.
+  // Search aliases only; never rewrite financial keys or dated provider routing.
+  // Preserve PSKY's historical label and SKYD's current label independently.
+  // Source: issuer's 2026-10-02 8-K; see research/COMPANY-SEARCH-SKYD.md.
+  "PSKY": ["파라마운트 스카이댄스", "Paramount Skydance Corporation", "파라마운트", "SKYD", "스카이댄스", "Skydance Corporation"],
   "PSX": ["필립스 66", "Phillips 66"],
   "PTC": ["PTC", "PTC Inc.", "피티씨"],
   "PWR": ["퀀타 서비스", "Quanta Services, Inc."],
@@ -411,6 +415,7 @@ const names={
   "SCHW": ["찰스 슈왑", "Charles Schwab Corporation (The", "찰스슈와브"],
   "SHW": ["셔윈 윌리엄스", "Sherwin-Williams Company (The)", "셔윈윌리엄즈"],
   "SJM": ["JM 스머커", "The J.M. Smucker Company", "제이엠스머커", "스머커"],
+  "SKYD": ["스카이댄스", "Skydance Corporation", "PSKY", "파라마운트 스카이댄스", "Paramount Skydance Corporation", "파라마운트"],
   "SLB": ["SLB", "SLB Limited", "에스엘비", "슐럼버거"],
   "SMCI": ["슈퍼마이크로 컴퓨터", "Super Micro Computer, Inc.", "슈퍼마이크로", "슈퍼마이크로컴퓨터"],
   "SNA": ["스냅온", "Snap-On Incorporated"],
@@ -457,6 +462,7 @@ const names={
   "TSN": ["타이슨 푸즈", "Tyson Foods, Inc.", "타이슨"],
   "TT": ["트레인 테크놀로지스", "Trane Technologies plc", "트레인"],
   "TTWO": ["테이크투 인터랙티브", "Take-Two Interactive Software,", "테이크투"],
+  "TWLO": ["트윌리오", "Twilio Inc.", "트위리오"],
   "TXN": ["텍사스 인스트루먼트", "Texas Instruments Incorporated", "텍사스인스트루먼츠"],
   "TXT": ["텍스트론", "Textron Inc."],
   "TYL": ["타일러 테크놀로지스", "Tyler Technologies, Inc.", "타일러"],
@@ -481,6 +487,7 @@ const names={
   "VRSN": ["베리사인", "VeriSign, Inc."],
   "VRT": ["버티브", "Vertiv Holdings, LLC"],
   "VRTX": ["버텍스 파마슈티컬스", "Vertex Pharmaceuticals Incorpor", "버텍스"],
+  "VYLR": ["바일러", "Vylor Inc."],
   "VST": ["비스트라", "Vistra Corp."],
   "VTR": ["벤타스", "Ventas, Inc."],
   "VTRS": ["비아트리스", "Viatris Inc."],
