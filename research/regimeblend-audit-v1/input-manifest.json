@@ -1,0 +1,224 @@
+{
+  "files": [
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-adaptive-126.json.gz",
+      "projection": false,
+      "rawSha256": "b9b534421aa7a45e9121f686ea9f429447f531ae44b94363e17c819187b61635",
+      "repositoryPath": "ml/adaptive/126.json",
+      "sha256": "7ae4235a84137b29cc53ff1b2319fc87ffa09c2d32ad26ef92d75f2334ec29b7"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-validation-126.json.gz",
+      "projection": false,
+      "rawSha256": "5d702a5b0814e3c2cc58484669acda63daf3b53b20b62bd75a5cc92cd70571e9",
+      "repositoryPath": "ml/validation/126.json",
+      "sha256": "bb320d201bd3dbc324c8c0bc90cbc37698898ead73f7bb58db866c473d4bf882"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-adaptive-252.json.gz",
+      "projection": false,
+      "rawSha256": "16363c9ad4a39290b89c2c70ac2b3e2eaa5a62b935934c07b5b7632cc5c677b2",
+      "repositoryPath": "ml/adaptive/252.json",
+      "sha256": "5040310736b010f4ca6c1bdbe7ced27c6800ffabbc95e5f82141ffeed371c2d1"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-validation-252.json.gz",
+      "projection": false,
+      "rawSha256": "da55ea3a17a76b308f89efcaef56f61cdfdbdbe17b5cbe64972b0332d7316ae5",
+      "repositoryPath": "ml/validation/252.json",
+      "sha256": "d234fac75b31e46fa115bb2a16b2e5128988e87646de9573587ad498415de728"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-summary.json.gz",
+      "projection": false,
+      "rawSha256": "e7eebc4890b712b623eeffc878f86d4f3a0159be9c15779b32de6d8e53747613",
+      "repositoryPath": "ml/adaptive-summary.json",
+      "sha256": "196e2b17a32164bbd4e71caacae50f09dd7f447a310f0052427688ea3ac481c6"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-status.json.gz",
+      "projection": false,
+      "rawSha256": "ea64e154a3aae58aabab58519b4451ffdb9fedab76945caf0e80a15554d640c7",
+      "repositoryPath": "simulation/self-improvement/status.json",
+      "sha256": "dc353ce132e0cf067773a3d63dc92b512c04e04dd4f00e2db7e9442419f1c457"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-registry.json.gz",
+      "projection": false,
+      "rawSha256": "c12df0523ad5f5a2cea1802c9fbcadb167fda4288479374ec872c140b704aa2b",
+      "repositoryPath": "decision/registry.json",
+      "sha256": "997633ddecc6aefe341731067e70b15a82ad23b160781a4d0b524602ee003cdb"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-adaptive-126.json.gz",
+      "projection": false,
+      "rawSha256": "5a087dab4319a1a14d54d37fb7fec0f23f103494b07f0f694e401451b99ac94a",
+      "repositoryPath": "research/adapter-failure-v1/sources/adaptive-126.json.gz",
+      "sha256": "cb013bd8841320bdc9a61285903b2ad1eb179bbc4b48f6bae9354b40e4132bf4"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-validation-126.json.gz",
+      "projection": false,
+      "rawSha256": "3d41c33ee8d3f68d5883410ed6a404d0f317854479f9325e96f9a2607fd1401b",
+      "repositoryPath": "research/adapter-failure-v1/sources/validation-126.json.gz",
+      "sha256": "11797e56fafedf2b1e0cfe09ae5a0dd8ad9c63e3e6777d0b2c7c274b54a23d1a"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-adaptive-summary.json.gz",
+      "projection": false,
+      "rawSha256": "8562462d6b8d0449ad0463306bd549096807a859e3e6531bd579785d66c9da00",
+      "repositoryPath": "research/adapter-failure-v1/sources/adaptive-summary.json.gz",
+      "sha256": "7ac59fcfbd82c82a1a56ce9e22f9080b1e77db3d83f2cf458991e3be625878e3"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr25-pit-audit.json.gz",
+      "projection": false,
+      "rawSha256": "ed856bc5ab1ee37a2e31868812c42179f5b66397e378eba5676c085ddb5a507d",
+      "repositoryPath": "research/adapter-failure-v1/sources/pr25-pit-audit.json.gz",
+      "sha256": "40e17f89a415c70086a31325731824a592c75caac80027ce29663b0b7cc437f2"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr25-lifecycle-audit.json.gz",
+      "projection": false,
+      "rawSha256": "a6d11be7ec037f7a47f53dcb6f068d1dbb1f32fd09cbc5232fe721a1214f4443",
+      "repositoryPath": "research/adapter-failure-v1/sources/pr25-lifecycle-audit.json.gz",
+      "sha256": "e72b9663682e7676651b22563e80ba687f590a7c537bb49a67e1a9d3794cf5dd"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/spy-input.csv.gz",
+      "projection": false,
+      "rawSha256": "a57fc69f4020b48b8a4016acb0f6003c76cd6ff50c352bfa2c451d680e0b2fc0",
+      "repositoryPath": "research/adapter-failure-v1/sources/spy-input.csv.gz",
+      "sha256": "aad88170c4bb6ea2bd222c0e38ab25ecca2f1bff843c0f742a623ad391d6deaa"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-PROTOCOL.json.gz",
+      "projection": false,
+      "rawSha256": "02b6781ae4b7668c22e4eb96ad27f107028c61053b3f8aeca58012e7928ba472",
+      "repositoryPath": "research/adapter-failure-v1/PROTOCOL.json",
+      "sha256": "51947d95253ff1e222c294763a5db0eca83a740ba1548504b236c40471151f0d"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-input-manifest.json.gz",
+      "projection": false,
+      "rawSha256": "c4135ba43097e938405b5f3fac6bcb6c3285be78fdcd9a79f1d917aad7ef0d0a",
+      "repositoryPath": "research/adapter-failure-v1/input-manifest.json",
+      "sha256": "42b89fe9e3dee2d742c8cfb2a570b2bb6f1be9257a2387beb8fef9d447e33e0f"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-output-results.json.gz",
+      "projection": false,
+      "rawSha256": "1d3d8b94e17009ea55709ff03fb9bda09d5e341f0244faed292fb23a6affbff6",
+      "repositoryPath": "research/adapter-failure-v1/output/results.json",
+      "sha256": "1db7111028b8877eb84fcdf58afd58cf9754d9a1e33a9dabfe2ff8f98d2a2d6e"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "sources/pr53-output-verification.json.gz",
+      "projection": false,
+      "rawSha256": "b8d917f7a2e6f62c823ad067b34327d158870cab8432f54e6cc49452672f6a5b",
+      "repositoryPath": "research/adapter-failure-v1/output/verification.json",
+      "sha256": "4c6ab8e6561bc023aee3980f7d88c9d65ef538a1de8a087dd054303cdcb01e09"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "reuse/build_adaptive_research.py",
+      "projection": false,
+      "rawSha256": "90653b59b1a0ba5d1815541a7402787ae244eb9cf4c4cd84c95d869c3f766775",
+      "repositoryPath": "research/adapter-failure-v1/reuse/build_adaptive_research.py",
+      "sha256": "90653b59b1a0ba5d1815541a7402787ae244eb9cf4c4cd84c95d869c3f766775"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "reuse/build_forecasts.py",
+      "projection": false,
+      "rawSha256": "2a96e49815c9eb0aec79822af0794bc416ecd4ef938bf598367a38c554e86a8a",
+      "repositoryPath": "research/adapter-failure-v1/reuse/build_forecasts.py",
+      "sha256": "2a96e49815c9eb0aec79822af0794bc416ecd4ef938bf598367a38c554e86a8a"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "reuse/build_learned_forecasts.py",
+      "projection": false,
+      "rawSha256": "7fca9bae879f2d70af95a68b82aee77046e950771ccc74a62bcf5444ed45934d",
+      "repositoryPath": "scripts/build_learned_forecasts.py",
+      "sha256": "7fca9bae879f2d70af95a68b82aee77046e950771ccc74a62bcf5444ed45934d"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "reuse/build_decision_support.py",
+      "projection": false,
+      "rawSha256": "be5d5b5dd42a0878e782ad93a3eecb397dddb25521cc46058f8d85fcc54fc82c",
+      "repositoryPath": "scripts/build_decision_support.py",
+      "sha256": "be5d5b5dd42a0878e782ad93a3eecb397dddb25521cc46058f8d85fcc54fc82c"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/latest-model-metadata.json.gz",
+      "projection": true,
+      "rawSha256": "f5cf739fd810440c1a9dbd7a483b0fe64743c039ff75379b87a0068414893453",
+      "repositoryPath": "ml/latest.json (all fields except stocks; explicitly a projection)",
+      "sha256": "3235518295b9d15407c18377d9328c283eeb5d249dfa3364152a2d975cb5df74"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "reuse/latest_build_adaptive_research.py",
+      "projection": false,
+      "rawSha256": "90653b59b1a0ba5d1815541a7402787ae244eb9cf4c4cd84c95d869c3f766775",
+      "repositoryPath": "scripts/build_adaptive_research.py",
+      "sha256": "90653b59b1a0ba5d1815541a7402787ae244eb9cf4c4cd84c95d869c3f766775"
+    },
+    {
+      "commit": "9c82f01d86dae0c7541211ad082f352417319f2d",
+      "file": "reuse/pr53_build_learned_forecasts.py",
+      "projection": false,
+      "rawSha256": "7fca9bae879f2d70af95a68b82aee77046e950771ccc74a62bcf5444ed45934d",
+      "repositoryPath": "scripts/build_learned_forecasts.py",
+      "sha256": "7fca9bae879f2d70af95a68b82aee77046e950771ccc74a62bcf5444ed45934d"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "reuse/decision-support.js",
+      "projection": false,
+      "rawSha256": "fe97dba7eaca447fc60afb415445445a589ef744f545c4642245a6647ee7c39c",
+      "repositoryPath": "assets/decision-support.js",
+      "sha256": "fe97dba7eaca447fc60afb415445445a589ef744f545c4642245a6647ee7c39c"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "sources/baseline-test-technical-guide.cjs.gz",
+      "projection": false,
+      "rawSha256": "d34fbd9552db74eeff77a83131b2dc1c551178374550390b817b3359bba611d6",
+      "repositoryPath": "scripts/test_technical_guide.cjs",
+      "sha256": "0b9a31c3b4802bcbfc89c2163e7055455bf0adefdab0a961df061c57692afeca"
+    },
+    {
+      "commit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+      "file": "reuse/test_status_indicators_browser.cjs",
+      "projection": false,
+      "rawSha256": "9b85c7932d27aaee4638dd3b8d904aa89709d293995c421a322da71284ca613a",
+      "repositoryPath": "scripts/test_status_indicators_browser.cjs",
+      "sha256": "9b85c7932d27aaee4638dd3b8d904aa89709d293995c421a322da71284ca613a"
+    }
+  ],
+  "mainCommit": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+  "pr25Head": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+  "pr53Head": "9c82f01d86dae0c7541211ad082f352417319f2d",
+  "version": "regimeblend-audit-v1"
+}

@@ -1,0 +1,20 @@
+{
+  "version": "regimeblend-audit-v1",
+  "registeredDateUTC": "2026-10-13",
+  "evidence": "Quarantined retrospective audit; latest and PR53 outcomes already inspected. No new holdout, tuning, fitting of a new model or trading evidence.",
+  "snapshots": {
+    "latest": "632dfa1e0e616544ec6fcfb0a1854971a22696f5",
+    "pr53": "9c82f01d86dae0c7541211ad082f352417319f2d",
+    "pr25": "1aa16f7a831b0aeed411593fe64464af94115cd5"
+  },
+  "cohort": "Replay the original adapters on each entire frozen source cohort; compare candidates only within one identical cohort. Cross-snapshot ordinal alignment is sensitivity description, never a matched holdout or causal price-vintage attribution.",
+  "selection": "Whole matured disjoint earlier blocks, targetDate strictly before evaluationStart. Apply joint feasibility first: return MAE improves 2% versus all three baselines; price MAPE and both tail errors no worse than all baselines; direction accuracy no worse than original/always-up; balanced accuracy/up and down recall no worse than original; >=10% down recall when >=20 down labels; down precision >= original and prevalence; false-down rate no worse. Only then minimize the existing MAE+0.25*p90 objective. No feasible candidate: selectedCandidate=null, retainedModel=original, legacy chosen remains explicitly diagnostic-only for display compatibility.",
+  "validation": "Frozen selection cannot switch candidates after inspecting later outcomes. Keep original four-date/60%-date-win checks and add the joint guards. Statistical success is distinct from production eligibility.",
+  "decomposition": "Date-equal whole-cohort weights fixed before subgroup filtering. Report conditional subgroup metrics and additive contributions separately; no per-model missing-row deletion. Ex-post error and realized direction groups are diagnostic only.",
+  "macroRegime": "Reuse PR53 frozen SPY series; strictly prior session close versus MA200 and 63-session annualized log volatility >=0.20. Never an adapter fit feature.",
+  "mechanismChecks": "Replay fixed pooled-only blend, local blend without its bias and original plus local blend bias. They are labeled component diagnostics, never selectable candidates or evidence for tuning.",
+  "promotion": "PIT readiness remains 0/34; latest origins have no evidenced readiness. Entire completed-error-adapter-v1 namespace is quarantined at the operating registry boundary regardless of passed/eligible booleans and future price screens. A contaminated registry stops before writes. Releasing the boundary requires a separate reviewed evidence/protocol change; no flag can release it.",
+  "unchanged": "No changes to adapter fitting/predicting, pooled source model, TOP3, trading, existing shadow runtime, PR25/PR53, source snapshots, existing non-adapter numerical promotion rules or deployment workflows.",
+  "uncertainty": "Only four independent date blocks. No stock-row iid significance claim. A descriptive date bootstrap cannot certify production readiness.",
+  "futureWork": "Close historical membership, sector, permanent identity/alias, original publication/revision vintage and full shareholder lifecycle gaps; then separately freeze a prospective protocol and joint direction/price gates. This audit neither supplies those missing inputs nor promotes any candidate. 252-day evidence remains insufficient."
+}
