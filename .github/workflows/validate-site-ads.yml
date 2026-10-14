@@ -14,9 +14,12 @@ on:
       - 'assets/site-info.css'
       - 'assets/sell-guide.css'
       - 'scripts/check_site_information.cjs'
+      - 'scripts/*search*.cjs'
+      - 'model-validation.html'
       - 'sitemap.xml'
       - 'robots.txt'
       - 'research/adsense-root-site/index.html'
+      - 'research/adsense-root-site/sitemap.xml'
       - 'assets/site-ads*'
       - 'scripts/*site_ads*'
       - 'research/AD-MONETIZATION.md'
@@ -36,9 +39,12 @@ on:
       - 'assets/site-info.css'
       - 'assets/sell-guide.css'
       - 'scripts/check_site_information.cjs'
+      - 'scripts/*search*.cjs'
+      - 'model-validation.html'
       - 'sitemap.xml'
       - 'robots.txt'
       - 'research/adsense-root-site/index.html'
+      - 'research/adsense-root-site/sitemap.xml'
       - 'assets/site-ads*'
       - 'scripts/*site_ads*'
       - 'research/AD-MONETIZATION.md'
@@ -60,6 +66,7 @@ jobs:
           node --check assets/site-ads-config.js
           node scripts/test_site_ads.cjs
           node scripts/check_site_information.cjs
+          node scripts/check_search_discovery.cjs
       - name: Install browser validation runtime
         run: |
           npm install --no-save --package-lock=false playwright@1.56.1
