@@ -16,8 +16,11 @@ const files = ['index.html','stocks.html','crypto.html','futures.html','simulati
 for (const name of files) {
   const source = fs.readFileSync(path.join(root, name), 'utf8');
   assert.equal((source.match(/src="assets\/site-analytics\.js\?v=1"/g) || []).length, 1, name);
-  for (const script of source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))
-    new vm.Script(script[1], {filename: name});
+  for (const script of source.matchAll(/<script(\s[^>]*)?>([\s\S]*?)<\/script>/g)) {
+    if (/type=["']application\/ld\+json["']/i.test(script[1] || '')) {
+      JSON.parse(script[2]);
+    } else new vm.Script(script[2], {filename: name});
+  }
 }
 const rootHomepage = fs.readFileSync(path.join(root, 'research/adsense-root-site/index.html'), 'utf8');
 assert(rootHomepage.includes('<base href="' + base + '">'), 'root homepage uses shared project assets');

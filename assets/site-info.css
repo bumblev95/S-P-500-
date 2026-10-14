@@ -39,3 +39,10 @@
 
 #market-home .hp-source-note{padding:10px 18px;border-top:1px solid #21344a;color:#91a5bb;font-size:11px;line-height:1.7}#market-home .hp-source-note a,#market-home .site-home-purpose a{color:#7dddf5}#market-home .site-learning-links h2{margin-bottom:6px}
 .site-prose button{padding:9px 13px;border:1px solid #416477;border-radius:8px;background:#102337;color:#edf4fb;cursor:pointer;font:inherit;min-height:44px}
+.site-breadcrumbs{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 20px;color:#9bb0c4;font-size:13px;line-height:1.7}
+.site-related nav,.site-stock-help nav{display:flex;flex-wrap:wrap;gap:8px 18px}
+.site-related nav a,.site-stock-help nav a{padding:6px 0}
+.site-stock-help{margin:0 0 14px;padding:14px 18px;border:1px solid #263c50;border-radius:16px;background:#0b1524;color:#a6bacb;font-size:13px;line-height:1.8}
+.site-stock-help h2{margin:0 0 5px;font-size:15px;color:#edf4fb}
+.site-stock-help p{margin:0 0 8px}
+.site-stock-help a{color:#7dddf5}
