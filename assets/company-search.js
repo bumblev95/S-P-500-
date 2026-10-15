@@ -9,7 +9,10 @@ function englishName(value,fallback=''){return fallback||record(value)?.[1]||'';
 function name(value,fallback=''){return koreanName(value)||englishName(value,fallback)||String(value||'');}
 function terms(item){
  const data=record(item.symbol),english=englishName(item.symbol,item.name),display=name(item.symbol,item.name);
- return [...new Set([item.symbol,display,english,...(data?.slice(2)||[]),display+' '+item.symbol,item.symbol+' '+display,english+' '+item.symbol,item.symbol+' '+english].map(normalize).filter(Boolean))];
+ // A provider may retain a former issuer name. Search the catalog's English
+ // name as well, without changing the caller's source name or symbol.
+ const labels=[...new Set([display,english,...(data||[])].filter(Boolean))];
+ return [...new Set([item.symbol,...labels,...labels.flatMap(label=>[label+' '+item.symbol,item.symbol+' '+label])].map(normalize).filter(Boolean))];
 }
 function score(item,query){
  const q=normalize(query);if(!q)return Infinity;

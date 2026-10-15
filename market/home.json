@@ -1,84 +1,84 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-13T21:19:51.086416+00:00",
+  "generatedAt": "2026-10-15T00:00:55.677554+00:00",
   "rankings": {
     "buy": [
       {
+        "symbol": "MTD",
+        "name": "메틀러 톨레도",
+        "asOf": "2026-10-14",
+        "score": 100,
+        "code": "buy",
+        "holdingCode": "hold",
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
+      },
+      {
         "symbol": "ABBV",
         "name": "애브비",
-        "asOf": "2026-10-12",
-        "score": 100,
-        "code": "unavailable",
+        "asOf": "2026-10-14",
+        "score": 99,
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
       },
       {
-        "symbol": "FTNT",
-        "name": "포티넷",
-        "asOf": "2026-10-12",
-        "score": 100,
-        "code": "unavailable",
+        "symbol": "IFF",
+        "name": "인터내셔널 플레이버스 앤 프래그런시스",
+        "asOf": "2026-10-14",
+        "score": 98,
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      },
-      {
-        "symbol": "MPC",
-        "name": "마라톤 페트롤리엄",
-        "asOf": "2026-10-12",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
       }
     ],
     "sell": [
       {
         "symbol": "ALB",
         "name": "앨버말",
-        "asOf": "2026-10-12",
+        "asOf": "2026-10-14",
         "score": 0,
-        "code": "unavailable",
+        "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "CHTR",
-        "name": "차터 커뮤니케이션즈",
-        "asOf": "2026-10-12",
+        "symbol": "APP",
+        "name": "앱러빈",
+        "asOf": "2026-10-14",
         "score": 0,
-        "code": "unavailable",
+        "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "CMCSA",
-        "name": "컴캐스트",
-        "asOf": "2026-10-12",
+        "symbol": "ARE",
+        "name": "알렉산드리아 리얼에스테이트",
+        "asOf": "2026-10-14",
         "score": 0,
-        "code": "unavailable",
+        "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-12",
+    "asOf": "2026-10-14",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-13T21:19:51.086Z",
-    "priceGeneratedAt": "2026-10-12T23:25:53+00:00",
-    "marketGeneratedAt": "2026-10-13T11:11:56.571358+00:00",
+    "evaluatedAt": "2026-10-15T00:00:55.677Z",
+    "priceGeneratedAt": "2026-10-14T20:25:46+00:00",
+    "marketGeneratedAt": "2026-10-14T23:57:17.085549+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
     "priceMaxAgeDays": 5,
     "marketMaxAgeDays": 3
   },
-  "brief": "에너지 강세 · 헬스케어 약세",
+  "brief": "시장 마감 자료 확인 중",
   "recap": {
-    "asOf": "2026-10-13",
+    "asOf": "2026-10-14",
     "weekStart": "2026-10-12",
     "weekEnd": "2026-10-16",
     "weekComplete": false,
@@ -89,46 +89,46 @@
         "symbol": "^GSPC",
         "name": "S&P 500",
         "icon": "chart-no-axes-combined",
-        "asOf": "2026-10-13",
-        "close": 7805.4501953125,
-        "day": -0.02292793623306366,
-        "dayBaseDate": "2026-10-12",
-        "week": -0.07795957928330433,
+        "asOf": "2026-10-14",
+        "close": 7718.93994140625,
+        "day": -1.1083313805295036,
+        "dayBaseDate": "2026-10-13",
+        "week": -1.1854269093314884,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "^IXIC",
         "name": "나스닥 종합",
         "icon": "chart-no-axes-combined",
-        "asOf": "2026-10-13",
-        "close": 27204.380859375,
-        "day": -0.15238817823868267,
-        "dayBaseDate": "2026-10-12",
-        "week": -0.5912009717175426,
+        "asOf": "2026-10-14",
+        "close": 26692.869140625,
+        "day": -1.8802549537668578,
+        "dayBaseDate": "2026-10-13",
+        "week": -2.4603398399269616,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "^DJI",
         "name": "다우",
         "icon": "chart-no-axes-combined",
-        "asOf": "2026-10-13",
-        "close": 51670.1015625,
-        "day": -0.34801794008184617,
-        "dayBaseDate": "2026-10-12",
-        "week": 0.029333769520967223,
+        "asOf": "2026-10-14",
+        "close": 51621.48046875,
+        "day": -0.09409908686009993,
+        "dayBaseDate": "2026-10-13",
+        "week": -0.06479292014839322,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       }
     ],
     "sectors": [
@@ -144,8 +144,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,8 +159,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLY",
@@ -174,8 +174,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,8 +189,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,8 +204,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,8 +219,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,104 +294,104 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
-        "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00"
+        "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
+        "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00"
       }
     ]
   },
   "news": [
     {
-      "url": "https://www.cnbc.com/2026/10/13/six-flags-shares-plunge-after-hours-deadly-roller-coaster-incident-goliath-georgia.html",
-      "title": "Six Flags shares decline following deadly roller coaster incident",
-      "publishedAt": "2026-10-13T21:18:03+00:00",
-      "firstPublishedAt": "2026-10-13T02:29:14+00:00",
+      "url": "https://www.cnbc.com/2026/10/14/cramer-big-bank-earnings-stock-reaction.html",
+      "title": "Jim Cramer explains why even strong bank earnings couldn't save their stocks",
+      "publishedAt": "2026-10-14T22:48:06+00:00",
+      "firstPublishedAt": "2026-10-14T22:48:06+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "7814e11ea795bbaedfdf2cd42af91c3c0a2ad0e818e27e37c3ce2033064f0a3d",
-      "headlineKo": "6 플래그스 주식은 치명적인 로터 코스터 사건 이후 하락",
-      "summaryKo": "보도에 따르면, 조지아 상의 6 플래그스에서 고리앗 스롤러 코스터가 발생한 사고로 한 사람이 사망하고 다른 몇 명이 부상당했습니다.",
+      "sourceHash": "2671514b3214608e770a95f650becfd55dda44a1ec1d8471782858dc6430b68c",
+      "headlineKo": "짐 크레이머 (Jim Cramer) 는 왜 강력한 은행 수익도 주식을 구할 수 없는지 설명합니다.",
+      "summaryKo": "6개 은행 모두 수익 보고서에 따라 하락했지만, 일부 은행은 강렬한 성과를 거두었고 이는 금리율과 경제 전망에 대한 우려를 반영했습니다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/10/13/inflation-hedge-tips-commodities-infrastructure.html",
-      "title": "Don't let inflation bite — how to hedge with TIPS, commodities and infrastructure funds",
-      "publishedAt": "2026-10-13T20:52:22+00:00",
-      "firstPublishedAt": "2026-10-13T20:52:22+00:00",
+      "url": "https://www.cnbc.com/2026/10/14/cramer-stock-market-selloff-inflation.html",
+      "title": "Jim Cramer says don't give up on this unpredictable market. Here's why",
+      "publishedAt": "2026-10-14T22:19:32+00:00",
+      "firstPublishedAt": "2026-10-14T22:19:32+00:00",
       "source": "CNBC 주요",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "5b74c97e9e602af0b31d5684deae639f4286ab1cdb4f4b3682c4c4ec7a796bf8",
-      "headlineKo": "인플레이션에 굴복하지 마십시오 - TIPS, 상품 및 인프라 자금으로 헤지링하는 방법",
-      "summaryKo": "팁은 매력적이지만 인플레이션 보호를 위한 유일한 방법은 아닙니다.",
+      "sourceHash": "bba982bd7dab3d129f230485fb9af05d5fc738c8eef15ca680421de0b9995da6",
+      "headlineKo": "짐 크레이머는 이 예측 불가능한 시장에서 포기하지 말라고 말합니다.",
+      "summaryKo": "예측할 수 없는 시장에도 불구하고, CNBC의 짐 크레이머는 투자를 유지하는 것이 중요하다고 말했습니다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/10/13/cxmt-memory-chip-stock-rout.html",
-      "title": "Why this little known Chinese chipmaker has caused a global stock rout",
-      "publishedAt": "2026-10-13T20:05:58+00:00",
-      "firstPublishedAt": "2026-10-13T12:41:56+00:00",
+      "url": "https://www.cnbc.com/2026/10/14/coreweave-put-options-ai-trade.html",
+      "title": "Traders pile into 'bubble puts' on CoreWeave as neocloud stocks plunge",
+      "publishedAt": "2026-10-14T21:19:09+00:00",
+      "firstPublishedAt": "2026-10-14T19:03:44+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "8e000b7438b06659ff35bf156474a0501269b491c13d047ce94fa29dc6554342",
-      "headlineKo": "왜 이 잘 알려지지 않은 중국 칩 메이커가 글로벌 주식 파손을 일으켰는지",
-      "summaryKo": "중국의 대표적인 메모리 칩 제조업체인 CXMT는 새로운 디자인에 진전을 이루었다고 한다.",
+      "sourceHash": "a1fee7f0ddcc9cb2778d4384a2737a2eee662fd624577d01f336ceecc3a0de96",
+      "headlineKo": "네오클라우드 주가가 하락함에 따라 거래자들은 코어웨이브에 '버블 포트'로 축적됩니다.",
+      "summaryKo": "인공지능 거래의 핵심 코너가 수요일에 타격을 받게 되면서, 거래자들은 상황이 더 악화될 수 있다고 내걸고 있습니다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/investingclub/2026/10/13/were-upgrading-our-rating-on-wells-fargo-as-the-stocks-pullback-offers-a-nice-entry-point.html",
-      "title": "We're upgrading our rating on Wells Fargo as the stock's pullback offers a nice entry point",
-      "publishedAt": "2026-10-13T19:51:06+00:00",
-      "firstPublishedAt": "2026-10-13T19:51:06+00:00",
+      "url": "https://www.cnbc.com/2026/10/14/coreweave-stock-bond-yields-ai-debt.html",
+      "title": "CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
+      "publishedAt": "2026-10-14T20:46:32+00:00",
+      "firstPublishedAt": "2026-10-14T17:06:17+00:00",
       "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "1e467c0ced35af5c07023580ebc62bedc98171ad1cf90b3eef554ece0228240e",
-      "headlineKo": "We're upgrading our rating on Wells Fargo as the stock's pullback offers a nice entry point",
-      "summaryKo": "웰스 파르고의 3분기 성과는 완벽하지는 않았지만, 찰리 샤프 CEO의 전환은 앞으로 더 많은 열매를 맺어야 합니다.",
+      "sourceHash": "3f38be6403744120dd3397a2941504a1542bf42d456b88150f3c1f757a1bf759",
+      "headlineKo": "CoreWeave shares tumble as bond yields near 15% on concern about AI borrowing binge",
+      "summaryKo": "코어웨이브의 주식은 15% 하락했고 채권 수익률은 더 떨어졌습니다.",
       "translationStatus": "headline-fallback",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2",
       "headlineFallbackVersion": "home-headline-quality-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/10/13/john-williams-fed-rate-hikes-2027.html",
-      "title": "Williams says Fed may not have to hike rates in 2027, at odds with traders",
-      "publishedAt": "2026-10-13T19:46:12+00:00",
-      "firstPublishedAt": "2026-10-13T19:46:12+00:00",
+      "url": "https://www.cnbc.com/2026/10/14/morgan-stanley-ms-q3-2026-earnings.html",
+      "title": "Morgan Stanley tops estimates as equities trading revenue beats expectations by $909 million",
+      "publishedAt": "2026-10-14T20:22:09+00:00",
+      "firstPublishedAt": "2026-10-14T11:30:21+00:00",
       "source": "CNBC 주요",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "682a15ece46bf276df154390cf3ab78f42edc5735de6aa8be4abcfe766a97349",
-      "headlineKo": "윌리엄스는 연방준비은행이 2027년에 금리를 올릴 필요가 없을 것이라고 말했습니다.",
-      "summaryKo": "뉴욕 연방준비제도 회장 존 윌리엄스는 2026년에 또 한 번의 금리 상승을 보고 있지만, 인플레이션 압력이 완화됨에 따라 2027년에는 추가적으로 증가하지 않을 것입니다.",
+      "sourceHash": "f4265f50e6a5e65a1d978c32ce44b5bf35c238c2787e3438a80e63e9f499ad76",
+      "headlineKo": "모건 스탠리는 주식 거래 매출이 예상보다 9억9000만 달러를 돌파하는 것으로 추정하고 있습니다.",
+      "summaryKo": "모건 스탠리는 3분기에 기대를 돌파했습니다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
@@ -402,56 +402,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-13T21:19:51.086416+00:00",
-      "lastSuccessAt": "2026-10-13T21:19:51.086416+00:00",
+      "lastAttemptAt": "2026-10-15T00:00:55.677554+00:00",
+      "lastSuccessAt": "2026-10-15T00:00:55.677554+00:00",
       "fromCache": false
     }
   ],

@@ -5,6 +5,18 @@ const now=Date.parse(market.generatedAt);
 // Live snapshots may have a stable credit aggregate but an expired mandatory
 // input. Exact state expectations live in test_market_state.cjs's fixed cases.
 require('./test_market_state.cjs');
+// A freshly collected snapshot can contain an observation older than its
+// validity window. Test freshness with fixed inputs, not mutable provider dates.
+const fixtureNow=Date.parse('2026-01-11T04:00:00Z');
+const freshMarket={generatedAt:'2026-01-11T04:00:00Z',credit:{status:'stable'},
+ indicators:['NFCI','STLFSI4','DRTSCILM','FUNDING'].map(id=>({id,status:'ready',asOf:'2026-01-10',maxAgeDays:5}))};
+assert.equal(guide.marketState(freshMarket,fixtureNow),'stable');
+const staleObservation=structuredClone(freshMarket);
+staleObservation.indicators.find(q=>q.id==='FUNDING').asOf='2026-01-06';
+assert.equal(guide.marketState(staleObservation,fixtureNow),'unknown','ready does not override an expired observation');
+staleObservation.credit.status='risk';
+assert.equal(guide.marketState(staleObservation,fixtureNow),'risk','Expired observations must not clear an existing risk state');
+assert.equal(guide.marketState(freshMarket,fixtureNow+10*86400000),'unknown');
 assert.equal(guide.marketState(market,now+10*86400000),'unknown');
 assert.equal(guide.marketState(null,now),'unknown');
 let count=0;

@@ -5,8 +5,8 @@
   <link rel="stylesheet" href="assets/site-analytics.css?v=1">
   <script src="assets/site-analytics.js?v=1"></script>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="S&P 500 종목의 추세, 매수 관심 구간, 손절 기준과 목표가를 한눈에 보는 초보자용 가이드">
-  <title>초보자용 주식 가이드 · S&P 500</title>
+  <meta name="description" content="S&amp;P 500 종목을 한글 회사명이나 티커로 검색하고 가격 추세, 신규 진입 조건, 보유 주식의 매도 기준을 확인하세요. 6개월·1년 전망은 검증 결과와 오차를 함께 표시합니다.">
+  <title>미국 주식 종목 분석 | 추세·매수 조건·매도 기준 · S&amp;P 500</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307111f'/%3E%3Cpath d='M12 43l13-13 9 8 18-21' fill='none' stroke='%236ee7b7' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/market-context.css">
   <link rel="stylesheet" href="assets/decision-support.css?v=2">
@@ -37,6 +37,17 @@
 <link rel="stylesheet" href="assets/company-events.css?v=3">
 <link rel="stylesheet" href="assets/site-info.css?v=1">
 <link rel="canonical" href="https://bumblev95.github.io/S-P-500-/stocks.html">
+
+<!-- search-metadata:start -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="S&amp;P 500 Market Dashboard">
+<meta property="og:title" content="미국 주식 종목 분석 | 추세·매수 조건·매도 기준 · S&amp;P 500">
+<meta property="og:description" content="S&amp;P 500 종목을 한글 회사명이나 티커로 검색하고 가격 추세, 신규 진입 조건, 보유 주식의 매도 기준을 확인하세요. 6개월·1년 전망은 검증 결과와 오차를 함께 표시합니다.">
+<meta property="og:url" content="https://bumblev95.github.io/S-P-500-/stocks.html">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"S&P 500 시장 대시보드","item":"https://bumblev95.github.io/"},{"@type":"ListItem","position":2,"name":"미국 주식 종목 분석 | 추세·매수 조건·매도 기준","item":"https://bumblev95.github.io/S-P-500-/stocks.html"}]},{"@type":"WebPage","@id":"https://bumblev95.github.io/S-P-500-/stocks.html#page","url":"https://bumblev95.github.io/S-P-500-/stocks.html","name":"미국 주식 종목 분석 | 추세·매수 조건·매도 기준 · S&P 500","headline":"미국 주식 종목 분석 | 추세·매수 조건·매도 기준 · S&P 500","description":"S&P 500 종목을 한글 회사명이나 티커로 검색하고 가격 추세, 신규 진입 조건, 보유 주식의 매도 기준을 확인하세요. 6개월·1년 전망은 검증 결과와 오차를 함께 표시합니다.","inLanguage":"ko","mainEntityOfPage":"https://bumblev95.github.io/S-P-500-/stocks.html"}]}</script>
+<!-- search-metadata:end -->
 </head>
 <body class="site-theme">
   <main class="shell site-frame">
@@ -49,6 +60,7 @@
       <div class="periods" role="group" aria-label="전망 기간"><button type="button" data-h="126" class="active">6개월</button><button type="button" data-h="252">1년</button></div><span class="asof" id="asof">데이터 확인 중…</span>
     </section>
     <aside class="sell-intro" aria-label="보유 주식 매도 안내"><strong>이미 샀다면, 언제 팔까요?</strong><nav aria-label="매도 가이드"><a href="#holding-guide">선택 종목의 매도 기준 ↓</a><a href="guide-sell.html">손절·이익 실현 쉽게 보기 →</a></nav></aside>
+    <section class="site-stock-help" aria-labelledby="stock-help-title"><h2 id="stock-help-title">미국 주식 분석, 이렇게 읽으세요</h2><p>한글 회사명이나 티커로 S&amp;P 500 종목을 검색하세요. 현재 가격의 추세 점수, 신규 진입 조건, 이미 가진 주식의 대응 기준을 나누어 확인할 수 있습니다. 점선으로 표시하는 6개월·1년 전망은 참고 시나리오이며, 예측의 검증 상태와 오차도 함께 확인하세요.</p><nav aria-label="주식 분석 해설"><a href="guide-indicators.html">점수는 높은데 왜 대기일까요?</a><a href="guide-sell.html">주식은 언제 팔아야 할까요?</a><a href="guide-top3.html">매수·매도 TOP3 읽는 법</a><a href="methodology.html">분석 기준·자료 출처</a></nav></section>
     <div id="sharedRisk"></div>
     <section class="candidatePanel" aria-labelledby="candidateTitle"><div class="candidateHead"><h2 id="candidateTitle">추세 관찰 후보</h2><span>단기 추세 점수 순 · 진입 조건은 별도 확인</span></div><div class="candidateRail skeleton" id="candidateRail" aria-live="polite"><button class="candidate"><strong>—</strong><span class="candidateScore">—</span><small>데이터 불러오는 중</small></button></div></section>
     <div id="app" aria-live="polite"><div class="empty"><strong>차트 데이터를 불러오는 중입니다</strong>잠시만 기다려 주세요.</div></div>

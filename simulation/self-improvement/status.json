@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "display-only",
   "mode": "shadow-only",
-  "generatedAt": 1791925835105,
+  "generatedAt": 1792017106690,
   "staleAfterMs": 1800000,
   "automaticPromotion": false,
   "defaultStrategyChanged": false,
@@ -19,7 +19,7 @@
     "thresholdR": 0.1
   },
   "sources": {
-    "decisionRecords": 152,
+    "decisionRecords": 158,
     "closedTrades": {
       "control-three": 9,
       "control-one": 5,
@@ -28,20 +28,20 @@
   },
   "forecastResearch": {
     "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
-    "generatedAt": "2026-10-13T11:11:54+00:00",
+    "generatedAt": "2026-10-14T20:56:31+00:00",
     "horizons": {
       "126": {
         "status": "research",
-        "chosen": "regimeBlend",
+        "chosen": "biasCorrected",
         "passed": false,
         "checks": {
           "enoughDates": true,
           "average": false,
-          "tail": false,
+          "tail": true,
           "consistency": false,
           "direction": false
         },
-        "improvementVsOriginal": -0.04685952381330405,
+        "improvementVsOriginal": 0.00844657657811676,
         "liveForecastChanged": false,
         "reason": null
       },
@@ -73,8 +73,8 @@
       "incumbentThresholdR": 0.1,
       "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
       "activity": "collecting",
-      "observations": 52,
-      "latestObservationAt": 1791925834796,
+      "observations": 59,
+      "latestObservationAt": 1792017106352,
       "initialTrainingTrades": 3,
       "assessment": {
         "schemaVersion": 1,
@@ -95,7 +95,7 @@
           "stressCostMultiplier": 2,
           "maxDrawdown": 0.1
         },
-        "asOf": 1791925834796,
+        "asOf": 1792017106352,
         "status": "insufficient",
         "promotionCandidate": false,
         "automaticPromotion": false,
@@ -123,10 +123,10 @@
           "identicalCurveTimes": true,
           "chronology": true,
           "noBackfill": true,
-          "observations": 52,
+          "observations": 59,
           "firstAt": 1790996520188,
-          "lastAt": 1791925834796,
-          "forwardDays": 10.525981435185185,
+          "lastAt": 1792017106352,
+          "forwardDays": 11.582365185185186,
           "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
         },
         "purgedWalkForward": {
@@ -151,7 +151,7 @@
           "maxEntryExposure": 0.33010219938979274,
           "maxConcurrentPositions": 1,
           "maxLeverage": 3,
-          "dailyVolatility": 0.0027977193607671472,
+          "dailyVolatility": 0.0026897500852470636,
           "worstDailyLoss": 0.009731881977371959,
           "tailDailyLoss": 0.009731881977371959,
           "funding": -0.04036246591478425,
@@ -177,7 +177,7 @@
           "maxEntryExposure": 0.33010219938979274,
           "maxConcurrentPositions": 1,
           "maxLeverage": 3,
-          "dailyVolatility": 0.0027977193607671472,
+          "dailyVolatility": 0.0026897500852470636,
           "worstDailyLoss": 0.009731881977371959,
           "tailDailyLoss": 0.009731881977371959,
           "funding": -0.04036246591478425,
@@ -188,10 +188,10 @@
           "pendingOrders": 0
         }
       },
-      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1791925834796-4009c13fc399.json",
-      "assessmentHash": "4009c13fc399b38b6c90cf72a9f42ec5068d354cb50d39b8de68d9fa4e2bf46e",
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792017106352-67f48ee13d7f.json",
+      "assessmentHash": "67f48ee13d7f684d987976cbfd26f7418f652c4a1cb019ec87f89aba8322639a",
       "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/candidate.json",
-      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1791925834796-eebc0378e956.json"
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792017106352-1e362fdda74b.json"
     },
     {
       "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",

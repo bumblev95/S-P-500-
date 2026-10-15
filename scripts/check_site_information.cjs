@@ -33,7 +33,7 @@ assert.equal(read('research/adsense-root-site/index.html').replace('  <base href
 const locations = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(x => x[1]);
 assert.equal(new Set(locations).size, locations.length, 'no duplicate sitemap URLs');
 for (const file of articles) assert(locations.includes('https://bumblev95.github.io/S-P-500-/' + file), file + ': discoverable');
-assert(read('robots.txt').includes('Sitemap: https://bumblev95.github.io/sitemap.xml'));
+assert(read('robots.txt').includes('Sitemap: https://bumblev95.github.io/S-P-500-/sitemap.xml'));
 assert(!/^Disallow:\s*\/\s*$/m.test(read('robots.txt')), 'site must remain crawlable');
 console.log('Site information: static guidance, internal destinations, primary-page navigation, synchronized root, canonical URLs and sitemap passed.');
 
