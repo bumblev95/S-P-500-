@@ -4,11 +4,19 @@ on:
     paths:
       - 'scripts/build_market_context.py'
       - 'scripts/test_market_context.py'
+      - 'scripts/test_market_freshness_contract.py'
+      - 'scripts/test_market_state.cjs'
+      - 'scripts/fixtures/market-freshness-*.json'
+      - 'assets/technical-guide.js'
       - '.github/workflows/validate-market-context.yml'
   pull_request:
     paths:
       - 'scripts/build_market_context.py'
       - 'scripts/test_market_context.py'
+      - 'scripts/test_market_freshness_contract.py'
+      - 'scripts/test_market_state.cjs'
+      - 'scripts/fixtures/market-freshness-*.json'
+      - 'assets/technical-guide.js'
       - '.github/workflows/validate-market-context.yml'
   workflow_dispatch:
 permissions:
@@ -24,8 +32,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Validate timeout, fallback and observation freshness
         run: python -m unittest discover -s scripts -p test_market_context.py
+      - name: Validate producer and entry-state freshness contract offline
+        run: |
+          python -m unittest discover -s scripts -p test_market_freshness_contract.py
+          node scripts/test_market_state.cjs
       - name: Verify live FRED recovery in an isolated snapshot
         run: |
           python - <<'PY'

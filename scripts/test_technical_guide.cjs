@@ -2,6 +2,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const guide=require('../assets/technical-guide.js'),data=JSON.parse(fs.readFileSync('forecasts/latest.json')),market=JSON.parse(fs.readFileSync('market/latest.json'));
 const learned=JSON.parse(fs.readFileSync('ml/latest.json'));
 const now=Date.parse(market.generatedAt);
+// Live snapshots may have a stable credit aggregate but an expired mandatory
+// input. Exact state expectations live in test_market_state.cjs's fixed cases.
+require('./test_market_state.cjs');
 // A freshly collected snapshot can contain an observation older than its
 // validity window. Test freshness with fixed inputs, not mutable provider dates.
 const fixtureNow=Date.parse('2026-01-11T04:00:00Z');

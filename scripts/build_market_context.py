@@ -44,7 +44,7 @@ def bond_spreads(text, today):
         except ValueError:
             try: d = datetime.strptime(raw_date, '%m/%d/%Y').date()
             except ValueError: continue
-        if not 0 <= (today-d).days < 900: continue
+        if not 0 <= age(d.isoformat(),today) < 900: continue
         for key in values:
             try:
                 v = float(row[key])
@@ -78,8 +78,16 @@ def get(url):
         return r.read(3_000_000).decode('utf-8-sig')
 
 def age(d, today):
+    """Elapsed UTC days from an observation's midnight, without day rounding.
+
+    Date-only callers evaluate at midnight. Production passes the actual build
+    timestamp so maxAgeDays agrees with TechnicalGuide.marketState().
+    """
     try:
-        return (today-date.fromisoformat(d[:10])).days
+        observed = datetime.combine(date.fromisoformat(d), datetime.min.time(), timezone.utc)
+        now = today if isinstance(today, datetime) else datetime.combine(today, datetime.min.time(), timezone.utc)
+        if now.tzinfo is None: now = now.replace(tzinfo=timezone.utc)
+        return (now-observed).total_seconds()/86400
     except (ValueError, TypeError):
         return 9999
 
@@ -127,7 +135,7 @@ def collect_series(key, today, fetcher):
 def retain_observation(entry, prior, today, error, now):
     """Keep a real last observation, its date and last successful fetch time."""
     if prior and isinstance(prior.get('value'), (int, float)) and math.isfinite(prior['value']):
-        entry = dict(prior, status='ready' if 0 <= age(prior.get('asOf'), today) <= entry['maxAgeDays'] else 'stale')
+        entry = dict(prior, status='ready' if 0 <= age(prior.get('asOf'), now) <= entry['maxAgeDays'] else 'stale')
         # Older snapshots discarded severity after one failed fetch. Recompute it.
         if entry['id'] in SERIES:
             _, _, _, limits, delta, _ = SERIES[entry['id']]
@@ -169,7 +177,7 @@ def funding(sofr, iorb, today):
     d,v=matched[-1]
     persistent=sum(x>=15 for _,x in matched[-3:])>=2
     severity=3 if persistent and v>=30 else 2 if persistent else 1 if v>=5 else 0
-    return dict(out,status='ready' if age(d,today)<=5 else 'stale',asOf=d,value=round(v,3),
+    return dict(out,status='ready' if 0 <= age(d,today)<=5 else 'stale',asOf=d,value=round(v,3),
                 previous=round(matched[-2][1],3),previousDate=matched[-2][0],
                 change=round(v-matched[-2][1],3),severity=severity,persistent=persistent)
 
@@ -184,6 +192,8 @@ def credit_state(indicators):
     # Coverage counts families with at least one usable member, not every input.
     # Overlapping conditions and GZ/EBP each supply one vote. Full coverage is
     # separate from the unchanged minimum of three families for a stable verdict.
+    # This aggregate is not entry permission: TechnicalGuide.marketState also
+    # requires each mandatory input and a fresh snapshot, preserving risk alerts.
     by={x['id']:x for x in indicators if x['status']=='ready' and x.get('severity') is not None}
     groups=[]; missing=[]
     for label, members in CREDIT_FAMILIES:
@@ -251,7 +261,7 @@ def build(root=ROOT, now=None, fetcher=get):
             fetched = bool(rows)
             if not fetched: rows = [(d,v) for d,v in old_rows.get(key, []) if 0 <= age(d,today) < 900 and isinstance(v,(int,float)) and math.isfinite(v)]
             observations[key]=rows
-            entry=summarize(key,rows,today)
+            entry=summarize(key,rows,now)
             if fetched:
                 entry.update(meta, fromCache=False, lastSuccessAt=now.isoformat(), lastAttemptAt=now.isoformat())
             else:
@@ -260,7 +270,7 @@ def build(root=ROOT, now=None, fetcher=get):
                 entry = retain_observation(entry, entry if rows else old_by.get(key), today, error, now)
             entry['frequency'] = 'quarterly' if key=='DRTSCILM' else 'weekly' if key in ('NFCI','STLFSI4') else 'daily'
             indicators.append(entry)
-    fund = funding(observations.get('SOFR',[]),observations.get('IORB',[]),today)
+    fund = funding(observations.get('SOFR',[]),observations.get('IORB',[]),now)
     fund['frequency'] = 'daily'
     inputs_ok = all(x['fetchStatus']=='ready' for x in indicators if x['id'] in ('SOFR','IORB'))
     if inputs_ok and fund['value'] is not None:
@@ -270,7 +280,7 @@ def build(root=ROOT, now=None, fetcher=get):
         fund = retain_observation(fund, fund if fund['value'] is not None else old_by.get('FUNDING'), today, '동일 날짜 SOFR·IORB 자료 갱신 확인 필요', now)
     indicators.append(fund)
     try:
-        bonds = bond_spreads(fetcher(EBP_URL), today)
+        bonds = bond_spreads(fetcher(EBP_URL), now)
         if any(q['value'] is None for q in bonds): raise ValueError('No valid bond observations')
         for q in bonds: q.update(fetchStatus='ready', fromCache=False, lastSuccessAt=now.isoformat(), lastAttemptAt=now.isoformat())
         indicators.extend(bonds)

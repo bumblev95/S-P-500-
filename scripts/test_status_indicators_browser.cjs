@@ -6,6 +6,7 @@ const path = require('node:path');
 const http = require('node:http');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const A = require('../assets/stock-assessment.js');
+const CompanyEvents = require('../assets/company-events.js');
 const root = path.resolve(__dirname, '..');
 const output = process.env.INDICATOR_SCREENSHOTS || '/tmp/sp500-indicator-qa';
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file)));
@@ -30,6 +31,30 @@ async function fits(page, selector) {
   }).map(n => ({class:n.className, width:n.clientWidth, scroll:n.scrollWidth,
     left:n.getBoundingClientRect().left, right:n.getBoundingClientRect().right})));
   assert.deepEqual(bad, [], page.url() + ': ' + selector + ' must fit the viewport');
+}
+async function checkNews(page, symbol, snapshot=news, now=clock) {
+  const selected=CompanyEvents.selectNews(snapshot,symbol,now);
+  const panel=page.locator('.company-events[data-event-symbol="'+symbol+'"]');
+  await panel.waitFor();
+  await page.waitForFunction(symbol=>{
+    const status=document.querySelector('.company-events[data-event-symbol="'+symbol+'"] .ce-news-status');
+    return status&&!status.textContent.includes('뉴스 확인 중');
+  },symbol);
+  assert.equal(await panel.locator('.ce-news-card').count(),selected.articles.length,
+    'Render exactly the valid selected articles, including an empty feed');
+  if(selected.articles.length) {
+    await panel.locator('.ce-news-card').first().waitFor();
+    const titles=await panel.locator('.ce-news-title').allTextContents();
+    assert(titles.every(t=>/[가-힣]{2}/.test(t)), 'News opens with Korean summaries');
+    assert(!titles.some(t=>/한국어 요약을 준비하지/.test(t)), 'Selected stock summaries are available');
+  } else {
+    const empty=panel.locator(':scope > .ce-empty');
+    await empty.waitFor();
+    assert((await empty.textContent()).includes(selected.fresh?
+      '확인한 뉴스 피드에 최근 표시할 회사 기사가 없습니다.':'최근 회사 뉴스 확인 자료가 없습니다.'));
+    assert((await empty.textContent()).includes('뉴스가 없거나 영향이 중립이라는 뜻은 아닙니다.'));
+  }
+  return selected;
 }
 (async () => {
   fs.mkdirSync(output, {recursive:true});
@@ -142,10 +167,7 @@ async function fits(page, selector) {
           await page.locator('#sourceStatus').screenshot({path:path.join(output, `credit-coverage-${width}.png`)});
         }
         if (file !== 'crypto.html') {
-          await page.locator('.company-events .ce-news-card').first().waitFor();
-          const newsTitles=await page.locator('.ce-news-title').allTextContents();
-          assert(newsTitles.every(t=>/[가-힣]{2}/.test(t)), 'News opens with Korean summaries');
-          assert(!newsTitles.some(t=>/한국어 요약을 준비하지/.test(t)), 'Selected stock summaries are available');
+          const selectedNews=await checkNews(page,'NVDA');
           await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
           assert.equal(await page.locator('.company-events').getAttribute('data-event-symbol'), 'NVDA');
@@ -159,9 +181,9 @@ async function fits(page, selector) {
             await priceSignal.locator('summary').click();
           }
           await page.locator('.company-events .ce-event').first().locator('summary').click();
-          await page.locator('.ce-news-detail > summary').first().click();
+          if(selectedNews.articles.length)await page.locator('.ce-news-detail > summary').first().click();
           await fits(page, '.company-events, .ce-news-card, .ce-news-title, .ce-news-reason, .ce-news-counts, .ce-event, .ce-event summary, .ce-body');
-          assert.equal(await page.locator('.ce-news-card').count(), news.issuers[news.symbols.NVDA].articles.length);
+          assert.equal(await page.locator('.ce-news-card').count(),selectedNews.articles.length);
           await page.locator('.company-events').screenshot({path:path.join(output, `events-${file.replace('.html','')}-${width}.png`)});
           assert.equal(await page.locator('#tradePlanner, .ds-planner').count(), 0);
         }
@@ -180,15 +202,15 @@ async function fits(page, selector) {
           await page.locator('#tickerInput').press('Enter');
           await page.locator('.company-events[data-event-symbol="XOM"]').waitFor();
           assert.equal(await page.locator('.company-events[data-event-symbol="NVDA"]').count(), 0);
-          await page.locator('.company-events .ce-news-card').first().waitFor();
+          const xomNews=await checkNews(page,'XOM');
           await page.locator('.ce-filings > summary').click();
           await page.locator('.company-events .ce-event').first().waitFor();
-          assert.equal(await page.locator('.ce-news-card').count(), news.issuers[news.symbols.XOM].articles.length);
+          assert.equal(await page.locator('.ce-news-card').count(),xomNews.articles.length);
           const primary=page.locator('.ce-primary-news .ce-news-card');
           if(await primary.count()){
             assert((await primary.locator('.ce-news-reason').allTextContents()).every(t=>t.includes('왜 ')));
             assert((await primary.locator('.ce-news-title').allTextContents()).every(t=>/[가-힣]{2}/.test(t)));
-          }else{
+          }else if(xomNews.articles.length){
             // A live snapshot can contain only reference/unclassified news.
             // Keep that fallback readable instead of requiring a business change.
             assert((await page.locator('.company-events > .ce-empty').textContent()).includes('아직 없습니다'));
@@ -201,9 +223,9 @@ async function fits(page, selector) {
           await page.getByRole('button', {name:'6개월',exact:true}).click();
           await page.locator('#tickerInput').fill('AMD');
           await page.locator('#tickerInput').press('Enter');
-          await page.locator('.company-events[data-event-symbol="AMD"] .ce-news-card').first().waitFor();
+          const amdNews=await checkNews(page,'AMD');
           const amdHistory=page.locator('.ce-primary-news .ce-news-card').filter({hasText:'회복·성장 성과'});
-          if(news.issuers[news.symbols.AMD].articles.some(a=>a.id==='news:f602f5defbad7eb740fda350')){
+          if(amdNews.articles.some(a=>a.id==='news:f602f5defbad7eb740fda350')){
             assert(await amdHistory.count()>=1);
             assert((await amdHistory.locator('.ce-impact').allTextContents()).every(x=>x==='호재'));
             assert((await amdHistory.locator('.ce-news-title').allTextContents()).some(x=>x.includes('시가총액 1조 달러')));
@@ -225,6 +247,48 @@ async function fits(page, selector) {
       }
       await page.close();
     }
+    // Exercise both populated and genuinely empty feeds independently of daily
+    // provider contents. These isolated QA responses never alter published news.
+    const newsPage=await browser.newPage({viewport:{width:390,height:900}});
+    newsPage.on('pageerror',e=>errors.push(e.message));
+    await newsPage.addInitScript(now=>{
+      const OriginalDate=Date;
+      window.Date=class extends OriginalDate {
+        constructor(...args){super(...(args.length?args:[now]));}
+        static now(){return now;}
+      };
+    },clock);
+    const qaTitle='QA fixture: sample company announcement',qaSummary='Synthetic browser test only';
+    const qaArticle={id:'qa:news-fixture',title:qaTitle,summary:qaSummary,
+      publishedAt:new Date(clock-3600000).toISOString(),observedAt:new Date(clock-1000).toISOString(),
+      source:{name:'QA fixture',url:'https://www.nvidia.com/en-us/'},
+      impact:{classifier:'company-impact-source-v2',basis:'headline-and-excerpt',
+        status:'positive',reason:'브라우저 검사용 가상 근거입니다.',kind:'company',topics:[]},
+      ko:{version:'company-news-ko-v5',language:'ko',status:'ready',sourceTitle:qaTitle,
+        sourceExcerpt:qaSummary,summary:'브라우저 검사용 회사 소식입니다.',method:'reviewed-summary'}};
+    let qaNews;
+    await newsPage.route('**/news/latest.json*',route=>route.fulfill({json:qaNews}));
+    for(const width of [320,390,1280]) {
+      await newsPage.setViewportSize({width,height:900});
+      for(const mode of ['primary','reference','empty']) {
+      const article=structuredClone(qaArticle);
+      if(mode==='reference')article.impact.status='unclear';
+      qaNews={schemaVersion:1,classifierVersion:'company-impact-source-v2',
+        generatedAt:new Date(clock).toISOString(),symbols:{NVDA:'qa'},issuers:{qa:{
+          feed:{status:'ready',lastSuccessAt:new Date(clock-1000).toISOString()},
+          articles:mode==='empty'?[]:[article]}}};
+      await ready(newsPage,base+'stocks.html','.company-events');
+      await checkNews(newsPage,'NVDA',qaNews);
+      if(mode!=='empty') {
+        assert.equal(await newsPage.locator(mode==='primary'?'.ce-primary-news .ce-news-card':'.ce-reference-news .ce-news-card').count(),1);
+        await newsPage.locator('.ce-news-detail > summary').click();
+        assert((await newsPage.locator('.ce-news-detail[open]').textContent()).includes(qaTitle));
+      }
+      await fits(newsPage,'.company-events, .ce-news-card, .ce-empty');
+      await newsPage.locator('.company-events').screenshot({path:path.join(output,'news-'+mode+'-'+width+'-fixture.png')});
+      }
+    }
+    await newsPage.close();
     // Credit stability and completeness are separate on the actual screener.
     // Legacy 3/3 metadata cannot be presented as complete four-family coverage.
     const coveragePage = await browser.newPage({viewport:{width:390,height:900}});
@@ -377,7 +441,7 @@ async function fits(page, selector) {
     await page.unrouteAll();
     await page.route('**/events/latest.json*', route => route.fulfill({status:503, json:{error:'QA unavailable'}}));
     await ready(page, base + 'stocks.html', '.company-events');
-    await page.locator('.ce-news-card').first().waitFor();
+    await checkNews(page,'NVDA',news,await page.evaluate(()=>Date.now()));
     await page.locator('.ce-filings > summary').click();
     await page.locator('.ce-status').filter({hasText:'자료 읽기 실패'}).waitFor();
     assert.equal(await page.locator('.company-events .ce-event').count(), 0);
@@ -411,6 +475,6 @@ async function fits(page, selector) {
     assert.equal(await page.locator('[data-indicator="단기 선물 진입"] .vi-pointer').count(), 0);
     await page.locator('[data-indicator="단기 선물 진입"]').screenshot({path:path.join(output,'futures-unavailable.png')});
     assert.deepEqual(errors, [], 'No uncaught browser errors');
-    console.log('Browser: 320/390/1280 px, four stock/spot pages, company news, distinct weak/overheated risks, shared entry states, missing forecast horizon, stock/horizon switches, failed feeds and risk table passed.');
+    console.log('Browser: 320/390/1280 px, four stock/spot pages, populated/reference/empty company news, distinct weak/overheated risks, shared entry states, missing forecast horizon, stock/horizon switches, failed feeds and risk table passed.');
   } finally {await browser?.close(); await new Promise(resolve => server.close(resolve));}
 })().catch(e => {console.error(e); process.exitCode = 1;});
