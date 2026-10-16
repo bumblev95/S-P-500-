@@ -50,6 +50,82 @@ HEADLINE_TERMS = (
 )
 
 
+# These rules apply to each field's own English text. Supplemental article
+# context can disambiguate a word, but cannot introduce a missing source term.
+# Exclusions run BEFORE Korean requirements: labor strikes, analyst ratings,
+# state governors, physical weights and company sales must keep their meanings.
+FINANCIAL_CONTEXT = r'\b(?:stocks?|shares?|equities|markets?|invest\w*|funds?|ETF\w*|index|indices|portfolio|S&P)\b'
+MILITARY_CONTEXT = r'\b(?:military|missiles?|attacks?|bomb\w*|war|warplanes?|refiner\w*|airstrikes?|air strikes?)\b'
+LABOR_CONTEXT = r'\b(?:workers?|unions?|labor|labour|wages?|pay dispute|industrial action|lightning|thunder|baseball)\b'
+CONTEXT_TERMS = (
+    (r'\bequal[- ]weight(?:ed|ing)?\b', 'investment allocation with the same portfolio share for each stock',
+     (r'동일\s*(?:가중|비중)|균등\s*(?:가중|비중|배분)|같은\s*비중|동등한\s*비중',),
+     r'(?:같은|동등한|동일한|균등한)\s*무게', FINANCIAL_CONTEXT,
+     r'\b(?:rating|rated|upgrades?|downgrades?|overweight|underweight|bars?|boxes?|kilograms?|grams?|weighing)\b'),
+    (r"['\"]real['\"]\s+price\b", 'actual price',
+     (r'실제|실질|진짜|실물',), r'실적.{0,6}가격', r'\b(?:oil|crude)\b', None),
+    (r'\bphysical\s+(?:crude\s+)?oil\b', 'crude oil for physical delivery',
+     (r'석유|원유',), r'물유', None, None),
+    (r'\bsell[- ]?offs?\b', 'market price decline',
+     (r'매도|매각|하락|급락|폭락|약세',), r'(?:주식|증시|시장)\s*(?:매출|판매)', FINANCIAL_CONTEXT,
+     r'\b(?:inventory|clearance|warehouses?|retailers?|unsold|business units?)\b'),
+    (r'\b(air|military|missile|drone|retaliatory) strike(s?)\b', r'\1 attack\2',
+     (r'공격|공습|타격|폭격',), r'파업', None, LABOR_CONTEXT),
+    (r'\bstrike(s?)(?=\s+(?:on|against|to resume)\b)', r'attack\1',
+     (r'공격|공습|타격|폭격',), r'파업', MILITARY_CONTEXT, LABOR_CONTEXT),
+    (r'\bstriking(?=\s+(?:(?:Russian|Ukrainian|Iranian|Israeli)\s+)?(?:energy sites|oil refineries|refineries|military targets)\b)', 'attacking',
+     (r'공격|공습|타격|폭격',), r'파업', None, LABOR_CONTEXT),
+    (r"\b((?:central bank|Bank of (?:France|England|Japan|Canada)|Reserve Bank of (?:Australia|India|New Zealand))(?:'s)?)\s+governor\b",
+     r'\1 chief', (r'총재|은행장|수장',), None, None, None),
+    (r"\bgovernor\s+of\s+(?:the\s+)?((?:central bank|Bank of (?:France|England|Japan|Canada)|Reserve Bank of (?:Australia|India|New Zealand)))\b",
+     r'chief of the \1', (r'총재|은행장|수장',), None, None, None),
+    (r"\bhead of ((?:the )?(?:country's |[A-Za-z]+(?:'s)? )?central bank)\b",
+     r'chief of \1', (r'총재|은행장|수장',), None, None, None),
+    (r'\brate signal\b', 'interest rate policy signal',
+     (r'금리',), r'금전\s*신호', r'\b(?:Fed|Federal Reserve|central bank|Warsh)\b', None),
+    (r'\bprivate equity-owned (companies|businesses)\b', r'\1 owned by private investment funds',
+     (r'사모|비공개\s*투자|민간\s*투자\s*(?:펀드|기금)',), r'개인\s*주식회사', None, None),
+    (r'\bprivate equity\b', 'private investment fund',
+     (r'사모|비공개\s*투자|민간\s*투자\s*(?:펀드|기금)',), r'개인\s*주식회사|프라이빗\s*에피티', None, None),
+    (r'\brelease\s+(diesel|oil|crude) stocks\b', r'release stored \1 reserves',
+     (r'비축|재고|저장',), None, None, r'\b(?:shares?|equities|stock market|energy sector)\b'),
+)
+
+
+def normalized_source(source):
+    return unicodedata.normalize('NFKC', source or '').replace('’', "'").replace('‘', "'").replace('–', '-').replace('‐', '-').replace('‑', '-')
+
+
+def valid_context_terms(text, source, source_context=''):
+    source = normalized_source(source)
+    context = source+' '+normalized_source(source_context)
+    for pattern, _, expected, wrong, positive, excluded in CONTEXT_TERMS:
+        if not re.search(pattern, source, re.I) or not term_context_matches(context, positive, excluded):
+            continue
+        if wrong and re.search(wrong, text, re.I):
+            # A field may mention both military and railway/other labor strikes.
+            # Keep the military meaning requirement, but only reject all 파업
+            # tokens when every source strike occurrence has a military match.
+            ambiguous_strike = False
+            if wrong == r'파업':
+                military_spans = [m.span() for p, _, _, w, positive, excluded in CONTEXT_TERMS
+                                  if w == r'파업' and term_context_matches(context, positive, excluded)
+                                  for m in re.finditer(p, source, re.I)]
+                ambiguous_strike = any(not any(start <= m.start() and end >= m.end() for start, end in military_spans)
+                                       for m in re.finditer(r'\bstrik(?:e|es|ing)\b', source, re.I))
+            if not ambiguous_strike: return False
+        if not all(re.search(required, text, re.I) for required in expected): return False
+    return True
+
+
+def valid_korean_summary(text, source_text='', source_context=''):
+    # Keep valid_korean as the generic language gate for existing callers.
+    # Validate the summary against the passage actually translated, not against
+    # every term in the headline. Do not silently publish detected bad text.
+    return (valid_korean(text) and valid_context_terms(text, source_text, source_context)
+            and not re.search(r'(?:예상|전망|기대|관측|예측|전년|전월|이전|현재)보다[\s.,!?\"\'”’]*$', text))
+
+
 def source_hash(article):
     return hashlib.sha256((article['title']+'\n'+article.get('summary', '')).encode()).hexdigest()
 
@@ -99,7 +175,7 @@ def valid_headline_terms(text, source_title):
     return True
 
 
-def valid_korean_headline(text, source_title=''):
+def valid_korean_headline(text, source_title='', source_context=''):
     """Reject obvious unfinished headlines, while allowing normal noun phrases.
 
     Known news terms also retain their source-title meaning. This conservative
@@ -120,13 +196,14 @@ def valid_korean_headline(text, source_title=''):
     tail = text.rstrip(' \t\r\n.,!?\"\'”’)]}:;')
     # These adverbs need a following predicate. Bare 처음/최초 and 첫 + noun
     # remain valid nominal headlines; do not reject them as sentence fragments.
-    if re.search(r'(?:처음으로|최초로)$', tail): return False
+    if re.search(r'(?:처음으로|최초로|(?:예상|전망|기대|관측|예측|전년|전월|이전|현재)보다)$', tail): return False
     if re.search(r'(?:^|[\s\"\'“‘])(?:왜|어떻게|언제|어디서|어디로|무엇을|누가|얼마나|'
                  r'그리고|하지만|그러나|만약|때문에|대해|관해|위해|따라|동안|'
                  r'은|는|이|가|을|를|의|에|에게|에서|으로|로|와|과)$', tail):
         return False
     return (not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
-            and valid_headline_terms(text, source_title))
+            and valid_headline_terms(text, source_title)
+            and valid_context_terms(text, source_title, source_context))
 
 
 def simpler_headline_input(title, source_excerpt=''):
@@ -135,7 +212,7 @@ def simpler_headline_input(title, source_excerpt=''):
     Only simplify the translation input; exact source text and its hash remain
     unchanged. The sentence splitter protects U.S./company abbreviations.
     """
-    text = translation_input(title)
+    text = translation_input(title, source_excerpt)
     # Preserve an event's trailing milestone clause before taking a lead sentence.
     # Flattening "- a first for ..." to a comma can leave a dangling Korean adverb.
     first = re.search(r'\s*(?: - |[:;])\s*a first for\s+(.+)$', text, re.I)
@@ -158,8 +235,12 @@ def simpler_headline_input(title, source_excerpt=''):
     return lead
 
 
-def translation_input(text):
-    text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-')
+def translation_input(text, source_context=''):
+    text = source = normalized_source(text)
+    for pattern, replacement, _, _, context, excluded in CONTEXT_TERMS:
+        if term_context_matches(source+' '+normalized_source(source_context), context, excluded):
+            text = re.sub(pattern, replacement, text, flags=re.I)
+    text = unicodedata.normalize('NFKC', text).replace('’', "'").replace('‘', "'").replace('—', ' - ').replace('–', '-').replace('‐', '-').replace('‑', '-')
     for pattern, replacement, _, _, context, excluded in HEADLINE_TERMS:
         if term_context_matches(text, context, excluded):
             text = re.sub(pattern, replacement, text, flags=re.I)
@@ -233,11 +314,11 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
         key = hashlib.sha256((VERSION+'\n'+passage).encode()).hexdigest()
         ko = article.get('ko', {})
         review = reviewed.get(article['id'], {})
-        if review.get('sourceHash') == source_hash(article) and valid_korean(review.get('summary')):
+        if review.get('sourceHash') == source_hash(article) and valid_korean_summary(review.get('summary'), passage):
             cache[key] = review['summary']
-        if ko.get('sourceHash') == source_hash(article) and ko.get('sourceText') == passage and ko.get('version') == VERSION and valid_korean(ko.get('summary')):
-            cache.setdefault(key, ko['summary'])
-        if not valid_korean(cache.get(key)): tasks[key] = passage
+        if ko.get('sourceHash') == source_hash(article) and ko.get('sourceText') == passage and ko.get('version') == VERSION and valid_korean_summary(ko.get('summary'), passage):
+            if not valid_korean_summary(cache.get(key), passage): cache[key] = ko['summary']
+        if not valid_korean_summary(cache.get(key), passage): tasks[key] = passage
     if tasks:
         if translate is None:
             translate = engine(model_dir or root/'research/source-cache/news-ko/model')
@@ -248,7 +329,7 @@ def translate_snapshot(root=ROOT, translate=None, model_dir=None):
             values = translate([tasks[k] for k in keys])
             if len(values) != len(keys): raise ValueError('Translation count mismatch')
             for key, value in zip(keys, values):
-                if not valid_korean(value):
+                if not valid_korean_summary(value, tasks[key]):
                     print(json.dumps({'translationUnavailable': key, 'source': tasks[key][:120], 'output': value[:120]}, ensure_ascii=False), flush=True)
                     value = '한국어 요약 번역을 완료하지 못했습니다. 원문에서 내용을 확인해 주세요.'
                 cache[key] = value

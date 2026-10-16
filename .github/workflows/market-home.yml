@@ -17,6 +17,7 @@ on:
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
       - 'scripts/fixtures/market-headline-terms.json'
+      - 'scripts/fixtures/market-news-context.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -36,6 +37,7 @@ on:
       - 'scripts/build_home_rankings.cjs'
       - 'scripts/test_market_home*'
       - 'scripts/fixtures/market-headline-terms.json'
+      - 'scripts/fixtures/market-news-context.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -125,6 +127,32 @@ jobs:
                   assert before == after, 'Healthy translation was changed'
           print('HEADLINE_MEANING_PREVIEW='+json.dumps(articles, ensure_ascii=False))
           PY
+      - name: Verify source-bound contextual translation safety with the live translator
+        if: github.event_name == 'pull_request'
+        env:
+          OMP_NUM_THREADS: '2'
+          HF_HUB_DISABLE_XET: '1'
+        run: |
+          python - <<'PYCODE'
+          from copy import deepcopy
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from build_market_home import ROOT, translate_news, usable_translation
+          from translate_company_news import engine, valid_korean_summary
+          cases=json.loads(Path('scripts/fixtures/market-news-context.json').read_text())['cases']
+          original=[c['article'] for c in cases]
+          articles=deepcopy(original)
+          translate_news(articles, ROOT, engine(ROOT/'research/source-cache/home-news-ko/model'))
+          for before, after in zip(original, articles):
+              changed={'headlineKo','summaryKo','translationStatus','headlineFallbackVersion'}
+              assert {k:v for k,v in before.items() if k not in changed} == {k:v for k,v in after.items() if k not in changed}
+              if valid_korean_summary(after['summaryKo'],after['sourceExcerpt'],after['title']):
+                  assert usable_translation(after), 'A safe summary needs a safe headline or source fallback'
+              else:
+                  assert after['translationStatus']=='unavailable', 'Detected semantic errors cannot publish as ready'
+          print('CONTEXT_TRANSLATION_PREVIEW='+json.dumps(articles, ensure_ascii=False))
+          PYCODE
       - name: Collect closed prices, source news and Korean summaries
         env:
           OMP_NUM_THREADS: '2'

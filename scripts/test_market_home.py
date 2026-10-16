@@ -1038,4 +1038,91 @@ class SemanticPublication(unittest.TestCase):
         self.assertTrue(log['changed']);self.assertFalse(quote['fromCache']);self.assertNotIn('day',quote)
 
 
+
+class ContextMeaning(unittest.TestCase):
+    def setUp(self):
+        self.cases=json.loads((Path(__file__).parent/'fixtures/market-news-context.json').read_text())['cases']
+        self.items=[deepcopy(c['article']) for c in self.cases]
+        self.good={c['article']['sourceHash']:c['expected'] for c in self.cases}
+        self.now=h.stamp('2026-10-16T14:00:00Z')
+
+    def correct(self,texts):
+        result=[]
+        for text in texts:
+            matches=[c['expected']['headlineKo' if text==c['article']['title'] else 'summaryKo'] for c in self.cases if text in [c['article']['title'],c['article']['sourceExcerpt']]]
+            self.assertEqual(len(matches),1,text);result.append(matches[0])
+        return result
+
+    def test_only_invalid_fields_are_repaired_in_mixed_current_v2_cache(self):
+        before=deepcopy(self.items);expected=[]
+        for a in before:
+            if not h.valid_korean_headline(a['headlineKo'],a['title'],a['sourceExcerpt']):expected.append(a['title'])
+            if not h.valid_korean_summary(a['summaryKo'],a['sourceExcerpt'],a['title']):expected.append(a['sourceExcerpt'])
+        calls=[]
+        def translate(texts):calls.append(texts);return self.correct(texts)
+        h.translate_news(self.items,Path('/unused'),translate)
+        self.assertEqual(calls,[expected])
+        for old,new in zip(before,self.items):
+            self.assertTrue(h.usable_translation(new))
+            for k,v in old.items():
+                if k not in {'headlineKo','summaryKo','translationStatus','headlineFallbackVersion'}:self.assertEqual(new[k],v)
+            if h.valid_korean_headline(old['headlineKo'],old['title'],old['sourceExcerpt']):self.assertEqual(new['headlineKo'],old['headlineKo'])
+            if h.valid_korean_summary(old['summaryKo'],old['sourceExcerpt'],old['title']):self.assertEqual(new['summaryKo'],old['summaryKo'])
+        frozen=deepcopy(self.items)
+        h.translate_news(self.items,Path('/unused'),lambda _:self.fail('Healthy cache must not retranslate'))
+        self.assertEqual(self.items,frozen)
+
+    def test_bad_summary_is_not_displayed_and_unavailable_cache_can_recover(self):
+        item=next(a for a in self.items if 'Russia accuses' in a['title'])
+        h.prepare_translations([item]);self.assertEqual(item['_translate'],[None,item['sourceExcerpt']])
+        self.assertEqual(item['translationStatus'],'unavailable');self.assertFalse(h.usable_translation(item))
+        item.pop('_translate')
+        # Feed failure retains this unavailable item; it must not become stuck.
+        retained=h.retain_news([item],item['source'],self.now)
+        h.prepare_translations(retained)
+        self.assertEqual(retained[0]['_translate'],[None,item['sourceExcerpt']])
+        h.translate_news(retained,Path('/unused'),self.correct)
+        self.assertTrue(h.usable_translation(retained[0]))
+        self.assertTrue(retained[0]['fromCache']);self.assertEqual(retained[0]['lastSuccessAt'],item['lastSuccessAt'])
+
+    def test_failed_summary_output_stays_unavailable_and_preserves_source(self):
+        item=next(a for a in self.items if 'Russia accuses' in a['title'])
+        before=deepcopy(item)
+        h.translate_news([item],Path('/unused'),lambda _:['러시아의 공격 이후 파업이 끝났다.'])
+        self.assertEqual(item['translationStatus'],'unavailable');self.assertFalse(h.usable_translation(item))
+        for key in ['sourceHash','sourceExcerpt','title','publishedAt','firstPublishedAt','lastSuccessAt']:self.assertEqual(item[key],before[key])
+
+    def test_engine_failure_or_disabled_translation_cannot_publish_semantic_errors(self):
+        def fail(_):raise TimeoutError()
+        for enabled in [False,True]:
+            with TemporaryDirectory() as folder,patch('sys.stdout',io.StringIO()):
+                root=Path(folder);h.atomic(root/'market/home-cache.json',{'news':self.items})
+                quotes={s:{'symbol':s,'name':name,'status':'unavailable'} for s,name,_ in h.INDICES+h.SECTORS}
+                with patch.object(h,'home_rankings',return_value={'buy':[],'sell':[]}),patch.object(h,'prices',return_value=(quotes,{})),patch.object(h,'sleep'):
+                    public=h.build(root,self.now,fail,fail,translate_enabled=enabled)
+                cache=json.loads((root/'market/home-cache.json').read_text())
+                self.assertEqual(len(cache['news']),len(self.items))
+                self.assertTrue(all(h.usable_translation(a) for a in public['news']))
+                for a in cache['news']:
+                    if not h.valid_korean_summary(a['summaryKo'],a['sourceExcerpt'],a['title']):self.assertEqual(a['translationStatus'],'unavailable')
+
+    def test_current_reviewed_corrections_pass_own_source_gates(self):
+        root=Path(__file__).parents[1]
+        reviews=json.loads((root/'market/home-reviewed-news.json').read_text())
+        cases=json.loads((root/'market/home-cache.json').read_text())['news']
+        for a in cases:
+            review=reviews.get(a['url'],{})
+            if not review.get('sourceHash') or review['sourceHash']!=a.get('sourceHash'):continue
+            self.assertTrue(h.valid_korean_headline(review['headline'],a['title'],a.get('sourceExcerpt','')))
+            self.assertTrue(h.valid_korean_summary(review['summary'],a.get('sourceExcerpt',''),a['title']))
+
+    def test_exact_review_source_binding_and_existing_review_records(self):
+        reviews=json.loads((Path(__file__).parents[1]/'market/home-reviewed-news.json').read_text())
+        for c in self.cases:
+            a=c['article'];review=reviews[a['url']]
+            self.assertEqual(review['sourceHash'],a['sourceHash']);self.assertEqual(review['title'],a['title'])
+            self.assertTrue(h.valid_korean_headline(review['headline'],a['title'],a['sourceExcerpt']))
+            self.assertTrue(h.valid_korean_summary(review['summary'],a['sourceExcerpt'],a['title']))
+
+
 if __name__=='__main__':unittest.main()

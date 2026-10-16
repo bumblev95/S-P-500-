@@ -1,0 +1,33 @@
+{
+  "baseCommit": "42b8d5c4c836ff84fbd99376571e4b4f8f19f4c5",
+  "restore": {
+    "scripts/translate_company_news.py": {
+      "before": "bfb60499cdeda3d2d8cfe193d50ae23fcbcaa2d5fdc6874f8a806151dfb338ec",
+      "after": "f1601490dc3cef6c18042ab93231528140ee0ec83799e67fa135b4d357eecb3e"
+    },
+    "scripts/build_market_home.py": {
+      "before": "458890c5ca9e44836bd6a9a4f21a28056b7ddbee585dd5c025d9ab3711c233a4",
+      "after": "176e56d6d368d982c08696381d9a15101503ac4eda7f78dff3313b6031af81e7"
+    },
+    "scripts/test_company_news_translation.py": {
+      "before": "623c0e498fa243d36af4bfde139c3224c03201e48ec6b35f7d093db43020c213",
+      "after": "d2eedb8e16395c44610d3c8ebe217f2c2be3dd9624df0b2de836710f01e3effa"
+    },
+    "scripts/test_market_home.py": {
+      "before": "3729ae4baed9afee2725c00219bd344268df83dcf18d6b15c42249cdb4beb1b7",
+      "after": "a3c8db653d7920c67ae693703404a88bccd7def4845d90e8c7541aca6ec08ff5"
+    },
+    ".github/workflows/market-home.yml": {
+      "before": "aaf5de8beec18be9f26165045a6bc1f8e692a91423268a1dc066cffc082eeb6b",
+      "after": "6fa71a044f916fc90b8e9e657952b73cda72e38e3e571797214a52e86a0e8f51"
+    },
+    "market/home-reviewed-news.json": {
+      "before": "f6be4b53f8d8a98c23e40b892c257f50edaeb31808722b0cac01ce9121a17590",
+      "after": "ac17c595eafcececc0bd1deadc8f20cc9b99da1a4b9ad0fd3e2e867f463c2df1"
+    }
+  },
+  "preservedNewFiles": [
+    "scripts/fixtures/market-news-context.json"
+  ],
+  "notes": "Restore refuses concurrent modifications. History, backup files and new regression evidence are never deleted."
+}
