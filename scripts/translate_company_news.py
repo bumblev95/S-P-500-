@@ -64,6 +64,9 @@ CONTEXT_TERMS = (
      r'\b(?:rating|rated|upgrades?|downgrades?|overweight|underweight|bars?|boxes?|kilograms?|grams?|weighing)\b'),
     (r"['\"]real['\"]\s+price\b", 'actual price',
      (r'실제|실질|진짜|실물',), r'실적.{0,6}가격', r'\b(?:oil|crude)\b', None),
+    (r'\bstock (?:price )?fixing\b', 'stock price manipulation',
+     (r'주가|주식|시세', r'조작|조종'), r'주식\s*고정',
+     r'\b(?:scandal|manipulation|fraud)\b', r'\b(?:inventory|machinery|clamps?|devices?)\b'),
     (r'\bphysical\s+(?:crude\s+)?oil\b', 'crude oil for physical delivery',
      (r'석유|원유',), r'물유', None, None),
     (r'\bsell[- ]?offs?\b', 'market price decline',
@@ -122,8 +125,8 @@ def valid_korean_summary(text, source_text='', source_context=''):
     # Keep valid_korean as the generic language gate for existing callers.
     # Validate the summary against the passage actually translated, not against
     # every term in the headline. Do not silently publish detected bad text.
-    return (valid_korean(text) and valid_context_terms(text, source_text, source_context)
-            and not re.search(r'(?:예상|전망|기대|관측|예측|전년|전월|이전|현재)보다[\s.,!?\"\'”’]*$', text))
+    return (valid_korean_headline(text)
+            and valid_context_terms(text, source_text, source_context))
 
 
 def source_hash(article):

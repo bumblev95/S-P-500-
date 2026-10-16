@@ -299,6 +299,19 @@ class ContextTranslationTests(unittest.TestCase):
         self.assertTrue(m.valid_korean_summary('재정 적자를 줄일 수 있다.','The deficit can be reduced.', 'Central bank governor speaks'))
         self.assertFalse(m.valid_korean_summary('중앙은행 총리가 말했다.',"The head of the country's central bank speaks."))
 
+    def test_summary_requires_complete_clause_and_stock_fixing_means_manipulation(self):
+        self.assertTrue(m.valid_korean('월스트리트는 코어위브 주가가 다시 하락하면서'))
+        self.assertFalse(m.valid_korean_summary('월스트리트는 코어위브 주가가 다시 하락하면서'))
+        self.assertTrue(m.valid_korean_summary('코어위브 주가가 하락하면서 미국 증시는 혼조세다.'))
+        self.assertTrue(m.valid_korean_summary('높은 금리에도 주가 상승'))
+        source='Stock fixing scandal could affect global indexes'
+        self.assertFalse(m.valid_korean_headline('주식 고정 스캔들이 글로벌 지표에 영향',source))
+        self.assertTrue(m.valid_korean_headline('주가 조작 파문이 글로벌 주가지수에 영향',source))
+        self.assertEqual(m.translation_input(source),'stock price manipulation scandal could affect global indexes')
+        for text in ['Workers are fixing stock inventory records','A factory uses stock fixing machinery','The market for stock fixing clamps is expanding','Fixing a broken stock-market display']:
+            self.assertEqual(m.translation_input(text),text)
+        self.assertTrue(m.valid_korean_headline('재고 고정 장비','Stock fixing machinery'))
+
     def test_company_current_version_cache_rechecks_own_passage(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder); (root/'news').mkdir()
