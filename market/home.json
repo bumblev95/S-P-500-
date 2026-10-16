@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-16T21:15:05.205607+00:00",
+  "generatedAt": "2026-10-16T21:15:42.735315+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-16",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-16T21:15:05.205Z",
+    "evaluatedAt": "2026-10-16T21:15:42.735Z",
     "priceGeneratedAt": "2026-10-16T20:16:40+00:00",
     "marketGeneratedAt": "2026-10-16T21:13:03.139271+00:00",
     "basis": "technical-relative-ranking",
@@ -97,8 +97,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -112,8 +112,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "^DJI",
@@ -127,8 +127,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       }
     ],
     "sectors": [
@@ -137,15 +137,15 @@
         "name": "기술",
         "icon": "cpu",
         "asOf": "2026-10-16",
-        "close": 183.4499969482422,
-        "day": -3.0339898615635352,
+        "close": 183.47000122070312,
+        "day": -3.023416220143371,
         "dayBaseDate": "2026-10-15",
-        "week": -7.71204443364315,
+        "week": -7.701980909856154,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,8 +159,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLY",
@@ -174,23 +174,23 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLF",
         "name": "금융",
         "icon": "landmark",
         "asOf": "2026-10-16",
-        "close": 55.5099983215332,
-        "day": 0.43422808355670917,
+        "close": 55.52000045776367,
+        "day": 0.45232494649796173,
         "dayBaseDate": "2026-10-15",
-        "week": 1.42517592877911,
+        "week": 1.4434513468571941,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,8 +204,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,8 +219,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,12 +294,31 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-        "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00"
+        "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+        "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00"
       }
     ]
   },
   "news": [
+    {
+      "url": "https://www.cnbc.com/investingclub/2026/10/16/coreweave-credit-default-swaps.html",
+      "title": "Why did CoreWeave stock get crushed this week? Look to this corner of the debt market for clues",
+      "publishedAt": "2026-10-16T20:33:55+00:00",
+      "firstPublishedAt": "2026-10-16T20:33:55+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "657ebab0bfba66a331567ebeb615484af70b74f6a7a765e4b66cd753db154645",
+      "translationMethod": "machine-translation",
+      "headlineKo": "왜 이번 주 코어웨이브 주가가 무너졌을까요?",
+      "summaryKo": "코어웨이브의 채권 수익률과 신용 부채 교환은 주가가 파산되면서 급증했습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
     {
       "url": "https://www.cnbc.com/2026/10/16/oil-price-today-iran-strait-hormuz-ukraine-russia.html",
       "title": "Brent oil touches $110 as Iran escalates Hormuz attacks, Ukraine vows to hit Russian refineries",
@@ -307,7 +326,7 @@
       "firstPublishedAt": "2026-10-16T19:30:30+00:00",
       "source": "CNBC 주요",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -326,7 +345,7 @@
       "firstPublishedAt": "2026-10-16T19:28:10+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -345,7 +364,7 @@
       "firstPublishedAt": "2026-10-16T19:22:21+00:00",
       "source": "CNBC 주요",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -358,32 +377,13 @@
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/investingclub/2026/10/16/were-downgrading-this-retail-stock-after-a-big-comeback-plus-ai-names-slide-again.html",
-      "title": "We're downgrading this retail stock after a big comeback. Plus, AI names slide again",
-      "publishedAt": "2026-10-16T18:46:19+00:00",
-      "firstPublishedAt": "2026-10-16T18:46:19+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "530d0a270188319a2504466e9e7806f27ddea77682b8b2ecc70a7c1653a61644",
-      "headlineKo": "우리는 이 소매 주식을 큰 복귀 후 하락합니다. 게다가, 인공지능 이름은 다시 슬라이드",
-      "summaryKo": "매주 평일, 투자 클럽은 Homestretch를 발매합니다. 마지막 거래시간에 맞춰 실행 가능한 오후 업데이트입니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
       "url": "https://www.cnbc.com/2026/10/15/treasury-yields-deficit-national-debt-ai.html",
       "title": "Analysis: Why a $2 trillion deficit and 5% Treasury yields are becoming America's biggest economic challenge",
       "publishedAt": "2026-10-16T18:04:20+00:00",
       "firstPublishedAt": "2026-10-15T09:30:06+00:00",
       "source": "CNBC 주요",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -401,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T20:18:38.206840+00:00",
-      "lastSuccessAt": "2026-10-16T20:18:38.206840+00:00",
+      "lastAttemptAt": "2026-10-16T21:15:42.735315+00:00",
+      "lastSuccessAt": "2026-10-16T21:15:42.735315+00:00",
       "fromCache": false
     }
   ],
