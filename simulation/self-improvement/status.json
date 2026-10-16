@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "display-only",
   "mode": "shadow-only",
-  "generatedAt": 1792144315365,
+  "generatedAt": 1792161459597,
   "staleAfterMs": 1800000,
   "automaticPromotion": false,
   "defaultStrategyChanged": false,
@@ -19,16 +19,16 @@
     "thresholdR": 0.1
   },
   "sources": {
-    "decisionRecords": 167,
+    "decisionRecords": 168,
     "closedTrades": {
-      "control-three": 9,
+      "control-three": 10,
       "control-one": 5,
       "boost-one": 4
     }
   },
   "forecastResearch": {
     "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
-    "generatedAt": "2026-10-16T08:36:29+00:00",
+    "generatedAt": "2026-10-16T12:29:05+00:00",
     "horizons": {
       "126": {
         "status": "research",
@@ -73,8 +73,8 @@
       "incumbentThresholdR": 0.1,
       "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
       "activity": "collecting",
-      "observations": 68,
-      "latestObservationAt": 1792144315006,
+      "observations": 69,
+      "latestObservationAt": 1792161459371,
       "initialTrainingTrades": 3,
       "assessment": {
         "schemaVersion": 1,
@@ -95,7 +95,7 @@
           "stressCostMultiplier": 2,
           "maxDrawdown": 0.1
         },
-        "asOf": 1792144315006,
+        "asOf": 1792161459371,
         "status": "insufficient",
         "promotionCandidate": false,
         "automaticPromotion": false,
@@ -123,10 +123,10 @@
           "identicalCurveTimes": true,
           "chronology": true,
           "noBackfill": true,
-          "observations": 68,
+          "observations": 69,
           "firstAt": 1790996520188,
-          "lastAt": 1792144315006,
-          "forwardDays": 13.054687569444445,
+          "lastAt": 1792161459371,
+          "forwardDays": 13.253117719907408,
           "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
         },
         "purgedWalkForward": {
@@ -188,10 +188,10 @@
           "pendingOrders": 0
         }
       },
-      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792144315006-34e245c0db7b.json",
-      "assessmentHash": "34e245c0db7b6beb52d4c418d9f8c09c869367d13b70489bd6498e9bb5e908e0",
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792161459371-249b12d756b0.json",
+      "assessmentHash": "249b12d756b0f1a1108f4f2cdec44194d5f2e262cee3fdb959325497cfbbe5ad",
       "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/candidate.json",
-      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792144315006-d3d632696ce5.json"
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792161459371-5d69dda40cbf.json"
     },
     {
       "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
