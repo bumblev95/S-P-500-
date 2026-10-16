@@ -215,4 +215,111 @@ class TranslationTests(unittest.TestCase):
                          'interest rates on U.S. government bonds rise, Federal Reserve holds rates')
 
 
+
+class ContextTranslationTests(unittest.TestCase):
+    def fixture(self):
+        return json.loads((Path(__file__).parent/'fixtures/market-news-context.json').read_text())['cases']
+
+    def test_exact_historical_failures_and_reviewed_corrections(self):
+        for case in self.fixture():
+            a, good = case['article'], case['expected']
+            with self.subTest(source=a['title']):
+                self.assertEqual(m.hashlib.sha256((a['title']+'\n'+a['sourceExcerpt']).encode()).hexdigest(), a['sourceHash'])
+                self.assertFalse(m.valid_korean_headline(a['headlineKo'],a['title'],a['sourceExcerpt'])
+                                 and m.valid_korean_summary(a['summaryKo'],a['sourceExcerpt'],a['title']))
+                self.assertTrue(m.valid_korean_headline(good['headlineKo'],a['title'],a['sourceExcerpt']))
+                self.assertTrue(m.valid_korean_summary(good['summaryKo'],a['sourceExcerpt'],a['title']))
+
+    def test_context_guards_accept_synonyms_and_preserve_other_meanings(self):
+        cases = [
+            ('An equal-weight index of stocks', '동일가중 주가지수'),
+            ('An equal weighted ETF', '종목별 같은 비중으로 투자하는 ETF'),
+            ('Physical crude oil delivery', '실물 원유 인도'),
+            ("The ‘real’ price of oil", '원유의 실제 가격'),
+            ('A stock selloff after weak sales', '매출 부진에 주식 매도세'),
+            ('A stock sell-off after weak sales', '매출 부진에 증시 급락'),
+            ('Military strikes hit refineries', '군의 공습으로 정유시설 피격'),
+            ('Military strikes continue while railway strikes disrupt travel', '군의 공습 계속…철도 파업으로 운행 차질'),
+            ("The Bank of England governor meets the prime minister", '영란은행 총재와 총리 회동'),
+            ("The head of the country's central bank speaks", '중앙은행 수장의 발언'),
+            ('The governor of the Bank of France speaks', '프랑스 중앙은행 총재 발언'),
+            ('Fed governor speaks on rates', '연준 이사의 금리 발언'),
+            ('Texas governor meets central bank officials', '텍사스 주지사와 중앙은행 관계자 회동'),
+            ('Russian oil workers go on strike', '러시아 석유 노동자 파업'),
+            ('Iranian workers strike after military attacks', '군의 공격 이후 이란 노동자 파업'),
+            ('A baseball player strikes out', '야구 선수가 삼진으로 물러났다'),
+            ('A striking change in military strategy', '군사 전략의 눈에 띄는 변화'),
+            ('Russia strikes a deal to end the war', '러시아, 전쟁 종식 합의 체결'),
+            ('Lightning strikes on a military base', '군사 기지에 낙뢰 발생'),
+            ('Retailers plan a stock selloff to clear unsold inventory', '소매업체, 미판매 재고 정리 판매 계획'),
+            ('Investors buy equal-weight gold bars', '투자자들이 같은 무게의 금괴를 매수한다'),
+            ('Analysts downgrade the stock to Equal Weight', '애널리스트, 주식 투자의견 중립으로 하향'),
+            ('Two boxes have equal weight', '두 상자의 무게가 같다'),
+            ('Oil stocks rally on earnings', '석유 관련주 실적 호조에 상승'),
+            ('The real price of oil adjusted for inflation', '물가를 반영한 실질 유가'),
+            ('A warehouse inventory sell-off', '창고 재고 정리 판매'),
+            ('Revenue rose after the selloff in stocks', '주식 매도세 이후 매출 증가'),
+        ]
+        for source, korean in cases:
+            with self.subTest(source=source):
+                self.assertTrue(m.valid_korean_headline(korean,source))
+                self.assertTrue(m.valid_korean_summary(korean,source))
+        # These ambiguous inputs must not be silently rewritten.
+        for source,_ in cases[11:]:
+            if source.startswith(('Revenue','Fed ')): continue
+            self.assertEqual(m.translation_input(source),source)
+
+    def test_normalization_keeps_roles_ownership_and_is_idempotent(self):
+        cases={
+            'Equal-weight stocks': 'investment allocation with the same portfolio share for each stock stocks',
+            "The ‘real’ price of oil": 'The actual price of oil',
+            'Physical oil': 'crude oil for physical delivery',
+            'AI stock sell-off': 'AI stock market price decline',
+            'Military strikes': 'Military attacks',
+            'A military strike': 'A military attack',
+            'a missile strike on a refinery': 'a missile attack on a refinery',
+            'striking energy sites after Russian attacks': 'attacking energy sites after Russian attacks',
+            'French central bank governor': 'French central bank chief',
+            "The head of France's central bank": "The chief of France's central bank",
+            'private equity-owned companies': 'companies owned by private investment funds',
+            'release diesel stocks': 'release stored diesel reserves',
+        }
+        for source,expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(m.translation_input(source),expected)
+                self.assertEqual(m.translation_input(expected),expected)
+
+    def test_dangling_comparatives_and_field_specific_source(self):
+        for text in ['영국 경제 성장률은 예상보다','영국 경제 성장률은 “예상보다!”','주가 상승률은 전년보다.']:
+            self.assertFalse(m.valid_korean_headline(text))
+            self.assertFalse(m.valid_korean_summary(text))
+        for text in ['예상보다 높은 성장률','주가가 예상보다 높다','전년보다 빠른 성장']:
+            self.assertTrue(m.valid_korean_headline(text))
+        self.assertTrue(m.valid_korean_headline('시장 전망 발표','Markets outlook', 'Central bank governor warns of risks.'))
+        self.assertTrue(m.valid_korean_summary('재정 적자를 줄일 수 있다.','The deficit can be reduced.', 'Central bank governor speaks'))
+        self.assertFalse(m.valid_korean_summary('중앙은행 총리가 말했다.',"The head of the country's central bank speaks."))
+
+    def test_company_current_version_cache_rechecks_own_passage(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); (root/'news').mkdir()
+            a={'id':'context:one','title':'AI stock sell-off deepens','summary':'','impact':{'status':'unclear'},'publishedAt':'2026-10-15T01:00:00Z'}
+            passage=m.short_passage(a)
+            a['ko']={'version':m.VERSION,'sourceHash':m.source_hash(a),'sourceText':passage,'summary':'AI 주식 매출이 심화됐다.'}
+            path=root/'news/latest.json';path.write_text(json.dumps({'issuers':{'1':{'articles':[a]}},'generatedAt':'2026-10-15T02:00:00Z'}))
+            key=m.hashlib.sha256((m.VERSION+'\n'+passage).encode()).hexdigest()
+            cache=root/'research/source-cache/news-ko/translations.json';cache.parent.mkdir(parents=True)
+            cache.write_text(json.dumps({key:a['ko']['summary']}))
+            calls=[]
+            def translate(texts): calls.extend(texts); return ['AI 주식 매도세가 심화됐다.']*len(texts)
+            first=m.translate_snapshot(root,translate)
+            self.assertEqual(calls,[passage])
+            row=first['issuers']['1']['articles'][0]
+            self.assertEqual(row['ko']['status'],'ready');self.assertEqual(row['publishedAt'],a['publishedAt'])
+            m.translate_snapshot(root,translate);self.assertEqual(calls,[passage])
+            cache.write_text(json.dumps({key:'AI 주식 매출이 심화됐다.'}))
+            m.translate_snapshot(root,translate);self.assertEqual(calls,[passage], 'Good source-bound article replaces an invalid cache')
+            latest=json.loads(path.read_text()); latest['issuers']['1']['articles'][0]['title']='AI stock sell-off eases';path.write_text(json.dumps(latest))
+            m.translate_snapshot(root,translate);self.assertEqual(calls[-1],'AI stock sell-off eases')
+
+
 if __name__ == '__main__': unittest.main()

@@ -25,7 +25,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from zoneinfo import ZoneInfo
 
-from translate_company_news import valid_korean, valid_korean_headline, simpler_headline_input
+from translate_company_news import valid_korean, valid_korean_headline, valid_korean_summary, simpler_headline_input
 
 ROOT = Path(__file__).resolve().parents[1]
 NY = ZoneInfo('America/New_York')
@@ -35,7 +35,7 @@ NY = ZoneInfo('America/New_York')
 POLLING_TIMESTAMPS = {'generatedAt', 'evaluatedAt', 'lastAttemptAt', 'lastSuccessAt'}
 # Revalidate cached headlines in place; a version bump would retranslate healthy v2 summaries.
 HOME_TRANSLATION_VERSION = 'home-news-ko-v2'
-HEADLINE_QUALITY_VERSION = 'home-headline-quality-v2'
+HEADLINE_QUALITY_VERSION = 'home-headline-quality-v3'
 TRANSLATION_FIELDS = ('headlineKo', 'summaryKo', 'translationStatus', 'translationMethod', 'translationVersion', 'headlineFallbackVersion')
 FEED_RETRY_DELAYS = (0.5, 1.0)  # At most three requests, with 1.5s total backoff.
 FEED_RETRY_HTTP_STATUSES = {408, 429, 500, 502, 503, 504}
@@ -269,9 +269,9 @@ def passage(article, body):
 
 def usable_translation(item):
     """A source-title fallback is displayable, but is never a ready Korean title."""
-    if not valid_korean(item.get('summaryKo')): return False
+    if not valid_korean_summary(item.get('summaryKo'), item.get('sourceExcerpt', ''), item.get('title', '')): return False
     if item.get('translationStatus') == 'ready':
-        return valid_korean_headline(item.get('headlineKo'), item['title'])
+        return valid_korean_headline(item.get('headlineKo'), item['title'], item.get('sourceExcerpt', ''))
     return item.get('translationStatus') == 'headline-fallback' and item.get('headlineKo') == item.get('title')
 
 
@@ -283,7 +283,7 @@ def reusable_translation(item):
 
 
 def set_translation(item, headline, summary, fallback_checked=False):
-    good_headline, good_summary = valid_korean_headline(headline, item['title']), valid_korean(summary)
+    good_headline, good_summary = valid_korean_headline(headline, item['title'], item.get('sourceExcerpt', '')), valid_korean_summary(summary, item.get('sourceExcerpt', ''), item['title'])
     item.update(headlineKo=headline if good_headline else item['title'], summaryKo=summary,
                 translationStatus=('ready' if good_headline else 'headline-fallback') if good_summary else 'unavailable',
                 translationMethod=item.get('translationMethod') or 'machine-translation',
@@ -297,9 +297,10 @@ def prepare_translations(articles):
     # Validate retained feed/error caches too, not only freshly fetched articles.
     # A disabled/unavailable model must still leave a safe display title.
     for item in articles:
-        if item.get('translationStatus') in ('ready','headline-fallback') and not reusable_translation(item):
-            item.setdefault('_translate', [None if valid_korean_headline(item.get('headlineKo'), item['title']) else item['title'],
-                                           None if valid_korean(item.get('summaryKo')) else item.get('sourceExcerpt', item['title'])])
+        if (item.get('translationStatus') in ('ready','headline-fallback','unavailable')
+                and ('headlineKo' in item or 'summaryKo' in item) and not reusable_translation(item)):
+            item.setdefault('_translate', [None if valid_korean_headline(item.get('headlineKo'), item['title'], item.get('sourceExcerpt', '')) else item['title'],
+                                           None if valid_korean_summary(item.get('summaryKo'), item.get('sourceExcerpt', ''), item['title']) else item.get('sourceExcerpt', item['title'])])
         if item.get('_translate') and ('headlineKo' in item or 'summaryKo' in item):
             set_translation(item, item.get('headlineKo'), item.get('summaryKo', ''))
 
@@ -353,8 +354,8 @@ def collect_news(prior, now, reviewed, fetch=get):
                 for key in TRANSLATION_FIELDS:
                     if key in previous:item[key]=previous[key]
                 if not reusable_translation(previous):
-                    item['_translate']=[None if valid_korean_headline(previous.get('headlineKo'), item['title']) else item['title'],
-                                        None if valid_korean(previous.get('summaryKo')) else lead]
+                    item['_translate']=[None if valid_korean_headline(previous.get('headlineKo'), item['title'], lead) else item['title'],
+                                        None if valid_korean_summary(previous.get('summaryKo'), lead, item['title']) else lead]
             else:item['_translate']=[item['title'],lead]
         except Exception as exc:
             if previous.get('title')==item['title'] and previous.get('translationStatus') in ('ready','headline-fallback'):
@@ -380,7 +381,7 @@ def translate_news(articles, root, translate=None):
         if len(outputs)!=len(texts):raise ValueError('Translation count mismatch')
         values=[[a.get('headlineKo'),a.get('summaryKo','')] for a in tasks]
         for (index,field,_),output in zip(queries,outputs):values[index][field]=output
-        retry=[index for index,(headline,_) in enumerate(values) if not valid_korean_headline(headline, tasks[index]['title'])]
+        retry=[index for index,(headline,_) in enumerate(values) if not valid_korean_headline(headline, tasks[index]['title'], tasks[index].get('sourceExcerpt', ''))]
         retry_complete=False
         if retry:
             try:
@@ -392,6 +393,7 @@ def translate_news(articles, root, translate=None):
                 # Keep first-pass summaries even if the headline retry fails.
                 print(json.dumps({'headlineRetryUnavailable':type(exc).__name__,'count':len(retry)}),flush=True)
         for index,(item,(headline,summary)) in enumerate(zip(tasks,values)):
+            item['translationMethod']='machine-translation'
             set_translation(item,headline,summary,fallback_checked=retry_complete and index in retry)
     for item in articles:
         item.pop('_translate',None);item.pop('_excerpt',None)
