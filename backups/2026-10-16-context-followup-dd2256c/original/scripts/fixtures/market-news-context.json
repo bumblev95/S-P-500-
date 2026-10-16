@@ -1,0 +1,221 @@
+{
+  "description": "Exact retained machine-translation failures from public market/home-cache.json. Older rows are regression evidence, not a claim they remain visible. No source texts or hashes are rewritten.",
+  "cases": [
+    {
+      "sourceCommit": "773df464ffb4c5fa8902085a3325e40176940894",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/15/france-budget-deficit-moulin-protests.html",
+        "title": "France is ‘putting the house in order’ and can slash deficit to 3% in three years, central bank governor tells CNBC",
+        "publishedAt": "2026-10-15T10:05:53+00:00",
+        "firstPublishedAt": "2026-10-15T10:05:53+00:00",
+        "source": "CNBC 주요",
+        "category": "경제·물가",
+        "lastSuccessAt": "2026-10-15T10:24:39.491541+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "22a55e36e626ce0949ef1365a2074e4f8676a1c006e220f3b909c5046433354c",
+        "sourceExcerpt": "France is able to slash its huge budget deficit troubling investors across the globe, according to the head of the country's central bank.",
+        "headlineKo": "프랑스는 '집을 정리'하고 있으며 3년 안에 적자를 3%로 줄일 수 있다고 중앙은행 총리는 CNBC에 말했다",
+        "summaryKo": "프랑스는 전세계 투자자들을 괴롭히는 막대한 예산 적자를 줄일 수 있다고 국가 중앙은행 총리가 말했습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "프랑스 중앙은행 총재: 재정 정비로 3년 안에 적자 비율 3%로 축소 가능",
+        "summaryKo": "프랑스 중앙은행 총재는 세계 투자자들이 우려하는 프랑스의 대규모 재정 적자를 줄일 수 있다고 말했다."
+      }
+    },
+    {
+      "sourceCommit": "773df464ffb4c5fa8902085a3325e40176940894",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/15/uk-gdp-august-2026-economy.html",
+        "title": "UK economy grew 0.1% in August, beating expectations",
+        "publishedAt": "2026-10-15T08:44:17+00:00",
+        "firstPublishedAt": "2026-10-15T07:15:28+00:00",
+        "source": "CNBC 주요",
+        "category": "경제·물가",
+        "lastSuccessAt": "2026-10-15T10:24:39.491541+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "2fda7a608568ce5684b733436eea7b247904f521125afad70cac9d717803263a",
+        "sourceExcerpt": "is grappling with a cost-of-living crisis sparked by sticky inflation and surging energy costs.",
+        "headlineKo": "영국 경제는 8월에 0.1% 성장하여 예상보다",
+        "summaryKo": "치열한 인플레이션과 에너지 비용 상승으로 인한 생활비용 위기에 직면하고 있습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "영국 경제, 8월 0.1% 성장하며 예상 상회",
+        "summaryKo": "끈질긴 인플레이션과 급등하는 에너지 비용으로 촉발된 생활비 위기를 겪고 있다."
+      }
+    },
+    {
+      "sourceCommit": "773df464ffb4c5fa8902085a3325e40176940894",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/15/sk-hynix-samsung-softbank-stocks-asia-tech-rout-ai-funding-worries.html",
+        "title": "Nvidia, AMD, Micron fall as AI stock sell-off deepens",
+        "publishedAt": "2026-10-15T08:18:14+00:00",
+        "firstPublishedAt": "2026-10-15T01:07:01+00:00",
+        "source": "CNBC 주요",
+        "category": "주식시장",
+        "lastSuccessAt": "2026-10-15T10:24:39.491541+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "589ee6b3187d4c938f773f489ee66e12a1220e3722366b63ccbe3355dfc7f863",
+        "sourceExcerpt": "A sell-off in global technology hardware stocks deepened Thursday.",
+        "headlineKo": "Nvidia, AMD, Micron은 AI 주식 판매가 심화됨에 따라 하락합니다",
+        "summaryKo": "글로벌 기술 하드웨어 주식 매출이 목요일 심화되었습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "AI 주식 매도세 심화에 엔비디아·AMD·마이크론 하락",
+        "summaryKo": "목요일 글로벌 기술 하드웨어 주식의 매도세가 심해졌다."
+      }
+    },
+    {
+      "sourceCommit": "8e3cf83f91738342292745b3a9c3fd1a8373752b",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/15/spx-sp500-tech-stocks-invest.html",
+        "title": "Equal-weight failed. Now tech stocks look shaky again. So what should you do about S&P 500 risk?",
+        "publishedAt": "2026-10-15T18:02:23+00:00",
+        "firstPublishedAt": "2026-10-15T18:02:23+00:00",
+        "source": "CNBC 주요",
+        "category": "주식시장",
+        "lastSuccessAt": "2026-10-15T22:25:09.706754+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "c9c7ae1641a2c5e701649510633f4bb366901b1197b54f7b13bdcc3ca13e8b59",
+        "sourceExcerpt": "In 2025 and into 2026 investors were told to avoid S&P 500 tech stock risk by moving to equal-weight.",
+        "headlineKo": "같은 무게가 실패했습니다. 이제 기술 주식은 다시 흔들리고 있습니다. 그래서 S&P 500 위험에 대해 어떻게 해야 할까요?",
+        "summaryKo": "2025년과 2026년까지 투자자들은 S&P 500 기술 주식 위험을 피하기 위해 동등한 무게로 이동하도록 지시되었습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "동일가중 전략 부진에 기술주도 다시 불안…S&P 500 위험에 어떻게 대응할까?",
+        "summaryKo": "2025년과 2026년 들어 투자자들은 S&P 500 기술주 위험을 피하기 위해 동일가중 투자로 옮기라는 권고를 받았다."
+      }
+    },
+    {
+      "sourceCommit": "42b8d5c4c836ff84fbd99376571e4b4f8f19f4c5",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/16/feds-warsh-says-ai-development-path-will-be-very-bumpy-.html",
+        "title": "Fed's Warsh withholds rate signal, praises recent global tightening",
+        "publishedAt": "2026-10-16T12:36:00+00:00",
+        "firstPublishedAt": "2026-10-16T07:11:22+00:00",
+        "source": "CNBC 주요",
+        "category": "Fed·금리",
+        "lastSuccessAt": "2026-10-16T12:44:18.078809+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "1f94ad285ff95e75a44b3c02dceb3fdab168252a132a4503303abd302f21111a",
+        "sourceExcerpt": "Warsh refrained from signaling another interest rate hike this month, pointed to a \"synchronous tightening\" by central banks in the fight against inflation.",
+        "headlineKo": "연방준비은행의 워쉬는 금전 신호를 억제하고, 최근 글로벌 강화에 찬사를 하고 있습니다.",
+        "summaryKo": "워쉬는 이번 달 또 다른 금리 인상 시나리오를 내놓지 않고 중앙은행이 인플레이션과의 싸움에서 \"동시화 강화\"에 대해 지적했다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "연준 워시, 금리 방향 시사 자제…최근 각국 긴축 조치 호평",
+        "summaryKo": "워시는 이번 달 추가 금리 인상에 대한 신호를 주지 않은 채, 인플레이션에 대응하는 중앙은행들의 동시 긴축을 언급했다."
+      }
+    },
+    {
+      "sourceCommit": "42b8d5c4c836ff84fbd99376571e4b4f8f19f4c5",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/16/private-equity-portfolios-ipo-debt.html",
+        "title": "The IPO drought is driving private equity-owned companies to the debt market to pay investors",
+        "publishedAt": "2026-10-16T05:00:01+00:00",
+        "firstPublishedAt": "2026-10-16T05:00:01+00:00",
+        "source": "CNBC 주요",
+        "category": "경제·물가",
+        "lastSuccessAt": "2026-10-16T12:44:18.078809+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "7016ae1455f93464b3842e450817c3114fd75ccb8cfe0fb84ebe7170f40eeb28",
+        "sourceExcerpt": "Private equity firms are increasingly using debt-funded dividend recaps to return cash to investors as exits remain subdued.",
+        "headlineKo": "IPO 가뭄은 투자자들에게 돈을 지불하기 위해 개인 주식회사를 채권 시장으로 몰고 있습니다.",
+        "summaryKo": "프라이빗 에피티 기업은 채권으로 자금을 조달한 배당 회수액을 투자자들에게 현금을 돌려주기 위해 점점 더 활용하고 있습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "IPO 부진에 사모펀드 소유 기업들, 투자자 지급 재원 마련 위해 채권시장으로",
+        "summaryKo": "투자금 회수가 부진한 가운데 사모펀드들이 차입을 통한 특별배당으로 투자자에게 현금을 돌려주는 방식을 점점 더 활용하고 있다."
+      }
+    },
+    {
+      "sourceCommit": "42b8d5c4c836ff84fbd99376571e4b4f8f19f4c5",
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/15/brian-sullivan-why-the-real-price-of-oil-is-likely-30-40-higher-than-where-it-is-now.html",
+        "title": "Brian Sullivan: Why the 'real' price of oil is likely $30-$40 higher than where it is now",
+        "publishedAt": "2026-10-15T19:53:29+00:00",
+        "firstPublishedAt": "2026-10-15T19:53:29+00:00",
+        "source": "CNBC 주요",
+        "category": "유가·원자재",
+        "lastSuccessAt": "2026-10-16T12:44:18.078809+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "a7b40dc0cbc9c03abcfdf5f9d3c9d8ac3df029b622620331fb0f70ec1d1b99ab",
+        "sourceExcerpt": "Physical oil can cost about $38 a barrel more to deliver, as tanker rates surge.",
+        "headlineKo": "브라이언 솔리반: 왜 석유의 '실적' 가격은 현재보다 30~40달러 더 높을 수 있는지",
+        "summaryKo": "물유는 배럴당 약 38달러 더 많은 가격으로 배달될 수 있습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "브라이언 설리번: 석유의 실제 가격이 현재보다 30~40달러 높을 수 있는 이유",
+        "summaryKo": "유조선 운임 급등으로 실물 원유의 인도 비용이 배럴당 약 38달러 더 들 수 있다."
+      }
+    },
+    {
+      "sourceCommit": "42b8d5c4c836ff84fbd99376571e4b4f8f19f4c5",
+      "article": {
+        "url": "https://www.bbc.co.uk/news/articles/cqwyrnwd9dw1o?at_medium=RSS&at_campaign=rss",
+        "title": "Russia accuses Ukraine of attacking oil refinery after Zelensky says strikes to resume",
+        "publishedAt": "2026-10-15T16:50:18+00:00",
+        "firstPublishedAt": "2026-10-15T12:03:51+00:00",
+        "source": "BBC 국제",
+        "category": "유가·원자재",
+        "lastSuccessAt": "2026-10-16T12:44:18.078809+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "b0103d13057a207017e2cb0344afd13fab230d7b1bfcfe70766b814b98e83567",
+        "sourceExcerpt": "Ukraine's president says a pause on striking energy sites is over following fresh Russian attacks.",
+        "headlineKo": "러시아는 우크라이나가 석유 정제공장을 공격했다고 비난했습니다.",
+        "summaryKo": "우크라이나 대통령은 러시아의 새로운 공격에 따라 파업 에너지 공장 중단이 끝났다고 말했습니다.",
+        "translationStatus": "ready",
+        "translationMethod": "machine-translation",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "젤렌스키의 공격 재개 발언 후 러시아, 우크라이나가 정유시설을 공격했다고 주장",
+        "summaryKo": "우크라이나 대통령은 러시아의 새로운 공격 이후 에너지 시설 공격을 중단했던 조치가 끝났다고 말했다."
+      }
+    }
+  ]
+}

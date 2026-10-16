@@ -1,0 +1,22 @@
+{
+  "baseCommit": "dd2256c88a2d53300b2c037737ca7e4f289f1a88",
+  "restore": {
+    "scripts/translate_company_news.py": {
+      "before": "f1601490dc3cef6c18042ab93231528140ee0ec83799e67fa135b4d357eecb3e",
+      "after": "de27fb5f116bfa3371a758cc3a588cf16c69cc80c6179b0aa1aa991458978fa8"
+    },
+    "scripts/test_company_news_translation.py": {
+      "before": "d2eedb8e16395c44610d3c8ebe217f2c2be3dd9624df0b2de836710f01e3effa",
+      "after": "cd16c55b91a8d7c18895513add19d01f74602c79b84fc495253ea53418ccf756"
+    },
+    "scripts/fixtures/market-news-context.json": {
+      "before": "b1030e7146e56f72c91f78086b8f1551a5b2e3600b93c02448ae2865311ad173",
+      "after": "ecbf91bbed90c5b47e8da63c5b0942a83cef15461571c30b6e3379a78acad328"
+    },
+    "market/home-reviewed-news.json": {
+      "before": "ac17c595eafcececc0bd1deadc8f20cc9b99da1a4b9ad0fd3e2e867f463c2df1",
+      "after": "d6ef4ec3bfed7bafcc4afc9ec84058fe26e5fe8b2644a655a2584d380c6ab31e"
+    }
+  },
+  "notes": "Restore follow-up first, then PR59 backup if a full rollback is desired. No files deleted."
+}

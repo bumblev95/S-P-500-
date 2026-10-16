@@ -216,6 +216,62 @@
         "headlineKo": "젤렌스키의 공격 재개 발언 후 러시아, 우크라이나가 정유시설을 공격했다고 주장",
         "summaryKo": "우크라이나 대통령은 러시아의 새로운 공격 이후 에너지 시설 공격을 중단했던 조치가 끝났다고 말했다."
       }
+    },
+    {
+      "sourceRun": "https://github.com/bumblev95/S-P-500-/actions/runs/38918046563",
+      "artifactId": 12054091373,
+      "article": {
+        "url": "https://www.cnbc.com/investingclub/2026/10/16/our-top-10-things-to-watch-in-the-stock-market-friday-.html",
+        "title": "Our top 10 things to watch in the stock market Friday",
+        "publishedAt": "2026-10-16T13:19:30+00:00",
+        "firstPublishedAt": "2026-10-16T13:19:30+00:00",
+        "source": "CNBC 주요",
+        "category": "주식시장",
+        "lastSuccessAt": "2026-10-16T14:44:34.792611+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "0ab131d3db284d09493d45aaf657a6e8e60e3c3427858fb0dc78bee0184ab4ae",
+        "sourceExcerpt": "Wall Street is headed for a mixed open, as CoreWeave shares tumble again.",
+        "translationMethod": "machine-translation",
+        "headlineKo": "금요일에 주식시장에서 볼 수 있는 10가지",
+        "summaryKo": "월스트리트는 코어웨이브 주가가 다시 하락하면서",
+        "translationStatus": "ready",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "금요일 주식시장에서 주목할 10가지",
+        "summaryKo": "코어위브 주가가 다시 급락하는 가운데 미국 증시는 혼조세로 출발할 전망이다."
+      }
+    },
+    {
+      "sourceRun": "https://github.com/bumblev95/S-P-500-/actions/runs/38918046563",
+      "artifactId": 12054091373,
+      "article": {
+        "url": "https://www.cnbc.com/2026/10/16/stock-fixing-turkey-msci-indonesia.html",
+        "title": "Stock fixing scandal could see Turkish companies frozen out of global indexes",
+        "publishedAt": "2026-10-16T12:58:15+00:00",
+        "firstPublishedAt": "2026-10-16T12:58:15+00:00",
+        "source": "CNBC 주요",
+        "category": "주식시장",
+        "lastSuccessAt": "2026-10-16T14:44:34.792611+00:00",
+        "fromCache": false,
+        "sourceStatus": "ready",
+        "importance": "normal",
+        "importanceReason": "",
+        "sourceHash": "c7239ad71b3651775a7fb72e8fd3ae2c8be7ea56add1fde8f35881b96ba44379",
+        "sourceExcerpt": "Turkey's status as an emerging market is also at risk.",
+        "translationMethod": "machine-translation",
+        "headlineKo": "주식 고정 스캔들은 터키 기업들이 글로벌 지표에서 동결될 수 있습니다.",
+        "summaryKo": "터키의 신흥시장 지위도 위험에 처해 있다.",
+        "translationStatus": "ready",
+        "translationVersion": "home-news-ko-v2"
+      },
+      "expected": {
+        "headlineKo": "주가 조작 파문에 튀르키예 기업들, 글로벌 주가지수에서 제외될 가능성",
+        "summaryKo": "튀르키예의 신흥시장 지위도 위험에 처해 있다."
+      }
     }
   ]
 }
