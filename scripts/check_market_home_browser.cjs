@@ -28,6 +28,15 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn}=require
       await page.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
       await page.waitForSelector('[data-sector]');
       assert.equal(await page.locator('[data-sector]').count(),11);
+      const stories=require('../assets/market-home.js').eligibleNews(data.news,now);
+      assert.equal(await page.locator('.hp-story').count(),stories.length);
+      for(const [i,story] of stories.entries()){
+        const card=page.locator('.hp-story').nth(i);
+        assert((await card.locator('.hp-story-meta').innerText()).includes(story.category+' · '+story.source));
+        assert.equal(await card.locator('h3 a').textContent(),story.headlineKo);
+        assert.equal(await card.locator('h3 a').getAttribute('href'),story.url);
+        assert.equal(await card.locator('p').textContent(),story.summaryKo);
+      }
       if(data.rankings.eligibleCount>=6){
         assert.equal(await page.locator('[data-home-buy] .hp-pick').count(),3);
         assert.equal(await page.locator('[data-home-sell] .hp-pick').count(),3);

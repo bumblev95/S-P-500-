@@ -50,7 +50,26 @@ FEEDS = [
 ]
 INDICES = [('^GSPC', 'S&P 500', 'chart-no-axes-combined'), ('^IXIC', '나스닥 종합', 'chart-no-axes-combined'), ('^DJI', '다우', 'chart-no-axes-combined')]
 SECTORS = [('XLK','기술','cpu'),('XLC','커뮤니케이션','radio'),('XLY','경기소비재','shopping-bag'),('XLF','금융','landmark'),('XLI','산업재','factory'),('XLV','헬스케어','heart-pulse'),('XLP','필수소비재','shopping-basket'),('XLRE','부동산','house'),('XLU','유틸리티','zap'),('XLB','소재','flask-conical'),('XLE','에너지','fuel')]
-MACRO = re.compile(r'\b(econom\w*|inflation|jobs|employment|central bank|interest rate|federal reserve|fed|tariff\w*|sanction\w*|war|conflict|invasion|missile|strike\w*|ceasefire|oil|energy|gas|shipping|hormuz|market\w*|stock\w*|equities|shares?|wall street|s&p(?: 500)?|nasdaq|dow|earnings?|recession|treasury|bond\w*|yield\w*|stress test|financial stability)\b',re.I)
+# Collection and display share one topic decision. In particular, an ambiguous
+# strike, political name or generic "market" is not economic evidence by itself.
+MONETARY = re.compile(r'\b((?-i:Fed|FED)|federal reserve|federal open market committee|FOMC|central bank\w*|bank of (?:england|japan|canada)|monetary|interest rates?|treasury|bonds?|bond yields?|stress tests?|financial stability)\b',re.I)
+EQUITY = re.compile(r'\b(stocks?|stock market|equities|share prices?|shares? (?:rise|fall|drop|jump|surge|slide)|wall street|s&p(?: 500)?|nasdaq|dow|earnings?|IPOs?|mergers?)\b',re.I)
+ECONOMY = re.compile(r'\b(econom\w*|inflation|deflation|recession|GDP|global (?:growth|slowdown)|consumer prices?|cost.of.living|payroll\w*|unemployment|employment|wages?|jobs report|job cuts?|shed [\d,]+ jobs|budget\w*|deficits?|sovereign debt|trade deficit)\b',re.I)
+COMMODITY = re.compile(r'\b(oil|crude|energy|natural gas|gas prices?|fuel|diesel|refiner\w*|shipping|supply chains?|exports?|imports?)\b',re.I)
+TRADE = re.compile(r'\b(tariffs?|trade (?:talks?|deals?|agreements?|war|wars|restrictions?)|export controls?|economic sanctions?|market access)\b',re.I)
+SANCTIONS = re.compile(r'\bsanctions?\b',re.I)
+SANCTION_CONTEXT = re.compile(r'\b(imposed|imposes?|lifted|lifts?|economic|trade|bank\w*|asset\w*|exports?|imports?|Russia|Iran|China|North Korea)\b',re.I)
+FINANCE = re.compile(r'\b(financial markets?|bull market|bear market|prediction markets?|derivatives|real estate market|investors?|investments?|banking|bank taxes|private equity|hedge funds?)\b',re.I)
+LABOR = re.compile(r'\b(workers?|unions?|labor|labour|wages?|pay dispute|industrial action)\b',re.I)
+STRIKE = re.compile(r'\b(strikes?|striking|struck)\b',re.I)
+MILITARY = re.compile(r'\b(wars?|invasion|missiles?|airstrikes?|air strikes?|military|bombing|ceasefire|armed conflict)\b',re.I)
+CONFLICT_ACTOR = re.compile(r'\b(Ukraine|Ukrainian|Russia|Russian|Zelensky|Putin|Houthi\w*|Iran|Iranian|Israel|Israeli|Gaza)\b',re.I)
+ATTACK = re.compile(r'\b(attacks?|attacking|strikes?|striking|struck)\b',re.I)
+CHOKEPOINT = re.compile(r'\b(hormuz|suez|red sea)\b',re.I)
+CHOKEPOINT_EVENT = re.compile(r'\b(clos\w*|block\w*|disrupt\w*|reopen\w*|halt\w*)\b',re.I)
+FIGURATIVE_WAR = re.compile(r'\b(?:trade|price|bidding) wars?\b|\bwar of words\b',re.I)
+STRIKE_IDIOM = re.compile(r'\b(?:strikes?|struck|striking) (?:a |an |the |new )?(?:trade |wage |pay )?(?:deals?|agreements?|balance|chord|pose)\b',re.I)
+PHYSICAL_STOCK = re.compile(r'\b(?:oil|crude|diesel|fuel|gas|weapons?|missiles?|arms|ammunition|food|inventory) stocks?\b|\bstocks? of (?:oil|crude|diesel|fuel|gas|weapons?|missiles?|arms|ammunition|food)\b',re.I)
 OPINION = re.compile(r'\b(could|might|may|fear\w*|warn\w*|consider\w*|urge\w*|opinion|analysis|what if|war of words|long shot|unlikely|prepar\w*|scenario\w*|drill\w*|why|how)\b',re.I)
 MAJOR = re.compile(r'\b((?:raises?|cuts?|holds?|hikes?) (?:the )?(?:interest |policy )?rates?|rate (?:cut|hike|decision)|inflation|consumer price|jobs report|payroll\w*|invades?|invasion|launches? (?:an? )?(?:attack|missile)|declares? war|ceasefire (?:agreed|signed|takes effect)|closes? (?:the )?strait|sanctions? (?:imposed|announced))\b',re.I)
 
@@ -221,12 +240,50 @@ def allowed(url):
     except ValueError:return False
 
 
-def category(text):
-    if re.search(r'\b(war|conflict|invasion|missile|ceasefire|sanction|hormuz)\b',text,re.I):return '전쟁·국제'
-    if re.search(r'\b(oil|energy|gas|shipping)\b',text,re.I):return '유가·원자재'
-    if re.search(r'\b(fed|federal reserve|monetary|interest rate|treasury|bond|yield|stress test)\b',text,re.I):return 'Fed·금리'
-    if re.search(r'\b(stock\w*|equities|shares?|wall street|s&p(?: 500)?|nasdaq|dow|earnings?)\b',text,re.I):return '주식시장'
-    return '경제·물가'
+def military_event(text):
+    # Explicit military wording survives mixed military/labor reports. An actor
+    # plus an otherwise ambiguous strike needs absence of labor context.
+    # Spaces preserve offsets when comparing a conflict with the leading topic.
+    text=STRIKE_IDIOM.sub(lambda m:' '*len(m[0]),FIGURATIVE_WAR.sub(lambda m:' '*len(m[0]),text))
+    matches=[MILITARY.search(text)]
+    if CONFLICT_ACTOR.search(text) and not LABOR.search(text):matches.append(ATTACK.search(text))
+    return min((m for m in matches if m),key=lambda m:m.start(),default=None)
+
+
+def category(title, excerpt=''):
+    """Return an evidenced topic, or None to exclude from the market briefing.
+
+    English source fields determine relevance, never translated wording or the
+    feed's section name. Prefer the title's topic; use the excerpt to resolve an
+    ambiguous title or establish economic consequences of a conflict.
+    """
+    # Ignore the inventory sense of stock only for topic matching. Keep the
+    # commodity noun, and never alter stored sources or translation inputs.
+    title=PHYSICAL_STOCK.sub(lambda m:re.sub(r'\bstocks?\b','',m[0],flags=re.I),title)
+    excerpt=PHYSICAL_STOCK.sub(lambda m:re.sub(r'\bstocks?\b','',m[0],flags=re.I),excerpt)
+    text=title+'\n'+excerpt
+    labor=bool((STRIKE.search(STRIKE_IDIOM.sub('',text)) and LABOR.search(text)) or re.search(r'\bindustrial action\b',text,re.I))
+    trade=bool(TRADE.search(text) or (SANCTIONS.search(text) and SANCTION_CONTEXT.search(text)))
+    chokepoint=bool(CHOKEPOINT.search(text) and CHOKEPOINT_EVENT.search(text))
+    economic=any(rule.search(text) for rule in (MONETARY,EQUITY,ECONOMY,COMMODITY,FINANCE)) or labor or trade or chokepoint
+    if not economic:return None
+    title_topics=[m for rule in (MONETARY,EQUITY,ECONOMY,COMMODITY,FINANCE,TRADE) if (m:=rule.search(title))]
+    event=military_event(title)
+    if ((event and not any(m.start()<event.start() for m in title_topics))
+            or (not title_topics and military_event(text) and not LABOR.search(title))
+            or (CHOKEPOINT.search(title) and (COMMODITY.search(text) or chokepoint))):
+        return '전쟁·국제'
+    # A labor-led story stays about employment even if its description also
+    # reports a separate attack. "Strikes a deal"/"striking gains" are not labor.
+    if STRIKE.search(title) and LABOR.search(title):return '경제·물가'
+    for field in (title,excerpt):
+        if MONETARY.search(field):return 'Fed·금리'
+        if EQUITY.search(field):return '주식시장'
+        if TRADE.search(field) or (SANCTIONS.search(field) and SANCTION_CONTEXT.search(text)):return '국제경제'
+        if ECONOMY.search(field):return '경제·물가'
+        if COMMODITY.search(field):return '유가·원자재'
+        if FINANCE.search(field):return '금융·시장'
+    return '경제·물가' if labor else None
 
 
 def parse_feed(xml, source, now):
@@ -237,10 +294,11 @@ def parse_feed(xml, source, now):
         except (ValueError,TypeError,AttributeError): continue
         age=(now-published).total_seconds()
         if not title or not allowed(url) or not 0<=age<=14*86400:continue
-        if not MACRO.search(title):continue
         excerpt=plain(item.findtext('description'))
+        topic=category(title,excerpt)
+        if topic is None:continue
         articles.append({'url':url,'title':title,'publishedAt':published.isoformat(),'firstPublishedAt':published.isoformat(),'source':source,
-                         'category':category(title),'_excerpt':excerpt,'lastSuccessAt':now.isoformat(),'fromCache':False,'sourceStatus':'ready'})
+                         'category':topic,'_excerpt':excerpt,'lastSuccessAt':now.isoformat(),'fromCache':False,'sourceStatus':'ready'})
     return articles
 
 
@@ -249,7 +307,9 @@ def retain_news(articles, source, now):
     for item in articles:
         pub=stamp(item.get('publishedAt'))
         if item.get('source')==source and allowed(item.get('url','')) and pub and 0<=(now-pub).total_seconds()<=14*86400:
-            old=deepcopy(item);old.update(fromCache=True,sourceStatus='unavailable');kept.append(old)
+            topic=category(item.get('title',''),item.get('sourceExcerpt',''))
+            if topic is None:continue
+            old=deepcopy(item);old.update(category=topic,fromCache=True,sourceStatus='unavailable');kept.append(old)
     return kept
 
 
@@ -412,10 +472,12 @@ def assemble(quotes, news, feeds, rankings, now):
     else:brief='시장 마감 자료 확인 중'
     seen=set();selected=[]
     for item in sorted(news,key=lambda a:(a['publishedAt'],a.get('importance')=='important'),reverse=True):
+        topic=category(item.get('title',''),item.get('sourceExcerpt') or item.get('_excerpt',''))
+        if topic is None:continue
         # Identical event headlines from two sources do not fill the briefing twice.
         key=re.sub(r'\W','',item.get('headlineKo','')).lower()
         if not usable_translation(item) or key in seen:continue
-        seen.add(key);selected.append({k:v for k,v in item.items() if k!='sourceExcerpt'})
+        seen.add(key);selected.append({**{k:v for k,v in item.items() if k!='sourceExcerpt'},'category':topic})
         if len(selected)==5:break
     return {'schemaVersion':1,'generatedAt':now.isoformat(),'rankings':rankings,'brief':brief,
             'recap':{'asOf':asof,'weekStart':start.isoformat(),'weekEnd':end.isoformat(),'weekComplete':complete,'timezone':'America/New_York','method':'sector-etf-unadjusted-close-price-return',
