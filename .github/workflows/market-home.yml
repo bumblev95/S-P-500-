@@ -18,6 +18,7 @@ on:
       - 'scripts/test_market_home*'
       - 'scripts/fixtures/market-headline-terms.json'
       - 'scripts/fixtures/market-news-context.json'
+      - 'scripts/fixtures/market-news-topics.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -38,6 +39,7 @@ on:
       - 'scripts/test_market_home*'
       - 'scripts/fixtures/market-headline-terms.json'
       - 'scripts/fixtures/market-news-context.json'
+      - 'scripts/fixtures/market-news-topics.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -162,8 +164,18 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
           from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from build_market_home import category, usable_translation
           snapshot=json.loads(Path('market/home.json').read_text())
+          sources={a['url']:a for a in json.loads(Path('market/home-cache.json').read_text())['news']}
+          for card in snapshot['news']:
+              source=sources[card['url']]
+              topic=category(source['title'],source.get('sourceExcerpt',''))
+              assert topic and card['category']==topic, 'News card needs source-backed economic relevance and topic'
+              assert usable_translation(source)
+              assert all(card[k]==source[k] for k in ['title','headlineKo','summaryKo','sourceHash'])
           assert len(snapshot['recap']['sectors'])==11
           assert len(snapshot['rankings']['buy'])<=3 and len(snapshot['rankings']['sell'])<=3
           ranks=snapshot['rankings']

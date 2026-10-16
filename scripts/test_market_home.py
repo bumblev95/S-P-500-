@@ -268,7 +268,7 @@ class Feeds(unittest.TestCase):
 
     def test_future_invalid_and_off_topic_feed_items_are_excluded(self):
         self.assertEqual(h.parse_feed(rss(published='Sun, 04 Oct 2026 16:00:00 GMT'),'BBC 국제',NOW),[])
-        self.assertEqual(h.parse_feed(rss('Celebrity wedding announced'),'BBC 국제',NOW),[])
+        self.assertEqual(h.parse_feed(rss('Celebrity wedding announced',description='The couple married on Saturday.'),'BBC 국제',NOW),[])
         self.assertFalse(h.allowed('javascript:alert(1)'))
 
     def test_cnbc_market_feed_is_allowed_and_duplicate_urls_are_ranked_once(self):
@@ -474,6 +474,12 @@ class HeadlineMeaning(unittest.TestCase):
         fixture=json.loads((Path(__file__).parent/'fixtures/market-headline-terms.json').read_text())
         self.now=h.stamp(fixture['observedAt'])
         self.prior={'news':fixture['news']}
+        # This translation-only fixture intentionally includes a non-market
+        # military story. Freeze its historical editorial selection so all old
+        # translation/retry checks still run; NewsTopics tests the real policy.
+        topics={a['title']:a['category'] for a in fixture['news']}
+        classify=h.category
+        self.enterContext(patch.object(h,'category',side_effect=lambda title,excerpt='':topics.get(title,classify(title,excerpt))))
         self.bad=[a for a in self.prior['news'] if a['sourceHash'] in self.GOOD]
         self.assertEqual(len(self.bad),4)
         for item in self.bad:
@@ -644,6 +650,11 @@ class HeadlineFirst(unittest.TestCase):
         fixture=json.loads((Path(__file__).parent/'fixtures/market-headline-first.json').read_text())
         self.now=h.stamp(fixture['observedAt'])
         self.prior={'news':fixture['news']}
+        # Preserve the non-market example's full translation regression coverage,
+        # independently of the current editorial filter (covered in NewsTopics).
+        topics={a['title']:a['category'] for a in fixture['news']}
+        classify=h.category
+        self.enterContext(patch.object(h,'category',side_effect=lambda title,excerpt='':topics.get(title,classify(title,excerpt))))
         self.bbc=self.prior['news'][1]
         self.assertEqual(self.bbc['headlineKo'],'포트 후드 총기 사격단은 2차 세계대전 이후 처음으로')
         self.assertEqual(h.sha256((self.bbc['title']+'\n'+self.bbc['sourceExcerpt']).encode()).hexdigest(),
@@ -1123,6 +1134,170 @@ class ContextMeaning(unittest.TestCase):
             self.assertEqual(review['sourceHash'],a['sourceHash']);self.assertEqual(review['title'],a['title'])
             self.assertTrue(h.valid_korean_headline(review['headline'],a['title'],a['sourceExcerpt']))
             self.assertTrue(h.valid_korean_summary(review['summary'],a['sourceExcerpt'],a['title']))
+
+
+class NewsTopics(unittest.TestCase):
+    """Real October 16 source/translation pairs plus ambiguous-word controls."""
+    def setUp(self):
+        self.fixture=json.loads((Path(__file__).parent/'fixtures/market-news-topics.json').read_text())
+        self.now=h.stamp(self.fixture['observedAt'])
+        self.cases=self.fixture['cases']
+        self.items=[deepcopy(c['article']) for c in self.cases]
+        self.expected={c['article']['url']:c['expectedCategory'] for c in self.cases}
+        self.quotes={s:{'symbol':s,'name':name,'status':'unavailable'} for s,name,_ in h.INDICES+h.SECTORS}
+
+    def feed(self, rows):
+        return '<rss><channel>'+''.join(rss(escape(a['title']),escape(a['url']),
+            h.stamp(a['publishedAt']).strftime('%a, %d %b %Y %H:%M:%S GMT'),
+            escape(a.get('sourceExcerpt',''))).split('<channel>')[1].split('</channel>')[0]
+            for a in rows)+'</channel></rss>'
+
+    def fetch(self, url):
+        source=next(source for source,feed in h.FEEDS if feed==url)
+        return self.feed([a for a in self.items if a['source']==source])
+
+    def test_real_source_titles_excerpts_and_korean_fields_agree_with_reviewed_topics(self):
+        self.assertEqual(self.fixture['sourceCommit'],'25c38ffefb1bb1d3f89c6d4027307bf471438061')
+        self.assertGreaterEqual(sum(a['publishedAt'].startswith('2026-10-16') for a in self.items),6)
+        for case in self.cases:
+            a=case['article']
+            with self.subTest(title=a['title']):
+                self.assertEqual(h.category(a['title'],a.get('sourceExcerpt','')),case['expectedCategory'])
+                if a.get('sourceHash'):
+                    self.assertEqual(h.sha256((a['title']+'\n'+a['sourceExcerpt']).encode()).hexdigest(),a['sourceHash'])
+                # Human-reviewed bilingual topic anchors catch changed/mismatched
+                # English/Korean titles or summaries without claiming general MT QA.
+                for field,anchors in case.get('evidence',{}).items():
+                    for anchor in anchors:self.assertIn(anchor.casefold(),a[field].casefold(),field)
+                if case.get('evidence'):self.assertTrue(h.usable_translation(a))
+
+    def test_actual_rss_items_use_the_same_relevance_and_category_decision(self):
+        for case in self.cases:
+            a=case['article']
+            with self.subTest(title=a['title']):
+                parsed=h.parse_feed(self.feed([a]),a['source'],self.now)
+                self.assertEqual(len(parsed),int(case['expectedCategory'] is not None))
+                if parsed:
+                    self.assertEqual(parsed[0]['category'],case['expectedCategory'])
+                    self.assertEqual(parsed[0]['title'],a['title'])
+
+    def test_live_collection_reuses_bilingual_sources_without_retranslation(self):
+        # Only exact ready source pairs participate in this cache reuse test.
+        self.items=[a for a in self.items if a.get('sourceHash')]
+        original=deepcopy(self.items)
+        items,_=h.collect_news({'news':self.items},self.now,{},self.fetch)
+        h.translate_news(items,Path('/unused'),lambda _:self.fail('Healthy source-bound translations must be reused'))
+        self.assertEqual({a['url'] for a in items},{a['url'] for a in original if self.expected[a['url']]})
+        before={a['url']:a for a in original}
+        for a in items:
+            self.assertEqual(a['category'],self.expected[a['url']])
+            for key in ['title','headlineKo','summaryKo','sourceExcerpt','sourceHash','publishedAt','firstPublishedAt','translationVersion','translationMethod']:
+                self.assertEqual(a[key],before[a['url']][key],key)
+        self.assertEqual(self.items,original,'Prior cache must stay immutable')
+
+    def test_failed_feed_reclassifies_old_cache_without_resetting_provenance(self):
+        original=deepcopy(self.items)
+        items,feeds=h.collect_news({'news':self.items},self.now,{},Mock(side_effect=ValueError('offline')))
+        self.assertEqual({a['url'] for a in items},{a['url'] for a in original if self.expected[a['url']]})
+        before={a['url']:a for a in original}
+        for a in items:
+            self.assertEqual(a['category'],self.expected[a['url']])
+            for key,value in before[a['url']].items():
+                if key not in {'category','fromCache','sourceStatus'}:self.assertEqual(a[key],value,key)
+            self.assertTrue(a['fromCache']);self.assertEqual(a['sourceStatus'],'unavailable')
+        self.assertTrue(all(f['status']=='unavailable' for f in feeds))
+        self.assertEqual(self.items,original)
+
+    def test_display_boundary_rejects_legacy_politics_and_reclassifies_valid_cards(self):
+        original=deepcopy(self.items)
+        public=h.assemble(self.quotes,self.items,[],{'buy':[],'sell':[]},self.now)['news']
+        expected=[a for a in self.items if self.expected[a['url']] and h.usable_translation(a)]
+        expected=sorted(expected,key=lambda a:a['publishedAt'],reverse=True)[:5]
+        self.assertEqual([a['url'] for a in public],[a['url'] for a in expected])
+        for a in public:
+            self.assertEqual(a['category'],self.expected[a['url']])
+            for key in ['title','headlineKo','summaryKo','sourceHash']:
+                self.assertEqual(a[key],next(b for b in original if b['url']==a['url'])[key])
+        self.assertEqual(self.items,original)
+
+    def test_build_with_failed_feeds_and_disabled_or_failed_model_cannot_restore_off_topic_news(self):
+        original=deepcopy(self.items)
+        for enabled in [False,True]:
+            with self.subTest(enabled=enabled),TemporaryDirectory() as folder,patch('sys.stdout',io.StringIO()):
+                root=Path(folder);h.atomic(root/'market/home-cache.json',{'news':self.items})
+                with patch.object(h,'home_rankings',return_value={'buy':[],'sell':[]}),patch.object(h,'prices',return_value=(self.quotes,{})):
+                    snapshot=h.build(root,self.now,Mock(side_effect=ValueError('offline')),Mock(side_effect=TimeoutError()),translate_enabled=enabled)
+                cache=json.loads((root/'market/home-cache.json').read_text())
+                self.assertEqual({a['url'] for a in cache['news']},{a['url'] for a in original if self.expected[a['url']]})
+                self.assertTrue(snapshot['news'])
+                for a in snapshot['news']:self.assertEqual(a['category'],self.expected[a['url']])
+        self.assertEqual(self.items,original)
+
+    def test_military_attacks_labor_actions_and_strike_idioms(self):
+        cases=[
+            ('Russian workers strike over wages','', '경제·물가'),
+            ('Rail union announces strike over pay dispute','', '경제·물가'),
+            ('Port workers strike, disrupting shipping','', '경제·물가'),
+            ('Missile strikes hit oil refineries','', '전쟁·국제'),
+            ('Drone strikes hit oil refineries','', '전쟁·국제'),
+            ('Ukraine resumes strikes','Oil refinery production was halted after the attacks.', '전쟁·국제'),
+            ('Latest strikes resume','Union workers walked out over wages.', '경제·물가'),
+            ('Rail workers strike over wages','Military strikes on oil facilities were also reported.', '경제·물가'),
+            ('Missile attacks hit oil sites as rail workers strike','', '전쟁·국제'),
+            ('Russia strikes a trade deal with China','', '국제경제'),
+            ('Iran strikes an oil deal','', '유가·원자재'),
+            ('Companies strike a merger deal','', '주식시장'),
+            ('Striking stock gains lift Wall Street','', '주식시장'),
+            ('Lightning strikes oil storage tanks','', '유가·원자재'),
+            ('Price war cuts consumer prices','', '경제·물가'),
+            ('Trade war raises tariffs','', '국제경제'),
+            ('War of words over interest rates','', 'Fed·금리'),
+            ('UK releases diesel stocks to ease fuel shortage','', '유가·원자재'),
+            ('Oil stocks fall as demand rises','', '유가·원자재'),
+        ]
+        for title,excerpt,expected in cases:
+            with self.subTest(title=title):self.assertEqual(h.category(title,excerpt),expected)
+
+    def test_politics_ambiguous_words_and_section_names_are_not_economic_evidence(self):
+        titles=["Zelensky condemns latest strikes",'Missile attack on presidential palace kills five',
+                'Why Canada is preparing for a possible invasion','Leaders discuss ceasefire',
+                'Fort Hood shooter to be executed by firing squad - a first for US military since World War Two',
+                'Baseball player strikes out','Lightning strikes town hall','Actor strikes a pose',
+                'A striking red dress at the ceremony','President shares a video','A busy Christmas market opens',
+                'FIFA sanctions football club','Birds fed in village square','Leaders strike a deal on prisoner exchange',
+                'Military strikes drain ammunition stocks','Russia depletes stocks of missiles']
+        for title in titles:
+            with self.subTest(title=title):
+                self.assertIsNone(h.category(title))
+                for source in ['BBC 국제','BBC 경제','CNBC 주요']:
+                    self.assertEqual(h.parse_feed(rss(title,description='Officials gave a statement.'),source,NOW),[])
+
+    def test_material_international_economics_and_financial_stories_remain_eligible(self):
+        cases=[('US imposes sanctions on Russian banks','국제경제'),
+               ('China announces export controls','국제경제'),('EU agrees tariff deal','국제경제'),
+               ('Strait of Hormuz closes','전쟁·국제'),('Suez Canal reopens after blockage','전쟁·국제'),
+               ('IMF sees milder global slowdown as AI boom offsets war hit','경제·물가'),
+               ('Consumer prices rise as gas prices jump','경제·물가'),
+               ('Federal Open Market Committee releases minutes','Fed·금리'),
+               ('Central bank raises interest rates','Fed·금리'),
+               ('Stocks fall after missile attacks hit oil facilities','주식시장'),
+               ('Stocks rise','Officials discuss a possible ceasefire.', '주식시장')]
+        for case in cases:
+            title,excerpt,expected=(case[0],'',case[1]) if len(case)==2 else case
+            with self.subTest(title=title):self.assertEqual(h.category(title,excerpt),expected)
+
+    def test_a_source_excerpt_can_resolve_a_vague_headline(self):
+        self.assertIsNone(h.category('Talks resume in Bangkok'))
+        self.assertEqual(h.category('Talks resume in Bangkok','Officials discussed banks gaining market access.'),'국제경제')
+        self.assertEqual(h.category('Negotiators return to the table','Union workers plan industrial action.'),'경제·물가')
+        # Merely mentioning an official/political actor cannot imply market impact.
+        self.assertIsNone(h.category('Leaders meet in Bangkok','Trump and Zelensky discussed the attacks.'))
+
+    def test_korean_wording_cannot_create_financial_relevance_for_a_political_source(self):
+        item=deepcopy(self.items[0])
+        item.update(category='경제·물가',headlineKo='금리와 주식시장 전망',summaryKo='물가와 주식시장 변화를 전합니다.')
+        self.assertEqual(h.retain_news([item],item['source'],self.now),[])
+        self.assertEqual(h.assemble(self.quotes,[item],[],{'buy':[],'sell':[]},self.now)['news'],[])
 
 
 if __name__=='__main__':unittest.main()
