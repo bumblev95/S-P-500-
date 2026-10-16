@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-16T07:15:59.955817+00:00",
+  "generatedAt": "2026-10-16T07:16:42.969012+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-15",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-16T07:15:59.955Z",
+    "evaluatedAt": "2026-10-16T07:16:42.969Z",
     "priceGeneratedAt": "2026-10-15T20:16:08+00:00",
     "marketGeneratedAt": "2026-10-16T07:13:37.406881+00:00",
     "basis": "technical-relative-ranking",
@@ -97,23 +97,23 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "^IXIC",
         "name": "나스닥 종합",
         "icon": "chart-no-axes-combined",
         "asOf": "2026-10-15",
-        "close": 26713.025390625,
-        "day": 0.07551174020976603,
+        "close": 26713.029296875,
+        "day": 0.0755263742679313,
         "dayBaseDate": "2026-10-14",
-        "week": -2.386685945145406,
+        "week": -2.386671671134788,
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "^DJI",
@@ -127,8 +127,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       }
     ],
     "sectors": [
@@ -144,8 +144,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,8 +159,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLY",
@@ -174,8 +174,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,8 +189,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,8 +204,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,8 +219,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,103 +294,103 @@
         "weekBaseDate": "2026-10-09",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-        "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00"
+        "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+        "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00"
       }
     ]
   },
   "news": [
     {
-      "url": "https://www.bbc.co.uk/news/articles/cm62y6lp73zdo?at_medium=RSS&at_campaign=rss",
-      "title": "Houthi missile attack on Yemeni presidential palace kills five, minister says",
-      "publishedAt": "2026-10-15T23:38:46+00:00",
-      "firstPublishedAt": "2026-10-15T17:18:49+00:00",
+      "url": "https://www.cnbc.com/2026/10/16/feds-warsh-says-ai-development-path-will-be-very-bumpy-.html",
+      "title": "Fed's Warsh withholds rate signal, praises recent global tightening with 'no free riders'",
+      "publishedAt": "2026-10-16T07:11:22+00:00",
+      "firstPublishedAt": "2026-10-16T07:11:22+00:00",
+      "source": "CNBC 주요",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "a9d4a6dff3ebf972493dafef82b709c838dd372e5d48b657b814affdac53aafc",
+      "headlineKo": "연방준비은행의 워쉬는 금전 신호를 억제하고, '자유 라이더가 없는' 최근 글로벌 강화에 찬사를 하고 있습니다.",
+      "summaryKo": "워쉬는 이번 달 또 다른 금리 인상 시나리오를 내놓지 않고 중앙은행이 인플레이션과의 싸움에서 \"동시화 강화\"에 대해 지적했다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/16/strait-hormuz-singapore-ships-attacked.html",
+      "title": "One Singapore ship was sunk, but here's why others are still transiting the Strait of Hormuz",
+      "publishedAt": "2026-10-16T05:56:28+00:00",
+      "firstPublishedAt": "2026-10-16T05:56:28+00:00",
+      "source": "CNBC 주요",
+      "category": "전쟁·국제",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "e0d1e6195b496061b807e462b69e4190c42b835fcb6be9e8a401e46961c997dd",
+      "headlineKo": "싱가포르의 한 선박이 침몰했지만, 다른 선박들은 여전히 호르무즈 해협을 통과하고 있습니다.",
+      "summaryKo": "싱가포르 배들은 두 개의 컨테이너 선박에 대한 공격에도 불구하고 위험한 호르무즈 해협을 계속 항해할 예정이라고 해양 전문가들은 말했습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/cmde8dpg8g0no?at_medium=RSS&at_campaign=rss",
+      "title": "Ship attack reports near Hormuz reach record high as oil exports slow",
+      "publishedAt": "2026-10-16T05:00:17+00:00",
+      "firstPublishedAt": "2026-10-16T05:00:17+00:00",
       "source": "BBC 국제",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "db24c00eaae28fb2da50869a7d990df58c40f56975254f9e0fccab0358990509",
-      "headlineKo": "예멘 대통령궁에 대한 후티 미사일 공격으로 5명이 사망했다",
-      "summaryKo": "예멘 정보부 장관은 총리와 다른 장관들이 탄도 미사일이 알 마시크 궁전을 타격했을 때 부상을 입지 않았다고 말했습니다.",
+      "sourceHash": "f63ce56d235c7f3d1ae623e87bb0e3941578ca1434ae929ca7b8e6960184fb1f",
+      "headlineKo": "호르무즈 인근의 선박 공격 보고서는 석유 수출이 느려짐에 따라 최고치를 기록했습니다",
+      "summaryKo": "영국 해양 기관의 자료를 분석한 BBC Verify는 일주일 동안 12개의 배가 충돌했다고 보여준다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/10/15/spx-sp500-tech-stocks-invest.html",
-      "title": "A lot changed in stock market in just a few months. The single biggest risk did not",
-      "publishedAt": "2026-10-15T23:12:24+00:00",
-      "firstPublishedAt": "2026-10-15T18:02:23+00:00",
+      "url": "https://www.cnbc.com/2026/10/16/private-equity-portfolios-ipo-debt.html",
+      "title": "The IPO drought is driving private equity-owned companies to the debt market to pay investors",
+      "publishedAt": "2026-10-16T05:00:01+00:00",
+      "firstPublishedAt": "2026-10-16T05:00:01+00:00",
+      "source": "CNBC 주요",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "7016ae1455f93464b3842e450817c3114fd75ccb8cfe0fb84ebe7170f40eeb28",
+      "headlineKo": "IPO 가뭄은 투자자들에게 돈을 지불하기 위해 개인 주식회사를 채권 시장으로 몰고 있습니다.",
+      "summaryKo": "프라이빗 에피티 기업은 채권으로 자금을 조달한 배당 회수액을 투자자들에게 현금을 돌려주기 위해 점점 더 활용하고 있습니다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/16/bts-concerts-hybe-katseye-cortis.html",
+      "title": "Hybe shares jump 10% as K-pop sensation BTS' tour lifts earnings hopes",
+      "publishedAt": "2026-10-16T03:53:48+00:00",
+      "firstPublishedAt": "2026-10-16T03:53:48+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "0771a05c8403d3283b9204b55562f9d14a28cd2a5c036538fd097808000ba6da",
-      "headlineKo": "몇 달 만에 주식 시장에서 많은 변화가 있었습니다.",
-      "summaryKo": "2025년과 2026년까지 투자자들은 S&P 500 기술 주식 위험을 피하기 위해 동등한 무게로 이동하도록 지시되었습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/15/brian-sullivan-why-the-real-price-of-oil-is-likely-30-40-higher-than-where-it-is-now.html",
-      "title": "Brian Sullivan: Why the 'real' price of oil is likely $30-$40 higher than where it is now",
-      "publishedAt": "2026-10-15T19:53:29+00:00",
-      "firstPublishedAt": "2026-10-15T19:53:29+00:00",
-      "source": "CNBC 주요",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "a7b40dc0cbc9c03abcfdf5f9d3c9d8ac3df029b622620331fb0f70ec1d1b99ab",
-      "headlineKo": "브라이언 솔리반: 왜 석유의 '실적' 가격은 현재보다 30~40달러 더 높을 수 있는지",
-      "summaryKo": "물유는 배럴당 약 38달러 더 많은 가격으로 배달될 수 있습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/investingclub/2026/10/15/heres-our-monthly-update-on-our-32-stocks-including-2-more-names-to-buy.html",
-      "title": "Here's our monthly update on our 32 stocks, including 2 more names to buy",
-      "publishedAt": "2026-10-15T19:08:05+00:00",
-      "firstPublishedAt": "2026-10-15T19:08:05+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "e4d61d57dc1d99f8f3fc83ec1dbda9c3f80beff240bb041ae6460e8253297f52",
-      "headlineKo": "여기 우리 주식 32개에 대한 월간 업데이트가 있습니다",
-      "summaryKo": "짐 크레이머는 그가 가장 좋아하는 주식 2개를 확인하고 아직은 손길이 닿지 않는 이름들을 찾아냈습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/videos/cqr7yzpxm083o?at_medium=RSS&at_campaign=rss",
-      "title": "Watch: What does Starlink have to do with the Ukraine-Russia war?",
-      "publishedAt": "2026-10-15T17:31:37+00:00",
-      "firstPublishedAt": "2026-10-15T17:31:37+00:00",
-      "source": "BBC 국제",
-      "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "9726d373c992f11ee5051219949232c7f8d406b41bcca18e7e0be3c34747c01c",
-      "headlineKo": "스타링크는 우크라이나-러시아 전쟁과 무슨 관련이 있을까요?",
-      "summaryKo": "우크라이나 대통령은 엘론 머스크에게 스타링크 시스템의 모든 제한이 생명을 앗아간다고 말했습니다.",
+      "sourceHash": "0a41508e1710cd50505ad5d9ea16353c3553e6ca88593ad8db02f8959bdb4373",
+      "headlineKo": "하이베 주식은 K-팝 센세이션 BTS의 투어에서 수익 기대를 끌어올리면서 10% 상승했다",
+      "summaryKo": "BTS의 세계 투어와 새로운 K-pop 공연에 대한 글로벌 수요가 증가하는 것은 수익 기대를 촉진하고 있으며, 하이베 주가가 상승합니다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
@@ -401,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-16T01:42:46.482455+00:00",
-      "lastSuccessAt": "2026-10-16T01:42:46.482455+00:00",
+      "lastAttemptAt": "2026-10-16T07:16:42.969012+00:00",
+      "lastSuccessAt": "2026-10-16T07:16:42.969012+00:00",
       "fromCache": false
     }
   ],
