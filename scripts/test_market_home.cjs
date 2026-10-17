@@ -125,6 +125,21 @@ const fallbackHtml=H.newsHtml({news:[headlineFallback],feeds:[]},now);
 assert(fallbackHtml.includes(cramerTitle)&&fallbackHtml.includes(headlineFallback.summaryKo));
 const escapedFallback={...headlineFallback,title:'Stocks rise <img onerror=alert(1)>',headlineKo:'Stocks rise <img onerror=alert(1)>'};
 assert(H.newsHtml({news:[escapedFallback],feeds:[]},now).includes('&lt;img'));
+const related={...item,title:'Trump waives Russia sanctions',headlineKo:'러시아 제재 면제',source:'CNBC 주요',sourceExcerpt:'The original economic policy source.',url:'https://www.cnbc.com/2026/10/03/sanctions.html'};
+const coverageHtml=H.newsHtml({news:[{...item,relatedCoverage:[related]}],feeds:[]},now);
+assert.equal((coverageHtml.match(/class="hp-story"/g)||[]).length,1,'Related sources share a single card');
+assert(coverageHtml.includes('<details class="hp-related"><summary>같은 사건 다른 보도 1건</summary>'));
+assert(coverageHtml.includes(related.summaryKo)&&coverageHtml.includes(related.url));
+const unsafeCoverage=[null,{...related,url:'javascript:alert(1)'},{...related,url:'https://www.cnbc.com@attacker.example/story'},
+  {...related,publishedAt:'2026-09-01T22:00:00Z'},{...related,publishedAt:'2026-10-04T22:00:00Z'},
+  {...related,url:item.url},related,related];
+const guardedCoverage=H.newsHtml({news:[{...item,relatedCoverage:unsafeCoverage}],feeds:[]},now);
+assert(guardedCoverage.includes('다른 보도 1건')&&!guardedCoverage.includes('javascript:')&&!guardedCoverage.includes('attacker.example'));
+const untranslated={...related,translationStatus:'unavailable',headlineKo:'LEAK_BROKEN_HEADLINE',summaryKo:'LEAK_BROKEN_SUMMARY',sourceExcerpt:'Sanctions <script>source</script>'};
+const untranslatedHtml=H.newsHtml({news:[{...item,relatedCoverage:[untranslated]}],feeds:[]},now);
+assert(untranslatedHtml.includes(related.title)&&untranslatedHtml.includes('&lt;script&gt;source&lt;/script&gt;'));
+assert(!untranslatedHtml.includes('LEAK_BROKEN_')&&!untranslatedHtml.includes('<script>'));
+assert.doesNotThrow(()=>H.newsHtml({news:[{...item,relatedCoverage:{}}],feeds:[]},now));
 const newsState=H.newsStateHtml({news:[item],feeds:[
   {name:'Fed 발표',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'},
   {name:'BBC 경제',status:'ready',lastSuccessAt:'2026-10-03T23:00:00Z'},
