@@ -32,8 +32,9 @@ const server=http.createServer((req,res)=>{
           return route.fulfill({contentType:'text/javascript',body:throwPush?'window.adsbygoogle={push:function(){throw Error("blocked ad request")}};':mockScript(status)});
         }
         if(url.origin!==base)return route.abort();
-        if(url.pathname==='/assets/site-ads-config.js'&&enabled){
-          return route.fulfill({contentType:'text/javascript',body:'window.SiteAdsConfig='+JSON.stringify(config)+';'});
+        if(url.pathname==='/assets/site-ads-config.js'){
+          // This suite tests manual slots. Avoid issuing real Auto ad requests.
+          return route.fulfill({contentType:'text/javascript',body:'window.SiteAdsConfig='+JSON.stringify(enabled ? config : {enabled:false,autoAdsEnabled:false,publisherId:'ca-pub-9876543210123456',slots:{}})+';'});
         }
         if(pathname==='/stocks.html'&&url.pathname==='/stocks.html'){
           // Exercise the real stock ad placement without requiring the large live datasets.
