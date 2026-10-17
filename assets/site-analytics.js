@@ -78,10 +78,8 @@
     started = true;
     root.dataLayer = root.dataLayer || [];
     root.gtag = root.gtag || gtag;
-    gtag('consent', 'default', {
-      analytics_storage: 'denied', ad_storage: 'denied',
-      ad_user_data: 'denied', ad_personalization: 'denied'
-    });
+    // Do not overwrite independent Google-certified AdSense advertising consent.
+    gtag('consent', 'default', {analytics_storage: 'denied'});
     gtag('consent', 'update', {analytics_storage: 'granted'});
     gtag('js', new Date());
     let referrer = '';
