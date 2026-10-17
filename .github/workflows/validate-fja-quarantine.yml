@@ -1,0 +1,55 @@
+name: Validate research FJA quarantine
+on:
+  push:
+    paths:
+      - 'scripts/audit_fja_sp500_quarantine.py'
+      - 'scripts/test_fja_sp500_quarantine.py'
+      - 'research/joint-indicator/pit-quarantine-fja-v1/**'
+      - 'research/joint-indicator/pit-inputs-v1/**'
+      - 'scripts/pit_sp500_inputs.py'
+      - 'scripts/build_pit_sp500_inputs.py'
+      - '.github/workflows/validate-fja-quarantine.yml'
+  pull_request:
+    paths:
+      - 'scripts/audit_fja_sp500_quarantine.py'
+      - 'scripts/test_fja_sp500_quarantine.py'
+      - 'research/joint-indicator/pit-quarantine-fja-v1/**'
+      - 'research/joint-indicator/pit-inputs-v1/**'
+      - 'scripts/pit_sp500_inputs.py'
+      - 'scripts/build_pit_sp500_inputs.py'
+      - '.github/workflows/validate-fja-quarantine.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test quarantine and existing PIT boundary (stdlib only)
+        env:
+          PYTHONPATH: scripts
+        run: python -m unittest test_fja_sp500_quarantine test_pit_sp500_inputs -v
+      - name: Replay frozen quarantine evidence and preserve earlier research
+        run: |
+          python scripts/audit_fja_sp500_quarantine.py --verify
+          python scripts/build_pit_sp500_inputs.py --verify
+      - name: Both export paths must remain fail-closed
+        shell: bash
+        run: |
+          set +e
+          python scripts/audit_fja_sp500_quarantine.py --export-cohorts
+          quarantine_status=$?
+          python scripts/build_pit_sp500_inputs.py --export-cohorts
+          pit_status=$?
+          set -e
+          test "$quarantine_status" -eq 2
+          test "$pit_status" -eq 2
+          test ! -e research/joint-indicator/pit-quarantine-fja-v1/origin-cohorts.json
+          test ! -e research/joint-indicator/pit-inputs-v1/origin-cohorts.json

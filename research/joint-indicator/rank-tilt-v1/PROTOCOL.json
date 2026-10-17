@@ -1,0 +1,49 @@
+{
+  "version": "residual-rank-tilt-v1",
+  "registeredAt": "2026-10-14T01:15:43Z",
+  "sourceMainCommit": "47346309075b29ef1bb7170e0bca8a66e27d5a10",
+  "parentResearchCommit": "1aa16f7a831b0aeed411593fe64464af94115cd5",
+  "horizons": [126, 252],
+  "hypotheses": {
+    "A": "A small same-origin cross-sectional tilt of priceOnly by issuer-specific residual-momentum rank supplies information less redundant than another fitted price model and can jointly improve price/return error and direction.",
+    "B": "A sparse downside-only tilt for the bottom residual-momentum quintile when the issuer is below its 200-day mean can increase downside recall without violating error and false-warning guards."
+  },
+  "candidates": ["symmetric_rank_tilt", "sparse_down_tilt"],
+  "controls": ["noChange", "priceOnly", "simpleTrend", "relative_expert"],
+  "inputs": {
+    "pairedPredictions": "../relative-v1/predictions.json.gz",
+    "featureSnapshot": "../relative-v1/sources/raw-features.json.gz",
+    "pairedPredictionsSha256": "27051ff29f5f47ad3c3943e90f9ea9100449c7e0352c3e0d87b2301bf5ea312e",
+    "featureSnapshotSha256": "b87781b01b847a8e0d0e1a3735bb1718edf8dc6f906ee09d7caedc503a8dc897",
+    "relativeResultsSha256": "46e1198a34e397e4a7134bf71ae4bf491b94bdbd801d6e270ce35eaff1fde809"
+  },
+  "featureDefinition": "For each origin, average the cross-sectional percentile ranks of relative[9] (126-day residual cumulative log return) and relative[10] (252-day residual cumulative log return), then rank that average again and map its percentile to [-1,1]. Average ranks are used for ties. The feature snapshot was frozen before this protocol and every raw price through-date is earlier than origin.",
+  "candidateA": "priceOnly * exp(0.025 * residualRankScore). Missing/unusable feature falls back to priceOnly.",
+  "candidateB": "priceOnly * exp(-0.05) only for the bottom 20% final residual-rank percentile and absolute[4] < 0 (own price below its 200-day mean); otherwise priceOnly. Missing/unusable feature falls back to priceOnly.",
+  "evaluation": "Reuse the frozen paired last-half evaluation rows from relative-v1: 9 origins for 126 trading days and 8 for 252. Every row is retained. This history has been inspected, so all results are exploratory quarantine evidence, never prospective evidence.",
+  "training": "No fitted model, label selection, class balancing, or target-sign quota. Cross-sectional ranks use only same-origin features known before origin. Horizons are evaluated separately.",
+  "direction": "Final numeric ratio >1.02 up, <0.98 down, otherwise neutral. Direction is always derived from the final numeric return; no classifier probability is attached.",
+  "weighting": "Equal total weight per origin for pooled headline metrics; retain unweighted pooledAllRows, per-date, and regime metrics.",
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "priceErrorImprovement": 0.02,
+    "minimumDateWinRate": 0.6,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "requireDirectionImprovementCI": true,
+    "prospectiveEvidenceRequired": true
+  },
+  "extraGate": "Apply the existing blend gates against priceOnly and noChange: both date-mean MAPE and return MAE improve at least 2%, tails do not worsen, date win rate >=60%, direction/balanced direction/up/down recall/down precision pass. Also require falseDownWarningRate <= priceOnly and both errors <= simpleTrend. Prospective remains false.",
+  "probability": "Not applicable: candidates emit numeric forecasts only. Brier/log loss are null and no score is represented as a calibrated probability.",
+  "abstention": "No abstention; neutral predictions remain in the full sample. Missing inputs fall back and remain scored.",
+  "knownBias": "Frozen data use current constituents/current sector labels and revised adjusted prices; point-in-time membership and delisted-issuer readiness remain 0/34. Therefore no promotion can result from this experiment.",
+  "noTradeClaims": true,
+  "noUIOrLiveChanges": true,
+  "selection": "none",
+  "noPostResultTuning": true,
+  "references": [
+    "https://doi.org/10.1016/j.jempfin.2011.01.003",
+    "https://repub.eur.nl/pub/22252"
+  ]
+}
