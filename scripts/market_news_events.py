@@ -50,7 +50,8 @@ def normalized(text):
     for pattern, replacement in ALIASES:
         text = re.sub(pattern, replacement, text)
     text = text.replace('$', ' usd ').replace('€', ' eur ').replace('£', ' gbp ')
-    return ' '.join(re.findall(r'\d+(?:\.\d+)?%?|[a-z]+', text))
+    text = re.sub(r'(?<=\d),(?=\d)', '', text)
+    return ' '.join(re.findall(r'[+-]?\d+(?:\.\d+)?%?|[a-z]+', text))
 
 
 def subject_name(text):
@@ -130,7 +131,7 @@ def close_in_time(left, right):
 
 
 def same_event(left, right):
-    if left.get('category') != right.get('category') or not close_in_time(left, right):
+    if not left.get('category') or left.get('category') != right.get('category') or not close_in_time(left, right):
         return False
     a, b = signature(left), signature(right)
     if a and b:
@@ -139,21 +140,7 @@ def same_event(left, right):
         # Conflicting explicit amounts/durations in direct economic source
         # leads are not silently reconciled. Missing details remain inspectable
         # related coverage; different known values require separate cards.
-        details = []
-        for article in (left, right):
-            excerpt = article.get('sourceExcerpt', '')
-            values = {}
-            if MARKET_FACTS.search(excerpt) and DIRECT_ACTION.search(excerpt):
-                for number, unit in re.findall(r'\b(\d+(?:\.\d+)?)\s*(basis points?|percentage points?|percent|%|days?|months?|years?|billion|trillion)(?!\w)', excerpt, re.I):
-                    unit = unit.casefold().rstrip('s')
-                    value = Decimal(number)
-                    if unit in {'basis point', 'percentage point'}:
-                        value *= 100 if unit == 'percentage point' else 1
-                        unit = 'basis point'
-                    elif unit in {'percent', '%'}:
-                        unit = 'percent'
-                    values.setdefault(unit, set()).add(value)
-            details.append(values)
+        details = [material_values(article) for article in (left, right)]
         return all(details[0][unit] == details[1][unit] for unit in details[0].keys() & details[1].keys())
     # Exact syndication is safe only with a substantive identical source lead.
     # A recurring generic title or a shared Korean translation is insufficient.
@@ -162,6 +149,38 @@ def same_event(left, right):
     return (len(title.split()) >= 6 and len(excerpt.split()) >= 8
             and title == normalized(right.get('title'))
             and excerpt == normalized(right.get('sourceExcerpt')))
+
+
+def material_values(article):
+    # Inspect the complete title, including any trailing explanatory clause.
+    # Excerpt details apply only to a direct economic statement, not incidental
+    # historical background such as the law's passage before today's waiver.
+    text = article.get('title', '')
+    excerpt = article.get('sourceExcerpt', '')
+    if MARKET_FACTS.search(excerpt) and DIRECT_ACTION.search(excerpt):
+        text += '\n' + excerpt
+    text = re.sub(r'(?<=\d),(?=\d)', '', text)
+    values = {}
+    for number, unit in re.findall(r'(?<!\w)([+-]?\d+(?:\.\d+)?)\s*(basis points?|percentage points?|percent|%|days?|months?|years?|billion|trillion)(?!\w)', text, re.I):
+        unit = unit.casefold().rstrip('s')
+        value = Decimal(number)
+        if unit in {'basis point', 'percentage point'}:
+            value *= 100 if unit == 'percentage point' else 1
+            unit = 'basis point'
+        elif unit in {'percent', '%'}:
+            unit = 'percent'
+        if unit in {'day', 'month', 'year'}:
+            values.setdefault('duration', set()).add((unit, value))
+        elif unit in {'billion', 'trillion'}:
+            values.setdefault('magnitude', set()).add((unit, value))
+        else:
+            values.setdefault(unit, set()).add(value)
+    for currency, number in re.findall(r'([$€£])\s*([+-]?\d+(?:\.\d+)?)', text):
+        values.setdefault('currencyAmount', set()).add((currency, Decimal(number)))
+    dates = re.findall(r'\b(?:20\d{2}-\d{2}-\d{2}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+\d{1,2}(?:st|nd|rd|th)?(?:,?\s+20\d{2})?|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|today|tomorrow|yesterday)\b', text, re.I)
+    if dates:
+        values['explicitDate'] = {normalized(d) for d in dates}
+    return values
 
 
 def representative_score(article):

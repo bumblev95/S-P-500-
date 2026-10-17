@@ -76,12 +76,14 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
         await page.screenshot({path:'home-preview/'+theme+'-'+width+'.png',fullPage:true});
       }
       // Freeze the reported October 17 event independently of live RSS changes.
-      await page.clock.setFixedTime(new Date(eventFixture.observedAt));
-      await page.route('**/market/home.json?*',route=>route.fulfill({json:{...data,news:eventNews}}));
-      await page.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
-      await page.waitForSelector('.hp-related');
-      assert.equal(await page.locator('.hp-story').count(),5);
-      const policy=page.locator('.hp-story').filter({has:page.locator('.hp-related')});
+      const eventPage=await browser.newPage({colorScheme:theme});
+      eventPage.on('pageerror',e=>errors.push(e.message));
+      await eventPage.clock.install({time:new Date(eventFixture.observedAt)});
+      await eventPage.route('**/market/home.json?*',route=>route.fulfill({json:{...data,news:eventNews}}));
+      await eventPage.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
+      await eventPage.waitForSelector('.hp-related');
+      assert.equal(await eventPage.locator('.hp-story').count(),5);
+      const policy=eventPage.locator('.hp-story').filter({has:eventPage.locator('.hp-related')});
       assert.equal(await policy.count(),1);
       assert.equal(await policy.locator('h3 a').getAttribute('href'),eventNews[0].url);
       assert((await policy.locator('.hp-story-meta').innerText()).includes('국제경제'));
@@ -90,12 +92,11 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
       assert.equal(await policy.locator('details li').count(),1);
       assert.equal(await policy.locator('details li p').textContent(),eventNews[0].relatedCoverage[0].summaryKo);
       for(const width of [320,375,768,1024,1440]){
-        await page.setViewportSize({width,height:1000});
-        assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'related coverage overflow at '+width);
-        await page.screenshot({path:'home-preview/events-'+theme+'-'+width+'.png',fullPage:true});
+        await eventPage.setViewportSize({width,height:1000});
+        assert(await eventPage.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'related coverage overflow at '+width);
+        await eventPage.screenshot({path:'home-preview/events-'+theme+'-'+width+'.png',fullPage:true});
       }
-      await page.unroute('**/market/home.json?*');
-      await page.clock.setFixedTime(new Date(now));
+      await eventPage.close();
 
       for(const [name,rankings] of scenarios){
         await page.route('**/market/home.json?*',route=>route.fulfill({json:{...data,rankings}}));

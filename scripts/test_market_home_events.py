@@ -251,6 +251,19 @@ class ConservativeEventIdentity(unittest.TestCase):
         b = {**a, 'publishedAt': '2026-10-17T12:00:00-06:00'}
         self.assertTrue(events.same_event(a, b))
 
+    def test_trailing_clauses_cannot_hide_conflicting_dates_or_deal_values(self):
+        for left, right in [
+            ('Trump waives Russia sanctions, effective October 18', 'Trump waives Russia sanctions, effective October 19'),
+            ('Trump waives Russia sanctions, effective Monday', 'Trump waives Russia sanctions, effective Tuesday'),
+            ('Nvidia acquires Acme as part of a $5 billion deal', 'Nvidia acquires Acme as part of a $50 billion deal'),
+            ('Nvidia acquires Acme as part of a $5 deal', 'Nvidia acquires Acme as part of a $6 deal'),
+            ('Nvidia acquires Acme as part of a $5 billion deal', 'Nvidia acquires Acme as part of a €5 billion deal'),
+            ('Trump waives Russia sanctions, lasting 30 days', 'Trump waives Russia sanctions, lasting 3 months'),
+            ('Fed holds rates at -1%', 'Fed holds rates at 1%'),
+        ]:
+            with self.subTest(left=left, right=right):
+                self.assertFalse(self.same(left, right))
+
     def test_complete_link_matching_prevents_transitive_multi_day_collapse(self):
         rows = []
         for index, hour in enumerate([0, 12, 24]):
@@ -263,6 +276,7 @@ class ConservativeEventIdentity(unittest.TestCase):
     def test_eligibility_topic_and_valid_translation_are_required(self):
         a = article('Trump waives Russia sanctions')
         self.assertFalse(events.same_event(a, {**a, 'category': '주식시장'}))
+        self.assertFalse(events.same_event({**a,'category':None}, {**a,'category':None}))
         b = {**a, 'url': article('', 1)['url']}
         self.assertEqual(events.group_coverage([a, b], lambda _: False), [])
 
