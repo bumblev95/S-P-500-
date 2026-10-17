@@ -1,0 +1,40 @@
+name: Validate prospective homepage TOP 3 research
+on:
+  push:
+    paths:
+      - 'scripts/*home_top3_study.py'
+      - 'scripts/requirements-home-top3-study.txt'
+      - 'simulation/home-top3/**'
+      - 'research/HOME-TOP3-PROSPECTIVE.md'
+      - '.github/workflows/update-home-top3-study.yml'
+      - '.github/workflows/validate-home-top3-study.yml'
+  pull_request:
+    paths:
+      - 'scripts/*home_top3_study.py'
+      - 'scripts/requirements-home-top3-study.txt'
+      - 'simulation/home-top3/**'
+      - 'research/HOME-TOP3-PROSPECTIVE.md'
+      - '.github/workflows/update-home-top3-study.yml'
+      - '.github/workflows/validate-home-top3-study.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r scripts/requirements-home-top3-study.txt
+      - run: python -m unittest discover -s scripts -p test_home_top3_study.py
+      - name: Verify append-only observations and reproducible forward report
+        env:
+          STUDY_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if ! git cat-file -e "${STUDY_BASE_REF}^{commit}" 2>/dev/null; then
+            STUDY_BASE_REF=origin/main
+          fi
+          python scripts/home_top3_study.py verify --base "$STUDY_BASE_REF"
