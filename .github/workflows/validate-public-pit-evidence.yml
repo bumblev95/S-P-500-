@@ -1,0 +1,49 @@
+name: Validate public PIT evidence (research only)
+on:
+  push:
+    branches: [codex/pit-public-evidence-v1]
+  pull_request:
+    paths:
+      - research/joint-indicator/pit-public-evidence-v1/**
+      - scripts/audit_public_pit_evidence.py
+      - scripts/test_public_pit_evidence.py
+      - .github/workflows/validate-public-pit-evidence.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Evidence, PIT, candidate-quarantine and lifecycle regressions
+        run: |
+          python -m unittest discover -s scripts -p test_public_pit_evidence.py -v
+          python -m unittest discover -s scripts -p test_pit_sp500_inputs.py -v
+          python -m unittest discover -s scripts -p test_fja_sp500_quarantine.py -v
+          python -m unittest discover -s scripts -p test_merger_lifecycle.py -v
+      - name: Replay saved evidence and original audits without downloads
+        run: |
+          python scripts/audit_public_pit_evidence.py --verify
+          python scripts/build_pit_sp500_inputs.py --folder research/joint-indicator/pit-public-evidence-v1 --verify
+          python scripts/build_pit_sp500_inputs.py --verify
+          python scripts/audit_fja_sp500_quarantine.py --verify
+          python scripts/build_merger_lifecycle.py --verify
+      - name: Incomplete new inputs must not export a cohort
+        run: |
+          set +e
+          python scripts/build_pit_sp500_inputs.py --folder research/joint-indicator/pit-public-evidence-v1 --export-cohorts
+          result=$?
+          set -e
+          test "$result" = 2
+          test ! -e research/joint-indicator/pit-public-evidence-v1/origin-cohorts.json
+      - name: Incomplete new lifecycle inputs must not export outcomes
+        run: |
+          set +e
+          python scripts/build_merger_lifecycle.py --folder research/joint-indicator/pit-public-evidence-v1 --pit-folder research/joint-indicator/pit-public-evidence-v1 --export-outcomes --origin 2025-04-25 --target-at 2026-04-27T20:00:00Z --evaluated-at 2026-10-13T10:30:00Z --output /tmp/public-pit-outcomes.json
+          result=$?
+          set -e
+          test "$result" = 2
+          test ! -e /tmp/public-pit-outcomes.json
