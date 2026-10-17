@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
 from zoneinfo import ZoneInfo
 
 from translate_company_news import valid_korean, valid_korean_headline, valid_korean_summary, simpler_headline_input
+from market_news_events import group_coverage, VERSION as EVENT_DEDUPLICATION_VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 NY = ZoneInfo('America/New_York')
@@ -268,6 +269,10 @@ def category(title, excerpt=''):
     economic=any(rule.search(text) for rule in (MONETARY,EQUITY,ECONOMY,COMMODITY,FINANCE)) or labor or trade or chokepoint
     if not economic:return None
     title_topics=[m for rule in (MONETARY,EQUITY,ECONOMY,COMMODITY,FINANCE,TRADE) if (m:=rule.search(title))]
+    # Sanctions are an explicit title topic too. A historical invasion in the
+    # excerpt must not override a headline about waiving economic restrictions.
+    if SANCTION_CONTEXT.search(text) and (sanction:=SANCTIONS.search(title)):
+        title_topics.append(sanction)
     event=military_event(title)
     if ((event and not any(m.start()<event.start() for m in title_topics))
             or (not title_topics and military_event(text) and not LABOR.search(title))
@@ -470,19 +475,16 @@ def assemble(quotes, news, feeds, rankings, now):
         high=max(available,key=lambda q:q['day']);low=min(available,key=lambda q:q['day'])
         brief=high['name']+' 강세 · '+low['name']+' 약세' if high['day']>0>low['day'] else ('섹터 전반 상승' if low['day']>0 else '섹터 전반 하락' if high['day']<0 else '섹터 혼조')
     else:brief='시장 마감 자료 확인 중'
-    seen=set();selected=[]
-    for item in sorted(news,key=lambda a:(a['publishedAt'],a.get('importance')=='important'),reverse=True):
+    eligible=[]
+    for item in news:
         topic=category(item.get('title',''),item.get('sourceExcerpt') or item.get('_excerpt',''))
         if topic is None:continue
-        # Identical event headlines from two sources do not fill the briefing twice.
-        key=re.sub(r'\W','',item.get('headlineKo','')).lower()
-        if not usable_translation(item) or key in seen:continue
-        seen.add(key);selected.append({**{k:v for k,v in item.items() if k!='sourceExcerpt'},'category':topic})
-        if len(selected)==5:break
+        eligible.append({**item,'category':topic})
+    selected=group_coverage(eligible,usable_translation)
     return {'schemaVersion':1,'generatedAt':now.isoformat(),'rankings':rankings,'brief':brief,
             'recap':{'asOf':asof,'weekStart':start.isoformat(),'weekEnd':end.isoformat(),'weekComplete':complete,'timezone':'America/New_York','method':'sector-etf-unadjusted-close-price-return',
                      'indices':[quotes[s] for s,_,_ in INDICES],'sectors':[quotes[s] for s,_,_ in SECTORS]},
-            'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'displayOrder':'latest-first','importanceBasis':'source-event-and-reviewed-context'}}
+            'news':selected,'feeds':feeds,'newsPolicy':{'maxAgeDays':14,'breakingMaxAgeHours':2,'displayOrder':'latest-first','importanceBasis':'source-event-and-reviewed-context','eventDeduplication':EVENT_DEDUPLICATION_VERSION}}
 
 
 def home_rankings(root, now):

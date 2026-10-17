@@ -73,9 +73,23 @@
     const stories=items.map(q=>{
       const urgent=breaking(q,now),mark=q.importance==='important'?'<span class="hp-news-mark'+(urgent?' breaking':'')+'"'+(urgent?' data-breaking-until="'+(Date.parse(q.firstPublishedAt||q.publishedAt)+2*3600000)+'"':'')+' aria-label="'+esc(q.importanceReason||'시장 영향이 큰 사건')+'">'+(urgent?'속보':'중요')+'</span>':'';
       const dateText=new Intl.DateTimeFormat('ko-KR',{timeZone:'America/New_York',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(q.publishedAt));
-      return '<article class="hp-story"><div class="hp-story-meta">'+mark+'<span>'+esc(q.category)+' · '+esc(q.source)+'</span><time datetime="'+esc(q.publishedAt)+'">'+esc(dateText)+' ET</time>'+(q.fromCache||q.sourceStatus!=='ready'?'<span class="hp-cache">이전 수집</span>':'')+'</div><h3><a href="'+esc(q.url)+'" target="_blank" rel="noopener noreferrer">'+esc(q.headlineKo)+'</a></h3><p>'+esc(q.summaryKo)+'</p></article>';
+      return '<article class="hp-story"><div class="hp-story-meta">'+mark+'<span>'+esc(q.category)+' · '+esc(q.source)+'</span><time datetime="'+esc(q.publishedAt)+'">'+esc(dateText)+' ET</time>'+(q.fromCache||q.sourceStatus!=='ready'?'<span class="hp-cache">이전 수집</span>':'')+'</div><h3><a href="'+esc(q.url)+'" target="_blank" rel="noopener noreferrer">'+esc(q.headlineKo)+'</a></h3><p>'+esc(q.summaryKo)+'</p>'+relatedCoverageHtml(q,now)+'</article>';
     }).join('');
     return (stories||'<p class="hp-empty">확인된 한국어 시장 뉴스가 아직 없습니다.</p>')+newsStateHtml(state,now);
+  }
+  function relatedCoverageHtml(item,now){
+    const seen=new Set([item.url]);
+    const related=(Array.isArray(item.relatedCoverage)?item.relatedCoverage:[]).filter(a=>{
+      if(!a||!a.title||!safeUrl(a.url)||!freshTime(a.publishedAt,now,14)||seen.has(a.url))return false;
+      seen.add(a.url);return true;
+    });
+    if(!related.length)return '';
+    return '<details class="hp-related"><summary>같은 사건 다른 보도 '+related.length+'건</summary><ul>'+related.map(a=>{
+      const translated=a.translationStatus==='ready'||a.translationStatus==='headline-fallback'&&a.headlineKo===a.title;
+      const headline=translated&&a.headlineKo?a.headlineKo:a.title;
+      const summary=translated&&a.summaryKo?a.summaryKo:a.sourceExcerpt||'';
+      return '<li><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.source)+' · '+esc(headline)+'</a>'+(summary?'<p>'+esc(summary)+'</p>':'')+'</li>';
+    }).join('')+'</ul></details>';
   }
   const api={nyDate,weekBounds,freshDate,breaking,eligibleNews,rankingHtml,buyHtml,rankingSignal,rankingNote,quoteValues,chartRows,scale,chartHtml,newsHtml,newsStateHtml,rankRows};
   if(typeof module!=='undefined')module.exports=api;else root.MarketHome=api;
