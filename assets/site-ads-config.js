@@ -3,7 +3,8 @@
   // Use the identifiers from your own AdSense account.
   // Keep disabled until site approval, hosting and Privacy & messaging are ready.
   const config=Object.freeze({
-    enabled:false,
+    enabled:false, // manual display-ad slots stay disabled until valid ad units exist
+    autoAdsEnabled:true, // Auto ads uses the AdSense site/account switch instead
     publisherId:'ca-pub-9723666081819297',
     slots:Object.freeze({home:'',stocks:''})
   });
