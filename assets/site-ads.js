@@ -66,8 +66,25 @@
     }
   }
 
+  // Auto ads is independent of the manual <ins> ad-slot feature. Never run
+  // on the planner/simulation/tools or ad-free explanatory and policy pages.
+  function initAutoAds(){
+    const config=root.SiteAdsConfig;
+    if(!config||config.autoAdsEnabled!==true||!/^ca-pub-\\d{16}$/.test(config.publisherId))return;
+    const pathname=root.location?.pathname||'';
+    const eligiblePaths=['/','/index.html','/S-P-500-/','/S-P-500-/index.html','/S-P-500-/stocks.html'];
+    if(root.location.hostname!=='bumblev95.github.io'||!eligiblePaths.includes(pathname)||root.navigator?.globalPrivacyControl===true)return;
+    if(!document.querySelector('meta[name="google-adsense-account"][content="'+config.publisherId+'"]'))return;
+    root.dataLayer=root.dataLayer||[];
+    root.gtag=root.gtag||function(){root.dataLayer.push(arguments);};
+    root.gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+    // Reuse one provider request even if this site later receives valid manual slots.
+    loadProvider(document,config.publisherId).catch(()=>{});
+  }
+
   function init(){
     if(typeof document==='undefined')return;
+    initAutoAds();
     document.querySelectorAll('[data-site-ad]').forEach(wrapper=>{
       const settings=adSettings(root.SiteAdsConfig,wrapper.dataset.siteAd);
       if(!settings||wrapper.dataset.adState)return;

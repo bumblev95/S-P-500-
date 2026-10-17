@@ -3,7 +3,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const {adSettings}=require('../assets/site-ads.js');
 const defaults=require('../assets/site-ads-config.js');
 const valid={enabled:true,publisherId:'ca-pub-9876543210123456',slots:{home:'9876543210',stocks:'9876543211'}};
-assert.equal(defaults.enabled,false,'unconfigured deployment must not request ads');
+assert.equal(defaults.enabled,false,'manual ad slots must remain disabled without valid slot IDs');
+assert.equal(defaults.autoAdsEnabled,true,'Auto ads connects to the approved publisher independently');
 assert.equal(adSettings(defaults,'home'),null);
 assert.deepEqual(adSettings(valid,'home'),{publisherId:valid.publisherId,slot:valid.slots.home});
 for(const config of [null,{}, {...valid,enabled:false},{...valid,enabled:'true'},
