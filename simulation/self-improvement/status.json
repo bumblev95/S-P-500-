@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "display-only",
   "mode": "shadow-only",
-  "generatedAt": 1792366377925,
+  "generatedAt": 1792373838277,
   "staleAfterMs": 1800000,
   "automaticPromotion": false,
   "defaultStrategyChanged": false,
@@ -19,7 +19,7 @@
     "thresholdR": 0.1
   },
   "sources": {
-    "decisionRecords": 181,
+    "decisionRecords": 182,
     "closedTrades": {
       "control-three": 10,
       "control-one": 5,
@@ -28,7 +28,7 @@
   },
   "forecastResearch": {
     "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
-    "generatedAt": "2026-10-18T20:47:25+00:00",
+    "generatedAt": "2026-10-18T23:15:59+00:00",
     "horizons": {
       "126": {
         "status": "research",
@@ -73,8 +73,8 @@
       "incumbentThresholdR": 0.1,
       "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
       "activity": "collecting",
-      "observations": 87,
-      "latestObservationAt": 1792366376893,
+      "observations": 88,
+      "latestObservationAt": 1792373837878,
       "initialTrainingTrades": 3,
       "assessment": {
         "schemaVersion": 1,
@@ -95,7 +95,7 @@
           "stressCostMultiplier": 2,
           "maxDrawdown": 0.1
         },
-        "asOf": 1792366376893,
+        "asOf": 1792373837878,
         "status": "insufficient",
         "promotionCandidate": false,
         "automaticPromotion": false,
@@ -123,10 +123,10 @@
           "identicalCurveTimes": true,
           "chronology": true,
           "noBackfill": true,
-          "observations": 87,
+          "observations": 88,
           "firstAt": 1790996520188,
-          "lastAt": 1792366376893,
-          "forwardDays": 15.624848298611111,
+          "lastAt": 1792373837878,
+          "forwardDays": 15.711202291666666,
           "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
         },
         "purgedWalkForward": {
@@ -151,7 +151,7 @@
           "maxEntryExposure": 0.33010219938979274,
           "maxConcurrentPositions": 1,
           "maxLeverage": 3,
-          "dailyVolatility": 0.0023557135516011065,
+          "dailyVolatility": 0.0022898545829110493,
           "worstDailyLoss": 0.009731881977371959,
           "tailDailyLoss": 0.009731881977371959,
           "funding": -0.04036246591478425,
@@ -177,7 +177,7 @@
           "maxEntryExposure": 0.33010219938979274,
           "maxConcurrentPositions": 1,
           "maxLeverage": 3,
-          "dailyVolatility": 0.0023557135516011065,
+          "dailyVolatility": 0.0022898545829110493,
           "worstDailyLoss": 0.009731881977371959,
           "tailDailyLoss": 0.009731881977371959,
           "funding": -0.04036246591478425,
@@ -188,10 +188,10 @@
           "pendingOrders": 0
         }
       },
-      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792366376893-35acd047d1c5.json",
-      "assessmentHash": "35acd047d1c507b5aabfd2eeb23244f7564bb7b0445b42e748905aa49c890ce9",
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792373837878-ede33de2b344.json",
+      "assessmentHash": "ede33de2b344e444dbe5f3116e9e8c14577f72f01d5e94c024066e32e3f6cd58",
       "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/candidate.json",
-      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792366376893-08116b9ae5f2.json"
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792373837878-5c1ac5a85a0d.json"
     },
     {
       "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
