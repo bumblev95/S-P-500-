@@ -1,54 +1,44 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-20T17:40:55.066238+00:00",
+  "generatedAt": "2026-10-20T20:18:15.741447+00:00",
   "rankings": {
     "buy": [
       {
-        "symbol": "EG",
-        "name": "에베레스트 그룹",
-        "asOf": "2026-10-19",
-        "score": 93,
+        "symbol": "BIIB",
+        "name": "바이오젠",
+        "asOf": "2026-10-20",
+        "score": 100,
+        "code": "buy",
+        "holdingCode": "hold",
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
+      },
+      {
+        "symbol": "PFE",
+        "name": "화이자",
+        "asOf": "2026-10-20",
+        "score": 99,
         "code": "buy",
         "holdingCode": "hold",
         "selection": "signal",
         "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
       },
       {
-        "symbol": "CVS",
-        "name": "CVS 헬스",
-        "asOf": "2026-10-19",
-        "score": 84,
+        "symbol": "WST",
+        "name": "웨스트 파마슈티컬 서비스",
+        "asOf": "2026-10-20",
+        "score": 98,
         "code": "buy",
         "holdingCode": "hold",
         "selection": "signal",
-        "reason": "지지 반등·손익비·위험 조건 충족"
-      },
-      {
-        "symbol": "COR",
-        "name": "센코라",
-        "asOf": "2026-10-19",
-        "score": 100,
-        "code": "breakout",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "직전 55거래일 고점 돌파 확인 대기"
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
       }
     ],
     "sell": [
       {
-        "symbol": "AKAM",
-        "name": "아카마이 테크놀로지스",
-        "asOf": "2026-10-19",
-        "score": 0,
-        "code": "avoid",
-        "holdingCode": "reduce",
-        "selection": "signal",
-        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
-      },
-      {
         "symbol": "ALB",
         "name": "앨버말",
-        "asOf": "2026-10-19",
+        "asOf": "2026-10-20",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -56,9 +46,19 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "ARE",
-        "name": "알렉산드리아 리얼에스테이트",
-        "asOf": "2026-10-19",
+        "symbol": "MOS",
+        "name": "모자이크",
+        "asOf": "2026-10-20",
+        "score": 0,
+        "code": "avoid",
+        "holdingCode": "reduce",
+        "selection": "signal",
+        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
+      },
+      {
+        "symbol": "SKYD",
+        "name": "스카이댄스",
+        "asOf": "2026-10-20",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -66,10 +66,10 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-19",
+    "asOf": "2026-10-20",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-20T17:40:55.066Z",
-    "priceGeneratedAt": "2026-10-19T21:20:34+00:00",
+    "evaluatedAt": "2026-10-20T20:18:15.741Z",
+    "priceGeneratedAt": "2026-10-20T20:16:56+00:00",
     "marketGeneratedAt": "2026-10-20T17:11:58.603227+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
