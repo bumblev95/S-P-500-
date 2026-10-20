@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-20T20:22:44.714290+00:00",
+  "generatedAt": "2026-10-20T20:40:05.810593+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-20",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-20T20:22:44.714Z",
+    "evaluatedAt": "2026-10-20T20:40:05.810Z",
     "priceGeneratedAt": "2026-10-20T20:16:56+00:00",
     "marketGeneratedAt": "2026-10-20T20:20:22.102999+00:00",
     "basis": "technical-relative-ranking",
@@ -97,8 +97,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -112,8 +112,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "^DJI",
@@ -127,8 +127,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       }
     ],
     "sectors": [
@@ -137,15 +137,15 @@
         "name": "기술",
         "icon": "cpu",
         "asOf": "2026-10-20",
-        "close": 185.4600067138672,
-        "day": -0.26887501718008133,
+        "close": 185.44000244140625,
+        "day": -0.2796323153833047,
         "dayBaseDate": "2026-10-19",
-        "week": 1.0846489779929858,
+        "week": 1.0737456846328541,
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,23 +159,23 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLY",
         "name": "경기소비재",
         "icon": "shopping-bag",
         "asOf": "2026-10-20",
-        "close": 115.51000213623047,
-        "day": 0.9173537132242116,
+        "close": 115.5,
+        "day": 0.90861517023062,
         "dayBaseDate": "2026-10-19",
-        "week": 2.7120781403055627,
+        "week": 2.7031841901793863,
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,8 +189,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,23 +204,23 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLV",
         "name": "헬스케어",
         "icon": "heart-pulse",
         "asOf": "2026-10-20",
-        "close": 179.8300018310547,
-        "day": 2.379737022384254,
+        "close": 179.82000732421875,
+        "day": 2.3740470097550315,
         "dayBaseDate": "2026-10-19",
-        "week": 1.7656018327470546,
+        "week": 1.7599459522330996,
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,12 +294,51 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-        "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00"
+        "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+        "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00"
       }
     ]
   },
   "news": [
+    {
+      "url": "https://www.cnbc.com/2026/10/20/netflix-nflx-earnings-q3-2026.html",
+      "title": "Netflix posts third-quarter earnings beat, but shares fall on advertising and revenue guidance",
+      "publishedAt": "2026-10-20T20:30:51+00:00",
+      "firstPublishedAt": "2026-10-20T16:00:01+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "3cae0946de631f093a4164ef7174a5b30acfc926b72432dd3af2fccc04df5023",
+      "translationMethod": "machine-translation",
+      "headlineKo": "Netflix posts third-quarter earnings beat, but shares fall on advertising and revenue guidance",
+      "summaryKo": "월스트리트와 투자자들은 최근 조직 변화에 따라 회사의 전략에 대한 추가적인 정보를 제공하기 위해 넷플릭스를 찾고 있습니다.",
+      "translationStatus": "headline-fallback",
+      "translationVersion": "home-news-ko-v2",
+      "headlineFallbackVersion": "home-headline-quality-v3"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/20/united-airlines-ual-3q-2026-earnings.html",
+      "title": "United Airlines slashes 2026 profit outlook on fuel prices, but travelers keep booking despite higher fares",
+      "publishedAt": "2026-10-20T20:23:58+00:00",
+      "firstPublishedAt": "2026-10-20T20:03:05+00:00",
+      "source": "CNBC 주요",
+      "category": "유가·원자재",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "03d4f2107d8b9bd1213e775dca44a5f677cbb18af5ef7c7882f9f3dc7033200f",
+      "headlineKo": "유나이티드 항공은 연료 가격에 대한 2026년 수익 전망을 절감했지만, 더 높은 요금에도 불구하고 여행자들은 계속 예약합니다.",
+      "summaryKo": "유나이티드 항공은 연간 수익 전망을 줄였으며 연료 가격은 계속 상승했다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
     {
       "url": "https://www.cnbc.com/2026/10/20/salesforce-braze-acquisition-deal.html",
       "title": "Salesforce announces $5.66 billion deal for Braze, sending BRZE stock soaring 51%",
@@ -307,16 +346,16 @@
       "firstPublishedAt": "2026-10-20T14:09:16+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "4c6f45aae9a9ac5f0ede59a6b59cb2f50b81efb204ca5afc908e3f1610468e50",
-      "translationMethod": "machine-translation",
       "headlineKo": "세일즈포스는 브레이즈에 대해 566억 달러의 거래를 발표했고,",
       "summaryKo": "회사의 최신 인수는 2028년 재정에서 종료될 것으로 예상되며, 브레이즈 주주들은 주당 47.50달러의 현금을 받게 될 것입니다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
@@ -326,7 +365,7 @@
       "firstPublishedAt": "2026-10-20T04:01:01+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -339,60 +378,22 @@
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/10/20/netflix-nflx-earnings-q3-2026.html",
-      "title": "Netflix posts third-quarter earnings beat, says viewer engagement remains 'healthy'",
-      "publishedAt": "2026-10-20T20:06:55+00:00",
-      "firstPublishedAt": "2026-10-20T16:00:01+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "2c091a74d96c734196c4a0c7a62414e9b7942b3a53674abf11786588761c4623",
-      "translationMethod": "machine-translation",
-      "headlineKo": "넷플릭스는 3분기에 예상보다 더 좋은 수익을 올리고 시청자 참여가 '건강하다'고 말했다",
-      "summaryKo": "월스트리트와 투자자들은 최근 조직 변화에 따라 회사의 전략에 대한 추가적인 정보를 제공하기 위해 넷플릭스를 찾고 있습니다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/20/united-airlines-ual-3q-2026-earnings.html",
-      "title": "United Airlines slashes 2026 profit outlook on fuel prices, but travelers keep booking despite higher fares",
-      "publishedAt": "2026-10-20T20:03:05+00:00",
-      "firstPublishedAt": "2026-10-20T20:03:05+00:00",
-      "source": "CNBC 주요",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "03d4f2107d8b9bd1213e775dca44a5f677cbb18af5ef7c7882f9f3dc7033200f",
-      "translationMethod": "machine-translation",
-      "headlineKo": "유나이티드 항공은 연료 가격에 대한 2026년 수익 전망을 절감했지만, 더 높은 요금에도 불구하고 여행자들은 계속 예약합니다.",
-      "summaryKo": "유나이티드 항공은 연간 수익 전망을 줄였으며 연료 가격은 계속 상승했다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
       "url": "https://www.cnbc.com/investingclub/2026/10/20/were-booking-big-profits-in-an-ai-stock-and-trimming-a-credit-exposed-bank.html",
       "title": "We're booking big profits in an AI stock and trimming a credit-exposed bank",
       "publishedAt": "2026-10-20T20:00:22+00:00",
       "firstPublishedAt": "2026-10-20T20:00:22+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "f93293993de662884cae391de2426e28634e4204d58c43b765b30c436eed7ede",
-      "translationMethod": "machine-translation",
       "headlineKo": "우리는 인공지능 주식에서 큰 이익을 기록하고 신용에 노출된 은행을 줄이고 있습니다",
       "summaryKo": "우리는 화요일 오후 두 개의 거래를 합니다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     }
   ],
@@ -401,56 +402,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T20:18:50.624276+00:00",
-      "lastSuccessAt": "2026-10-20T20:18:50.624276+00:00",
+      "lastAttemptAt": "2026-10-20T20:40:05.810593+00:00",
+      "lastSuccessAt": "2026-10-20T20:40:05.810593+00:00",
       "fromCache": false
     }
   ],
