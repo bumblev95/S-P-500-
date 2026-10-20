@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-20T06:06:00.080838+00:00",
+  "generatedAt": "2026-10-20T06:06:42.733920+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-19",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-20T06:06:00.080Z",
+    "evaluatedAt": "2026-10-20T06:06:42.733Z",
     "priceGeneratedAt": "2026-10-19T21:20:34+00:00",
     "marketGeneratedAt": "2026-10-20T06:04:21.488175+00:00",
     "basis": "technical-relative-ranking",
@@ -97,23 +97,23 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "^IXIC",
         "name": "나스닥 종합",
         "icon": "chart-no-axes-combined",
         "asOf": "2026-10-19",
-        "close": 26430.88671875,
-        "day": 1.1126897317967899,
+        "close": 26430.890625,
+        "day": 1.1127046753531156,
         "dayBaseDate": "2026-10-16",
-        "week": 1.1126897317967899,
+        "week": 1.1127046753531156,
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "^DJI",
@@ -127,8 +127,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       }
     ],
     "sectors": [
@@ -144,8 +144,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,8 +159,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLY",
@@ -174,8 +174,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,8 +189,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLI",
@@ -204,8 +204,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,8 +219,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,105 +294,105 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-        "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00"
+        "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+        "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00"
       }
     ]
   },
   "news": [
     {
-      "url": "https://www.cnbc.com/2026/10/20/venture-capital-jenny-lee-granite-asia-startups.html",
-      "title": "Top venture capitalist Jenny Lee says Asian startups are speeding toward IPOs",
-      "publishedAt": "2026-10-20T01:52:05+00:00",
-      "firstPublishedAt": "2026-10-20T01:52:05+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/cqy0rxw37x2eo?at_medium=RSS&at_campaign=rss",
+      "title": "Food aid charity under pressure from fuel costs",
+      "publishedAt": "2026-10-20T05:15:16+00:00",
+      "firstPublishedAt": "2026-10-20T05:15:16+00:00",
+      "source": "BBC 경제",
+      "category": "유가·원자재",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "b7c4cd1f0a9c252e417e242c31f6d4ff3275ef102c62f8015c98a8fcc69a8c6b",
+      "sourceHash": "e62471c37595a239daebcb59621aa37bb82d448318e5714aee891c208321bc1f",
       "translationMethod": "machine-translation",
-      "headlineKo": "베스트 벤처캐피탈리스트 제니 리는 아시아 스타트업들이 IPO를 향해 가속화되고 있다고 말했습니다.",
-      "summaryKo": "그라나이트 아시아의 제니 리 (Jenny Lee) 에 따르면 스타트업이 처음 공개된 상품을 제공하는 시간표가 가속화되었습니다.",
+      "headlineKo": "연료 비용의 압박에 처한 식량 지원 자선단체",
+      "summaryKo": "페어셰어 사우스 웨스트 (FareShare South West) 는 연료 비용은 수천 명의 도움이 필요한 사람들에게 엄청난 압력을 가하고 있다고 말했습니다.",
       "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/10/19/cnbcs-the-china-connection-newsletter-navigating-a-tech-heavy-world.html",
-      "title": "CNBC's The China Connection newsletter: Navigating a tech-heavy world",
-      "publishedAt": "2026-10-19T23:00:02+00:00",
-      "firstPublishedAt": "2026-10-19T23:00:02+00:00",
-      "source": "CNBC 주요",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "6c2f9797b581dee1198a4c13fa068eaf9e94daf2f8b670e8bc662c17a13461da",
-      "translationMethod": "machine-translation",
-      "headlineKo": "CNBC의 '중국 연결' 뉴스레터: 기술로 가득한 세계를 탐색",
-      "summaryKo": "경제학자들과 전 중앙은행들이 펀드 정상회담에서 기술과 통화 정책을 논의하는 동안 기업들은 새로운 수익을 얻기 위해 더 빠르게 움직이고 있습니다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/19/saudi-arabia-postpones-fii-investor-conference-to-2027.html",
-      "title": "Saudi Arabia postpones big investor conference to 2027 as Iran-backed Houthis escalate attacks on kingdom",
-      "publishedAt": "2026-10-19T19:37:51+00:00",
-      "firstPublishedAt": "2026-10-19T19:37:51+00:00",
-      "source": "CNBC 주요",
-      "category": "금융·시장",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "7bf2f5f3ee7528a63fae68ae40402746e22c3ab459637b4ffd56ecef015f0878",
-      "translationMethod": "machine-translation",
-      "headlineKo": "사우디아라비아는 이란이 지원하는 후티가 왕국에 대한 공격을 격화함에 따라 대규모 투자자 회의를 2027년까지 연기했습니다.",
-      "summaryKo": "이란이 지원하는 후티 무장군은 이 달 초반의 치명적인 공항 공격 이후 사우디아라비아에 미사일과 드론을 반복적으로 발사했습니다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/investingclub/2026/10/19/crushed-tech-stocks-bounce-new-doctor-survey-keeps-us-positive-on-lilly.html",
-      "title": "Crushed tech stocks bounce — plus, new doctor survey keeps us positive on Lilly",
-      "publishedAt": "2026-10-19T19:13:00+00:00",
-      "firstPublishedAt": "2026-10-19T19:13:00+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "4dd33a1294122ab4896b298ae157f1940a85a7e42b6ecc4b99aee198a948f460",
-      "translationMethod": "machine-translation",
-      "headlineKo": "진한 기술 주가 급부상하고, 새로운 의사 조사로 인해 리리는 긍정적으로 나타났습니다.",
-      "summaryKo": "매주 평일, 투자 클럽은 Homestretch를 발매합니다. 마지막 거래시간에 맞춰 실행 가능한 오후 업데이트입니다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/19/ai-job-losses-women-automation-risk.html",
-      "title": "Women may be at greater risk of AI job losses. Telephone switch operators and PCs show why",
-      "publishedAt": "2026-10-19T18:36:21+00:00",
-      "firstPublishedAt": "2026-10-19T14:20:08+00:00",
-      "source": "CNBC 경제",
+      "url": "https://www.bbc.co.uk/news/articles/cv98ze40jz18o?at_medium=RSS&at_campaign=rss",
+      "title": "How is the US economy really doing under President Trump?",
+      "publishedAt": "2026-10-20T05:00:45+00:00",
+      "firstPublishedAt": "2026-10-20T05:00:45+00:00",
+      "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "428e08e1d4e69cf7ff34bd7b0a5e1e34996b46dd264bab0f29f7b0770e58ac05",
-      "headlineKo": "여성들은 인공지능 일자리 손실의 위험이 더 높을 수 있습니다. 전화 스위치 운영자 및 PC는",
-      "summaryKo": "기술 발전의 역사는 인공지능이 확산됨에 따라 고용에 대한 영향은 남성보다 여성에게 더 많이 영향을 미칠 것이라는 것을 암시합니다.",
-      "translationStatus": "ready",
+      "sourceHash": "79dc040a531b19f1c3b1933b3745e2402d98b42cf9e839444137bd5d7e0b7409",
       "translationMethod": "machine-translation",
+      "headlineKo": "트럼프 대통령 하에서 미국 경제가 어떻게 진행되고 있습니까?",
+      "summaryKo": "중간선거를 앞두고 트럼프는 미국 경제의 성과에 대해 자랑했습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/20/singapore-haze-shanmugam-indonesia-malaysia.html",
+      "title": "'Cannot play hide and seek': Minister's warning over haze sends Singapore agricultural stocks lower",
+      "publishedAt": "2026-10-20T04:48:52+00:00",
+      "firstPublishedAt": "2026-10-20T04:48:52+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "52386fa61896ec96d030472865c7aa4005c061ce3852ca4dda1f19948167bf38",
+      "translationMethod": "machine-translation",
+      "headlineKo": "'숨겨서 놀 수 없다': 비우에 대한 장관의 경고는 싱가포르 농산물 매출을 낮추고 있습니다.",
+      "summaryKo": "싱가포르 상임부 장관 성무암은 싱가포르 거래소가 7개의 기업에 대해 그들의 운영과",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/20/indonesia-msci-inflation-interest-rate-.html",
+      "title": "Bank Indonesia faces mounting pressure to hike after MSCI threat fuels market rout",
+      "publishedAt": "2026-10-20T03:59:35+00:00",
+      "firstPublishedAt": "2026-10-20T03:59:35+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "605d92d923d43cc14519f289e4588a21031f9ccc5cff4b00f1cd7f378375e51a",
+      "translationMethod": "machine-translation",
+      "headlineKo": "인도네시아 은행은 MSCI 위협으로 시장 진출이 증가하고 있기 때문에 상승 압박을 받고 있습니다.",
+      "summaryKo": "인도네시아 은행은 MSCI의 시장을 독자적 지위로 줄일 위협으로 주식의 하락이 발생하고 루피아가 약화되면서 금리를 올리는 압박을 받고 있다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/20/jio-ipo-gic-blackrock-.html",
+      "title": "BlackRock, GIC among investors chasing Indian telecom major Jio's IPO as anchor bids top $26 billion",
+      "publishedAt": "2026-10-20T02:44:35+00:00",
+      "firstPublishedAt": "2026-10-20T02:44:35+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "2e29b454d7b42b60357aaf5c83f03aa106d97afec7f39c31d9b7bbf7278959d3",
+      "translationMethod": "machine-translation",
+      "headlineKo": "블랙록, GIC는 인도 통신 메이저 지오의 IPO를 추격하는 투자자 중 가장 높은 매출액 26억 달러",
+      "summaryKo": "지오 플랫폼은 IPO를 통해 32억 달러까지 모을 계획입니다.",
+      "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     }
   ],
@@ -401,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-20T02:09:21.858248+00:00",
-      "lastSuccessAt": "2026-10-20T02:09:21.858248+00:00",
+      "lastAttemptAt": "2026-10-20T06:06:42.733920+00:00",
+      "lastSuccessAt": "2026-10-20T06:06:42.733920+00:00",
       "fromCache": false
     }
   ],
