@@ -94,6 +94,30 @@ def metric(rows: list[dict], method: str, probability: bool = False) -> dict:
     return result
 
 
+def direction_metric(rows: list[dict], field: str) -> dict:
+    actual = [row["actualDirection"] for row in rows]
+    predicted = [row["methods"]["v5HorizonModel"][field] for row in rows]
+
+    def recall(label: int):
+        count = sum(value == label for value in actual)
+        return sum(a == label and p == label for a, p in zip(actual, predicted)) / count if count else None
+
+    recalls = [recall(label) for label in (-1, 0, 1)]
+    down_warnings = sum(value == -1 for value in predicted)
+    return {
+        "n": len(rows), "dates": 1,
+        "directionAccuracy": sum(a == p for a, p in zip(actual, predicted)) / len(rows),
+        "balancedDirectionAccuracy": sum(value for value in recalls if value is not None) / sum(value is not None for value in recalls),
+        "upRecall": recall(1), "downRecall": recall(-1), "flatRecall": recall(0),
+        "downPrecision": (sum(a == -1 and p == -1 for a, p in zip(actual, predicted)) / down_warnings
+                          if down_warnings else None),
+        "falseDownWarningRate": sum(a != -1 and p == -1 for a, p in zip(actual, predicted)) / len(rows),
+        "directionCounts": {str(k): v for k, v in sorted(Counter(predicted).items())},
+        "actualDirectionCounts": {str(k): v for k, v in sorted(Counter(actual).items())},
+        "numericMetricsApplicable": False,
+    }
+
+
 def method_row(anchor: float, point: float, target: float, bounds=None, scores=None) -> dict:
     actual_return = target / anchor - 1
     predicted_return = point / anchor - 1
@@ -111,7 +135,8 @@ def method_row(anchor: float, point: float, target: float, bounds=None, scores=N
         label = direction(actual_return) + 1
         result["brier"] = sum((prob - (index == label)) ** 2 for index, prob in enumerate(probs)) / 3
         result["logLoss"] = -math.log(max(probs[label], 1e-15))
-        result["classifierArgmax"] = int(scores["chosen"])
+        result["classifierRawArgmax"] = (-1, 0, 1)[max(range(3), key=lambda index: probs[index])]
+        result["classifierStoredChosen"] = int(scores["chosen"])
     return result
 
 
@@ -190,6 +215,8 @@ def build(output: Path = FOLDER) -> dict:
 
     numeric = ["noChange", "simpleTrend", "v2Balanced", "v3Balanced", "v4Balanced", "v5Balanced", "v5HorizonModel"]
     evaluation = {name: metric(rows, name, name == "v5HorizonModel") for name in numeric}
+    evaluation["v5ClassifierRawArgmax"] = direction_metric(rows, "classifierRawArgmax")
+    evaluation["v5ClassifierStoredChosen"] = direction_metric(rows, "classifierStoredChosen")
     actual_counts = evaluation["noChange"]["actualDirectionCounts"]
     always_up = {
         "n": len(rows), "dates": 1, "directionAccuracy": int(actual_counts.get("1", 0)) / len(rows),
@@ -230,8 +257,8 @@ def build(output: Path = FOLDER) -> dict:
                 "passed": False
             },
             "B": {
-                "downsideLift": evaluation["v5HorizonModel"]["downRecall"] > evaluation["v2Balanced"]["downRecall"],
-                "balancedDirectionLift": evaluation["v5HorizonModel"]["balancedDirectionAccuracy"] > evaluation["v2Balanced"]["balancedDirectionAccuracy"],
+                "downsideLift": evaluation["v5ClassifierRawArgmax"]["downRecall"] > evaluation["v2Balanced"]["downRecall"],
+                "balancedDirectionLift": evaluation["v5ClassifierRawArgmax"]["balancedDirectionAccuracy"] > evaluation["v2Balanced"]["balancedDirectionAccuracy"],
                 "passed": False
             }
         },

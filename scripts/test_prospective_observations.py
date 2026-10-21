@@ -35,6 +35,9 @@ class ProspectiveObservationTests(unittest.TestCase):
         self.assertEqual(result["commonCohort"]["n"], 15)
         self.assertEqual(result["commonCohort"]["abstained"], 0)
         self.assertEqual(result["evaluation"]["v5HorizonModel"]["n"], 15)
+        self.assertEqual(result["evaluation"]["v5HorizonModel"]["directionCounts"], {"0": 15})
+        self.assertEqual(result["evaluation"]["v5ClassifierRawArgmax"]["directionCounts"], {"1": 15})
+        self.assertEqual(result["evaluation"]["v5ClassifierStoredChosen"]["directionCounts"], {"0": 15})
         self.assertGreater(result["fullCohort"]["issued"], result["commonCohort"]["n"])
 
 
