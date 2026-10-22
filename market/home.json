@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-22T20:40:13.872708+00:00",
+  "generatedAt": "2026-10-22T20:40:53.167726+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-22",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-22T20:40:13.872Z",
+    "evaluatedAt": "2026-10-22T20:40:53.167Z",
     "priceGeneratedAt": "2026-10-22T20:23:21+00:00",
     "marketGeneratedAt": "2026-10-22T20:10:08.390891+00:00",
     "basis": "technical-relative-ranking",
@@ -97,8 +97,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -112,8 +112,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "^DJI",
@@ -127,8 +127,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       }
     ],
     "sectors": [
@@ -137,15 +137,15 @@
         "name": "기술",
         "icon": "cpu",
         "asOf": "2026-10-22",
-        "close": 182.3699951171875,
-        "day": -3.272514261513515,
+        "close": 182.33999633789062,
+        "day": -3.288425357495861,
         "dayBaseDate": "2026-10-21",
-        "week": -0.5995563831671769,
+        "week": -0.6159071648193737,
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLC",
@@ -159,8 +159,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLY",
@@ -174,8 +174,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLF",
@@ -189,23 +189,23 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLI",
         "name": "산업재",
         "icon": "factory",
         "asOf": "2026-10-22",
-        "close": 166.7100067138672,
-        "day": -0.9506213938180075,
+        "close": 166.72999572753906,
+        "day": -0.9387450858376001,
         "dayBaseDate": "2026-10-21",
-        "week": -0.6258868784869698,
+        "week": -0.6139716338956491,
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLV",
@@ -219,8 +219,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLP",
@@ -234,8 +234,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLRE",
@@ -249,8 +249,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLU",
@@ -264,8 +264,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLB",
@@ -279,8 +279,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       },
       {
         "symbol": "XLE",
@@ -294,8 +294,8 @@
         "weekBaseDate": "2026-10-16",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
-        "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00"
+        "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
+        "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00"
       }
     ]
   },
@@ -303,20 +303,20 @@
     {
       "url": "https://www.cnbc.com/2026/10/22/openai-funding-round-uae-investors.html",
       "title": "OpenAI nears up to $30 billion funding round at $1.25 trillion valuation led by UAE investors",
-      "publishedAt": "2026-10-22T20:16:56+00:00",
+      "publishedAt": "2026-10-22T20:36:59+00:00",
       "firstPublishedAt": "2026-10-22T20:16:56+00:00",
       "source": "CNBC 주요",
       "category": "금융·시장",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "89a55f094cf37b6443e3f3c3fc67635695a7043aff442ae5abb9f7df714d3e1d",
-      "translationMethod": "machine-translation",
       "headlineKo": "오픈AI는 아랍에미리트 투자자들이 주도하는 1.25조 달러 평가로 30억 달러 규모의 자금 라운드에 가까워지고 있습니다.",
       "summaryKo": "오픈AI는 2027년 IPO에 대한 교두보 역할을 하는 새로운 투자 라운드를 마무리하고 있다고 관련 소식통이 CNBC에 전했다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
@@ -326,16 +326,16 @@
       "firstPublishedAt": "2026-10-21T22:50:35+00:00",
       "source": "CNBC 주요",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "ce97a67cd6fa2c2d8069af8bc491516e5958d2fb2730647706425522486a851f",
-      "translationMethod": "machine-translation",
       "headlineKo": "코어웨이브의 시장 신뢰는 채권 수익률이 급증하고 주가가 하락함에 따라 침체합니다",
       "summaryKo": "코어웨이브 주식은 10월에 36% 하락했고, 신용 부채 교환의 스프레드는 확대되고 있다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
@@ -345,16 +345,16 @@
       "firstPublishedAt": "2026-10-22T20:11:55+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "ffe13321a3b27d1e6a7bc8303709792821d8a39097996b57d3947eaf919f1506",
-      "translationMethod": "machine-translation",
       "headlineKo": "포커의 교훈은 메타에서 수익이 팔린 후",
       "summaryKo": "메타의 내부 인공지능 연구소는 월스트리트에서 충분한 신용을 얻지 못하고 있습니다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
@@ -364,7 +364,7 @@
       "firstPublishedAt": "2026-10-22T19:26:33+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -383,7 +383,7 @@
       "firstPublishedAt": "2026-10-22T15:36:13+00:00",
       "source": "CNBC 주요",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -401,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-22T20:25:03.495045+00:00",
-      "lastSuccessAt": "2026-10-22T20:25:03.495045+00:00",
+      "lastAttemptAt": "2026-10-22T20:40:53.167726+00:00",
+      "lastSuccessAt": "2026-10-22T20:40:53.167726+00:00",
       "fromCache": false
     }
   ],
