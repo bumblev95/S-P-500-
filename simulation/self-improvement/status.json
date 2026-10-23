@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "display-only",
   "mode": "shadow-only",
-  "generatedAt": 1792708750676,
+  "generatedAt": 1792717206046,
   "staleAfterMs": 1800000,
   "automaticPromotion": false,
   "defaultStrategyChanged": false,
@@ -19,7 +19,7 @@
     "thresholdR": 0.1
   },
   "sources": {
-    "decisionRecords": 201,
+    "decisionRecords": 202,
     "closedTrades": {
       "control-three": 12,
       "control-one": 6,
@@ -28,7 +28,7 @@
   },
   "forecastResearch": {
     "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
-    "generatedAt": "2026-10-22T20:46:15+00:00",
+    "generatedAt": "2026-10-22T23:25:34+00:00",
     "horizons": {
       "126": {
         "status": "research",
@@ -73,8 +73,8 @@
       "incumbentThresholdR": 0.1,
       "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
       "activity": "collecting",
-      "observations": 109,
-      "latestObservationAt": 1792708750235,
+      "observations": 110,
+      "latestObservationAt": 1792717205631,
       "initialTrainingTrades": 3,
       "assessment": {
         "schemaVersion": 1,
@@ -95,7 +95,7 @@
           "stressCostMultiplier": 2,
           "maxDrawdown": 0.1
         },
-        "asOf": 1792708750235,
+        "asOf": 1792717205631,
         "status": "insufficient",
         "promotionCandidate": false,
         "automaticPromotion": false,
@@ -123,10 +123,10 @@
           "identicalCurveTimes": true,
           "chronology": true,
           "noBackfill": true,
-          "observations": 109,
+          "observations": 110,
           "firstAt": 1790996520188,
-          "lastAt": 1792708750235,
-          "forwardDays": 19.58750271990741,
+          "lastAt": 1792717205631,
+          "forwardDays": 19.68536609953704,
           "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
         },
         "purgedWalkForward": {
@@ -151,9 +151,9 @@
           "maxEntryExposure": 0.33010219938979274,
           "maxConcurrentPositions": 1,
           "maxLeverage": 3,
-          "dailyVolatility": 0.002121014503491458,
+          "dailyVolatility": 0.0020724904428960733,
           "worstDailyLoss": 0.009731881977371959,
-          "tailDailyLoss": 0.009731881977371959,
+          "tailDailyLoss": 0.0048659409886859795,
           "funding": -0.04036246591478425,
           "estimatedFundingHours": 0,
           "fees": 3.0133754075825583,
@@ -177,9 +177,9 @@
           "maxEntryExposure": 0.33010219938979274,
           "maxConcurrentPositions": 1,
           "maxLeverage": 3,
-          "dailyVolatility": 0.002121014503491458,
+          "dailyVolatility": 0.0020724904428960733,
           "worstDailyLoss": 0.009731881977371959,
-          "tailDailyLoss": 0.009731881977371959,
+          "tailDailyLoss": 0.0048659409886859795,
           "funding": -0.04036246591478425,
           "estimatedFundingHours": 0,
           "fees": 3.0133754075825583,
@@ -188,10 +188,10 @@
           "pendingOrders": 0
         }
       },
-      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792708750235-183bc80f08b4.json",
-      "assessmentHash": "183bc80f08b4289206b672429364ca5aeda3ec50a43c68e4c98bc6fb2a8b1f5e",
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1792717205631-dcbb0ce7d00d.json",
+      "assessmentHash": "dcbb0ce7d00d337bbff847f45b5d4db5d98f9c3324f9b6822fac9af296a6a681",
       "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/candidate.json",
-      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792708750235-de0fc4fc37f2.json"
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1792717205631-9228256d739c.json"
     },
     {
       "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
