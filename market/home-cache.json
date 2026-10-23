@@ -91,7 +91,7 @@
           "close": 7663.43017578125
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "^IXIC": {
       "rows": [
@@ -184,7 +184,7 @@
           "close": 26008.859375
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "^DJI": {
       "rows": [
@@ -277,7 +277,7 @@
           "close": 52867.98046875
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLK": {
       "rows": [
@@ -370,7 +370,7 @@
           "close": 182.33999633789062
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLC": {
       "rows": [
@@ -463,7 +463,7 @@
           "close": 107.41999816894531
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLY": {
       "rows": [
@@ -556,7 +556,7 @@
           "close": 115.01000213623047
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLF": {
       "rows": [
@@ -649,7 +649,7 @@
           "close": 56.650001525878906
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLI": {
       "rows": [
@@ -742,7 +742,7 @@
           "close": 166.72999572753906
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLV": {
       "rows": [
@@ -835,7 +835,7 @@
           "close": 181.3000030517578
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLP": {
       "rows": [
@@ -928,7 +928,7 @@
           "close": 89.98999786376953
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLRE": {
       "rows": [
@@ -1021,7 +1021,7 @@
           "close": 42.52000045776367
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLU": {
       "rows": [
@@ -1114,7 +1114,7 @@
           "close": 42.869998931884766
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLB": {
       "rows": [
@@ -1207,7 +1207,7 @@
           "close": 51.689998626708984
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     },
     "XLE": {
       "rows": [
@@ -1300,10 +1300,190 @@
           "close": 67.56999969482422
         }
       ],
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00"
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00"
     }
   },
   "news": [
+    {
+      "url": "https://www.cnbc.com/2026/10/23/bonds-yields-us-treasurys.html",
+      "title": "10-year Treasury yield drops back to 5% this week as investors seek cover from AI worries",
+      "publishedAt": "2026-10-23T15:04:09+00:00",
+      "firstPublishedAt": "2026-10-23T15:04:09+00:00",
+      "source": "CNBC 주요",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "9e476079f7822a46ea2f89ec943db11eb06ee50ef5426b240e00b790cba39ed5",
+      "sourceExcerpt": "The 10-year Treasury yield stayed below 5% Friday after AI-driven tech selling sent investors into government bonds.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "10년 재무 수익률이 이번 주 5%로 줄어들면서 투자자들은 인공지능에 대한 걱정으로부터 보호를 구하고 있습니다.",
+      "summaryKo": "10년 기획재정 수익률은 AI 기반의 기술 판매가 투자자들을 정부 채권으로 파견한 후 금요일에 5% 이하로 유지되었습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/investingclub/2026/10/23/ai-agents-could-disrupt-bank-deposits-why-wall-street-may-be-overreacting.html",
+      "title": "AI agents could disrupt bank deposits. Why Wall Street may be overreacting",
+      "publishedAt": "2026-10-23T15:00:49+00:00",
+      "firstPublishedAt": "2026-10-23T15:00:49+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "6e6ec1847d53cbea10a7b633cc8a9513073fe93feb5c47a848ca7bcc19f7a18a",
+      "sourceExcerpt": "Analysts say the fears that AI agents could disrupt the banking industry are overblown, for now.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "인공지능 에이전트는 은행 예산을 방해할 수 있습니다. 왜 월스트리트가 지나치게 반응하는 걸까요?",
+      "summaryKo": "분석가들은 인공지능 요원이 은행 산업을 방해할 수 있다는 우려가 아직 과장된다고 합니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/23/airfare-airline-capacity.html",
+      "title": "Fewer people are flying as airfare soars. Here's why airlines aren't worried",
+      "publishedAt": "2026-10-23T14:55:36+00:00",
+      "firstPublishedAt": "2026-10-23T14:55:36+00:00",
+      "source": "CNBC 주요",
+      "category": "유가·원자재",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "d67acbaf2ca7b1a29628f766614f1305dad54f6e5c052cb6abd4565ade7ec038",
+      "sourceExcerpt": "Airlines are reporting fewer people flew in the third quarter as airfare surged on fuel costs, but executives say travelers are mostly swallowing higher fares.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "항공편이 급증함에 따라 더 적은 사람들이 비행을 하고 있습니다.",
+      "summaryKo": "아시아나항공은 3분기 항공권 가격이 상승함에 따라 더 적은 사람들이 날아간다고 보고하고 있지만, 관리들은 여행자들이 대부분 더 높은 요금을 삼키고 있다고 합니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/23/darden-brinker-qsr-stocks-restaurant-earnings.html",
+      "title": "Restaurant earnings will test whether owning more brands pays off",
+      "publishedAt": "2026-10-23T13:55:46+00:00",
+      "firstPublishedAt": "2026-10-23T13:55:46+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "67879b1a384803251c57e57b76f1c5a082aac9611a3ab2c0484dba57c8a03b54",
+      "sourceExcerpt": "Shares of companies with multiple restaurant brands like Brinker and Darden are outperforming single-chain stocks like McDonald's and Chipotle.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "레스토랑의 수익은 더 많은 브랜드를 소유하는 것이 보상하는지 여부를 테스트합니다",
+      "summaryKo": "브링커와 다든 같은 여러 레스토랑 브랜드의 주식은 맥도날드나 치폴틀과 같은 싱글 체인 주식을 뛰어넘습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/22/openai-funding-round-uae-investors.html",
+      "title": "OpenAI nears up to $30 billion funding round at $1.25 trillion valuation led by UAE investors",
+      "publishedAt": "2026-10-23T12:39:27+00:00",
+      "firstPublishedAt": "2026-10-22T20:16:56+00:00",
+      "source": "CNBC 주요",
+      "category": "금융·시장",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "89a55f094cf37b6443e3f3c3fc67635695a7043aff442ae5abb9f7df714d3e1d",
+      "sourceExcerpt": "OpenAI is close to finalizing a new funding round that is meant to be a bridge to its 2027 IPO, sources familiar with the matter tell CNBC.",
+      "headlineKo": "오픈AI는 아랍에미리트 투자자들이 주도하는 1.25조 달러 평가로 30억 달러 규모의 자금 라운드에 가까워지고 있습니다.",
+      "summaryKo": "오픈AI는 2027년 IPO에 대한 교두보 역할을 하는 새로운 투자 라운드를 마무리하고 있다고 관련 소식통이 CNBC에 전했다.",
+      "translationStatus": "ready",
+      "translationMethod": "machine-translation",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/23/high-interest-rates-raise-the-bar-for-real-estate-deals.html",
+      "title": "Higher interest rates have made family offices pickier about investing in real estate",
+      "publishedAt": "2026-10-23T12:15:03+00:00",
+      "firstPublishedAt": "2026-10-23T12:15:03+00:00",
+      "source": "CNBC 주요",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "a1e629cdfba0eb4baa99b8b3b41f8e3510447fa8e1521d0c58ebb10cba72deec",
+      "sourceExcerpt": "Higher interest rates have made family offices more selective about investing in real estate.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "더 높은 금리는 가족 사무실들이 부동산에 투자하는 것에 대해 더 선택적으로",
+      "summaryKo": "더 높은 금리는 가족 사무실들이 부동산에 투자하는 것에 대해 좀 더 선택적으로 결정하게 했습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/cmz6581p1ee8o?at_medium=RSS&at_campaign=rss",
+      "title": "Island inflation rate rises to 3%, figures show",
+      "publishedAt": "2026-10-23T11:58:19+00:00",
+      "firstPublishedAt": "2026-10-23T11:58:19+00:00",
+      "source": "BBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "important",
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도",
+      "sourceHash": "b02bccff2eda7589ee3a866f6bb658d2d08f16f27a3b9bd77e25a0ab68b7e48a",
+      "sourceExcerpt": "The rising cost of food and alcohol drives an increase in the inflation rate, figures show.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "섬의 인플레이션률은 3%로 증가하고,",
+      "summaryKo": "식량 과 알코올 가격 상승 은 인플레이션 비율 의 증가 를 유도 한다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/c6n8dex0zeg9o?at_medium=RSS&at_campaign=rss",
+      "title": "Earnings limit of up to £140K for first-time buyers loan scheme",
+      "publishedAt": "2026-10-23T11:48:04+00:00",
+      "firstPublishedAt": "2026-10-23T11:48:04+00:00",
+      "source": "BBC 경제",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "abf7231adca6eabf82fb210031c70ca6acadccacb0d90acf7b2294ad8e037da7",
+      "sourceExcerpt": "The Your First Home scheme will offer government-backed loans for those buying new-builds in England.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "첫 번째 구매자 대출제도에 대해 최대 14만 파운드의 수익금 제한",
+      "summaryKo": "\"Your First Home\"는 영국에서 새로운 건물을 구매하는 사람들에게 정부 지원 대출을 제공할 것입니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/10/23/spacex-tesla-merger-chatter-takes-center-stage-after-earnings.html",
+      "title": "With earnings in rearview mirror, SpaceX-Tesla merger chatter takes center stage",
+      "publishedAt": "2026-10-23T11:00:01+00:00",
+      "firstPublishedAt": "2026-10-23T11:00:01+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "b4887248097003ad00ef6abb664f1289f5c02480ca3be50a695971d16bdf97d7",
+      "sourceExcerpt": "A Tesla-SpaceX merger may be in the works, but the companies face a long road of negotiations and regulatory reviews.",
+      "translationMethod": "machine-translation",
+      "headlineKo": "엑스-테슬라 합병 논의가 주위를 차지하고 있습니다",
+      "summaryKo": "테슬라-스페이스엑스 합병은 진행 중일 수도 있지만 회사들은 협상과 규제 검토의 긴 길을 직면하고 있습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
     {
       "url": "https://www.cnbc.com/2026/10/23/corruption-midterm-election-cnbc-poll-trump.html",
       "title": "Corruption is voters' top issue ahead of midterm election, CNBC survey shows",
@@ -1311,35 +1491,15 @@
       "firstPublishedAt": "2026-10-23T10:00:01+00:00",
       "source": "CNBC 주요",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "57382f59ec53a22f5a53647f3d4b4ee1911505a2c33ea9c4db99e5f5b5f8f4db",
       "sourceExcerpt": "Democrats have worked to contrast economic hardship with President Trump's surging net worth and his family's lucrative business dealings.",
-      "translationMethod": "machine-translation",
       "headlineKo": "부패는 중간선거를 앞두고 유권자들의 주요 문제다. CNBC 조사에 따르면",
       "summaryKo": "민주당은 트럼프 대통령의 급증하는 자산과 그의 가족의 수익성 높은 비즈니스 거래와 경제적 어려움을 대조하기 위해 노력했습니다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/23/oil-price-brent-wti-iran-war-saudi-arabia.html",
-      "title": "U.S. oil holds above $100, Brent at five-month high as Iran says it’s prepared for warfare",
-      "publishedAt": "2026-10-23T09:02:44+00:00",
-      "firstPublishedAt": "2026-10-23T09:02:44+00:00",
-      "source": "CNBC 주요",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "30496b7c863e3cdbfaf1759d6ce8a4a6637b58d2f3788de406a78f2360f2bd1c",
-      "sourceExcerpt": "President Donald Trump accused Iran on Thursday of trying to manipulate the oil market.",
-      "headlineKo": "미국 석유가 100달러를 넘어서고, 브렌트는 5개월 만에 최고치를 기록했고 이란은 전쟁을 준비했다고 말했습니다.",
-      "summaryKo": "도널드 트럼프 대통령은 목요일에 이란이 석유 시장을 조작하려 한다고 비난했습니다.",
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
@@ -1351,17 +1511,17 @@
       "firstPublishedAt": "2026-10-23T08:39:42+00:00",
       "source": "BBC 국제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "d791cbd63a00abebe1e2413cdecc0cf77f24dc88063214d45016ff32f41713b2",
       "sourceExcerpt": "US Secretary of State Marco Rubio pushed a business and energy agenda over diplomacy on his second trip to India this year.",
-      "translationMethod": "machine-translation",
       "headlineKo": "루비오는 미국 석유가 상승함에 따라 작은 인도 마을로 돌아갑니다.",
       "summaryKo": "마르코 루비오 미국 국무장관은 올해 두 번째 인도 방문에서 외교에 대한 비즈니스 및 에너지 의제를 추진했습니다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
@@ -1371,7 +1531,7 @@
       "firstPublishedAt": "2026-10-18T10:22:17+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1391,18 +1551,11 @@
       "firstPublishedAt": "2026-10-23T00:55:11+00:00",
       "source": "CNBC 주요",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
-      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도",
-      "sourceHash": "aee44196cc6ac33cd2937a1c57e29875b804fe4156ba728329d299d3cd246ebf",
-      "sourceExcerpt": "Core inflation, which strips out prices of fresh food, was in line with the 2.1% forecast by economists polled by Reuters.",
-      "headlineKo": "일본은 9월 기저 인플레이션이 2.1%로 올해 최고치를 기록했다",
-      "summaryKo": "신선한 식품의 가격을 제거하는 근본 인플레이션은 로이터에 의해 조사된 경제학자들의 2.1% 예측과 일치했습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도"
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/cmy56q2n1veqo?at_medium=RSS&at_campaign=rss",
@@ -1411,18 +1564,11 @@
       "firstPublishedAt": "2026-10-22T23:04:38+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "332171626cdaa31c4260191de78ea09defe86a17363297cf83cede614d2a98dc",
-      "sourceExcerpt": "The assurance from the National Energy System Operator comes amid concern from its engineers about their ability to ensure adequate supply.",
-      "headlineKo": "이 겨울에 빛이 계속 켜질 예정이라고 네트워크 운영자는 우려를 표했다.",
-      "summaryKo": "국가 에너지 시스템 운영자로부터의 확신은 그 엔지니어들의 충분한 공급을 보장할 수 있는 능력에 대한 우려 가운데 나온다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
+      "importanceReason": ""
     },
     {
       "url": "https://www.cnbc.com/2026/10/23/sk-hynix-solidigm-ipo-.html",
@@ -1431,18 +1577,11 @@
       "firstPublishedAt": "2026-10-23T06:45:04+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "03bbe7f1e8317c00b4fe8684ddfdd8444b068e5fd89542fd19fee2a428f52601",
-      "sourceExcerpt": "SK Hynix shares closed 4% higher after an initial drop in early trading as the chipmaker halted review of Solidigm IPO plans in the U.S.",
-      "headlineKo": "SK 하이닉스 주식은 초반 손실 이후 4% 이상 상승했습니다.",
-      "summaryKo": "SK 하이닉스 주식은 초기 거래의 첫 번째 하락 이후 미국 솔리디그름 IPO 계획 검토를 중단하면서 4% 상승했다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
+      "importanceReason": ""
     },
     {
       "url": "https://www.cnbc.com/2026/10/22/spacex-records-561-million-investment-gain-from-stake-in-boring-co.html",
@@ -1451,18 +1590,11 @@
       "firstPublishedAt": "2026-10-23T00:46:09+00:00",
       "source": "CNBC 주요",
       "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "7b4d9156ac256c3cdaee63c639fffda5945dac71881bcb8ae5b52dc29869bb53",
-      "sourceExcerpt": "helped boost its net income in the third quarter.",
-      "headlineKo": "스페이스X는 엘론 머스크의 보잉 회사에서 5억6100만 달러의 투자 수익을 기록했습니다.",
-      "summaryKo": "제3분기에 당기순이익을 끌어올리는 데 기여했습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
+      "importanceReason": ""
     },
     {
       "url": "https://www.cnbc.com/2026/10/22/meta-mark-zuckerberg-california-billionaire-tax.html",
@@ -1471,18 +1603,11 @@
       "firstPublishedAt": "2026-10-22T20:37:32+00:00",
       "source": "CNBC 주요",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "d1ee97c6a7afe093f9c16ffa83394f80264f889928dc9f15e6cee36c0714c1c7",
-      "sourceExcerpt": "With less than two weeks before the midterm elections, Meta made clear that Mark Zuckerberg is staying in California if the wealth tax passes.",
-      "headlineKo": "메타의 츠커버그를 캘리포니아에서 유지하는 거래는 선거 전에 부세 토론에 연료가 추가됩니다",
-      "summaryKo": "중간선거까지 2주도 채 되지 않아 메타는 마크 저커버그가 캘리포니아에 머무르면 부세가 통과될 것이라고 분명히 했습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
+      "importanceReason": ""
     },
     {
       "url": "https://www.cnbc.com/2026/10/22/trump-musk-starlink-ukraine.html",
@@ -1491,106 +1616,20 @@
       "firstPublishedAt": "2026-10-22T19:05:32+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "5bf41dc9d8be24be2334fc76f6ba1124c6255f3b6762194b6e2aa97d691f5a24",
-      "sourceExcerpt": "Elon Musk, a critic of Ukrainian President Volodymyr Zelenskyy, had ordered the slowdown of SpaceX's Starlink, The Wall Street Journal previously reported.",
-      "headlineKo": "트럼프는 머스크에게 스타링크 둔화를 해제하라고 요청했다",
-      "summaryKo": "우크라이나 대통령 Volodymyr Zelenskyy의 비평가인 엘론 머스크는 이전에 월스트리트 저널에 따르면 스페이스X의 스타링크가 느려질 것을 지시했다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/22/openai-funding-round-uae-investors.html",
-      "title": "OpenAI nears up to $30 billion funding round at $1.25 trillion valuation led by UAE investors",
-      "publishedAt": "2026-10-22T20:41:37+00:00",
-      "firstPublishedAt": "2026-10-22T20:16:56+00:00",
-      "source": "CNBC 주요",
-      "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "89a55f094cf37b6443e3f3c3fc67635695a7043aff442ae5abb9f7df714d3e1d",
-      "sourceExcerpt": "OpenAI is close to finalizing a new funding round that is meant to be a bridge to its 2027 IPO, sources familiar with the matter tell CNBC.",
-      "headlineKo": "오픈AI는 아랍에미리트 투자자들이 주도하는 1.25조 달러 평가로 30억 달러 규모의 자금 라운드에 가까워지고 있습니다.",
-      "summaryKo": "오픈AI는 2027년 IPO에 대한 교두보 역할을 하는 새로운 투자 라운드를 마무리하고 있다고 관련 소식통이 CNBC에 전했다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/investingclub/2026/10/22/meta-stock-why-were-staying-bullish-after-the-post-earnings-sell-off.html",
-      "title": "A lesson from poker tells us not to fold on Meta after its earnings sell-off. Here’s why",
-      "publishedAt": "2026-10-22T20:11:55+00:00",
-      "firstPublishedAt": "2026-10-22T20:11:55+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "ffe13321a3b27d1e6a7bc8303709792821d8a39097996b57d3947eaf919f1506",
-      "sourceExcerpt": "Meta's in-house AI lab is not getting enough credit on Wall Street.",
-      "headlineKo": "포커의 교훈은 메타에서 수익이 팔린 후",
-      "summaryKo": "메타의 내부 인공지능 연구소는 월스트리트에서 충분한 신용을 얻지 못하고 있습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/22/ai-debt-and-french-bonds-stress-test.html",
-      "title": "AI debt and French bonds face a stress test — why it may not be over",
-      "publishedAt": "2026-10-22T18:13:37+00:00",
-      "firstPublishedAt": "2026-10-22T18:13:37+00:00",
-      "source": "CNBC 주요",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": ""
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/22/bill-ackman-talks-meta-and-markets-with-cnbc.html",
-      "title": "Bill Ackman says 2027 will be an amazing year for stocks as wars, inflation ease",
-      "publishedAt": "2026-10-22T17:53:08+00:00",
-      "firstPublishedAt": "2026-10-22T15:48:37+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "important",
-      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도"
     },
     {
       "url": "https://www.cnbc.com/2026/10/22/jobless-claims-record-low-weekly.html",
       "title": "Jobless claims near the lowest since the 1960s as low-fire trend continues",
       "publishedAt": "2026-10-22T16:40:09+00:00",
       "firstPublishedAt": "2026-10-22T14:28:10+00:00",
-      "source": "CNBC 주요",
+      "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/22/under-the-radar-stocks-to-play-the-next-leg-of-the-energy-trade-with-oil-prices-jumping-again.html",
-      "title": "Under-the-radar stocks to play the next leg of the energy trade with oil prices jumping again",
-      "publishedAt": "2026-10-22T15:16:05+00:00",
-      "firstPublishedAt": "2026-10-22T15:16:05+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1603,7 +1642,7 @@
       "firstPublishedAt": "2026-10-22T13:19:00+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1616,7 +1655,7 @@
       "firstPublishedAt": "2026-10-22T13:18:36+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1629,20 +1668,7 @@
       "firstPublishedAt": "2026-10-22T09:55:16+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/cmgel220j7nvo?at_medium=RSS&at_campaign=rss",
-      "title": "Woman 'scared to turn heating on' due to oil cost",
-      "publishedAt": "2026-10-22T05:29:22+00:00",
-      "firstPublishedAt": "2026-10-22T05:29:22+00:00",
-      "source": "BBC 경제",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1655,7 +1681,7 @@
       "firstPublishedAt": "2026-10-21T23:27:05+00:00",
       "source": "BBC 경제",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1668,7 +1694,7 @@
       "firstPublishedAt": "2026-10-21T04:13:14+00:00",
       "source": "BBC 경제",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1681,7 +1707,7 @@
       "firstPublishedAt": "2026-10-21T13:30:57+00:00",
       "source": "CNBC 금융",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1694,7 +1720,7 @@
       "firstPublishedAt": "2026-10-20T19:28:43+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1707,7 +1733,7 @@
       "firstPublishedAt": "2026-10-21T10:03:41+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1720,7 +1746,7 @@
       "firstPublishedAt": "2026-10-21T08:07:09+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1733,7 +1759,7 @@
       "firstPublishedAt": "2026-10-20T23:24:47+00:00",
       "source": "BBC 경제",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1746,7 +1772,7 @@
       "firstPublishedAt": "2026-10-21T08:35:47+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1759,7 +1785,7 @@
       "firstPublishedAt": "2026-10-21T07:50:10+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -1772,7 +1798,7 @@
       "firstPublishedAt": "2026-10-20T19:30:05+00:00",
       "source": "BBC 경제",
       "category": "국제경제",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1785,7 +1811,7 @@
       "firstPublishedAt": "2026-10-20T18:03:19+00:00",
       "source": "BBC 경제",
       "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1798,7 +1824,7 @@
       "firstPublishedAt": "2026-10-19T14:20:08+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1811,7 +1837,7 @@
       "firstPublishedAt": "2026-10-19T15:25:27+00:00",
       "source": "CNBC 금융",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1824,7 +1850,7 @@
       "firstPublishedAt": "2026-10-19T12:34:01+00:00",
       "source": "CNBC 금융",
       "category": "전쟁·국제",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1837,7 +1863,7 @@
       "firstPublishedAt": "2026-10-19T04:46:26+00:00",
       "source": "CNBC 경제",
       "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1850,7 +1876,7 @@
       "firstPublishedAt": "2026-10-17T15:00:01+00:00",
       "source": "CNBC 금융",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1863,7 +1889,7 @@
       "firstPublishedAt": "2026-10-16T18:00:15+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1876,7 +1902,7 @@
       "firstPublishedAt": "2026-10-15T09:30:06+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1889,7 +1915,7 @@
       "firstPublishedAt": "2026-10-16T16:46:18+00:00",
       "source": "CNBC 금융",
       "category": "국제경제",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1902,7 +1928,7 @@
       "firstPublishedAt": "2026-10-16T16:27:31+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1915,7 +1941,7 @@
       "firstPublishedAt": "2026-10-16T15:00:00+00:00",
       "source": "Fed 발표",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1928,7 +1954,7 @@
       "firstPublishedAt": "2026-10-15T23:00:01+00:00",
       "source": "CNBC 금융",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1941,7 +1967,7 @@
       "firstPublishedAt": "2026-10-15T16:15:44+00:00",
       "source": "CNBC 경제",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1954,7 +1980,7 @@
       "firstPublishedAt": "2026-10-15T15:37:59+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1967,7 +1993,7 @@
       "firstPublishedAt": "2026-10-15T13:42:32+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1980,7 +2006,7 @@
       "firstPublishedAt": "2026-10-13T09:49:15+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -1993,7 +2019,7 @@
       "firstPublishedAt": "2026-10-15T09:02:31+00:00",
       "source": "CNBC 금융",
       "category": "국제경제",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2006,7 +2032,7 @@
       "firstPublishedAt": "2026-10-15T07:15:28+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2026,7 +2052,7 @@
       "firstPublishedAt": "2026-10-13T03:25:20+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2039,7 +2065,7 @@
       "firstPublishedAt": "2026-10-15T02:55:00+00:00",
       "source": "Fed 연설",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2052,7 +2078,7 @@
       "firstPublishedAt": "2026-10-14T11:30:21+00:00",
       "source": "CNBC 금융",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2065,7 +2091,7 @@
       "firstPublishedAt": "2026-10-14T11:28:19+00:00",
       "source": "CNBC 금융",
       "category": "주식시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2078,7 +2104,7 @@
       "firstPublishedAt": "2026-10-14T16:49:18+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2091,7 +2117,7 @@
       "firstPublishedAt": "2026-10-14T13:53:28+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2104,7 +2130,7 @@
       "firstPublishedAt": "2026-10-14T04:24:28+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -2117,7 +2143,7 @@
       "firstPublishedAt": "2026-10-14T03:41:36+00:00",
       "source": "CNBC 금융",
       "category": "유가·원자재",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2130,7 +2156,7 @@
       "firstPublishedAt": "2026-10-13T23:05:12+00:00",
       "source": "CNBC 금융",
       "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2143,7 +2169,7 @@
       "firstPublishedAt": "2026-10-13T19:46:12+00:00",
       "source": "CNBC 금융",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2156,7 +2182,7 @@
       "firstPublishedAt": "2026-10-13T18:05:57+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -2169,7 +2195,7 @@
       "firstPublishedAt": "2026-10-12T08:58:54+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2182,7 +2208,7 @@
       "firstPublishedAt": "2026-10-13T03:19:43+00:00",
       "source": "CNBC 경제",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2195,7 +2221,7 @@
       "firstPublishedAt": "2026-10-12T17:15:21+00:00",
       "source": "CNBC 금융",
       "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2208,7 +2234,7 @@
       "firstPublishedAt": "2026-10-12T18:18:39+00:00",
       "source": "CNBC 금융",
       "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2221,7 +2247,7 @@
       "firstPublishedAt": "2026-10-12T15:37:26+00:00",
       "source": "CNBC 금융",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -2234,7 +2260,7 @@
       "firstPublishedAt": "2026-10-12T11:30:46+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2247,7 +2273,7 @@
       "firstPublishedAt": "2026-10-12T10:49:24+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "important",
@@ -2260,46 +2286,7 @@
       "firstPublishedAt": "2026-10-09T16:10:41+00:00",
       "source": "CNBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
-    },
-    {
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
-      "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
-      "publishedAt": "2026-10-09T14:00:00+00:00",
-      "firstPublishedAt": "2026-10-09T14:00:00+00:00",
-      "source": "Fed 발표",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/09/judy-shelton-scott-bessent-treasury.html",
-      "title": "Treasury's Bessent hires Trump's controversial former Fed board pick, Judy Shelton, as advisor",
-      "publishedAt": "2026-10-09T13:09:19+00:00",
-      "firstPublishedAt": "2026-10-09T13:09:19+00:00",
-      "source": "CNBC 경제",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": ""
-    },
-    {
-      "url": "https://www.cnbc.com/2026/10/09/blockchain-com-cftc-prediction-markets.html",
-      "title": "Blockchain.com seeks U.S. approval for prediction markets, crypto derivatives trading",
-      "publishedAt": "2026-10-09T12:01:26+00:00",
-      "firstPublishedAt": "2026-10-09T12:01:26+00:00",
-      "source": "CNBC 금융",
-      "category": "금융·시장",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -2311,56 +2298,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-10-23T10:37:22.622642+00:00",
-      "lastSuccessAt": "2026-10-23T10:37:22.622642+00:00",
+      "lastAttemptAt": "2026-10-23T15:10:20.574539+00:00",
+      "lastSuccessAt": "2026-10-23T15:10:20.574539+00:00",
       "fromCache": false
     }
   ]
