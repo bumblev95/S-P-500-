@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-10-23T10:07:38.278525+00:00",
+  "generatedAt": "2026-10-23T15:07:57.667463+00:00",
   "observations": {
     "DGS10": [
       [
@@ -6841,6 +6841,10 @@
       [
         "2026-10-21",
         3.88
+      ],
+      [
+        "2026-10-22",
+        3.9
       ]
     ],
     "IORB": [
@@ -9790,8 +9794,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "daily"
     },
     {
@@ -9813,8 +9817,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "daily"
     },
     {
@@ -9840,8 +9844,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "weekly"
     },
     {
@@ -9867,8 +9871,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "weekly"
     },
     {
@@ -9894,8 +9898,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9907,18 +9911,18 @@
       "url": "https://fred.stlouisfed.org/series/SOFR",
       "thresholds": null,
       "status": "ready",
-      "value": 3.88,
-      "asOf": "2026-10-21",
-      "previous": 3.87,
-      "previousDate": "2026-09-23",
-      "change": 0.009999999999999787,
+      "value": 3.9,
+      "asOf": "2026-10-22",
+      "previous": 3.88,
+      "previousDate": "2026-09-24",
+      "change": 0.020000000000000018,
       "severity": null,
       "fetchStatus": "ready",
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "daily"
     },
     {
@@ -9940,8 +9944,8 @@
       "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-10-23",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "frequency": "daily"
     },
     {
@@ -9957,18 +9961,18 @@
         30
       ],
       "status": "ready",
-      "asOf": "2026-10-21",
-      "value": -2.0,
+      "asOf": "2026-10-22",
+      "value": 0.0,
       "previous": -2.0,
-      "previousDate": "2026-10-20",
-      "change": 0.0,
+      "previousDate": "2026-10-21",
+      "change": 2.0,
       "severity": 0,
       "persistent": false,
       "frequency": "daily",
       "fromCache": false,
       "fetchStatus": "ready",
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9986,8 +9990,8 @@
       "change": 0.04705731413697389,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00"
     },
     {
       "id": "EBP",
@@ -10005,8 +10009,8 @@
       "change": -0.16647387375334027,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00"
     }
   ],
   "credit": {
@@ -10027,7 +10031,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00"
     },
     {
       "title": "Bowman, Supervisory Modernization After Silicon Valley Bank",
@@ -10038,7 +10042,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00"
     },
     {
       "title": "Minutes of the Board's discount rate meetings on August 17, September 9, and September 16, 2026",
@@ -10049,36 +10053,25 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00"
-    },
-    {
-      "title": "Federal Reserve Board releases results of the 2025 Survey of Consumer Finances, which provides the public and policymakers with detailed insights into the economic condition of American families",
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/other20261009a.htm",
-      "publishedAt": "2026-10-09T14:00:00+00:00",
-      "source": "Fed 발표",
-      "topic": "기타 발표",
-      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
-      "assessment": "원문 검토 필요",
-      "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-10-23T10:07:38.278525+00:00",
+      "lastAttemptAt": "2026-10-23T15:07:57.667463+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-23T10:07:38.278525+00:00"
+      "lastSuccessAt": "2026-10-23T15:07:57.667463+00:00"
     }
   ],
   "errors": [],
