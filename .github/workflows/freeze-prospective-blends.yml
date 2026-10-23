@@ -1,0 +1,45 @@
+name: Freeze prospective forecast blends
+
+on:
+  workflow_run:
+    workflows: ['Update environment model research']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: decision-support
+  cancel-in-progress: false
+
+jobs:
+  freeze:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Freeze the first eligible non-overlapping issue cohort
+        id: freeze
+        run: python scripts/freeze_prospective_blends.py
+      - name: Commit only the research issue snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ -d research/joint-indicator/prospective-blend-v1/issued ]; then
+            git add research/joint-indicator/prospective-blend-v1/issued/
+          fi
+          if git diff --cached --quiet; then
+            echo 'No new prospective blend issue is eligible; no commit created.'
+            exit 0
+          fi
+          git commit -m 'Freeze prospective v5 trend blend issue'
+          git pull --rebase origin main
+          git push origin HEAD:main
