@@ -2,7 +2,7 @@ name: Research-only 21-session publication
 
 on:
   push:
-    branches: [codex/joint-indicator-research, research/prospective-21-issues]
+    branches: [research/prospective-21-issues]
     paths:
       - 'scripts/publish_prospective_components.py'
       - 'scripts/test_prospective_component_publication.py'
@@ -30,7 +30,27 @@ concurrency:
 
 jobs:
   regression:
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref_name == 'codex/joint-indicator-research')
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          # The preserved observation JSON was computed with Python 3.12's
+          # compensated float sum. Keep its exact replay environment.
+          python-version: '3.12'
+      - run: pip install numpy==2.2.6 scikit-learn==1.8.0 pandas==2.3.3
+      - name: Run all repository script regressions
+        run: python -m unittest discover -s scripts -p 'test_*.py'
+      - name: Verify byte-pinned legacy sources and compile new code
+        run: |
+          PYTHONPATH=scripts python -c 'from publish_prospective_components import verify_sources; verify_sources()'
+          python -m py_compile scripts/publish_prospective_components.py research/joint-indicator/prospective-publication-v1/legacy/generate.py
+
+  legacy-runtime:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,12 +60,11 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install numpy==2.2.6 scikit-learn==1.8.0
-      - name: Run all repository script regressions
-        run: python -m unittest discover -s scripts -p 'test_*.py'
-      - name: Verify byte-pinned legacy sources and compile new code
+      - name: Exercise the actual publisher runtime and unchanged freezer
         run: |
+          python -m unittest discover -s scripts -p test_prospective_component_publication.py
+          python -m unittest discover -s scripts -p test_prospective_blends.py
           PYTHONPATH=scripts python -c 'from publish_prospective_components import verify_sources; verify_sources()'
-          python -m py_compile scripts/publish_prospective_components.py research/joint-indicator/prospective-publication-v1/legacy/generate.py
 
   publish:
     # Main contains only this isolated dispatcher. PR and production jobs never
