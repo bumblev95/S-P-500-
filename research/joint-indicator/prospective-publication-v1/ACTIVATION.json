@@ -1,0 +1,25 @@
+{
+  "version": "prospective-publication-activation-v1",
+  "enabled": true,
+  "reviewedBy": "Codex agent code review under the explicit research-publication task",
+  "reviewedAt": "2026-10-24T05:32:28.105Z",
+  "reviewedCodeCommit": "143bd25f7d957ff0acb560b42fd47b5ad7408ecc",
+  "protocolSha256": "c2608373068c24f4a2512c1bb07fe68aefa642b6c574e6218649bb78e10cb674",
+  "sourceLockSha256": "c89a31e37ec0b277f5a472a80db2fe4deb6fb027f606f9810b74bb5af9fc976d",
+  "codeSha256": {
+    "scripts/publish_prospective_components.py": "75018fe1a60302be4d95b9545b6ef4d86566602bd914b18894c1924a1b89765e",
+    "research/joint-indicator/prospective-publication-v1/legacy/generate.py": "6684ecc6bc11a5856a1bef9f37760ae87055c66995e80583af4ece08ee07755c",
+    "scripts/freeze_prospective_blends.py": "3398e6aff16015e9cc82c0169a276359505b822b94e2750b31e36fa521b24757",
+    "scripts/audit_prospective_blends.py": "641bd7d9f51b190e68c048c567ca3e5d57a6614c0269ca6698d0ec7b20e07db2",
+    "scripts/prospective_blends.py": "57086909980e41482cbb6a6de93518615096afe7f03555a8d86b14a1f6f8c56e"
+  },
+  "reviewedScope": "Original prospective protocol and unchanged freezer/verifier; byte-pinned legacy estimators; temporal boundaries, first-issue and branch/write isolation.",
+  "githubHumanApprovalClaimed": false,
+  "legacyRuntimeValidationRun": 40066390591,
+  "productionPromotion": false,
+  "fullMergedMainValidation": {
+    "runId": 40066390591,
+    "tests": 574,
+    "status": "passed"
+  }
+}
