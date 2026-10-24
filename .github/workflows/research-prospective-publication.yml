@@ -1,0 +1,82 @@
+name: Research-only 21-session publication
+
+on:
+  push:
+    branches: [codex/joint-indicator-research, research/prospective-21-issues]
+    paths:
+      - 'scripts/publish_prospective_components.py'
+      - 'scripts/test_prospective_component_publication.py'
+      - 'research/joint-indicator/prospective-publication-v1/legacy/**'
+      - 'research/joint-indicator/prospective-publication-v1/SOURCE-LOCK.json'
+      - 'research/joint-indicator/prospective-publication-v1/ACTIVATION.json'
+      - '.github/workflows/research-prospective-publication.yml'
+  pull_request:
+    paths:
+      - 'scripts/publish_prospective_components.py'
+      - 'scripts/test_prospective_component_publication.py'
+      - 'research/joint-indicator/prospective-publication-v1/**'
+      - '.github/workflows/research-prospective-publication.yml'
+  workflow_dispatch:
+  schedule:
+    # Daily cheap eligibility check; download/train only at a new cohort floor.
+    - cron: '15 1 * * 2-6'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: research-prospective-21-publication
+  cancel-in-progress: false
+
+jobs:
+  regression:
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref_name == 'codex/joint-indicator-research')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==2.2.6 scikit-learn==1.8.0
+      - name: Run all repository script regressions
+        run: python -m unittest discover -s scripts -p 'test_*.py'
+      - name: Verify byte-pinned legacy sources and compile new code
+        run: |
+          PYTHONPATH=scripts python -c 'from publish_prospective_components import verify_sources; verify_sources()'
+          python -m py_compile scripts/publish_prospective_components.py research/joint-indicator/prospective-publication-v1/legacy/generate.py
+
+  publish:
+    # Main contains only this isolated dispatcher. PR and production jobs never
+    # run a publisher; all state writes are explicitly restricted to this branch.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name == 'research/prospective-21-issues')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prospective-21-issues
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==2.2.6 scikit-learn==1.8.0
+      - name: Publish only on the research state branch, then run unchanged freezer
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main research/prospective-21-issues
+          python scripts/publish_prospective_components.py
+      - name: Keep run diagnostics on failure without publishing inputs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unissued-prospective-publication-diagnostics
+          path: research/joint-indicator/prospective-publication-v1/inputs/
+          retention-days: 7

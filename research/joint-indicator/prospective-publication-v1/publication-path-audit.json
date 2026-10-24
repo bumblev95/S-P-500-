@@ -1,0 +1,47 @@
+{
+  "sourceMainCommit": "d5cba78ccd56aa0efc1da8672ffa698fe2dd0b05",
+  "requiredInputs": [
+    {
+      "model": "environment-challenger-v5-horizon-specific",
+      "horizon": 21,
+      "rows": 501,
+      "lastOrigin": "2026-09-11",
+      "lastIssuedAt": "2026-09-13T09:48:03.240469+00:00"
+    },
+    {
+      "model": "trend-decay-v1",
+      "horizon": 21,
+      "rows": 1509,
+      "lastOrigin": "2026-09-11",
+      "lastIssuedAt": "2026-09-12T01:19:36+00:00"
+    }
+  ],
+  "workflowSha256": {
+    ".github/workflows/update-environment-research.yml": "c8dc84976095eacfa1960380dc37bcf958c27e8cf99a0ca72d80ff2ecd02adca",
+    ".github/workflows/update-eod-prices.yml": "46f4a3d66400b697d260701617ed421d0b066a189f1b55eaeb06aa6cd922d837",
+    ".github/workflows/update-eod-research.yml": "cfc4a40ec70d1179bf858a947c5348b4910f7ec503a1965b7d899562f689dabf"
+  },
+  "retirementCommit": "038c8116c9f16b2df21db21cb2b9cf882fb331da",
+  "laterEnvironmentCommit": "a5e91af7",
+  "legacySourceCommit": "dcc1e9ca87b3d8353cff0b2077ae8ee429006c2a",
+  "successfulEodRuns": [
+    40017053698,
+    40020562026
+  ],
+  "successfulEodResearchRuns": [
+    40018046486,
+    40020665584
+  ],
+  "rootCause": "The 2026-09-13 medium/long refocus retired both registered 21-session streams. Configured generators now use environment v7 and trend v2; recent EOD runs succeed but cannot satisfy v5/trend-v1 21-session enrollment. The draft freezer is also absent on main, so its main-checkout workflow is not a deployed enrollment path.",
+  "decision": "Restore only the legacy 21-session components on an isolated state branch; keep the original blend protocol and production unchanged.",
+  "newLongProtocolCreated": false,
+  "newPerformanceClaimed": false,
+  "currentEnvironment": {
+    "model": "environment-challenger-v7-direction-selection",
+    "generatedAt": "2026-10-23T08:06:11.864543+00:00",
+    "horizons": [
+      "126",
+      "252"
+    ]
+  }
+}
