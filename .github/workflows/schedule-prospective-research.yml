@@ -1,0 +1,39 @@
+name: Schedule isolated 21-session research publication
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 1 * * 2-6'
+  push:
+    branches: [main]
+    paths: ['.github/workflows/schedule-prospective-research.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-prospective-21-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prospective-21-issues
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==2.2.6 scikit-learn==1.8.0
+      - name: Publish only reviewed research code on its isolated branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main research/prospective-21-issues
+          python scripts/publish_prospective_components.py
