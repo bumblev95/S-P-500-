@@ -33,6 +33,11 @@ The selector is a display policy, not a newly validated trading strategy.
 `StockAssessment`, `TechnicalGuide`, research/backtests, AI promotion and paper
 accounts retain their existing rules.
 
+The separate [prospective TOP 3 study](HOME-TOP3-PROSPECTIVE.md) preserves the
+first operational observation and each newly observed close-date ranking, then
+scores only mature future 20/63-session stock and SPY returns. Its research
+results never change the production selector or signals.
+
 ## Refresh
 
 The existing hourly workflow and successful price/market completion triggers
