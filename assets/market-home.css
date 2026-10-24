@@ -43,6 +43,12 @@
     #market-home .hp-story h3 a{color:var(--hp-ink);text-decoration:none;display:block;min-height:44px}
     #market-home .hp-story h3 a:hover{text-decoration:underline;text-underline-offset:4px}
     #market-home .hp-story p{font-size:14px;color:var(--hp-muted);line-height:1.65}
+    #market-home .hp-related{margin-top:12px;font-size:12px;color:var(--hp-muted);overflow-wrap:anywhere}
+    #market-home .hp-related summary{cursor:pointer;min-height:32px;padding:6px 0;color:var(--hp-cyan)}
+    #market-home .hp-related ul{margin:6px 0 0;padding-left:18px}
+    #market-home .hp-related li+li{margin-top:10px}
+    #market-home .hp-related a{color:var(--hp-ink);line-height:1.6}
+    #market-home .hp-related p{font-size:12px;margin-top:4px}
     #market-home .hp-impact{margin-top:9px;font-size:11px;color:var(--hp-cyan)}
     #market-home .hp-news-state{border-top:1px solid var(--hp-line);padding:11px 18px;font-size:11px;color:var(--hp-muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
     #market-home .hp-ready-dot{width:6px;height:6px;background:var(--hp-green);border-radius:50%;display:inline-block}
