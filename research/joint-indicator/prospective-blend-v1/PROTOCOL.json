@@ -1,0 +1,112 @@
+{
+  "version": "prospective-blend-v1",
+  "registeredAt": "2026-10-23T12:28:17Z",
+  "registrationMainCommit": "d7dd6c427721d146c0c37d02bcaf2e01c3a3e3d8",
+  "parentResearchCommit": "f0ff926347727cfe8cf6d108f23568647853b340",
+  "purpose": "Prospectively compare two frozen research-only combinations of the actually issued v5 horizon-specific point forecast and the separately issued simple-trend point forecast. Preserve the low-error versus downside-detection trade-off without using the 2026-10-12 result to choose weights or thresholds.",
+  "statusAtRegistration": "No future blended forecasts or future target outcomes have been read, created, estimated, or scored. This file freezes the candidate rules and decision gates before the first eligible issue snapshot.",
+  "scope": {
+    "horizonSessions": 21,
+    "cohortCount": 5,
+    "minimumOriginDate": "2026-10-23",
+    "firstIssueMustBe": "A common v5/trend issue whose component issuedAt timestamps are at or after registeredAt, whose 21st XNYS session target is after the capture date, and whose research-only materialization is committed before that target session closes.",
+    "nextCohortRule": "After the first cohort, choose the earliest later common issue origin whose asOf is on or after the prior cohort targetDate. This makes forward 21-session windows non-overlapping. If no eligible issue exists yet, wait; do not use outcome data to skip or select an origin.",
+    "activationRule": "Capture begins only after this Draft PR is reviewed and the research-only freezer runs. If the target session has started before a frozen blend record could be committed, that issue is ineligible and is never reconstructed after the outcome; the next still-future eligible issue may start enrollment.",
+    "cohortRule": "For each origin, use the outcome-independent intersection of symbols with an actual issued v5 horizonModel row and an actual issued trend-decay-v1 21-session row. Freeze this exact symbol set before the target. Every target price must later be present for every frozen symbol; otherwise block that cohort's aggregate scores and the final joint decision. Never score a survivor-only subset.",
+    "issueEvidence": "The freeze action records the source commit, raw archive hashes, source-row hashes, issue timestamps, registration protocol hash, and candidate predictions. The issue snapshot must be committed before 00:00 America/New_York on the 21st target session and is never rewritten.",
+    "targetEvidence": "At evaluation, pin the outcome-source commit and target archive hash. Verify each frozen issue artifact first appeared in Git history before the target session began, its input commit is an ancestor, and its issue rows still match the pinned input commit. Verify the target archive first appeared after the official regular or early close.",
+    "sessionCalendar": "Count XNYS sessions strictly after asOf. Use the official NYSE full-closure and known early-close dates for 2026 and 2027 frozen in scripts/prospective_blends.py; early-close sessions remain sessions. Fail closed outside the covered calendar years.",
+    "selection": "No candidate selection or promotion from fewer than all five complete cohorts. No recalibration, threshold search, cohort substitution, or post-outcome candidate addition is allowed."
+  },
+  "inputs": {
+    "v5": {
+      "path": "research/issued.json",
+      "model": "environment-challenger-v5-horizon-specific",
+      "field": "horizonModel",
+      "anchorField": "anchor"
+    },
+    "simpleTrend": {
+      "pathPattern": "forecasts/archive/YYYY-MM.csv",
+      "model": "trend-decay-v1",
+      "horizon": 21,
+      "field": "base",
+      "anchorField": "anchor"
+    },
+    "targetPrices": {
+      "pathPattern": "ml/archive/YYYY-MM-DD-pooled-hgb-pattern-v3-medium-long.json",
+      "symbolMap": "stocks",
+      "priceField": "price",
+      "asOfField": "asOf"
+    }
+  },
+  "forecastConstruction": {
+    "commonAnchor": "Use the v5 row's positive origin anchor for actual return, all candidate target prices, and the no-change baseline. Convert each component's point forecast to a simple return using that component's own saved anchor, then re-express that return at the common v5 anchor. Do not refit or alter either component forecast.",
+    "directionThreshold": "A predicted or actual simple return strictly above +2.0% is up; strictly below -2.0% is down; otherwise flat. Exact boundary values are flat.",
+    "controls": [
+      "noChange",
+      "v5",
+      "simpleTrend"
+    ],
+    "candidates": {
+      "fixed50": {
+        "formula": "0.50 * v5 predicted simple return + 0.50 * simpleTrend predicted simple return",
+        "weights": {
+          "v5": 0.5,
+          "simpleTrend": 0.5
+        }
+      },
+      "downsideOverride": {
+        "formula": "Use the simpleTrend point forecast only when its own predicted simple return is strictly below -2.0%; otherwise use v5. Re-express the selected return at the common v5 anchor.",
+        "trigger": "simpleTrend predicted return < -0.02"
+      }
+    },
+    "rounding": "No intermediate rounding. Round only displayed results to two decimals; compute from full stored precision. Reject non-positive anchors or non-positive derived point prices."
+  },
+  "evaluation": {
+    "perOriginMetrics": [
+      "price MAPE (%)",
+      "simple-return MAE (percentage points)",
+      "up capture / recall (%)",
+      "down capture / recall (%)",
+      "down-warning precision (%)",
+      "false-down-warning rate (%)"
+    ],
+    "metricDefinitions": {
+      "mape": "Mean absolute predicted-price / target-price error, in percent.",
+      "returnMae": "Mean absolute difference between predicted and realized simple returns, multiplied by 100 and reported in percentage points.",
+      "upRecall": "Correct up predictions divided by actual up symbols; direction uses the fixed ±2% threshold.",
+      "downRecall": "Correct down predictions divided by actual down symbols; direction uses the fixed ±2% threshold.",
+      "downWarningPrecision": "Correct actual-down warnings divided by all predicted-down warnings; undefined when there are no down warnings.",
+      "falseDownWarningRate": "False down warnings divided by the full frozen symbol cohort, not only predicted-down warnings."
+    },
+    "summaryWeighting": "Report every origin separately and compute the final summary as an equal-weight mean of the five origin-level metrics. Do not let a larger cohort date dominate. Preserve denominators and undefined metrics.",
+    "jointSuccessGate": {
+      "minimumCompleteOrigins": 5,
+      "minimumOriginsWithActualDowns": 2,
+      "minimumOriginsWithDownWarnings": 2,
+      "candidateMust": [
+        "equal-origin mean MAPE <= v5 and equal-origin mean return MAE <= v5",
+        "equal-origin mean down recall >= simpleTrend and strictly > v5",
+        "equal-origin mean down-warning precision >= simpleTrend",
+        "equal-origin mean false-down-warning rate <= simpleTrend",
+        "equal-origin mean up recall >= v5"
+      ],
+      "undefinedMetricRule": "If fewer than two origins contain actual-down outcomes, fewer than two origins contain simpleTrend or candidate down warnings, or another required denominator is zero, the joint gate is not evaluable and cannot pass."
+    },
+    "interpretation": "Five non-overlapping issue dates remain a small, concentrated sample. Results are descriptive and do not establish statistical significance, S&P 500-wide performance, profitability, or suitability for investment decisions. A pass only justifies a separately preregistered replication; it never promotes a candidate."
+  },
+  "safetyBoundary": {
+    "productionForecastsChanged": false,
+    "homeTop3Changed": false,
+    "serviceRankingsChanged": false,
+    "investmentRulesChanged": false,
+    "automaticPromotion": false,
+    "tradeClaims": false,
+    "syntheticFixturesAreEvidence": false
+  },
+  "references": [
+    "https://www.nyse.com/markets/hours-calendars",
+    "https://doi.org/10.1057/jors.1969.103",
+    "https://doi.org/10.1016/S1574-0706(05)01004-9"
+  ]
+}
