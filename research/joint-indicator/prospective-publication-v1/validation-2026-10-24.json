@@ -1,0 +1,82 @@
+{
+  "version": "prospective-publication-validation-v1",
+  "verifiedAt": "2026-10-24T05:40:31.079Z",
+  "codeValidationCommit": "df49cd08d3ef7d23244badb64d8280565fa1d45e",
+  "fullMergedMainCI": {
+    "runId": 40066390591,
+    "tests": 574,
+    "conclusion": "success",
+    "python": "3.12"
+  },
+  "legacyRuntimeCI": {
+    "runId": 40066390591,
+    "publicationTests": 20,
+    "unchangedBlendTests": 10,
+    "python": "3.11",
+    "conclusion": "success"
+  },
+  "preservedResearchCI": [
+    40066390582,
+    40066390699,
+    40066390674,
+    40066390571
+  ],
+  "firstPublication": {
+    "runId": 40066656153,
+    "conclusion": "success",
+    "stateCommit": "a44fa4d6056073bc73c641b8646ec190fcd82694",
+    "inputCommit": "d5efc81e961448824b2cb497bd3ede1018c1cf18",
+    "firstFrozenCommit": "a44fa4d6056073bc73c641b8646ec190fcd82694",
+    "origin": "2026-10-23",
+    "issuedAt": "2026-10-24T05:34:37.824540+00:00",
+    "capturedAt": "2026-10-24T05:34:42.299791Z",
+    "targetDate": "2026-11-23",
+    "commonSymbols": 500,
+    "counts": {
+      "trend": 504,
+      "v5": 500
+    },
+    "unavailableHistories": {
+      "FDXF": "Missing, stale, duplicate or short adjusted history: FDXF",
+      "HONA": "Missing, stale, duplicate or short adjusted history: HONA",
+      "VYLR": "Missing, stale, duplicate or short adjusted history: VYLR"
+    },
+    "rawHistoriesVerified": 506,
+    "normalizedSha256": "d3f4d48c644afdbe1d16cb998fbf401894242a890c0f0f9aab7b618013d7ef44",
+    "manifestPath": "research/joint-indicator/prospective-publication-v1/inputs/2026-10-23/publication.json",
+    "issuePath": "research/joint-indicator/prospective-blend-v1/issued/2026-10-23.json"
+  },
+  "verification": {
+    "allRawAndGzipHashes": true,
+    "normalizedBundleHash": true,
+    "universeAndPriceHashes": true,
+    "originalFreezerAndGitFirstAddVerifier": true,
+    "fullIntersection": true,
+    "originalProtocolSha256": "c2608373068c24f4a2512c1bb07fe68aefa642b6c574e6218649bb78e10cb674"
+  },
+  "scheduler": {
+    "pullRequest": 64,
+    "mergeCommit": "ef2ce337e5b1c9783fca38d65722635c3cedc4e0",
+    "smokeRun": 40067000717,
+    "conclusion": "success",
+    "rerunStatus": "waiting",
+    "nextOriginOnOrAfter": "2026-11-23",
+    "cron": "15 1 * * 2-6",
+    "timezone": "UTC",
+    "stateBranch": "research/prospective-21-issues"
+  },
+  "safety": {
+    "mainChangedPaths": [
+      ".github/workflows/schedule-prospective-research.yml"
+    ],
+    "originalPR25Draft": true,
+    "originalPR25Merged": false,
+    "productionForecastsChanged": false,
+    "homeTop3Changed": false,
+    "investmentRulesChanged": false,
+    "scoresWritten": false,
+    "candidateSelected": false,
+    "automaticPromotion": false
+  },
+  "remaining": "Wait for five complete non-overlapping prospective cohorts and verified full-cohort future targets. No performance or promotion conclusion is available."
+}
