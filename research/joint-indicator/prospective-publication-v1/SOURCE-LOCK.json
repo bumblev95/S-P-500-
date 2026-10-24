@@ -1,0 +1,37 @@
+{
+  "version": "prospective-publication-v1",
+  "legacyCommit": "dcc1e9ca87b3d8353cff0b2077ae8ee429006c2a",
+  "files": {
+    "build_environment_research.py": {
+      "sourcePath": "scripts/build_environment_research.py",
+      "sha256": "7716c75db504831ea5d08c265b74722b6554e82a3d1bcf5338939dd6c76f98dd",
+      "blob": "df9638b39d7361dad2ae9d6ac15121d9c40f52eb"
+    },
+    "build_forecasts.py": {
+      "sourcePath": "scripts/build_forecasts.py",
+      "sha256": "db9b49ae1411d3fff17a846738f874999e20c5cab7d5ee4a7ec1e044ac8d84fc",
+      "blob": "6b6bbde5068c5c53ad824e2e02d3c63b4a6a400e"
+    },
+    "build_research_inputs.py": {
+      "sourcePath": "scripts/build_research_inputs.py",
+      "sha256": "e680daab950a26764157cee5ca0c1eb0ef28660e317b7f49b6506beb9567467a",
+      "blob": "94eb2177c63e99552bebd85ac30316b2790c136a"
+    },
+    "build_earnings_inputs.py": {
+      "sourcePath": "scripts/build_earnings_inputs.py",
+      "sha256": "a07c594a9495f8eb7c1e9fc2ec2365a628a933c55a707f4273f923350a43e774",
+      "blob": "a667bbd8a885e6062fbdc72bce102723c60f5719"
+    },
+    "research_universe.py": {
+      "sourcePath": "scripts/research_universe.py",
+      "sha256": "3a682774fce0f062dea689d28727b000624d3f1b39130d9c6265deaeebf0d217",
+      "blob": "f8deeac0431a9788e9f5f46f68bf27b3c6ad8914"
+    }
+  },
+  "requirements": {
+    "numpy": "2.2.6",
+    "scikit-learn": "1.8.0"
+  },
+  "scope": "Restore only the original v5 horizonModel at 21 XNYS sessions and trend-decay-v1 at 21 sessions. No backtest, retuning, ranking, target collection or promotion.",
+  "stateBranch": "research/prospective-21-issues"
+}

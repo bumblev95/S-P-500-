@@ -1,0 +1,31 @@
+{
+  "version": "drawdown-separation-v1",
+  "protocolRegisteredBeforeOutcomeCollection": true,
+  "protocolCommit": "b66fbf57589124d5bf14c7b345a23891dff772b9",
+  "protocolHash": "ed47321d0319be7337a83b269531a50587a0d96cfc2ac3b494635ae6ada87f06",
+  "pathSnapshotHash": "21914f5953b461962c639b9a7a1a02c9b946c7087e1be6cbb2d483396e53def9",
+  "predictionSnapshotHash": "f57b4de11d47bbf2de8bac326b69558d4113a19784d50088d1f67a3196b41f9c",
+  "canonicalResultHash": "329594419aa4b63c7505057f1fb5d5a7d252025ee48c59f9ed5f39b61200b3ec",
+  "exactCanonicalReplay": true,
+  "exactPredictionReplay": true,
+  "codeHashes": {
+    "collect_drawdown_paths.py": "88a33c37bafb0eb7190220ae1b2f8aaaaf1f0728f4a95575965827e938511ef7",
+    "research_drawdown_separation.py": "09faf20ed713b19232e58510c0ba3fac5beec82553e2fa166c1e51856691406f",
+    "test_drawdown_separation.py": "24840cac86b5662530c891ae42a943d5b0ba40481558752ae30a7542cf30bea0"
+  },
+  "tests": {
+    "unit": 7,
+    "fullResearchRegression": 146
+  },
+  "coverage": {
+    "totalRows": 8277,
+    "coveredRows": 8243,
+    "missingRows": 34,
+    "missingReason": "Current PSKY symbol has no valid historical path for legacy PARA periods; no identity backfill was invented."
+  },
+  "pointInTimeCohortReady": false,
+  "prospectiveEvidence": false,
+  "selected": null,
+  "uiChanged": false,
+  "serviceForecastChanged": false
+}
