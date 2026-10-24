@@ -41,7 +41,8 @@ jobs:
           # The preserved observation JSON was computed with Python 3.12's
           # compensated float sum. Keep its exact replay environment.
           python-version: '3.12'
-      - run: pip install numpy==2.2.6 scikit-learn==1.8.0 pandas==2.3.3
+      - name: Install complete merged-main regression dependencies
+        run: pip install -r scripts/requirements-eod.txt scikit-learn==1.8.0 PyYAML==6.0.2
       - name: Run all repository script regressions
         run: python -m unittest discover -s scripts -p 'test_*.py'
       - name: Verify byte-pinned legacy sources and compile new code
