@@ -1,44 +1,44 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-26T21:02:46.646553+00:00",
+  "generatedAt": "2026-10-26T21:20:29.596249+00:00",
   "rankings": {
     "buy": [
       {
-        "symbol": "OXY",
-        "name": "옥시덴탈 페트롤리엄",
-        "asOf": "2026-10-23",
-        "score": 100,
+        "symbol": "AES",
+        "name": "AES",
+        "asOf": "2026-10-26",
+        "score": 91,
         "code": "buy",
         "holdingCode": "hold",
         "selection": "signal",
-        "reason": "가격 돌파·위험 조건 충족 · 거래량 동반"
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
       },
       {
-        "symbol": "MTD",
-        "name": "메틀러 톨레도",
-        "asOf": "2026-10-23",
-        "score": 100,
-        "code": "pullback",
+        "symbol": "RTX",
+        "name": "RTX",
+        "asOf": "2026-10-26",
+        "score": 85,
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "상승 추세지만 눌림목 반등 조건 대기"
+        "selection": "signal",
+        "reason": "지지 반등·손익비·위험 조건 충족"
       },
       {
-        "symbol": "VEEV",
-        "name": "비바 시스템즈",
-        "asOf": "2026-10-23",
-        "score": 100,
-        "code": "breakout",
+        "symbol": "ROST",
+        "name": "로스 스토어스",
+        "asOf": "2026-10-26",
+        "score": 82,
+        "code": "buy",
         "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "직전 55거래일 고점 돌파 확인 대기"
+        "selection": "signal",
+        "reason": "지지 반등·손익비·위험 조건 충족"
       }
     ],
     "sell": [
       {
         "symbol": "CAT",
         "name": "캐터필러",
-        "asOf": "2026-10-23",
+        "asOf": "2026-10-26",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -46,9 +46,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "CMG",
-        "name": "치폴레 멕시칸 그릴",
-        "asOf": "2026-10-23",
+        "symbol": "FIX",
+        "name": "컴포트 시스템즈 USA",
+        "asOf": "2026-10-26",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -56,9 +56,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "COHR",
-        "name": "코히런트",
-        "asOf": "2026-10-23",
+        "symbol": "GE",
+        "name": "GE 에어로스페이스",
+        "asOf": "2026-10-26",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -66,10 +66,10 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-23",
+    "asOf": "2026-10-26",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-26T21:02:46.646Z",
-    "priceGeneratedAt": "2026-10-23T20:16:39+00:00",
+    "evaluatedAt": "2026-10-26T21:20:29.596Z",
+    "priceGeneratedAt": "2026-10-26T21:19:14+00:00",
     "marketGeneratedAt": "2026-10-26T20:31:42.038019+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
