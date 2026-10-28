@@ -1,0 +1,34 @@
+name: Validate research PIT input boundary
+on:
+  push:
+    paths:
+      - 'scripts/pit_sp500_inputs.py'
+      - 'scripts/build_pit_sp500_inputs.py'
+      - 'scripts/test_pit_sp500_inputs.py'
+      - 'research/joint-indicator/pit-inputs-v1/**'
+      - '.github/workflows/validate-pit-inputs.yml'
+  pull_request:
+    paths:
+      - 'scripts/pit_sp500_inputs.py'
+      - 'scripts/build_pit_sp500_inputs.py'
+      - 'scripts/test_pit_sp500_inputs.py'
+      - 'research/joint-indicator/pit-inputs-v1/**'
+      - '.github/workflows/validate-pit-inputs.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test temporal boundary, identity and population retention
+        run: python -m unittest discover -s scripts -p test_pit_sp500_inputs.py -v
+      - name: Verify frozen evidence, prior studies and exact audit replay
+        run: python scripts/build_pit_sp500_inputs.py --verify

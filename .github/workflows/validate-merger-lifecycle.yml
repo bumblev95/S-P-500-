@@ -1,0 +1,57 @@
+name: Validate research merger lifecycle
+on:
+  push:
+    paths:
+      - 'scripts/research_merger_lifecycle.py'
+      - 'scripts/build_merger_lifecycle.py'
+      - 'scripts/test_merger_lifecycle.py'
+      - 'research/joint-indicator/merger-lifecycle-v1/**'
+      - '.github/workflows/validate-merger-lifecycle.yml'
+  pull_request:
+    paths:
+      - 'scripts/research_merger_lifecycle.py'
+      - 'scripts/build_merger_lifecycle.py'
+      - 'scripts/test_merger_lifecycle.py'
+      - 'research/joint-indicator/merger-lifecycle-v1/**'
+      - '.github/workflows/validate-merger-lifecycle.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test lifecycle, origin boundary and candidate quarantine
+        env:
+          PYTHONPATH: scripts
+        run: python -m unittest test_merger_lifecycle test_pit_sp500_inputs test_fja_sp500_quarantine -v
+      - name: Replay all frozen audits and reference hashes
+        run: |
+          python scripts/build_merger_lifecycle.py --verify
+          python scripts/build_pit_sp500_inputs.py --verify
+          python scripts/audit_fja_sp500_quarantine.py --verify
+      - name: Incomplete evidence must not export outcomes or cohorts
+        shell: bash
+        run: |
+          lifecycle_output="$RUNNER_TEMP/blocked-merger-outcomes.json"
+          set +e
+          python scripts/build_merger_lifecycle.py --export-outcomes --origin 2009-11-13 --target-at 2010-11-15T21:00:00Z --evaluated-at 2026-10-08T00:00:00Z --output "$lifecycle_output"
+          lifecycle_status=$?
+          python scripts/build_pit_sp500_inputs.py --export-cohorts
+          pit_status=$?
+          python scripts/audit_fja_sp500_quarantine.py --export-cohorts
+          quarantine_status=$?
+          set -e
+          test "$lifecycle_status" -eq 2
+          test "$pit_status" -eq 2
+          test "$quarantine_status" -eq 2
+          test ! -e "$lifecycle_output"
+          test ! -e research/joint-indicator/pit-inputs-v1/origin-cohorts.json
+          test ! -e research/joint-indicator/pit-quarantine-fja-v1/origin-cohorts.json
