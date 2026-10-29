@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-10-29T10:27:49.529948+00:00",
+  "generatedAt": "2026-10-29T16:10:29.370148+00:00",
   "observations": {
     "DGS10": [
       [
@@ -9774,7 +9774,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "daily"
     },
     {
@@ -9796,7 +9796,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "daily"
     },
     {
@@ -9822,7 +9822,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "weekly"
     },
     {
@@ -9848,7 +9848,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "weekly"
     },
     {
@@ -9874,7 +9874,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9896,7 +9896,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "daily"
     },
     {
@@ -9918,7 +9918,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "frequency": "daily"
     },
     {
@@ -9946,7 +9946,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "동일 날짜 SOFR·IORB 자료 갱신 확인 필요",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9964,8 +9964,8 @@
       "change": 0.04705731413697389,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-29T10:27:49.529948+00:00",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastSuccessAt": "2026-10-29T16:10:29.370148+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00"
     },
     {
       "id": "EBP",
@@ -9983,8 +9983,8 @@
       "change": -0.16647387375334027,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-29T10:27:49.529948+00:00",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastSuccessAt": "2026-10-29T16:10:29.370148+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00"
     }
   ],
   "credit": {
@@ -10007,7 +10007,7 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastSuccessAt": "2026-10-29T16:10:29.370148+00:00"
     },
     {
       "title": "Federal Reserve Board announces termination of enforcement actions with Gardner Bancshares, Inc. and Small Business Bank",
@@ -10018,25 +10018,25 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastSuccessAt": "2026-10-29T16:10:29.370148+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastSuccessAt": "2026-10-29T16:10:29.370148+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-10-29T10:27:49.529948+00:00",
+      "lastAttemptAt": "2026-10-29T16:10:29.370148+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-10-29T10:27:49.529948+00:00"
+      "lastSuccessAt": "2026-10-29T16:10:29.370148+00:00"
     }
   ],
   "errors": [
