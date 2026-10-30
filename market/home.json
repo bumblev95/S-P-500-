@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T19:29:58.185335+00:00",
+  "generatedAt": "2026-10-30T21:19:57.877139+00:00",
   "rankings": {
     "buy": [
       {
         "symbol": "ABBV",
         "name": "애브비",
-        "asOf": "2026-10-29",
+        "asOf": "2026-10-30",
         "score": 100,
         "code": "unavailable",
         "holdingCode": "hold",
@@ -14,9 +14,9 @@
         "reason": "시장 위험 데이터 확인 필요"
       },
       {
-        "symbol": "ALLE",
-        "name": "얼리전",
-        "asOf": "2026-10-29",
+        "symbol": "ACN",
+        "name": "액센츄어",
+        "asOf": "2026-10-30",
         "score": 100,
         "code": "unavailable",
         "holdingCode": "hold",
@@ -24,9 +24,9 @@
         "reason": "시장 위험 데이터 확인 필요"
       },
       {
-        "symbol": "AMGN",
-        "name": "암젠",
-        "asOf": "2026-10-29",
+        "symbol": "AJG",
+        "name": "아서 J 갤러거",
+        "asOf": "2026-10-30",
         "score": 100,
         "code": "unavailable",
         "holdingCode": "hold",
@@ -36,9 +36,9 @@
     ],
     "sell": [
       {
-        "symbol": "BG",
-        "name": "번지",
-        "asOf": "2026-10-29",
+        "symbol": "APP",
+        "name": "앱러빈",
+        "asOf": "2026-10-30",
         "score": 0,
         "code": "unavailable",
         "holdingCode": "reduce",
@@ -48,7 +48,7 @@
       {
         "symbol": "CAT",
         "name": "캐터필러",
-        "asOf": "2026-10-29",
+        "asOf": "2026-10-30",
         "score": 0,
         "code": "unavailable",
         "holdingCode": "reduce",
@@ -56,9 +56,9 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "GOOG",
-        "name": "알파벳 C",
-        "asOf": "2026-10-29",
+        "symbol": "CHRW",
+        "name": "CH 로빈슨",
+        "asOf": "2026-10-30",
         "score": 0,
         "code": "unavailable",
         "holdingCode": "reduce",
@@ -66,10 +66,10 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-10-29",
+    "asOf": "2026-10-30",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-10-30T19:29:58.185Z",
-    "priceGeneratedAt": "2026-10-29T21:31:34+00:00",
+    "evaluatedAt": "2026-10-30T21:19:57.877Z",
+    "priceGeneratedAt": "2026-10-30T21:18:36+00:00",
     "marketGeneratedAt": "2026-10-30T19:26:00.762968+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
