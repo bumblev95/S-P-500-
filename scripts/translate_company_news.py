@@ -143,15 +143,15 @@ def valid_financial_facts(text, source):
     """
     source = normalized_source(source)
     amounts = []
-    for match in re.finditer(r'\$\s*([\d,]+(?:\.\d+)?)\s*(billion|million|trillion|bn|mn)\b', source, re.I):
+    for match in re.finditer(r'\$\s*(\d+(?:,\d{3})*(?:\.\d+)?)\s*(billion|million|trillion|bn|mn)\b', source, re.I):
         scale = {'billion': 10**9, 'bn': 10**9, 'million': 10**6, 'mn': 10**6, 'trillion': 10**12}[match[2].lower()]
         amounts.append(Decimal(match[1].replace(',', '')) * scale)
     if amounts:
         translated = []
-        for match in re.finditer(r'((?:[\d,]+(?:\.\d+)?\s*[조억만천백십]*\s*)+)달러', text):
+        for match in re.finditer(r'((?:\d+(?:,\d{3})*(?:\.\d+)?\s*[조억만천백십]*\s*)+)달러', text):
             total = group = Decimal(0)
             pending = None
-            for token in re.findall(r'[\d,]+(?:\.\d+)?|[조억만천백십]', match[1]):
+            for token in re.findall(r'\d+(?:,\d{3})*(?:\.\d+)?|[조억만천백십]', match[1]):
                 if token in ('조', '억', '만'):
                     total += (group + (pending or 0)) * {'조': 10**12, '억': 10**8, '만': 10**4}[token]
                     group = Decimal(0)

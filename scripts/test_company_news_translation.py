@@ -349,6 +349,12 @@ class FinancialFactTests(unittest.TestCase):
         self.assertTrue(m.valid_korean_summary('회사 이익은 2조 3천억 달러다.', 'Profit was $2.3 trillion.'))
         self.assertFalse(m.valid_korean_summary('회사 이익은 1.5억 달러다.', 'Profit was $1.5 billion.'))
 
+    def test_punctuation_between_amounts_is_never_a_decimal_token(self):
+        self.assertTrue(m.valid_korean_summary('매출은 230억 달러, 이익은 15억 달러다.', 'Revenue was $23bn, profit was $1.5 billion.'))
+        self.assertFalse(m.valid_korean_summary('매출은 23억 달러, 이익은 15억 달러다.', 'Revenue was $23bn, profit was $1.5 billion.'))
+        for text in ['금액은 , 달러다.', '금액은 ,,, 달러다.', '금액은 . 달러다.']:
+            self.assertFalse(m.valid_korean_summary(text, 'Profit was $23bn.'))
+
     def test_earnings_miss_and_primary_keep_their_source_meaning(self):
         source = 'Starbucks sales miss expectations, but its U.S. turnaround is gaining steam'
         self.assertFalse(m.valid_korean_headline('스타벅스 매출은 기대를 미루지만 미국 시장 전환은 빨라지고 있다.', source))
