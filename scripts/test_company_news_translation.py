@@ -335,4 +335,29 @@ class ContextTranslationTests(unittest.TestCase):
             m.translate_snapshot(root,translate);self.assertEqual(calls[-1],'AI stock sell-off eases')
 
 
+class FinancialFactTests(unittest.TestCase):
+    def test_dollar_magnitude_is_not_relabelled_as_ready(self):
+        source = 'Swiss central bank posts bumper $23bn profit thanks to gold, foreign assets'
+        for good in ['스위스 중앙은행, 금·외화자산 덕에 230억 달러 이익',
+                     '스위스 중앙은행, 금·외화자산 덕에 23,000,000,000달러 이익']:
+            self.assertTrue(m.valid_korean_headline(good, source))
+        for bad in ['스위스 중앙은행, 금·외화자산 덕에 23억 달러 이익',
+                    '스위스 중앙은행, 금·외화자산 덕에 23달러 이익']:
+            self.assertFalse(m.valid_korean_headline(bad, source))
+            self.assertFalse(m.valid_korean_summary(bad, source))
+        self.assertTrue(m.valid_korean_summary('회사 이익은 15억 달러다.', 'Profit was $1.5 billion.'))
+        self.assertTrue(m.valid_korean_summary('회사 이익은 2조 3천억 달러다.', 'Profit was $2.3 trillion.'))
+        self.assertFalse(m.valid_korean_summary('회사 이익은 1.5억 달러다.', 'Profit was $1.5 billion.'))
+
+    def test_earnings_miss_and_primary_keep_their_source_meaning(self):
+        source = 'Starbucks sales miss expectations, but its U.S. turnaround is gaining steam'
+        self.assertFalse(m.valid_korean_headline('스타벅스 매출은 기대를 미루지만 미국 시장 전환은 빨라지고 있다.', source))
+        self.assertTrue(m.valid_korean_headline('스타벅스 매출 기대치 미달, 미국 사업 회복은 탄력', source))
+        source = 'Prediction markets failed to call the LA primary correctly.'
+        self.assertFalse(m.valid_korean_summary('예측 시장이 LA 초등급을 올바르게 호출하지 못했다.', source))
+        self.assertTrue(m.valid_korean_summary('예측시장이 로스앤젤레스 예비선거 결과를 잘못 예측했다.', source))
+        # Context alone must not force an unrelated field to repeat these facts.
+        self.assertTrue(m.valid_korean_summary('국제 사업은 예상보다 부진했다.', 'International business fell short.', source))
+
+
 if __name__ == '__main__': unittest.main()

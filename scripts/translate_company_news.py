@@ -5,6 +5,7 @@ headline/excerpt remain available for checking. Cache entries bind to exact
 source text; a changed article cannot inherit an old Korean summary.
 """
 import argparse
+from decimal import Decimal
 import hashlib
 import json
 import re
@@ -121,12 +122,51 @@ def valid_context_terms(text, source, source_context=''):
     return True
 
 
+def valid_financial_facts(text, source):
+    """Conservative source-field checks for amount scale and earnings misses.
+
+    These catch known failure classes, not arbitrary translation errors. Never
+    borrow an amount or a direction from the other field of the article.
+    """
+    source = normalized_source(source)
+    amounts = []
+    for match in re.finditer(r'\$\s*([\d,]+(?:\.\d+)?)\s*(billion|million|trillion|bn|mn)\b', source, re.I):
+        scale = {'billion': 10**9, 'bn': 10**9, 'million': 10**6, 'mn': 10**6, 'trillion': 10**12}[match[2].lower()]
+        amounts.append(Decimal(match[1].replace(',', '')) * scale)
+    if amounts:
+        translated = []
+        for match in re.finditer(r'((?:[\d,]+(?:\.\d+)?\s*[조억만천백십]*\s*)+)달러', text):
+            total = group = Decimal(0)
+            pending = None
+            for token in re.findall(r'[\d,]+(?:\.\d+)?|[조억만천백십]', match[1]):
+                if token in ('조', '억', '만'):
+                    total += (group + (pending or 0)) * {'조': 10**12, '억': 10**8, '만': 10**4}[token]
+                    group = Decimal(0)
+                    pending = None
+                elif token in ('천', '백', '십'):
+                    group += (pending if pending is not None else 1) * {'천': 1000, '백': 100, '십': 10}[token]
+                    pending = None
+                else:
+                    pending = Decimal(token.replace(',', ''))
+            translated.append(total + group + (pending or 0))
+        if any(amount not in translated for amount in amounts):
+            return False
+    if re.search(r'\b(?:sales|revenue|earnings)\s+miss(?:es|ed)?\s+(?:\w+\s+){0,2}expectations\b', source, re.I):
+        if not re.search(r'미달|밑돌|하회|못\s*미(?:치|쳤|친)', text):
+            return False
+    if re.search(r'\b(?:LA|Los Angeles) primary\b', source, re.I):
+        if not re.search(r'예비\s*선거|경선', text):
+            return False
+    return True
+
+
 def valid_korean_summary(text, source_text='', source_context=''):
     # Keep valid_korean as the generic language gate for existing callers.
     # Validate the summary against the passage actually translated, not against
     # every term in the headline. Do not silently publish detected bad text.
     return (valid_korean_headline(text)
-            and valid_context_terms(text, source_text, source_context))
+            and valid_context_terms(text, source_text, source_context)
+            and valid_financial_facts(text, source_text))
 
 
 def source_hash(article):
@@ -206,7 +246,8 @@ def valid_korean_headline(text, source_title='', source_context=''):
         return False
     return (not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
             and valid_headline_terms(text, source_title)
-            and valid_context_terms(text, source_title, source_context))
+            and valid_context_terms(text, source_title, source_context)
+            and valid_financial_facts(text, source_title))
 
 
 def simpler_headline_input(title, source_excerpt=''):

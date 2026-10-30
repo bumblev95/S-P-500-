@@ -59,7 +59,8 @@ concurrency:
 jobs:
   home:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 supports Ubuntu 24.04; ubuntu-latest can move ahead.
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
@@ -186,6 +187,7 @@ jobs:
           assert len(symbols)==len(set(symbols))
           assert all(q['asOf']==ranks['asOf'] for side in ('buy','sell') for q in ranks[side])
           print('MARKET_HOME_SNAPSHOT='+json.dumps(snapshot,ensure_ascii=False,separators=(',',':')))
+          print('MARKET_HOME_NEWS_EVIDENCE='+json.dumps([sources[a['url']] for a in snapshot['news']],ensure_ascii=False,separators=(',',':')))
           PY
       - name: Install browser validation runtime
         run: |
