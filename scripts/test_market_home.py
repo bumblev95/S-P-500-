@@ -42,6 +42,30 @@ class FinancialTranslationPublication(unittest.TestCase):
         self.assertFalse(h.usable_translation(bad_summary))
 
 
+class RecoveredNewsMeanings(unittest.TestCase):
+    def test_observed_financial_mistranslations_and_source_bound_reviews(self):
+        root = Path(__file__).parents[1]
+        cases = json.loads((root/'scripts/fixtures/market-news-20261030.json').read_text())['cases']
+        reviews = json.loads((root/'market/home-reviewed-news.json').read_text())
+        for case in cases:
+            old = deepcopy(case['article'])
+            with self.subTest(title=old['title']):
+                if old['translationStatus'] == 'ready':
+                    self.assertFalse(h.usable_translation(old), 'Observed mistranslations must not be publishable as ready')
+                else:
+                    self.assertEqual(old['translationStatus'], 'headline-fallback')
+                review = reviews[old['url']]
+                self.assertEqual(review['sourceHash'], old['sourceHash'])
+                self.assertEqual(review['title'], old['title'])
+                self.assertEqual(review['headline'], case['expected']['headlineKo'])
+                self.assertEqual(review['summary'], case['expected']['summaryKo'])
+                self.assertTrue(h.valid_korean_headline(review['headline'], old['title'], old['sourceExcerpt']))
+                self.assertTrue(h.valid_korean_summary(review['summary'], old['sourceExcerpt'], old['title']))
+                h.set_translation(old, review['headline'], review['summary'])
+                self.assertTrue(h.usable_translation(old))
+                self.assertEqual(old['translationStatus'], 'ready')
+
+
 class Periods(unittest.TestCase):
     def test_week_is_monday_friday_in_new_york_not_rolling_seven_days(self):
         self.assertEqual(tuple(map(str,h.week_bounds(NOW))),('2026-09-28','2026-10-02'))

@@ -59,6 +59,19 @@ FINANCIAL_CONTEXT = r'\b(?:stocks?|shares?|equities|markets?|invest\w*|funds?|ET
 MILITARY_CONTEXT = r'\b(?:military|missiles?|attacks?|bomb\w*|war|warplanes?|refiner\w*|airstrikes?|air strikes?)\b'
 LABOR_CONTEXT = r'\b(?:workers?|unions?|labor|labour|wages?|pay dispute|industrial action|lightning|thunder|baseball)\b'
 CONTEXT_TERMS = (
+    (r'\bearnings calls?\b', 'company financial results conference call',
+     (r'실적.{0,12}(?:발표|설명|콘퍼런스|컨퍼런스)|어닝.{0,3}콜',), r'수익\s*통화', None, None),
+    (r'\bSeries I bonds?\b', 'U.S. inflation-linked Series I savings bond',
+     (r'시리즈\s*I|I[-\s]*본드|I[-\s]*저축\s*채권|물가.{0,8}연동.{0,8}(?:채권|저축)',),
+     r'신종\s*1\s*부채', None, None),
+    (r'\b(?:Treasury Department|Department of the Treasury)\b', 'United States Treasury Department',
+     (r'재무부',), r'기획\s*재정부', r'\b(?:U\.S\.|United States|Series I)\b', None),
+    (r'\btech-heavy\b', 'with a large share of technology stocks',
+     (r'기술주|기술\s*업종',), r'기술력', r'\bNasdaq\b', None),
+    (r'\bcomparable sales\b', 'sales at stores open for at least one year',
+     (r'(?:동일|기존|비교).{0,8}(?:매장|점포).{0,8}매출|1년.{0,15}매출',),
+     r'비교적.{0,8}(?:판매|매출)', None, None),
+
     (r'\bequal[- ]weight(?:ed|ing)?\b', 'investment allocation with the same portfolio share for each stock',
      (r'동일\s*(?:가중|비중)|균등\s*(?:가중|비중|배분)|같은\s*비중|동등한\s*비중',),
      r'(?:같은|동등한|동일한|균등한)\s*무게', FINANCIAL_CONTEXT,
