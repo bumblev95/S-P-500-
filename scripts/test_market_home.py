@@ -22,6 +22,50 @@ def rss(title='U.S. economy outlook', url='https://www.federalreserve.gov/newsev
     return '<rss><channel><item><title>'+title+'</title><link>'+url+'</link><pubDate>'+published+'</pubDate><description>'+description+'</description></item></channel></rss>'
 
 
+class FinancialTranslationPublication(unittest.TestCase):
+    def test_bad_amount_is_rejected_in_fresh_and_retained_translations(self):
+        article = {'title': 'Swiss central bank posts bumper $23bn profit thanks to gold, foreign assets',
+                   'sourceExcerpt': 'The bank holds a substantial stock portfolio.',
+                   'headlineKo': '스위스 중앙은행, 금·외화자산 덕에 23억 달러 이익',
+                   'summaryKo': '이 은행은 상당한 규모의 주식 포트폴리오를 보유하고 있다.',
+                   'translationStatus': 'ready'}
+        self.assertFalse(h.usable_translation(article))
+        h.prepare_translations([article])
+        self.assertEqual(article['translationStatus'], 'headline-fallback')
+        self.assertEqual(article['headlineKo'], article['title'])
+        h.translate_news([article], Path('/unused'), lambda texts: ['스위스 중앙은행, 금·외화자산 덕에 23억 달러 이익'] * len(texts))
+        self.assertEqual(article['translationStatus'], 'headline-fallback')
+        self.assertNotEqual(article['translationStatus'], 'ready')
+        bad_summary = {**article, 'sourceExcerpt': 'Profit was $23bn.', 'summaryKo': '수익은 23억 달러였다.'}
+        h.set_translation(bad_summary, article['title'], bad_summary['summaryKo'])
+        self.assertEqual(bad_summary['translationStatus'], 'unavailable')
+        self.assertFalse(h.usable_translation(bad_summary))
+
+
+class RecoveredNewsMeanings(unittest.TestCase):
+    def test_observed_financial_mistranslations_and_source_bound_reviews(self):
+        root = Path(__file__).parents[1]
+        cases = json.loads((root/'scripts/fixtures/market-news-20261030.json').read_text())['cases']
+        reviews = json.loads((root/'market/home-reviewed-news.json').read_text())
+        for case in cases:
+            old = deepcopy(case['article'])
+            with self.subTest(title=old['title']):
+                if old['translationStatus'] == 'ready':
+                    self.assertFalse(h.usable_translation(old), 'Observed mistranslations must not be publishable as ready')
+                else:
+                    self.assertEqual(old['translationStatus'], 'headline-fallback')
+                review = reviews[old['url']]
+                self.assertEqual(review['sourceHash'], old['sourceHash'])
+                self.assertEqual(review['title'], old['title'])
+                self.assertEqual(review['headline'], case['expected']['headlineKo'])
+                self.assertEqual(review['summary'], case['expected']['summaryKo'])
+                self.assertTrue(h.valid_korean_headline(review['headline'], old['title'], old['sourceExcerpt']))
+                self.assertTrue(h.valid_korean_summary(review['summary'], old['sourceExcerpt'], old['title']))
+                h.set_translation(old, review['headline'], review['summary'])
+                self.assertTrue(h.usable_translation(old))
+                self.assertEqual(old['translationStatus'], 'ready')
+
+
 class Periods(unittest.TestCase):
     def test_week_is_monday_friday_in_new_york_not_rolling_seven_days(self):
         self.assertEqual(tuple(map(str,h.week_bounds(NOW))),('2026-09-28','2026-10-02'))
