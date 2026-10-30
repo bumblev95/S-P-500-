@@ -70,7 +70,8 @@ jobs:
       - run: node scripts/test_crypto_page.cjs
       - run: node scripts/test_perp.cjs
   browser:
-    runs-on: ubuntu-latest
+    # Keep the pinned Playwright runtime on a supported runner image.
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
