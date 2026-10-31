@@ -1,6 +1,6 @@
 'use strict';
 const {chromium}=require('playwright');
-const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn}=require('node:child_process');
+const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFileSync}=require('node:child_process');
 (async()=>{
   const server=spawn('python3',['-m','http.server','8765','--bind','127.0.0.1'],{stdio:'ignore'});
   let browser;
@@ -9,6 +9,16 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn}=require
     browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH||undefined});
     fs.mkdirSync('home-preview',{recursive:true});
     const data=JSON.parse(fs.readFileSync('market/home.json','utf8'));
+    const eventFixture=JSON.parse(fs.readFileSync('scripts/fixtures/market-news-events-20261017.json','utf8'));
+    const eventNews=JSON.parse(execFileSync('python3',['-c',[
+      'import json,sys',
+      "sys.path.insert(0,'scripts')",
+      'from build_market_home import category,usable_translation',
+      'from market_news_events import group_coverage',
+      "fixture=json.load(open('scripts/fixtures/market-news-events-20261017.json'))",
+      "articles=[{**a,'category':category(a['title'],a.get('sourceExcerpt',''))} for a in fixture['news']]",
+      'print(json.dumps(group_coverage(articles,usable_translation)))'
+    ].join('\n')],{encoding:'utf8'}));
     const now=Date.parse(data.rankings.evaluatedAt||data.generatedAt),asOf=data.rankings.asOf;
     const buy=['AAPL','MSFT','NVDA'].map(symbol=>({symbol,name:symbol,asOf,code:'breakout',holdingCode:'hold',selection:'relative'}));
     const sell=['AON','APP','CCI'].map(symbol=>({symbol,name:symbol,asOf,code:'avoid',holdingCode:'reduce',selection:'signal'}));
@@ -35,7 +45,18 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn}=require
         assert((await card.locator('.hp-story-meta').innerText()).includes(story.category+' · '+story.source));
         assert.equal(await card.locator('h3 a').textContent(),story.headlineKo);
         assert.equal(await card.locator('h3 a').getAttribute('href'),story.url);
-        assert.equal(await card.locator('p').textContent(),story.summaryKo);
+        assert.equal(await card.locator(':scope > p').textContent(),story.summaryKo);
+        const related=story.relatedCoverage||[];
+        if(related.length){
+          await card.locator('details summary').click();
+          assert.equal(await card.locator('details li').count(),related.length);
+          for(const [j,coverage] of related.entries()){
+            const link=card.locator('details li a').nth(j);
+            assert.equal(await link.getAttribute('href'),coverage.url);
+            assert((await link.innerText()).includes(coverage.source));
+          }
+          await card.locator('details summary').click();
+        }
       }
       if(data.rankings.eligibleCount>=6){
         assert.equal(await page.locator('[data-home-buy] .hp-pick').count(),3);
@@ -54,6 +75,29 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn}=require
         assert(marks.every(Boolean),'bar outside lane');
         await page.screenshot({path:'home-preview/'+theme+'-'+width+'.png',fullPage:true});
       }
+      // Freeze the reported October 17 event independently of live RSS changes.
+      const eventPage=await browser.newPage({colorScheme:theme});
+      eventPage.on('pageerror',e=>errors.push(e.message));
+      await eventPage.clock.install({time:new Date(eventFixture.observedAt)});
+      await eventPage.route('**/market/home.json?*',route=>route.fulfill({json:{...data,news:eventNews}}));
+      await eventPage.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
+      await eventPage.waitForSelector('.hp-related');
+      assert.equal(await eventPage.locator('.hp-story').count(),5);
+      const policy=eventPage.locator('.hp-story').filter({has:eventPage.locator('.hp-related')});
+      assert.equal(await policy.count(),1);
+      assert.equal(await policy.locator('h3 a').getAttribute('href'),eventNews[0].url);
+      assert((await policy.locator('.hp-story-meta').innerText()).includes('국제경제'));
+      assert.equal(await policy.locator('details').getAttribute('open'),null);
+      await policy.locator('summary').click();
+      assert.equal(await policy.locator('details li').count(),1);
+      assert.equal(await policy.locator('details li p').textContent(),eventNews[0].relatedCoverage[0].summaryKo);
+      for(const width of [320,375,768,1024,1440]){
+        await eventPage.setViewportSize({width,height:1000});
+        assert(await eventPage.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'related coverage overflow at '+width);
+        await eventPage.screenshot({path:'home-preview/events-'+theme+'-'+width+'.png',fullPage:true});
+      }
+      await eventPage.close();
+
       for(const [name,rankings] of scenarios){
         await page.route('**/market/home.json?*',route=>route.fulfill({json:{...data,rankings}}));
         await page.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});

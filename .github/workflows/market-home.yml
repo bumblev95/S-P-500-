@@ -12,6 +12,7 @@ on:
       - 'forecasts/latest.json'
       - 'market/latest.json'
       - 'scripts/build_market_home.py'
+      - 'scripts/market_news_events.py'
       - 'scripts/translate_company_news.py'
       - 'scripts/test_company_news_translation.py'
       - 'scripts/build_home_rankings.cjs'
@@ -20,6 +21,7 @@ on:
       - 'scripts/fixtures/market-news-context.json'
       - 'scripts/fixtures/market-news-topics.json'
       - 'scripts/fixtures/market-news-20261030.json'
+      - 'scripts/fixtures/market-news-events-20261017.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -34,6 +36,7 @@ on:
       - 'forecasts/latest.json'
       - 'market/latest.json'
       - 'scripts/build_market_home.py'
+      - 'scripts/market_news_events.py'
       - 'scripts/translate_company_news.py'
       - 'scripts/test_company_news_translation.py'
       - 'scripts/build_home_rankings.cjs'
@@ -42,6 +45,7 @@ on:
       - 'scripts/fixtures/market-news-context.json'
       - 'scripts/fixtures/market-news-topics.json'
       - 'scripts/fixtures/market-news-20261030.json'
+      - 'scripts/fixtures/market-news-events-20261017.json'
       - 'scripts/check_market_home_browser.cjs'
       - 'market/home-reviewed-news.json'
       - '.github/workflows/market-home.yml'
@@ -76,7 +80,7 @@ jobs:
           python-version: '3.11'
       - name: Validate daily TOP 3, semantic no-ops, periods and cache recovery
         run: |
-          python -m unittest discover -s scripts -p test_market_home.py
+          python -m unittest discover -s scripts -p 'test_market_home*.py'
           python -m unittest discover -s scripts -p test_company_news_translation.py
           node scripts/test_market_home.cjs
           node --check assets/market-home.js
@@ -171,6 +175,7 @@ jobs:
           from pathlib import Path
           sys.path.insert(0, 'scripts')
           from build_market_home import category, usable_translation
+          from market_news_events import same_event
           snapshot=json.loads(Path('market/home.json').read_text())
           sources={a['url']:a for a in json.loads(Path('market/home-cache.json').read_text())['news']}
           for card in snapshot['news']:
@@ -179,6 +184,15 @@ jobs:
               assert topic and card['category']==topic, 'News card needs source-backed economic relevance and topic'
               assert usable_translation(source)
               assert all(card[k]==source[k] for k in ['title','headlineKo','summaryKo','sourceHash'])
+              for related in card.get('relatedCoverage',[]):
+                  original=sources[related['url']]
+                  assert same_event({**source,'category':topic},related)
+                  assert related['category']==category(original['title'],original.get('sourceExcerpt',''))
+                  assert all(related.get(k)==original.get(k) for k in ['title','sourceExcerpt','sourceHash'])
+                  if usable_translation(original):
+                      assert all(related[k]==original[k] for k in ['headlineKo','summaryKo'])
+                  else:
+                      assert 'headlineKo' not in related and 'summaryKo' not in related
           assert len(snapshot['recap']['sectors'])==11
           assert len(snapshot['rankings']['buy'])<=3 and len(snapshot['rankings']['sell'])<=3
           ranks=snapshot['rankings']
