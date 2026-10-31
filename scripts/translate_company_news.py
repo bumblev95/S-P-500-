@@ -5,6 +5,7 @@ headline/excerpt remain available for checking. Cache entries bind to exact
 source text; a changed article cannot inherit an old Korean summary.
 """
 import argparse
+from decimal import Decimal
 import hashlib
 import json
 import re
@@ -58,6 +59,19 @@ FINANCIAL_CONTEXT = r'\b(?:stocks?|shares?|equities|markets?|invest\w*|funds?|ET
 MILITARY_CONTEXT = r'\b(?:military|missiles?|attacks?|bomb\w*|war|warplanes?|refiner\w*|airstrikes?|air strikes?)\b'
 LABOR_CONTEXT = r'\b(?:workers?|unions?|labor|labour|wages?|pay dispute|industrial action|lightning|thunder|baseball)\b'
 CONTEXT_TERMS = (
+    (r'\bearnings calls?\b', 'company financial results conference call',
+     (r'실적.{0,12}(?:발표|설명|콘퍼런스|컨퍼런스)|어닝.{0,3}콜',), r'수익\s*통화', None, None),
+    (r'\bSeries I bonds?\b', 'U.S. inflation-linked Series I savings bond',
+     (r'시리즈\s*I|I[-\s]*본드|I[-\s]*저축\s*채권|물가.{0,8}연동.{0,8}(?:채권|저축)',),
+     r'신종\s*1\s*부채', None, None),
+    (r'\b(?:Treasury Department|Department of the Treasury)\b', 'United States Treasury Department',
+     (r'재무부',), r'기획\s*재정부', r'\b(?:U\.S\.|United States|Series I)\b', None),
+    (r'\btech-heavy\b', 'with a large share of technology stocks',
+     (r'기술주|기술\s*업종',), r'기술력', r'\bNasdaq\b', None),
+    (r'\bcomparable sales\b', 'sales at stores open for at least one year',
+     (r'(?:동일|기존|비교).{0,8}(?:매장|점포).{0,8}매출|1년.{0,15}매출',),
+     r'비교적.{0,8}(?:판매|매출)', None, None),
+
     (r'\bequal[- ]weight(?:ed|ing)?\b', 'investment allocation with the same portfolio share for each stock',
      (r'동일\s*(?:가중|비중)|균등\s*(?:가중|비중|배분)|같은\s*비중|동등한\s*비중',),
      r'(?:같은|동등한|동일한|균등한)\s*무게', FINANCIAL_CONTEXT,
@@ -121,12 +135,51 @@ def valid_context_terms(text, source, source_context=''):
     return True
 
 
+def valid_financial_facts(text, source):
+    """Conservative source-field checks for amount scale and earnings misses.
+
+    These catch known failure classes, not arbitrary translation errors. Never
+    borrow an amount or a direction from the other field of the article.
+    """
+    source = normalized_source(source)
+    amounts = []
+    for match in re.finditer(r'\$\s*(\d+(?:,\d{3})*(?:\.\d+)?)\s*(billion|million|trillion|bn|mn)\b', source, re.I):
+        scale = {'billion': 10**9, 'bn': 10**9, 'million': 10**6, 'mn': 10**6, 'trillion': 10**12}[match[2].lower()]
+        amounts.append(Decimal(match[1].replace(',', '')) * scale)
+    if amounts:
+        translated = []
+        for match in re.finditer(r'((?:\d+(?:,\d{3})*(?:\.\d+)?\s*[조억만천백십]*\s*)+)달러', text):
+            total = group = Decimal(0)
+            pending = None
+            for token in re.findall(r'\d+(?:,\d{3})*(?:\.\d+)?|[조억만천백십]', match[1]):
+                if token in ('조', '억', '만'):
+                    total += (group + (pending or 0)) * {'조': 10**12, '억': 10**8, '만': 10**4}[token]
+                    group = Decimal(0)
+                    pending = None
+                elif token in ('천', '백', '십'):
+                    group += (pending if pending is not None else 1) * {'천': 1000, '백': 100, '십': 10}[token]
+                    pending = None
+                else:
+                    pending = Decimal(token.replace(',', ''))
+            translated.append(total + group + (pending or 0))
+        if any(amount not in translated for amount in amounts):
+            return False
+    if re.search(r'\b(?:sales|revenue|earnings)\s+miss(?:es|ed)?\s+(?:\w+\s+){0,2}expectations\b', source, re.I):
+        if not re.search(r'미달|밑돌|하회|못\s*미(?:치|쳤|친)', text):
+            return False
+    if re.search(r'\b(?:LA|Los Angeles) primary\b', source, re.I):
+        if not re.search(r'예비\s*선거|경선', text):
+            return False
+    return True
+
+
 def valid_korean_summary(text, source_text='', source_context=''):
     # Keep valid_korean as the generic language gate for existing callers.
     # Validate the summary against the passage actually translated, not against
     # every term in the headline. Do not silently publish detected bad text.
     return (valid_korean_headline(text)
-            and valid_context_terms(text, source_text, source_context))
+            and valid_context_terms(text, source_text, source_context)
+            and valid_financial_facts(text, source_text))
 
 
 def source_hash(article):
@@ -206,7 +259,8 @@ def valid_korean_headline(text, source_title='', source_context=''):
         return False
     return (not re.search(r'[가-힣]+(?:지만|면서|으며|는데|다면|으면|므로|에도)$', tail)
             and valid_headline_terms(text, source_title)
-            and valid_context_terms(text, source_title, source_context))
+            and valid_context_terms(text, source_title, source_context)
+            and valid_financial_facts(text, source_title))
 
 
 def simpler_headline_input(title, source_excerpt=''):

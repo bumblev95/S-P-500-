@@ -115,10 +115,15 @@ class ActualOctober17Events(unittest.TestCase):
             return self.feed([a for a in self.news if a['source'] == source])
         before = deepcopy(self.news)
         collected, _ = h.collect_news({'news': self.news}, NOW, {}, fetch)
+        # The modern semantic guard rejects one historical translation; test
+        # reuse only for entries that pass the current validator.
+        rejected = [a for a in collected if not h.reusable_translation(a)]
+        self.assertTrue(rejected)
+        collected = [a for a in collected if h.reusable_translation(a)]
         translator = Mock(side_effect=AssertionError('Healthy cached translations require no model'))
         h.translate_news(collected, Path('/unused'), translator)
         translator.assert_not_called()
-        self.assertEqual({a['url'] for a in collected}, {a['url'] for a in self.news})
+        self.assertEqual({a['url'] for a in collected}, {a['url'] for a in self.news if h.reusable_translation(a)})
         self.assertEqual(len(self.assemble(collected)['news']), 5)
         self.assertEqual(self.news, before)
 
@@ -138,8 +143,13 @@ class ActualOctober17Events(unittest.TestCase):
                 self.assertEqual(snapshot['news'][0]['lastSuccessAt'], self.bbc['lastSuccessAt'])
                 for old in self.news:
                     new = next(a for a in saved['news'] if a['url'] == old['url'])
-                    for key in ['title', 'sourceExcerpt', 'sourceHash', 'headlineKo', 'summaryKo']:
+                    for key in ['title', 'sourceExcerpt', 'sourceHash']:
                         self.assertEqual(new[key], old[key])
+                    if h.reusable_translation(old):
+                        for key in ['headlineKo', 'summaryKo']:
+                            self.assertEqual(new[key], old[key])
+                    else:
+                        self.assertFalse(h.usable_translation(new) and new.get('headlineKo') == old.get('headlineKo'))
 
     def test_quotes_rankings_and_recap_are_unchanged_by_event_selection(self):
         before = deepcopy((self.quotes, self.ranks))
