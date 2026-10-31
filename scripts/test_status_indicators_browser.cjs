@@ -44,9 +44,16 @@ async function checkNews(page, symbol, snapshot=news, now=clock) {
     'Render exactly the valid selected articles, including an empty feed');
   if(selected.articles.length) {
     await panel.locator('.ce-news-card').first().waitFor();
-    const titles=await panel.locator('.ce-news-title').allTextContents();
-    assert(titles.every(t=>/[가-힣]{2}/.test(t)), 'News opens with Korean summaries');
-    assert(!titles.some(t=>/한국어 요약을 준비하지/.test(t)), 'Selected stock summaries are available');
+    // The live feed can legitimately contain unavailable or stale translations.
+    // Check every card against its own source, including the explicit fallback.
+    const cards=panel.locator('.ce-news-title');
+    for (let i=0;i<await cards.count();i++) {
+      const link=cards.nth(i), url=await link.getAttribute('href');
+      const article=selected.articles.find(e=>e.source.url===url);
+      assert(article, 'Card links to a selected source');
+      const expected=CompanyEvents.koreanSummary(article) || '한국어 요약을 준비하지 못했습니다. 원문에서 내용을 확인해 주세요.';
+      assert.equal(await link.textContent(), expected, 'Show the verified summary or an honest unavailable fallback');
+    }
   } else {
     const empty=panel.locator(':scope > .ce-empty');
     await empty.waitFor();
