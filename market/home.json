@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T00:05:57.396934+00:00",
+  "generatedAt": "2026-11-02T06:18:15.332937+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-10-30",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-11-02T00:05:57.396Z",
+    "evaluatedAt": "2026-11-02T06:18:15.332Z",
     "priceGeneratedAt": "2026-10-30T21:18:36+00:00",
     "marketGeneratedAt": "2026-11-01T23:38:55.936210+00:00",
     "basis": "technical-relative-ranking",
@@ -79,9 +79,9 @@
   "brief": "에너지 강세 · 기술 약세",
   "recap": {
     "asOf": "2026-10-30",
-    "weekStart": "2026-10-26",
-    "weekEnd": "2026-10-30",
-    "weekComplete": true,
+    "weekStart": "2026-11-02",
+    "weekEnd": "2026-11-06",
+    "weekComplete": false,
     "timezone": "America/New_York",
     "method": "sector-etf-unadjusted-close-price-return",
     "indices": [
@@ -93,12 +93,12 @@
         "close": 7580.06982421875,
         "day": -1.8175287778868343,
         "dayBaseDate": "2026-10-29",
-        "week": -0.5720380519245838,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -108,12 +108,12 @@
         "close": 25437.0,
         "day": -2.8555611175022477,
         "dayBaseDate": "2026-10-29",
-        "week": -1.9970451046697257,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "^DJI",
@@ -123,12 +123,12 @@
         "close": 51770.30859375,
         "day": -1.0932786156699792,
         "dayBaseDate": "2026-10-29",
-        "week": -0.8519586288135761,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       }
     ],
     "sectors": [
@@ -140,12 +140,12 @@
         "close": 179.50999450683594,
         "day": -4.890330993797932,
         "dayBaseDate": "2026-10-29",
-        "week": -2.0302359370431455,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLC",
@@ -155,12 +155,12 @@
         "close": 99.9000015258789,
         "day": -1.29433610359031,
         "dayBaseDate": "2026-10-29",
-        "week": -5.317032031814528,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLY",
@@ -170,12 +170,12 @@
         "close": 115.37999725341797,
         "day": -0.7056796182098535,
         "dayBaseDate": "2026-10-29",
-        "week": 2.015914067247815,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLF",
@@ -185,12 +185,12 @@
         "close": 56.5099983215332,
         "day": -0.7551814463410911,
         "dayBaseDate": "2026-10-29",
-        "week": 1.0912285849793646,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLI",
@@ -200,12 +200,12 @@
         "close": 167.39999389648438,
         "day": -1.6046616751751674,
         "dayBaseDate": "2026-10-29",
-        "week": 1.6887370075050034,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLV",
@@ -215,12 +215,12 @@
         "close": 184.8699951171875,
         "day": 0.4509899268276163,
         "dayBaseDate": "2026-10-29",
-        "week": 3.118025644774902,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLP",
@@ -230,12 +230,12 @@
         "close": 89.41999816894531,
         "day": 1.4062121336789746,
         "dayBaseDate": "2026-10-29",
-        "week": 1.3142941362321414,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLRE",
@@ -245,12 +245,12 @@
         "close": 43.16999816894531,
         "day": 0.2554500514310831,
         "dayBaseDate": "2026-10-29",
-        "week": 1.4094396956127797,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLU",
@@ -260,12 +260,12 @@
         "close": 43.43000030517578,
         "day": 0.6722320807378779,
         "dayBaseDate": "2026-10-29",
-        "week": 2.0441703567019687,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLB",
@@ -275,12 +275,12 @@
         "close": 52.7400016784668,
         "day": 0.39977708747385154,
         "dayBaseDate": "2026-10-29",
-        "week": 2.786981615479278,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       },
       {
         "symbol": "XLE",
@@ -290,16 +290,54 @@
         "close": 70.0199966430664,
         "day": 1.906560291149506,
         "dayBaseDate": "2026-10-29",
-        "week": 0.9952326464567562,
-        "weekBaseDate": "2026-10-23",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-        "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00"
+        "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+        "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00"
       }
     ]
   },
   "news": [
+    {
+      "url": "https://www.cnbc.com/2026/11/02/south-korea-ai-spending-budget.html",
+      "title": "South Korea targets 'world's highest performance' sovereign AI model in record new budget",
+      "publishedAt": "2026-11-02T06:02:03+00:00",
+      "firstPublishedAt": "2026-11-02T06:02:03+00:00",
+      "source": "CNBC 주요",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "7ac6b21c5cf7309727db4c5baa07cec2858ab3cf4adbbfe448447f637790f663",
+      "translationMethod": "machine-translation",
+      "headlineKo": "한국은 '세계 최고 성능'의 주권 인공지능 모델을 신기록 예산으로 목표로 하고 있습니다.",
+      "summaryKo": "2027년 예산은 12.8% 증가하여 820.9조 원으로 늘어날 것이며, 반도체, 물리적 AI 및 AI 데이터 센터에 21.3조 원의 투자를 포함할 것입니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/11/02/canada-india-bank-takeover-protest-workers.html",
+      "title": "Canada-India $5.5 billion bank takeover attracts opposition from workers, politicians",
+      "publishedAt": "2026-11-02T04:09:34+00:00",
+      "firstPublishedAt": "2026-11-02T04:09:34+00:00",
+      "source": "CNBC 주요",
+      "category": "금융·시장",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "f5679250a64222fb4ccbd7a2290ff54ec48da537b221464234f6b17210a5d680",
+      "translationMethod": "machine-translation",
+      "headlineKo": "캐나다와 인도의 55억 달러 규모의 은행 인수 사업은 노동자, 정치인들의 반대를 불러일으키고 있습니다.",
+      "summaryKo": "IDBI 근로자들은 정부로부터 \"개인화 과정을 취소하고\" 공공 투자와 직원들의 이익을 보호하면서 은행을 강화하기 위해 노력할 것을 요구합니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
     {
       "url": "https://www.bbc.co.uk/news/videos/cwly0eev3m44o?at_medium=RSS&at_campaign=rss",
       "title": "'I've had people eating cat food': Rising cost of living top of mind for US voters",
@@ -307,7 +345,7 @@
       "firstPublishedAt": "2026-11-01T22:25:51+00:00",
       "source": "BBC 경제",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -326,7 +364,7 @@
       "firstPublishedAt": "2026-11-01T06:00:01+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -345,7 +383,7 @@
       "firstPublishedAt": "2026-11-01T12:33:53+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -356,44 +394,6 @@
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/11/01/election-municipal-bonds.html",
-      "title": "The midterm election could reshape the muni bond market. Here’s what investors need to know",
-      "publishedAt": "2026-11-01T12:30:48+00:00",
-      "firstPublishedAt": "2026-11-01T12:30:48+00:00",
-      "source": "CNBC 주요",
-      "category": "Fed·금리",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "1f8b2fe680f3cd50a53cf81ce473210dad2f7b443b754b752e76d06c3b0b76aa",
-      "headlineKo": "중간선거는 시가 재편될 수 있습니다. 투자자들이 알아야 할 것은",
-      "summaryKo": "2026년 선거는 국가 세금 조치, 새로운 채권 공급 및 의회 구성에 의해 시립 채권에 영향을 미칠 수 있습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/cqj34gnd3n30o?at_medium=RSS&at_campaign=rss",
-      "title": "Shops looted as German cost-of-living protests turn violent",
-      "publishedAt": "2026-11-01T11:57:48+00:00",
-      "firstPublishedAt": "2026-11-01T07:36:18+00:00",
-      "source": "BBC 경제",
-      "category": "경제·물가",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "952c41a171da3a1671f67dd3ca4f2e30dbddd6c7c9c7833c77ae283e5d2e15d7",
-      "headlineKo": "독일의 생활비용 시위가 폭력적으로 진행되면서 점포가 약탈당했습니다",
-      "summaryKo": "독일 전역의 도시들 - 베를린, 함부르크, 프랑크푸르트 등에서 일어난 시위는 같은 날 프랑스에서도 수백만의 사람들이 시위를 벌였다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
     }
   ],
   "feeds": [
@@ -401,56 +401,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-02T00:05:57.396934+00:00",
-      "lastSuccessAt": "2026-11-02T00:05:57.396934+00:00",
+      "lastAttemptAt": "2026-11-02T06:18:15.332937+00:00",
+      "lastSuccessAt": "2026-11-02T06:18:15.332937+00:00",
       "fromCache": false
     }
   ],
