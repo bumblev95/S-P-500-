@@ -1,74 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T21:42:37.700965+00:00",
+  "generatedAt": "2026-11-04T01:27:01.458597+00:00",
   "rankings": {
-    "buy": [
-      {
-        "symbol": "ABBV",
-        "name": "애브비",
-        "asOf": "2026-10-30",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      },
-      {
-        "symbol": "ACN",
-        "name": "액센츄어",
-        "asOf": "2026-10-30",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      },
-      {
-        "symbol": "AJG",
-        "name": "아서 J 갤러거",
-        "asOf": "2026-10-30",
-        "score": 100,
-        "code": "unavailable",
-        "holdingCode": "hold",
-        "selection": "relative",
-        "reason": "시장 위험 데이터 확인 필요"
-      }
-    ],
-    "sell": [
-      {
-        "symbol": "APP",
-        "name": "앱러빈",
-        "asOf": "2026-10-30",
-        "score": 0,
-        "code": "unavailable",
-        "holdingCode": "reduce",
-        "selection": "signal",
-        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
-      },
-      {
-        "symbol": "CAT",
-        "name": "캐터필러",
-        "asOf": "2026-10-30",
-        "score": 0,
-        "code": "unavailable",
-        "holdingCode": "reduce",
-        "selection": "signal",
-        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
-      },
-      {
-        "symbol": "CHRW",
-        "name": "CH 로빈슨",
-        "asOf": "2026-10-30",
-        "score": 0,
-        "code": "unavailable",
-        "holdingCode": "reduce",
-        "selection": "signal",
-        "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
-      }
-    ],
-    "asOf": "2026-10-30",
-    "eligibleCount": 504,
-    "evaluatedAt": "2026-11-03T21:42:37.700Z",
+    "buy": [],
+    "sell": [],
+    "asOf": null,
+    "eligibleCount": 0,
+    "evaluatedAt": "2026-11-04T01:27:01.458Z",
     "priceGeneratedAt": "2026-10-30T21:18:36+00:00",
     "marketGeneratedAt": "2026-11-03T21:05:21.809525+00:00",
     "basis": "technical-relative-ranking",
