@@ -105,7 +105,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
       }
       await eventPage.close();
 
-      await page.clock.setFixedTime(new Date(now));
+      // Date.now must continue advancing for the refresh throttle below.
+      await page.clock.setSystemTime(new Date(now));
       for(const [name,rankings] of scenarios){
         await page.route('**/market/home.json?*',route=>route.fulfill({json:{...data,rankings}}));
         await page.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
