@@ -30,10 +30,15 @@ TRANSITIONS = {
 }
 LAST_TRADING_SESSIONS = {
     "WBD": ("2026-10-05", "https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-710"),
+    "KVUE": ("2026-10-30", "https://kimberlyclark.gcs-web.com/news-releases/news-release-details/kimberly-clark-completes-acquisition-kenvue-creating-preeminent"),
 }
 # Constituent replacement changes the requested universe, not security identity.
 # The added stock is downloaded independently; old forecasts remain historical.
 CONSTITUENT_REPLACEMENTS = [
+    {
+        "removedSymbol": "KVUE", "addedSymbol": "OKTA", "effectiveDate": "2026-11-04",
+        "sourceUrl": "https://press.spglobal.com/2026-10-30-Okta-Set-to-Join-S-P-500-Others-to-Join-S-P-MidCap-400-and-S-P-SmallCap-600",
+    },
     {
         "removedSymbol": "WBD", "addedSymbol": "TWLO", "effectiveDate": "2026-10-06",
         "sourceUrl": "https://press.spglobal.com/2026-10-01-Vylor-Added-to-the-S-P-500-Twilio-Set-to-Join-S-P-500-Others-to-Join-S-P-MidCap-400-and-S-P-SmallCap-600",

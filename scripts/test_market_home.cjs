@@ -73,6 +73,15 @@ assert.deepEqual(H.rankRows([null,{symbol:'<script>',asOf:'2026-10-02'},...ranke
 assert(H.rankingHtml([{symbol:'BRK.B',name:'<script>',reason:'<img onerror=alert(1)>',asOf:'2026-10-02',code:'breakout'}],'buy',now).includes('&lt;script&gt;'));
 assert(!H.buyHtml({buy:[{symbol:'OLD',asOf:'2026-09-20'}]},now).includes('hp-pick'));
 assert(H.buyHtml({buy:[]},now).includes('최신 순위 자료 확인 중'));
+// Fresh market metadata cannot make missing/expired prices look available.
+const incidentNow=Date.parse('2026-11-05T08:00:00Z');
+const incident={buy:[],sell:[],asOf:null,priceAsOf:'2026-10-30',eligibleCount:0,
+  priceGeneratedAt:'2026-10-30T21:18:36Z',marketGeneratedAt:'2026-11-05T07:00:00Z'};
+assert(H.rankingNote(incident,incidentNow).includes('TOP3 표시를 보류'));
+assert(H.rankingNote(incident,incidentNow).includes('마지막 가격 기준일 2026-10-30'));
+assert(H.rankingNote({...incident,priceAsOf:null},incidentNow).includes('2026-10-30 21:18 UTC'));
+assert(H.rankingNote({...incident,buy:[{symbol:'AAPL',asOf:'2026-10-30'}]},incidentNow).includes('TOP3 표시를 보류'));
+assert(!H.rankingNote({...ranks,priceAsOf:'2026-10-02'},now).includes('TOP3 표시를 보류'));
 
 // Real assessment integration: no trigger, a real trigger, risk and stale market.
 const day='2026-10-02',market={generatedAt:day+'T22:00:00Z',credit:{status:'stable'},
@@ -97,6 +106,7 @@ try{
   assert.equal(A.evaluate(stock('A',100),market,null,126,now).plan.code,'buy');
   assert.equal(entry.buy.length,3);assert(entry.buy.every(q=>q.selection==='signal'));
   assert.equal(entry.policy,'daily-top3-v1');assert.equal(entry.basis,'technical-relative-ranking');
+  assert.equal(entry.priceAsOf,day,'Display observation date without changing ranking policy');
   for(const m of [{...market,generatedAt:'2026-09-29T22:00:00Z'},{...market,credit:{status:'risk'}}]){
     const result=write(99.2,m);
     assert.equal(result.buy.length,3);assert.equal(result.sell.length,3);

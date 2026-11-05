@@ -39,6 +39,7 @@ function build(root,now=Date.now()){
   const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
   const prices=read('forecasts/latest.json'),market=read('market/latest.json');
   return {...select(assessment.all(prices,market,null,126,now),now),evaluatedAt:new Date(now).toISOString(),
+    priceAsOf:Object.values(prices.stocks||{}).map(s=>s.asOf).filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d||'')).sort().at(-1)||null,
     priceGeneratedAt:prices.generatedAt,marketGeneratedAt:market.generatedAt,basis:'technical-relative-ranking',
     policy:'daily-top3-v1',
     priceMaxAgeDays:5,marketMaxAgeDays:3};

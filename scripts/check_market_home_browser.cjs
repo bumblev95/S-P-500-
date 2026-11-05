@@ -19,10 +19,13 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
       "articles=[{**a,'category':category(a['title'],a.get('sourceExcerpt',''))} for a in fixture['news']]",
       'print(json.dumps(group_coverage(articles,usable_translation)))'
     ].join('\n')],{encoding:'utf8'}));
-    const now=Date.parse(data.rankings.evaluatedAt||data.generatedAt),asOf=data.rankings.asOf;
+    // Synthetic healthy scenarios must not inherit a live incident's null/stale
+    // asOf. The real snapshot is checked separately at its own evaluation time.
+    const liveNow=Date.parse(data.rankings.evaluatedAt||data.generatedAt);
+    const now=Date.parse('2026-11-05T08:00:00Z'),asOf='2026-11-04';
     const buy=['AAPL','MSFT','NVDA'].map(symbol=>({symbol,name:symbol,asOf,code:'breakout',holdingCode:'hold',selection:'relative'}));
     const sell=['AON','APP','CCI'].map(symbol=>({symbol,name:symbol,asOf,code:'avoid',holdingCode:'reduce',selection:'signal'}));
-    const ranks={...data.rankings,buy,sell,marketGeneratedAt:new Date(now-3600000).toISOString()};
+    const ranks={buy,sell,asOf,priceAsOf:asOf,eligibleCount:6,evaluatedAt:new Date(now).toISOString(),marketGeneratedAt:new Date(now-3600000).toISOString()};
     const scenarios=[
       ['relative',ranks],
       ['one-signal',{...ranks,buy:[{...buy[0],code:'buy',selection:'signal'},buy[1],buy[2]]}],
@@ -33,12 +36,12 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
     ];
     for(const theme of ['light','dark']){
       const page=await browser.newPage({colorScheme:theme});
-      await page.clock.install({time:new Date(now)});
+      await page.clock.install({time:new Date(liveNow)});
       const errors=[];page.on('pageerror',e=>errors.push(e.message));
       await page.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
       await page.waitForSelector('[data-sector]');
       assert.equal(await page.locator('[data-sector]').count(),11);
-      const stories=require('../assets/market-home.js').eligibleNews(data.news,now);
+      const stories=require('../assets/market-home.js').eligibleNews(data.news,liveNow);
       assert.equal(await page.locator('.hp-story').count(),stories.length);
       for(const [i,story] of stories.entries()){
         const card=page.locator('.hp-story').nth(i);
@@ -61,6 +64,10 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
       if(data.rankings.eligibleCount>=6){
         assert.equal(await page.locator('[data-home-buy] .hp-pick').count(),3);
         assert.equal(await page.locator('[data-home-sell] .hp-pick').count(),3);
+      }else if(data.rankings.eligibleCount===0){
+        assert.equal(await page.locator('.hp-pick').count(),0);
+        assert((await page.locator('[data-home-ranking-note]').innerText()).includes('TOP3 표시를 보류'));
+        assert(!(await page.locator('[data-home-status]').innerText()).includes('최신 종가로 매일 재선정'));
       }
       assert.equal(await page.locator('.hp-entry-wait').count(),0);
       await page.locator('[data-sector]').first().click();
@@ -98,6 +105,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
       }
       await eventPage.close();
 
+      await page.clock.setFixedTime(new Date(now));
       for(const [name,rankings] of scenarios){
         await page.route('**/market/home.json?*',route=>route.fulfill({json:{...data,rankings}}));
         await page.goto('http://127.0.0.1:8765/',{waitUntil:'networkidle'});
@@ -109,6 +117,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
           assert.equal(await picks.locator('.hp-pick').count(),0);
           assert.equal(await sales.locator('.hp-pick').count(),0);
           assert.equal(await picks.innerText(),'최신 순위 자료 확인 중');
+          assert((await page.locator('[data-home-ranking-note]').innerText()).includes('TOP3 표시를 보류'));
         }else{
           assert.equal(await picks.locator('.hp-pick').count(),3,name+' keeps three buys');
           assert.equal(await sales.locator('.hp-pick').count(),3,name+' keeps three sells');
@@ -133,12 +142,14 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),{spawn,execFile
       }
 
       const legacy=fs.readFileSync('index.html','utf8').replace(/^.*data-home-ranking-note.*\n/m,'');
+      await page.route('**/market/home.json?*',route=>route.fulfill({json:{...data,rankings:ranks}}));
       await page.route('**/legacy-home.html',route=>route.fulfill({contentType:'text/html',body:legacy}));
       await page.goto('http://127.0.0.1:8765/legacy-home.html',{waitUntil:'networkidle'});
       await page.waitForFunction(()=>document.querySelector('[data-home-status]').textContent.startsWith('갱신'));
       assert.equal(await page.locator('[data-home-ranking-note]').count(),1,'Cached root wrappers acquire the new caption');
       assert.equal(await page.locator('.hp-pick').count(),6,'Existing root wrapper markup remains compatible');
       await page.unroute('**/legacy-home.html');
+      await page.unroute('**/market/home.json?*');
 
       // Keep a tab open: a new daily rank arrives, an HTTP failure preserves it,
       // then the next refresh recovers without a manual reload.

@@ -9,6 +9,7 @@ import sys
 import threading
 import urllib.request
 import urllib.error
+import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 from zoneinfo import ZoneInfo
 from datetime import datetime, timezone
@@ -117,24 +118,36 @@ def normalize_symbol(symbol: str) -> str:
     return str(symbol or "").strip().upper().replace("-", ".")
 
 
+def sheet_csv_url(url: str) -> str:
+    """Convert only Google's published HTML view to its CSV export endpoint."""
+    parsed = urllib.parse.urlsplit(url)
+    if (parsed.scheme == "https" and parsed.netloc == "docs.google.com"
+            and re.fullmatch(r"/spreadsheets/d/e/[A-Za-z0-9_-]+/pubhtml", parsed.path)):
+        query = dict(urllib.parse.parse_qsl(parsed.query))
+        query["output"] = "csv"
+        return urllib.parse.urlunsplit(parsed._replace(
+            path=parsed.path[:-7] + "pub", query=urllib.parse.urlencode(query)))
+    return url
+
+
 def read_watchlist_sheet_url() -> str:
     env_url = os.getenv("WATCHLIST_CSV_URL", "").strip()
     if env_url:
-        return env_url
+        return sheet_csv_url(env_url)
 
     if CONFIG_PATH.exists():
         try:
             cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
             url = str(cfg.get("sheetCsvUrl") or "").strip()
             if url and not url.startswith("PASTE_"):
-                return url
+                return sheet_csv_url(url)
         except Exception as exc:
             print(f"Warning: could not read {CONFIG_PATH}: {exc}")
 
     if LEGACY_SHEET_URL_PATH.exists():
         url = LEGACY_SHEET_URL_PATH.read_text(encoding="utf-8").strip()
         if url and not url.startswith("PASTE_"):
-            return url
+            return sheet_csv_url(url)
     return ""
 
 
