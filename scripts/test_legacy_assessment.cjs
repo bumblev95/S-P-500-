@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const A=require('../assets/stock-assessment.js'),T=require('../assets/technical-guide.js'),L=require('../assets/learned-guide.js');
 const key='sp500_sector_valuation_dashboard_ko_family_v25';
 const fixture={selectedSymbol:'NVDA',selectedSector:'All',lastConstituentRefresh:Date.now(),settings:{years:3,analysisMode:3,autoSave:false},stocks:[{symbol:'NVDA',name:'Saved watch item',sector:'Watchlist',isCustom:true,watchlistSource:'local',price:200,forwardEPS:6,epsGrowth:10,revGrowth:8,grossMargin:40,opMargin:25,exitPE:22,discountRate:12,notes:'Keep my original note',risk:{rate:2,cyc:2,margin:2,balance:2,crowding:2,reg:2},fundamentalSource:'Saved manual assumptions'}]};
-let clock=Date.parse(JSON.parse(fs.readFileSync('market/latest.json')).generatedAt);class TestDate extends Date{static now(){return clock}}
+let clock=Date.parse(JSON.parse(fs.readFileSync('forecasts/latest.json')).generatedAt);class TestDate extends Date{static now(){return clock}}
 const storage=new Map([[key,JSON.stringify(fixture)]]),nodes=new Map();
 function node(id){
  if(!nodes.has(id)){const classes=new Set();nodes.set(id,{value:'',innerHTML:'',textContent:'',dataset:{},style:{},children:[],classList:{contains:x=>classes.has(x),toggle(x,v){if(v)classes.add(x);else classes.delete(x)},add:x=>classes.add(x),remove:x=>classes.delete(x)},appendChild(x){this.children.push(x)},replaceChildren(...xs){this.children=xs},setAttribute(k,v){this[k]=v},addEventListener(){},querySelectorAll(){return []},querySelector(){return null}});}

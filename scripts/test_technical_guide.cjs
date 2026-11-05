@@ -1,7 +1,8 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const guide=require('../assets/technical-guide.js'),data=JSON.parse(fs.readFileSync('forecasts/latest.json')),market=JSON.parse(fs.readFileSync('market/latest.json'));
 const learned=JSON.parse(fs.readFileSync('ml/latest.json'));
-const now=Date.parse(market.generatedAt);
+// Keep healthy price rendering independent of the market feed's update clock.
+const now=Date.parse(data.generatedAt);
 // Live snapshots may have a stable credit aggregate but an expired mandatory
 // input. Exact state expectations live in test_market_state.cjs's fixed cases.
 require('./test_market_state.cjs');

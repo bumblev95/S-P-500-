@@ -177,7 +177,8 @@ for(const entry of [{...e,fresh:false},{...e,history:history.slice(-30)},
 
 // Real snapshot checks: both horizons share the exact observed-price score.
 const data=JSON.parse(fs.readFileSync('forecasts/latest.json')),actualMarket=JSON.parse(fs.readFileSync('market/latest.json')),actualML=JSON.parse(fs.readFileSync('ml/latest.json'));
-const actualNow=Date.parse(actualMarket.generatedAt),six=A.all(data,actualMarket,actualML,126,actualNow),year=A.all(data,actualMarket,actualML,252,actualNow);
+// Healthy-price integration uses the price clock; market updates are independent.
+const actualNow=Date.parse(data.generatedAt),six=A.all(data,actualMarket,actualML,126,actualNow),year=A.all(data,actualMarket,actualML,252,actualNow);
 const amdSignals=A.signals(data.stocks.AMD,six.AMD,actualMarket,actualNow);
 const nvdaSignals=A.signals(data.stocks.NVDA,six.NVDA,actualMarket,actualNow);
 const jnjSignals=A.signals(data.stocks.JNJ,six.JNJ,actualMarket,actualNow);
@@ -199,6 +200,9 @@ for(const [symbol,a] of Object.entries(six)){
     A.signals(data.stocks[assessment.symbol],assessment,actualMarket,actualNow));
 }
 assert(checked>=400&&scored>0);assert(A.rank(six).every((a,i,arr)=>!i||a.score<=arr[i-1].score));
+const expired=A.all(data,actualMarket,actualML,126,actualNow+6*86400000);
+assert(Object.values(expired).every(a=>a.score===null),'A newer market snapshot cannot revive expired prices');
+assert.equal(A.rank(expired).length,0);
 
 (async()=>{
   const result=await A.load(async url=>{if(url.startsWith('forecasts'))throw Error('offline');return {ok:true,json:async()=>url.startsWith('market')?market:ml};},null);
