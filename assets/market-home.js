@@ -40,6 +40,13 @@
   }
   const buyHtml=(rankings,now)=>rankingHtml(rankings?.buy,'buy',now);
   function rankingNote(r,now){
+    const buys=rankRows(r?.buy,now).length,sells=rankRows(r?.sell,now).length;
+    if(!buys&&!sells){
+      const date=r?.priceAsOf||r?.asOf;
+      const last=validDate(date)?'마지막 가격 기준일 '+date:
+        finite(Date.parse(r?.priceGeneratedAt))?'마지막 가격 자료 생성 '+new Date(r.priceGeneratedAt).toISOString().slice(0,16).replace('T',' ')+' UTC':'마지막 가격 기준일 확인 중';
+      return '유효한 최신 종가가 없어 TOP3 표시를 보류했습니다. '+last+' · 가격 검증 후 갱신됩니다. 시장 환경 갱신과 가격 갱신은 별개입니다.';
+    }
     return (validDate(r?.asOf)?short(r.asOf)+' 종가 · ':'')+'매수·매도 우선 검토 순위 · 실제 조건은 카드에서 확인'+
       (!freshTime(r?.marketGeneratedAt,now,r?.marketMaxAgeDays||3)?' · 시장 자료 갱신 지연':'');
   }
@@ -131,7 +138,7 @@
     $('[data-home-brief]').textContent=data.recap?.asOf&&freshDate(data.recap.asOf,now)?data.brief:'최근 마감 자료 갱신 대기';
     const localDate=new Intl.DateTimeFormat('ko-KR',{timeZone:'America/New_York',month:'long',day:'numeric',weekday:'long'}).format(new Date(now));
     $('[data-home-date]').innerHTML='<strong>'+esc(localDate)+' · 미국장</strong><span class="hp-status">최근 마감 · '+short(data.recap?.asOf)+'</span>';
-    $('[data-home-status]').textContent='갱신 '+new Intl.DateTimeFormat('ko-KR',{timeZone:'America/New_York',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(data.generatedAt))+' ET · 최신 종가로 매일 재선정';
+    $('[data-home-status]').textContent='갱신 '+new Intl.DateTimeFormat('ko-KR',{timeZone:'America/New_York',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(data.generatedAt))+' ET · '+(rankRows(data.rankings?.buy,now).length||rankRows(data.rankings?.sell,now).length?'최신 종가로 매일 재선정':'TOP3 가격 자료 확인 중');
     renderRecap(now);icons();
   }
   async function load(){

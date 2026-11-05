@@ -58,7 +58,10 @@ function node(id){if(!nodes.has(id))nodes.set(id,{value:'',innerHTML:'',textCont
 const tabs=['screen','compare','value','validation'].map(view=>Object.assign(node('tab-'+view),{dataset:{view}}));
 let fail=false;
 const snapshot=JSON.parse(fs.readFileSync('forecasts/latest.json')),market=JSON.parse(fs.readFileSync('market/latest.json')),ml=JSON.parse(fs.readFileSync('ml/latest.json'));
-let clock=Date.parse(market.generatedAt),exported='',marketPayload=market;
+// Exercise the healthy-price path at the price observation clock. A freshly
+// updated market file must not expire every price in this integration fixture.
+// The six-day advance below independently checks stale scores and exports.
+let clock=Date.parse(snapshot.generatedAt),exported='',marketPayload=market;
 const mountedSymbols=[];
 class TestDate extends Date{constructor(...args){super(...(args.length?args:[clock]))}static now(){return clock}}
 const context={CompanyEvents:{mount:(_host,symbol)=>mountedSymbols.push(symbol)},AdvancedEngine:E,MarketVisuals:V,LearnedGuide:L,StockAssessment:{...A,all:(d,m,l,h)=>A.all(d,m,l,h,clock),evaluate:(e,m,l,h)=>A.evaluate(e,m,l,h,clock)},TechnicalGuide:{...T,marketState:m=>T.marketState(m,clock)},DecisionSupport:{load:async()=>{},applyStocks:x=>x},document:{getElementById:node,createElement:()=>({click(){}}),querySelectorAll:s=>s==='[data-view]'?tabs:s==='[data-assumption]'?[...node('content').innerHTML.matchAll(/data-assumption="([^"]+)"[^>]*value="([^"]*)"/g)].map(m=>{const n=node('assumption-'+m[1]);n.dataset.assumption=m[1];if(n.value==='')n.value=m[2];return n}):[],hidden:false},localStorage:{getItem:()=>null,setItem(){}},fetch:async url=>{if(fail)throw Error('offline');return {ok:true,text:async()=>fs.readFileSync(url,'utf8'),json:async()=>url.startsWith('market/')?marketPayload:JSON.parse(fs.readFileSync(url,'utf8'))}},Blob:class{constructor(parts){exported=parts.join('')}},URL:{createObjectURL:()=> 'blob:test',revokeObjectURL(){}},setInterval(){},setTimeout(){},console,Intl,Date:TestDate};

@@ -291,7 +291,8 @@ class IncidentPublicationTests(unittest.TestCase):
         self.assertEqual(self.repo.receipt['minimumSymbolCount'], 505)
         self.assertNotIn('WBD', self.repo.receipt['symbols'])
         self.assertIn('TWLO', self.repo.receipt['symbols'])
-        self.assertEqual(self.repo.receipt['universeChanges'], mapping.CONSTITUENT_REPLACEMENTS)
+        self.assertEqual(self.repo.receipt['universeChanges'], [r for r in mapping.CONSTITUENT_REPLACEMENTS
+                                                            if r['effectiveDate'] <= AS_OF])
         self.assertIn(mapping.chart_url('TWLO'), self.request_urls)
         self.assertTrue(all('/WBD' not in url for url in self.request_urls))
         twlo = next(row for row in self.repo.prices() if row['symbol'] == 'TWLO')
