@@ -1,0 +1,13 @@
+{
+  "adapterComparisonReplayWithinTolerance": true,
+  "adapterPredictionsReplayWithinTolerance": true,
+  "constantPricesForDirectionCandidates": true,
+  "identicalCohort": true,
+  "outputHashes": {
+    "metrics.csv": "fa5e9aa92a8964ba35988814026c167befa85bb23b2e55d162d7e361d4a50ff2",
+    "predictions.json.gz": "0aaed2f3091926d8c8cfe7dee99565b4a9d33023728936901c0d679e7a8d7e0a",
+    "results.json": "1d3d8b94e17009ea55709ff03fb9bda09d5e341f0244faed292fb23a6affbff6"
+  },
+  "sourceHashesVerified": true,
+  "tolerance": 1e-14
+}
