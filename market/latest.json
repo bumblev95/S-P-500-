@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-11-06T11:53:28.950930+00:00",
+  "generatedAt": "2026-11-06T18:01:17.210823+00:00",
   "observations": {
     "DGS10": [
       [
@@ -6845,6 +6845,10 @@
       [
         "2026-11-04",
         3.94
+      ],
+      [
+        "2026-11-05",
+        3.92
       ]
     ],
     "IORB": [
@@ -9790,11 +9794,12 @@
       "previousDate": "2026-10-07",
       "change": -0.3799999999999999,
       "severity": null,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "daily"
     },
     {
@@ -9812,11 +9817,12 @@
       "previousDate": "2026-10-02",
       "change": 0.2807999999999993,
       "severity": null,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "daily"
     },
     {
@@ -9838,11 +9844,12 @@
       "previousDate": "2026-10-02",
       "change": 0.03899999999999998,
       "severity": 0,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "weekly"
     },
     {
@@ -9864,11 +9871,12 @@
       "previousDate": "2026-10-02",
       "change": -0.06119999999999998,
       "severity": 0,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "weekly"
     },
     {
@@ -9890,11 +9898,12 @@
       "previousDate": "2026-07-01",
       "change": 1.7,
       "severity": 0,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9906,17 +9915,18 @@
       "url": "https://fred.stlouisfed.org/series/SOFR",
       "thresholds": null,
       "status": "ready",
-      "value": 3.94,
-      "asOf": "2026-11-04",
-      "previous": 3.88,
-      "previousDate": "2026-10-07",
-      "change": 0.06000000000000005,
+      "value": 3.92,
+      "asOf": "2026-11-05",
+      "previous": 3.87,
+      "previousDate": "2026-10-08",
+      "change": 0.04999999999999982,
       "severity": null,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "daily"
     },
     {
@@ -9934,11 +9944,12 @@
       "previousDate": "2026-10-09",
       "change": 0.0,
       "severity": null,
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "fetchStatus": "ready",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-11-06",
+      "fetchWarnings": [],
+      "fromCache": false,
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "frequency": "daily"
     },
     {
@@ -9954,19 +9965,18 @@
         30
       ],
       "status": "ready",
-      "asOf": "2026-11-04",
-      "value": 4.0,
-      "previous": 7.0,
-      "previousDate": "2026-11-03",
-      "change": -3.0,
+      "asOf": "2026-11-05",
+      "value": 2.0,
+      "previous": 4.0,
+      "previousDate": "2026-11-04",
+      "change": -2.0,
       "severity": 0,
       "persistent": false,
       "frequency": "daily",
-      "lastSuccessAt": "2026-11-06T03:41:11.812036+00:00",
-      "fromCache": true,
-      "fetchStatus": "unavailable",
-      "fetchError": "동일 날짜 SOFR·IORB 자료 갱신 확인 필요",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00"
+      "fromCache": false,
+      "fetchStatus": "ready",
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9984,8 +9994,8 @@
       "change": 0.07767714768522072,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00"
     },
     {
       "id": "EBP",
@@ -10003,8 +10013,8 @@
       "change": 0.11802557281568216,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00"
     }
   ],
   "credit": {
@@ -10025,7 +10035,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00"
     },
     {
       "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
@@ -10036,7 +10046,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00"
     },
     {
       "title": "Federal Reserve issues FOMC statement",
@@ -10047,36 +10057,28 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
+      "lastAttemptAt": "2026-11-06T18:01:17.210823+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
+      "lastSuccessAt": "2026-11-06T18:01:17.210823+00:00"
     }
   ],
-  "errors": [
-    "DGS10: csv: TimeoutError; table: TimeoutError",
-    "DTWEXBGS: csv: TimeoutError; table: TimeoutError",
-    "NFCI: csv: TimeoutError; table: TimeoutError",
-    "STLFSI4: csv: TimeoutError; table: TimeoutError",
-    "DRTSCILM: csv: TimeoutError; table: TimeoutError",
-    "SOFR: csv: TimeoutError; table: TimeoutError",
-    "IORB: csv: TimeoutError; table: TimeoutError"
-  ],
+  "errors": [],
   "newsScope": "Fed 공식 발표·연설, 최근 14일. 키워드 주제 분류이며 기사 본문 분석이나 악재 확정이 아님. 기업뉴스·실적·사모신용 환매 전체를 감시하지 않음.",
   "exclusions": [
     "HY/CCC OAS와 MOVE 수치 미재배포",
