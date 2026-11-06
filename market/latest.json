@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-11-06T11:14:42.052709+00:00",
+  "generatedAt": "2026-11-06T11:53:28.950930+00:00",
   "observations": {
     "DGS10": [
       [
@@ -9794,7 +9794,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "daily"
     },
     {
@@ -9816,7 +9816,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "daily"
     },
     {
@@ -9842,7 +9842,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "weekly"
     },
     {
@@ -9868,7 +9868,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "weekly"
     },
     {
@@ -9894,7 +9894,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9916,7 +9916,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "daily"
     },
     {
@@ -9938,7 +9938,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "csv: TimeoutError; table: TimeoutError",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "frequency": "daily"
     },
     {
@@ -9966,7 +9966,7 @@
       "fromCache": true,
       "fetchStatus": "unavailable",
       "fetchError": "동일 날짜 SOFR·IORB 자료 갱신 확인 필요",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9984,8 +9984,8 @@
       "change": 0.07767714768522072,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00"
     },
     {
       "id": "EBP",
@@ -10003,8 +10003,8 @@
       "change": 0.11802557281568216,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00"
     }
   ],
   "credit": {
@@ -10025,7 +10025,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
     },
     {
       "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
@@ -10036,7 +10036,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
     },
     {
       "title": "Federal Reserve issues FOMC statement",
@@ -10047,25 +10047,25 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-11-06T11:14:42.052709+00:00",
+      "lastAttemptAt": "2026-11-06T11:53:28.950930+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-06T11:14:42.052709+00:00"
+      "lastSuccessAt": "2026-11-06T11:53:28.950930+00:00"
     }
   ],
   "errors": [
