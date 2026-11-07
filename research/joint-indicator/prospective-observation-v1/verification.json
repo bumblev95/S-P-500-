@@ -1,0 +1,21 @@
+{
+  "version": "prospective-observation-v1-verification",
+  "verifiedAt": "2026-10-21T01:44:00Z",
+  "sourceMainCommit": "f9f137721b3e62606f7422c11560e2761f8ceb65",
+  "registrationCommit": "0deed2fd9f473eae16edd31ad49894b2e197fa0c",
+  "protocolSha256": "33e887ff2dac91f969870b1b132aa0f45fd3ba61eec24c55a1022072c4bb64b0",
+  "researchCodeSha256": "2ed6f3eddd5f1010e056accdeb90bd6cdf3d6b86ebb7916dbabf65de3102c280",
+  "testCodeSha256": "26cfc474a36e1b572e576396126fb77b13e71c23201566aee378ab6879584af4",
+  "resultsSha256": "571e1d90273b7db1b63133d8930b28935e618745dc8ec0e1c455b43b3888abd7",
+  "replayCount": 2,
+  "replayHashesEqual": true,
+  "researchTestsPassed": 159,
+  "fullCohortAggregateBlocked": true,
+  "longHorizonMatured": {
+    "126": 0,
+    "252": 0
+  },
+  "selected": null,
+  "uiChanged": false,
+  "serviceForecastChanged": false
+}

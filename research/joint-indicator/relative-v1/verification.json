@@ -1,0 +1,25 @@
+{
+  "testsPassed": 28,
+  "newTests": 7,
+  "priorTests": 21,
+  "replayExact": true,
+  "allModelHashesExact": true,
+  "predictionsByteExact": true,
+  "causalFoldChecks": 28,
+  "evaluatedRowsChecked": 8277,
+  "issuerUniqueness": true,
+  "overlapPurgedOrDisjoint": true,
+  "rawFeaturesStrictlyPast": true,
+  "oldResultsAndScriptsUnchanged": true,
+  "uiAndServiceChanges": false,
+  "allGatesFalse": true,
+  "codeHashes": {
+    "research_relative_blends.py": "e7a5bae2cb6d2e1e632572c202c995ae95c60a1f8a7a635d983d781c468067be",
+    "collect_relative_inputs.py": "c6af50ca5863294ea7c85399cb966d3e327ac5f8c6adcd1d0eb31c308147f74e",
+    "research_joint_indicator.py": "75f5ebaa9c6a61b2aea14475102de2f5720022b32c7fcaa4376054d6ec88df19",
+    "research_indicator_blends.py": "b1f22c876086e20a7926351f5bbedc650a9520b534faba258a38b5603893a2a9"
+  },
+  "inputSnapshotHash": "b87781b01b847a8e0d0e1a3735bb1718edf8dc6f906ee09d7caedc503a8dc897",
+  "sourceHash": "03e37d34b4b9beeb1c93ce6a626c43be1faaf36fa54932c02be617bf42696c90",
+  "protocolHash": "154e6ea59dcbe659fb90443d7c4341b588fdceae315d02ef50c2771f2cd766c8"
+}
