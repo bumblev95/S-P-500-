@@ -1,13 +1,9 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-11-08T23:45:38.854475+00:00",
+  "generatedAt": "2026-11-09T06:39:19.803408+00:00",
   "observations": {
     "DGS10": [
-      [
-        "2024-11-08",
-        4.3
-      ],
       [
         "2024-11-12",
         4.43
@@ -1995,10 +1991,6 @@
     ],
     "DTWEXBGS": [
       [
-        "2024-11-08",
-        125.5811
-      ],
-      [
         "2024-11-12",
         126.7762
       ],
@@ -3973,10 +3965,6 @@
     ],
     "NFCI": [
       [
-        "2024-11-08",
-        -0.457
-      ],
-      [
         "2024-11-15",
         -0.464
       ],
@@ -4390,10 +4378,6 @@
       ]
     ],
     "STLFSI4": [
-      [
-        "2024-11-08",
-        -0.5566
-      ],
       [
         "2024-11-15",
         -0.7965
@@ -4846,10 +4830,6 @@
       ]
     ],
     "SOFR": [
-      [
-        "2024-11-08",
-        4.6
-      ],
       [
         "2024-11-12",
         4.6
@@ -6832,10 +6812,6 @@
       ]
     ],
     "IORB": [
-      [
-        "2024-11-08",
-        4.65
-      ],
       [
         "2024-11-09",
         4.65
@@ -9755,6 +9731,10 @@
       [
         "2026-11-08",
         3.9
+      ],
+      [
+        "2026-11-09",
+        3.9
       ]
     ]
   },
@@ -9775,11 +9755,11 @@
       "change": -0.3799999999999999,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "daily"
     },
     {
@@ -9790,7 +9770,7 @@
       "source": "Federal Reserve Board",
       "url": "https://fred.stlouisfed.org/series/DTWEXBGS",
       "thresholds": null,
-      "status": "ready",
+      "status": "stale",
       "value": 121.6656,
       "asOf": "2026-10-30",
       "previous": 121.3848,
@@ -9798,11 +9778,11 @@
       "change": 0.2807999999999993,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "daily"
     },
     {
@@ -9825,11 +9805,11 @@
       "change": 0.03899999999999998,
       "severity": 0,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "weekly"
     },
     {
@@ -9852,11 +9832,11 @@
       "change": -0.06119999999999998,
       "severity": 0,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "weekly"
     },
     {
@@ -9879,11 +9859,11 @@
       "change": 1.7,
       "severity": 0,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9902,11 +9882,11 @@
       "change": 0.04999999999999982,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "daily"
     },
     {
@@ -9919,17 +9899,17 @@
       "thresholds": null,
       "status": "ready",
       "value": 3.9,
-      "asOf": "2026-11-08",
+      "asOf": "2026-11-09",
       "previous": 3.9,
-      "previousDate": "2026-10-11",
+      "previousDate": "2026-10-12",
       "change": 0.0,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-11-08",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-11-09",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "frequency": "daily"
     },
     {
@@ -9955,8 +9935,8 @@
       "frequency": "daily",
       "fromCache": false,
       "fetchStatus": "ready",
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9974,8 +9954,8 @@
       "change": 0.07767714768522072,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00"
     },
     {
       "id": "EBP",
@@ -9993,8 +9973,8 @@
       "change": 0.11802557281568216,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00"
     }
   ],
   "credit": {
@@ -10015,7 +9995,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00"
     },
     {
       "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
@@ -10026,7 +10006,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00"
     },
     {
       "title": "Federal Reserve issues FOMC statement",
@@ -10037,25 +10017,25 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-11-08T23:45:38.854475+00:00",
+      "lastAttemptAt": "2026-11-09T06:39:19.803408+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-08T23:45:38.854475+00:00"
+      "lastSuccessAt": "2026-11-09T06:39:19.803408+00:00"
     }
   ],
   "errors": [],
