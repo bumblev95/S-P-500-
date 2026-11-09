@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-09T00:23:40.834839+00:00",
+  "generatedAt": "2026-11-09T06:45:05.095591+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-11-06",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-11-09T00:23:40.834Z",
+    "evaluatedAt": "2026-11-09T06:45:05.095Z",
     "priceAsOf": "2026-11-06",
     "priceGeneratedAt": "2026-11-06T22:37:22+00:00",
     "marketGeneratedAt": "2026-11-08T23:45:38.854475+00:00",
@@ -80,9 +80,9 @@
   "brief": "기술 강세 · 필수소비재 약세",
   "recap": {
     "asOf": "2026-11-06",
-    "weekStart": "2026-11-02",
-    "weekEnd": "2026-11-06",
-    "weekComplete": true,
+    "weekStart": "2026-11-09",
+    "weekEnd": "2026-11-13",
+    "weekComplete": false,
     "timezone": "America/New_York",
     "method": "sector-etf-unadjusted-close-price-return",
     "indices": [
@@ -94,12 +94,12 @@
         "close": 7376.85986328125,
         "day": 0.3145326640212831,
         "dayBaseDate": "2026-11-05",
-        "week": -2.6808455020853827,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -109,12 +109,12 @@
         "close": 24579.4296875,
         "day": 1.0875167077935455,
         "dayBaseDate": "2026-11-05",
-        "week": -3.3713500511066585,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "^DJI",
@@ -124,12 +124,12 @@
         "close": 51285.73046875,
         "day": -0.46062507055586455,
         "dayBaseDate": "2026-11-05",
-        "week": -0.9360155234973799,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       }
     ],
     "sectors": [
@@ -141,12 +141,12 @@
         "close": 164.74000549316406,
         "day": 1.4533812904210297,
         "dayBaseDate": "2026-11-05",
-        "week": -8.227948006042318,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLC",
@@ -156,12 +156,12 @@
         "close": 104.79000091552734,
         "day": 0.43128674854409077,
         "dayBaseDate": "2026-11-05",
-        "week": 4.894894209167444,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLY",
@@ -171,12 +171,12 @@
         "close": 117.58000183105469,
         "day": -0.05100098512839102,
         "dayBaseDate": "2026-11-05",
-        "week": 1.9067469492174416,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLF",
@@ -186,12 +186,12 @@
         "close": 57.15999984741211,
         "day": -0.5913046131963307,
         "dayBaseDate": "2026-11-05",
-        "week": 1.1502416301280016,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLI",
@@ -201,12 +201,12 @@
         "close": 162.6699981689453,
         "day": 0.12309776988954635,
         "dayBaseDate": "2026-11-05",
-        "week": -2.825565053762169,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLV",
@@ -216,12 +216,12 @@
         "close": 184.8000030517578,
         "day": -0.05948872866422539,
         "dayBaseDate": "2026-11-05",
-        "week": -0.037860154312940875,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLP",
@@ -231,12 +231,12 @@
         "close": 90.08000183105469,
         "day": -1.2821897741866484,
         "dayBaseDate": "2026-11-05",
-        "week": 0.7380940232881716,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLRE",
@@ -246,12 +246,12 @@
         "close": 44.0,
         "day": -0.6771991923863796,
         "dayBaseDate": "2026-11-05",
-        "week": 1.9226357800768978,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLU",
@@ -261,12 +261,12 @@
         "close": 43.130001068115234,
         "day": -0.3926054779229915,
         "dayBaseDate": "2026-11-05",
-        "week": -0.6907649895291246,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLB",
@@ -276,12 +276,12 @@
         "close": 51.95000076293945,
         "day": -0.7261629176739781,
         "dayBaseDate": "2026-11-05",
-        "week": -1.4979159848034107,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       },
       {
         "symbol": "XLE",
@@ -291,16 +291,55 @@
         "close": 61.619998931884766,
         "day": -0.016229329964501105,
         "dayBaseDate": "2026-11-05",
-        "week": -11.996569714222394,
-        "weekBaseDate": "2026-10-30",
+        "week": null,
+        "weekBaseDate": null,
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-        "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00"
+        "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+        "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00"
       }
     ]
   },
   "news": [
+    {
+      "url": "https://www.bbc.co.uk/news/articles/cmd6dd3652zvo?at_medium=RSS&at_campaign=rss",
+      "title": "How you can get council's £250 cost of living help",
+      "publishedAt": "2026-11-09T06:11:28+00:00",
+      "firstPublishedAt": "2026-11-09T06:11:28+00:00",
+      "source": "BBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "7be2a19082127f271a921c9efe463956f1705fe291ee119c95ac1f524eeb533c",
+      "translationMethod": "machine-translation",
+      "headlineKo": "어떻게 구의 250 파운드의 생활비를 받을 수 있을까요?",
+      "summaryKo": "가정 보조금 250 파운드까지 지원 신청은 서리 주민들에게 열려 있습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/11/09/china-wholesale-inflation-rises-consumer.html",
+      "title": "China wholesale inflation hits highest in more than four years as consumer measure slows",
+      "publishedAt": "2026-11-09T02:50:22+00:00",
+      "firstPublishedAt": "2026-11-09T02:50:22+00:00",
+      "source": "CNBC 주요",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "important",
+      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도",
+      "sourceHash": "1d08240a4819e1156dfad727b1fad894e4498bf9b17cee5a6c8b78a76307f449",
+      "translationMethod": "machine-translation",
+      "headlineKo": "China wholesale inflation hits highest in more than four years as consumer measure slows",
+      "summaryKo": "10월 PPI는 로이터에서 조사한 경제학자들이 예상했던 5.3%에 비해 5.7%로 나타났다.",
+      "translationStatus": "headline-fallback",
+      "translationVersion": "home-news-ko-v2",
+      "headlineFallbackVersion": "home-headline-quality-v3"
+    },
     {
       "url": "https://www.cnbc.com/investingclub/2026/11/08/here-are-the-2-big-things-were-watching-in-the-stock-market-in-the-week-ahead.html",
       "title": "Here are the 2 big things we're watching in the stock market in the week ahead",
@@ -308,16 +347,16 @@
       "firstPublishedAt": "2026-11-08T17:40:15+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
       "sourceHash": "a05565b20959c52218eace8f25a1dfba8afeb00a158a3fd06aa365201665d105",
-      "translationMethod": "machine-translation",
       "headlineKo": "다음 주에 주식시장에서 볼 수 있는 두 가지 큰 점입니다.",
       "summaryKo": "코어웨이브의 수익과 인플레이션 데이터가 중심에 있을 것입니다.",
       "translationStatus": "ready",
+      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     },
     {
@@ -327,7 +366,7 @@
       "firstPublishedAt": "2026-11-08T13:00:01+00:00",
       "source": "CNBC 주요",
       "category": "국제경제",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -346,7 +385,7 @@
       "firstPublishedAt": "2026-11-08T11:47:24+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
@@ -357,44 +396,6 @@
       "translationStatus": "ready",
       "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.bbc.co.uk/news/articles/c68jzzvjgdy9o?at_medium=RSS&at_campaign=rss",
-      "title": "Paraguay's former president charged after bank collapse",
-      "publishedAt": "2026-11-07T19:17:22+00:00",
-      "firstPublishedAt": "2026-11-07T07:20:00+00:00",
-      "source": "BBC 국제",
-      "category": "금융·시장",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "be1859bb798691b6be947fb68dbac2853356e505080bf99074ae34b9a80846de",
-      "headlineKo": "파라과이의 전 대통령은 은행 붕괴 후 기소되었습니다",
-      "summaryKo": "산티아고 페냐는 은행 위기 때문에 폐지됐습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/11/07/healthcare-stocks-may-face-trouble-due-to-midterm-results.html",
-      "title": "Why the prognosis for healthcare stocks is uncertain ahead of Congress’ new makeup",
-      "publishedAt": "2026-11-07T16:02:33+00:00",
-      "firstPublishedAt": "2026-11-07T16:02:33+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "c36d3b934cf04690c907a2ad60d855e6bb799846a6d51b1a22035adc707003ab",
-      "headlineKo": "왜 국회의 새로운 구성에 앞서 건강보험 주식에 대한 예측이 불확실한지",
-      "summaryKo": "민주당이 의회를 장악하기 위해 준비되면서 건강보험 주식은 추진력을 찾기 위해 어려움을 겪을 수 있습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
     }
   ],
   "feeds": [
@@ -402,56 +403,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-08T19:47:28.097722+00:00",
-      "lastSuccessAt": "2026-11-08T19:47:28.097722+00:00",
+      "lastAttemptAt": "2026-11-09T06:45:05.095591+00:00",
+      "lastSuccessAt": "2026-11-09T06:45:05.095591+00:00",
       "fromCache": false
     }
   ],
