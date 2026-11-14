@@ -1,0 +1,52 @@
+{
+  "version": "momentum-decomposition-v1",
+  "registeredAt": "2026-10-17T01:06:07Z",
+  "sourceMainCommit": "a0c6d1001c7b6d4f2155bc086f22bde2bae8b85e",
+  "parentResearchCommit": "1c76262a6a65419c38fbdb8a74966768c714ca21",
+  "horizons": [126, 252],
+  "hypotheses": {
+    "A": "The pre-peak high-to-price component of 12-to-1-month momentum is less crash-prone and more complementary to priceOnly than total or residual momentum, so a small HTP rank tilt can improve both error and direction.",
+    "B": "A sparse downside guard applied only to stocks that rank in the top HTP and top PTH quintiles can add downside detection to the low-error priceOnly forecast without causing excessive false warnings or magnitude error."
+  },
+  "candidates": ["htp_rank_tilt", "pth_hype_guard"],
+  "controls": ["noChange", "priceOnly", "simpleTrend", "total_momentum_tilt"],
+  "source": {
+    "environment": "sources/environment.json.gz",
+    "environmentSha256": "d76e3eb430b787b4943da575ff930824229daf2a74194e9e1334e6cb1520b95e",
+    "universe": "sources/universe.json",
+    "universeSha256": "80ac5b2a80be735cef93ad509a98ccec6a3453e8757fb8aa9a9344baa9e2fd8d"
+  },
+  "formationWindow": "From 252 trading sessions before origin through 21 sessions before origin, using adjusted closes strictly earlier than origin. HTP=log(max(window)/first(window)); PTH=log(last(window)/max(window)); total momentum=HTP+PTH.",
+  "ranking": "Within each origin, use deterministic average-rank percentiles. Map percentile p to score 2p-1. Missing features do not enter ranks and fall back to priceOnly.",
+  "candidateA": "priceOnly * exp(0.025 * HTP rank score). The coefficient is fixed before feature collection and outcome evaluation.",
+  "candidateB": "priceOnly * exp(-0.05) only when both HTP and PTH percentiles exceed 0.80; otherwise priceOnly. The intersection is intended to identify long-run winners still near their formation-period high, not to target a desired warning count.",
+  "totalMomentumControl": "priceOnly * exp(0.025 * total-momentum rank score), using the same rank transform and coefficient as candidate A.",
+  "simpleTrend": "exp(horizon/126 * trailing-126-session log return ending before origin); no fitted parameters.",
+  "evaluation": "Fixed last half of latest-main origin dates: 9 origins for 126 sessions and 8 origins for 252 sessions. Retain every row and every missing-input fallback. Historical outcomes have already been observed, so results are exploratory only.",
+  "training": "No fitted model, label selection, class balancing, or target-sign quota. Same-origin cross-sectional ranks use only adjusted closes dated before origin. Horizons are evaluated separately. Duplicate CIK/origin observations are rejected.",
+  "direction": "Final numeric ratio >1.02 up, <0.98 down, otherwise neutral. Direction comes only from the final numeric value; no classifier argmax or probability is attached.",
+  "weighting": "Equal total weight per origin for headline metrics; preserve unweighted pooled metrics, each date, and each market regime.",
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "priceErrorImprovement": 0.02,
+    "minimumDateWinRate": 0.6,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "requireDirectionImprovementCI": true,
+    "prospectiveEvidenceRequired": true
+  },
+  "extraGate": "Apply existing blend gates against priceOnly and noChange: date-mean future-price MAPE and return MAE both improve at least 2%, tails do not worsen, date win rate is at least 60%, direction/balanced direction/up/down recall/down precision pass. Also require falseDownWarningRate no worse than priceOnly and errors no worse than simpleTrend. Prospective remains false.",
+  "dataCollection": "After registration, retrieve Yahoo chart payloads once and freeze compact past-only features plus URL, retrieval time, row range, and raw payload SHA256. Revised adjusted prices and current constituent identities are not point-in-time evidence.",
+  "probability": "Not applicable. Numeric tilts emit no calibrated probabilities; Brier and log loss remain null.",
+  "abstention": "No abstention. Neutral forecasts and priceOnly fallbacks remain in full-sample metrics.",
+  "knownBias": "Current constituents, current identities, revised adjusted prices, and previously inspected historical outcomes remain. PIT membership/lifecycle readiness is 0/34, so no candidate can be promoted from this experiment.",
+  "noTradeClaims": true,
+  "noUIOrLiveChanges": true,
+  "selection": "none",
+  "noPostResultTuning": true,
+  "references": [
+    "https://doi.org/10.1016/j.jbankfin.2024.107292",
+    "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3887512"
+  ]
+}
