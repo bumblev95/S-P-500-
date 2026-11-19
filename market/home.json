@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-19T12:13:03.231001+00:00",
+  "generatedAt": "2026-11-19T12:13:44.855642+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-11-18",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-11-19T12:13:03.231Z",
+    "evaluatedAt": "2026-11-19T12:13:44.855Z",
     "priceAsOf": "2026-11-18",
     "priceGeneratedAt": "2026-11-18T23:46:29+00:00",
     "marketGeneratedAt": "2026-11-19T11:27:28.158874+00:00",
@@ -98,38 +98,38 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "^IXIC",
         "name": "나스닥 종합",
         "icon": "chart-no-axes-combined",
         "asOf": "2026-11-18",
-        "close": 24429.884765625,
-        "day": 0.41722425687398257,
+        "close": 24429.880859375,
+        "day": 0.41720820052391083,
         "dayBaseDate": "2026-11-17",
-        "week": -2.810221161683546,
+        "week": -2.810236701976798,
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "^DJI",
         "name": "다우",
         "icon": "chart-no-axes-combined",
         "asOf": "2026-11-18",
-        "close": 50198.19921875,
-        "day": -1.105652183415451,
+        "close": 50198.171875,
+        "day": -1.1057060527248197,
         "dayBaseDate": "2026-11-17",
-        "week": -4.105925741362215,
+        "week": -4.105977976375296,
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       }
     ],
     "sectors": [
@@ -145,8 +145,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLC",
@@ -160,8 +160,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLY",
@@ -175,8 +175,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLF",
@@ -190,8 +190,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLI",
@@ -205,8 +205,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLV",
@@ -220,8 +220,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLP",
@@ -235,8 +235,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLRE",
@@ -250,8 +250,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLU",
@@ -265,8 +265,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLB",
@@ -280,8 +280,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       },
       {
         "symbol": "XLE",
@@ -295,105 +295,105 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-        "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00"
+        "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+        "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00"
       }
     ]
   },
   "news": [
     {
-      "url": "https://www.cnbc.com/2026/11/19/china-south-korea-trade-deal-films-gaming.html",
-      "title": "'Parasite' backer and other South Korean media, gaming and travel stocks rally on China trade deal",
-      "publishedAt": "2026-11-19T03:43:38+00:00",
-      "firstPublishedAt": "2026-11-19T02:54:37+00:00",
+      "url": "https://www.cnbc.com/2026/11/19/walmart-wmt-q3-2026-earnings.html",
+      "title": "Walmart raises sales and earnings outlook as e-commerce sales jump again",
+      "publishedAt": "2026-11-19T12:02:06+00:00",
+      "firstPublishedAt": "2026-11-19T12:02:06+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "f556b98779fdcdd4c7b3a0d932f351929168efce814b3e1318357f926431701e",
-      "headlineKo": "'파라사이트' 후원자와 한국의 다른 언론, 게임 및 여행 주가 중국 무역 협정에 대한 집회",
-      "summaryKo": "한국 언론, 게임 및 여행 주식은 중국에 대한 더 큰 접근을 희망하면서 급증했습니다.",
-      "translationStatus": "ready",
+      "sourceHash": "53b0f511402e2519f236ffedc6627570eaaa30068a41bf312cdbc881b586fd97",
       "translationMethod": "machine-translation",
+      "headlineKo": "월마트는 전자상거래 판매가 다시 급등하면서 매출과 수익 전망을 높인다",
+      "summaryKo": "월마트는 매장에서 채용 및 배달으로 세 번째 재정분기에 강세를 보였다고 말했습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/11/19/trump-xi-putin-photos-us-china-russia-trilateral-.html",
+      "title": "APEC final day in photos: Trump, Xi and Putin shake hands; Takaichi kept at a distance",
+      "publishedAt": "2026-11-19T10:54:07+00:00",
+      "firstPublishedAt": "2026-11-19T10:54:07+00:00",
+      "source": "CNBC 주요",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "8f51459153ccc100c91bd1780b4fc25e051d6d20caf6632e133cd78adb18c995",
+      "translationMethod": "machine-translation",
+      "headlineKo": "APEC의 마지막 날 사진: 트럼프, 시와 푸틴이 손을 잡았다. 타카이치는 멀리 떨어져 있었다",
+      "summaryKo": "지도자들은 4일 경제정상회담의 두 번째 날로 모였습니다. 미국, 러시아 및 중국 간의 역사적인 삼방적 만남을 앞두고요.",
+      "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     },
     {
       "url": "https://www.bbc.co.uk/news/articles/c6742m39xgzxo?at_medium=RSS&at_campaign=rss",
-      "title": "AI giant Anthropic valued at up to $1.5tn ahead of stock market debut",
-      "publishedAt": "2026-11-19T02:20:15+00:00",
+      "title": "Anthropic raises $81bn in record-breaking stock market debut",
+      "publishedAt": "2026-11-19T10:48:04+00:00",
       "firstPublishedAt": "2026-11-18T23:44:27+00:00",
       "source": "BBC 경제",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "b98e3cd848e807b139cc742fc8256e65e240e55e70b93623e1d2d280396a8694",
-      "headlineKo": "인공지능 거대인 앤트로픽은 증권 시장에 데뷔하기 전에 최대 1.5조 달러로 평가되었습니다.",
-      "summaryKo": "이 회사는 불과 5년 전에 시작되었고 현재 인공지능 분야에서 가장 큰 이름 중 하나입니다.",
-      "translationStatus": "ready",
+      "sourceHash": "ff72d175b1d7e2696526baaa5c2fa239880dfbe51965606c8a54429bd9cedd8c",
       "translationMethod": "machine-translation",
+      "headlineKo": "앤트로픽은 810억 달러의 기록을 경신한 증권 시장 데뷔",
+      "summaryKo": "클로드 채트봇 뒤에 있는 회사는 세계에서 가장 가치있는 회사 중 하나가 될 것입니다.",
+      "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.bbc.co.uk/news/videos/c6y0x84xx22wo?at_medium=RSS&at_campaign=rss",
-      "title": "Who are the investors ready to jump on Anthropic?",
-      "publishedAt": "2026-11-19T01:22:38+00:00",
-      "firstPublishedAt": "2026-11-19T01:22:38+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/cmwy8pgj2z8vo?at_medium=RSS&at_campaign=rss",
+      "title": "Gilts v kilts: What is happening with Scottish government bonds?",
+      "publishedAt": "2026-11-19T06:15:57+00:00",
+      "firstPublishedAt": "2026-11-18T23:01:09+00:00",
       "source": "BBC 경제",
-      "category": "금융·시장",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "category": "Fed·금리",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "b07813f01e1a58dace80d971e1c166c8b14bdba9f6485b3c2eaff18f6053edc0",
-      "headlineKo": "투자자들은 Anthropic에 뛰어들기 위해 준비됐어요?",
-      "summaryKo": "BBC의 사미라 후세인 (Samira Hussain) 는 AI 회사의 주가가 목요일에 생동감 있게 나오기를 기다리고 있는 소매 투자자와 이야기합니다.",
-      "translationStatus": "ready",
+      "sourceHash": "0409bd3ec41bea4bfd2e11fa3eed7c86a1c1a0da89aeea25b24dece8648bc2e6",
       "translationMethod": "machine-translation",
+      "headlineKo": "길츠와 킬츠: 스코틀랜드 정부 채권에 무슨 일이 일어나고 있습니까?",
+      "summaryKo": "MSPs는 시장에 첫 번째 채권을 출시하는 정부의 계획의 장과 단점을 모두 들었습니다.",
+      "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/11/18/anthropic-ipo-ai-offering-price.html",
-      "title": "Anthropic IPO raises over $81 billion in largest offering on record, topping SpaceX",
-      "publishedAt": "2026-11-19T01:13:20+00:00",
-      "firstPublishedAt": "2026-11-18T21:42:35+00:00",
+      "url": "https://www.cnbc.com/investingclub/2026/11/18/palo-alto-surges-as-all-signs-point-to-cybersecurity-need-in-the-ai-age.html",
+      "title": "Palo Alto stock surges as all signs point to how important cybersecurity is in the AI age",
+      "publishedAt": "2026-11-19T01:29:06+00:00",
+      "firstPublishedAt": "2026-11-19T01:29:06+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "5bfe03b359520e347d9a8b3697a61f9da5e8a75a95792ac3a1ee0d94b0acbdd6",
-      "headlineKo": "앤트로피스 IPO는 역사상 가장 큰 매출액으로 810억 달러 이상을 올리고, 스페이스엑스를 상대로",
-      "summaryKo": "아인트로피크 주식은 목요일 NASDAQ에서 ANT 기호로 거래될 예정입니다.",
-      "translationStatus": "ready",
+      "sourceHash": "a9fbf5bb3269853e9361150fe5c0be4750cb80f43e4b5fa4160158679cf1f4fa",
       "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/11/18/palo-alto-networks-panw-q1-2027-earnings-.html",
-      "title": "Palo Alto inks $4.5 billion deal for AI startup Applied Compute, shares pop 7% on earnings",
-      "publishedAt": "2026-11-19T00:07:06+00:00",
-      "firstPublishedAt": "2026-11-18T22:25:32+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "f5eb6692c328d506c6d1474c53803ce4b5340445d87a70200673b686c3ad60b6",
-      "headlineKo": "팔로 알토는 AI 스타트업 애플리케이션 컴퓨팅에 45억 달러의 계약을 맺고",
-      "summaryKo": "팔로 알토 네트워크는 지속적으로 인공지능과의 싸움을 위해 사이버 도구에 대한 수요를 활용하기 위해 회사를 인수하고 있습니다.",
+      "headlineKo": "팔로 알토 주가가 급증하면서 모든 징후들은 인공지능 시대에 사이버 보안이 얼마나 중요한지를 보여줍니다.",
+      "summaryKo": "모든 것을 포괄하고 신속하게 대응하는 사이버 보안 플랫폼의 필요성은 그 어느 때보다 크았습니다.",
       "translationStatus": "ready",
-      "translationMethod": "machine-translation",
       "translationVersion": "home-news-ko-v2"
     }
   ],
@@ -402,56 +402,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-19T04:35:21.389097+00:00",
-      "lastSuccessAt": "2026-11-19T04:35:21.389097+00:00",
+      "lastAttemptAt": "2026-11-19T12:13:44.855642+00:00",
+      "lastSuccessAt": "2026-11-19T12:13:44.855642+00:00",
       "fromCache": false
     }
   ],
