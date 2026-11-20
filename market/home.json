@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-20T12:04:03.761432+00:00",
+  "generatedAt": "2026-11-20T12:04:39.886603+00:00",
   "rankings": {
     "buy": [
       {
@@ -68,7 +68,7 @@
     ],
     "asOf": "2026-11-19",
     "eligibleCount": 503,
-    "evaluatedAt": "2026-11-20T12:04:03.761Z",
+    "evaluatedAt": "2026-11-20T12:04:39.886Z",
     "priceAsOf": "2026-11-19",
     "priceGeneratedAt": "2026-11-20T00:05:35+00:00",
     "marketGeneratedAt": "2026-11-20T11:16:14.192163+00:00",
@@ -98,8 +98,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "^IXIC",
@@ -113,23 +113,23 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "^DJI",
         "name": "다우",
         "icon": "chart-no-axes-combined",
         "asOf": "2026-11-19",
-        "close": 49097.1015625,
-        "day": -2.1934470347681367,
+        "close": 49097.05859375,
+        "day": -2.19353263300488,
         "dayBaseDate": "2026-11-18",
-        "week": -6.209362558972398,
+        "week": -6.209444642564388,
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       }
     ],
     "sectors": [
@@ -145,23 +145,23 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLC",
         "name": "커뮤니케이션",
         "icon": "radio",
-        "asOf": "2026-11-18",
-        "close": 105.58000183105469,
-        "day": 0.3040088241781147,
-        "dayBaseDate": "2026-11-17",
-        "week": -2.8613492874177915,
+        "asOf": "2026-11-19",
+        "close": 102.76000213623047,
+        "day": -2.6709600737994665,
+        "dayBaseDate": "2026-11-18",
+        "week": -5.45588386417839,
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLY",
@@ -175,8 +175,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLF",
@@ -190,8 +190,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLI",
@@ -205,8 +205,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLV",
@@ -220,8 +220,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLP",
@@ -235,23 +235,23 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLRE",
         "name": "부동산",
         "icon": "house",
-        "asOf": "2026-11-18",
-        "close": 43.619998931884766,
-        "day": 0.06882032390884696,
-        "dayBaseDate": "2026-11-17",
-        "week": -1.690331345626972,
+        "asOf": "2026-11-19",
+        "close": 42.880001068115234,
+        "day": -1.6964646535757244,
+        "dayBaseDate": "2026-11-18",
+        "week": -3.3581201253958137,
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLU",
@@ -265,8 +265,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLB",
@@ -280,8 +280,8 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       },
       {
         "symbol": "XLE",
@@ -295,105 +295,105 @@
         "weekBaseDate": "2026-11-13",
         "status": "ready",
         "fromCache": false,
-        "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-        "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00"
+        "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+        "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00"
       }
     ]
   },
   "news": [
     {
-      "url": "https://www.cnbc.com/2026/11/20/baaja-bill-senate-passes-permitting-reform.html",
-      "title": "Senate passes BAAJA permitting reform bill backed by AI, energy sectors",
-      "publishedAt": "2026-11-20T03:56:17+00:00",
-      "firstPublishedAt": "2026-11-20T03:56:17+00:00",
-      "source": "CNBC 주요",
-      "category": "유가·원자재",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "normal",
-      "importanceReason": "",
-      "sourceHash": "101b60f9c67358b68f1c27cf19a80dae596592bb0d7fe7d9a9085d7b64187d75",
-      "translationMethod": "machine-translation",
-      "headlineKo": "상원은 인공지능, 에너지 부문의 지원을 받아 BAAJA를 허용하는 개혁 법안을 통과시켰다",
-      "summaryKo": "허가를 주는 법안의 상원 통과는 법이 되기 위한 중요한 단계이지만, 트럼프 대통령의 책상으로 향하기 전에 하원을 청결해야 합니다.",
-      "translationStatus": "ready",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/11/20/anthropic-ipo-stocks-market.html",
-      "title": "Anthropic IPO 'exactly what the markets need,' but analysts warn of volatility",
-      "publishedAt": "2026-11-20T03:38:07+00:00",
-      "firstPublishedAt": "2026-11-20T02:33:39+00:00",
+      "url": "https://www.cnbc.com/2026/11/20/tech-download-anthropic-compute-access.html",
+      "title": "The Tech Download: Anthropic charmed Wall Street. But one big uncertainty hangs over the business",
+      "publishedAt": "2026-11-20T12:00:02+00:00",
+      "firstPublishedAt": "2026-11-20T12:00:02+00:00",
       "source": "CNBC 주요",
       "category": "주식시장",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "90e2f2b1af09c59c78e44cb5507003edba6fe0d6ea9eebf5a6bda33bb58d23ce",
+      "sourceHash": "7ecef3ec84be8ea7918ad4c1542ec18a6bdc8de9e1058fe66d0278365ca0bebf",
       "translationMethod": "machine-translation",
-      "headlineKo": "인트로피 IPO는 '시장들이 필요로 하는 것'이지만 분석가들은 변동성에 대해 경고한다",
-      "summaryKo": "인트로픽 IPO는 \"시장들이 필요로 하는 것\"입니다. 그러나 분석가들은 앞으로 몇 주 동안 그 주가가 변동할 것이라고 말합니다.",
+      "headlineKo": "인트로피는 월스트리트를 매료했습니다. 하지만 큰 불확실성이 사업에 달려 있습니다.",
+      "summaryKo": "회사가 계속해서 모델을 개발하고 배포하는 데 필요한 엄청난 양의 컴퓨팅에 대한 접근은 앤트로픽이 탐색 할 수있는 도전입니다.",
       "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/11/20/japan-inflation-cpi-october.html",
-      "title": "Japan core inflation soars to highest this year as energy subsidy expiry pushes up consumer prices",
-      "publishedAt": "2026-11-20T01:49:03+00:00",
-      "firstPublishedAt": "2026-11-19T23:59:29+00:00",
+      "url": "https://www.cnbc.com/2026/11/20/anthropic-defies-odds-holding-ipo-despite-massively-disruptive-market.html",
+      "title": "Anthropic defies the odds, holding record IPO despite ‘massively disruptive’ market",
+      "publishedAt": "2026-11-20T11:00:01+00:00",
+      "firstPublishedAt": "2026-11-20T11:00:01+00:00",
+      "source": "CNBC 주요",
+      "category": "주식시장",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "7740aea4b9f975f81e6fe8dd142b3b26c86f3766f8d1a5ab97ab4aba42cfa8f7",
+      "translationMethod": "machine-translation",
+      "headlineKo": "앤트로피크는 '대폭적인 파괴' 시장에도 불구하고 신기록 IPO를 보유하며",
+      "summaryKo": "앤트로픽은 시장 시장 가격 하락과 분노한 인공지능 반대 정서, 그리고 엔비디아에서 역사상 가장 큰 IPO를 달성하는 위기에 직면했습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.cnbc.com/2026/11/20/gta-vi-launch-streaming-content-economy.html",
+      "title": "‘More than just a game’: How GTA VI’s blockbuster launch fuels a booming content economy",
+      "publishedAt": "2026-11-20T07:08:36+00:00",
+      "firstPublishedAt": "2026-11-20T07:08:36+00:00",
       "source": "CNBC 주요",
       "category": "경제·물가",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
-      "fromCache": false,
-      "sourceStatus": "ready",
-      "importance": "important",
-      "importanceReason": "주요 경제지표·정책 또는 국제 사건 보도",
-      "sourceHash": "d78387ab48c0c511d9b41997992583ba917b8eca83405ca454f0b6dc99e2f1da",
-      "headlineKo": "일본은 에너지 보조금 만료로 소비자 가격을 끌어올리기 때문에 인플레이션이 올해 가장 높습니다",
-      "summaryKo": "식량 가격을 제거하는 근본적인 인플레이션 수치는 로이터 조사에 참여한 경제학자들이 예상했던 2.3%보다 낮았습니다.",
-      "translationStatus": "ready",
-      "translationMethod": "machine-translation",
-      "translationVersion": "home-news-ko-v2"
-    },
-    {
-      "url": "https://www.cnbc.com/2026/11/19/nvidia-amd-china-chip-sales-congress.html",
-      "title": "Commerce approved sales of more than 879,000 AI chips to Chinese companies, Rep. Mast says",
-      "publishedAt": "2026-11-20T00:53:55+00:00",
-      "firstPublishedAt": "2026-11-19T21:27:33+00:00",
-      "source": "CNBC 주요",
-      "category": "국제경제",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "e4cde3e7d826bb6fb1ab536878285a6b754921e51b7ea5eda7a626cadcf248c8",
-      "headlineKo": "무역은 중국 기업에 879,000 이상의 인공지능 칩의 판매를 승인했습니다.",
-      "summaryKo": "국회의원들은 Jensen Huang 스캔들 이후 중국으로의 칩 판매에 대한 수출 통제를 강화하는 법안을 추진했습니다.",
-      "translationStatus": "ready",
+      "sourceHash": "c04851c96a175064cfb2647f0dbf1364bddb6888bec4475d7a67b488231d2578",
       "translationMethod": "machine-translation",
+      "headlineKo": "'게임 이상의 것': GTA VI의 블록버스터 출시가 번성하는 콘텐츠 경제를 활성화시키는 방법",
+      "summaryKo": "GTA VI의 블록버스터 출시는 라이브 스트리밍, 소셜 클립 및 많은 양의 콘텐츠 농장을 중심으로 더 넓은 경제를 창출하고 있습니다. 수백만 명이 다른 사람들이 플레이하는 것을 지켜보고 있습니다.",
+      "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     },
     {
-      "url": "https://www.cnbc.com/2026/11/19/anthropic-ipo-flipping-rules.html",
-      "title": "Anthropic IPO: Investors who flip the stock may face brokerage penalty",
-      "publishedAt": "2026-11-20T00:16:30+00:00",
-      "firstPublishedAt": "2026-11-19T13:05:40+00:00",
-      "source": "CNBC 주요",
-      "category": "주식시장",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/cq772r7kk315o?at_medium=RSS&at_campaign=rss",
+      "title": "Survey reveals 'major increase' in cost of living",
+      "publishedAt": "2026-11-20T06:12:28+00:00",
+      "firstPublishedAt": "2026-11-20T06:12:28+00:00",
+      "source": "BBC 경제",
+      "category": "경제·물가",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false,
       "sourceStatus": "ready",
       "importance": "normal",
       "importanceReason": "",
-      "sourceHash": "75a71c782fa94062ee291e6348bee71b98c84c3c3af9044d7b2dd86c75feb36f",
-      "headlineKo": "인트로피 IPO: 주식을 뒤집는 투자자들은 중개 벌금에 처할 수 있습니다",
-      "summaryKo": "브로커지 회사들은 Anthropic 주식을 너무 빨리 판매하는 투자자들에게 미래의 IPO 제한을 설정할 수 있습니다.",
-      "translationStatus": "ready",
+      "sourceHash": "d172a482ec48d26f0205cdc44f9b2f4a0a1c06bcf27d43ac0cb07056f23b4662",
       "translationMethod": "machine-translation",
+      "headlineKo": "조사 결과 생활 비용 의 '큰 증가'가 나타났습니다",
+      "summaryKo": "응답자의 3분의 2 이상이 생활비용이 상승했다고 보고했습니다.",
+      "translationStatus": "ready",
+      "translationVersion": "home-news-ko-v2"
+    },
+    {
+      "url": "https://www.bbc.co.uk/news/articles/c6evre8j12vno?at_medium=RSS&at_campaign=rss",
+      "title": "Mouldy, infested housing for vulnerable people sold as ethical investments abroad",
+      "publishedAt": "2026-11-20T06:00:33+00:00",
+      "firstPublishedAt": "2026-11-20T06:00:33+00:00",
+      "source": "BBC 경제",
+      "category": "금융·시장",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
+      "fromCache": false,
+      "sourceStatus": "ready",
+      "importance": "normal",
+      "importanceReason": "",
+      "sourceHash": "bee3c3233c50391e672dcaf619e304a29793aaeeb78d7299b7ca5b91432f019b",
+      "translationMethod": "machine-translation",
+      "headlineKo": "취약계층을 위한 무더운 주택은 해외에 윤리적인 투자로 판매됩니다.",
+      "summaryKo": "이 부동산들은 정부가 지원하는 수익금에 대한 청구와 함께 프리미엄 가격으로 판매된다.",
+      "translationStatus": "ready",
       "translationVersion": "home-news-ko-v2"
     }
   ],
@@ -402,56 +402,56 @@
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 경제",
       "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     },
     {
       "name": "BBC 국제",
       "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 주요",
       "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 금융",
       "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     },
     {
       "name": "CNBC 경제",
       "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html",
       "status": "ready",
-      "lastAttemptAt": "2026-11-20T04:23:26.073609+00:00",
-      "lastSuccessAt": "2026-11-20T04:23:26.073609+00:00",
+      "lastAttemptAt": "2026-11-20T12:04:39.886603+00:00",
+      "lastSuccessAt": "2026-11-20T12:04:39.886603+00:00",
       "fromCache": false
     }
   ],
