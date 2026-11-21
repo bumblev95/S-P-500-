@@ -1,0 +1,55 @@
+{
+  "version": "prospective-observation-v1",
+  "registeredAt": "2026-10-21T01:37:24Z",
+  "sourceMainCommit": "f9f137721b3e62606f7422c11560e2761f8ceb65",
+  "parentResearchCommit": "103213bf3add4b72849b9df4e507b29b7056b4f6",
+  "purpose": "Audit the first matured short-horizon observations that were immutably issued before their outcomes, without treating them as evidence for the separate 126/252-day joint-indicator candidates.",
+  "inputs": {
+    "issued": {
+      "path": "research/issued.json",
+      "sha256": "b0b9143e55d383f9990fc2a666cd3055ca60c21dc7cd796b610d99071c891926"
+    },
+    "simpleTrend": {
+      "path": "forecasts/archive/2026-09.csv",
+      "sha256": "5d1757d338f7ab17b537271a7c14f2db2d615a6a945163bc8c13b6964755dafb"
+    },
+    "targetPrices": {
+      "path": "ml/archive/2026-10-12-pooled-hgb-pattern-v3-medium-long.json",
+      "sha256": "933b5dd8d48fe5a48b73473b39dcec8865cc75de50dc5743c33ab4e6be5aae81"
+    }
+  },
+  "observation": {
+    "origin": "2026-09-11",
+    "targetDate": "2026-10-12",
+    "horizonSessions": 21,
+    "sessionRule": "XNYS weekdays strictly after the origin. The official 2026 NYSE holiday list has no closure between 2026-09-11 and 2026-10-12; Columbus Day is an open session.",
+    "models": [
+      "environment-challenger-v2-logmedian",
+      "environment-challenger-v3-official-earnings",
+      "environment-challenger-v4-sp500-earnings",
+      "environment-challenger-v5-horizon-specific"
+    ],
+    "commonCohort": "Outcome-independent intersection of symbols issued by all four models at the fixed origin/horizon and present in the fixed target archive. SPY is absent from v4/v5 and therefore is not in the common stock cohort.",
+    "controls": ["noChange", "alwaysUp", "simpleTrend"],
+    "numericMethods": ["v2Balanced", "v3Balanced", "v4Balanced", "v5Balanced", "v5HorizonModel"],
+    "directionRule": "Final numeric return above 2% is up, below -2% is down, otherwise flat. Always-up is direction-only. Classifier argmax and numeric sign are not forced to agree.",
+    "weighting": "One fixed issue date; every common-cohort security has equal weight.",
+    "fullCohortRule": "Do not publish aggregate v4/v5 501-security metrics if any originally issued security lacks the fixed target source. Preserve coverage and missing identities instead.",
+    "probability": "Only v5 raw horizonDirectionScores are audited with multiclass Brier and log loss. They remain research scores because this is one issue date, not sufficient calibration evidence.",
+    "abstention": "No row abstention in the complete common cohort. Missing full-cohort targets are coverage blockers, not abstentions and not removed from a claimed full-sample score."
+  },
+  "hypotheses": {
+    "A": "A genuinely pre-outcome issued 21-session point forecast improves both price MAPE and return MAE over no change without materially losing direction performance versus the separately issued simple-trend control.",
+    "B": "The horizon-specific v5 forecast adds useful downside detection or balanced direction accuracy while retaining the magnitude-error benefit of the earlier issued point forecasts."
+  },
+  "decision": "No selection or promotion from one issue date. Any blend designed after the target is observed is diagnostic only and is not evaluated here as an executable candidate.",
+  "longHorizonBoundary": "126- and 252-session issued forecasts remain pending. They are counted but receive no outcome score in this audit.",
+  "knownLimits": "The 15-stock common cohort is a concentrated legacy watchlist and the evaluation protocol was written after the target date. Underlying forecasts were issued before outcomes, but this is not a preregistered representative trial. Current/revised target archives and lifecycle gaps remain.",
+  "noTradeClaims": true,
+  "noUIOrLiveChanges": true,
+  "references": [
+    "https://www.nyse.com/markets/hours-calendars",
+    "https://doi.org/10.1057/jors.1969.103",
+    "https://doi.org/10.1016/S1574-0706(05)01004-9"
+  ]
+}

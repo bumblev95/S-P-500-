@@ -1,0 +1,15 @@
+{
+  "verifiedAt": "2026-10-14T01:20:53Z",
+  "command": "PYTHONPATH=scripts python scripts/research_rank_tilt.py",
+  "independentExecutions": 2,
+  "generatedAtChanged": true,
+  "canonicalHashRun1": "4c34b1e35408cf2abbba75b4e5ea4214b44e12b955310a2eb7f73d5980888949",
+  "canonicalHashRun2": "4c34b1e35408cf2abbba75b4e5ea4214b44e12b955310a2eb7f73d5980888949",
+  "predictionsGzipSha256Run1": "0576525a8ad8508493cc8682a922c8168a56cdab30323f1ee6190a1b66503863",
+  "predictionsGzipSha256Run2": "0576525a8ad8508493cc8682a922c8168a56cdab30323f1ee6190a1b66503863",
+  "protocolSha256": "8d9ee55b360bfbb3091a649f6a482973e66def497496ff23ea9e0cbec95b61bf",
+  "researchCodeSha256": "cefc333c23f1827ca20a9fd85d7c2998c4c61899beb3fc2fc63e4a3b1557e305",
+  "regressionCommand": "PYTHONPATH=scripts python -m unittest scripts.test_joint_indicator scripts.test_indicator_blends scripts.test_conditional_indicator scripts.test_relative_blends scripts.test_pit_sp500_inputs scripts.test_fja_sp500_quarantine scripts.test_merger_lifecycle scripts.test_drawdown_separation scripts.test_rank_tilt",
+  "regressionTests": 150,
+  "regressionStatus": "passed"
+}

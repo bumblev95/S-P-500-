@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-17T01:12:20Z",
+  "collectionCommand": "python scripts/collect_momentum_decomposition.py",
+  "evaluationCommand": "PYTHONPATH=scripts python scripts/research_momentum_decomposition.py",
+  "independentEvaluationExecutions": 2,
+  "generatedAtChanged": true,
+  "canonicalHashRun1": "0107a8a873583e78d99231252889c7380d0f5b3bade585cdf963146e21782bdf",
+  "canonicalHashRun2": "0107a8a873583e78d99231252889c7380d0f5b3bade585cdf963146e21782bdf",
+  "predictionsGzipSha256Run1": "aa6e6d157ee4ded118608be9b1618d53dfdce980fad75c9467226e7bd07a4d1b",
+  "predictionsGzipSha256Run2": "aa6e6d157ee4ded118608be9b1618d53dfdce980fad75c9467226e7bd07a4d1b",
+  "protocolSha256": "5f0a5aa84fbdb4b54dac9c3f73ef1baa66851cc78ab6bd096f8878bdeffcd474",
+  "featureSnapshotSha256": "892ced4f763049e7709224d032c430d7610853133cec43fb3ca7a5ef662f68c1",
+  "researchCodeSha256": "cb15b758dc497265aabc1f32467ba65b797253ea61e394280a72ab4c30c6bad5",
+  "collectorCodeSha256": "4032dc2dea8d18a9a2948d8ab5650a203ebd28d1e66b707f8641e0c3df75f076",
+  "regressionCommand": "PYTHONPATH=scripts python -m unittest scripts.test_joint_indicator scripts.test_indicator_blends scripts.test_conditional_indicator scripts.test_relative_blends scripts.test_pit_sp500_inputs scripts.test_fja_sp500_quarantine scripts.test_merger_lifecycle scripts.test_drawdown_separation scripts.test_rank_tilt scripts.test_momentum_decomposition",
+  "regressionTests": 155,
+  "regressionStatus": "passed"
+}
