@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "display-only",
   "mode": "shadow-only",
-  "generatedAt": 1795545820961,
+  "generatedAt": 1795574988692,
   "staleAfterMs": 1800000,
   "automaticPromotion": false,
   "defaultStrategyChanged": false,
@@ -19,7 +19,7 @@
     "thresholdR": 0.1
   },
   "sources": {
-    "decisionRecords": 334,
+    "decisionRecords": 335,
     "closedTrades": {
       "control-three": 19,
       "control-one": 8,
@@ -28,7 +28,7 @@
   },
   "forecastResearch": {
     "model": "completed-error-adapter-v1:pooled-hgb-pattern-v3-medium-long",
-    "generatedAt": "2026-11-24T14:20:09+00:00",
+    "generatedAt": "2026-11-24T21:15:22+00:00",
     "horizons": {
       "126": {
         "status": "research",
@@ -41,7 +41,7 @@
           "consistency": false,
           "direction": false
         },
-        "improvementVsOriginal": 0.014053190213298872,
+        "improvementVsOriginal": 0.01405319021329876,
         "liveForecastChanged": false,
         "reason": null
       },
@@ -73,8 +73,8 @@
       "incumbentThresholdR": 0.1,
       "baseModelId": "momentum14-breakout3-boost-2026-frozen-v1",
       "activity": "collecting",
-      "observations": 244,
-      "latestObservationAt": 1795545820208,
+      "observations": 245,
+      "latestObservationAt": 1795574988122,
       "initialTrainingTrades": 3,
       "assessment": {
         "schemaVersion": 1,
@@ -95,7 +95,7 @@
           "stressCostMultiplier": 2,
           "maxDrawdown": 0.1
         },
-        "asOf": 1795545820208,
+        "asOf": 1795574988122,
         "status": "insufficient",
         "promotionCandidate": false,
         "automaticPromotion": false,
@@ -123,10 +123,10 @@
           "identicalCurveTimes": true,
           "chronology": true,
           "noBackfill": true,
-          "observations": 244,
+          "observations": 245,
           "firstAt": 1790996520188,
-          "lastAt": 1795545820208,
-          "forwardDays": 52.42396074074074,
+          "lastAt": 1795574988122,
+          "forwardDays": 52.76155233796296,
           "comparison": "Whole paired accounts, including rejected signals, unfilled orders, cash and all losses; no matched-winner trade intersection."
         },
         "purgedWalkForward": {
@@ -151,7 +151,7 @@
           "maxEntryExposure": 0.4525119136246215,
           "maxConcurrentPositions": 1,
           "maxLeverage": 5,
-          "dailyVolatility": 0.005578470243436284,
+          "dailyVolatility": 0.005529041718878474,
           "worstDailyLoss": 0.009731881977371959,
           "tailDailyLoss": 0.007529590098653838,
           "funding": -13.943821905383736,
@@ -177,7 +177,7 @@
           "maxEntryExposure": 0.4525119136246215,
           "maxConcurrentPositions": 1,
           "maxLeverage": 5,
-          "dailyVolatility": 0.005578470243436284,
+          "dailyVolatility": 0.005529041718878474,
           "worstDailyLoss": 0.009731881977371959,
           "tailDailyLoss": 0.007529590098653838,
           "funding": -13.943821905383736,
@@ -188,10 +188,10 @@
           "pendingOrders": 0
         }
       },
-      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1795545820208-96b5e8a5a594.json",
-      "assessmentHash": "96b5e8a5a594af44e28aea6775e92dcddfadc7b93ef5c7c5464d0c48826568b7",
+      "assessmentPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/assessments/1795574988122-8bcd0ed667c0.json",
+      "assessmentHash": "8bcd0ed667c00e3b8f3f5d26c9d78f7d5108f109c8b113a9611c9294b82bb84b",
       "candidatePath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/candidate.json",
-      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1795545820208-13d3e7651707.json"
+      "observationPath": "simulation/self-improvement/versions/shadow-threshold-v1-1790996520188-ac0b896d93c8/observations/1795574988122-d80b1ffa316e.json"
     },
     {
       "version": "shadow-threshold-v1-1790847209063-32d1b0a79b74",
