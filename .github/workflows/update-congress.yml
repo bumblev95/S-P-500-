@@ -1,0 +1,33 @@
+name: Refresh congressional trading data
+on:
+  schedule:
+    - cron: '37 13 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: refresh-congress-disclosures
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Refresh and validate disclosures and closing prices
+        run: python3 scripts/update_congress.py
+      - name: Publish updated data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add data/congress/NVDA.json data/congress/market.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refresh congressional disclosure chart and rankings'
+          git pull --rebase origin main
+          git push origin HEAD:main
+          gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

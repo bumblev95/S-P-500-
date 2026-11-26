@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>미국 의원 거래 적중률 | S&amp;P 500 리서치 대시보드</title>
+  <link rel="canonical" href="https://bumblev95.github.io/S-P-500-/congress.html">
+  <meta name="description" content="엔비디아의 미국 의원 공시 거래를 매수·매도별로 살펴보고, 전체 종목 매수 공시가 S&P 500을 앞선 비율도 비교하세요.">
+  <link rel="stylesheet" href="assets/site-shell.css?v=2">
+  <link rel="stylesheet" href="assets/site-info.css?v=1">
+  <link rel="stylesheet" href="assets/congress-rank.css">
+  <script defer src="assets/congress-rank.js"></script>
+</head>
+<body class="site-theme">
+  <div class="site-frame" id="congress-rank">
+    <header class="site-header">
+      <div class="site-brand">
+        <span class="site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><div class="site-eyebrow">S&amp;P 500 RESEARCH</div><h1>미국 의원 거래 적중률</h1></div>
+      </div>
+      <nav class="site-nav" aria-label="주요 페이지">
+        <a href="./">메인</a><a href="stocks.html">주식</a><a href="congress.html" aria-current="page">의원 거래</a><a href="crypto.html">코인 현물</a><a href="futures.html">선물</a><a href="simulation.html">모의운용</a>
+      </nav>
+    </header>
+    <main>
+      <div class="cr-tabs" role="group" aria-label="집계 종류">
+        <button type="button" data-scope="nvda" aria-pressed="true">엔비디아 거래</button>
+        <button type="button" data-scope="market" aria-pressed="false">전체 종목 매수 공시</button>
+      </div>
+      <section class="site-panel cr-panel" aria-labelledby="cr-title">
+        <div class="cr-head">
+          <div><h2 id="cr-title">엔비디아 매매 적중률</h2><p id="cr-context">매수와 매도 이후 엔비디아의 90일 성과를 비교합니다.</p></div>
+          <a class="cr-chart" href="stocks.html?symbol=NVDA#congress-chart">NVDA 차트 보기 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="cr-controls">
+          <label id="cr-side-label">거래 방향
+            <select id="cr-side"><option value="all">매수·매도 전체</option><option value="buy">매수만</option><option value="sell">매도만</option></select>
+          </label>
+          <label id="cr-outcome-label" hidden>적중 기준
+            <select id="cr-outcome"><option value="relative">SPY 대비 성과</option><option value="absolute">실제 주가 방향</option></select>
+          </label>
+          <label id="cr-sort-label" hidden>순위 기준
+            <select id="cr-sort"><option value="hit">시장 초과 비율</option><option value="excess">평균 초과수익률</option></select>
+          </label>
+          <label>최소 평가 건수 <select id="cr-min" aria-label="최소 평가 건수"></select></label>
+        </div>
+        <div class="cr-stat"><span id="cr-status" role="status" aria-live="polite">집계 불러오는 중…</span><span id="cr-asof"></span></div>
+        <p id="cr-error" hidden></p><button type="button" id="cr-retry" hidden>다시 불러오기</button>
+        <div id="cr-table-wrap" hidden>
+          <table id="cr-table"><caption class="cr-sr" id="cr-caption"></caption><thead><tr></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+      <section id="cr-method" class="site-disclosure" aria-labelledby="cr-method-title">
+        <h2 id="cr-method-title">집계 기준과 출처</h2><p id="cr-method-text"></p><p id="cr-source"></p>
+      </section>
+      <noscript><p>거래 방향과 표본 수에 따라 순위를 계산하려면 JavaScript를 켜 주세요. <a href="https://pathosinvestments.com/congress/nvda">엔비디아 거래 자료</a> · <a href="https://steadyshares.com/politicians/leaderboard">전체 종목 매수 집계</a></p></noscript>
+    </main>
+  </div>
+  <footer class="site-info-footer" aria-label="사이트 정보"><nav aria-label="사이트 안내"><a href="methodology.html">분석 기준·자료 출처</a><a href="privacy.html">개인정보·광고 안내</a></nav></footer>
+</body>
+</html>

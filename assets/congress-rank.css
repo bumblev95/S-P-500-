@@ -1,0 +1,46 @@
+#congress-rank.site-frame{max-width:1150px}
+#congress-rank main{max-width:990px;margin:30px auto 0}
+#congress-rank [hidden]{display:none!important}
+#congress-rank a{color:var(--site-cyan);text-underline-offset:3px}
+.cr-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:15px}
+.cr-tabs button,#cr-retry{border:1px solid var(--site-line);border-radius:9px;padding:10px 15px;background:var(--site-surface);color:var(--site-muted);font:inherit;font-size:.9rem;cursor:pointer;min-height:42px}
+.cr-tabs button[aria-pressed=true]{background:#123a39;color:#9bf3d3;border-color:#28544e;font-weight:650}
+.cr-panel{padding:clamp(14px,3.8vw,34px)}
+.cr-head,.cr-stat{display:flex;align-items:baseline;justify-content:space-between;gap:8px 18px;flex-wrap:wrap}
+.cr-head h2{margin:0;font-size:clamp(1.3rem,3vw,1.75rem);letter-spacing:-.035em}
+.cr-head p,.cr-stat,#cr-method p{color:var(--site-muted);line-height:1.65}
+.cr-head p{margin:4px 0 0}
+.cr-chart{font-size:.88rem;font-weight:650}
+.cr-controls{display:flex;align-items:end;gap:10px 16px;flex-wrap:wrap;margin:22px 0 16px}
+.cr-controls label{display:grid;gap:4px;min-width:123px;font-size:.78rem;color:var(--site-muted)}
+.cr-controls select{font:inherit;font-size:.88rem;min-height:42px;padding:6px 28px 6px 10px;border-radius:8px;border:1px solid #37516b;background:#081625;color:var(--site-text);cursor:pointer}
+#congress-rank :is(button,select,a):focus-visible{outline:2px solid var(--site-green);outline-offset:3px}
+.cr-stat{font-size:.8rem;border-top:1px solid var(--site-line);padding-top:12px}
+#cr-table{width:100%;border-collapse:collapse;font-size:.92rem;font-variant-numeric:tabular-nums;margin-top:12px}
+#cr-table th,#cr-table td{padding:12px 7px;text-align:right;border-bottom:1px solid var(--site-line)}
+#cr-table thead th{font-size:.77rem;font-weight:600;color:var(--site-muted);background:var(--site-surface)}
+#cr-table th:first-child,#cr-table td:first-child{text-align:left}
+#cr-table tbody th{font-weight:600}
+#cr-table small{display:block;font-weight:400;color:var(--site-muted);font-size:.76rem}
+#cr-table .cr-place{display:inline-block;min-width:2.3em;color:var(--site-muted);font-weight:500}
+#cr-table tbody th a{text-decoration:none}
+#cr-table tbody th a:hover{text-decoration:underline}
+#cr-table .cr-highlight{color:var(--site-green);font-weight:700}
+#cr-method h2{font-size:1rem;margin:0}
+#cr-method p{margin:6px 0 0;font-size:.88rem}
+#cr-error{color:var(--site-yellow)}
+.cr-sr{width:1px;height:1px;overflow:hidden;clip-path:inset(50%);position:absolute;white-space:nowrap}
+@media(max-width:700px){
+  #congress-rank main{margin-top:20px}
+  .cr-controls{gap:8px}
+  #cr-table th,#cr-table td{padding:10px 4px}
+  #cr-table{font-size:.86rem}
+  #cr-table .cr-place{min-width:1.75em}
+}
+@media(max-width:560px){
+  #cr-table .cr-wide{display:none}
+  .cr-controls label{min-width:0;flex:1 1 123px}
+  .cr-controls select{width:100%;padding-right:5px}
+  #cr-table tbody th{max-width:11em;overflow-wrap:anywhere}
+}
+@media(min-width:561px){#cr-table .cr-mobile{display:none}}
