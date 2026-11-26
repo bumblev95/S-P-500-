@@ -5,6 +5,10 @@ body.stock-desk{background:#11171e;--bg:#11171e;--surface:#171e26;--line:#303a45
 .stock-desk .candidatePanel{background:#171e26;border-color:#303a45;border-radius:8px;box-shadow:none}
 .stock-desk .controlBar{background:#151c24;border-radius:8px;box-shadow:none}
 .stock-desk .decisionHero{background:#1b2430}
+.stock-desk #stock-overview{margin-top:14px}
+.stock-desk .tickerLine .companyName{order:-1;color:var(--text);font-size:1.1rem;font-weight:700}
+.stock-desk .tickerLine h2{font-size:.86rem;color:#aab9c9;font-weight:600}
+.stock-desk .tickerLine .price{font-size:clamp(1.1rem,2.6vw,1.72rem)}
 .stock-desk .chartStage{background:#141a22;border-radius:6px}
 .stock-desk .stock-jump{gap:0;border-bottom:1px solid var(--line)}
 .stock-desk .stock-jump a{border:0;border-radius:0;background:transparent;padding:0 12px}
