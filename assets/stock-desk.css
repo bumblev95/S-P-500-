@@ -22,7 +22,7 @@ body.stock-desk{background:#11171e;--bg:#11171e;--surface:#171e26;--line:#303a45
 .stock-preview p{color:var(--muted);font-size:.86rem;margin:6px 0 0}
 .stock-desk #stock-candidate-load{margin:10px 14px;min-height:44px;padding:6px 12px;background:#1b2a36;color:#cce5f1;border:1px solid #536d7f;border-radius:6px;font:inherit;cursor:pointer}
 #stock-search-return{display:none}
-.stock-desk [hidden]{display:none!important}
+.stock-desk :is(#stock-search-return,#stock-candidate-load,#candidateRail)[hidden]{display:none!important}
 @media(max-width:720px){
   .stock-desk .stock-jump a{justify-content:flex-start}
   .stock-desk #stock-search-return:not([hidden]){
