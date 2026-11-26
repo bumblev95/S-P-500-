@@ -1,0 +1,56 @@
+name: Publish congressional stock disclosures
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_congress_chart_data.py'
+      - '.github/workflows/publish-congress-chart-data.yml'
+  schedule:
+    - cron: "35 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: congress-chart-data
+  cancel-in-progress: false
+
+jobs:
+  snapshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate congressional disclosure normalization
+        run: |
+          python -m unittest discover -s scripts -p test_congress_chart_data.py
+      - name: Generate disclosures for current dashboard stocks
+        id: publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            python scripts/build_congress_chart_data.py
+            git add data/congress/by-symbol
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Refresh congressional stock disclosures'
+            if git push origin HEAD:main; then
+              echo 'published=true' >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          exit 1
+      - name: Refresh the published website
+        if: steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
