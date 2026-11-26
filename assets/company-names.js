@@ -353,6 +353,7 @@ const names={
   "O": ["리얼티 인컴", "Realty Income Corporation", "리얼티인컴"],
   "ODFL": ["올드 도미니언 프레이트 라인", "Old Dominion Freight Line, Inc.", "올드도미니언"],
   "OKE": ["원오크", "ONEOK, Inc.", "오네오크"],
+  "OKTA": ["옥타", "Okta, Inc.", "오크타"],
   "OMC": ["옴니콤 그룹", "Omnicom Group Inc.", "옴니콤"],
   "ON": ["온세미컨덕터", "ON Semiconductor Corporation", "온세미", "온세미콘덕터"],
   "ORCL": ["오라클", "Oracle Corporation"],

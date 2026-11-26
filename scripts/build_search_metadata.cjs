@@ -53,6 +53,8 @@ for (const file of [...primary, ...articles]) {
 const sitemap = entries => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+entries.join('\n')+'\n</urlset>\n';
 write('sitemap.xml',sitemap(projectEntries));
 write('research/adsense-root-site/sitemap.xml',sitemap(rootEntries));
-write('research/adsense-root-site/index.html',read('index.html').replace('<head>\n','<head>\n  <base href="'+base+'">\n'));
+const rootHome = read('index.html').replace('<head>\n','<head>\n  <base href="'+base+'">\n')
+  .replaceAll('href="#home-', 'href="'+home+'#home-');
+write('research/adsense-root-site/index.html',rootHome);
 if (process.argv.includes('--check') && changed) process.exitCode = 1;
 else console.log('Search metadata and scoped sitemaps '+(changed?'updated':'verified')+'.');

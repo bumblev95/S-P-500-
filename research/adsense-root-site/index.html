@@ -38,19 +38,26 @@
         <div class="site-brand"><span class="site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="site-eyebrow">MARKET BRIEF</div><h1>오늘 시장, 한눈에.</h1></div></div>
         <nav class="site-nav" aria-label="주요 페이지"><a href="./" aria-current="page">메인</a><a href="stocks.html">주식</a><a href="congress.html">의원 거래 적중률</a><a href="crypto.html">코인 현물</a><a href="futures.html">선물</a><a href="simulation.html">모의운용</a></nav>
       </header>
+      <div class="hp-discover">
+        <form class="hp-search" action="stocks.html" method="get" role="search" aria-label="종목 찾기">
+          <label for="home-ticker">종목 찾기</label>
+          <div><input id="home-ticker" name="q" type="search" placeholder="애플 또는 AAPL" autocomplete="off" maxlength="80" required><button type="submit">검색</button></div>
+        </form>
+        <nav class="hp-jump" aria-label="홈에서 바로 보기"><a href="https://bumblev95.github.io/#home-picks">매수·매도 TOP 3</a><a href="https://bumblev95.github.io/#home-recap">지수·섹터</a><a href="https://bumblev95.github.io/#home-news">시장 뉴스</a></nav>
+      </div>
       <section class="hp-intro">
         <p class="hp-muted" data-home-brief>미국 시장의 최근 마감과 섹터 흐름을 확인합니다.</p>
         <div class="hp-date" data-home-date></div>
       </section>
       <p class="site-home-purpose">종가 기반 분석 · TOP3는 우선 검토 순위 · <a href="guide-top3.html">읽는 방법</a></p>
-      <section class="hp-picks" aria-label="매수·매도 후보">
+      <section class="hp-picks" id="home-picks" aria-label="매수·매도 후보">
         <div class="hp-column hp-buy site-panel"><div class="hp-column-head"><h2><i data-lucide="arrow-up-right" aria-hidden="true"></i>매수</h2><span class="hp-number">TOP 3</span></div><div data-home-buy><p class="hp-muted">순위 불러오는 중</p></div></div>
         <div class="hp-column hp-sell site-panel"><div class="hp-column-head"><h2><i data-lucide="arrow-down-right" aria-hidden="true"></i>매도</h2><span class="hp-number">TOP 3</span></div><div data-home-sell><p class="hp-muted">순위 불러오는 중</p></div></div>
         <p class="hp-rank-note" data-home-ranking-note>매수·매도 우선 검토 순위 · 최신 종가 기준</p>
       </section>
       <div class="hp-main-grid">
+        <section class="site-panel hp-panel" id="home-recap" aria-labelledby="home-recap-title"><div class="hp-section-head site-panel-head"><h2 id="home-recap-title">주요 지수와 섹터</h2><span class="hp-muted" data-recap-state>마감 기준</span></div><div data-home-recap><p class="hp-empty">섹터 그래프 불러오는 중</p></div></section>
         <section class="site-panel hp-panel" id="home-news" aria-labelledby="home-news-title"><div class="hp-section-head site-panel-head"><h2 id="home-news-title">최신 시장 뉴스</h2><span class="hp-muted">최신순 · 중요 뉴스 표시</span></div><div data-home-news aria-live="polite"><p class="hp-empty">뉴스 불러오는 중</p></div><p class="hp-source-note">원문 기반 짧은 요약 · 자동 번역 포함 · <a href="guide-news.html">뉴스 읽는 기준</a></p></section>
-        <section class="site-panel hp-panel" id="home-recap" aria-labelledby="home-recap-title"><div class="hp-section-head site-panel-head"><h2 id="home-recap-title">오늘 · 이번 주 Recap</h2><span class="hp-muted" data-recap-state>마감 기준</span></div><div data-home-recap><p class="hp-empty">섹터 그래프 불러오는 중</p></div></section>
       </div>
       <section class="site-learning-links" aria-labelledby="home-guide-title"><h2 id="home-guide-title">처음이라면, 이 기준부터</h2><nav aria-label="시장 해설"><a href="guide-top3.html">TOP3 읽기</a><a href="guide-sell.html">주식 매도·손절 기준</a><a href="guide-indicators.html">점수와 진입 조건</a><a href="guide-backtesting.html">백테스트 읽기</a><a href="guide-news.html">뉴스·섹터 읽기</a></nav><p class="hp-muted">매수 순위는 먼저 살펴볼 후보입니다. 이미 보유한 주식은 매입가와 비중, 추세 이탈을 함께 확인하세요. <a href="learn.html">초보자 주식 가이드 전체 보기 →</a></p></section>
       <aside class="site-ad" data-site-ad="home" aria-label="광고" hidden><span class="site-ad-label">광고</span><div class="site-ad-body" data-site-ad-body></div></aside>
