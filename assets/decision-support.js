@@ -88,7 +88,7 @@ function adaptivePanel(sym,h,data=adaptive){
 function extras(asset,sym,h,validation,tail){return confidence(validation,{tail,direction:asset==='crypto'?'과거 코인 백테스트는 상승/비상승을 비교합니다. 실제 성적표는 ±2% 중립 기준을 별도로 사용합니다.':undefined})+'<details class="site-disclosure"><summary>공개 예측 성적·변경 이력</summary>'+scorePanel(asset,sym,h)+changePanel(asset,sym,h)+(asset==='stocks'?adaptivePanel(sym,h):'')+'</details>'}
 function mountStock({e,plan,h,ai}){
  const host=document.getElementById('decisionEvidence');if(host)host.innerHTML=extras('stocks',e.symbol,h,ai.record?.validation||{},!ai.record?.model&&bundle?.stockValidationGeneratedAt===ai.generatedAt?bundle?.stockTailErrors?.[e.symbol]?.[h]:null);
- root.CompanyEvents?.mount(document.getElementById('companyEvents'),e.symbol);
+ root.CompanyEvents?.mount(document.getElementById('companyEvents'),e.symbol,{history:e.history,asOf:e.asOf});
  const riskHost=document.getElementById('sharedRisk');if(riskHost)riskHost.innerHTML=riskPanel();
 
 }

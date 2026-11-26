@@ -90,6 +90,75 @@ function newsPanel(ticker,snapshot=newsData,now=Date.now()){
  return '<div class="ce-heading"><div><small>회사별 한국어 뉴스 · '+esc(s.key)+'</small><h3>회사 뉴스 · 호재와 악재</h3></div><span class="ce-status ce-news-status'+(s.fresh?' ce-ready':'')+'">'+state+'</span></div>'+(s.checkedAt?'<p class="ce-collection">'+(s.fresh?'뉴스 확인 ':s.sourceFresh?'마지막 원문 확보 ':'수집 지연 · 마지막 뉴스 확인 ')+confirmed(s.checkedAt)+'</p>':'')+content+'<p class="ce-news-note">호재는 사업·수익 기회에 유리한 내용, 악재는 비용·위험 등 부담 요인입니다. 두 요인이 함께 있으면 혼재, 발표 안내 등 방향 변화가 없으면 중립입니다. 제목·제공 요약에 근거한 예비 판단이며 주가 상승·하락을 예측하지 않습니다. 한국어 요약은 제공된 짧은 원문을 번역한 것으로, 영어 원문에서 함께 확인할 수 있습니다.</p>';
 }
 
+const marketDate=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'});
+function nyDate(milliseconds){
+ const fields=Object.fromEntries(marketDate.formatToParts(milliseconds).map(({type,value})=>[type,value]));
+ return fields.year+'-'+fields.month+'-'+fields.day;
+}
+const reviewedMoves=[
+ {symbols:['NVDA'],date:'2026-08-27',title:'예상을 웃돈 분기 실적과 매출 전망이 AI주 상승을 뒷받침했다고 보도했습니다.',source:{name:'AP',url:'https://apnews.com/article/35c60216666d877595a3941df73030de'}},
+ {symbols:['AAPL','MSFT','AMZN','GOOGL','GOOG','META'],date:'2026-11-04',title:'미국 중간선거 결과 발표 뒤 대형 기술주가 함께 올랐다고 보도했습니다.',source:{name:'Reuters',url:'https://www.reuters.com/business/retail-consumer/democrats-midterm-sweep-fuels-750-billion-big-tech-rally-2026-11-04/'}},
+ {symbols:['NVDA'],date:'2026-11-05',title:'중간선거 이후 시장이 약세를 보였고 AI 반도체주가 동반 하락했다고 보도했습니다.',source:{name:'The Motley Fool · Yahoo Finance',url:'https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-5-220938210.html'}},
+ {symbols:['NVDA'],date:'2026-11-20',title:'반도체주 전반이 급락했습니다. 로이터는 NVIDIA 회계에 관한 SEC 조사 보도도 전했습니다.',source:{name:'Reuters',url:'https://www.reuters.com/business/view-nasdaq-plunges-5-day-after-anthropic-debut-investors-still-believe-ai-2026-11-20/'}}
+];
+function recentMoves(history,asOf) {
+ const cutoff=dateMs(asOf);
+ const start=cutoff-89*DAY;
+ const rows=[...new Map((Array.isArray(history)?history:[])
+  .filter(row=>dateMs(row?.date)<=cutoff && Number.isFinite(row.close) && row.close>0)
+  .map(row=>[row.date,row])).values()].sort((a,b)=>a.date.localeCompare(b.date));
+ const moves=[];
+ for(let i=1;i<rows.length;i++){
+  const previous=rows[i-1],current=rows[i],currentDay=dateMs(current.date);
+  const gap=currentDay-dateMs(previous.date);
+  if(currentDay>=start&&gap<=4*DAY){
+   const change=current.close/previous.close-1;
+   if(Number.isFinite(change)&&change!==0)moves.push({date:current.date,previousDate:previous.date,change});
+  }
+ }
+ return {
+  earliest:rows.find(row=>dateMs(row.date)>=start)?.date,
+  up:moves.filter(move=>move.change>0).sort((a,b)=>b.change-a.change||b.date.localeCompare(a.date)).slice(0,3),
+  down:moves.filter(move=>move.change<0).sort((a,b)=>a.change-b.change||b.date.localeCompare(a.date)).slice(0,3)
+ };
+}
+function sameDateSources(move,filings,articles,now,ticker){
+ const reviewed=reviewedMoves.filter(item=>item.date===move.date&&item.symbols.includes(ticker))
+  .map(item=>({...item,kind:'검토한 보도'}));
+ const formal=filings.filter(event=>{
+  const accepted=observed(event.acceptanceAt,now);
+  return (Number.isFinite(accepted)?nyDate(accepted):event.date)===move.date;
+ }).map(event=>({title:event.title,source:event.source,kind:event.dateKind==='filed'?'공시':'회사 발표'}));
+ const news=articles.filter(article=>nyDate(Date.parse(article.publishedAt))===move.date)
+  .map(article=>({title:article.ko?.method==='reviewed-summary'&&koreanSummary(article)||article.title,
+   source:article.source,kind:'뉴스'}));
+ const sources=new Map();
+ for(const item of [...reviewed,...formal,...news]){
+  if(!sources.has(item.source.url))sources.set(item.source.url,item);
+ }
+ return [...sources.values()].slice(0,3);
+}
+function movesPanel(price,filings,articles,now,ticker){
+ const moves=recentMoves(price.history,price.asOf);
+ if(!moves.up.length&&!moves.down.length)return '';
+ function item(move){
+  const value=(move.change>0?'+':'')+(100*move.change).toFixed(2)+'%';
+  const sources=sameDateSources(move,filings,articles,now,ticker);
+  const evidence=sources.length?'<ul>'+sources.map(entry=>'<li><small>'+entry.kind+' · '+esc(entry.source.name||'원문')+
+   '</small><a href="'+esc(entry.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(entry.title)+'</a></li>').join('')+'</ul>':
+   '<p>확보한 자료에서 같은 날짜의 공시·뉴스를 찾지 못했습니다.</p>';
+  return '<li><details><summary><time datetime="'+esc(move.date)+'">'+esc(move.date)+'</time><strong>'+value+
+   '</strong><small>'+ (sources.length?sources.length+'건':'자료 없음')+'</small></summary><div class="ce-move-detail">'+
+   '<small>비교 시작 '+esc(move.previousDate)+'</small>'+evidence+'</div></details></li>';
+ }
+ const column=(label,rows,side)=>'<div class="ce-move-'+side+'"><h4>'+label+'</h4>'+
+  (rows.length?'<ol>'+rows.map(item).join('')+'</ol>':'<p>표시할 변동이 없습니다.</p>')+'</div>';
+ return '<section class="ce-moves" aria-labelledby="ce-moves-title"><div class="ce-heading"><div><small>일별 종가 · '+
+  esc(moves.earliest)+' ~ '+esc(price.asOf)+'</small><h3 id="ce-moves-title">최근 90일 큰 주가 변동</h3></div></div>'+
+  '<div class="ce-move-grid">'+column('상승 상위',moves.up,'up')+column('하락 상위',moves.down,'down')+
+  '</div><p class="ce-news-note">앞선 종가 대비 변화입니다. 같은 날짜(미국 동부 기준)의 공시·뉴스에는 장 마감 이후 자료도 포함될 수 있습니다. 자동 뉴스는 최근 30일 피드 범위입니다. 날짜가 겹친 자료만으로 변동 원인을 확정할 수 없습니다.</p></section>';
+}
+
 const categories={earnings:'실적',report:'보고서',contract:'계약',corporate:'기업 변화',capital:'자금·주식',governance:'지배구조',security:'보안',disclosure:'공시'};
 function card(e,today){
  const planned=e.dateKind==='estimated',type=planned?'예상 일정':categories[e.category]||'공시';
@@ -98,14 +167,14 @@ function card(e,today){
  if(e.reportDate&&Number.isFinite(dateMs(e.reportDate)))fields.unshift({label:e.form?.startsWith('8-K')?'공시상 기준일':'보고 대상 기간 종료',value:e.reportDate});
  return '<li><details class="ce-event'+(planned?' ce-upcoming':'')+'"><summary><time datetime="'+esc(e.date)+'"><b>'+esc(e.date.slice(5).replace('-','.'))+'</b><span>'+esc(e.date.slice(0,4))+'</span><small>'+esc(label)+'</small></time><div class="ce-card-heading"><span class="ce-tag ce-'+(planned?'estimate':esc(Object.hasOwn(categories,e.category)?e.category:'disclosure'))+'">'+esc(type)+'</span><strong>'+esc(e.title)+'</strong><small>'+esc(e.form||e.source.name)+'</small></div><span class="ce-expand" aria-hidden="true">+</span></summary><div class="ce-body"><p>'+esc(e.summary||'상세 내용은 원문에서 확인하세요.')+'</p>'+(fields.length?'<dl>'+fields.map(x=>'<div><dt>'+esc(x.label)+'</dt><dd>'+esc(x.value)+'</dd></div>').join('')+'</dl>':'')+(e.form?.startsWith('8-K')?'<small>공시일은 사건 발생일·실적 발표일과 다를 수 있습니다. '+(e.items?.length?'공시 항목 '+esc(e.items.join(', '))+'. ':'')+'구체적인 조건과 내용은 원문을 확인하세요.</small>':'')+'<div class="ce-source"><a href="'+esc(e.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(e.source.name)+' 원문 ↗</a><small>확인 '+confirmed(e.observedAt)+'</small></div></div></details></li>';
 }
-function panel(ticker,snapshot=data,now=Date.now(),newsSnapshot=newsData){
+function panel(ticker,snapshot=data,now=Date.now(),newsSnapshot=newsData,price=null){
  const s=select(snapshot,ticker,now),list=rows=>'<ol class="ce-list">'+rows.map(e=>card(e,s.today)).join('')+'</ol>';
  const state=s.fresh?'최근 공시 확인':s.checkedAt?'마지막 확보 자료':s.past.length?'회사 발표 연결':failed?'자료 읽기 실패':snapshot?'공시 수집 대기':'자료 확인 중';
  let content='<h4>다가오는 일정</h4>'+(s.upcoming.length?list(s.upcoming):'<p class="ce-empty">최신 예정 일정 확인 자료가 없습니다.</p>')+'<h4>최근 180일</h4>';
  content+=s.past.length?list(s.past.slice(0,4)):'<p class="ce-empty">'+(s.fresh?'확인한 공시 범위에 최근 표시할 항목이 없습니다.':'최근 공시 확인 자료가 없습니다. 원문으로 확인하세요.')+'</p>';
  if(s.past.length>4)content+='<details class="ce-more"><summary>이전 공시 '+(s.past.length-4)+'개 더 보기</summary>'+list(s.past.slice(4))+'</details>';
  const cik=s.issuer?.cik,edgar=Number.isInteger(cik)&&cik>0?'<a href="https://www.sec.gov/edgar/browse/?CIK='+cik+'&owner=exclude" target="_blank" rel="noopener noreferrer">SEC 전체 공시 ↗</a>':'';
- return '<section class="company-events" data-event-symbol="'+esc(s.key)+'" aria-label="'+esc(s.key)+' 회사 뉴스">'+newsPanel(ticker,newsSnapshot,now)+'<details class="ce-filings"><summary>공시·일정 보조 자료</summary><div class="ce-heading"><h3>공시·일정</h3><span class="ce-status'+(s.fresh?' ce-ready':'')+'">'+state+'</span></div>'+(!s.fresh&&s.checkedAt?'<p class="ce-collection">수집 지연 · 마지막 공시 확인 '+confirmed(s.checkedAt)+'</p>':'')+content+'<footer>'+edgar+'<details><summary>출처·수집 범위</summary><p>SEC 주요 사항·정기 보고서·주주총회 자료를 공시일 순으로 표시합니다. 회사 원문 실적 요약은 NVDA·MSFT에 연결되어 있습니다. 예상 실적일은 Yahoo 제공 자료로, 회사 확정 일정과 구분합니다.</p><p>SEC 확인 '+confirmed(s.checkedAt)+'. 수집 누락은 사건이 없다는 뜻이 아닙니다. 공시 종류만으로 호재·악재를 판단하지 않습니다.</p></details></footer></details></section>';
+ return '<section class="company-events" data-event-symbol="'+esc(s.key)+'" aria-label="'+esc(s.key)+' 회사 뉴스">'+(price?movesPanel(price,s.past,selectNews(newsSnapshot,ticker,now).articles,now,s.key):'')+newsPanel(ticker,newsSnapshot,now)+'<details class="ce-filings"><summary>공시·일정 보조 자료</summary><div class="ce-heading"><h3>공시·일정</h3><span class="ce-status'+(s.fresh?' ce-ready':'')+'">'+state+'</span></div>'+(!s.fresh&&s.checkedAt?'<p class="ce-collection">수집 지연 · 마지막 공시 확인 '+confirmed(s.checkedAt)+'</p>':'')+content+'<footer>'+edgar+'<details><summary>출처·수집 범위</summary><p>SEC 주요 사항·정기 보고서·주주총회 자료를 공시일 순으로 표시합니다. 회사 원문 실적 요약은 NVDA·MSFT에 연결되어 있습니다. 예상 실적일은 Yahoo 제공 자료로, 회사 확정 일정과 구분합니다.</p><p>SEC 확인 '+confirmed(s.checkedAt)+'. 수집 누락은 사건이 없다는 뜻이 아닙니다. 공시 종류만으로 호재·악재를 판단하지 않습니다.</p></details></footer></details></section>';
 }
 async function load(fetcher=root.fetch?.bind(root),force=false){
  const age=Date.now()-loadedAt;
@@ -117,9 +186,9 @@ async function load(fetcher=root.fetch?.bind(root),force=false){
  ]);return data})();
  return loading;
 }
-function mount(host,ticker){
- if(!host)return;const key=normalize(ticker);host.dataset.eventSymbol=key;host.innerHTML=panel(key);
- load().then(()=>{if(host.isConnected&&host.dataset.eventSymbol===key)host.innerHTML=panel(key)});
+function mount(host,ticker,price=null){
+ if(!host)return;const key=normalize(ticker);host.dataset.eventSymbol=key;host.innerHTML=panel(key,data,Date.now(),newsData,price);
+ load().then(()=>{if(host.isConnected&&host.dataset.eventSymbol===key)host.innerHTML=panel(key,data,Date.now(),newsData,price)});
 }
-const api={load,panel,select,mount,safeSource,newsPanel,selectNews,safeNewsSource,koreanSummary};if(typeof module!=='undefined')module.exports=api;else root.CompanyEvents=api;
+const api={load,panel,select,mount,safeSource,newsPanel,selectNews,safeNewsSource,koreanSummary,recentMoves,sameDateSources};if(typeof module!=='undefined')module.exports=api;else root.CompanyEvents=api;
 })(typeof window!=='undefined'?window:globalThis);
