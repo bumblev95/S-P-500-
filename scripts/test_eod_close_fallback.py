@@ -164,6 +164,35 @@ class RecoveryTests(unittest.TestCase):
                     self.assertEqual(result["HUBB"].iloc[-1]["Close"], 95.4)
                     self.assertIn("HUBB", result.attrs["eodRecoveries"])
 
+    def test_recovers_four_trailing_sessions_and_replays_all_evidence(self):
+        frame = sample_frame().iloc[:-1].copy()
+        frame.loc[pd.Timestamp("2026-10-02"), "Close"] = 92.304996
+        fill_dates = pd.to_datetime(["2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08"])
+        frame = frame.reindex(frame.index.union(fill_dates))
+        frame.loc[fill_dates[-1], ["Open", "High", "Low"]] = [93, 96, 92]
+        payload = sample_response()
+        payload["data"]["tradesTable"]["rows"][1]["close"] = "$92.305"
+        for offset in (6, 7, 8):
+            payload["data"]["tradesTable"]["rows"].insert(0, {
+                "date": f"10/0{offset}/2026", "open": "$93.00", "high": "$96.00",
+                "low": "$92.00", "close": f"$95.{offset}0", "volume": "1,305"})
+        with patch.object(recovery.urllib.request, "urlopen", return_value=io.StringIO(json.dumps(payload))):
+            recovered, evidence = recovery.recover("HUBB", META, frame, "2026-10-08")
+        self.assertEqual(tuple(evidence["yahooGap"]), tuple(d.date().isoformat() for d in fill_dates))
+        self.assertEqual(recovered.loc[fill_dates, "Close"].tolist(), [95.4, 95.6, 95.7, 95.8])
+        evidence["retrievedAt"] = "2026-10-09T01:00:00Z"
+        history = [{"date": day.date().isoformat(), **{k.lower(): float(row[k]) for k in ("Close", "Open", "High", "Low", "Volume")}}
+                   for day, row in recovered.iterrows()]
+        recovery.verify_evidence(evidence, "HUBB", "2026-10-08", "2026-10-09T01:01:00Z", history)
+        history[-3]["close"] = 95.61
+        with self.assertRaisesRegex(ValueError, "history disagree"):
+            recovery.verify_evidence(evidence, "HUBB", "2026-10-08", "2026-10-09T01:01:00Z", history)
+        payload["data"]["tradesTable"]["rows"].pop(1)
+        with self.assertRaisesRegex(ValueError, "no completed bar for 2026-10-07"):
+            recovery.checked_gap(payload, "HUBB", frame, "2026-10-08")
+        with self.assertRaisesRegex(ValueError, "five-session window"):
+            recovery.recovery_gap(frame, "2026-10-12")
+
     def test_class_share_symbol_identity_is_preserved(self):
         frame, evidence = recovered_fixture("BRK-B")
         history = [{"date": day.date().isoformat(), **{k.lower(): float(v) for k, v in row.items()}}

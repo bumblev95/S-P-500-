@@ -63,7 +63,7 @@ def download_public_chart(symbols):
             if regular_end and now.timestamp()<regular_end+900:
                 frame=frame[[x.date()<now.astimezone(zone).date() for x in frame.index]]
             # Dated aliases require verified identity and a complete Yahoo bar.
-            # Other missing Close bars retain the existing one-bar recovery rule.
+            # A short trailing Close gap can be recovered after price-basis checks.
             try:
                 evidence = None
                 if mapping and not stopped.is_set():
@@ -73,7 +73,8 @@ def download_public_chart(symbols):
                     frame, evidence = recover(symbol, result['meta'], frame, as_of)
                 if evidence:
                     frame.attrs['eodRecovery'] = evidence
-                    print(f'EOD recovered {symbol} {as_of}: {evidence["provider"]}', flush=True)
+                    count = len(evidence.get('yahooGap', {})) or 1
+                    print(f'EOD recovered {symbol} {as_of}: {evidence["provider"]} ({count} bars)', flush=True)
             except urllib.error.HTTPError as exc:
                 if exc.code in (401,403,429): stopped.set()
                 print(f'EOD recovery unavailable {symbol}: HTTP {exc.code}', flush=True)
