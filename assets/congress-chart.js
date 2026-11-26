@@ -1,7 +1,9 @@
 /* Congressional disclosures on the stock page's historical close series. */
 (function () {
   'use strict';
-  const supported = new Set(['NVDA']);
+  const archiveSymbol = 'NVDA';
+  const shardRoot = 'data/congress/by-symbol/';
+  let indexRequest;
   const cache = new Map();
   const ns = 'http://www.w3.org/2000/svg';
   let portraitRequest;
@@ -13,15 +15,12 @@
     self: '본인', unspecified: '명의 구분 미표기'
   };
 
-  function markup(symbol) {
-    if (!supported.has(symbol)) {
-      return '<aside class="cg-other">의원 거래 차트 지원 종목 <a href="stocks.html?symbol=NVDA">NVDA</a> · <a href="congress.html">의원 거래 적중률</a></aside>';
-    }
+  function markup() {
     return '<section class="cg-chart" aria-label="의원 거래 공시"><div class="cg-heading">' +
       '<label class="cg-switch"><input type="checkbox" data-cg="enabled"> 의원 거래 보기</label>' +
       '<a href="congress.html">의원 거래 적중률 ↗</a></div>' +
       '<div data-cg="panel" hidden><div class="cg-filters">' +
-      '<label>날짜 기준<select data-cg="basis"><option value="tradeDate">거래일</option><option value="disclosedDate">공시일</option></select></label>' +
+      '<label>날짜 기준<select data-cg="basis"><option value="tradeDate">거래일</option><option value="disclosedDate">공시 제출일</option></select></label>' +
       '<label>거래 방향<select data-cg="side"><option value="all">전체</option><option value="buy">매수</option><option value="sell">매도</option></select></label>' +
       '<label data-cg="memberLabel" hidden>의원<select data-cg="member"></select></label>' +
       '</div><p class="cg-status" data-cg="status" role="status" aria-live="polite"></p>' +
@@ -60,16 +59,40 @@
     } catch (_) { return null; }
   }
 
+  async function readJSON(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('disclosures unavailable');
+    return response.json();
+  }
+
+  function loadIndex() {
+    if (!indexRequest) {
+      indexRequest = readJSON(shardRoot + 'index.json').then(index => {
+        if (!index.symbols || !Array.isArray(index.sources) || !index.asOf) {
+          throw new Error('invalid disclosure index');
+        }
+        return index;
+      }).catch(error => { indexRequest = null; throw error; });
+    }
+    return indexRequest;
+  }
+
+  async function readSymbol(symbol) {
+    if (symbol === archiveSymbol) return readJSON('data/congress/NVDA.json');
+    const index = await loadIndex();
+    const count = Object.hasOwn(index.symbols, symbol) ? index.symbols[symbol] : 0;
+    if (!count) return {symbol, events:[], sources:index.sources, asOf:index.asOf, licenseUrl:index.licenseUrl};
+    const data = await readJSON(shardRoot + encodeURIComponent(symbol) + '.json');
+    if (data.events?.length !== count) throw new Error('disclosure count mismatch');
+    return {...data, sources:index.sources, asOf:index.asOf, licenseUrl:index.licenseUrl};
+  }
+
   function load(symbol) {
     if (!cache.has(symbol)) {
-      const job = fetch('data/congress/' + encodeURIComponent(symbol) + '.json')
-        .then(response => {
-          if (!response.ok) throw new Error('disclosures unavailable');
-          return response.json();
-        }).then(data => {
-          if (data.symbol !== symbol || !Array.isArray(data.events)) throw new Error('invalid disclosures');
-          return data;
-        }).catch(error => { cache.delete(symbol); throw error; });
+      const job = readSymbol(symbol).then(data => {
+        if (data.symbol !== symbol || !Array.isArray(data.events)) throw new Error('invalid disclosures');
+        return data;
+      }).catch(error => { cache.delete(symbol); throw error; });
       cache.set(symbol, job);
     }
     return cache.get(symbol);
@@ -136,10 +159,14 @@
         header.append(image);
       }
       header.append(action, element('strong', e.member));
+      if (e.chamber) header.append(element('span', e.chamber === 'senate' ? '상원' : '하원'));
       const link = safeLink(e.filingUrl, '공시 원문 ↗') || safeLink(context.data.sourceUrl, '집계 출처 ↗');
       if (link) header.append(link);
-      item.append(header, element('p', (ownerName[e.owner] || ownerName.unspecified) + ' · ' + (e.amount || '금액 미표기') + ' USD'));
-      item.append(element('p', '거래일 ' + e.tradeDate + ' · 공시일 ' + e.disclosedDate));
+      const amount = e.amount ? '신고 금액 범위 ' + e.amount + ' USD' : '신고 금액 범위 미표기';
+      item.append(header, element('p', (ownerName[e.owner] || ownerName.unspecified) + ' · ' + amount));
+      const basis = e.chamber ? '공시 제출일 ' : '공시일 ';
+      const delay = Number.isInteger(e.delayDays) ? ' · 제출까지 ' + e.delayDays + '일' : '';
+      item.append(element('p', '거래일 ' + e.tradeDate + ' · ' + basis + e.disclosedDate + delay));
       if (e.optionDescription) item.append(element('p', e.optionDescription));
       if (!e.option && Number.isFinite(e.absolute90dPct) && Number.isFinite(e.excess90d)) {
         const signed = value => (value > 0 ? '+' : '') + value.toFixed(1);
@@ -279,15 +306,16 @@
     let selected = byDay.has(context.selectedDay) ? context.selectedDay : '';
     if (!selected && ui.member.value) selected = sorted.find(day => context.datesOnChart.has(day)) || sorted[0] || '';
     addDetails(context, selected);
-    if (!sorted.length) ui.status.textContent = '선택한 조건에 해당하는 거래가 없습니다.';
+    if (!data.events.length) ui.status.textContent = '현재 수집 자료에서 이 종목의 의원 매수·매도 공시를 확인하지 못했습니다.';
+    else if (!sorted.length) ui.status.textContent = '선택한 조건에 해당하는 거래가 없습니다.';
     else if (!visible) ui.status.textContent = '현재 차트의 실제 종가와 일치하는 거래 날짜가 없습니다. 전체 기간의 공시는 아래에서 확인할 수 있습니다.';
-    else ui.status.textContent = '현재 차트에 '+visible+'일 표시 · ▲ 매수 / ▼ 매도 / ↕ 혼합 · 숫자는 공시 건수, 여러 의원이 겹치면 선택한 날짜 기준 가장 최근 의원이 대표로 표시됩니다.';
+    else ui.status.textContent = '공시 '+data.events.length+'건 · 현재 차트에 '+visible+'일 표시 · ▲ 매수 / ▼ 매도 / ↕ 혼합 · 숫자는 공시 건수, 여러 의원이 겹치면 선택한 날짜 기준 가장 최근 의원이 대표로 표시됩니다.';
   }
 
   function mount({root,symbol,points=[],x,y}) {
     current?.observer?.disconnect();
     current = null;
-    if (!supported.has(symbol) || !root) return;
+    if (!root) return;
     const panel = root.matches?.('.cg-chart') ? root : root.querySelector('.cg-chart');
     if (!panel) return;
     const ui = Object.fromEntries(Array.from(panel.querySelectorAll('[data-cg]'), el => [el.dataset.cg, el]));
@@ -315,11 +343,32 @@
       ui.member.replaceChildren(option('','전체 의원'),...names.map(name=>option(name,name)));
       const name = names.find(n=>n.toLowerCase()===desiredMember.toLowerCase());
       if (name) ui.member.value = name;
-      ui.memberLabel.hidden = false;
-      ui.credit.textContent = '자료 기준 '+data.asOf+' · 표식 가격은 해당일 종가 · ';
-      const credit = safeLink(data.sourceUrl,'거래 자료');
-      if (credit) ui.credit.append(credit);
+      ui.memberLabel.hidden = !names.length;
+      ui.credit.textContent = '자료 기준 ' + data.asOf + ' · 표식 가격은 해당일 종가 · ';
+      if (data.sources) {
+        data.sources.forEach((source, index) => {
+          const link = safeLink(source.url, source.name);
+          if (!link) return;
+          if (index) ui.credit.append(' / ');
+          ui.credit.append(link);
+        });
+        const license = safeLink(data.licenseUrl, 'CC BY 4.0');
+        if (license) ui.credit.append(' · ', license, ' · 차트용으로 정리');
+        ui.credit.append(' · 제출일과 실제 공개 시점은 다를 수 있습니다.');
+      } else {
+        const credit = safeLink(data.sourceUrl, '거래 자료');
+        if (credit) ui.credit.append(credit);
+      }
       draw(context);
+      if (!names.length) return;
+      loadPortraits().then(portraits => {
+        if (current !== context || !root.isConnected || !portraits || !Object.keys(portraits).length) return;
+        context.portraits = portraits;
+        if (prefs.enabled) {
+          markChart(context);
+          addDetails(context, context.selectedDay, context.alternatives);
+        }
+      });
       if (svg && typeof ResizeObserver !== 'undefined') {
         let width = svg.getBoundingClientRect().width;
         context.observer = new ResizeObserver(() => {
@@ -338,14 +387,7 @@
       ui.status.append(retry);
     });
     retrieve();
-    loadPortraits().then(portraits => {
-      if (current !== context || !root.isConnected || !portraits || !Object.keys(portraits).length) return;
-      context.portraits=portraits;
-      if (context.data && prefs.enabled) {
-        markChart(context);
-        addDetails(context, context.selectedDay, context.alternatives);
-      }
-    });
+
   }
 
   window.CongressChart = { markup, mount, loadData: load };
