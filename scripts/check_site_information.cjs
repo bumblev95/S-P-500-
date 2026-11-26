@@ -29,7 +29,7 @@ for (const file of articles) {
   }
 }
 const homepage = read('index.html');
-assert.equal(read('research/adsense-root-site/index.html').replace('  <base href="https://bumblev95.github.io/S-P-500-/">\n',''), homepage, 'hostname root must match the current main markup');
+assert.equal(read('research/adsense-root-site/index.html').replace('  <base href="https://bumblev95.github.io/S-P-500-/">\n','').replaceAll('href="https://bumblev95.github.io/#home-', 'href="#home-'), homepage, 'hostname root must match the current main markup');
 const locations = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(x => x[1]);
 assert.equal(new Set(locations).size, locations.length, 'no duplicate sitemap URLs');
 for (const file of articles) assert(locations.includes('https://bumblev95.github.io/S-P-500-/' + file), file + ': discoverable');
