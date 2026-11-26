@@ -27,7 +27,7 @@
       el => [el.dataset.explore, el]));
     const doc = panel.ownerDocument;
     let items = [], page = 0, selected = '';
-    let members = null, coverage = null, sectorJob, congressJob;
+    let members = null, coverage = null, trends = null, sectorJob, congressJob, trendJob;
     let sectorError = false, congressError = false;
 
     function node(tag, text) {
@@ -41,6 +41,7 @@
       toggle.setAttribute('aria-expanded', String(open));
       if (open) {
         loadSectors();
+        loadTrends();
         if (ui.congress.checked) loadCongress();
         render();
       }
@@ -88,6 +89,46 @@
       }
     }
 
+    async function loadTrends() {
+      if (trends || trendJob) return;
+      trendJob = read('forecasts/by-symbol/explore-trends.json');
+      try {
+        const data = await trendJob;
+        if (data.schemaVersion === 1 && data.trends) trends = data.trends;
+      } catch (_) {
+        // Browsing still works when the optional price summary is unavailable.
+      } finally {
+        trendJob = null;
+        if (!panel.hidden && trends) render();
+      }
+    }
+
+    function trendView(symbol) {
+      const trend = trends?.[symbol];
+      if (!trend || !Number.isFinite(trend.returnPct) || !Array.isArray(trend.points)
+          || trend.points.length !== 9 || !trend.points.every(v => Number.isFinite(v) && v >= 0 && v <= 100)) return null;
+      const movement = node('span', '');
+      const format = new Intl.NumberFormat('ko-KR', {maximumFractionDigits:2, signDisplay:'exceptZero'});
+      const pct = format.format(trend.returnPct) + '%';
+      movement.className = 'stock-explore-move ' + (trend.returnPct > 0 ? 'is-up' : trend.returnPct < 0 ? 'is-down' : '');
+      movement.title = trend.from + '–' + trend.asOf + ' · 실제 종가 기준';
+      movement.setAttribute('aria-label', '최근 21거래일 ' + pct);
+      const ns = 'http://www.w3.org/2000/svg';
+      const spark = doc.createElementNS(ns,'svg');
+      spark.setAttribute('viewBox', '0 0 48 20');
+      spark.setAttribute('aria-hidden', 'true');
+      const line = doc.createElementNS(ns,'polyline');
+      line.setAttribute('points', trend.points.map((value,i)=>[2+5.5*i,18-value*.16].join(',')).join(' '));
+      line.setAttribute('fill','none');
+      line.setAttribute('stroke','currentColor');
+      line.setAttribute('stroke-width','1.6');
+      line.setAttribute('stroke-linecap','round');
+      line.setAttribute('stroke-linejoin','round');
+      spark.append(line);
+      movement.append(spark,node('span',pct));
+      return movement;
+    }
+
     function addResult(item) {
       const detail = members?.[item.symbol];
       const name = root.CompanySearch.name(item.symbol, item.name || detail?.name);
@@ -95,8 +136,12 @@
       const link = node('a', '');
       link.href = 'stocks.html?symbol=' + encodeURIComponent(item.symbol);
       if (item.symbol === selected) link.setAttribute('aria-current', 'true');
-      link.append(node('strong', item.symbol), node('span', name === item.symbol ? '' : name));
-      if (sectors[detail?.sector]) link.append(node('small', sectors[detail.sector]));
+      const identity = node('span',name === item.symbol ? '' : name);
+      identity.className = 'stock-explore-identity';
+      if (sectors[detail?.sector]) identity.append(node('small', sectors[detail.sector]));
+      link.append(node('strong',item.symbol),identity);
+      const movement = trendView(item.symbol);
+      if (movement) link.append(movement);
       link.addEventListener('click', event => {
         if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
@@ -123,7 +168,7 @@
       const totalPages = Math.ceil(filtered.length / pageSize);
       page = Math.min(page, Math.max(0, totalPages - 1));
       ui.status.textContent = filtered.length
-        ? filtered.length + '개 종목 · 티커 A–Z'
+        ? filtered.length + '개 종목 · 티커 A–Z' + (trends ? ' · 최근 21거래일' : '')
         : '선택한 조건에 해당하는 종목이 없습니다.';
       if (sectorError) {
         ui.status.append(' · 섹터 목록을 불러오지 못했습니다. ');

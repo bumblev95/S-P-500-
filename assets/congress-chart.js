@@ -19,13 +19,13 @@
     return '<section class="cg-chart" aria-label="의원 거래 공시"><div class="cg-heading">' +
       '<label class="cg-switch"><input type="checkbox" data-cg="enabled"> 의원 거래 보기</label>' +
       '<a href="congress.html">의원 거래 적중률 ↗</a></div>' +
-      '<div data-cg="panel" hidden><div class="cg-filters">' +
+      '<div data-cg="panel" hidden><div class="cg-cluster" data-cg="cluster"></div>' +
+      '<div class="cg-detail" data-cg="detail" tabindex="-1"></div><div class="cg-filters">' +
       '<label>날짜 기준<select data-cg="basis"><option value="tradeDate">거래일</option><option value="disclosedDate">공시 제출일</option></select></label>' +
       '<label>거래 방향<select data-cg="side"><option value="all">전체</option><option value="buy">매수</option><option value="sell">매도</option></select></label>' +
       '<label data-cg="memberLabel" hidden>의원<select data-cg="member"></select></label>' +
       '</div><p class="cg-status" data-cg="status" role="status" aria-live="polite"></p>' +
       '<div class="cg-date" data-cg="picker" hidden><label>날짜별 공시<select data-cg="date"></select></label></div>' +
-      '<div class="cg-cluster" data-cg="cluster"></div><div class="cg-detail" data-cg="detail"></div>' +
       '<p class="cg-foot" data-cg="credit"></p></div></section>';
   }
 
@@ -195,7 +195,12 @@
     const groups = [];
     const viewWidth = svg.viewBox?.baseVal.width || 930;
     const scale = viewWidth / Math.max(260, svg.getBoundingClientRect().width || viewWidth);
-    const spacing = (context.portraits ? 33 : 26) * scale;
+    const spacing = 29 * scale;
+    const plotBottom = Number(svg.dataset.plotBottom);
+    const badgeY = plotBottom + 16 * scale;
+    const height = svg.viewBox?.baseVal.height || 454;
+    const radius = 11 * scale;
+    const rowY = Math.min(badgeY, height - 30 - radius);
     for (const point of points) {
       const day = point.date;
       if (!byDay.has(day) || point.actual === false || !(point.close > 0)) continue;
@@ -208,67 +213,47 @@
       else groups.push([mark]);
     }
     if (!groups.length) return;
+    const center = group => group[Math.floor((group.length-1)/2)];
+    const separated = [];
+    for (const group of groups) {
+      let next = group;
+      while (separated.length && center(next).px - center(separated.at(-1)).px < spacing) {
+        next = separated.pop().concat(next);
+      }
+      separated.push(next);
+    }
     svg.setAttribute('role', 'group');
     const overlay = svgTag('g', { class: 'cg-overlay', 'aria-label': '의원 거래 표식' });
     context.overlay = overlay;
-    let iconIndex = 0;
-    for (const group of groups) {
+    for (const group of separated) {
       const dates = group.map(m => m.day).reverse();
       const events = dates.flatMap(d => byDay.get(d));
       const buy = events.some(e => e.side === 'buy'), sell = events.some(e => e.side === 'sell');
       const direction = buy && sell ? 'both' : buy ? 'buy' : 'sell';
       const sideText = direction === 'buy' ? '매수' : direction === 'sell' ? '매도' : '매수·매도';
       const names = Array.from(new Set(events.map(e=>e.member)));
-      // Dates are newest first; only show a verified portrait belonging to this cluster.
-      const representative = names.find(name => portraitUrl(context, name));
-      const portrait = representative ? portraitUrl(context, representative) : null;
-      const membersLabel = names.length === 1 ? names[0] : representative
-        ? '대표 '+representative+' 외 '+(names.length-1)+'명'
-        : '의원 '+names.length+'명';
-      const radius = Math.min(35, Math.max(11, (portrait ? 13 : 9)*scale));
-      const anchor = group[Math.floor((group.length-1)/2)];
-      const badgeY = anchor.py < radius*3 ? anchor.py + radius*2.3 :
-        direction === 'sell' && anchor.py < (svg.viewBox?.baseVal.height || 500)-radius*3.5 ? anchor.py+radius*2.3 : anchor.py-radius*2.3;
+      const membersLabel = names.length === 1 ? names[0] : '의원 '+names.length+'명';
+      const anchor = center(group);
       const title = (dates.length === 1 ? dates[0] : dates[dates.length-1]+' ~ '+dates[0])+' · '+membersLabel+' · '+sideText+' '+events.length+'건';
       const g = svgTag('g', { class: 'cg-marker cg-mark-'+direction, role: 'button', tabindex: '0', 'aria-label': title+' 상세 보기' });
       g.append(svgTag('title', {}));
       g.firstChild.textContent = title;
       for (const m of group) {
-        g.append(svgTag('line', { x1:m.px, y1:m.py, x2:anchor.px, y2:badgeY, class:'cg-stem' }));
-        g.append(svgTag('circle', { cx:m.px, cy:m.py, r:2.8, class:'cg-pin' }));
+        g.append(svgTag('circle', { cx:m.px, cy:m.py, r:2.6 * scale, class:'cg-pin' }));
       }
-      const hit = svgTag('circle', {cx:anchor.px,cy:badgeY,r:radius*1.4,fill:'transparent'});
-      const badge = svgTag('circle', {cx:anchor.px,cy:badgeY,r:radius,class:'cg-badge'});
+      const hit = svgTag('circle', {cx:anchor.px,cy:rowY,r:radius*1.4,fill:'transparent'});
+      const badge = svgTag('circle', {cx:anchor.px,cy:rowY,r:radius,class:'cg-badge'});
       const glyph = direction === 'buy' ? '▲' : direction === 'sell' ? '▼' : '↕';
       const stamp = glyph + (events.length > 1 ? events.length : '');
       const typeScale = stamp.length > 2 ? .72 : stamp.length > 1 ? .84 : 1.05;
-      const label = svgTag('text', { x:anchor.px, y:badgeY, 'font-size':radius*typeScale });
+      const label = svgTag('text', { x:anchor.px, y:rowY, 'font-size':radius*typeScale });
       label.textContent = stamp;
       g.append(hit,badge,label);
-      if (portrait) {
-        const clipId = 'cg-portrait-clip-' + (++iconIndex);
-        const clip = svgTag('clipPath', {id:clipId});
-        clip.append(svgTag('circle', {cx:anchor.px,cy:badgeY,r:radius-1.3}));
-        const photo = svgTag('image', {
-          x:anchor.px-radius, y:badgeY-radius, width:radius*2, height:radius*2,
-          'clip-path':'url(#'+clipId+')', preserveAspectRatio:'xMidYMid slice'
-        });
-        const flag = svgTag('g', {'aria-hidden':'true'});
-        const flagRadius=radius*(stamp.length>1?.68:.55), flagX=anchor.px+radius*.8, flagY=badgeY+radius*.75;
-        flag.append(svgTag('circle',{cx:flagX,cy:flagY,r:flagRadius,class:'cg-badge'}));
-        const icon=svgTag('text',{x:flagX,y:flagY,'font-size':flagRadius*typeScale});
-        icon.textContent=label.textContent;
-        flag.append(icon);
-        const defs=svgTag('defs',{});
-        defs.append(clip);
-        photo.addEventListener('error',()=>{photo.remove();flag.remove();},{once:true});
-        photo.setAttribute('href',portrait);
-        g.append(defs,photo,flag);
-      }
       const select = () => {
         addDetails(context, dates[0], dates);
-        ui.date.focus({preventScroll:true});
-        ui.detail.scrollIntoView?.({block:'nearest',behavior:'instant'});
+        const focus = ui.cluster.querySelector('button[aria-pressed="true"]') || ui.detail;
+        focus.focus({preventScroll:true});
+        (focus === ui.detail ? ui.detail : ui.cluster).scrollIntoView?.({block:'nearest',behavior:'instant'});
       };
       g.addEventListener('click', select);
       g.addEventListener('keydown', event => {
@@ -309,7 +294,7 @@
     if (!data.events.length) ui.status.textContent = '현재 수집 자료에서 이 종목의 의원 매수·매도 공시를 확인하지 못했습니다.';
     else if (!sorted.length) ui.status.textContent = '선택한 조건에 해당하는 거래가 없습니다.';
     else if (!visible) ui.status.textContent = '현재 차트의 실제 종가와 일치하는 거래 날짜가 없습니다. 전체 기간의 공시는 아래에서 확인할 수 있습니다.';
-    else ui.status.textContent = '공시 '+data.events.length+'건 · 현재 차트에 '+visible+'일 표시 · ▲ 매수 / ▼ 매도 / ↕ 혼합 · 숫자는 공시 건수, 여러 의원이 겹치면 선택한 날짜 기준 가장 최근 의원이 대표로 표시됩니다.';
+    else ui.status.textContent = '공시 '+data.events.length+'건 · 현재 차트에 '+visible+'일 표시 · ▲ 매수 / ▼ 매도 / ↕ 혼합 · 숫자는 공시 건수입니다.';
   }
 
   function mount({root,symbol,points=[],x,y}) {
@@ -365,8 +350,7 @@
         if (current !== context || !root.isConnected || !portraits || !Object.keys(portraits).length) return;
         context.portraits = portraits;
         if (prefs.enabled) {
-          markChart(context);
-          addDetails(context, context.selectedDay, context.alternatives);
+          if (context.selectedDay) addDetails(context, context.selectedDay, context.alternatives);
         }
       });
       if (svg && typeof ResizeObserver !== 'undefined') {
