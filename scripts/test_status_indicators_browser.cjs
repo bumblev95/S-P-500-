@@ -32,6 +32,24 @@ async function fits(page, selector) {
     left:n.getBoundingClientRect().left, right:n.getBoundingClientRect().right})));
   assert.deepEqual(bad, [], page.url() + ': ' + selector + ' must fit the viewport');
 }
+async function checkIssuerRisks(page, symbol) {
+  const entry = forecasts.stocks[symbol];
+  const panel = page.locator('[data-signals-symbol="' + symbol + '"] .sa-specific-risks');
+  await panel.waitFor();
+  const ids = await panel.locator('[data-signal]').evaluateAll(nodes => nodes.map(n => n.dataset.signal));
+  const assessment = A.evaluate(entry, market, null, 126, clock);
+  if (assessment.score === null) {
+    assert.deepEqual(ids, [], symbol + ' must withhold technical risks when price inputs are unavailable');
+    assert((await panel.textContent()).includes('종목별 위험 판단에 필요한 가격 자료가 부족합니다'));
+    assert.equal(await page.locator('.sa-limitations [data-signal="price-data"]').count(), 1);
+    return null;
+  }
+  if (Number.isFinite(entry.inputs.return1m)) {
+    assert.equal(ids.includes('return1m'), entry.inputs.return1m < 0, symbol + ' monthly risk must match the observed return');
+    if (entry.inputs.return1m < 0) assert((await panel.textContent()).includes('1개월 수익률'));
+  }
+  return ids;
+}
 async function checkNews(page, symbol, snapshot=news, now=clock) {
   const selected=CompanyEvents.selectNews(snapshot,symbol,now);
   const panel=page.locator('.company-events[data-event-symbol="'+symbol+'"]');
@@ -239,16 +257,15 @@ async function checkNews(page, symbol, snapshot=news, now=clock) {
           }
           assert(!(await page.locator('.sa-specific-risks').textContent()).includes('시장 상태 확인 보류'));
           assert(!(await page.locator('.sa-specific-risks').textContent()).includes('AI 예측 활용 보류'));
-          const amdRiskIds=await page.locator('.sa-specific-risks [data-signal]').evaluateAll(nodes=>nodes.map(n=>n.dataset.signal));
+          const amdRiskIds=await checkIssuerRisks(page,'AMD');
           await fits(page,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
           await page.locator('.sa-signals').screenshot({path:path.join(output,`issuer-risks-amd-${width}.png`)});
           await page.locator('#tickerInput').fill('JNJ');
           await page.locator('#tickerInput').press('Enter');
-          await page.locator('[data-signals-symbol="JNJ"]').waitFor();
-          if((forecasts.stocks.AMD.inputs.return1m<0)!==(forecasts.stocks.JNJ.inputs.return1m<0))
-            assert.notDeepEqual(await page.locator('.sa-specific-risks [data-signal]').evaluateAll(nodes=>nodes.map(n=>n.dataset.signal)),amdRiskIds,
+          const jnjRiskIds=await checkIssuerRisks(page,'JNJ');
+          if(amdRiskIds && jnjRiskIds && (forecasts.stocks.AMD.inputs.return1m<0)!==(forecasts.stocks.JNJ.inputs.return1m<0))
+            assert.notDeepEqual(jnjRiskIds,amdRiskIds,
               'Opposite monthly returns must produce different technical risks');
-          if(forecasts.stocks.JNJ.inputs.return1m<0)assert((await page.locator('.sa-specific-risks').textContent()).includes('1개월 수익률'));
           await fits(page,'.sa-signals, .sa-specific-risks, .sa-limitations, .sa-signal-copy');
         }
       }
@@ -485,3 +502,4 @@ async function checkNews(page, symbol, snapshot=news, now=clock) {
     console.log('Browser: 320/390/1280 px, four stock/spot pages, populated/reference/empty company news, distinct weak/overheated risks, shared entry states, missing forecast horizon, stock/horizon switches, failed feeds and risk table passed.');
   } finally {await browser?.close(); await new Promise(resolve => server.close(resolve));}
 })().catch(e => {console.error(e); process.exitCode = 1;});
+

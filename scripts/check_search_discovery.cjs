@@ -38,7 +38,8 @@ for (const url of [home,...urls]) {
   if (crumb) assert.equal(crumb.itemListElement.at(-1).item,url);
 }
 assert(urls.includes(base+'guide-sell.html'));
+assert(urls.includes(base+'congress.html'));
 assert(read('index.html').includes('href="guide-sell.html"'));
 assert(read('stocks.html').includes('id="stock-help-title"'));
 assert(read('robots.txt').includes('Sitemap: '+base+'sitemap.xml'));
-console.log('PASS: 24 metadata/schema pages, 23 property-scoped URLs, canonical homepage mirror, visible guide navigation and truthful update dates.');
+console.log(`PASS: ${rootUrls.length} metadata/schema pages, ${urls.length} property-scoped URLs, canonical homepage mirror, visible guide navigation and truthful update dates.`);

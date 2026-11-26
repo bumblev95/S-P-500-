@@ -5,7 +5,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const base = 'https://bumblev95.github.io/S-P-500-/';
 const home = 'https://bumblev95.github.io/';
-const primary = ['index.html','stocks.html','crypto.html','futures.html','simulation.html','advanced.html','research.html','model-validation.html','signal-lab.html','leverage-lab.html','exit-experiment.html','momentum-experiment.html','selector-experiment.html'];
+const primary = ['index.html','stocks.html','congress.html','crypto.html','futures.html','simulation.html','advanced.html','research.html','model-validation.html','signal-lab.html','leverage-lab.html','exit-experiment.html','momentum-experiment.html','selector-experiment.html'];
 const articles = ['learn.html','guide-top3.html','guide-indicators.html','guide-sell.html','guide-backtesting.html','guide-news.html','methodology.html','about.html','contact.html','terms.html','privacy.html'];
 const editorial = new Set(['learn.html','methodology.html', ...articles.filter(f => f.startsWith('guide-'))]);
 const decode = s => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'");

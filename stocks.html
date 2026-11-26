@@ -88,10 +88,10 @@
     const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])),horizonName=h=>h===126?'6개월':'1년';
     let dataset=null,market=null,learned=null,comparison=null,live=null,stability=null,horizon=126,symbol=String(typeof URLSearchParams==='function'?new URLSearchParams(window.location?.search||'').get('symbol')||'NVDA':'NVDA').trim().toUpperCase().replace(/\./g,'-'),pathMode='center',searchWidget=null;
 
-    const query = new URLSearchParams(window.location.search);
-    let historyRange = query.get('member') ? 'archive' : 'recent';
+    const memberView = typeof URLSearchParams === 'function' && new URLSearchParams(window.location?.search || '').has('member');
+    let historyRange = memberView ? 'archive' : 'recent';
     let archive = null, archivePending = false, archiveFailed = false;
-    let jumpToCongress = window.location.hash === '#congress-chart';
+    let jumpToCongress = window.location?.hash === '#congress-chart';
 
     function historyControls() {
       if (symbol !== 'NVDA') return '';
@@ -103,8 +103,9 @@
     }
 
     function mountCongress(graphic) {
+      if (!window.CongressChart) return;
       const root = document.getElementById('congress-chart');
-      if (!root || !window.CongressChart) return;
+      if (!root) return;
       window.CongressChart.mount({root,symbol,points:graphic?.points || [],x:graphic?.x,y:graphic?.y});
       root.querySelectorAll('[data-history]').forEach(button => button.addEventListener('click', () => {
         historyRange = button.dataset.history;
