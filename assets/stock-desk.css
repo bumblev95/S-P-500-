@@ -31,3 +31,31 @@ body.stock-desk{background:#11171e;--bg:#11171e;--surface:#171e26;--line:#303a45
     background:#1d2b36;color:#d5eafa;font:inherit;font-size:.85rem;box-shadow:0 3px 12px #0005;cursor:pointer
   }
 }
+.stock-find{display:flex;gap:8px;min-width:0}
+.stock-find .companySearch{flex:1;min-width:0}
+.stock-explore-toggle,.stock-explore button,.stock-explore select{padding:7px 11px;min-height:44px;border:1px solid #536d7f;border-radius:6px;background:#1b2a36;color:#e0edf5;font:inherit;font-size:.84rem}
+.stock-explore-toggle,.stock-explore button{cursor:pointer;white-space:nowrap}
+.stock-explore-toggle:hover,.stock-explore button:hover:not(:disabled){border-color:var(--cyan)}
+.stock-explore-toggle[aria-expanded=true]{border-color:var(--cyan);background:#263c4b}
+.stock-explore :is(button,select):disabled,.stock-explore-toggle:disabled{opacity:.54;cursor:default}
+.stock-explore :is(button,select,input,a):focus-visible,.stock-explore-toggle:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.stock-explore{margin:0 0 14px;padding:14px;border:1px solid var(--line);border-radius:8px;background:#171e26}
+.stock-explore-heading,.stock-explore-filters,.stock-explore-pages{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stock-explore-heading{justify-content:space-between}
+.stock-explore-heading h2{margin:0;font-size:1.05rem}
+.stock-explore-filters{margin:8px 0;gap:10px 20px}
+.stock-explore-filters label{display:flex;gap:7px;align-items:center;min-height:44px;font-size:.84rem}
+.stock-explore-filters input{width:18px;height:18px;accent-color:#9bc5dd}
+.stock-explore [data-explore=status]{margin:7px 0;color:#aab9c9;font-size:.82rem}
+.stock-explore-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;margin:0;padding:0;list-style:none}
+.stock-explore-list a{display:grid;grid-template-columns:4.5rem minmax(0,1fr) auto;align-items:center;gap:8px;min-height:44px;padding:7px 4px;border-top:1px solid var(--line);color:var(--text);text-decoration:none;font-size:.87rem}
+.stock-explore-list a:is(:hover,[aria-current]){background:#22303a}
+.stock-explore-list :is(span,small){overflow-wrap:anywhere}
+.stock-explore-list small,.stock-explore-pages span{color:#aab9c9;font-size:.77rem}
+.stock-explore-pages{justify-content:center;margin-top:8px}
+.stock-explore[hidden],.stock-explore [hidden]{display:none!important}
+@media(max-width:600px){
+  .stock-explore-list{grid-template-columns:minmax(0,1fr)}
+  .stock-explore-list a{grid-template-columns:3.9rem minmax(0,1fr) auto}
+  .stock-find input{font-size:16px}
+}
