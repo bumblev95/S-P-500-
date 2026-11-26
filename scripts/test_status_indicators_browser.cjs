@@ -381,6 +381,7 @@ async function checkNews(page, symbol, snapshot=news, now=clock) {
         inputs:{ma20:97,ma50:90,ma200:80,return1m:.25,return3m:.35,volatility4m:.75}}
     }};
     await riskPage.route('**/config/*.json*',route=>route.fulfill({json:{sheetCsvUrl:'',submitUrl:''}}));
+    await riskPage.route('**/forecasts/by-symbol/**', route => route.fulfill({status:404}));
     await riskPage.route('**/forecasts/latest.json*',route=>route.fulfill({json:fixtures}));
     await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:null}));
     await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:null}));
@@ -425,6 +426,7 @@ async function checkNews(page, symbol, snapshot=news, now=clock) {
         reasons:['시험용 AI 검증 미통과']}]))}}};
     await riskPage.unrouteAll();
     await riskPage.route('**/config/*.json*',route=>route.fulfill({json:{sheetCsvUrl:'',submitUrl:''}}));
+    await riskPage.route('**/forecasts/by-symbol/**', route => route.fulfill({status:404}));
     await riskPage.route('**/forecasts/latest.json*',route=>route.fulfill({json:{stocks:{NVDA:readyEntry}}}));
     await riskPage.route('**/market/latest.json*',route=>route.fulfill({json:readyMarket}));
     await riskPage.route('**/ml/latest.json*',route=>route.fulfill({json:research}));
@@ -444,6 +446,7 @@ async function checkNews(page, symbol, snapshot=news, now=clock) {
     // Failed/stale feeds get grey indicators without a pointer on the real page.
     const page = await browser.newPage({viewport:{width:390,height:900}});
     page.on('pageerror', e => errors.push(e.message));
+    await page.route('**/forecasts/by-symbol/**', route => route.fulfill({status:404}));
     await page.route('**/forecasts/latest.json*', route => route.fulfill({json:{stocks:{
       NVDA:{...forecasts.stocks.NVDA, fresh:false}
     }}}));

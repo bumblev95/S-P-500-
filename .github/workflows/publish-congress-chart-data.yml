@@ -5,20 +5,40 @@ on:
     paths:
       - 'scripts/build_congress_chart_data.py'
       - '.github/workflows/publish-congress-chart-data.yml'
+  pull_request:
+    paths:
+      - 'scripts/build_congress_chart_data.py'
+      - 'scripts/test_congress_chart_data.py'
+      - '.github/workflows/publish-congress-chart-data.yml'
   schedule:
     - cron: "35 23 * * *"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pages: write
-
 concurrency:
-  group: congress-chart-data
+  group: congress-chart-data-${{ github.event_name == 'pull_request' && github.ref || 'publish' }}
   cancel-in-progress: false
 
 jobs:
+  verify:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate normalization and both feeds
+        run: |
+          python -m unittest discover -s scripts -p test_congress_chart_data.py
+          python scripts/build_congress_chart_data.py --output "$RUNNER_TEMP/congress-chart"
   snapshots:
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: write
+      pages: write
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
