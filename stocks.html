@@ -49,6 +49,7 @@
 </style>
 <link rel="stylesheet" href="assets/company-search.css?v=1"><link rel="stylesheet" href="assets/site-shell.css?v=2"><link rel="stylesheet" href="assets/status-indicators.css?v=1">
 <link rel="stylesheet" href="assets/company-events.css?v=4">
+<link rel="stylesheet" href="assets/stock-desk.css?v=1">
 <link rel="stylesheet" href="assets/site-info.css?v=1">
 <link rel="canonical" href="https://bumblev95.github.io/S-P-500-/stocks.html">
 
@@ -63,31 +64,33 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"S&P 500 시장 대시보드","item":"https://bumblev95.github.io/"},{"@type":"ListItem","position":2,"name":"미국 주식 종목 분석 | 추세·매수 조건·매도 기준","item":"https://bumblev95.github.io/S-P-500-/stocks.html"}]},{"@type":"WebPage","@id":"https://bumblev95.github.io/S-P-500-/stocks.html#page","url":"https://bumblev95.github.io/S-P-500-/stocks.html","name":"미국 주식 종목 분석 | 추세·매수 조건·매도 기준 · S&P 500","headline":"미국 주식 종목 분석 | 추세·매수 조건·매도 기준 · S&P 500","description":"S&P 500 종목을 한글 회사명이나 티커로 검색하고 가격 추세, 신규 진입 조건, 보유 주식의 매도 기준을 확인하세요. 6개월·1년 전망은 검증 결과와 오차를 함께 표시합니다.","inLanguage":"ko","mainEntityOfPage":"https://bumblev95.github.io/S-P-500-/stocks.html"}]}</script>
 <!-- search-metadata:end -->
 </head>
-<body class="site-theme">
+<body class="site-theme stock-desk">
   <main class="shell site-frame">
     <header class="topbar site-header">
-      <div class="brand site-brand"><span class="brandMark site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="eyebrow site-eyebrow">Beginner Mode</div><h1>초보자용 주식 가이드</h1></div></div>
+      <div class="brand site-brand"><span class="brandMark site-brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M3 21.5 10.3 14l5 4.5L25 7" stroke="#6ee7b7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h1>미국 주식 분석</h1></div></div>
       <nav class="site-nav" aria-label="주요 페이지"><a href="./">메인</a><a href="stocks.html" aria-current="page">주식</a><a href="congress.html">의원 거래 적중률</a><a href="crypto.html">코인 현물</a><a href="futures.html">선물</a><a href="simulation.html">모의운용</a></nav>
     </header>
-    <section class="controlBar" aria-label="종목과 분석 기간 선택">
+    <section class="controlBar" id="stock-controls" aria-label="종목과 분석 기간 선택">
       <div class="companySearch" id="companySearch"><label class="searchWrap" for="tickerInput"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input id="tickerInput" type="search" value="NVDA" placeholder="회사명 또는 티커 (예: 엔비디아)" aria-label="한글 회사명 또는 티커 검색" autocomplete="off" spellcheck="false" disabled></label><div class="companySearch-menu" data-company-menu hidden><div id="companySearchOptions" class="companySearch-options" data-company-options role="listbox" aria-label="검색한 종목"></div><p class="companySearch-status" data-company-status role="status" aria-live="polite"></p></div></div>
       <div class="periods" role="group" aria-label="전망 기간"><button type="button" data-h="126" class="active">6개월</button><button type="button" data-h="252">1년</button></div><span class="asof" id="asof">데이터 확인 중…</span>
     </section>
     <nav class="stock-jump" aria-label="종목 화면에서 바로 보기"><a href="#stock-overview">분석 요약</a><a href="#stock-price">주가 차트</a><a href="#companyEvents">큰 변동·뉴스</a><a href="#stock-candidates">추세 후보</a></nav>
     <div id="app" aria-live="polite"><div class="empty"><strong>차트 데이터를 불러오는 중입니다</strong>잠시만 기다려 주세요.</div></div>
     <div id="sharedRisk"></div>
-    <section class="candidatePanel" id="stock-candidates" aria-labelledby="candidateTitle"><div class="candidateHead"><h2 id="candidateTitle">추세 관찰 후보</h2><span>단기 추세 점수 순 · 진입 조건은 별도 확인</span></div><div class="candidateRail skeleton" id="candidateRail" aria-live="polite"><button class="candidate"><strong>—</strong><span class="candidateScore">—</span><small>데이터 불러오는 중</small></button></div></section>
+    <section class="candidatePanel" id="stock-candidates" aria-labelledby="candidateTitle"><div class="candidateHead"><h2 id="candidateTitle">추세 관찰 후보</h2><span>단기 추세 점수 순 · 진입 조건은 별도 확인</span></div><button type="button" id="stock-candidate-load" hidden>추세 후보 불러오기</button><div class="candidateRail skeleton" id="candidateRail" aria-live="polite"><button class="candidate"><strong>—</strong><span class="candidateScore">—</span><small>데이터 불러오는 중</small></button></div></section>
     <details class="site-disclosure stock-help-disclosure"><summary>처음 보는 분을 위한 안내</summary>
     <section class="site-stock-help" aria-labelledby="stock-help-title"><h2 id="stock-help-title">미국 주식 분석, 이렇게 읽으세요</h2><p>한글 회사명이나 티커로 S&amp;P 500 종목을 검색하세요. 현재 가격의 추세 점수, 신규 진입 조건, 이미 가진 주식의 대응 기준을 나누어 확인할 수 있습니다. 점선으로 표시하는 6개월·1년 전망은 참고 시나리오이며, 예측의 검증 상태와 오차도 함께 확인하세요.</p><nav aria-label="주식 분석 해설"><a href="guide-indicators.html">점수는 높은데 왜 대기일까요?</a><a href="guide-sell.html">주식은 언제 팔아야 할까요?</a><a href="guide-top3.html">매수·매도 TOP3 읽는 법</a><a href="methodology.html">분석 기준·자료 출처</a></nav></section>
     <aside class="sell-intro" aria-label="보유 주식 매도 안내"><strong>이미 샀다면, 언제 팔까요?</strong><nav aria-label="매도 가이드"><a href="#holding-guide">선택 종목의 매도 기준 ↓</a><a href="guide-sell.html">손절·이익 실현 쉽게 보기 →</a></nav></aside>
     </details>
     <aside class="site-ad" data-site-ad="stocks" aria-label="광고" hidden><span class="site-ad-label">광고</span><div class="site-ad-body" data-site-ad-body></div></aside>
+    <button type="button" id="stock-search-return" hidden>종목 바꾸기</button>
     <footer><div class="site-secondary"><a href="advanced.html">고급 분석</a><a href="research.html">검증 자료실</a><a href="model-validation.html#stockStudy">SEC 업데이트 결과</a><a href="privacy.html">개인정보·광고 안내</a></div>교육용 규칙 기반 분석이며 수익을 보장하지 않습니다. 실적 발표·뉴스·개인 손실 감내 범위를 함께 확인하세요.</footer>
   </main>
   <script src="assets/company-names.js?v=2"></script>
   <script src="assets/company-search.js?v=2"></script>
+  <script src="assets/stock-snapshot.js?v=1"></script>
   <script src="assets/market-visuals.js?v=4"></script>
-  <script src="assets/company-events.js?v=5"></script><script src="assets/decision-support.js?v=8"></script>
+  <script src="assets/company-events.js?v=6"></script><script src="assets/decision-support.js?v=9"></script>
   <script src="assets/technical-guide.js?v=2"></script>
   <script src="assets/learned-guide.js?v=7"></script>
   <script src="assets/stock-assessment.js?v=10"></script>
@@ -107,6 +110,11 @@
 
     const initialSearch = typeof URLSearchParams === 'function' ? (new URLSearchParams(window.location?.search || '').get('q') || '').trim().slice(0,80) : '';
     let pendingSearch = initialSearch;
+    const reader=window.StockSnapshot?.reader();
+    const entries=Object.create(null);
+    let index=null, rankingDataset=null, candidatesJob=null, contextJob=null, navigation=0, currentReady=false;
+    const addressParams=()=>window.location&&new URLSearchParams(window.location.search||'');
+    const fromAddress=()=>CompanySearch.symbol(addressParams()?.get('symbol')||'NVDA');
     const memberView = typeof URLSearchParams === 'function' && new URLSearchParams(window.location?.search || '').has('member');
     let historyRange = memberView ? 'archive' : 'recent';
     let archive = null, archivePending = false, archiveFailed = false;
@@ -152,7 +160,7 @@
 
 
 
-    function ranking(){return StockAssessment.rank(StockAssessment.all(dataset,market,learned,horizon)).map(assessment=>({e:dataset.stocks[assessment.symbol],assessment})).filter(x=>x.e)}
+    function ranking(){return StockAssessment.rank(StockAssessment.all(rankingDataset,market,learned,horizon)).map(assessment=>({e:rankingDataset.stocks[assessment.symbol],assessment})).filter(x=>x.e)}
     function pastSeries(e){
       if (e.symbol === 'NVDA' && historyRange === 'archive' && archive) {
         const byDate = new Map();
@@ -165,10 +173,13 @@
       const raw=(e.history||[]).map((q,i)=>({date:q.date,close:Number(q.close),offset:i-(e.history.length-1),actual:true})).filter(q=>finite(q.close)&&q.close>0);if(raw.length>1)return{points:raw.slice(-126),actual:true};const a=e.inputs||{},px=e.price,anchors=[];[[-126,a.return6m,'6개월 전'],[-63,a.return3m,'3개월 전'],[-21,a.return1m,'1개월 전']].forEach(([offset,r,label])=>{const base=finite(r)&&r>-.95?px/(1+r):NaN;if(finite(base)&&base>0)anchors.push({offset,close:base,label,actual:false})});anchors.push({offset:0,close:px,label:'현재',actual:false});return{points:anchors,actual:false}}
     function chart(e,p,plan){e=LearnedGuide.chartEntry(learned,e,horizon);const past=pastSeries(e),hist=past.points,pastDays=Math.max(21,Math.abs(hist[0]?.offset||-63)),pathResult=ForecastPath.build(e,p,horizon,pathMode,LearnedGuide.allPeriods(learned,e)),future=pathResult.points,levels=[plan.buyLow,plan.buyHigh,plan.stop,plan.target1,plan.target2,e.inputs?.ma50,e.inputs?.ma200].map(Number).filter(v=>finite(v)&&v>0),vals=hist.map(q=>q.close).concat(future.flatMap(q=>[q.base,q.bear,q.bull]),levels);let lo=Math.min(...vals),hi=Math.max(...vals);if(!(lo>0)||!finite(hi))return{svg:'',actual:past.actual};const logPad=Math.max((Math.log(hi)-Math.log(lo))*.07,.018);lo=Math.log(lo)-logPad;hi=Math.log(hi)+logPad;const W=930,H=500,L=70,R=122,T=24,B=52,x=t=>L+(t+pastDays)/(horizon+pastDays)*(W-L-R),y=v=>T+(hi-Math.log(v))/(hi-lo)*(H-T-B),pt=(t,v)=>x(t).toFixed(1)+','+y(v).toFixed(1);let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(e.symbol)} 과거 가격과 ${horizonName(horizon)} 전망, 매수·손절·목표 구간"><defs><linearGradient id="forecastBand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#58d5f7" stop-opacity=".22"/><stop offset="1" stop-color="#58d5f7" stop-opacity=".03"/></linearGradient><linearGradient id="buyBand" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#6ee7b7" stop-opacity=".16"/><stop offset="1" stop-color="#6ee7b7" stop-opacity=".04"/></linearGradient></defs>`;for(let i=0;i<3;i++){const v=Math.exp(lo+(hi-lo)*i/2),yy=y(v);svg+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#1d3044" opacity=".55"/><text x="${L-9}" y="${yy+4}" text-anchor="end" fill="#7890a6" font-size="12">${fmt(v)}</text>`}const nowX=x(0);svg+=`<line x1="${nowX}" y1="${T}" x2="${nowX}" y2="${H-B}" stroke="#36526c" stroke-dasharray="3 6" opacity=".7"/><text x="${nowX}" y="${T+12}" text-anchor="middle" fill="#91a5bb" font-size="11">기준일</text>`;if(plan.buyHigh>0&&plan.buyLow>0){const buyTop=y(plan.buyHigh),buyBottom=y(plan.buyLow),buyMidY=(buyTop+buyBottom)/2;svg+=`<rect x="${L}" y="${Math.min(buyTop,buyBottom)}" width="${W-R-L}" height="${Math.abs(buyBottom-buyTop)}" fill="url(#buyBand)"/><text x="${L+9}" y="${buyMidY+4}" fill="#6ee7b7" font-size="11" font-weight="700">매수구간</text>`;}const poly=future.map(q=>pt(q.t,q.bull)).concat(future.slice().reverse().map(q=>pt(q.t,q.bear))).join(' ');svg+=`<polygon points="${poly}" fill="url(#forecastBand)"/>`;if(hist.length>1){svg+=`<polyline points="${hist.map(q=>pt(q.offset,q.close)).join(' ')}" fill="none" stroke="#eff6fb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;if(!past.actual)hist.forEach(q=>{svg+=`<circle cx="${x(q.offset)}" cy="${y(q.close)}" r="3.5" fill="#eff6fb"/><text x="${x(q.offset)}" y="${H-17}" text-anchor="middle" fill="#7f94a8" font-size="10">${q.label}</text>`})}svg+=`<polyline points="${future.map(q=>pt(q.t,q.base)).join(' ')}" fill="none" stroke="#58d5f7" stroke-width="3.2" stroke-dasharray="9 6" stroke-linecap="round"/><circle cx="${nowX}" cy="${y(e.price)}" r="5" fill="#fff" stroke="#58d5f7" stroke-width="3"/>`;const marks=[{v:plan.target1,c:'#f9cf6b',label:'1차 목표',dash:'7 5'},{v:plan.stop,c:'#ff7f91',label:'손절 기준',dash:'5 4'}].filter(m=>finite(m.v)&&m.v>0).map(m=>({...m,realY:y(m.v),labelY:y(m.v)})).sort((a,b)=>a.labelY-b.labelY);marks.forEach(m=>{svg+=`<line x1="${L}" y1="${m.realY}" x2="${W-R}" y2="${m.realY}" stroke="${m.c}" stroke-width="1.25" stroke-dasharray="${m.dash}" opacity=".82"/><text x="${W-R+14}" y="${m.labelY-2}" fill="${m.c}" font-size="11" font-weight="700">${m.label}</text><text x="${W-R+14}" y="${m.labelY+12}" fill="#dce8f2" font-size="12">${fmt(m.v)}</text>`});svg+=`<text x="${L}" y="${H-17}" fill="#7890a6" font-size="11">과거</text><text x="${W-R}" y="${H-17}" text-anchor="end" fill="#7890a6" font-size="11">+${horizonName(horizon)}</text></svg>`;return{svg,actual:past.actual,sampled:pathResult.sampled,points:past.actual?hist:[],x,y}}
     function longTermPanel(e){const s=e.longTermScenario;if(!s)return `<section class="longTerm"><h3>3년 가치 시나리오</h3><p>양수 EPS와 성장 자료가 모두 확인될 때만 계산합니다. 현재는 자료가 부족해 숫자를 만들지 않습니다.</p></section>`;const label={bear:'보수',base:'기준',bull:'낙관'};return `<section class="longTerm"><h3>3년 가치 시나리오 · 예측 확률 아님</h3><p>현재 ${s.epsSource==='forwardEps'?'1년 예상':'최근'} EPS ${s.startingEps.toFixed(2)}, P/E ${s.currentPE.toFixed(1)}배에서 시작합니다. 성장은 3년차 ${pct(s.terminalGrowth,false)}로 낮아집니다. 기준 종료 P/E는 현재보다 높이지 않고, 고평가라면 업종 정상값 ${s.sectorNormalPE.toFixed(1)}배 쪽으로 축소합니다.</p><div class="scenarioGrid">${['bear','base','bull'].map(k=>{const c=s.cases[k];return `<div class="scenario"><span>${label[k]} 시나리오</span><strong class="${k==='bear'?'badText':k==='bull'?'goodText':'warnText'}">${fmt(c.value)} <small>${pct(c.return)}</small></strong><small>3년차 EPS ${c.eps.toFixed(2)} · 종료 P/E ${c.exitPE.toFixed(1)}배</small></div>`}).join('')}</div></section>`}
-    function renderCandidates(){const items=ranking(),rail=$('#candidateRail');rail.classList.remove('skeleton');rail.innerHTML=items.length?items.map(({e,assessment:a})=>`<button type="button" class="candidate ${e.symbol===symbol?'active':''}" data-symbol="${esc(e.symbol)}" aria-label="${esc(e.symbol+' · '+a.decision+' · '+a.label+' '+a.score+' · '+a.reason)}"><strong>${esc(e.symbol)}</strong><small class="candidateCompany">${esc(CompanySearch.name(e.symbol,e.name))}</small><span class="candidateDecision">${MarketVisuals.entryBadge(a.plan.code,a.decision)}</span><span class="candidateScore" data-trend-symbol="${esc(e.symbol)}" data-trend-score="${a.score}">추세 ${a.score}<small>/100</small> · ${esc(a.trend)}</span><small>종가 ${esc(a.asOf)}</small><small class="candidateTag">${esc(a.reason)}</small></button>`).join(''):'<span class="asof">현재 추세 점수를 산출할 자료가 부족합니다.</span>';rail.querySelectorAll('[data-symbol]').forEach(btn=>btn.addEventListener('click',()=>selectSymbol(btn.dataset.symbol,true)))}
-    function render(){if(!dataset)return;const e=dataset.stocks[symbol];if(!e)return showError('선택한 종목의 데이터가 없습니다.');window.SiteAnalytics?.viewAsset('stock',symbol);const ai=LearnedGuide.inspect(learned,e,horizon),p=ai.researchForecast||(e.predictions&&e.predictions[String(horizon)]);if(!p){const a=StockAssessment.evaluate(e,market,learned,horizon);$('#asof').textContent='종가 '+(e.asOf||'확인 필요');$('#app').innerHTML='<div id="stock-overview">'+StockAssessment.panel(a,{holdingGuide:true})+'</div>'+StockAssessment.signalPanels(e,a,market)+'<section class="guide" id="stock-price">선택 기간의 전망 자료가 부족합니다. 추세 점수와 진입 조건을 먼저 확인하세요.</section><div id="companyEvents" class="stock-events"></div><div class="chartWrap" id="congress-chart">'+(window.CongressChart?.markup(symbol)||'')+'</div>';mountCongress(null);CompanyEvents.mount(document.getElementById('companyEvents'),e.symbol,{history:e.history,asOf:e.asOf});renderCandidates();return;}const assessment=StockAssessment.evaluate(e,market,learned,horizon),plan=assessment.plan,graphic=chart(e,p,plan),forecastReturn=p.base/p.anchor-1,forecastTone=forecastReturn>.02?'good':forecastReturn<-.02?'bad':'neutral',volatility=Number(e.inputs?.volatility4m)||0,riskWidth=clamp(volatility/.8*100,5,100);$('#asof').textContent=`종가 ${e.asOf||'—'} · ${p.learned?'AI 연구 '+ai.asOf:'기존 추세 계산'}`;$('#app').innerHTML=`
-      <div id="stock-overview">${StockAssessment.panel(assessment,{holdingGuide:true})}</div><div class="workspace"><section class="panel" id="stock-price" aria-labelledby="chartTitle"><div class="panelHead"><div><div class="tickerLine"><h2 id="chartTitle">${esc(symbol)}</h2><span class="companyName">${esc(CompanySearch.name(symbol,e.name))}</span><span class="price">${fmt(e.price)}</span><span class="change ${forecastTone}">${horizonName(horizon)} ${pct(forecastReturn)}</span></div><div class="subline">실선은 실제 종가, 점선은 6개월·1년 전망을 잇는 참고 경로입니다.</div></div></div>${LearnedGuide.horizonPanel(learned,e,horizon)}<div class="chartWrap" id="congress-chart">${historyControls()}<div class="pathControls" role="group" aria-label="미래 경로 표시"><button type="button" data-path="sample" aria-pressed="${pathMode==='sample'}">흔들림 예시</button><button type="button" data-path="center" aria-pressed="${pathMode==='center'}">AI 연구 방향</button></div><p class="pathNotice">${graphic.sampled?'점선의 등락은 과거 변동을 재조합한 예시입니다. 예시 끝값은 AI 목표가와 다를 수 있습니다. 저점·반등 시점을 예측한 선이 아닙니다.':'점선은 6개월·12개월 전망값을 잇는 공통 방향선입니다. 실제 가격은 중간에 크게 오르내릴 수 있습니다.'}</p><div class="chartStage">${graphic.svg}</div>${window.CongressChart?.markup(symbol)||''}<div class="chartLegend"><span class="key" style="color:#eff6fb"><i class="swatch"></i>과거 가격</span><span class="key" style="color:#58d5f7"><i class="swatch dash"></i>${graphic.sampled?'움직임 예시':p.learned?'AI 연구 방향':'기존 추세'}</span><span class="key" style="color:#6ee7b7"><i class="swatch"></i>매수 구간</span><span class="key" style="color:#ff7f91"><i class="swatch dash"></i>재평가</span><span class="key" style="color:#f9cf6b"><i class="swatch dash"></i>저항</span><span class="historyNote">${graphic.actual?'실제 일별 종가 사용':'일별 종가 준비 중 · 실제 6·3·1개월 수익률 기준점 사용'}</span></div></div><div class="chartSummary"><div class="summaryCell"><span>${p.learned?'AI 연구 목표 · 모델 기준가 대비':'기존 계산 참고 가격'}</span><strong class="${forecastReturn>=0?'goodText':'badText'}">${fmt(p.base)} <small>${pct(forecastReturn)}</small></strong></div><div class="summaryCell"><span>${p.learned?'과거 오차 기반 참고 범위':'보수–강세 시나리오'}</span><strong>${fmt(p.bear)}–${fmt(p.bull)}</strong></div><div class="summaryCell"><span>최근 변동성</span><strong class="${volatility>=.5?'badText':volatility>=.32?'warnText':'goodText'}">${riskLabel(volatility)} <small>${pct(volatility,false)}</small></strong></div></div>${longTermPanel(e)}<details class="site-disclosure"><summary>선택한 전망의 검증 근거</summary>${LearnedGuide.panel(learned,e,horizon)}</details><div id="decisionEvidence"></div></section>
+    function renderCandidates(){const rail=$('#candidateRail'),button=$('#stock-candidate-load');
+      if(!rankingDataset){rail.hidden=true;button.hidden=false;return;}
+      button.hidden=true;rail.hidden=false;const items=ranking();rail.classList.remove('skeleton');rail.innerHTML=items.length?items.map(({e,assessment:a})=>`<button type="button" class="candidate ${e.symbol===symbol?'active':''}" data-symbol="${esc(e.symbol)}" aria-label="${esc(e.symbol+' · '+a.decision+' · '+a.label+' '+a.score+' · '+a.reason)}"><strong>${esc(e.symbol)}</strong><small class="candidateCompany">${esc(CompanySearch.name(e.symbol,e.name))}</small><span class="candidateDecision">${MarketVisuals.entryBadge(a.plan.code,a.decision)}</span><span class="candidateScore" data-trend-symbol="${esc(e.symbol)}" data-trend-score="${a.score}">추세 ${a.score}<small>/100</small> · ${esc(a.trend)}</span><small>종가 ${esc(a.asOf)}</small><small class="candidateTag">${esc(a.reason)}</small></button>`).join(''):'<span class="asof">현재 추세 점수를 산출할 자료가 부족합니다.</span>';rail.querySelectorAll('[data-symbol]').forEach(btn=>btn.addEventListener('click',()=>selectSymbol(btn.dataset.symbol,true)))}
+    function render(){if(!dataset||!currentReady)return;const e=dataset.stocks[symbol];if(!e)return showError('선택한 종목의 데이터가 없습니다.');window.SiteAnalytics?.viewAsset('stock',symbol);const ai=LearnedGuide.inspect(learned,e,horizon),p=ai.researchForecast||(e.predictions&&e.predictions[String(horizon)]);if(!p){const a=StockAssessment.evaluate(e,market,learned,horizon);$('#asof').textContent=priceStamp(e);$('#app').innerHTML='<div id="stock-overview">'+StockAssessment.panel(a,{holdingGuide:true})+'</div>'+StockAssessment.signalPanels(e,a,market)+'<section class="guide" id="stock-price">선택 기간의 전망 자료가 부족합니다. 추세 점수와 진입 조건을 먼저 확인하세요.<div class="stock-dateline"><span>'+esc(priceStamp(e))+'</span><span id="stock-news-date" data-symbol="'+esc(e.symbol)+'">뉴스 확인 중</span></div></section><div id="companyEvents" class="stock-events"></div><div class="chartWrap" id="congress-chart">'+(window.CongressChart?.markup(symbol)||'')+'</div>';mountCongress(null);CompanyEvents.mount(document.getElementById('companyEvents'),e.symbol,{history:e.history,asOf:e.asOf});renderCandidates();return;}const assessment=StockAssessment.evaluate(e,market,learned,horizon),plan=assessment.plan,graphic=chart(e,p,plan),forecastReturn=p.base/p.anchor-1,forecastTone=forecastReturn>.02?'good':forecastReturn<-.02?'bad':'neutral',volatility=Number(e.inputs?.volatility4m)||0,riskWidth=clamp(volatility/.8*100,5,100);$('#asof').textContent=priceStamp(e);$('#app').innerHTML=`
+      <div class="workspace"><section class="panel" id="stock-price" aria-labelledby="chartTitle"><div class="panelHead"><div><div class="tickerLine"><h2 id="chartTitle">${esc(symbol)}</h2><span class="companyName">${esc(CompanySearch.name(symbol,e.name))}</span><span class="price">${fmt(e.price)}</span><span class="change ${forecastTone}">${horizonName(horizon)} ${pct(forecastReturn)}</span></div><div class="stock-dateline"><span>${esc(priceStamp(e))}</span><span id="stock-news-date" data-symbol="${esc(e.symbol)}">뉴스 확인 중</span></div></div></div><div class="chartWrap" id="congress-chart">${historyControls()}<div class="pathControls" role="group" aria-label="미래 경로 표시"><button type="button" data-path="sample" aria-pressed="${pathMode==='sample'}">흔들림 예시</button><button type="button" data-path="center" aria-pressed="${pathMode==='center'}">중심 경로</button></div><p class="pathNotice">${graphic.sampled?'점선의 등락은 과거 변동을 재조합한 예시입니다. 예시 끝값은 AI 목표가와 다를 수 있습니다. 저점·반등 시점을 예측한 선이 아닙니다.':'점선은 6개월·12개월 전망값을 잇는 공통 방향선입니다. 실제 가격은 중간에 크게 오르내릴 수 있습니다.'}</p><div class="chartStage">${graphic.svg}</div>${window.CongressChart?.markup(symbol)||''}<div class="chartLegend"><span class="key" style="color:#eff6fb"><i class="swatch"></i>과거 가격</span><span class="key" style="color:#58d5f7"><i class="swatch dash"></i>${graphic.sampled?'움직임 예시':p.learned?'AI 연구 방향':'기존 추세'}</span><span class="key" style="color:#6ee7b7"><i class="swatch"></i>매수 구간</span><span class="key" style="color:#ff7f91"><i class="swatch dash"></i>재평가</span><span class="key" style="color:#f9cf6b"><i class="swatch dash"></i>저항</span><span class="historyNote">${graphic.actual?'실제 일별 종가 사용':'일별 종가 준비 중 · 실제 6·3·1개월 수익률 기준점 사용'}</span></div></div><div class="chartSummary"><div class="summaryCell"><span>${p.learned?'AI 연구 목표 · 모델 기준가 대비':'기존 계산 참고 가격'}</span><strong class="${forecastReturn>=0?'goodText':'badText'}">${fmt(p.base)} <small>${pct(forecastReturn)}</small></strong></div><div class="summaryCell"><span>${p.learned?'과거 오차 기반 참고 범위':'보수–강세 시나리오'}</span><strong>${fmt(p.bear)}–${fmt(p.bull)}</strong></div><div class="summaryCell"><span>최근 변동성</span><strong class="${volatility>=.5?'badText':volatility>=.32?'warnText':'goodText'}">${riskLabel(volatility)} <small>${pct(volatility,false)}</small></strong></div></div>${LearnedGuide.horizonPanel(learned,e,horizon)}${longTermPanel(e)}<details class="site-disclosure"><summary>선택한 전망의 검증 근거</summary>${LearnedGuide.panel(learned,e,horizon)}</details><div id="decisionEvidence"></div></section>
       <aside class="panel decision" aria-label="선택 전략의 가격 기준"><div class="decisionHero"><div class="decisionLabel" id="decisionTitle">선택 전략의 가격 기준</div><div class="decisionAction ${plan.tone}">${plan.strategy==='breakout'?'고점 돌파':'눌림목 반등'}</div><p class="decisionCopy">${esc(plan.range.label)} 기준 · 종가 ${esc(e.asOf)}</p></div><div class="levels"><div class="level"><span>진입 관심 구간</span><strong class="goodText">${fmt(plan.buyLow)}–${fmt(plan.buyHigh)}</strong><small>진입 조건과 함께 확인</small></div><div class="level"><span>무효화·재평가 기준</span><strong class="badText">${fmt(plan.stop)}</strong><small>종가 이탈 시 계획 재검토</small></div><div class="level"><span>${plan.strategy==='breakout'?'추세 청산 기준':'관측 고점 목표'}</span><strong class="warnText">${fmt(plan.strategy==='breakout'?plan.exitLevel:plan.target1)}</strong><small>${plan.strategy==='breakout'?'이전 20거래일 저점':'이전 55거래일 고점'}</small></div><div class="level"><span>계획 위험 폭</span><strong class="purpleText">${pct(plan.riskPct,false)}</strong><small>관심 진입가에서 무효화 가격까지</small></div></div>${LearnedGuide.nextSteps(plan,e.price,{ai,asOf:e.asOf,assessment})}<details class="site-disclosure"><summary>내 보유·관심 기록</summary><section id="tradeJournal" class="tradeJournal"></section></details></aside></div>
+      <div id="stock-overview">${StockAssessment.panel(assessment,{holdingGuide:true})}</div>
       <div id="companyEvents" class="stock-events"></div>
       ${StockAssessment.signalPanels(e,assessment,market)}
       <section class="guide"><strong>최종 판단을 읽는 방법:</strong> 진입 판단의 이유와 다음 확인 조건을 먼저 보세요. 돌파와 눌림목은 각각 평가하며, 보유 중 대응은 별도로 확인합니다. AI 연구 전망과 기업가치 시나리오는 기간과 근거가 다른 참고 정보입니다.<details><summary>계산 방식과 한계 보기</summary><p>추세 점수는 이동평균·실제 수익률·RSI·MACD의 가중 합계이며 상승 확률이 아닙니다. 진입 판단에는 실제 종가 60개 이상, 시장 자료, 50·200일선 배열을 확인합니다. 돌파는 현재 종가가 직전 55거래일 고점을 넘고 가격 이격과 변동성 손절 위험이 허용 범위인지 평가합니다. 거래량 1.2배 이상은 보강 정보이며 필수 진입 문턱은 아닙니다. 눌림목은 직전 이동평균 구간의 반등 종가, 이전 55거래일 고점을 목표로 한 손익비, 손절 위험을 확인합니다. 현재 관측값은 목표가를 임의로 높이지 않습니다. 지지와 고점은 현재 종가 이전 자료로 고정합니다. 고가·저가가 충분하면 20일 평균 실제 변동폭을, 기존 종가 자료만 있으면 최근 종가 수익률의 변동폭을 사용하며 ATR로 표시하지 않습니다. 시장 주의 시 계획 위험 폭을 8%에서 5%로 제한하고 눌림목 손익비는 1.5에서 2로 높입니다. 보유 대응은 이전 20거래일 저점과 이동평균 이탈을 확인하며 매입가와 개인 비중은 반영하지 않습니다. AI 검증 상태·방향은 이 기술 판단에 합산하지 않습니다. 이 문턱은 연구를 참고한 설계값이며 매매 수익성과 최적성이 검증된 값은 아닙니다.</p></details><details><summary>기술 지표·검증 상태</summary><div class="technical-summary">${MarketVisuals.table([
@@ -180,16 +191,117 @@
  ['선택 전략 손익비',plan.strategy==='breakout'?'추세 이탈 청산 방식':finite(plan.rr)?plan.rr.toFixed(2):'보상 여유 확인'],
  ['기존 전망 검증 표본',(e.backtest?.[String(horizon)]?.n||0)+'개']
  ],'기술 지표 요약')}</div><p>새 진입 규칙은 실거래·외부표본 성과 미검증입니다.</p></details><details class="site-disclosure"><summary>기간별 안정성·기존 모델 비교</summary>${StabilityPanel.panel(stability,horizon,learned)}${LearnedGuide.comparisonPanel(learned,horizon,comparison)}</details></section>`;mountCongress(graphic);document.querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>{pathMode=b.dataset.path;render()}));TradeJournal.mount({e,plan,h:horizon,ai,live});DecisionSupport.mountStock({e,plan,h:horizon,ai:{...ai,generatedAt:learned?.generatedAt}});renderCandidates()}
-    function selectSymbol(value,scroll=false){const next=String(value||'').trim().toUpperCase();if(!dataset?.stocks?.[next]){searchWidget?.setSelection(symbol);return}symbol=next;searchWidget?.setSelection(symbol);render();if(scroll)window.scrollTo({top:0,behavior:'smooth'})}function showError(message){$('#app').innerHTML=`<div class="empty"><strong>데이터를 표시하지 못했습니다</strong>${esc(message)}<br><button type="button" class="retry" id="retry">다시 불러오기</button></div>`;$('#retry')?.addEventListener('click',load)}
-    async function load(){$('#app').innerHTML='<div class="empty"><strong>차트 데이터를 불러오는 중입니다</strong>잠시만 기다려 주세요.</div>';try{const response=await fetch('forecasts/latest.json?refresh='+Math.floor(Date.now()/60000),{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);dataset=await response.json();try{const mr=await fetch('market/latest.json',{cache:'no-store'});market=mr.ok?await mr.json():null}catch(_){market=null}try{const lr=await fetch('ml/latest.json?refresh='+Math.floor(Date.now()/60000),{cache:'no-store'});learned=lr.ok?await lr.json():null}catch(_){learned=null}try{const cr=await fetch('ml/comparison.json',{cache:'no-store'});comparison=cr.ok?await cr.json():null}catch(_){comparison=null}try{const sr=await fetch('ml/live-results.json',{cache:'no-store'});live=sr.ok?await sr.json():null}catch(_){live=null}try{const sr=await fetch('ml/stability.json',{cache:'no-store'});stability=sr.ok?await sr.json():null}catch(_){stability=null}await DecisionSupport.load();learned=DecisionSupport.applyStocks(learned);const symbols=Object.keys(dataset.stocks||{}).sort();if(!symbols.length)throw new Error('종목 없음');if(!dataset.stocks[symbol])symbol=dataset.stocks.NVDA?'NVDA':symbols[0];const items=symbols.map(s=>({symbol:s,name:dataset.stocks[s]?.name||''}));if(searchWidget)searchWidget.setItems(items);else searchWidget=CompanySearch.mount({input:$('#tickerInput'),host:$('#companySearch'),items,onSelect:s=>selectSymbol(s,true)});const requested=pendingSearch&&CompanySearch.resolve(items,pendingSearch);
-      if(requested)symbol=requested.symbol;
-      searchWidget.setSelection(symbol);render();
-      if(pendingSearch&&!requested){
-        const input=$('#tickerInput');
-        input.value=pendingSearch;input.focus();input.dispatchEvent(new Event('input',{bubbles:true}));
+    function priceStamp(e){
+      const today=new Date().toISOString().slice(0,10),age=Math.round((Date.parse(today)-Date.parse(e.asOf))/86400000);
+      return '종가 '+(e.asOf||'기준일 확인 필요')+(age>=4?' · '+age+'일 전':'');
+    }
+    function updateAddress(next,replace=false){
+      if(!window.history||!window.location?.href)return;
+      const url=new URL(window.location.href);
+      if(url.searchParams.get('symbol')!==next){url.searchParams.delete('member');url.searchParams.delete('disclosures');}
+      url.searchParams.delete('q');url.searchParams.set('symbol',next);
+      if(!replace)url.hash='';
+      if(url.href!==window.location.href)window.history[replace?'replaceState':'pushState'](null,'',url);
+    }
+    function selectSymbol(value,scroll=false,writeAddress=true){
+      const next=CompanySearch.symbol(value);
+      if(!(rankingDataset?.stocks?.[next]||index?.items.some(item=>item.symbol===next))){searchWidget?.setSelection(symbol);return;}
+      const changed=symbol!==next;symbol=next;
+      if(writeAddress&&(changed||addressParams()?.has('q')))updateAddress(next);
+      if(changed)historyRange=addressParams()?.has('member')?'archive':'recent';
+      searchWidget?.setSelection(next);
+      if(rankingDataset&&currentReady){navigation++;dataset=rankingDataset;render();}
+      else if(changed||!currentReady)loadSymbol(next);
+      if(scroll)window.scrollTo({top:0,behavior:'smooth'});
+    }
+    function showError(message){
+      $('#app').innerHTML=`<div class="empty"><strong>데이터를 표시하지 못했습니다</strong>${esc(message)}<br><button type="button" class="retry" id="retry">다시 불러오기</button></div>`;
+      $('#retry')?.addEventListener('click',load);
+    }
+    function waitForPrice(){
+      $('#app').innerHTML='<div class="empty"><strong>종가를 불러오는 중입니다.</strong></div>';
+    }
+    function pricePreview(e){
+      const points=(e.history||[]).slice(-63).filter(row=>finite(row.close)&&row.close>0);
+      const values=points.map(row=>row.close);
+      const low=Math.min(...values),spread=Math.max(Math.max(...values)-low,.01);
+      const path=points.map((row,i)=>[12+i*696/Math.max(1,points.length-1),146-(row.close-low)*124/spread].join(',')).join(' ');
+      const graph=points.length>1?`<svg viewBox="0 0 720 160" role="img" aria-label="최근 일별 종가"><polyline points="${path}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`:'';
+      $('#asof').textContent=priceStamp(e);
+      $('#app').innerHTML=`<section class="panel stock-preview" aria-label="최근 가격"><div><h2>${esc(e.symbol)} <small>${esc(CompanySearch.name(e.symbol,e.name))}</small></h2><b>${fmt(e.price)}</b></div>${graph}<p role="status">전망과 시장 자료를 불러오는 중입니다.</p></section>`;
+    }
+    async function optional(path){
+      try{const response=await fetch(path,{cache:'no-store'});return response.ok?await response.json():null;}
+      catch{return null;}
+    }
+    function loadContext(){
+      if(!contextJob){
+        const marketRequest=optional('market/latest.json');
+        contextJob=Promise.all([marketRequest,optional('ml/latest.json'),optional('ml/comparison.json'),
+          optional('ml/live-results.json'),optional('ml/stability.json'),
+          reader?DecisionSupport.load({stockUniverse:index?.risk||rankingDataset?.stocks||{},marketSnapshot:marketRequest}):DecisionSupport.load()
+        ]).then(values=>{[market,learned,comparison,live,stability]=values;learned=DecisionSupport.applyStocks(learned);});
       }
-      pendingSearch='';
-    }catch(error){showError('최신 전망 파일을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')}}
+      return contextJob;
+    }
+    async function fullDataset(){
+      if(rankingDataset)return rankingDataset;
+      if(!candidatesJob)candidatesJob=(async()=>{
+        const full=reader?await reader.full():await optional('forecasts/latest.json');
+        if(!Object.keys(full?.stocks||{}).length)throw new Error('No forecasts');
+        rankingDataset=full;return full;
+      })().catch(error=>{candidatesJob=null;throw error;});
+      return candidatesJob;
+    }
+    async function loadSymbol(next){
+      const request=++navigation;currentReady=false;waitForPrice();
+      try{
+        if(!entries[next]){
+          if(rankingDataset)entries[next]=rankingDataset.stocks[next];
+          else try{entries[next]=await reader.stock(index,next);}
+          catch{entries[next]=(await fullDataset()).stocks[next];}
+        }
+        if(request!==navigation||symbol!==next)return;
+        const e=entries[next];if(!e)throw new Error('No stock');
+        dataset={stocks:{[next]:e}};pricePreview(e);await loadContext();
+        if(request!==navigation||symbol!==next)return;
+        currentReady=true;render();
+      }catch{if(request===navigation&&symbol===next)showError('이 종목의 전망 파일을 불러오지 못했습니다.');}
+    }
+    async function load(){
+      const request=++navigation;currentReady=false;waitForPrice();
+      try{
+        if(reader){try{index=await reader.catalog();}catch{await fullDataset();}}
+        else await fullDataset();
+        if(request!==navigation)return;
+        const items=index?.items||Object.values(rankingDataset.stocks).map(e=>({symbol:e.symbol,name:e.name||''}));
+        if(!items.some(item=>item.symbol===symbol))symbol=items.find(item=>item.symbol==='NVDA')?.symbol||items[0].symbol;
+        if(searchWidget)searchWidget.setItems(items);
+        else searchWidget=CompanySearch.mount({input:$('#tickerInput'),host:$('#companySearch'),items,onSelect:s=>selectSymbol(s,true)});
+        const requested=pendingSearch&&CompanySearch.resolve(items,pendingSearch);
+        if(requested){symbol=requested.symbol;updateAddress(symbol,true);}
+        searchWidget.setSelection(symbol);
+        if(pendingSearch&&!requested){
+          const input=$('#tickerInput');input.value=pendingSearch;input.focus();input.dispatchEvent(new Event('input',{bubbles:true}));
+        }
+        pendingSearch='';
+        if(index)await loadSymbol(symbol);
+        else{dataset=rankingDataset;await loadContext();if(request===navigation){currentReady=true;render();}}
+      }catch(error){if(request===navigation)showError('최신 전망 파일을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');}
+    }
+    $('#stock-candidate-load').addEventListener('click',async event=>{
+      const button=event.currentTarget;button.disabled=true;button.textContent='추세 후보 불러오는 중…';
+      try{await fullDataset();await loadContext();renderCandidates();}
+      catch{button.disabled=false;button.textContent='추세 후보 다시 불러오기';}
+    });
+    window.addEventListener?.('popstate',()=>{if(searchWidget&&fromAddress()!==symbol)selectSymbol(fromAddress(),false,false);});
+    const returnButton=$('#stock-search-return');
+    returnButton.addEventListener('click',()=>{
+      $('#tickerInput').focus({preventScroll:true});$('#stock-controls').scrollIntoView({block:'start'});
+    });
+    if(typeof IntersectionObserver==='function'){
+      new IntersectionObserver(([entry])=>{returnButton.hidden=entry.isIntersecting;}).observe($('#stock-controls'));
+    }
     document.querySelectorAll('[data-h]').forEach(button=>button.addEventListener('click',()=>{horizon=Number(button.dataset.h);document.querySelectorAll('[data-h]').forEach(x=>x.classList.toggle('active',x===button));render()}));load();
   })();
   </script>

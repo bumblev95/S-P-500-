@@ -94,7 +94,19 @@ function mountStock({e,plan,h,ai}){
 }
 function mountCrypto(e,h){const host=document.getElementById('decisionEvidence');if(host)host.innerHTML=extras('crypto',e.symbol,h,e.spotModel?.predictions?.[h]?.validation||{});const riskHost=document.getElementById('sharedRisk');if(riskHost)riskHost.innerHTML=riskPanel(e)}
 function mountPerp(symbol,snapshot,analysis){const r=document.getElementById('sharedRisk');if(r)r.innerHTML=riskPanel({...coins[symbol],oiChange24h:fresh(coins[symbol]?.perp?.at,2/24)?coins[symbol]?.oiChange24h:null,perp:{openInterestUSD:snapshot.quote?.oiUSD,at:snapshot.quoteAt?new Date(snapshot.quoteAt).toISOString():null,fundingHourly:snapshot.quote?.funding}})}
-async function load(){if(loading)return loading;loading=(async()=>{const urls=['decision/latest.json','market/latest.json','forecasts/latest.json','crypto/latest.json','ml/adaptive-summary.json'];const rs=await Promise.allSettled(urls.map(async url=>{const r=await fetch(url,{cache:'no-store'});return r.ok?await r.json():null}));const values=rs.map(r=>r.status==='fulfilled'?r.value:null);[bundle,market]=values;stocks=values[2]?.stocks||{};coins=values[3]?.coins||{};adaptive=values[4];})();return loading}
+async function load({stockUniverse,marketSnapshot}={}){
+ if(loading)return loading;
+ const fetchData=async url=>{const r=await fetch(url,{cache:'no-store'});return r.ok?await r.json():null};
+ loading=(async()=>{
+  const results=await Promise.allSettled([fetchData('decision/latest.json'),
+   marketSnapshot!==undefined?marketSnapshot:fetchData('market/latest.json'),
+   stockUniverse!==undefined?{stocks:stockUniverse}:fetchData('forecasts/latest.json'),
+   fetchData('crypto/latest.json'),fetchData('ml/adaptive-summary.json')]);
+  const values=results.map(r=>r.status==='fulfilled'?r.value:null);
+  [bundle,market]=values;stocks=values[2]?.stocks||{};coins=values[3]?.coins||{};adaptive=values[4];
+ })();
+ return loading;
+}
 // Only a prospectively promoted model can replace a current chart result. All
 // period records retain their own model name, as-of date and validation metric.
 function promoted(asset,symbol,h,asOf,anchor){const r=bundle?.current?.[asset]?.[symbol]?.[h];return fresh(bundle?.generatedAt,4)&&r?.promoted&&r.asOf===asOf&&positive(anchor)&&Math.abs(r.anchor/anchor-1)<1e-6&&positive(r.low)&&positive(r.high)&&r.low<=r.base&&r.base<=r.high?r:null}

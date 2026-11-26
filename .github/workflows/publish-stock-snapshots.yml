@@ -1,0 +1,61 @@
+name: Publish stock detail snapshots
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'forecasts/latest.json'
+      - 'scripts/build_stock_snapshots.py'
+      - '.github/workflows/publish-stock-snapshots.yml'
+  workflow_run:
+    workflows: ['Update S&P 500 EOD prices']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: stock-detail-snapshots
+  cancel-in-progress: false
+
+jobs:
+  snapshots:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate the projection and the lightweight reader
+        run: |
+          python -m unittest discover -s scripts -p test_stock_snapshots.py
+          node --test scripts/test_stock_snapshot.cjs
+      - name: Generate the stock detail view from current public forecasts
+        id: publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            python scripts/build_stock_snapshots.py
+            git add forecasts/by-symbol
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Refresh stock detail snapshots'
+            if git push origin HEAD:main; then
+              echo 'published=true' >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          exit 1
+      - name: Refresh the published website
+        if: steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"

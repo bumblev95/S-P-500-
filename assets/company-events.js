@@ -187,8 +187,19 @@ async function load(fetcher=root.fetch?.bind(root),force=false){
  return loading;
 }
 function mount(host,ticker,price=null){
- if(!host)return;const key=normalize(ticker);host.dataset.eventSymbol=key;host.innerHTML=panel(key,data,Date.now(),newsData,price);
- load().then(()=>{if(host.isConnected&&host.dataset.eventSymbol===key)host.innerHTML=panel(key,data,Date.now(),newsData,price)});
+ if(!host)return;
+ const key=normalize(ticker);host.dataset.eventSymbol=key;
+ function paint(){
+  if(!host.isConnected||host.dataset.eventSymbol!==key)return;
+  const now=Date.now();host.innerHTML=panel(key,data,now,newsData,price);
+  const stamp=root.document?.getElementById('stock-news-date');
+  if(stamp?.dataset?.symbol===key){
+   const result=selectNews(newsData,key,now);
+   stamp.textContent=result.checkedAt?'뉴스 확인 '+result.checkedAt.replace('T',' ').slice(0,16)+' UTC':
+    newsData||newsFailed?'뉴스 확인 기록 없음':'뉴스 확인 중';
+  }
+ }
+ paint();load().then(paint);
 }
 const api={load,panel,select,mount,safeSource,newsPanel,selectNews,safeNewsSource,koreanSummary,recentMoves,sameDateSources};if(typeof module!=='undefined')module.exports=api;else root.CompanyEvents=api;
 })(typeof window!=='undefined'?window:globalThis);

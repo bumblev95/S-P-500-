@@ -113,3 +113,12 @@ html{color-scheme:dark;background:#060d18}a,button{touch-action:manipulation}#ma
   #market-home .hp-jump{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
   #market-home .hp-jump a{padding-inline:3px}
 }
+
+#market-home .hp-intro,
+#market-home .site-panel,
+#market-home .hp-pick{background:#171e26;border:1px solid #303a45;border-radius:8px;box-shadow:none}
+#market-home .hp-column-head{padding-block:12px}
+#market-home .hp-jump a{border:0;border-radius:0;border-bottom:1px solid #303a45;background:transparent}
+#market-home .hp-jump a:hover{color:#a6d6ea}
+#market-home .hp-search button{background:#263e4e;color:#e1eef7;border-color:#42657e;border-radius:6px}
+#market-home .hp-search input{background:#141b23;border-radius:6px}
