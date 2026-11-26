@@ -29,10 +29,13 @@
 .cg-marker{cursor:pointer;--cg-color:#a1c9ff}
 .cg-mark-buy{--cg-color:#74ebbb}
 .cg-mark-sell{--cg-color:#ffa6b3}
-.cg-stem{stroke:var(--cg-color);stroke-width:1.5;opacity:.8}
 .cg-pin{fill:var(--cg-color)}
 .cg-badge{fill:#102233;stroke:var(--cg-color);stroke-width:2.2}
 .cg-marker text{fill:var(--cg-color);font-weight:750;text-anchor:middle;dominant-baseline:central;pointer-events:none}
 .cg-marker:hover .cg-badge,.cg-marker:focus .cg-badge{stroke:#f4fbff;stroke-width:3.5}
 @media(max-width:600px){.cg-chart,.cg-other{padding:10px}.cg-filters label{max-width:100%}.cg-filters select,.cg-date select,.cg-chart button,.cg-switch{min-height:44px}.cg-chart select{font-size:16px}.cg-heading a{display:inline-flex;min-height:44px;align-items:center}}
 .cg-portrait{width:32px;height:32px;display:block;object-fit:cover;object-position:center 32%;border-radius:50%;background:#142a3c}
+.cg-detail:not(:empty){margin:8px 0;padding:2px 10px;border:1px solid #2b455c;border-radius:8px}
+.cg-detail:focus-visible{outline:2px solid #8edeff;outline-offset:2px}
+.cg-detail,.cg-cluster{scroll-margin-top:75px}
+.cg-marker:focus-visible{outline:none}

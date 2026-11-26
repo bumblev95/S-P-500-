@@ -59,3 +59,15 @@ body.stock-desk{background:#11171e;--bg:#11171e;--surface:#171e26;--line:#303a45
   .stock-explore-list a{grid-template-columns:3.9rem minmax(0,1fr) auto}
   .stock-find input{font-size:16px}
 }
+.stock-desk .chartStage,.stock-desk .chartStage svg{min-height:0}
+.stock-chart-controls{display:flex;flex-wrap:wrap;gap:0 12px}
+.stock-chart-controls .pathNotice{flex-basis:100%}
+.stock-explore-list a{grid-template-columns:4.15rem minmax(0,1fr) auto}
+.stock-explore-list .stock-explore-identity{min-width:0}
+.stock-explore-list .stock-explore-identity small{display:block}
+.stock-explore-move{display:flex;align-items:center;justify-content:flex-end;gap:7px;color:#b9c6d4;font-variant-numeric:tabular-nums;font-weight:650;white-space:nowrap}
+.stock-explore-move svg{width:43px;height:18px;flex:none}
+.stock-explore-move.is-up{color:#94ddc0}
+.stock-explore-move.is-down{color:#ffa3ad}
+@media(max-width:375px){.stock-explore-list a{grid-template-columns:3.45rem minmax(0,1fr) auto;gap:6px}.stock-explore-move{gap:4px;font-size:.78rem}.stock-explore-move svg{width:32px}}
+.stock-desk:has(#stock-explore:not([hidden])) #stock-search-return{display:none}
