@@ -1,0 +1,80 @@
+{
+  "version": "joint-indicator-data-incident-v1",
+  "observedAt": "2026-11-25T02:08:06Z",
+  "localResearchDate": "2026-11-24",
+  "status": "blocked_fail_closed",
+  "scope": "prospective-blend-v1",
+  "hypothesesTested": 0,
+  "reason": "A complete verified public EOD snapshot was unavailable, so no prospective cohort metric was computed.",
+  "repositoryState": {
+    "mainCommit": "0fb36a9b2fb41be06e9a4be158083e1c71d18f25",
+    "researchCommit": "df49cd08d3ef7d23244badb64d8280565fa1d45e",
+    "prospectiveCommit": "f3e24e2eb0f92cfaf20696164d054379b621201d"
+  },
+  "prospectiveStudy": {
+    "protocolSha256": "c2608373068c24f4a2512c1bb07fe68aefa642b6c574e6218649bb78e10cb674",
+    "firstIssueArtifact": {
+      "path": "research/joint-indicator/prospective-blend-v1/issued/2026-10-23.json",
+      "sha256": "51962a8929b4ca6074ae1b7c79af9bcae8a429cca4573763f2e4be9fabe5ace6",
+      "origin": "2026-10-23",
+      "targetDate": "2026-11-23",
+      "symbols": 500,
+      "containsTargetData": false
+    },
+    "audit": {
+      "status": "pending",
+      "reason": "five_pre_target_issue_cohorts_not_yet_frozen",
+      "issueCohortsFrozen": 1,
+      "required": 5,
+      "scoresWritten": false
+    }
+  },
+  "publicInput": {
+    "pricesPath": "prices/latest_prices.csv",
+    "pricesSha256": "df83ea1d652d24d5e99a661a2e24eda82318a4255fb3a3b7c66daac553218086",
+    "forecastsPath": "forecasts/latest.json",
+    "forecastsSha256": "d1ff5cd6afdb9fbafeb950a16f8cd32fa637387c94622c860fea1b1c2959203d",
+    "publishedAsOf": "2026-11-20",
+    "publishedSymbols": 505
+  },
+  "publisherFailure": {
+    "workflowRun": 45379041856,
+    "job": 138392925794,
+    "observedError": "Public EOD snapshot is not the latest settled session 2026-11-23",
+    "url": "https://github.com/bumblev95/S-P-500-/actions/runs/45379041856"
+  },
+  "recoveryFailure": {
+    "workflowRun": 45528188471,
+    "job": 138916640146,
+    "attempts": 4,
+    "expectedSession": "2026-11-24",
+    "generatedRowsPerAttempt": 505,
+    "forecastRowsReady": 503,
+    "forecastRowsWithHistory": 505,
+    "providerEvidence": "Nasdaq has no completed bar for the required session",
+    "validationError": "A: stale, unfinished or retained price row; expected 2026-11-24",
+    "publicationCommitted": false,
+    "researchArtifactTransferred": false,
+    "url": "https://github.com/bumblev95/S-P-500-/actions/runs/45528188471"
+  },
+  "codeHashes": {
+    ".github/workflows/update-eod-prices.yml": "46f4a3d66400b697d260701617ed421d0b066a189f1b55eaeb06aa6cd922d837",
+    "scripts/eod_close_schedule.py": "1839aed563554691dbae64c0d408024b46e3354af5f0ea92423e1a71017d9505",
+    "scripts/eod_publication.py": "02e1f1e539a63a343b236bf72e3828083a172c8dbc6df3e1aac2293d89b7381b"
+  },
+  "metrics": {
+    "completeTargetCohorts": 0,
+    "partialSurvivorScoreAllowed": false,
+    "candidateScoresWritten": false,
+    "promotion": "none"
+  },
+  "guards": {
+    "productionForecastChanged": false,
+    "serviceRankingsChanged": false,
+    "uiChanged": false,
+    "tradingPolicyChanged": false,
+    "automaticPromotionChanged": false,
+    "retroactiveTargetBackfillAllowed": false
+  },
+  "nextAction": "After a complete settled public EOD snapshot is atomically published, rerun the isolated prospective publisher unchanged. Preserve the first 500-symbol cohort, freeze only a genuinely new pre-target cohort, and keep all aggregate scores blocked until five complete non-overlapping cohorts exist."
+}

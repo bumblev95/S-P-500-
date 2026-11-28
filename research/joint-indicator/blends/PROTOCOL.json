@@ -1,0 +1,93 @@
+{
+  "version": "indicator-blends-v1",
+  "registeredAt": "2026-10-04T04:28:20.473516+00:00",
+  "sourceCommit": "c67f12f1242c85bb570561ed5fed9d635c8afd8e",
+  "parentResearchCommit": "87478265474562eac52137f690b8a3fd9fb94102",
+  "source": "research/environment.json",
+  "sourceHash": "ec8d4e97347d3ef7a92028bb09f6ba68d818c6e31970d82f5b197f48586c3ecc",
+  "jointProtocolHash": "9b44644a8977b295082b89c77a1c1e89479c99d193ff8cde9a178fecc0d83df9",
+  "horizons": [
+    126,
+    252
+  ],
+  "hypotheses": {
+    "A": "Complementary price errors permit convex combinations; optimize either magnitude alone or balanced direction under an error guard.",
+    "B": "A calibrated downside classifier can route or weight a conditional downside magnitude expert while keeping a low-error default."
+  },
+  "candidates": [
+    "fixed_half",
+    "causal_error_blend",
+    "causal_joint_blend",
+    "down_soft_mix",
+    "guarded_down_route"
+  ],
+  "specialist": "joint_logistic, reused unchanged in both horizons; chosen after the first inspected exploratory study, not an untouched holdout choice",
+  "defaults": [
+    "priceOnly",
+    "noChange"
+  ],
+  "blendWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "routeThresholds": [
+    0.35,
+    0.45,
+    0.55,
+    0.65,
+    0.75
+  ],
+  "fixedHalf": "0.5 * priceOnly + 0.5 * joint_logistic median",
+  "errorBlend": "Minimize date-equal MAPE on previous matured OOS forecasts; tie order noChange, priceOnly, then smaller specialist weight; fall back to fixed half if fewer than 3 dates.",
+  "jointBlend": "Maximize balanced three-class direction subject to calibration guards; ties lower MAPE, then lower return MAE; fall back to causal_error_blend if infeasible.",
+  "softMix": "p(down) * causal conditional-down MAPE-optimal median + (1-p(down)) * priceOnly",
+  "guardedRoute": "When p(down) >= threshold and p(down) > p(up), use conditional-down median; otherwise use the chosen default. Choose default/threshold on previous matured OOS forecasts subject to calibration guards; fall back to causal_error_blend if infeasible.",
+  "calibrationGuard": {
+    "maxErrorRatio": 1.02,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "minimumDownWarnings": 30
+  },
+  "minimumBlendDates": 3,
+  "conditionalDownMagnitude": "Date-equal weights within previously realized down outcomes, divided by actual price ratio; weighted median minimizes empirical MAPE within down class.",
+  "evaluationSplit": "same fixed last-half origin dates as the joint v1 study; warm-up forecasts generated causally on earlier origins where sufficient history exists",
+  "directionRule": "Classify the final numeric forecast using unchanged +/-2% boundary; do not overwrite its sign using the specialist class.",
+  "probabilityRule": "Only the reference joint model emits a class distribution; numerical blends do not inherit its probabilities. Reference Brier/calibration diagnostics are reported separately.",
+  "labelsAvailableRule": "Every base specialist fit/calibration respects joint protocol; blend weights and gates use only historical OOS forecasts with targetDate < new origin.",
+  "metrics": [
+    "dateMeanMape",
+    "dateMeanReturnMae",
+    "p90Mape",
+    "p90ReturnError",
+    "directionAccuracy",
+    "balancedDirectionAccuracy",
+    "upRecall",
+    "downRecall",
+    "downPrecision",
+    "falseDownWarningRate",
+    "dateWins",
+    "regimeMetrics"
+  ],
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "priceErrorImprovement": 0.02,
+    "minimumDateWinRate": 0.6,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "requireDirectionImprovementCI": true,
+    "prospectiveEvidenceRequired": true
+  },
+  "extraGate": "Require return MAE >=2% better than both priceOnly/noChange and p90 return error no worse, as well as original magnitude/direction gates. No numerical probability-performance claim.",
+  "noTradeClaims": true,
+  "noUIOrLiveChanges": true,
+  "futureEvidenceRequired": true,
+  "holdoutRevisited": true,
+  "selection": "none; report every declared candidate and every fallback",
+  "diagnosticOracle": "Per-row best endpoint error is a future-informed impossibility bound, never an executable candidate or promotion input.",
+  "codeChangeAfterResultsRule": "No post-result hyperparameter or gate adjustment in this protocol; fixes must be disclosed and hash/version updated."
+}

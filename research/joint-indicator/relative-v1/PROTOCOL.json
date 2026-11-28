@@ -1,0 +1,84 @@
+{
+  "version": "relative-strength-blends-v1",
+  "registeredAt": "2026-10-07T01:23:40.712629+00:00",
+  "sourceMainCommit": "d60e6cbc777be57868b4e23b9a4561030b27434d",
+  "parentResearchCommit": "5cd41f8552370feec29e1965f8146ff0ae992205",
+  "source": "sources/environment.json.gz",
+  "horizons": [
+    126,
+    252
+  ],
+  "hypotheses": {
+    "A": "Separating own, market and sector trailing returns and OLS residual strength adds complementary information to the existing OOS forecasts, improving both direction and magnitude.",
+    "B": "A relative-strength expert can be combined with the existing research price-pattern forecast via a fixed average, matured OOS convex stacking, or a predeclared market-condition role switch."
+  },
+  "candidates": [
+    "relative_expert",
+    "relative_half",
+    "relative_stack",
+    "relative_bear_route"
+  ],
+  "controls": [
+    "noChange",
+    "priceOnly",
+    "simpleTrend",
+    "absolute_control"
+  ],
+  "evaluation": "Fixed last half of source origin dates; retain all issuer/date rows and missing-input fallbacks. Prior history already inspected; exploratory only.",
+  "features": "Five existing OOS log forecasts, own trailing 63/126/252 log returns, volatility63, distance200, drawdown63; SPY and sector ETF trailing returns63/126/252 and distance200. Relative expert additionally uses own-minus-SPY and own-minus-sector returns, 252-observation OLS betas and intercept-removed residual cumulative returns63/126/252. All new raw input dates strictly precede origin. Sector identities are the current universe, not point-in-time classifications.",
+  "sectorETFs": {
+    "Information Technology": "XLK",
+    "Health Care": "XLV",
+    "Financials": "XLF",
+    "Consumer Discretionary": "XLY",
+    "Communication Services": "XLC",
+    "Industrials": "XLI",
+    "Consumer Staples": "XLP",
+    "Energy": "XLE",
+    "Utilities": "XLU",
+    "Materials": "XLB",
+    "Real Estate": "XLRE"
+  },
+  "data": "Yahoo adjusted daily closes retrieved in this run, raw payload hashes and compact extracted features saved. No backfilled ETF history before launch. Historical revisions and current-member survivorship remain.",
+  "regressor": {
+    "max_iter": 70,
+    "max_leaf_nodes": 7,
+    "min_samples_leaf": 50,
+    "learning_rate": 0.04,
+    "l2_regularization": 20,
+    "early_stopping": false,
+    "random_state": 41
+  },
+  "loss": "absolute_error on future/current price ratio, date-equal weights, no class balancing or desired sign quotas",
+  "training": "Only origin < current origin and targetDate < current origin; source origin/target intervals are disjoint by horizon, verified before execution. Horizons fitted independently. No new classifier or calibration claims.",
+  "simpleTrend": "Exp(horizon/126 * previous-close trailing126 log return), clipped only to min/max ratios of matured labels; no probability",
+  "bounds": "Clip every new regressor/stack output to matured target min/max, report counts",
+  "fixedHalf": "0.5 * priceOnly + 0.5 * relative_expert",
+  "stack": "Weights [0, .25, .5, .75, 1] selected by equal-date (MAPE + return MAE) on previous matured OOS expert forecasts, ties lower expert weight. Require at least3 OOS origins; otherwise retain priceOnly. No holdout tuning.",
+  "bearRoute": "Use relative expert only when previous-close SPY distance200 <0 and expert value <.98, otherwise priceOnly. Fixed market condition, no learned holdout threshold.",
+  "missing": "Missing own or SPY feature -> priceOnly for all new forecasts, preserve row; unavailable sector features remain NaN, OLS sector beta0 with market-only regression. All missing status retained.",
+  "direction": "Final numeric ratio >1.02 up, <.98 down, otherwise neutral; always-up direction comparator recorded separately",
+  "probability": "No probability outputs from numeric experts/blends; Brier/logloss explicitly not applicable, not borrowed from another classifier",
+  "gate": {
+    "minimumEvaluationDates": 6,
+    "priceErrorImprovement": 0.02,
+    "minimumDateWinRate": 0.6,
+    "minimumUpRecall": 0.3,
+    "minimumDownRecall": 0.3,
+    "minimumDownPrecisionLift": 0.05,
+    "requireDirectionImprovementCI": true,
+    "prospectiveEvidenceRequired": true
+  },
+  "extraGate": "Reuse unchanged blend gates: improve MAPE and return MAE against both noChange and priceOnly by2%; no worse tails; both directions and precision pass. Also require falseDownWarningRate <= priceOnly and consistency against simpleTrend and absolute_control; prospective always false.",
+  "abstention": "No abstention; neutral forecasts are a predicted class, not excluded rows",
+  "prospective": "Preserve genuinely issued after-publication forecasts separately when a timely complete snapshot is available. Never call historical replay an issued forecast. This run is historical research only.",
+  "noTradeClaims": true,
+  "noUIOrLiveChanges": true,
+  "selection": "none",
+  "noPostResultTuning": true,
+  "references": [
+    "https://repub.eur.nl/pub/22252",
+    "https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html"
+  ],
+  "sourceHash": "03e37d34b4b9beeb1c93ce6a626c43be1faaf36fa54932c02be617bf42696c90"
+}
