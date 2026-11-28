@@ -1,12 +1,22 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T20:37:17.192963+00:00",
+  "generatedAt": "2026-11-28T00:57:32.721048+00:00",
   "rankings": {
     "buy": [
       {
-        "symbol": "MRSH",
-        "name": "마시",
-        "asOf": "2026-11-25",
+        "symbol": "DOC",
+        "name": "헬스피크 프로퍼티스",
+        "asOf": "2026-11-27",
+        "score": 94,
+        "code": "buy",
+        "holdingCode": "hold",
+        "selection": "signal",
+        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
+      },
+      {
+        "symbol": "AIZ",
+        "name": "어슈런트",
+        "asOf": "2026-11-27",
         "score": 90,
         "code": "buy",
         "holdingCode": "hold",
@@ -16,18 +26,8 @@
       {
         "symbol": "ADP",
         "name": "오토매틱 데이터 프로세싱",
-        "asOf": "2026-11-25",
-        "score": 88,
-        "code": "buy",
-        "holdingCode": "hold",
-        "selection": "signal",
-        "reason": "가격 돌파·위험 조건 충족 · 거래량 보강 없음"
-      },
-      {
-        "symbol": "DGX",
-        "name": "퀘스트 다이아그노스틱스",
-        "asOf": "2026-11-25",
-        "score": 99,
+        "asOf": "2026-11-27",
+        "score": 100,
         "code": "breakout",
         "holdingCode": "hold",
         "selection": "relative",
@@ -38,7 +38,7 @@
       {
         "symbol": "COIN",
         "name": "코인베이스",
-        "asOf": "2026-11-25",
+        "asOf": "2026-11-27",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -48,7 +48,7 @@
       {
         "symbol": "INTU",
         "name": "인튜이트",
-        "asOf": "2026-11-25",
+        "asOf": "2026-11-27",
         "score": 0,
         "code": "avoid",
         "holdingCode": "reduce",
@@ -56,21 +56,21 @@
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       },
       {
-        "symbol": "TPL",
-        "name": "텍사스 퍼시픽 랜드",
-        "asOf": "2026-11-25",
-        "score": 0,
+        "symbol": "ALB",
+        "name": "앨버말",
+        "asOf": "2026-11-27",
+        "score": 1,
         "code": "avoid",
         "holdingCode": "reduce",
         "selection": "signal",
         "reason": "중기 하락 또는 이전 지지 이탈이 확인됐습니다."
       }
     ],
-    "asOf": "2026-11-25",
+    "asOf": "2026-11-27",
     "eligibleCount": 504,
-    "evaluatedAt": "2026-11-27T20:37:17.192Z",
-    "priceAsOf": "2026-11-25",
-    "priceGeneratedAt": "2026-11-26T19:34:27+00:00",
+    "evaluatedAt": "2026-11-28T00:57:32.721Z",
+    "priceAsOf": "2026-11-27",
+    "priceGeneratedAt": "2026-11-28T00:56:08+00:00",
     "marketGeneratedAt": "2026-11-27T20:00:24.082494+00:00",
     "basis": "technical-relative-ranking",
     "policy": "daily-top3-v1",
