@@ -1,13 +1,9 @@
 {
   "schemaVersion": 2,
   "model": "public-early-warning-v1",
-  "generatedAt": "2026-11-27T20:00:24.082494+00:00",
+  "generatedAt": "2026-11-28T00:59:30.133687+00:00",
   "observations": {
     "DGS10": [
-      [
-        "2024-11-27",
-        4.25
-      ],
       [
         "2024-11-29",
         4.18
@@ -1991,13 +1987,13 @@
       [
         "2026-11-24",
         4.91
+      ],
+      [
+        "2026-11-25",
+        4.85
       ]
     ],
     "DTWEXBGS": [
-      [
-        "2024-11-27",
-        126.8205
-      ],
       [
         "2024-11-29",
         126.5798
@@ -4855,10 +4851,6 @@
     ],
     "SOFR": [
       [
-        "2024-11-27",
-        4.57
-      ],
-      [
         "2024-11-29",
         4.59
       ],
@@ -6844,10 +6836,6 @@
       ]
     ],
     "IORB": [
-      [
-        "2024-11-27",
-        4.65
-      ],
       [
         "2024-11-28",
         4.65
@@ -9767,6 +9755,10 @@
       [
         "2026-11-27",
         3.9
+      ],
+      [
+        "2026-11-28",
+        3.9
       ]
     ]
   },
@@ -9780,18 +9772,18 @@
       "url": "https://fred.stlouisfed.org/series/DGS10",
       "thresholds": null,
       "status": "ready",
-      "value": 4.91,
-      "asOf": "2026-11-24",
-      "previous": 4.99,
-      "previousDate": "2026-10-27",
-      "change": -0.08000000000000007,
+      "value": 4.85,
+      "asOf": "2026-11-25",
+      "previous": 5.05,
+      "previousDate": "2026-10-28",
+      "change": -0.20000000000000018,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "daily"
     },
     {
@@ -9810,11 +9802,11 @@
       "change": 2.2776000000000067,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "daily"
     },
     {
@@ -9837,11 +9829,11 @@
       "change": 0.02200000000000002,
       "severity": 0,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "weekly"
     },
     {
@@ -9864,11 +9856,11 @@
       "change": 0.5131,
       "severity": 1,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=STLFSI4&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "weekly"
     },
     {
@@ -9891,11 +9883,11 @@
       "change": 1.7,
       "severity": 0,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DRTSCILM&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "quarterly"
     },
     {
@@ -9914,11 +9906,11 @@
       "change": 0.010000000000000231,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "daily"
     },
     {
@@ -9931,17 +9923,17 @@
       "thresholds": null,
       "status": "ready",
       "value": 3.9,
-      "asOf": "2026-11-27",
+      "asOf": "2026-11-28",
       "previous": 3.9,
-      "previousDate": "2026-10-30",
+      "previousDate": "2026-10-31",
       "change": 0.0,
       "severity": null,
       "fetchStatus": "ready",
-      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-11-27",
+      "dataUrl": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB&cosd=2024-11-28",
       "fetchWarnings": [],
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "frequency": "daily"
     },
     {
@@ -9967,8 +9959,8 @@
       "frequency": "daily",
       "fromCache": false,
       "fetchStatus": "ready",
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "id": "GZ_SPREAD",
@@ -9986,8 +9978,8 @@
       "change": 0.07767714768522072,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "id": "EBP",
@@ -10005,8 +9997,8 @@
       "change": 0.11802557281568216,
       "fetchStatus": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00"
     }
   ],
   "credit": {
@@ -10027,7 +10019,7 @@
       "interpretation": "은행 대출 여건과 차입 의존 기업에 대한 영향을 확인하세요.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Agencies announce dollar thresholds for smaller loan exemption from appraisal requirements for higher-priced mortgage loans",
@@ -10038,7 +10030,7 @@
       "interpretation": "은행 대출 여건과 차입 의존 기업에 대한 영향을 확인하세요.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Bowman, Modernizing Banking Supervision: A Shared Agenda for the Americas",
@@ -10049,7 +10041,7 @@
       "interpretation": "은행 대출 여건과 차입 의존 기업에 대한 영향을 확인하세요.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Minutes of the Board's discount rate meetings on October 19 and October 28, 2026",
@@ -10060,7 +10052,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Federal Reserve announces College Fed Challenge winners",
@@ -10071,7 +10063,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Cook, The U.S. Economy in Global Context",
@@ -10082,7 +10074,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Federal Reserve Board releases results from survey of senior financial officers at banks about their strategies and practices for managing reserve balances",
@@ -10093,7 +10085,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Waller, Opening Remarks",
@@ -10104,7 +10096,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
@@ -10115,7 +10107,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Jefferson, Monetary Policy amid Frequent and Complex Shocks",
@@ -10126,7 +10118,7 @@
       "interpretation": "정책 변화는 할인율과 성장주 가격 변동에 영향을 줄 수 있습니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Minutes of the Federal Open Market Committee, October 27-28, 2026",
@@ -10137,7 +10129,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Barr, Investing in America’s Underserved Communities",
@@ -10148,7 +10140,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Waller, Considerations at the Intersection of Payments and Tokenized Markets",
@@ -10159,7 +10151,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Warsh, Opening Remarks",
@@ -10170,7 +10162,7 @@
       "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "title": "Barr, Some Potential Financial Stability Implications of Artificial Intelligence",
@@ -10181,47 +10173,25 @@
       "interpretation": "자금조달·차환 비용에 영향을 줄 수 있어 원문 확인이 필요합니다.",
       "assessment": "원문 검토 필요",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
-    },
-    {
-      "title": "Jefferson, New Technology, Old Questions: Productivity Puzzles and the Macroeconomy",
-      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20261113a.htm",
-      "publishedAt": "2026-11-14T00:00:00+00:00",
-      "source": "Fed 연설",
-      "topic": "기타 발표",
-      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
-      "assessment": "원문 검토 필요",
-      "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
-    },
-    {
-      "title": "Agencies extend comment period for proposed third-party risk management guidance",
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261113a.htm",
-      "publishedAt": "2026-11-13T21:15:00+00:00",
-      "source": "Fed 발표",
-      "topic": "기타 발표",
-      "interpretation": "시장 방향을 단정하지 않는 참고 발표입니다.",
-      "assessment": "원문 검토 필요",
-      "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     }
   ],
   "feeds": [
     {
       "name": "Fed 발표",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     },
     {
       "name": "Fed 연설",
       "url": "https://www.federalreserve.gov/feeds/speeches.xml",
-      "lastAttemptAt": "2026-11-27T20:00:24.082494+00:00",
+      "lastAttemptAt": "2026-11-28T00:59:30.133687+00:00",
       "status": "ready",
       "fromCache": false,
-      "lastSuccessAt": "2026-11-27T20:00:24.082494+00:00"
+      "lastSuccessAt": "2026-11-28T00:59:30.133687+00:00"
     }
   ],
   "errors": [],
